@@ -17,6 +17,8 @@
 ##   2) no edge lengths exist
 ## also have not dealt with meta data, but seems straightforward
 
+## assuming that tree(s) have some sort of edge lengths
+
 DEBUG <- FALSE;
 
 NEXMLer <- function(phy, file = "") {
@@ -35,7 +37,7 @@ NEXMLer <- function(phy, file = "") {
 	if (class(phy) == "phylo") {
 		nTrees <- 1;
 		nTaxa <- length(phy$tip.label);
-		if (is.rooted(phy)) {
+		if (is.rooted(phy)) { # LJH says that this function is not reliable
 			rootage <- "rooted";
 		} else {
 			rootage <- "unrooted";
@@ -56,11 +58,11 @@ NEXMLer <- function(phy, file = "") {
 	if (DEBUG) cat("\nRootage=", rootage, "\n\n", sep="");
 	
 	
-## store spacing as a variable; or create true xml object
+## store spacing as a variable; or create true xml object and rely on existing print functions
 	
 	cat("<?xml version=\"1.0\"?>\n", file = file);
 	
-# header: move this bit <outside> for nicer updating
+# header: maybe move this bit <outside> for nicer updating
 	cat(paste("<nex:nexml\n",
 	"\tgenerator=\"NEXMLer\"\n",
 	"\tversion=\"0.9\"\n",
@@ -73,34 +75,28 @@ NEXMLer <- function(phy, file = "") {
 	"\txmlns=\"http://www.nexml.org/2009\">\n"), file = file, append = TRUE);
 # </outside>
 	
-	cat("\t<otus id=\"OTUs\" label=\"fooTaxaBlock\">\n", file = file, append = TRUE);
+# seems that if this is coming from a single (multi)phylo object, there is only one list of otus
+	cat("\t<otus id=\"tax1\" label=\"TaxonList\">\n", file = file, append = TRUE);
 	for (i in 1:nTaxa) {
 		cat(paste("\t\t<otu id=\"", obj[[1]]$tip.label[i], "\"/>\n", sep=""), file = file, append = TRUE);
 	}
 	cat("\t</otus>\n", file = file, append = TRUE);
 	
-	cat("\t<trees otus=\"OTUs\" id=\"Trees\" label=\"TreesBlockFromXML\">\n", file = file, append = TRUE);
+	cat("\t<trees otus=\"tax1\" id=\"Trees\" label=\"TreesBlock\">\n", file = file, append = TRUE);
 	
 	for (i in 1:nTrees) {
 		treeLabel <- paste("tree", i, sep="");
-	# label is optional, although could be passed in via multiPhylo; make flexible (later)
-		cat(paste("\t\t<tree id=\"", treeLabel, "\" xsi:type=\"nex:FloatTree\"",
-			" label=\"", treeLabel, "\">\n", sep=""), file = file, append = TRUE);
 		
 		tree <- obj[[i]] # ugh. ugly, but safe(?)
 		tips <- tree$tip.label;
 		edges <- tree$edge;
+		numEdge <- length(edges[,1]);
 		lengths <- tree$edge.length;
-		numNode <- 0L;
+		numNode <- max(edges); # remove previous binary assumption
 		
-	# NOTE: this here implicitly assumes binary trees; make more general
-		if (rootage == "rooted") {
-			numNode <- (2 * nTaxa) - 1;
-		} else if (rootage == "unrooted") {
-			numNode <- (2 * nTaxa) - 2;
-		} else { # rooting is apparently variable. check.
-			numNode <- ifelse(is.rooted, (2 * nTaxa) - 1, (2 * nTaxa) - 2);
-		}
+# tree label is optional, although could be passed in via multiPhylo; make flexible (later)
+		cat(paste("\t\t<tree id=\"", treeLabel, "\" xsi:type=\"nex:FloatTree\"",
+			" label=\"", treeLabel, "\">\n", sep=""), file = file, append = TRUE);
 		
 		for (j in 1:numNode) {
 			nodeLabel <- paste("n", j, sep="");
@@ -113,7 +109,7 @@ NEXMLer <- function(phy, file = "") {
 			cat("/>\n", sep="");
 		}
 		
-		for (j in 1:length(edges[,1])) {
+		for (j in 1:numEdge) {
 			cat(paste("\t\t\t<edge source=\"n", edges[j,1], "\" target=\"n", edges[j,2],
 				"\" id=\"e", j, "\" length=\"", lengths[j], "\"/>\n", sep=""));
 		}
