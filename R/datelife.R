@@ -3,6 +3,7 @@ library(ape)
 library(phylobase)
 library(abind)
 library(compare)
+library(phangorn)
 
 ReadRDFTree <- function(identifier, format = "phylo") {
 	# reads a tree in RDF format from the hypothetical data store
@@ -106,4 +107,11 @@ AsubForLapply <- function(idx, x, dims=3) {
   return(asub(x, idx, dims)) 
 }
 
+GetQuantiles <- function(ages,probs=c(0.025,.5,0.975) ) {
+  # just utility wrapper function with different defaults
+  return(quantile(ages,probs))
+}
 
+PatristicMatrixToTree <- function(patristic.matrix) {
+  return(midpoint(nj(patristic.matrix)))
+}

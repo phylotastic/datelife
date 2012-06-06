@@ -35,5 +35,4 @@ bininda.emonds.all<-BindMatrices(list(
   ))
 result<-GetSubsetArray (bininda.emonds.all, c("Homo_sapiens", "Pan_paniscus", "Mus_musculus"))
 print(GetAges(result$patristic.matrix.array))
-  
-  
+
