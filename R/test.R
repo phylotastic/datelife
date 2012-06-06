@@ -5,6 +5,7 @@ run<-function(taxa="cat", ...) {
 	oprint(paste("Problems: ",results$problem,sep=""))
 	oprint(paste("Age (MY): ",GetAge(results$patristic.matrix),sep=""))
   if(dim(results$patristic.matrix)[1]>2) {
-    write.tree(PatristicMatrixToTree( results$patristic.matrix ))
+    newick.tree<-write.tree(PatristicMatrixToTree( results$patristic.matrix ))
+	oprint(newick.tree)
   }
 }
