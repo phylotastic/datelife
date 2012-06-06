@@ -9,5 +9,10 @@
  <p><form action = "http://datelife.org/cgi-bin/R/test" method="get">
  <p>Taxa: <input type="text" name="taxa" value="Homo_sapiens,Pan_paniscus,Mus_musculus" size="80"> <input type="submit" value="Send"></p>
 </form></p>
- </body>
+<p>Note source code is available at <a href="https://bitbucket.org/bomeara/datelife">https://bitbucket.org/bomeara/datelife</a></p>
+<p>We use the <a href="http://r-forge.r-project.org/projects/phyloorchard/">PhyloOrchard</a> R package to store trees; you can install it by doing<br />
+<code>install.packages("PhyloOrchard", repos="http://R-Forge.R-project.org")</code></p>
+<br /><hr>
+<p>Work on code:</p>
+<p><script id="feed-1338987350323483" type="text/javascript" src="http://rss.bloople.net/?url=https%3A%2F%2Fbitbucket.org%2Fbomeara%2Fdatelife%2Frss&showtitle=false&type=js&id=1338987350323483"></script></p> </body>
 </html>
