@@ -27,3 +27,12 @@ result<-GetSubsetMatrix( patristic.distance, c("Homo_sapiens", "Griffin","Unicor
 print(result$problem)
 print(GetAge(result$patristic.matrix))
 
+# now do all three Bininda-Emonds trees:
+bininda.emonds.all<-BindMatrices(list(
+  ComputePatristicDistance(reorder(as(BinindaEmondsEtAl2007$trees$best,"phylo")) ),
+  ComputePatristicDistance(reorder(as(BinindaEmondsEtAl2007$trees$upper,"phylo")) ),
+  ComputePatristicDistance(reorder(as(BinindaEmondsEtAl2007$trees$lower,"phylo")) )
+  ))
+result<-GetSubsetArray (bininda.emonds.all, c("Homo_sapiens", "Pan_paniscus", "Mus_musculus"))
+print(GetAges(result$patristic.matrix.array))
+
