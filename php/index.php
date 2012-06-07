@@ -24,6 +24,7 @@
  
  <p><input type="submit" value="Send"></p>
 </form></p>
+<br /><hr>
 <p>Note source code is available at <a href="https://bitbucket.org/bomeara/datelife">https://bitbucket.org/bomeara/datelife</a></p>
 <p>We use the <a href="http://r-forge.r-project.org/projects/phyloorchard/">PhyloOrchard</a> R package to store trees; you can install it by doing<br />
 <code>install.packages("PhyloOrchard", repos="http://R-Forge.R-project.org")</code></p>
