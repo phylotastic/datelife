@@ -1,0 +1,26 @@
+<nex:nexml xmlns="http://www.nexml.org/2009" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:nex="http://www.nexml.org/2009" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:dc="http://purl.org/dc/elements/1.1/" version="0.9" xsi:schemaLocation="http://www.nexml.org/2009 http://www.nexml.org/2009/nexml.xsd" generator="Bio::Phylo::Project v.0.45_1660" about="#nl1">
+	<meta xsi:type="nex:LiteralMeta" content="2012-06-07T17:19:19" id="ma11" datatype="xsd:date" property="dc:date"/>
+	<otus id="os12">
+	<otu label="Homo_sapiens" id="ou15"/>
+	<otu label="Mus_musculus" id="ou14"/>
+	<otu label="Pan_paniscus" id="ou16"/>
+	<otu label="Rattus_rattus" id="ou13"/>
+	</otus>
+	<trees otus="os12" id="ts2">
+		<tree xsi:type="nex:FloatTree" id="te3">
+			<node root="true" id="ne4"/>
+			<node id="ne5"/>
+			<node id="ne8"/>
+			<node label="Rattus_rattus" id="ne6" otu="ou13"/>
+			<node label="Mus_musculus" id="ne7" otu="ou14"/>
+			<node label="Homo_sapiens" id="ne9" otu="ou15"/>
+			<node label="Pan_paniscus" id="ne10" otu="ou16"/>
+			<edge source="ne4" length="62.7" target="ne5" id="edge5"/>
+			<edge source="ne4" length="83.2" target="ne8" id="edge8"/>
+			<edge source="ne5" length="29.1" target="ne6" id="edge6"/>
+			<edge source="ne5" length="29.1" target="ne7" id="edge7"/>
+			<edge source="ne8" length="8.6" target="ne9" id="edge9"/>
+			<edge source="ne8" length="8.6" target="ne10" id="edge10"/>
+		</tree>
+	</trees>
+</nex:nexml>
