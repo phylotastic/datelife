@@ -10,8 +10,8 @@
 
  <p>Return format: <select name="format">
  <option value="html">HTML</option>
- <option value="newick">Newick</option>
- <option value="bestguess">The single best guess</option>
+ <option value="newick">Newick (in the future)</option>
+ <option value="bestguess">The single best guess (in the future)</option>
  <option value="nexml">NeXML (in the future)</option>
  <option value="rda">R data file (in the future)</option>
  </select> (note that to return a tree you'll need to provide at least three taxon names)</p>
