@@ -9,7 +9,10 @@ run<-function(taxa=c("Homo_sapiens","Mus_musculus"), format="html", partial="lib
     out("<table border='1'><tr><td>Median</td><td>Min</td><td>2.5% quantile</td><td>97.5% quantile</td><td>Max</td><td<NTrees</td><td>Problems</td><td>Citation</td></tr>")
     for (i in sequence(length(studies))) {
       result<-results.list[[i]]
-      num.matching<-dim(SplitArray(result$patristic.matrix.array)[[1]])[1] #take just the first array
+      num.matching<-0
+      if (!is.na(result$patristic.matrix.array)) { #happens if 0 return
+        num.matching<-dim(SplitArray(result$patristic.matrix.array)[[1]])[1] #take just the first array
+      }
       display.result<-FALSE
       if(num.matching == length(cleaned.names)) {
         display.result<-TRUE 
