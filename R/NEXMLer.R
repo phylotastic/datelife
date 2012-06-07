@@ -14,7 +14,7 @@
 
 ## TODO: have not yet considered case where:
 ##   1) root edge exists
-##   2) no edge lengths exist
+##   2) no edge lengths exist (is this something that might happen?)
 ## also have not dealt with meta data, but seems straightforward
 
 ## assuming that tree(s) have some sort of edge lengths
@@ -100,18 +100,18 @@ NEXMLer <- function(phy, file = "") {
 		
 		for (j in 1:numNode) {
 			nodeLabel <- paste("n", j, sep="");
-			cat(paste("\t\t\t<node id=\"", nodeLabel, "\" label=\"", nodeLabel, "\"", sep=""));
+			cat(paste("\t\t\t<node id=\"", nodeLabel, "\" label=\"", nodeLabel, "\"", sep=""), file = file, append = TRUE);
 			if (j <= nTaxa) {
-				cat(paste(" otu=\"", tips[j], "\"", sep=""));
+				cat(paste(" otu=\"", tips[j], "\"", sep=""), file = file, append = TRUE);
 			} else if (j == (nTaxa + 1) && rootage == "rooted") {
-				cat(" root=\"true\"");
+				cat(" root=\"true\"", file = file, append = TRUE);
 			}
-			cat("/>\n", sep="");
+			cat("/>\n", sep="", file = file, append = TRUE);
 		}
 		
 		for (j in 1:numEdge) {
 			cat(paste("\t\t\t<edge source=\"n", edges[j,1], "\" target=\"n", edges[j,2],
-				"\" id=\"e", j, "\" length=\"", lengths[j], "\"/>\n", sep=""));
+				"\" id=\"e", j, "\" length=\"", lengths[j], "\"/>\n", sep=""), file = file, append = TRUE);
 		}
 		cat("\t\t</tree>\n", file = file, append = TRUE);
 	}
