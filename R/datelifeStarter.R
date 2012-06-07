@@ -30,7 +30,7 @@ citations<-c(citations,"Bininda-Emonds et al. 2007")
 embargoed<-c(embargoed,FALSE)
 load("bininda.emonds.rda")
 print(ls())
-studies[[length(studies)+1]]<-studies,bininda.emonds.all
+studies[[length(studies)+1]]<-bininda.emonds.all
 rm(bininda.emonds.all)
 print(citations)
 
