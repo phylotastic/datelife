@@ -1,7 +1,7 @@
 citations<-c()
 embargoed<-c()
 studies<-list()
-original.wd<-getcwd()
+original.wd<-getwd()
 setwd("/Library/WebServer/Sites/datelife.org/datelife/data/")
 print(system("ls",intern=TRUE))
 
