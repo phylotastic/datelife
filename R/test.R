@@ -1,4 +1,4 @@
-run<-function(taxa=c("Homo_sapiens","Mus_musculus"), format="html") {
+run<-function(taxa=c("Homo_sapiens","Mus_musculus"), format="html", partial="liberal") {
 	cleaned.names<-strsplit( gsub("\\s","",taxa), ",")[[1]]
 	results<-GetSubsetMatrix( patristic.distance, cleaned.names)
   if (format=="html") {
@@ -22,5 +22,9 @@ run<-function(taxa=c("Homo_sapiens","Mus_musculus"), format="html") {
        out(paste("Error: only ",dim(results$patristic.matrix)[1]," taxa returned",sep=""))
        return(done())
     }
+  }
+  if (format=="bestguess") {
+    out(GetAge(results$patristic.matrix))
+    return(done())
   }
 }
