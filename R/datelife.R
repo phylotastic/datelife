@@ -14,10 +14,10 @@ ReadRDFTree <- function(identifier, format = "phylo") {
 }
 
 #in case we want to cache. Not clear we do
-ComputePatristicDistance <- function(phy, test=TRUE) {
+ComputePatristicDistance <- function(phy, test=TRUE,tol=0.0001) {
 	# stores the distance between taxa
 	if (test) {
-		if (!is.ultrametric(phy)) {
+		if (!is.ultrametric(phy,tol)) {
 			stop("currently we require that chronograms be ultrametric") # can pad them so that terminals all reach to present
 		}
 	}
