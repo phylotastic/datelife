@@ -31,7 +31,7 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
   problem <- "none"
   final.size <- sum(rownames(patristic.matrix) %in% taxa) # returns number of matches
   if (final.size < length(taxa)) {
-    problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
+    problem <- "some of the queried taxa are not on this chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
     if (final.size < 2 ) {
       problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA 
       patristic.matrix <- NA # to make sure no one uses the zero by mistake

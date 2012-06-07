@@ -18,8 +18,8 @@
  </select> (note that to return a tree you'll need to provide at least three taxon names)</p>
  
  <p>Partial match: <select name="partial">
- <option value="liberal">Return info from trees that have some taxon overlap</option>
- <option value="conservative">Return info only from trees with complete taxon overlap</option>
+ <option value="liberal">Return info from trees that have some taxon overlap with your query</option>
+ <option value="conservative">Return info only from trees with complete taxon overlap with your query</option>
  </select></p>
  
  <p>Use embargoed data: <select name="useembargoed">
