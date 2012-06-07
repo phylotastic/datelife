@@ -11,9 +11,12 @@ run<-function(taxa=c("Homo_sapiens","Mus_musculus"), format="html") {
 		  oprint(write.tree(PatristicMatrixToTree( results$patristic.matrix )))
 	  }
     out("</body></html>")
-    done()
+    return(done())
   }
   if (format=="newick") {
-    
+    if (dim(results$patristic.matrix)[1]>2) {
+      WebResult(cmd="file",payload=write.tree(PatristicMatrixToTree( results$patristic.matrix )))
+      return(done())
+    }
   }
 }
