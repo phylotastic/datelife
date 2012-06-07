@@ -1,11 +1,22 @@
-run<-function(taxa="cat", ...) {
+run<-function(taxa=c("Homo_sapiens","Mus_musculus"), format="html") {
 	cleaned.names<-strsplit( gsub("\\s","",taxa), ",")[[1]]
-	oprint(cleaned.names)
 	results<-GetSubsetMatrix( patristic.distance, cleaned.names)
-	oprint(paste("Problems: ",results$problem,sep=""))
-	oprint(paste("Age (MY): ",GetAge(results$patristic.matrix),sep=""))
-	if (dim(results$patristic.matrix)[1]>2) {
-		oprint(write.tree(PatristicMatrixToTree( results$patristic.matrix )))
-	}
-	done()
+  if (format=="html") {
+    out("<!doctype html><html lang='en'><head><title>DateLife</title></head>")
+    out("<body>")
+  	oprint(cleaned.names)
+  	oprint(paste("Problems: ",results$problem,sep=""))
+  	oprint(paste("Age (MY): ",GetAge(results$patristic.matrix),sep=""))
+  	if (dim(results$patristic.matrix)[1]>2) {
+		  oprint(write.tree(PatristicMatrixToTree( results$patristic.matrix )))
+	  }
+    out("</body></html>")
+    return(done())
+  }
+  if (format=="newick") {
+    if (dim(results$patristic.matrix)[1]>2) {
+      WebResult(cmd="file",payload=write.tree(PatristicMatrixToTree( results$patristic.matrix )))
+      return(done())
+    }
+  }
 }

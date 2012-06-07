@@ -1,0 +1,23 @@
+setwd("/Users/bomeara/Documents/MyDocuments/Active/datelife/data")
+library(PhyloOrchard) #install.packages("PhyloOrchard", repos="http://R-Forge.R-project.org")
+library(phylobase)
+source("../R/datelife.R")
+harvard10k.carnivores.trees<-read.nexus("TreeBlock_10kTrees_Carnivora_Version1.nex")
+harvard10k.perissodactyla.trees<-read.nexus("TreeBlock_10kTrees_Perissodactyla_Version1.nex")
+harvard10k.primates.trees<-read.nexus("TreeBlock_10kTrees_Primates_Version3.nex")
+harvard10k.carnivores.all<-BindMatrices(lapply(harvard10k.carnivores.trees,ComputePatristicDistance))
+harvard10k.perissodactyla.all<-BindMatrices(lapply(harvard10k.perissodactyla.trees,ComputePatristicDistance))
+harvard10k.primates.all<-BindMatrices(lapply(harvard10k.primates.trees,ComputePatristicDistance))
+save(harvard10k.carnivores.all,file="harvard10k.carnivores.rda",compress=TRUE)
+save(harvard10k.perissodactyla.all,file="harvard10k.perissodactyla.rda",compress=TRUE)
+save(harvard10k.primates.all,file="harvard10k.primates.rda",compress=TRUE)
+data(BinindaEmondsEtAl2007)
+bininda.emonds.all<-BindMatrices(list(
+  ComputePatristicDistance(reorder(as(BinindaEmondsEtAl2007$trees$best,"phylo")) ),
+  ComputePatristicDistance(reorder(as(BinindaEmondsEtAl2007$trees$upper,"phylo")) ),
+  ComputePatristicDistance(reorder(as(BinindaEmondsEtAl2007$trees$lower,"phylo")) )
+  ))
+save(bininda.emonds.all,file="bininda.emonds.rda",compress=TRUE)
+data(Heath)
+heath.all<-BindMatrices(lapply(Heath$trees,ComputePatristicDistance))
+save(heath.all,file="heath.rda",compress=TRUE)
