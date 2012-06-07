@@ -107,9 +107,13 @@ AsubForLapply <- function(idx, x, dims=3) {
   return(asub(x, idx, dims)) 
 }
 
-GetQuantiles <- function(ages,probs=c(0.025,.5,0.975) ) {
+GetQuantiles <- function(ages,probs=c(0.5,0,0.025,0.975,1) ) {
   # just utility wrapper function with different defaults
   return(quantile(ages,probs))
+}
+
+VectorToTableRow <- function(x) {
+  return(paste(paste("<td>",x,sep=""),"</td>",sep="",collapse=""))
 }
 
 PatristicMatrixToTree <- function(patristic.matrix) {
