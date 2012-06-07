@@ -10,7 +10,6 @@
 	       xsi:schemaLocation="http://www.nexml.org/2009 http://www.nexml.org/2009/nexml.xsd" generator="Bio::Phylo::Project v.0.45_1660" about="#nl1">
 	<meta xsi:type="nex:LiteralMeta" content="2012-06-07T17:19:19" id="ma11" datatype="xsd:date" property="dc:date"/>
 	<meta xsi:type="nex:LiteralMeta" content="2012-06-07T17:20:20" id="ma12" datatype="xsd:date" property="dla:analysisdate"/>
-	<meta xsi:type="nex:LiteralMeta" content="DateLife 0.1" id="ma13" datatype="xsd:string" property="dla:branchLengthService"/>
 	<otus id="os12">
 		<otu label="Homo_sapiens" id="ou15"/>
 		<otu label="Mus_musculus" id="ou14"/>
@@ -19,6 +18,19 @@
 	</otus>
 	<trees otus="os12" id="ts2">
 		<tree xsi:type="nex:FloatTree" id="te3">
+			<meta xsi:type="nex:LiteralMeta" content="DateLife 0.1" id="ma13" datatype="xsd:string" property="dla:branchLengthService"/>
+			<meta xsi:type="nex:LiteralMeta" 
+				content="@article{bininda07,author = {Bininda-Emonds, Olaf R. P. and Cardillo, Marcel and Jones, Kate E. and Macphee, Ross D. E. and Beck, Robin M. D. and Grenyer, Richard and Price, Samantha A. and Vos, Rutger A. and Gittleman, John L. and Purvis, Andy},
+				day = {29},
+				doi = {10.1038/nature05634},
+				journal = {Nature},
+				number = {7135},
+				pages = {507--512},
+				volume = {446},
+				year = {2007}
+				}" 
+				id = "ma14" 
+				datatype="xsd:string" property="dla:branchLengthSourceTreeCitation"/>
 			<node root="true" id="ne4">
 				<meta xsi:type="nex:LiteralMeta" content="91.8" id="ma40" datatype="xsd:float" property="dla:nodeAge"/>				
 				<meta xsi:type="nex:LiteralMeta" content="Euarchontoglires" id="ma41" datatype="xsd:string" property="dla:taxonomicName"/>
