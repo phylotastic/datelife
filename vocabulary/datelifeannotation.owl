@@ -7,7 +7,7 @@
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
     <!ENTITY cdao "http://purl.obolibrary.org/obo/cdao/2012-06-06/cdao.owl" >
-    <!ENTITY datelifeannotation "http://www.datelife.org/vocabulary/datelifeannotation.owl#" >
+    <!ENTITY dla "http://www.datelife.org/vocabulary/datelifeannotation.owl#" >
 ]>
 
 
@@ -15,7 +15,7 @@
      xml:base="http://www.datelife.org/vocabulary/datelifeannotation.owl"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:cdao="http://purl.obolibrary.org/obo/cdao/2012-06-06/cdao.owl"
-     xmlns:datelifeannotation="http://www.datelife.org/vocabulary/datelifeannotation.owl#"
+     xmlns:dla="http://www.datelife.org/vocabulary/datelifeannotation.owl#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -58,7 +58,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLObjectProperty_01339084329409002000 -->
 
-    <owl:ObjectProperty rdf:about="&datelifeannotation;OWLObjectProperty_01339084329409002000">
+    <owl:ObjectProperty rdf:about="&dla;OWLObjectProperty_01339084329409002000">
         <rdfs:label xml:lang="en">fcdbEntry</rdfs:label>
         <rdfs:comment xml:lang="en">A URL that links to the entry on FCDB (or for the moment the url to Date-A-Clade)</rdfs:comment>
     </owl:ObjectProperty>
@@ -67,7 +67,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLObjectProperty_01339088488288051000 -->
 
-    <owl:ObjectProperty rdf:about="&datelifeannotation;OWLObjectProperty_01339088488288051000">
+    <owl:ObjectProperty rdf:about="&dla;OWLObjectProperty_01339088488288051000">
         <rdfs:label xml:lang="en">pbdbEntry</rdfs:label>
         <rdfs:comment xml:lang="en">link to the PaleoBiology DB (PBDB) entry for the fossil (if available, though, this might not be entirely necessary if the calibration comes from the FCDB) </rdfs:comment>
     </owl:ObjectProperty>
@@ -87,7 +87,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339081909405100000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339081909405100000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339081909405100000">
         <rdfs:label xml:lang="en">OWLDataProperty_01339081909405100000</rdfs:label>
         <rdfs:label xml:lang="en">nodeAge</rdfs:label>
         <rdfs:range rdf:resource="&xsd;float"/>
@@ -97,7 +97,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339081918618771000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339081918618771000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339081918618771000">
         <rdfs:label xml:lang="en">branchLengthService</rdfs:label>
         <rdfs:comment xml:lang="en">Description of the service that got the branch lengths (e.g., datalife or Congruifier)</rdfs:comment>
     </owl:DatatypeProperty>
@@ -106,7 +106,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339082300088898000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339082300088898000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339082300088898000">
         <rdfs:label xml:lang="en">serviceOptions</rdfs:label>
         <rdfs:comment xml:lang="en">Description of the options that were used</rdfs:comment>
     </owl:DatatypeProperty>
@@ -115,25 +115,16 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339082334299907000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339082334299907000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339082334299907000">
         <rdfs:label xml:lang="en">analysisDate</rdfs:label>
         <rdfs:comment xml:lang="en">Date this was done</rdfs:comment>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339082480328051000 -->
-
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339082480328051000">
-        <rdfs:label xml:lang="en">serviceVersionNumber</rdfs:label>
-        <rdfs:comment xml:lang="en">Version number of the dating service</rdfs:comment>
-    </owl:DatatypeProperty>
-    
-
-
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339082529518740000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339082529518740000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339082529518740000">
         <rdfs:label xml:lang="en">branchLengthSourceTreeCitation</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -141,7 +132,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339082621051616000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339082621051616000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339082621051616000">
         <rdfs:label xml:lang="en">userTreeCitation</rdfs:label>
         <rdfs:comment xml:lang="en">Citation of the tree we&#39;re dating (could be user, could from phylotastic)</rdfs:comment>
     </owl:DatatypeProperty>
@@ -150,7 +141,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339082666701394000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339082666701394000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339082666701394000">
         <rdfs:label xml:lang="en">serviceErrors</rdfs:label>
         <rdfs:comment xml:lang="en">List of errors/problems if any</rdfs:comment>
     </owl:DatatypeProperty>
@@ -159,7 +150,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339082770152349000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339082770152349000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339082770152349000">
         <rdfs:label xml:lang="en">treeSet</rdfs:label>
         <rdfs:comment xml:lang="en">If the tree is associated with other trees (e.g. an MCMC set of trees or multiple trees from different r8s runs) this indicates that and links it to other trees; or if tree is summary of multiple trees.</rdfs:comment>
     </owl:DatatypeProperty>
@@ -168,7 +159,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339082866422855000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339082866422855000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339082866422855000">
         <rdfs:label xml:lang="en">nodeAge</rdfs:label>
         <rdfs:subPropertyOf rdf:resource="&owl;topDataProperty"/>
     </owl:DatatypeProperty>
@@ -177,7 +168,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083101059928000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083101059928000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083101059928000">
         <rdfs:label xml:lang="en">ageSummary</rdfs:label>
         <rdfs:comment xml:lang="en">Summary statistics of age, if derived from multiple trees</rdfs:comment>
     </owl:DatatypeProperty>
@@ -186,10 +177,10 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083147370146000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083147370146000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083147370146000">
         <rdfs:label xml:lang="en">meanAgeSummary</rdfs:label>
         <rdfs:comment xml:lang="en">Summary of multiple age estimates expressed as a mean.</rdfs:comment>
-        <rdfs:subPropertyOf rdf:resource="&datelifeannotation;OWLDataProperty_01339083101059928000"/>
+        <rdfs:subPropertyOf rdf:resource="&dla;OWLDataProperty_01339083101059928000"/>
         <rdfs:range rdf:resource="&xsd;float"/>
     </owl:DatatypeProperty>
     
@@ -197,10 +188,10 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083160190079000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083160190079000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083160190079000">
         <rdfs:label xml:lang="en">medianAgeSummary</rdfs:label>
         <rdfs:comment xml:lang="en">Summary of multiple age estimates expressed as a median.</rdfs:comment>
-        <rdfs:subPropertyOf rdf:resource="&datelifeannotation;OWLDataProperty_01339083101059928000"/>
+        <rdfs:subPropertyOf rdf:resource="&dla;OWLDataProperty_01339083101059928000"/>
         <rdfs:range rdf:resource="&xsd;float"/>
     </owl:DatatypeProperty>
     
@@ -208,17 +199,17 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083179001988000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083179001988000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083179001988000">
         <rdfs:label xml:lang="en">ageRangeSummary</rdfs:label>
         <rdfs:comment xml:lang="en">Summary of multiple age estimates expressed as a range.</rdfs:comment>
-        <rdfs:subPropertyOf rdf:resource="&datelifeannotation;OWLDataProperty_01339083101059928000"/>
+        <rdfs:subPropertyOf rdf:resource="&dla;OWLDataProperty_01339083101059928000"/>
     </owl:DatatypeProperty>
     
 
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083196651359000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083196651359000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083196651359000">
         <rdfs:label xml:lang="en">nodeSupportValue</rdfs:label>
         <rdfs:comment xml:lang="en">Support value, if any, for the node</rdfs:comment>
     </owl:DatatypeProperty>
@@ -227,7 +218,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083336741139000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083336741139000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083336741139000">
         <rdfs:label xml:lang="en">taxonomicName</rdfs:label>
         <rdfs:comment xml:lang="en">Node name, if any, from taxonomy (e.g., Glires)</rdfs:comment>
         <rdfs:subPropertyOf rdf:resource="&owl;topDataProperty"/>
@@ -237,7 +228,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083386141541000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083386141541000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083386141541000">
         <rdfs:label xml:lang="en">nodeSpecificErrors</rdfs:label>
         <rdfs:comment xml:lang="en">Per node error or cautionary messages (such as the node being made a polytomy due to dating conflicts)</rdfs:comment>
     </owl:DatatypeProperty>
@@ -246,7 +237,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083477018513000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083477018513000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083477018513000">
         <rdfs:label xml:lang="en">fossilSpecimenName</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -254,7 +245,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083571118690000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083571118690000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083571118690000">
         <rdfs:label xml:lang="en">calibrationSource</rdfs:label>
         <rdfs:comment xml:lang="en">Name of the source of the calibration (biogeographical or secondary calibration)</rdfs:comment>
     </owl:DatatypeProperty>
@@ -263,7 +254,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083625212709000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083625212709000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083625212709000">
         <rdfs:label xml:lang="en">calibrationSummaryAge</rdfs:label>
         <rdfs:comment xml:lang="en">“Best guess” age: perhaps the mean or median age (mean makes sense for a single Bayesian run, but when aggregating data across many analyses, one really bad study could affect mean more than median)</rdfs:comment>
         <rdfs:range rdf:resource="&xsd;float"/>
@@ -273,7 +264,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083752413345000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083752413345000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083752413345000">
         <rdfs:label xml:lang="en">minimumNodeAge</rdfs:label>
         <rdfs:comment xml:lang="en">Minimum age for the node from the fossil calibration (this may be a range of dates)</rdfs:comment>
         <rdfs:range rdf:resource="&xsd;float"/>
@@ -283,7 +274,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083941578052000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083941578052000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083941578052000">
         <rdfs:label xml:lang="en">maximumNodeAge</rdfs:label>
         <rdfs:comment xml:lang="en">Maximum age of the node, if available (if there is a maximum age, there might be a different citation for this)</rdfs:comment>
         <rdfs:range rdf:resource="&xsd;float"/>
@@ -293,7 +284,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339083971349655000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339083971349655000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339083971349655000">
         <rdfs:label xml:lang="en">ageProbabilityDistribution</rdfs:label>
         <rdfs:comment xml:lang="en">Probability distribution for the age (perhaps in BEAST format, or a standard ontology for log normal, normal, etc.)</rdfs:comment>
     </owl:DatatypeProperty>
@@ -302,7 +293,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339084076460436000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339084076460436000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339084076460436000">
         <rdfs:label xml:lang="en">fcdbCitation</rdfs:label>
         <rdfs:comment xml:lang="en">If the fossil is from FCDB, then a link to citation for the FCDB</rdfs:comment>
     </owl:DatatypeProperty>
@@ -311,7 +302,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339084241757702000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339084241757702000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339084241757702000">
         <rdfs:label xml:lang="en">fossilCitation</rdfs:label>
         <rdfs:comment xml:lang="en">Citations associated with the fossil (e.g. the citation describing the fossil, this might not be available from calibration database)</rdfs:comment>
     </owl:DatatypeProperty>
@@ -320,7 +311,7 @@
 
     <!-- http://www.datelife.org/vocabulary/datelifeannotation.owl#OWLDataProperty_01339084279353898000 -->
 
-    <owl:DatatypeProperty rdf:about="&datelifeannotation;OWLDataProperty_01339084279353898000">
+    <owl:DatatypeProperty rdf:about="&dla;OWLDataProperty_01339084279353898000">
         <rdfs:label xml:lang="en">validationCitation</rdfs:label>
         <rdfs:comment xml:lang="en">If the fossil is from the Fossil Calibration DataBase (FCDB), then there will a citation validating it as a fossil calibration (most likely published in Paleontologica Electronica)</rdfs:comment>
     </owl:DatatypeProperty>
