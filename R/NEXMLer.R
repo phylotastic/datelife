@@ -23,7 +23,7 @@ DEBUG <- FALSE;
 
 NEXMLer <- function(phy, file = "") {
 	if (class(phy) != "phylo" && class(phy) != "multiPhylo") {
-		stop("Wrong input, fucktard.\n");
+		stop("Wrong input. Please try again. We still like you.\n");
 	}
 	
 	nTrees <- 0L;
