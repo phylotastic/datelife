@@ -36,17 +36,9 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
     return(done())
   }
   if (format=="newick") {
-    if (dim(results$patristic.matrix)[1]>2) {
-      out(write.tree(PatristicMatrixToTree( results$patristic.matrix )))
-      return(done())
-    }
-    else {
-       out(paste("Error: only ",dim(results$patristic.matrix)[1]," taxa returned",sep=""))
-       return(done())
-    }
+    return(done())
   }
   if (format=="bestguess") {
-    out(GetAge(results$patristic.matrix))
     return(done())
   }
 }
