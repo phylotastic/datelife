@@ -1,4 +1,4 @@
-run<-function(taxa=c("Homo_sapiens","Mus_musculus"), format="html", partial="liberal",useembargoed="yes") {
+run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes") {
   #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
   #  studies
 	cleaned.names<-strsplit( gsub("\\s","",taxa), ",")[[1]]
@@ -6,7 +6,7 @@ run<-function(taxa=c("Homo_sapiens","Mus_musculus"), format="html", partial="lib
   if (format=="html") {
     out("<!doctype html><html lang='en'><head><title>DateLife</title></head>")
     out("<body><p>")
-    out("<table border='1'><tr><td>Median</td><td>Min</td><td>2.5% quantile</td><td>97.5% quantile</td><td>Max</td><td<NTrees</td><td>Problems</td><td>Citation</td></tr>")
+    out("<table border='1'><tr><td>Median</td><td>Min</td><td>2.5% quantile</td><td>97.5% quantile</td><td>Max</td><td><NTrees</td><td>Problems</td><td>Citation</td></tr>")
     for (i in sequence(length(studies))) {
       result<-results.list[[i]]
       num.matching<-0
