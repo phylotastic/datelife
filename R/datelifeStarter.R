@@ -1,6 +1,28 @@
-data(BinindaEmondsEtAl2007)
-best.phylo4<-BinindaEmondsEtAl2007$trees$best
-best.phylo3<-reorder(as(best.phylo4,"phylo"))
+citations<-c()
+embargoed<-c()
+studies<-list()
 
-patristic.distance <- ComputePatristicDistance(best.phylo3)
+citations<-append(citations,"Bininda-Emonds et al. 2007")
+embargoed<-append(embargoed,FALSE)
+load("/Library/WebServer/Sites/datelife.org/datelife/data/bininda.emonds.rda")
+studies<-append(studies,bininda.emonds.all)
 
+citations<-append(citations,"10K trees Carnivores, V1")
+embargoed<-append(embargoed,FALSE)
+load("/Library/WebServer/Sites/datelife.org/datelife/data/harvard10k.carnivores.rda")
+studies<-append(studies,harvard10k.carnivores.all)
+
+citations<-append(citations,"10K trees Perissodactyla, V1")
+embargoed<-append(embargoed,FALSE)
+load("/Library/WebServer/Sites/datelife.org/datelife/data/harvard10k.perissodactyla.rda")
+studies<-append(studies,harvard10k.perissodactyla.all)
+
+citations<-append(citations,"10K trees Primates, V3")
+embargoed<-append(embargoed,FALSE)
+load("/Library/WebServer/Sites/datelife.org/datelife/data/harvard10k.primates.rda")
+studies<-append(studies,harvard10k.primates.all)
+
+citations<-append(citations,"Heath et al. 2012")
+embargoed<-append(embargoed,FALSE)
+load("/Library/WebServer/Sites/datelife.org/datelife/data/heath.rda")
+studies<-append(studies,heath.all)

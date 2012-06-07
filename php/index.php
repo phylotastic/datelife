@@ -22,7 +22,7 @@
  <option value="conservative">Return info only from trees with complete taxon overlap</option>
  </select></p>
  
- <p>Use embargoed data: <select name="embargoed">
+ <p>Use embargoed data: <select name="useembargoed">
  <option value="yes">Yes, use all data in the database, even that otherwise hidden until publication</option>
  <option value="no">No, use public peer-reviewed results, only</option>
  </select></p>
