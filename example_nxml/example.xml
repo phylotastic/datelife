@@ -1,16 +1,68 @@
-<nex:nexml xmlns="http://www.nexml.org/2009" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:nex="http://www.nexml.org/2009" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:dc="http://purl.org/dc/elements/1.1/" version="0.9" xsi:schemaLocation="http://www.nexml.org/2009 http://www.nexml.org/2009/nexml.xsd" generator="Bio::Phylo::Project v.0.45_1660" about="#nl1">
+<nex:nexml xmlns="http://www.nexml.org/2009" 
+	       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+	       xmlns:nex="http://www.nexml.org/2009" 
+	       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	       xmlns:xsd="http://www.w3.org/2001/XMLSchema#" 
+	       xmlns:dc="http://purl.org/dc/elements/1.1/" version="0.9" 
+	       xmlns:cdao="http://purl.org/obo/cdao/2012-06-06/cdao.owl"
+	       xmlns:dla="http://www.datelife.org/vocabulary/datelifeannotation.owl"
+	       xmlns:dac="http://www.fossilrecord.net/dateaclade/"
+	       xsi:schemaLocation="http://www.nexml.org/2009 http://www.nexml.org/2009/nexml.xsd" generator="Bio::Phylo::Project v.0.45_1660" about="#nl1">
 	<meta xsi:type="nex:LiteralMeta" content="2012-06-07T17:19:19" id="ma11" datatype="xsd:date" property="dc:date"/>
+	<meta xsi:type="nex:LiteralMeta" content="2012-06-07T17:20:20" id="ma12" datatype="xsd:date" property="dla:analysisdate"/>
+	<meta xsi:type="nex:LiteralMeta" content="DateLife 0.1" id="ma13" datatype="xsd:string" property="dla:branchLengthService"/>
 	<otus id="os12">
-	<otu label="Homo_sapiens" id="ou15"/>
-	<otu label="Mus_musculus" id="ou14"/>
-	<otu label="Pan_paniscus" id="ou16"/>
-	<otu label="Rattus_rattus" id="ou13"/>
+		<otu label="Homo_sapiens" id="ou15"/>
+		<otu label="Mus_musculus" id="ou14"/>
+		<otu label="Pan_paniscus" id="ou16"/>
+		<otu label="Rattus_rattus" id="ou13"/>
 	</otus>
 	<trees otus="os12" id="ts2">
 		<tree xsi:type="nex:FloatTree" id="te3">
-			<node root="true" id="ne4"/>
-			<node id="ne5"/>
-			<node id="ne8"/>
+			<node root="true" id="ne4">
+				<meta xsi:type="nex:LiteralMeta" content="91.8" id="ma40" datatype="xsd:float" property="dla:nodeAge"/>				
+				<meta xsi:type="nex:LiteralMeta" content="Euarchontoglires" id="ma41" datatype="xsd:string" property="dla:taxonomicName"/>
+				<meta xsi:type="nex:LiteralMeta" content="Heomys" id="ma42" datatype="xsd:string" property="dla:fossilSpecimenName"/>
+				<meta xsi:type="nex:LiteralMeta" content="61.5-61.9" id="ma43" datatype="xsd:string" property="dla:minimumAge"/>
+				<meta xsi:type="nex:LiteralMeta" content="98.7-100.5" id="ma44" datatype="xsd:string" property="dla:maximumAge"/>
+				<meta xsi:type="nex:LiteralMeta" 
+					content="@Article{benton_donoghue2007,author = {M. J. Benton and P. C. J. Donoghue},title= {Paleontological evidence to date the tree of life},journal = {Mol. Biol. Evol.},year = {2007},volume = {24},pages = {26--53}}"
+					id="ma45"
+					datatype="xsd:string"
+					property="dla:validationCitation"	  
+				/>
+				<meta xsi:type="nex:ResourceMeta" rel="dac:clade-human-rat.html" id="ma46" property="dla:fcdbEntry"/> 
+			</node>
+				
+			<node id="ne5">
+				<meta xsi:type="nex:LiteralMeta" content="29.1" id="ma20" datatype="xsd:float" property="dla:nodeAge"/>
+				<meta xsi:type="nex:LiteralMeta" content="Murinae" id="ma21" datatype="xsd:string" property="dla:taxonomicName"/>
+				<meta xsi:type="nex:LiteralMeta" content="Progonomys" id="ma22" datatype="xsd:string" property="dla:fossilSpecimenName"/>
+				<meta xsi:type="nex:LiteralMeta" content="11" id="ma23" datatype="xsd:string" property="dla:minimumAge"/>
+				<meta xsi:type="nex:LiteralMeta" content="12.3" id="ma24" datatype="xsd:string" property="dla:maximumAge"/>
+				<meta xsi:type="nex:LiteralMeta" content="Warning - node age exceeds soft maximum" id="ma25" datatype="xsd:string" property="dla:nodeSpecificErrors"/>
+				<meta xsi:type="nex:LiteralMeta" 
+					  content="@Article{benton_donoghue2007,author = {M. J. Benton and P. C. J. Donoghue},title= {Paleontological evidence to date the tree of life},journal = {Mol. Biol. Evol.},year = {2007},volume = {24},pages = {26--53}}"
+					  id="ma26"
+					  datatype="xsd:string"
+					  property="dla:validationCitation"	  
+				/>
+				<meta xsi:type="nex:ResourceMeta" rel="dac:clade-mouse-rat.html" id="ma27" property="dla:fcdbEntry"/> 
+			</node>
+			<node id="ne8">
+				<meta xsi:type="nex:LiteralMeta" content="8.6" id="ma30" datatype="xsd:float" property="dla:nodeAge"/>
+				<meta xsi:type="nex:LiteralMeta" content="Hominini" id="ma31" datatype="xsd:string" property="dla:taxonomicName"/>
+				<meta xsi:type="nex:LiteralMeta" content="Sahelanthropus" id="ma32" datatype="xsd:string" property="dla:fossilSpecimenName"/>
+				<meta xsi:type="nex:LiteralMeta" content="6.5" id="ma33" datatype="xsd:string" property="dla:minimumAge"/>
+				<meta xsi:type="nex:LiteralMeta" content="10.0" id="ma34" datatype="xsd:string" property="dla:maximumAge"/>
+				<meta xsi:type="nex:LiteralMeta" 
+					content="@Article{benton_donoghue2007,author = {M. J. Benton and P. C. J. Donoghue},title= {Paleontological evidence to date the tree of life},journal = {Mol. Biol. Evol.},year = {2007},volume = {24},pages = {26--53}}"
+					id="ma36"
+					datatype="xsd:string"
+					property="dla:validationCitation"
+				/>
+				<meta xsi:type="nex:ResourceMeta" rel="dac:clade-human-chimp.html" id="ma37" property="dla:fcdbEntry"/> 
+			</node>
 			<node label="Rattus_rattus" id="ne6" otu="ou13"/>
 			<node label="Mus_musculus" id="ne7" otu="ou14"/>
 			<node label="Homo_sapiens" id="ne9" otu="ou15"/>
