@@ -36,3 +36,10 @@ bininda.emonds.all<-BindMatrices(list(
 result<-GetSubsetArray (bininda.emonds.all, c("Homo_sapiens", "Pan_paniscus", "Mus_musculus"))
 print(GetAges(result$patristic.matrix.array))
 
+# load 20K primate trees from Tracy Heath
+data(Heath)
+heath.all<-BindMatrices(lapply(sample(Heath$trees,500),ComputePatristicDistance))
+#heath.all<-BindMatrices(lapply(Heath$trees,ComputePatristicDistance)) #will be slow
+result<-GetSubsetArray (heath.all, c("Lemur_catta", "Galago_crassicaudatus"))
+print(GetAges(result$patristic.matrix.array))
+print(GetQuantiles(GetAges(result$patristic.matrix.array)))
