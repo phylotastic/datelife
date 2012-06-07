@@ -6,7 +6,7 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
   if (format=="html") {
     out("<!doctype html><html lang='en'><head><title>DateLife</title></head>")
     out("<body><p>")
-    out("<table border='1'><tr><td>Median</td><td>Min</td><td>2.5% quantile</td><td>97.5% quantile</td><td>Max</td><td><NTrees</td><td>Problems</td><td>Citation</td></tr>")
+    out("<table border='1'><tr><td>Median</td><td>Min</td><td>2.5% quantile</td><td>97.5% quantile</td><td>Max</td><td>NTrees</td><td>Problems</td><td>Citation</td></tr>")
     for (i in sequence(length(studies))) {
       result<-results.list[[i]]
       num.matching<-0

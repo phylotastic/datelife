@@ -25,7 +25,6 @@ studies[[length(studies)+1]]<-harvard10k.perissodactyla.all
 rm(harvard10k.perissodactyla.all)
 print(citations)
 
-if (1>2) {
 citations<-c(citations,"Bininda-Emonds et al. 2007")
 embargoed<-c(embargoed,FALSE)
 load("bininda.emonds.rda")
@@ -49,6 +48,6 @@ print(ls())
 studies[[length(studies)+1]]<-harvard10k.primates.all
 rm(harvard10k.primates.all)
 print(citations)
-}
+
 
 setwd(original.wd)
