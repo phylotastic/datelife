@@ -6,7 +6,7 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
   SummaryPatristicMatrix <- function(patristic.matrix.array,fn=median) {
     return(apply(patristic.matrix.array,MARGIN=c(1,2),fn))
   }
-  if(format="newick1000") {
+  if(format=="newick1000") {
     randomtreesperstudy<-1000
   }
   tree.list<-list()
