@@ -1,9 +1,10 @@
-run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes") {
+run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100) {
   #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
   #  studies
 	cleaned.names<-strsplit( gsub("\\s","",taxa), ",")[[1]]
 	results.list<-lapply(studies,GetSubsetArray, taxa=cleaned.names)
   ages.matrix<-c() #will hold median, and 95% CI
+  uncertainty<-as.numeric(uncertainty)/100 #make percentage
   if (format=="html") {
     out("<!doctype html><html><?php include('/Library/WebServer/Sites/datelife.org/datelife/php/pagestart.html'); ?>")
     out("<p>")
@@ -29,7 +30,12 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
     }
     if (display.result) {
       ages<-GetAges(result$patristic.matrix.array)
-      ages.matrix<-rbind(ages.matrix,matrix(quantile(ages,c(0.5,0.025,0.975)),nrow=1))
+      if (length(ages)==1) {
+        ages.matrix<-rbind(ages.matrix,matrix(c(ages[1],ages[1]-uncertainty*ages[1],ages[1]+uncertainty*ages[1]) ,nrow=1))
+      }
+      else {
+        ages.matrix<-rbind(ages.matrix,matrix(quantile(ages,c(0.5,0.025,0.975)),nrow=1))
+      }
       if (format=="html") {
         probs<-c(0.5,0,0.025,0.975,1)
         out(paste("\n<tr>",VectorToTableRow(GetQuantiles(ages,probs)),"<td>",length(ages),"</td><td>",result$problem,"</td><td>",citations[i],"</td></tr>",sep="",collapse=""))
@@ -38,11 +44,18 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
   }
   if (format=="html") {
     out("</table></p>")
+    out(paste("<p>The best guess (median) for the estimate is ",out(median(ages.matrix[,1]))," million years, ",sep=""))
+    out(paste("but the median uncertainty for age goes from ",median(ages.matrix[,2])," to ",median(ages.matrix[,3]),sep=""))
+    out(paste(" and the maximum uncertainty goes from ",min(ages.matrix[,2])," to ",max(ages.matrix[,2]),sep=""))
     out("<?php include('/Library/WebServer/Sites/datelife.org/datelife/php/pageend.html'); ?>");
   }
   if (format=="bestguess") {
     out(median(ages.matrix[,1])) 
   }
+	if (format=="bestguessuncert") {
+	  out(paste(median(ages.matrix[,1]),median(ages.matrix[,2]),median(ages.matrix[,3]),sep=",")) 
+	}
+	
   return(done())
 
 }
