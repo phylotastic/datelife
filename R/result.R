@@ -4,7 +4,7 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
 
   #include here TEMPORARILY until spinning up a new R daemon
   SummaryPatristicMatrix <- function(patristic.matrix.array,fn=median) {
-    return(apply(result$patristic.matrix.array,MARGIN=c(1,2),fn))
+    return(apply(patristic.matrix.array,MARGIN=c(1,2),fn))
   }
   
   

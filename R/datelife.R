@@ -121,5 +121,5 @@ PatristicMatrixToTree <- function(patristic.matrix) {
 }
 
 SummaryPatristicMatrix <- function(patristic.matrix.array,fn=median) {
-  return(apply(result$patristic.matrix.array,MARGIN=c(1,2),fn))
+  return(apply(patristic.matrix.array,MARGIN=c(1,2),fn))
 }
