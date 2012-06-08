@@ -357,7 +357,11 @@ right: 2.0em;
 bottom: 1.2em;
 }
 
-table, th, td
+table
 {
-border: 1px solid black;
+border-collapse:collapse;
+}
+table, td, th
+{
+border:1px solid black;
 }
