@@ -9,7 +9,7 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
     out("<!doctype html><html>")
     pagestart<-scan('/Library/WebServer/Sites/datelife.org/datelife/php/pagestart.html',"raw",sep="\n")
     for(i in sequence(length(pagestart))) {
-      out(cat(pagestart[i]))
+      out(pagestart[i])
       out("\n")
     }
     out("<p>")
