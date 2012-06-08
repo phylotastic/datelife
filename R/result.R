@@ -82,7 +82,11 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
 	if (format=="bestguessuncert") {
 	  out(paste(median(ages.matrix[,1]),median(ages.matrix[,2]),median(ages.matrix[,3]),sep=",")) 
 	}
-	
+	if (format=="newickmed") {
+	  if (dim(median.patristic.matrix)[1]>2) {
+	    out(write.tree(PatristicMatrixToTree( median.patristic.matrix )))
+	  }
+	}
   return(done())
 
 }

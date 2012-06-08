@@ -3,7 +3,7 @@
 
 <p>Use the syntax <code>Genus_species,Genus_species</code>: comma-delimited, no spaces, underscores in names</p>
  <p><form action = "http://datelife.org/cgi-bin/R/result" method="get">
- <p>Taxa: <input type="text" name="taxa" value="Rhinoceros_unicornis,Equus_caballus" size="80"></p>
+ <p>Taxa: <input type="text" name="taxa" value="Rhinoceros_unicornis,Equus_caballus,Mus_musculus" size="80"></p>
 
  <p>Return format: <select name="format">
  <option value="html">HTML</option>
