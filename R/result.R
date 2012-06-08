@@ -7,7 +7,7 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
   uncertainty<-as.numeric(uncertainty)/100 #make percentage
   if (format=="html") {
     out("<!doctype html><html>")
-    pagestart<-scan('/Library/WebServer/Sites/datelife.org/datelife/php/pagestart.html',"raw",sep="\n")
+    pagestart<-scan('/Library/WebServer/Sites/datelife.org/datelife/php/pagestart.html',"raw",sep="\n",quiet=TRUE)
     for(i in sequence(length(pagestart))) {
       out(pagestart[i])
       out("\n")
@@ -52,7 +52,11 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
     out(paste("<p>The best guess (median) for the estimate is ",median(ages.matrix[,1])," MY, ",sep=""))
     out(paste("but the median uncertainty for age goes from ",median(ages.matrix[,2])," to ",median(ages.matrix[,3]),sep=""))
     out(paste("MY and the maximum uncertainty goes from ",min(ages.matrix[,2])," to ",max(ages.matrix[,3])," MY.",sep=""))
-    out("<?php include('/Library/WebServer/Sites/datelife.org/datelife/php/pageend.html'); ?>");
+    pageend<-scan('/Library/WebServer/Sites/datelife.org/datelife/php/pagestart.html',"raw",sep="\n",quiet=TRUE)
+    for(i in sequence(length(pageend))) {
+      out(pageend[i])
+      out("\n")
+    }
   }
   if (format=="bestguess") {
     out(median(ages.matrix[,1])) 
