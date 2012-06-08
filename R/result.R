@@ -13,7 +13,7 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
       out("\n")
     }
     out("<p>")
-    out("<table border='1'><tr><td>Median</td><td>Min</td><td>2.5% quantile</td><td>97.5% quantile</td><td>Max</td><td>NTrees</td><td>Problems</td><td>Citation</td></tr>")
+    out("<table border='1'><tr><th>Median</th><th>Min</th><th>2.5% quantile</th><th>97.5% quantile</th><th>Max</th><th>NTrees</th><th>Problems</th><th>Citation</th></tr>")
   }
   for (i in sequence(length(studies))) {
     result<-results.list[[i]]
