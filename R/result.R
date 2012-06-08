@@ -3,43 +3,46 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
   #  studies
 	cleaned.names<-strsplit( gsub("\\s","",taxa), ",")[[1]]
 	results.list<-lapply(studies,GetSubsetArray, taxa=cleaned.names)
+  ages.matrix<-c() #will hold median, and 95% CI
   if (format=="html") {
     out("<!doctype html><html><?php include('/Library/WebServer/Sites/datelife.org/datelife/php/pagestart.html'); ?>")
     out("<p>")
     out("<table border='1'><tr><td>Median</td><td>Min</td><td>2.5% quantile</td><td>97.5% quantile</td><td>Max</td><td>NTrees</td><td>Problems</td><td>Citation</td></tr>")
-    for (i in sequence(length(studies))) {
-      result<-results.list[[i]]
-      num.matching<-0
-      if (!is.na(result$patristic.matrix.array)) { #happens if 0 return
-        num.matching<-dim(SplitArray(result$patristic.matrix.array)[[1]])[1] #take just the first array
-      }
-      display.result<-FALSE
-      if(num.matching == length(cleaned.names)) {
+  }
+  for (i in sequence(length(studies))) {
+    result<-results.list[[i]]
+    num.matching<-0
+    if (!is.na(result$patristic.matrix.array)) { #happens if 0 return
+      num.matching<-dim(SplitArray(result$patristic.matrix.array)[[1]])[1] #take just the first array
+    }
+    display.result<-FALSE
+    if(num.matching == length(cleaned.names)) {
+      display.result<-TRUE 
+    }
+    else {
+      if ( ( num.matching > 1)  && (partial=="liberal") ) {
         display.result<-TRUE 
       }
-      else {
-        if ( ( num.matching > 1)  && (partial=="liberal") ) {
-          display.result<-TRUE 
-        }
-      }
-      if ((useembargoed=="no") && (embargoed[i]==TRUE)) {
-        display.result<-FALSE 
-      }
-      if (display.result) {
-        ages<-GetAges(result$patristic.matrix.array)
-        out("\n")
+    }
+    if ((useembargoed=="no") && (embargoed[i]==TRUE)) {
+      display.result<-FALSE 
+    }
+    if (display.result) {
+      ages<-GetAges(result$patristic.matrix.array)
+      ages.matrix<-rbind(ages.matrix,matrix(quantile(ages,c(0.5,0.025,0.975)),nrow=1))
+      if (format==html) {
         probs<-c(0.5,0,0.025,0.975,1)
-        out(paste("<tr>",VectorToTableRow(GetQuantiles(ages,probs)),"<td>",length(ages),"</td><td>",result$problem,"</td><td>",citations[i],"</td></tr>",sep="",collapse=""))
+        out(paste("\n<tr>",VectorToTableRow(GetQuantiles(ages,probs)),"<td>",length(ages),"</td><td>",result$problem,"</td><td>",citations[i],"</td></tr>",sep="",collapse=""))
       }
     }
+  }
+  if (format=="html") {
     out("</table></p>")
     out("<?php include('/Library/WebServer/Sites/datelife.org/datelife/php/pageend.html'); ?>");
-    return(done())
-  }
-  if (format=="newick") {
-    return(done())
   }
   if (format=="bestguess") {
-    return(done())
+    out(median(ages.matrix[,1])) 
   }
+  return(done())
+
 }
