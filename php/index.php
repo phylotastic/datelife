@@ -1,51 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--
-
-	zenlike1.0 by nodethirtythree design
-	http://www.nodethirtythree.com
-
--->
 <html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
-<title>DateLife</title>
-<meta name="keywords" content="" />
-<meta name="description" content="" />
-<link rel="stylesheet" type="text/css" href="default.css" />
-</head>
-<body>
-
-<div id="upbg"></div>
-
-<div id="outer">
-
-
-	
-
-
-	<div id="headerpic"></div>
-
-	
-	<div id="menu">
-		<!-- HINT: Set the class of any menu link below to "active" to make it appear active -->
-		<ul>
-			<li><a href="#">Home</a></li>
-			<li><a href="#">Source code</a></li>
-			<li><a href="#">About</a></li>
-			<li><a href="#">Contact</a></li>
-			<li><a href="#">Phylotastic!</a></li>
-
-		</ul>
-	</div>
-	<div id="menubottom"></div>
-
-	
-	<div id="content">
-
-		<!-- Normal content: Stuff that's not going to be put in the left or right column. -->
-		<div id="normalcontent">
-			<div class="contentarea">
-				<!-- Normal content area start -->
+<?php include("pagestart.html"); ?>
 
 <p>Use the syntax <code>Genus_species,Genus_species</code>: comma-delimited, no spaces, underscores in names</p>
  <p><form action = "http://datelife.org/cgi-bin/R/result" method="get">
@@ -76,17 +30,5 @@
 <p>Note source code is available at <a href="https://bitbucket.org/bomeara/datelife">https://bitbucket.org/bomeara/datelife</a></p>
 <p>We use the <a href="http://r-forge.r-project.org/projects/phyloorchard/">PhyloOrchard</a> R package to store trees; you can install it by doing<br />
 <code>install.packages("PhyloOrchard", repos="http://R-Forge.R-project.org")</code></p>
-				<!-- Normal content area end -->
-			</div>
-		</div>
-	</div>
 
-	<div id="footer">
-			<div class="left">Reuse encouraged</div>
-			<div class="right">Design by <a href="http://www.nodethirtythree.com/">NodeThirtyThree Design</a></div>
-	</div>
-	
-</div>
-
-</body>
-</html>
+<?php include("pageend.html"); ?>
