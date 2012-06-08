@@ -119,3 +119,7 @@ VectorToTableRow <- function(x) {
 PatristicMatrixToTree <- function(patristic.matrix) {
   return(midpoint(nj(patristic.matrix)))
 }
+
+SummaryPatristicMatrix <- function(patristic.matrix.array,fn=median) {
+  return(apply(result$patristic.matrix.array,MARGIN=c(1,2),fn))
+}

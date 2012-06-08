@@ -7,7 +7,8 @@
 
  <p>Return format: <select name="format">
  <option value="html">HTML</option>
- <option value="newick">Newick (in the future)</option>
+ <option value="newickmed">Newick median</option>
+ <option value="newick1000">Newick 1000 trees, sampled from all studies</option>
  <option value="bestguess">Best guess</option>
  <option value="bestguessuncert">Best guess,Min guess,Max guess</option>
  <option value="nexml">NeXML (in the future)</option>
