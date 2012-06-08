@@ -4,8 +4,8 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
 	cleaned.names<-strsplit( gsub("\\s","",taxa), ",")[[1]]
 	results.list<-lapply(studies,GetSubsetArray, taxa=cleaned.names)
   if (format=="html") {
-    out("<!doctype html><html lang='en'><head><title>DateLife</title></head>")
-    out("<body><p>")
+    out("<!doctype html><html><?php include('/Library/WebServer/Sites/datelife.org/datelife/php/pagestart.html'); ?>")
+    out("<p>")
     out("<table border='1'><tr><td>Median</td><td>Min</td><td>2.5% quantile</td><td>97.5% quantile</td><td>Max</td><td>NTrees</td><td>Problems</td><td>Citation</td></tr>")
     for (i in sequence(length(studies))) {
       result<-results.list[[i]]
@@ -32,7 +32,8 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
         out(paste("<tr>",VectorToTableRow(GetQuantiles(ages,probs)),"<td>",length(ages),"</td><td>",result$problem,"</td><td>",citations[i],"</td></tr>",sep="",collapse=""))
       }
     }
-    out("</table></p></body></html>")
+    out("</table></p>")
+    out("<?php include('/Library/WebServer/Sites/datelife.org/datelife/php/pageend.html'); ?>");
     return(done())
   }
   if (format=="newick") {
