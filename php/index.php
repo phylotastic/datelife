@@ -8,9 +8,9 @@
  <p>Return format: <select name="format">
  <option value="html">HTML</option>
  <option value="newickmed">Newick median</option>
- <option value="newick1000">Newick 1000 trees, sampled from all studies</option>
  <option value="bestguess">Best guess</option>
  <option value="bestguessuncert">Best guess,Min guess,Max guess</option>
+ <option value="newick1000">Newick 1000 trees, sampled from all studies (in the future)</option>
  <option value="nexml">NeXML (in the future)</option>
  <option value="rda">R data file (in the future)</option>
  </select><br />Note that to return a tree you'll need to provide at least three taxon names. The "best guesses" are just the medians of the results by study.</p>
