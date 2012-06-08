@@ -30,7 +30,7 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
     if (display.result) {
       ages<-GetAges(result$patristic.matrix.array)
       ages.matrix<-rbind(ages.matrix,matrix(quantile(ages,c(0.5,0.025,0.975)),nrow=1))
-      if (format==html) {
+      if (format=="html") {
         probs<-c(0.5,0,0.025,0.975,1)
         out(paste("\n<tr>",VectorToTableRow(GetQuantiles(ages,probs)),"<td>",length(ages),"</td><td>",result$problem,"</td><td>",citations[i],"</td></tr>",sep="",collapse=""))
       }
