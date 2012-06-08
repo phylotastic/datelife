@@ -52,7 +52,7 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
     out(paste("<p>The best guess (median) for the estimate is ",median(ages.matrix[,1])," MY, ",sep=""))
     out(paste("but the median uncertainty for age goes from ",median(ages.matrix[,2])," to ",median(ages.matrix[,3]),sep=""))
     out(paste("MY and the maximum uncertainty goes from ",min(ages.matrix[,2])," to ",max(ages.matrix[,3])," MY.",sep=""))
-    pageend<-scan('/Library/WebServer/Sites/datelife.org/datelife/php/pagestart.html',"raw",sep="\n",quiet=TRUE)
+    pageend<-scan('/Library/WebServer/Sites/datelife.org/datelife/php/pageend.html',"raw",sep="\n",quiet=TRUE)
     for(i in sequence(length(pageend))) {
       out(pageend[i])
       out("\n")
