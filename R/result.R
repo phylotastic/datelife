@@ -44,9 +44,9 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
   }
   if (format=="html") {
     out("</table></p>")
-    out(paste("<p>The best guess (median) for the estimate is ",out(median(ages.matrix[,1]))," million years, ",sep=""))
+    out(paste("<p>The best guess (median) for the estimate is ",median(ages.matrix[,1])," MY, ",sep=""))
     out(paste("but the median uncertainty for age goes from ",median(ages.matrix[,2])," to ",median(ages.matrix[,3]),sep=""))
-    out(paste(" and the maximum uncertainty goes from ",min(ages.matrix[,2])," to ",max(ages.matrix[,2]),sep=""))
+    out(paste("MY and the maximum uncertainty goes from ",min(ages.matrix[,2])," to ",max(ages.matrix[,2])," MY",sep=""))
     out("<?php include('/Library/WebServer/Sites/datelife.org/datelife/php/pageend.html'); ?>");
   }
   if (format=="bestguess") {
