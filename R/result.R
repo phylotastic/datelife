@@ -1,4 +1,4 @@
-run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100) {
+run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100, randomtreesperstudy=0) {
   #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
   #  studies
 
@@ -6,8 +6,10 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
   SummaryPatristicMatrix <- function(patristic.matrix.array,fn=median) {
     return(apply(patristic.matrix.array,MARGIN=c(1,2),fn))
   }
-  
-  
+  if(format=="newick1000") {
+    randomtreesperstudy<-1000
+  }
+  tree.list<-list()
   cleaned.names<-strsplit( gsub("\\s","",taxa), ",")[[1]]
 	results.list<-lapply(studies,GetSubsetArray, taxa=cleaned.names)
   median.patristic.matrices<-list()

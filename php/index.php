@@ -1,6 +1,6 @@
 <html>
 <?php include("pagestart.html"); ?>
-
+<p>This will give the age of the most recent common ancestor of a set of taxa based on available time-calibrated trees. It is still actively in development, so it may break at times. Currently it mostly has mammals in the database. We will be adding more taxa throughout June, 2012. See the <a href="http://datelife.org/faq.php">FAQ</a> page for more info on this project, and the <a href="http://phylotastic.org">Phylotastic</a> page for more info on the overall hackathon, of which this was just one outcome.</p>
 <p>Use the syntax <code>Genus_species,Genus_species</code>: comma-delimited, no spaces, underscores in names</p>
  <p><form action = "http://datelife.org/cgi-bin/R/result" method="get">
  <p>Taxa: <input type="text" name="taxa" value="Rhinoceros_unicornis,Equus_caballus,Mus_musculus" size="80"></p>
@@ -8,9 +8,9 @@
  <p>Return format: <select name="format">
  <option value="html">HTML</option>
  <option value="newickmed">Newick median</option>
- <option value="newick1000">Newick 1000 trees, sampled from all studies</option>
  <option value="bestguess">Best guess</option>
  <option value="bestguessuncert">Best guess,Min guess,Max guess</option>
+ <option value="newick1000">Newick 1000 trees, sampled from all studies (in the future)</option>
  <option value="nexml">NeXML (in the future)</option>
  <option value="rda">R data file (in the future)</option>
  </select><br />Note that to return a tree you'll need to provide at least three taxon names. The "best guesses" are just the medians of the results by study.</p>
@@ -33,6 +33,7 @@
  <option value="10">Assume +/- 10% of the age</option> 
  <option value="5">Assume +/- 5% of the age</option> 
  <option value="1">Assume +/- 1% of the age</option> 
+ <option value="0">Assume +/- 0% of the age</option> 
 </select></p>
 
 
