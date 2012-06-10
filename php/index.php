@@ -21,8 +21,8 @@
  </select></p>
 
  <p>Use embargoed data: <select name="useembargoed">
- <option value="yes">Yes, use all data in the database, even data that is otherwise being hidden until publication</option>
- <option value="no">No, use public peer-reviewed results, only</option>
+ <option value="yes">Yes, use all data in the database (even info from as yet unpublished trees by DateLife contributors)</option>
+ <option value="no">No, use public, peer-reviewed results, only</option>
  </select></p>
 
  <p>How to deal with single point estimates (which have no uncertainty): <select name="uncertainty">
