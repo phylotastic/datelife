@@ -2,10 +2,6 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
   #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
   #  studies
 
-  #include here TEMPORARILY until spinning up a new R daemon
-  SummaryPatristicMatrix <- function(patristic.matrix.array,fn=median) {
-    return(apply(patristic.matrix.array,MARGIN=c(1,2),fn))
-  }
   if(format=="newick1000") {
     randomtreesperstudy<-1000
   }

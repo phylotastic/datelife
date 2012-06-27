@@ -71,7 +71,15 @@ GetAge <- function(patristic.matrix) {
 }
 
 GetAges <- function(patristic.matrix.array) {
-  return( sapply(SplitArray(patristic.matrix.array), GetAge ))
+  if (length(dim(patristic.matrix.array))==2) {
+    return(GetAge(patristic.matrix.array))
+  }
+  else if (dim(patristic.matrix.array)[3]==1) {
+    return(GetAge(patristic.matrix.array))
+  }
+  else {
+    return( sapply(SplitArray(patristic.matrix.array), GetAge ))
+  }
 }
 
 ReorderMatrix <- function(patristic.matrix) {
@@ -112,8 +120,8 @@ GetQuantiles <- function(ages,probs=c(0.5,0,0.025,0.975,1) ) {
   return(quantile(ages,probs))
 }
 
-VectorToTableRow <- function(x) {
-  return(paste(paste("<td>",x,sep=""),"</td>",sep="",collapse=""))
+VectorToTableRow <- function(x,digits=2) {
+  return(paste(paste("<td>",round(x,digits),sep=""),"</td>",sep="",collapse=""))
 }
 
 PatristicMatrixToTree <- function(patristic.matrix) {
