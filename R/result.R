@@ -7,7 +7,7 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
   }
   tree.list<-list()
   cleaned.names<-strsplit( gsub("\\s","",taxa), ",")[[1]]
-	results.list<-lapply(studies,GetSubsetArray, taxa=cleaned.names)
+  results.list<-lapply(studies,GetSubsetArray, taxa=cleaned.names)
   median.patristic.matrices<-list()
   ages.matrix<-c() #will hold median, and 95% CI
   uncertainty<-as.numeric(uncertainty)/100 #make percentage
@@ -55,6 +55,11 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
       if (format=="html") {
         probs<-c(0.5,0,0.025,0.975,1)
         out(paste("\n<tr>",VectorToTableRow(GetQuantiles(ages,probs)),"<td>",length(ages),"</td><td>",result$problem,"</td><td>",citations[i],"</td></tr>",sep="",collapse=""))
+      }
+      if (format=="newick1000") {
+      	for (rep in sequence(randomtreesperstudy) ) {
+      	  out(write.tree(PatristicMatrixToTree(SamplePatristicMatrix(result$patristic.matrix.array, uncertainty=uncertainty))))
+      	}
       }
     }
   }
