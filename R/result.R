@@ -57,8 +57,27 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
         out(paste("\n<tr>",VectorToTableRow(GetQuantiles(ages,probs)),"<td>",length(ages),"</td><td>",result$problem,"</td><td>",citations[i],"</td></tr>",sep="",collapse=""))
       }
       if (format=="newick1000") {
-      	for (rep in sequence(randomtreesperstudy) ) {
-      	  out(write.tree(PatristicMatrixToTree(SamplePatristicMatrix(result$patristic.matrix.array, uncertainty=uncertainty))))
+SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
+ # if (dim(patristic.matrix.array)[3] == 1) {
+ # 	patristic.matrix<-patristic.matrix.array[,,1]
+ # 	#need order of node depths, from just the upper triangular and diagonal part of the matrix
+ # 	element.order<-order(patristic.matrix[upper.tri(patristic.matrix,diag=FALSE)],decreasing=TRUE)
+ # 	new.patristic.matrix<-patristic.matrix*0
+ # 	cur.val<-patristic.matrix[upper.tri(patristic.matrix,diag=FALSE)][element.order[1]]
+ #   new.patristic.matrix[upper.tri(new.patristic.matrix,diag=FALSE)][element.order[1]] <- cur.val + runif(1, -cur.val*uncertainty/100, cur.val*uncertainty/100)
+#	element.order<-element.order[-1]
+#  	for (i in sequence(length(element.order))) {
+#  		cur.val<-patristic.matrix[upper.tri(patristic.matrix,diag=FALSE)][element.order[i]]
+#  		new.patristic.matrix[upper.tri(new.patristic.matrix,diag=FALSE)][element.order[i]] <- cur.val + runif(1, -cur.val*uncertainty/100, min(cur.val*uncertainty/100, min( ))
+#  	}
+#  }
+#  else {
+  	return(patristic.matrix<-patristic.matrix.array[,,sample.int(1, size=dim(patristic.matrix.array)[3], replace=TRUE )] )
+ # }
+}
+      	for (rep in sequence(5) ) {
+		#out("try")
+      	 out(write.tree(PatristicMatrixToTree(SamplePatristicMatrix(result$patristic.matrix.array, uncertainty=uncertainty))))
       	}
       }
     }
