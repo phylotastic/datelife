@@ -2,8 +2,9 @@
 library(ape)
 library(phylobase)
 library(abind)
-library(compare)
 library(phangorn)
+library(compare)
+
 
 ReadRDFTree <- function(identifier, format = "phylo") {
 	# reads a tree in RDF format from the hypothetical data store
@@ -87,10 +88,10 @@ ReorderMatrix <- function(patristic.matrix) {
 }
 
 TestNameOrder <- function(patristic.matrix, standard.rownames, standard.colnames) {
-  if (compare(rownames(patristic.matrix),standard.rownames)$result!=TRUE) {
+  if (compare::compare(rownames(patristic.matrix),standard.rownames)$result!=TRUE) {
     return(FALSE) 
   }
-  if (compare(colnames(patristic.matrix),standard.colnames)$result!=TRUE) {
+  if (compare::compare(colnames(patristic.matrix),standard.colnames)$result!=TRUE) {
     return(FALSE)
   }
   return(TRUE)
