@@ -101,9 +101,12 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
     if (dim(median.patristic.matrix)[1]>2) {
       out("<p>Newick tree string: based on median tree from each study (only those with no problems), then median of those:</p>")
       out(write.tree(PatristicMatrixToTree( median.patristic.matrix )))
+      out("<p>")
       p<-WebPlot(600, 600)
       plot(PatristicMatrixToTree( median.patristic.matrix ))
+      axisPhylo()
       out(p)
+      out("</p>")
     }
     pageend<-scan('/Library/WebServer/Sites/datelife.org/datelife/php/pageend.html',"raw",sep="\n",quiet=TRUE)
     for(i in sequence(length(pageend))) {
