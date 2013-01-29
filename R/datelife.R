@@ -58,6 +58,9 @@ GetSubsetArrayBoth <- function(patristic.matrix.array, taxa, phy=NULL, phy4=NULL
 
 CongruifyTree <- function(patristic.matrix, query.tree) {
   result.matrix<-matrix(nrow=dim(patristic.matrix)[1], ncol=dim(patristic.matrix)[2])
+  if(is.null(query.tree$edge.length)) {
+    query.tree<-compute.brlen(query.tree, method="Grafen")
+  }
   try(result.matrix<-ComputePatristicDistance(congruify.phylo(PatristicMatrixToTree(patristic.matrix), query.tree, NULL, 0, scale="PATHd8")$phy))
   return(result.matrix)
 }
