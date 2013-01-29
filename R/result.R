@@ -8,8 +8,7 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
   cleaned.names<-""
   if(!is.null(phy)) {
     cleaned.names<-phy$tip.label 
-  }
-  else {
+  } else {
     cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
   }
 
