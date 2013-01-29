@@ -1,13 +1,23 @@
-run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100, randomtreesperstudy=0) {
+run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100, randomtreesperstudy=0) {
   #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
   #  studies
+  phy<-NULL
+  if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
+    phy<-input
+  }
+  cleaned.names<-""
+  if(!is.null(phy)) {
+    cleaned.names<-phy$tip.label 
+  }
+  else {
+    cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
+  }
 
   if(format=="newick1000") {
     randomtreesperstudy<-1000
   }
   tree.list<-list()
-  cleaned.names<-strsplit( gsub("\\s","",taxa), ",")[[1]]
-  results.list<-lapply(studies,GetSubsetArray, taxa=cleaned.names)
+  results.list<-lapply(studies,GetSubsetArrayBoth, taxa=cleaned.names, phy=phy)
   median.patristic.matrices<-list()
   ages.matrix<-c() #will hold median, and 95% CI
   uncertainty<-as.numeric(uncertainty)/100 #make percentage
@@ -21,6 +31,7 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
     }
     out("<p>")
     out("<table border='1'><tr><th>Median</th><th>Min</th><th>2.5% quantile</th><th>97.5% quantile</th><th>Max</th><th>NTrees</th><th>Problems</th><th>Citation</th></tr>")
+	
   }
   for (i in sequence(length(studies))) {
     result<-results.list[[i]]
@@ -41,7 +52,7 @@ run<-function(taxa=c("Rhinoceros_unicornis","Equus_caballus"), format="html", pa
       display.result<-FALSE 
     }
     used.studies<-c(used.studies,display.result)
-    if (display.result) {
+    if (display.result) { 
       ages<-GetAges(result$patristic.matrix.array)
       if(result$problem=="none") { #rather than dealing with missing taxa
         median.patristic.matrices[[length(median.patristic.matrices)+1]] <- SummaryPatristicMatrix(result$patristic.matrix.array)

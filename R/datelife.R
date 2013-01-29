@@ -4,6 +4,7 @@ library(phylobase)
 library(abind)
 library(phangorn)
 library(compare)
+library(geiger) #note this uses the next version of geiger, which has congruifier code
 
 
 ReadRDFTree <- function(identifier, format = "phylo") {
@@ -44,6 +45,38 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
     }
   }
   return(list(patristic.matrix=patristic.matrix,problem=problem))
+}
+
+GetSubsetArrayBoth <- function(patristic.matrix.array, taxa, phy=NULL, phy4=NULL) {
+  if (is.null(phy)) {
+    return(GetSubsetArray(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy4=phy4)) 
+  }
+  else { #congruify
+    return(GetSubsetArray(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy=phy)) 
+  }
+}
+
+CongruifyTree <- function(patristic.matrix, query.tree) {
+  result.matrix<-matrix(nrow=dim(patristic.matrix)[1], ncol=dim(patristic.matrix)[2])
+  try(result.matrix<-ComputePatristicDistance(congruify.phylo(PatristicMatrixToTree(patristic.matrix), query.tree, NULL, 0, scale="PATHd8")$phy))
+  return(result.matrix)
+}
+
+GetSubsetArrayCongruify <- function(patristic.matrix.array, taxa, phy=NULL) {
+  #gets a subset of the patristic.matrix.array. 
+  patristic.matrix.array <- patristic.matrix.array[ rownames(patristic.matrix.array) %in% taxa,colnames(patristic.matrix.array) %in% taxa,  ]
+  problem <- "none"
+  final.size <- sum(rownames(patristic.matrix.array) %in% taxa) # returns number of matches
+  if (final.size < length(taxa)) {
+    problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
+    if (final.size < 2 ) {
+      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA 
+      patristic.matrix.array <- NA # to make sure no one uses the zero by mistake
+    }
+  }
+  patristic.matrix.list <- SplitArray(patristic.matrix.array)
+  patristic.matrix.array<-BindMatrices(lapply(patristic.matrix.list, CongruifyTree, query.tree=phy)) #yes, this should be parallel
+  return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
 }
 
 GetSubsetArray <- function(patristic.matrix.array, taxa, phy4=NULL) {
@@ -152,9 +185,3 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
  # }
 }
 
-CongruifyTrees <- function(query.tree, patristic.matrix.array) {
-	#first, load code from development version of geiger (this should be done outside this function)
-	#for each tree in patristic matrix array (currently this will be patristic.matrix, but maybe change)
-	#if it has enough overlap,
-	#return congruify.phylo(PatristicMatrixToTree(patristic.matrix), query.tree, NULL, 0, scale="PATHd8")
-}
