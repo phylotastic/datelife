@@ -72,9 +72,11 @@ GetSubsetArrayCongruify <- function(patristic.matrix.array, taxa, phy=NULL) {
   final.size <- sum(rownames(patristic.matrix.array) %in% taxa) # returns number of matches
   if (final.size < length(taxa)) {
     problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
-    if (final.size < 2 ) {
+    if (final.size < 3 ) {
       problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA 
       patristic.matrix.array <- NA # to make sure no one uses the zero by mistake
+      return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
+      
     }
   }
   patristic.matrix.list <- SplitArray(patristic.matrix.array)
