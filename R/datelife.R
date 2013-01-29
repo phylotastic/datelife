@@ -151,3 +151,10 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
   	return(patristic.matrix<-patristic.matrix.array[,,sample.int(1, size=dim(patristic.matrix.array)[3] )] )
  # }
 }
+
+CongruifyTrees <- function(query.tree, patristic.matrix.array) {
+	#first, load code from development version of geiger (this should be done outside this function)
+	#for each tree in patristic matrix array (currently this will be patristic.matrix, but maybe change)
+	#if it has enough overlap,
+	#return congruify.phylo(PatristicMatrixToTree(patristic.matrix), query.tree, NULL, 0, scale="PATHd8")
+}
