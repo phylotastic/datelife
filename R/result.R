@@ -3,7 +3,7 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
   #  studies
   phy<-NULL
   if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
-    phy<-input
+    phy<-read.tree(text=input)
   }
   cleaned.names<-""
   if(!is.null(phy)) {
