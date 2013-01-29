@@ -52,7 +52,7 @@ GetSubsetArrayBoth <- function(patristic.matrix.array, taxa, phy=NULL, phy4=NULL
     return(GetSubsetArray(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy4=phy4)) 
   }
   else { #congruify
-    return(GetSubsetArray(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy=phy)) 
+    return(GetSubsetArrayCongruify(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy=phy)) 
   }
 }
 
