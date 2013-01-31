@@ -1,7 +1,7 @@
 # Check species names against Taxosaurus
-# Run and write trees to directory with new file name, just appending "_new" to the end
 # Run the function replacenames across all trees
 library(taxize); library(ape); library(stringr); library(doMC)
+
 # treefilenames <- dir("/Users/scottmac2/phyloorchard/pkg/data")
 treefilenames <- dir("/Library/WebServer/Sites/datelife.org/datelife/data")
 
@@ -13,7 +13,7 @@ l_ply(treefilenames, function(x) load(paste("/Library/WebServer/Sites/datelife.o
 # Get tree names in the workspace
 trees <- sapply(treefilenames, function(x) str_replace(x, ".rda", ""), USE.NAMES=F)
 
-# taxonomic group assignment for trees
+# Taxonomic group assignment for trees  - Add to this as needed
 treegrouplist <- list(
 	list("AlfaroEtAl2009", "verts", "NCBI"),
 	list("Apogonidae2011", "fishes", "NCBI"),
@@ -42,12 +42,13 @@ treegrouplist <- list(
 	list("ZhangandWake2009", "amphibians", "NCBI")
 )
 
+# Create a safe version of checknames so that the below lapply doesn't stop if one fails 
+checknames_safe <- plyr::failwith(NULL, checknames)
+
 # Wrapper to checknames to be able to specify taxonomic group to speed up function
 check_wrapper <- function(list_, ...){
 	checknames_safe(phylo=list_[[1]], source_=list_[[3]], ...)
 }
 
-# Run all, with the same arguments to TNRS, change arguments per tree in the 
-# future based on taxonomic group
-checknames_safe <- plyr::failwith(NULL, checknames_safe)
-l_ply(treegrouplist[1:2], check_wrapper, splitby=100, writefile=FALSE) # run the cleaning algorithm on all trees
+# Run all, with the same arguments to TNRS
+l_ply(treegrouplist, check_wrapper, splitby=200, writefile=TRUE)
