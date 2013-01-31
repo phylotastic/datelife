@@ -102,7 +102,7 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
       out("<p>Newick tree string: based on median tree from each study (only those with no problems), then median of those:</p>")
       out(write.tree(PatristicMatrixToTree( median.patristic.matrix )))
       out("<p>")
-      p<-WebPlot(plot.width, plot.height)
+      p<-WebPlot(as.numeric(plot.width), as.numeric(plot.height))
       plot(PatristicMatrixToTree( median.patristic.matrix ))
       axisPhylo()
       out(p)
@@ -126,7 +126,7 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
 	}
   }
   if (format=="png") {
-      p<-WebPlot(plot.width, plot.height)
+      p<-WebPlot(as.numeric(plot.width), as.numeric(plot.height))
       plot(PatristicMatrixToTree( median.patristic.matrix ))
       axisPhylo()
       out(p)
