@@ -2,27 +2,13 @@
 <?php include("pagestart.html"); ?>
 <h2>API</h2>
 <br />
-<p>This page describes the current API for DateLife. Note that it is still alpha: it may break or change.
-<br />The basic interface is passing arguments through the url (something familiar from other sites: looking at <a href="http://www.ncbi.nlm.nih.gov/nuccore/?term=myrmecocystus">http://www.ncbi.nlm.nih.gov/nuccore/?term=myrmecocystus</a>, you can tell that <a href="http://www.ncbi.nlm.nih.gov/nuccore/?term=rhinostomus">http://www.ncbi.nlm.nih.gov/nuccore/?term=rhinostomus</a> would give info on a different taxon). The arguments correspond to info on the <a href="http://www.datelife.org">home page</a>:</p>
+<p>This page describes the current API for DateLife. Note that it is still alpha: it may break or change.</p>
+<p>The basic interface is passing arguments through the URL. For example, <br /><a href="http://datelife.org/cgi-bin/R/result?input=Rhinoceros_unicornis%2CEquus_caballus%2CMus_musculus&format=newickmed&partial=liberal&useembargoed=yes&uncertainty=100">http://datelife.org/cgi-bin/R/result?input=Rhinoceros_unicornis%2CEquus_caballus%2CMus_musculus&format=newickmed&partial=liberal&useembargoed=yes&uncertainty=100</a><br /> will return a newick tree linking <i>Rhinoceros unicornis</i>, <i>Equus caballus</i>, and <i>Mus musculus</i>. The arguments correspond to info on the <a href="http://www.datelife.org">home page</a>:</p>
 
-<p>format=<br />
-<table border="0">
-<tr>
-<td>html</td>
-<td>Web page with tables and a figure</td>
-</tr>
-<tr>
-<td>newickmed</td>
-<td>Newick median tree (median of all the chronograms with sufficient overlap)</td>
-</tr>
-<tr>
-<td>bestguess</td>
-<td>The median estimate for the root age: a single floating point number</td>
-</tr>
-<tr>
-<td>bestguessuncert</td>
-<td>Comma delimited: Median,Min,Max estimates for the root age</td>
-</tr>
-</table>
+<p><b>format=</b>
+<br /><b>html</b>: The standard web page view of results
+<br /><b>newickmed</b>: The Newick tree that is the median of all the returned tree ages
+<br /><b>bestguess</b>: A single floating point number with the median age of the MRCA across studies
+<br /><b>bestguessuncert</b>: Comma-delimited: median age, min age, max age
 </p>
 <?php include("pageend.html"); ?>
