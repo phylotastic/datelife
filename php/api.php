@@ -10,6 +10,7 @@
 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>newickmed</b>: The Newick tree that is the median of all the returned tree ages
 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>bestguess</b>: A single floating point number with the median age of the MRCA across studies
 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>bestguessuncert</b>: Comma-delimited: median age, min age, max age
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>png</b>: A PNG image of the median tree.
 </p>
 <p><b>partial=</b>
 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>liberal</b>: Return info from trees that have any taxon overlap with your query (even though this may result in an age underestimate)
@@ -21,5 +22,11 @@
 </p>
 <p><b>uncertainty=</b>
 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><i>0-100</i></b>: You can enter any number from 0 to 100 here. If there is a single point estimate, how uncertain should the age estimate be interpreted as (60=age of MRCA +/- 60% of this age)
+</p>
+<p><b>plot.width=</b>
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><i>integer</i></b>: The width of the plot, in pixels.
+</p>
+<p><b>plot.height=</b>
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><i>integer</i></b>: The height of the plot, in pixels.
 </p>
 <?php include("pageend.html"); ?>
