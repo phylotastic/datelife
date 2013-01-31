@@ -1,4 +1,4 @@
-run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100, randomtreesperstudy=0) {
+run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600) {
   #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
   #  studies
   phy<-NULL
@@ -16,7 +16,7 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
     randomtreesperstudy<-1000
   }
   tree.list<-list()
-  results.list<-lapply(studies,GetSubsetArrayBoth, taxa=cleaned.names, phy=phy)
+  results.list<-lapply(studies,GetSubsetArrayBoth, taxa=cleaned.names, phy=phy) #need to change this to GetSubsetArrayBothFromPhylo, and change studies, once they are input and stored as phylo/multiphylo
   median.patristic.matrices<-list()
   ages.matrix<-c() #will hold median, and 95% CI
   uncertainty<-as.numeric(uncertainty)/100 #make percentage
@@ -102,7 +102,7 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
       out("<p>Newick tree string: based on median tree from each study (only those with no problems), then median of those:</p>")
       out(write.tree(PatristicMatrixToTree( median.patristic.matrix )))
       out("<p>")
-      p<-WebPlot(600, 600)
+      p<-WebPlot(plot.width, plot.height)
       plot(PatristicMatrixToTree( median.patristic.matrix ))
       axisPhylo()
       out(p)
@@ -117,14 +117,20 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
   if (format=="bestguess") {
     out(median(ages.matrix[,1])) 
   }
-	if (format=="bestguessuncert") {
-	  out(paste(median(ages.matrix[,1]),median(ages.matrix[,2]),median(ages.matrix[,3]),sep=",")) 
+  if (format=="bestguessuncert") {
+	out(paste(median(ages.matrix[,1]),median(ages.matrix[,2]),median(ages.matrix[,3]),sep=",")) 
+  }
+  if (format=="newickmed") {
+	if (dim(median.patristic.matrix)[1]>2) {
+	  out(write.tree(PatristicMatrixToTree( median.patristic.matrix )))
 	}
-	if (format=="newickmed") {
-	  if (dim(median.patristic.matrix)[1]>2) {
-	    out(write.tree(PatristicMatrixToTree( median.patristic.matrix )))
-	  }
-	}
+  }
+  if (format=="png") {
+      p<-WebPlot(plot.width, plot.height)
+      plot(PatristicMatrixToTree( median.patristic.matrix ))
+      axisPhylo()
+      out(p)
+  }
   return(done())
 
 }
