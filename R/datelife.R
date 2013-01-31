@@ -5,7 +5,16 @@ library(abind)
 library(phangorn)
 library(compare)
 library(geiger) #note this uses the next version of geiger, which has congruifier code
+library(datelife2) #Klaus Schliep's code for pruning efficiently. Eventually, this will be moved into phangorn
 
+#Note that originally trees were stored as patristic matrices. This was intended
+#to make subsetting fast. The downside is large memory usage. Klaus Schliep wrote
+#fast tree subsetting for phylo and multiphylo objects, so now trees are stored
+#internally as objects of this type, but with the final output after pruning
+#going through patristic matrices. Both sets of functions are maintained for
+#now, but eventually the ones that take a patristic.matrix.array and then 
+#subset it will be deprecated for those that first take a multiphylo or phylo
+#object.
 
 ReadRDFTree <- function(identifier, format = "phylo") {
 	# reads a tree in RDF format from the hypothetical data store
@@ -47,6 +56,83 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
   return(list(patristic.matrix=patristic.matrix,problem=problem))
 }
 
+GetSubsetArrayBothFromPhylo <- function(reference.tree, taxa, phy=NULL, phy4=NULL) {
+  if (is.null(phy)) {
+    return(GetSubsetArrayFromPhylo(reference.tree=reference.tree, taxa=taxa, phy4=phy4)) 
+  }
+  else { #congruify
+    return(GetSubsetArrayCongruifyFromPhylo(reference.tree=reference.tree, taxa=taxa, phy=phy)) 
+  }
+
+}
+
+
+GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4=NULL) {
+  reference.tree<-pruneTrees(reference.tree, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
+  problem <- "none"
+  final.size <- 0
+  patristic.matrix.array <- NA
+  if (!is.null(reference.tree)) {
+  	if(class(reference.tree)=="phylo") {
+  		final.size<-Ntip(reference.tree)
+  	} else {
+  		final.size<-Ntip(reference.tree[[1]]) #since Ntip only works on phylo objects
+  	}
+  }
+  if (final.size < length(taxa)) {
+    problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
+    if (final.size < 2 ) {
+      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA 
+      patristic.matrix.array <- NA # to make sure no one uses the zero by mistake
+    }
+  }
+  if (final.size >= 2) {
+  	if(class(reference.tree)=="phylo") {
+  		patristic.matrix.array <- BindMatrices(list(ComputePatristicDistance(reference.tree)))
+  	} else {
+  		patristic.matrix.array <- BindMatrices(lapply(reference.tree,ComputePatristicDistance))
+  	}
+  }
+  if(!is.null(phy4)) {
+    if (length(descendants(phy4, MRCA(phy4, taxa), type="tips")) > taxa) {
+      problem <- "set of taxa not a clade, so this is probably an overestimate"
+    }
+  }
+  return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
+}
+
+GetSubsetArrayCongruifyFromPhylo <- function(reference.tree, taxa, phy=NULL) {
+  reference.tree<-pruneTrees(reference.tree, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
+  problem <- "none"
+  final.size <- 0
+  patristic.matrix.array <- NA
+  if (!is.null(reference.tree)) {
+  	if(class(reference.tree)=="phylo") {
+  		final.size<-Ntip(reference.tree)
+  	} else {
+  		final.size<-Ntip(reference.tree[[1]]) #since Ntip only works on phylo objects
+  	}
+  }
+  if (final.size < length(taxa)) {
+    problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
+    if (final.size < 3 ) {
+      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA 
+      patristic.matrix.array <- NA # to make sure no one uses the zero by mistake
+      return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
+      
+    }
+  }
+  if (final.size >= 3) {
+  	if(class(reference.tree)=="phylo") {
+  		patristic.matrix.array <- BindMatrices(list(CongruifyTreeFromPhylo(reference.tree, query.tree=phy)))
+  	} else {
+  		patristic.matrix.array <- BindMatrices(lapply(reference.tree,CongruifyTreeFromPhylo, query.tree=phy)) #think about mclapply
+  	}
+  }
+  return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
+}
+
+
 GetSubsetArrayBoth <- function(patristic.matrix.array, taxa, phy=NULL, phy4=NULL) {
   if (is.null(phy)) {
     return(GetSubsetArray(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy4=phy4)) 
@@ -59,9 +145,18 @@ GetSubsetArrayBoth <- function(patristic.matrix.array, taxa, phy=NULL, phy4=NULL
 CongruifyTree <- function(patristic.matrix, query.tree) {
   result.matrix<-matrix(nrow=dim(patristic.matrix)[1], ncol=dim(patristic.matrix)[2])
   if(is.null(query.tree$edge.length)) {
-    query.tree<-compute.brlen(query.tree, method="Grafen")
+    query.tree$edge.length<-numeric(nrow(query.tree$edge))
   }
   try(result.matrix<-ComputePatristicDistance(congruify.phylo(PatristicMatrixToTree(patristic.matrix), query.tree, NULL, 0, scale="PATHd8")$phy))
+  return(result.matrix)
+}
+
+CongruifyTreeFromPhylo <- function(reference.tree, query.tree) {
+  result.matrix<-matrix(nrow=Ntip(reference.tree), ncol=Ntip(reference.tree))
+  if(is.null(query.tree$edge.length)) {
+    query.tree$edge.length<-numeric(nrow(query.tree$edge)) #makes it so that branches that don't match reference tree get zero length
+  }
+  try(result.matrix<-ComputePatristicDistance(congruify.phylo(reference.tree, query.tree, NULL, 0, scale="PATHd8")$phy))
   return(result.matrix)
 }
 

@@ -1,8 +1,8 @@
 <html>
 <?php include("pagestart.html"); ?>
-<p>This will give the age of the most recent common ancestor of a set of taxa, or stretch an input tree, based on available time-calibrated trees. It is still actively in development, so it may break at times. Currently it mostly has mammals in the database. We will be adding more taxa throughout June, 2012. See the <a href="http://datelife.org/faq.php">FAQ</a> page for more info on this project, and the <a href="http://phylotastic.org">Phylotastic</a> page for more info on the overall hackathon, of which this was just one outcome.</p>
+<p>This will give the age of the most recent common ancestor of a set of taxa, or stretch an input tree, based on available time-calibrated trees. It is still actively in development, so it may break at times. Currently it mostly has mammals in the database, but we are actively adding taxa. See the <a href="http://datelife.org/faq.php">FAQ</a> page for more info on this project, and the <a href="http://phylotastic.org">Phylotastic</a> page for more info on the overall hackathon, of which this was just one outcome.</p>
  <p><form action = "http://datelife.org/cgi-bin/R/result" method="get">
- <p>Use the syntax <code>Genus_species,Genus_species</code>: comma-delimited, no spaces, underscores in names, i.e., <b>Rhinoceros_unicornis,Equus_caballus,Mus_musculus</b> for a list of species in the taxa box, <b>OR</b> a Newick tree string, ending with a semicolon: <b>((Rhinoceros_unicornis,Equus_caballus),Mus_musculus);</b>. The tree can have branch lengths.</p>
+ <p>Use the syntax <code>Genus_species,Genus_species</code>: comma-delimited, no spaces, underscores in names, i.e., <br /><b>Rhinoceros_unicornis,Equus_caballus,Mus_musculus</b> <br />for a list of species in the taxa box, <b>OR</b> a Newick tree string, ending with a semicolon: <br /><b>((Rhinoceros_unicornis,Equus_caballus),Mus_musculus);</b><br />The tree can have branch lengths.</p>
  <p>Input: <input type="text" name="input" value="" size="80"></p>
  
  <p>Return format: <select name="format">
@@ -10,9 +10,7 @@
  <option value="newickmed">Newick median</option>
  <option value="bestguess">Best guess</option>
  <option value="bestguessuncert">Best guess,Min guess,Max guess</option>
- <option value="newick1000">Newick 1000 trees, sampled from all studies (in the future)</option>
- <option value="nexml">NeXML (in the future)</option>
- <option value="rda">R data file (in the future)</option>
+ <option value="png">Image file of median tree (PNG format)</option>
  </select><br />Note that to return a tree you'll need to provide at least three taxon names. The "best guesses" are just the medians of the results by study.</p>
 
  <p>Partial match: <select name="partial">
