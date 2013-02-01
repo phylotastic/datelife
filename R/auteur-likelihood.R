@@ -1,0 +1,740 @@
+# optimization for single-rate Brownian model -- use fitContinuous instead 
+.TESTING.likfx.bm=function(phy, dat, SE=NULL, method=c("direct","vcv","reml"), niter=10){
+	method=match.arg(method, c("direct","vcv","reml"))
+	
+	lik=make.bm.relaxed(phy, dat, SE, method=method)
+	
+    pp=names(argn(lik))
+    
+    xLIK=function(lik){
+        attz=names(attributes(lik)$argn)
+        if("root"%in%attz){
+            if("SE"%in%attz){
+                f=function(p){
+                    rr=numeric(length(argn(lik)$rates))
+                    rr[]=exp(p[1])
+                    rt=p[2]
+                    se=exp(p[3])
+                    lik(rr, rt, se)
+                }
+            } else {
+                f=function(p){
+                    rr=numeric(length(argn(lik)$rates))
+                    rr[]=exp(p[1])
+                    rt=p[2]
+                    lik(rr, rt)
+                }
+            }
+        } else {
+            if("SE"%in%attz){
+                f=function(p){
+                    rr=numeric(length(argn(lik)$rates))
+                    rr[]=exp(p[1])
+                    se=exp(p[2])
+                    lik(rr, se)
+                }
+
+            } else {
+                f=function(p){
+                    rr=numeric(length(argn(lik)$rates))
+                    rr[]=exp(p[1])
+                    lik(rr)
+                }
+            }
+            
+        }
+        f
+    }
+    
+    f=xLIK(lik)
+    z=function(p){
+        t=try(f(p), silent=TRUE)
+        if(inherits(t, "try-error")){
+            t=-1e200
+        }
+        if(is.na(t)) t=-1e200
+        if(is.infinite(t)) t=-1e200
+        t
+    }
+    att=argn(lik)
+    if(is.list(att)) args=names(att) else args=att
+    
+    bnds=cbind(min=c(-500, -(max(abs(dat))*100), -500), max=c(10, (max(abs(dat))*100), 10))
+    rownames(bnds)=c("rates", "root", "SE")
+    typ=c("exp", "nat", "exp")
+    names(typ)=rownames(bnds)
+    
+    out=lapply(1:niter, function(i){
+        while(1){
+            st=apply(matrix(bnds[args,], nrow=length(args)), 1, function(x) runif(1, x[1], x[2]))
+            if(!is.na(z(st)->L)) if(is.finite(L) & L>-1e200) break()
+        }
+        
+        if(length(args)==1) method="Brent" else method="L-BFGS-B"
+        rr=optim(st, fn=z, lower=bnds[args,"min"], upper=bnds[args,"max"], method=method, control=list(fnscale=-1))
+        names(rr$par)=args
+        typ=typ[args]
+        rr$par=ifelse(typ=="nat", rr$par, exp(rr$par))
+        rr$lik=z
+        rr
+    })
+    
+    lnL=sapply(out, function(x) x$value)
+    res=out[[min(which(lnL==max(lnL)))]]
+    res
+}
+
+## WORKHORSE -- built from diversitree:::make.bm by tricking models into multivariate normal
+# likelihood function creation
+bm.lik<-function (phy, dat, SE = NA, model=c("BM", "OU", "EB", "trend", "lambda", "kappa", "delta", "drift", "white"), ...)
+{
+    ## SE: can be array of mixed NA and numeric values -- where SE == NA, SE will be estimated (assuming a global parameter for all species)
+	
+	model=match.arg(model, c("BM", "OU", "EB", "trend", "lambda", "kappa", "delta", "drift", "white"))
+	
+    cache=.prepare.bm.univariate(phy, dat, SE=SE, ...)
+    cache$ordering=attributes(cache$phy)$order ## SHOULD BE POSTORDER
+    
+	# function for reshaping tree by model
+	FUN=switch(model,
+    BM=.null.cache(cache),
+    OU=.ou.cache(cache),
+    EB=.eb.cache(cache),
+    trend=.trend.cache(cache),
+    lambda=.lambda.cache(cache),
+    kappa=.kappa.cache(cache),
+    delta=.delta.cache(cache),
+    drift=.null.cache(cache),
+    white=.white.cache(cache)
+    )
+    
+    N = cache$n.tip
+    n = cache$n.node
+	z = length(cache$len)
+    rootidx = as.integer(cache$root)
+    adjvar = as.integer(attributes(cache$y)$adjse)
+	given = as.integer(attributes(cache$y)$given)
+    given[rootidx]=1
+    adjSE=any(adjvar==1)
+    if(model=="drift"){
+        adjDRIFT=TRUE
+        if(is.ultrametric(cache$phy)){
+            warning("likelihoods under 'drift' and 'BM' models will be indistinguishable with an ultrametric 'phy'")
+        }
+    } else {
+        adjDRIFT=FALSE
+    }
+    
+    
+    # cache object needed for 'bm_direct'
+    datc = list(
+    intorder = as.integer(cache$order[-length(cache$order)]),
+    tiporder = as.integer(1:N),
+    root = rootidx,
+    y = as.numeric(cache$y[1, ]),
+    var = as.numeric(cache$y[2, ]),
+    n = as.integer(z),
+    given = as.integer(given),
+    descRight = as.integer(cache$children[ ,1]),
+    descLeft = as.integer(cache$children[, 2]),
+    drift = 0
+    )
+	
+    ll.bm.direct = function(q, sigsq, se, drft, datc) {
+		
+		if(is.null(argn(FUN))) new=FUN() else new=FUN(q)
+        if(adjDRIFT) datc$drift=drft
+        
+		datc$len=as.numeric(new$len)
+		.xxSE=function(cache){
+            vv=cache$y[2,]^2
+            ff=function(x){
+				if(any(adjvar==1->ww)){
+					vv[which(ww)]=x^2
+					return(vv)
+				} else {
+					return(vv)
+				}
+			}
+			return(ff)
+		}
+		modSE=.xxSE(cache)
+		
+		datc$var=as.numeric(modSE(se))
+		
+        out = .Call("bm_direct", dat = datc, pars = as.numeric(rep(sigsq, z)), package = "geiger")
+        #       vals = c(out$initM[rootidx], out$initV[rootidx], out$lq[rootidx])
+        loglik <- sum(out$lq)
+        #        rlq=loglik-sum(out$lq[-rootidx])
+        #        print(list(rlq, vals, out))
+        #       intermediates=FALSE
+        #       if (intermediates) {
+        #         attr(loglik, "intermediates") <- intermediates
+        #         attr(loglik, "vals") <- vals
+        #       }
+        #       attr(loglik, "ROOT.MAX")=vals[1]
+		if(is.na(loglik)) loglik=-Inf
+        return(as.numeric(loglik))
+    }
+    class(ll.bm.direct) <- c("bm", "dtlik", "function")
+	
+	
+    ## EXPORT LIKELIHOOD FUNCTION
+	if(is.null(argn(FUN))){
+		
+		if(adjSE){
+			attb=c("sigsq", "SE", "z0")
+            if(adjDRIFT) attb=c(attb, "drift")
+            
+			lik <- function(pars) {
+				pars=.repars(pars, attb)
+                if(adjDRIFT) drft=-pars[4] else drft=0
+                datc$y[rootidx]=pars[3]
+				ll = ll.bm.direct(q=NULL, sigsq = pars[1], se=pars[2], drft, datc)
+				return(ll)
+			}
+			attr(lik, "argn") = attb
+		} else {
+			attb=c("sigsq", "z0")
+            if(adjDRIFT) attb=c(attb, "drift")
+            
+			lik <- function(pars) {
+				pars=.repars(pars, attb)
+                if(adjDRIFT) drft=-pars[3] else drft=0
+                datc$y[rootidx]=pars[2]
+				ll = ll.bm.direct(q=NULL, sigsq = pars[1], se=NULL, drft, datc)
+				return(ll)
+			}
+			attr(lik, "argn") = attb
+		}
+		
+	} else {
+		if(adjSE){
+			attb=c(argn(FUN), "sigsq", "SE", "z0")
+            if(adjDRIFT) attb=c(attb, "drift")
+            
+			lik <- function(pars) {
+				pars=.repars(pars, attb)
+                if(adjDRIFT) drft=-pars[5] else drft=0
+                datc$y[rootidx]=pars[4]
+				ll = ll.bm.direct(q=pars[1], sigsq = pars[2], se=pars[3], drft=drft, datc)
+				return(ll)
+			}
+			attr(lik, "argn") = attb
+		} else {
+			attb=c(argn(FUN), "sigsq", "z0")
+            if(adjDRIFT) attb=c(attb, "drift")
+            
+			lik <- function(pars) {
+				pars=.repars(pars, attb)
+                if(adjDRIFT) drft=-pars[4] else drft=0
+                datc$y[rootidx]=pars[3]
+				ll = ll.bm.direct(pars[1], sigsq = pars[2], se=NULL, drft=drft, datc)
+				return(ll)
+			}
+			attr(lik, "argn") = attb
+		}
+	}
+	
+    attr(lik, "cache") <- cache
+    class(lik) = c("bm", "function")
+    lik
+}
+
+## replacing prepare.data.bm
+make.bm.relaxed <- function(phy, dat, SE=NA, method=c("direct","vcv","reml")){
+#   method=match.arg(method, c("direct","vcv","reml"))
+    method=match.arg(method, c("direct","vcv")) ## REML not trusted currently
+
+	lik=switch(method,
+			   direct=.make.bm.relaxed.direct(phy, dat, SE),
+			   vcv=.make.bm.relaxed.vcv(phy, dat, SE),
+			   reml=.make.bm.relaxed.pic(phy, dat, SE))
+	lik
+}
+
+
+#primary function for computing the likelihood of data, given a root state, VCV matrix, and Brownian motion model
+#author: LJ HARMON 2009 and JM EASTMAN 2010
+.bm.lik.fn.vcv <-
+function(root, dat, vcv, SE) { 
+# mod 12.02.2010 JM Eastman: using determinant()$modulus rather than det() to stay in log-space
+	y=dat
+	b <- vcv
+	if(any(SE!=0)) diag(b)=diag(b)+SE^2
+	w <- rep(root, nrow(b))
+	num <- -t(y-w)%*%solve(b)%*%(y-w)/2
+	den <- 0.5*(length(y)*log(2*pi) + as.numeric(determinant(b)$modulus))
+	return((num-den)[1,1])
+}
+
+
+#primary function for computing the likelihood of data, using REML, under Brownian motion model 
+#author: LJ HARMON, LJ REVELL, and JM EASTMAN 2011
+#'rphy' is rate-scaled tree in pruning-wise order (as 'ic')
+.bm.lik.fn.reml <- 
+function(rphy, ic) {
+    new.var=.pic_variance.phylo(rphy)
+	reml=dnorm(ic, mean=0, sd=sqrt(new.var), log=TRUE)
+	return(sum(reml))
+}
+
+
+#compute expected PIC variance given tree: used for .bm.lik.fn.reml()  
+#author: JM EASTMAN 2011
+.pic_variance.phylo <- function(phy)
+{
+	phy$node.label=NULL
+	nb.tip <- Ntip(phy)
+    nb.node <- phy$Nnode
+	if(!is.binary.tree(phy)) stop("'phy' is not fully dichotomous.")
+	
+    phy <- reorder(phy, "postorder")
+	
+	ans <- .C("pic_variance", as.integer(nb.tip), as.integer(nb.node),
+              as.integer(phy$edge[, 1]), as.integer(phy$edge[, 2]),
+              as.double(phy$edge.length), double(nb.node),
+              PACKAGE = "geiger")
+	
+    var <- ans[[6]]
+    var
+}
+
+.make.bm.relaxed.vcv <- function(phy, dat, SE=NULL){
+    ## NOT currently handling given node states
+    
+	cache=.prepare.bm.univariate(phy, dat, nodes=NULL, SE=SE, control=list(binary=FALSE))
+	
+	check.argn=function(rates, root){
+		if(length(rates)!=(cache$n.node+cache$n.tip-1) && length(root)==1) stop("Supply 'rates' as a vector of rate scalars for each branch, and supply 'root' as a single value.")
+	}
+	
+    adjvar = as.integer(attributes(cache$y)$adjse)
+ 
+    if(any(adjvar==1)){ # adjustable SE
+		likSE <- function(rates, root, SE) {
+			check.argn(rates, root)
+            tt=.scale.brlen(cache$phy, rates)
+            vcv=.vmat(tt)
+            xSE=cache$SE[mm<-match(colnames(vcv), names(cache$SE))]
+            adjvar=adjvar[mm]
+            xSE[which(adjvar==1)]=SE
+            dat=cache$dat[match(colnames(vcv), names(cache$dat))]
+            .bm.lik.fn.vcv(root, dat, vcv, xSE)
+        }
+		attr(likSE, "cache") <- cache
+		attr(likSE,"argn")=list(rates=cache$phy$edge[,2], root="root", SE="SE")
+		class(likSE)=c("rbm","bm","function")
+		return(likSE)
+	} else { # unadjustable SE
+		lik <- function(rates, root){
+            check.argn(rates, root)
+            tt=.scale.brlen(cache$phy, rates)
+            vcv=.vmat(tt)
+            SE=cache$SE[match(colnames(vcv),names(cache$SE))]
+            dat=cache$dat[match(colnames(vcv),names(cache$dat))]
+            .bm.lik.fn.vcv(root, dat, vcv, SE)
+        }
+        attr(lik, "cache") <- cache
+        attr(lik,"argn")=list(rates=cache$phy$edge[,2], root="root")
+        class(lik)=c("rbm","bm","function")
+        return(lik)
+    }
+}
+
+.make.bm.relaxed.pic <- function(phy, dat, SE=NULL){
+    
+    ## NOT currently handling given node states
+	cache=.prepare.bm.univariate(phy, dat, nodes=NULL, SE=SE)
+	
+	ic=pic(cache$dat, cache$phy, scaled=FALSE)
+	cache$ic=ic
+	
+	check.argn=function(rates){
+		if(length(rates)!=(cache$n.node+cache$n.tip-1)) stop("Supply 'rates' as a vector of rate scalars for each branch.")
+	}
+	
+    adjvar = as.integer(attributes(cache$y)$adjse)
+
+    xSE=cache$SE
+    N=Ntip(cache$phy)
+    subSE=match(1:N, cache$phy$edge[,2])
+
+    
+    if(any(adjvar==1)){ # adjustable SE
+		likSE <- function(rates, SE) {
+			check.argn(rates)
+            xSE[adjvar==1]=SE
+            rphy=.scale.brlen(cache$phy, rates)
+            rphy$edge.length[subSE]=rphy$edge.length[subSE]+xSE^2
+            .bm.lik.fn.reml(rphy, cache$ic)
+        }
+		attr(likSE, "cache") <- cache
+		attr(likSE,"argn")=list(rates=cache$phy$edge[,2], SE="SE")
+		class(likSE)=c("rbm","bm","function")
+		return(likSE)
+	} else {
+        lik <- function(rates){
+            check.argn(rates)
+            rphy=.scale.brlen(cache$phy, rates)
+            rphy$edge.length[subSE]=rphy$edge.length[subSE]+xSE^2
+            .bm.lik.fn.reml(rphy, cache$ic)
+        }
+        attr(lik,"cache")=cache
+        attr(lik,"argn")=list(rates=cache$phy$edge[,2])
+        class(lik)=c("rbm","bm","function")
+    }
+
+	lik
+}
+
+
+.make.bm.relaxed.direct <- function (phy, dat, SE=NULL) 
+{
+
+    ## NOT currently handling given node states
+    
+	cache=.prepare.bm.univariate(phy, dat, nodes=NULL, SE=SE)
+    N = cache$n.tip
+    n = cache$n.node
+	z = length(cache$len)
+    rootidx = as.integer(cache$root)
+    adjvar = as.integer(attributes(cache$y)$adjse)
+	given = as.integer(attributes(cache$y)$given)
+    given[rootidx]=1
+    
+    datc_init = list(
+                len = as.numeric(cache$len),
+				intorder = as.integer(cache$order[-length(cache$order)]), 
+				tiporder = as.integer(1:N), 
+				root = rootidx, 
+                y = as.numeric(cache$y[1, ]),
+				n = as.integer(z),
+                given = as.integer(given),
+				descRight = as.integer(cache$children[, 1]),
+				descLeft = as.integer(cache$children[, 2]),
+                drift=0
+    )
+	
+	ll.bm.direct <- function(pars, datc) {
+        out = .Call("bm_direct", dat = datc, pars = pars, package = "geiger")
+#       vals = c(out$initM[rootidx], out$initV[rootidx], out$lq[rootidx])
+        loglik <- sum(out$lq)
+#       intermediates=FALSE
+#       if (intermediates) {
+#          attr(loglik, "intermediates") <- intermediates
+#          attr(loglik, "vals") <- vals
+#       }
+        return(loglik)
+    }
+    class(ll.bm.direct) <- c("bm.direct", "bm", "function")
+	
+	vv = numeric(N+n)
+    mm = match(cache$phy$edge[, 2], 1:(N+n))
+	check.argn=function(rates, root){
+		if(length(rates)!=(N+n-1) && length(root)==1) stop("Supply 'rates' as a vector of rate scalars for each branch, and supply 'root' as a single value.")
+	}
+	   
+    var = as.numeric(cache$y[2, ]^2)
+    
+	## LIKELIHOOD FUNCTION
+	if(any(adjvar==1)){ # adjustable SE
+		likSE <- function(rates, root, SE) {
+			check.argn(rates, root)
+			vv[mm] = rates
+			datc_se=datc_init
+			var[which(adjvar==1)]=SE^2
+            datc_se$var=var
+            
+            datc_se$y[rootidx]=root
+            
+			ll = ll.bm.direct(pars = vv,  datc_se)
+			return(ll)
+		}
+		attr(likSE, "cache") <- cache
+		attr(likSE,"argn")=list(rates=cache$phy$edge[,2], root="root", SE="SE")
+		class(likSE)=c("rbm","bm","function")
+		return(likSE)
+	} else { # unadjustable SE
+		lik <- function(rates, root) {
+			check.argn(rates, root)
+			vv[mm] = rates
+            datc_init$var=var
+            datc_init$y[rootidx]=root
+
+			ll = ll.bm.direct(pars = vv,  datc_init)
+			return(ll)
+		}
+		attr(lik, "cache") <- cache
+		attr(lik,"argn")=list(rates=cache$phy$edge[,2], root="root")
+		class(lik)=c("rbm","bm","function")
+		return(lik)
+	}	
+}
+
+.cache.tree <- function (phy) 
+{
+	ordxx=function (children, is.tip, root) 
+# from diversitree:::get.ordering
+	{
+		todo <- list(root)
+		i <- root
+		repeat {
+			kids <- children[i, ]
+			i <- kids[!is.tip[kids]]
+			if (length(i) > 0) 
+            todo <- c(todo, list(i))
+			else break
+		}
+		as.vector(unlist(rev(todo)))
+	}
+	
+    edge <- phy$edge
+    edge.length <- phy$edge.length
+    idx <- seq_len(max(edge))
+    n.tip <- Ntip(phy)
+    tips <- seq_len(n.tip)
+    root <- n.tip + 1
+    is.tip <- idx <= n.tip
+	
+	desc=.cache_tree(phy)
+    children <- desc$fdesc
+	if(!max(sapply(children, length) == 2)){
+		children=NULL
+		order=NULL
+		binary=FALSE
+	} else {
+		children <- rbind(matrix(NA, n.tip, 2), t(matrix(unlist(children), nrow=2)))
+		order <- ordxx(children, is.tip, root)	
+		binary=TRUE
+	}
+	
+    len <- edge.length[mm<-match(idx, edge[, 2])]
+	
+	ans <- list(tip.label = phy$tip.label, node.label = phy$node.label,
+				len = len, children = children, order = order, 
+				root = root, n.tip = n.tip, n.node = phy$Nnode, tips = tips, 
+				edge = edge, edge.length = edge.length, nodes = phy$edge[,2], binary = binary, desc = desc)
+    ans
+}
+
+
+.prepare.bm.univariate=function(phy, dat, nodes=NULL, SE=NA, control=list(binary=TRUE, ultrametric=FALSE)){
+
+    ## CONTROL OBJECT
+    ct=list(binary=TRUE, ultrametric=FALSE)
+    ct[names(control)]=control
+
+    phy=reorder(phy, "postorder")
+    
+    ## MATCHING and major problems
+    td=treedata(phy, dat, sort=TRUE, warnings=FALSE)
+    phy=td$phy
+    if(ct$binary) if(!is.binary.tree(phy)) stop("'phy' should be a binary tree")
+    if(ct$ultrametric) if(!is.ultrametric(phy)) stop("'phy' should be an ultrametric tree")
+    if(is.null(phy$edge.length)) stop("'phy' must include branch lengths in units of time")
+
+
+    if(ncol(td$data)>1) stop("'dat' should be univariate")
+    dat=td$data[,1]
+
+	## RESOLVE SE
+    seTMP=structure(rep(NA, length(dat)), names=names(dat))
+    
+	if(is.null(SE)) SE=NA
+    
+    if(length(SE)>1){
+        if(is.null(names(SE))) stop("'SE' should be a named vector")
+        if(!all(names(dat)%in%names(SE))) stop("names in 'SE' must all occur in names of 'dat'")
+        seTMP[names(SE[names(dat)])]=SE[names(dat)]
+        SE=seTMP
+    } else {
+        if(is.numeric(SE)){
+            seTMP[]=SE
+            SE=seTMP
+        } else {
+            SE=seTMP
+        }
+    }
+    
+    if(!all(is.na(SE) | SE >= 0)) stop("'SE' values should be positive (including 0) or NA")
+    
+    adjse=numeric(length(dat))
+    if(any(vv<-is.na(SE))) {
+        adjse[which(vv)]=1
+    }
+    
+    ## CACHE tree
+    cache=.cache.tree(phy)
+    N=cache$n.tip
+    n=cache$n.node
+    m<-s<-g<-numeric(N+n)
+    
+    ## RESOLVE data: given trait values (m and g) and SE (s) for every node (tips and internals)
+    g[1:N]=1
+    m[]=NA; m[1:N]=dat
+    s[1:N]=SE
+
+    ## RESOLVE nodes
+    if(!is.null(nodes)){
+        if(!all(c("taxon1", "taxon2", "mean", "SE")%in%colnames(nodes))){
+            stop("'nodes' must minimally have column names: 'taxon1', 'taxon2', 'mean', and 'SE'")
+        }
+        
+        nodes=as.data.frame(nodes)
+        if(!is.numeric(nodes$mean) | !is.numeric(nodes$SE)){
+            stop("'nodes' must have numeric vectors for 'mean' and 'SE'")
+        }
+        
+        if(!all(zz<-unique(c(as.character(nodes$taxon1), as.character(nodes$taxon2)))%in%phy$tip.label)){
+            stop(paste("Some taxa appear missing from 'phy':\n\t", paste(zz[!zz%in%phy$tip.label], collapse="\n\t", sep=""), sep=""))
+        }
+                    
+        nodes$node=apply(nodes[,c("taxon1", "taxon2")], 1, .mrca, phy=phy)
+        if(!length(unique(nodes$node))==nrow(nodes)) {
+            stop("Some nodes multiply constrained:\n\t", paste(nodes$node[duplicated(nodes$node)], collapse="\n\t", sep=""), sep="")
+        }
+        
+        m[nodes$node]=nodes$mean
+        s[nodes$node]=nodes$SE
+        g[nodes$node]=1
+    } 
+
+    vec=rbind(m=m, s=s)
+    attr(vec, "given")=g
+    attr(vec, "adjse")=adjse
+    	
+	cache$SE=SE
+	cache$dat=dat[match(phy$tip.label, names(dat))]
+	cache$phy=phy
+    
+    cache$y=vec
+
+    return(cache)
+}
+
+## CHECK -- DEFUNCT ##
+.DEFUNCT_prepare.bm <- function(phy, dat, SE=NA) {
+
+	## SE: can be array of mixed NA and numeric values -- where SE == NA, SE will be estimated (assuming a global parameter for all species) 
+	# resolve estimation of SE
+    seTMP=structure(rep(NA, length(dat)), names=names(dat))
+    
+	if(is.null(SE)) SE=NA
+    
+    if(length(SE)>1){
+        if(is.null(names(SE))) stop("'SE' should be a named vector")
+        if(!all(names(SE)%in%names(dat))) stop("names in 'SE' must all occur in names of 'dat'")
+        seTMP[names(SE)]=SE
+        SE=seTMP
+    } else {
+        if(is.numeric(SE)){
+            seTMP[]=SE
+            SE=seTMP
+        } else {
+            SE=seTMP
+        }
+    }
+    
+    SE[is.na(SE)]=-666
+    
+	# check major issues
+	if(all(is.null(names(dat)))) stop("'dat' must have names matchable to tip labels in 'phy'")
+	if(!inherits(phy,"phylo")) stop("Supply 'phy' as a phylo object")
+	td=treedata(phy, dat, sort = TRUE, warnings=FALSE)
+	if(any(sapply(td, length)==0)) stop("'dat' and 'phy' appear unmatchable")
+	if(ncol(td$data)>1) stop("Please supply one trait at a time")
+	td$phy=reorder(td$phy,"pruningwise")
+	
+	# cache object
+    if(!setequal(names(SE),td$phy$tip.label)) stop("'phy', 'dat', and 'SE' are not matchable")
+    SE=SE[match(td$phy$tip.label, names(SE))]
+	cache=.DEFUNCT_cache.data.bm(td$phy, td$data[,1], SE)
+	cache$nodes=cache$phy$edge[,2]
+	return(cache)
+}
+
+
+## DEFUNCT
+.DEFUNCT_cache.data.bm <- function (phy, dat, SE=NULL) 
+{
+	cache=.cache.tree(phy)
+	
+	# RESOLVE SE
+	# SE should be entirely numeric
+    if (is.null(SE)) stop("'SE' must be a numeric value or vector")
+	
+	if(length(SE)==1) {
+		SE=rep(SE, Ntip(phy))
+		names(SE)=phy$tip.label
+	}
+	
+	if(!is.null(names(SE))) {
+		xx=setequal(names(SE), phy$tip.label)
+		ss.match=match(phy$tip.label, names(SE))
+		if(!xx) stop(paste("encountered error in constructing 'SE' with the following tips not found in the dataset:\n\t", paste(names(SE[is.na(ss.match)]), collapse="\n\t"), sep=""))
+		SE=SE[ss.match]
+	} else {
+		stop("'SE' must be a named vector of measurement error")
+	}
+	
+	tmp <- .check.states.quasse(phy, dat, SE)
+    states <- tmp$states
+    states.sd <- tmp$states.sd
+    cache$ny <- 3
+    #    y <- mapply(function(mean, sd) c(mean, sd * sd, 0), states, states.sd, SIMPLIFY = TRUE)
+    y <- mapply(function(mean, sd) c(mean, sd * sd, 0), states, 0, SIMPLIFY = TRUE)
+
+
+    cache$y <- .dt.tips.ordered(y, cache$tips, cache$len[cache$tips])
+	cache$y$adjSE <- as.integer((SE==-666)[cache$y$target])
+    cache$y$SE <- SE[cache$y$target]
+	
+	cache$SE=SE
+	cache$dat=dat[match(phy$tip.label, names(dat))]
+	cache$phy=phy
+	
+    cache
+}
+
+.proc.lnR=function(gen, subprop, cur.lnL, new.lnL, lnp, lnh, heat=1, control){
+	if(is.infinite(cur.lnL)) stop("Starting point has exceptionally poor likelihood.")
+	if(is.finite(new.lnL)) {
+		lnLikelihoodRatio = new.lnL - cur.lnL
+	} else {
+		new.lnL=-Inf
+		lnLikelihoodRatio = -Inf
+	}
+
+	if(control$sample.priors) lnLikelihoodRatio=0
+
+	lnR=(heat * lnLikelihoodRatio) + (heat * lnp) + lnh
+
+	r=.assess.lnR(lnR)	
+	
+	if(r$error) .error.rjmcmc(gen, subprop, cur.lnL, new.lnL, lnLikelihoodRatio, lnp, lnh, control$errorlog)
+	return(r)
+}
+
+
+#general phylogenetic utility for determining whether to accept ('r'=1) or reject ('r'=0) a proposed model in Markov chain Monte Carlo sampling
+#author: JM EASTMAN 2010
+.assess.lnR <- function(lnR) {
+	if(is.na(lnR) | is.infinite(abs(lnR))) {
+		error=TRUE
+		r=0
+	} else {
+		if(lnR < -20) {
+			r=0 
+		} else if(lnR >= 0) {
+			r=1 
+		} else {
+			r=exp(lnR)
+		}
+		error=FALSE
+	}
+	return(list(r=r, error=error))
+}
+
+
+
