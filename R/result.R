@@ -2,7 +2,7 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
   #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
   #  studies
   phy<-NULL
-  str_trim(input, side = "both")
+  #input<-str_trim(input, side = "both")
   if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
     phy<-read.tree(text=input)
   }
@@ -14,10 +14,12 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
     cleaned.names<-phy$tip.label 
   } else {
     cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
+    #cleaned.names<-lapply(cleaned.names, str_trim, side="both")
     if (usetnrs=="yes") {
     	cleaned.names <- checknames(charvector=cleaned.names, source_=tnrssource)
     }
   }
+  phy<-NULL #just while fixing this bug
 
   if(format=="newick1000") {
     randomtreesperstudy<-1000
