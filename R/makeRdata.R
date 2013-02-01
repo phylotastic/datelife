@@ -1,3 +1,4 @@
+source("datelife.R")
 citations<-c()
 embargoed<-c()
 studies<-list()
@@ -32,10 +33,16 @@ treefilenames <- system(paste("ls -1S ", cleaned.data.dir), intern=TRUE)
 
 trees <- sapply(treefilenames, function(x) str_replace(x, ".rda", ""), USE.NAMES=F)
 for (i in sequence(length(treefilenames))) {
+  print(paste("now processing ",treefilenames[i], sep=""))
   load(paste(cleaned.data.dir,treefilenames[i], sep="")) 
   if(class(trees_cleaned)=="phylo") {
     trees_cleaned<-c(trees_cleaned) 
   }
+  if (class(trees_cleaned)!="multiPhylo") {
+    print(paste("ALERT! Something was wrong with ", treefilenames[i]))
+    next()
+  }
+  print(paste("loaded ",treefilenames[i]," with ",length(trees_cleaned)," trees each with ",Ntip(trees_cleaned[[1]])," taxa", sep=""))
   all.taxa<-append(all.taxa, trees_cleaned[[1]]$tip.label)
   ntrees<-ntrees+min(max.trees.per.study, length(trees_cleaned))
   new.pos <- length(studies)+1
@@ -43,28 +50,32 @@ for (i in sequence(length(treefilenames))) {
   ntrees.per.study[new.pos] <- length(trees_cleaned)
   ntax.per.study[new.pos] <- Ntip(trees_cleaned[[1]])
   
-  print(paste("now processing ",treefilenames[i]," with ",length(trees_cleaned)," trees each with ",Ntip(trees_cleaned[[1]])," taxa", sep=""))
-  
   studies[[new.pos]]<-NA
   if (Ntip(trees_cleaned[[1]]) * length(trees_cleaned) <= max.array.size) {
-  	try(studies[[new.pos]] <- BindMatrices(mclapply(trees_cleaned,ComputePatristicDistance, mc.cores=min(1, detectCores()-2))), silent=TRUE)
+        print("Trying to make patristic matrix")
+  	try(studies[[new.pos]] <- BindMatrices(lapply(trees_cleaned,ComputePatristicDistance))) #mclapply is in theory faster. But memory gets clobbered (even for three large trees) and causes thrashing
   }
   if (is.na(studies[[new.pos]])) {
+    print("Did not make patristic matrix, so adding the multiphylo object instead")
     studies[[new.pos]] <- trees_cleaned #couldn't make the array, perhaps too big for memory or for R. Stick to slower trees
   } 
-  print("loaded")
-  new.citation<-NULL
+  print("done storing data for that file")
+  new.citation<-NA
   
   try(new.citation <- GetFieldFromRdFile(file=paste(man.data.dir, trees[i], ".Rd", sep="", collapse="")), silent=TRUE)
-  if (is.null(new.citation)) {
+  if (is.na(new.citation)) {
     matching.files<-system(paste("grep -l ", trees[i], " ", man.data.dir, "*", sep=""), intern=TRUE)
     try(new.citation <- GetFieldFromRdFile(file=matching.files[1]), silent=TRUE)
+  }
+  if (is.na(new.citation)) {
+    new.citation<-trees[i]
   }
   citations[new.pos] <- new.citation
   embargoed[new.pos] <- FALSE
   if (grepl("Unpub",trees[i])) {
   	embargoed[new.pos] <- TRUE
   }
+  print("done storing metadata")
   rm(trees_cleaned)
 }
 
@@ -78,4 +89,4 @@ print(paste("number of taxa = ", length(unique.taxa)))
 
 print(paste("number of trees = ", ntrees))
 
-save(list=ls(), file=paste(cleaned.data.dir,"StartFiles.Data"), compress=TRUE) #Note that this is saved with a different extension
+save(list=ls(), file=paste(cleaned.data.dir,"StartFiles.Data", sep=""), compress=TRUE) #Note that this is saved with a different extension
