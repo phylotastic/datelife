@@ -24,8 +24,8 @@ GetFieldFromRdFile <- function (file, field="source", sep="") {
 
 cleaned.data.dir <- "/Library/WebServer/Sites/datelife.org/datelife/data/"
 man.data.dir <- "/Library/WebServer/Sites/datelife.org/phyloorchard/pkg/man/"
-cleaned.data.dir <- "/Users/bomeara/Desktop/phyloorchard/pkg/cleaned/"
-man.data.dir <- "/Users/bomeara/Desktop/phyloorchard/pkg/man/"
+#cleaned.data.dir <- "/Users/bomeara/Desktop/phyloorchard/pkg/cleaned/"
+#man.data.dir <- "/Users/bomeara/Desktop/phyloorchard/pkg/man/"
 
 #treefilenames <- dir(cleaned.data.dir)
 treefilenames <- system(paste("ls -1S ", cleaned.data.dir), intern=TRUE)
