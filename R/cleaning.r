@@ -93,6 +93,7 @@ detect_unid <- function(taxon){
 #' @param writefile Write file to directory or not. Remember to change directory to 
 #' 		write to in the function. Right now it is set to 
 #' 		"/Library/WebServer/Sites/datelife.org/datelife/data/"
+#' @param writedir A directory to write file to (defaults to "~/"); ignore if writefile = FALSE.
 #' @param byfilename Defaults to TRUE - if TRUE, then interprets the phylo argument input 
 #' 		using eval() so executes it (used in name fixing on stored trees). If FALSE, 
 #' 		then you can specify phylo as a phylo object instead of the name of that object.
@@ -125,7 +126,7 @@ detect_unid <- function(taxon){
 #' out <- suppressMessages(checknames(phylo=mmm, source_="NCBI", byfilename=FALSE))
 #' }
 checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI", 
-	splitby = NULL, writefile = FALSE, byfilename = TRUE)
+	splitby = NULL, writefile = FALSE, writedir="~/", byfilename = TRUE)
 {	
 	if(!is.null(phylo)){
 		if(byfilename){			
@@ -255,7 +256,7 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 			
 			if(writefile){
 				trees_cleaned <- temppp
-				save(trees_cleaned, file=paste("/Library/WebServer/Sites/datelife.org/datelife/data/",phylo,".rda",sep=""))
+				save(trees_cleaned, file=paste(writedir,phylo,".rda",sep=""))
 # 				save(trees_cleaned, file=paste(phylo,"_cleaned.rda",sep=""))
 			} else
 			{ return(temppp) }
@@ -264,8 +265,6 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 			return(tips_2)
 		}
 }
-
-
 
 #' Test timing of name cleaning on datelife trees
 #' 
