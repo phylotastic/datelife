@@ -34,53 +34,21 @@ slice <- function(input, by = 2) {
 #' @import stringr
 #' @param taxon Taxonomic name, or a vector of taxonomic names.
 #' @examples \dontrun{
-#' detect_unid(taxon = Pyron2011[[1]]$tip.label)
+#' drop_epithets(taxon = Oaks2011$tip.label)
 #' }
-detect_unid <- function(taxon){
+drop_epithets <- function(taxon){
 	# replace underscores
 	taxon2 <- str_replace_all(taxon, "_", " ")
 	
-	# split species names to find duplicates in next step
-	if(all(sapply(taxon2, function(x) length(str_split(x, " ")[[1]]), USE.NAMES=F) == 1)){
-		dups <- taxon2
-	} else
-	{
-		split_collapse <- function(x){
-			y <- str_split(x, " ")[[1]]
-			if(length(y)>1){
-				paste(y[1:2], collapse=" ",sep="")	
-			} else { y }
-		}
-		dups <- sapply(taxon2, split_collapse, USE.NAMES=F)
-	}
-	
-	# remove duplicates
-	numdups <- split(dups, as.factor(dups))
-	makenull <- function(x){
-		if(length(x)>1) {
-			x[1:length(x)-1] <- rep("NULL NULL", length(x)-1)
-			x
-		} else{ x }
-	}
-	dupsout <- unlist(lapply(numdups, makenull), use.names=F)
-	# 	dupsout <- unique(dups)
-	# remove epithets with just "cf"
-	# 	nocfs <- dupsout[grep("^cf$", sapply(dupsout, function(x) str_split(x, " ")[[1]][[2]], USE.NAMES=F), invert=T)]
-	
 	# remove sp.'s, etc. 
-	# 	remove_sps <- gsub(" sp[^aeiouh]+| sp\\.+| sp$", "", dupsout)
+	remove_sps <- gsub(" sp[^aeiouh]+| sp\\.+| sp$", "", taxon2)
 	
 	# remove epithets with just one letter
-	# 	remove_onechar_epithet <- gsub(" [A-Za-z0-9]{1}$", "", remove_sps)
-	
-	# remove genera (without epithets) if matches in the vector
-	# 	remove_sps_u <- unique(remove_onechar_epithet)
-	# 	justfirst <- sapply(remove_sps_u, function(x) str_split(x, " ")[[1]][[1]], USE.NAMES=F)
-	# 	matches <- remove_sps_u[is.na(match(remove_sps_u, unique(justfirst)))]
-	
-	# 	unlist(lapply(split(remove_onechar_epithet, as.factor(remove_onechar_epithet)), makenull), use.names=F)
-	
-	return(dupsout)
+	remove_onechar_epithet <- gsub(" [A-Za-z0-9]{1}$", "", remove_sps)
+
+	# put underscores back in
+# 	return(str_replace_all(remove_onechar_epithet, " ", "_"))
+	return(remove_onechar_epithet)
 }
 
 #' Function to check names on a species list or phylogeny.
@@ -100,9 +68,9 @@ detect_unid <- function(taxon){
 #' @examples \dontrun{
 #' # Cleaning stored trees
 #' # A phylogeny as input
-#' library(doMC)
+#' library(doMC); library(ape)
 #' out <- checknames(phylo="BergmannEtAl2012", source_="NCBI", splitby=200)
-#' out <- checknames(phylo=A"lfaroEtAl2009_tree", source_="NCBI", splitby=100)
+#' out <- checknames(phylo="AlfaroEtAl2009", source_="NCBI", splitby=200)
 #' out <- checknames(phylo="EastmanEtAlUnpublished_tree", source_="NCBI", splitby=100)
 #' out <- checknames(phylo="HeathEtAl2012_tree", source_="NCBI")
 #' out <- checknames(phylo="JaffeEtAl2011", source_="NCBI", splitby=100)
@@ -112,10 +80,10 @@ detect_unid <- function(taxon){
 #' 
 #' out <- checknames(phylo="Apogonidae2011", source_="NCBI")
 #' out <- checknames(phylo="BinindaEmondsEtAl2007", source_="NCBI", splitby=500)
-#' out <- checknames(phylo="HardyCook2012", source_="NCBI", writefile=TRUE)
+#' out <- checknames(phylo="HardyCook2012", source_="NCBI")
 #' out <- checknames(phylo="FabreEtAl2009", source_="NCBI", splitby=50)
-#' out <- checknames(phylo="Pyron2011", source_="NCBI")
-#' out <- checknames(phylo="SantiniEtAl2009", source_="NCBI", splitby=50)
+#' out <- checknames(phylo="PyronWiens2011", source_="NCBI", splitby=500, writefile=TRUE)
+#' out <- checknames(phylo="Unpub3", source_="NCBI", splitby=50, writefile=TRUE)
 #' 
 #' # Cleaning user input trees
 #' # A character vector as input (of species names)
@@ -125,7 +93,7 @@ detect_unid <- function(taxon){
 #' mmm<-drop.tip(AlfaroEtAl2009, 1:190)
 #' out <- suppressMessages(checknames(phylo=mmm, source_="NCBI", byfilename=FALSE))
 #' }
-checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI", 
+checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 	splitby = NULL, writefile = FALSE, writedir="~/", byfilename = TRUE)
 {	
 	if(!is.null(phylo)){
@@ -135,6 +103,11 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 		
 		# if multiphylo compress the multiphylo so just one set of tip labels
 		if(class(obj)=="multiPhylo") {
+			# Sample max of 100 trees from a multiPhylo object
+			max.trees.per.study <- 100 #some studies will have a huge number of trees. They will be consistently sampled up to this number
+			obj <- obj[unique(round(seq(from=1, to=length(obj), length.out=max.trees.per.study)))]
+			
+			# Compress tip labels
 			obj <- .compressTipLabel(obj)
 			orig_tips <- attr(obj,"TipLabel")
 			tree_tips <- str_replace_all(orig_tips, "_", " ") # replace underscores
@@ -147,6 +120,7 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 		}
 	} else
 		if(!is.null(charvector)) {
+			obj <- NULL
 			tree_tips <- str_replace_all(charvector, "_", " ") # replace underscores
 			orig_tips <- tree_tips
 			message(paste("Cleaning names on your vector ", " - ", length(tree_tips), " taxa", sep=""))
@@ -210,7 +184,8 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 		if(as.character(x$old) %in% as.character(x$new)) { 0 } else { 1 }
 	}
 	df_ <- data.frame(old=orig_tips, new=temp3$V1)
-	df_2 <- ddply(df_, .(old), names_match_bin)
+# 	df_2 <- ddply(df_, .(old), names_match_bin)
+	df_2 <- adply(df_, 1, names_match_bin)[,-2]
 	df_2_merge <- merge(df_, df_2, by="old")
 	df_3 <- droplevels(df_2_merge[df_2_merge$V1 == 1, ])
 	
@@ -232,34 +207,36 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 	
 	# clean names, remove unid. species, etc., 
 	# when taxa match after cleaning, keep only the one taxon with longest branch
-	tips_ <- detect_unid(temp3$V1)
+	# COMMENTED OUT FOR NOW, NEED TO WORK OUT SOME ISSUES WITH CLEANING NAMES - 
+	# 	DO WE DROP SPECIES WITH EPTITHETS LIKE "sp."
+# 	tips_ <- detect_unid(temp3$V1)
 	
 	# replace spaces with underscores
-	tips_2 <- str_replace_all(tips_, " ", "_")
+	tips_2 <- str_replace_all(temp3$V1, " ", "_")
 	
 	if(class(obj)=="phylo"){
 		obj$tip.label <- tips_2 # assign new names to tip.labels on phylo object
-		temppp <- drop.tip(obj, tip="NULL NULL") # drop tips with "NULL NULL"
+# 		temppp <- drop.tip(obj, tip="NULL NULL") # drop tips with "NULL NULL"
 		
 		if(writefile){
-			trees_cleaned <- temppp
-			save(trees_cleaned, file=paste(phylo,"_cleaned.rda",sep=""))
+			trees_cleaned <- obj
+			save(trees_cleaned, file=paste(phylo,".rda",sep=""))
 		} else
-		{ return(temppp) }
+		{ return(obj) }
 	} else
 		if(class(obj)=="multiPhylo"){
 			attr(obj,"TipLabel") <- tips_2
 			obj <- .uncompressTipLabel(obj)
 			
-			temppp <- lapply(obj, function(x) drop.tip(x, tip="NULL NULL") )
-			class(temppp) <- "multiPhylo"
+# 			temppp <- lapply(obj, function(x) drop.tip(x, tip="NULL NULL") )
+			class(obj) <- "multiPhylo"
 			
 			if(writefile){
-				trees_cleaned <- temppp
+				trees_cleaned <- obj
 				save(trees_cleaned, file=paste(writedir,phylo,".rda",sep=""))
 # 				save(trees_cleaned, file=paste(phylo,"_cleaned.rda",sep=""))
 			} else
-			{ return(temppp) }
+			{ return(obj) }
 		} else
 		{
 			return(tips_2)

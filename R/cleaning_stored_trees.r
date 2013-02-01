@@ -32,7 +32,7 @@ treegrouplist <- list(
 	list("LohmannEtAl2013", "plants", "iPlant_TNRS"),
 	list("LopezFernandezEtAl2013", "fishes", "NCBI"),
 	list("NauheimerEtAl2012", "plants", "iPlant_TNRS"),
-	list("Oaks2011", "plants", "iPlant_TNRS"),
+	list("Oaks2011", "crocodiles", "NCBI"),
 	list("Pyron2011", "amphibians", "NCBI"),
 	list("PyronWiens2011", "amphibians", "NCBI"),
 	list("SantiniEtAl2009", "fishes", "NCBI"),
@@ -51,5 +51,5 @@ check_wrapper <- function(list_, ...){
 }
 
 # Run all, with the same arguments to TNRS
-l_ply(treegrouplist[1:2], check_wrapper, splitby=200, writefile=TRUE, writedir="/Library/WebServer/Sites/datelife.org/datelife/data/")
+l_ply(treegrouplist[1:2], check_wrapper, splitby=200, writefile=TRUE, writedir="/Users/schamber/datelife_testout/")
 # l_ply(treegrouplist[1:2], check_wrapper, splitby=200, writefile=TRUE)
