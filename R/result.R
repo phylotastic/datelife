@@ -3,7 +3,9 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
     #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
     #  studies
     phy<-NULL
-    #input<-str_trim(input, side = "both")
+    input<-gsub("\\+"," ",input)
+    input<-str_trim(input, side = "both")
+ 
     if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
       phy<-read.tree(text=input)
     }
@@ -144,6 +146,6 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
     return(done())
   }
   if (version=="bleedingedge") {
-    source("/Library/WebServer/Sites/datelife.org/datelife/R/bleedingedge.R") #has commands to use
+    source("/Library/WebServer/Sites/datelife.org/datelife/R/bleedingedge.R", local=TRUE) #has commands to use
   }
 }
