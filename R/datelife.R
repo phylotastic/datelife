@@ -1,13 +1,15 @@
 #skeleton of code to make open access info on dating life
 library(ape)
-library(phylobase)
 library(abind)
 library(phangorn)
 library(compare)
 library(geiger) #note this uses the next version of geiger, which has congruifier code. The relevant code is in auteur-congruify.R
 library(datelife2) #Klaus Schliep's code for pruning efficiently. Eventually, this will be moved into phangorn
 library(parallel)
+library(doMC)
 library(stringr)
+library(ggplot2)
+library(taxize)
 library(plyr)
 source("/Library/WebServer/Sites/datelife.org/datelife/R/cleaning.r")
 

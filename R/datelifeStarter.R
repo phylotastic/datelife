@@ -1,2 +1,1 @@
-cleaned.data.dir <- "/Users/bomeara/Desktop/phyloorchard/pkg/cleaned/"
-load(file=paste(cleaned.data.dir,"StartFiles.Data", sep=""), compress=TRUE)
+load("/Library/WebServer/Sites/datelife.org/datelife/data/StartFiles.Data")

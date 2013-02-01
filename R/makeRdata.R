@@ -8,6 +8,7 @@ ntrees.per.study<-c()
 ntax.per.study<-c()
 max.trees.per.study<-100 #some studies will have a huge number of trees. They will be consistently sampled up to this number
 max.array.size<-14000 #Any dataset for which ntax * ntrees is bigger than this will be left in smaller, but slower, multiphylo format
+max.array.dimension<-7000 #Any dataset for which ntax or ntrees is bigger than this will be left in multiphylo
 
 GetFieldFromRdFile <- function (file, field="source", sep="") {
   all.text<-read.delim(file=file, stringsAsFactors=FALSE)[,1]
@@ -29,7 +30,7 @@ man.data.dir <- "/Library/WebServer/Sites/datelife.org/phyloorchard/pkg/man/"
 #man.data.dir <- "/Users/bomeara/Desktop/phyloorchard/pkg/man/"
 
 #treefilenames <- dir(cleaned.data.dir)
-treefilenames <- system(paste("ls -1S ", cleaned.data.dir), intern=TRUE)
+treefilenames <- system(paste("ls -1S ", cleaned.data.dir, " | grep .rda"), intern=TRUE)
 
 trees <- sapply(treefilenames, function(x) str_replace(x, ".rda", ""), USE.NAMES=F)
 for (i in sequence(length(treefilenames))) {
@@ -38,7 +39,11 @@ for (i in sequence(length(treefilenames))) {
   if(class(trees_cleaned)=="phylo") {
     trees_cleaned<-c(trees_cleaned) 
   }
-  if (class(trees_cleaned)!="multiPhylo") {
+  if(class(trees_cleaned)!="phylo" && !is.null(trees_cleaned$Nnode)) {
+    class(trees_cleaned)<-"phylo" #sometimes post tnrs, trees lose their class. This is a hack to fix this
+    trees_cleaned<-c(trees_cleaned)
+  }
+  if (class(trees_cleaned)!="multiPhylo" || is.null(trees_cleaned[[1]]$edge.length)) {
     print(paste("ALERT! Something was wrong with ", treefilenames[i]))
     next()
   }
@@ -51,11 +56,11 @@ for (i in sequence(length(treefilenames))) {
   ntax.per.study[new.pos] <- Ntip(trees_cleaned[[1]])
   
   studies[[new.pos]]<-NA
-  if (Ntip(trees_cleaned[[1]]) * length(trees_cleaned) <= max.array.size) {
+  if ((Ntip(trees_cleaned[[1]]) * length(trees_cleaned) <= max.array.size) && (Ntip(trees_cleaned[[1]]) <= max.array.dimension) && (length(trees_cleaned) <= max.array.dimension)) {
         print("Trying to make patristic matrix")
   	try(studies[[new.pos]] <- BindMatrices(lapply(trees_cleaned,ComputePatristicDistance))) #mclapply is in theory faster. But memory gets clobbered (even for three large trees) and causes thrashing
   }
-  if (is.na(studies[[new.pos]])) {
+  if (is.na(studies[[new.pos]][1])) {
     print("Did not make patristic matrix, so adding the multiphylo object instead")
     studies[[new.pos]] <- trees_cleaned #couldn't make the array, perhaps too big for memory or for R. Stick to slower trees
   } 
