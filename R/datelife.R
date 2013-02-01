@@ -9,7 +9,7 @@ library(datelife2) #Klaus Schliep's code for pruning efficiently. Eventually, th
 library(parallel)
 library(stringr)
 library(plyr)
-source(cleaning.r)
+source("/Library/WebServer/Sites/datelife.org/datelife/R/cleaning.r")
 
 #Note that originally trees were stored as patristic matrices. This was intended
 #to make subsetting fast. The downside is large memory usage. Klaus Schliep wrote
