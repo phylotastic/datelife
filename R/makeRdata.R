@@ -94,4 +94,4 @@ print(paste("number of taxa = ", length(unique.taxa)))
 
 print(paste("number of trees = ", ntrees))
 
-save(list=ls(), file=paste(cleaned.data.dir,"StartFiles.Data", sep=""), compress=TRUE) #Note that this is saved with a different extension
+save(studies, unique.taxa, all.taxa, ntrees, citations, embargoed, ntrees.per.study, ntax.per.study, max.trees.per.study, max.array.size, max.array.dimension, trees, treefilenames, cleaned.data.dir, man.data.dir, file=paste(cleaned.data.dir,"StartFiles.Data", sep=""), compress=TRUE) #Note that this is saved with a different extension

@@ -1,4 +1,4 @@
-run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600, usetnrs="no", tnrssource="ncbi") {
+run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600, usetnrs="no", tnrssource="NCBI") {
   #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
   #  studies
   phy<-NULL
