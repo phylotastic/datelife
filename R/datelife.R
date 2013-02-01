@@ -12,6 +12,18 @@ library(ggplot2)
 library(taxize)
 library(plyr)
 source("/Library/WebServer/Sites/datelife.org/datelife/R/cleaning.r")
+source("/Library/WebServer/Sites/datelife.org/datelife/R/auteur-congruify.R")
+source("/Library/WebServer/Sites/datelife.org/datelife/R/auteur-edges.R")
+source("/Library/WebServer/Sites/datelife.org/datelife/R/auteur-glomogram.R")
+source("/Library/WebServer/Sites/datelife.org/datelife/R/auteur-internal.R")
+source("/Library/WebServer/Sites/datelife.org/datelife/R/auteur-likelihood.R")
+source("/Library/WebServer/Sites/datelife.org/datelife/R/auteur-phylo.R")
+source("/Library/WebServer/Sites/datelife.org/datelife/R/auteur-plotting.R")
+source("/Library/WebServer/Sites/datelife.org/datelife/R/auteur-proposals.R")
+source("/Library/WebServer/Sites/datelife.org/datelife/R/auteur-rjmcmc.R")
+source("/Library/WebServer/Sites/datelife.org/datelife/R/auteur-utiliities-misc.R")
+source("/Library/WebServer/Sites/datelife.org/datelife/R/auteur-utilities-stat.R")
+source("/Library/WebServer/Sites/datelife.org/datelife/R/auteur-utilities.R")
 
 #Note that originally trees were stored as patristic matrices. This was intended
 #to make subsetting fast. The downside is large memory usage. Klaus Schliep wrote
