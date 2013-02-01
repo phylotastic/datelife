@@ -22,7 +22,6 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
         cleaned.names <- checknames(charvector=cleaned.names, source_=tnrssource)
       }
     }
-    phy<-NULL #just while fixing this bug
     
     if(format=="newick1000") {
       randomtreesperstudy<-1000
