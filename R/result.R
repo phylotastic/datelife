@@ -1,4 +1,4 @@
-run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600) {
+run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600, usetnrs="no", tnrssource="ncbi") {
   #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
   #  studies
   phy<-NULL
@@ -7,9 +7,15 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
   }
   cleaned.names<-""
   if(!is.null(phy)) {
+    if(usetnrs=="yes") {
+    	phy <- suppressMessages(checknames(phylo=phy, source_=tnrssource, byfilename=FALSE))
+    }
     cleaned.names<-phy$tip.label 
   } else {
     cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
+    if (usetnrs=="yes") {
+    	cleaned.names <- checknames(charvector=cleaned.names, source_=tnrssource)
+    }
   }
 
   if(format=="newick1000") {
