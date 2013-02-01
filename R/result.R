@@ -2,6 +2,7 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
   #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
   #  studies
   phy<-NULL
+  str_trim(input, side = "both")
   if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
     phy<-read.tree(text=input)
   }
