@@ -1,108 +1,81 @@
 citations<-c()
 embargoed<-c()
 studies<-list()
-original.wd<-getwd()
-setwd("/Library/WebServer/Sites/datelife.org/datelife/data/")
-#setwd("/Users/bomeara/Documents/MyDocuments/Active/datelife/data/")
-print(system("ls",intern=TRUE))
+all.taxa<-c()
+ntrees<-0
+ntrees.per.study<-c()
+ntax.per.study<-c()
+max.trees.per.study<-100 #some studies will have a huge number of trees. They will be consistently sampled up to this number
+max.array.size<-14000 #Any dataset for which ntax * ntrees is bigger than this will be left in smaller, but slower, multiphylo format
 
-print("beginning to load data")
+GetFieldFromRdFile <- function (file, field="source", sep="") {
+  all.text<-read.delim(file=file, stringsAsFactors=FALSE)[,1]
+  focal.start<-which(all.text==paste("\\",field,"{",sep=""))+1
+  if(length(focal.start)==1) { #it is defined
+     final.text<-""
+     while(all.text[focal.start]!="}") {
+        final.text<-paste(final.text, all.text[focal.start], sep=sep)
+        focal.start<-focal.start+1
+     }
+     return(final.text)
+  }
+  return(NULL)
+}
 
+cleaned.data.dir <- "/Library/WebServer/Sites/datelife.org/datelife/data/"
+man.data.dir <- "/Library/WebServer/Sites/datelife.org/phyloorchard/pkg/man/"
+cleaned.data.dir <- "/Users/bomeara/Desktop/phyloorchard/pkg/cleaned/"
+man.data.dir <- "/Users/bomeara/Desktop/phyloorchard/pkg/man/"
 
-citations<-c(citations,"Heath et al. 2012")
-embargoed<-c(embargoed,FALSE)
-data(HeathEtAl2012)
-print(ls())
-studies[[length(studies)+1]]<-HeathEtAl2012_tree
-rm(HeathEtAl2012_tree)
-print(citations)
+#treefilenames <- dir(cleaned.data.dir)
+treefilenames <- system(paste("ls -1S ", cleaned.data.dir), intern=TRUE)
 
-citations<-c(citations,"10K trees Perissodactyla, V1")
-embargoed<-c(embargoed,FALSE)
-harvard10k.perissodactyla.trees<-read.nexus("TreeBlock_10kTrees_Perissodactyla_Version1.nex")
-print(ls())
-studies[[length(studies)+1]]<-harvard10k.perissodactyla.trees
-rm(harvard10k.perissodactyla.trees)
-print(citations)
+trees <- sapply(treefilenames, function(x) str_replace(x, ".rda", ""), USE.NAMES=F)
+for (i in sequence(length(treefilenames))) {
+  load(paste(cleaned.data.dir,treefilenames[i], sep="")) 
+  if(class(trees_cleaned)=="phylo") {
+    trees_cleaned<-c(trees_cleaned) 
+  }
+  all.taxa<-append(all.taxa, trees_cleaned[[1]]$tip.label)
+  ntrees<-ntrees+min(max.trees.per.study, length(trees_cleaned))
+  new.pos <- length(studies)+1
+  trees_cleaned<-trees_cleaned[unique(round(seq(from=1, to=length(trees_cleaned), length.out=max.trees.per.study)))]
+  ntrees.per.study[new.pos] <- length(trees_cleaned)
+  ntax.per.study[new.pos] <- Ntip(trees_cleaned[[1]])
+  
+  print(paste("now processing ",treefilenames[i]," with ",length(trees_cleaned)," trees each with ",Ntip(trees_cleaned[[1]])," taxa", sep=""))
+  
+  studies[[new.pos]]<-NA
+  if (Ntip(trees_cleaned[[1]]) * length(trees_cleaned) <= max.array.size) {
+  	try(studies[[new.pos]] <- BindMatrices(mclapply(trees_cleaned,ComputePatristicDistance, mc.cores=min(1, detectCores()-2))), silent=TRUE)
+  }
+  if (is.na(studies[[new.pos]])) {
+    studies[[new.pos]] <- trees_cleaned #couldn't make the array, perhaps too big for memory or for R. Stick to slower trees
+  } 
+  print("loaded")
+  new.citation<-NULL
+  
+  try(new.citation <- GetFieldFromRdFile(file=paste(man.data.dir, trees[i], ".Rd", sep="", collapse="")), silent=TRUE)
+  if (is.null(new.citation)) {
+    matching.files<-system(paste("grep -l ", trees[i], " ", man.data.dir, "*", sep=""), intern=TRUE)
+    try(new.citation <- GetFieldFromRdFile(file=matching.files[1]), silent=TRUE)
+  }
+  citations[new.pos] <- new.citation
+  embargoed[new.pos] <- FALSE
+  if (grepl("Unpub",trees[i])) {
+  	embargoed[new.pos] <- TRUE
+  }
+  rm(trees_cleaned)
+}
 
-citations<-c(citations,"Bininda-Emonds et al. 2007")
-embargoed<-c(embargoed,FALSE)
-data(BinindaEmondsEtAl2007)
-print(ls())
-studies[[length(studies)+1]]<-BinindaEmondsEtAl2007
-rm(BinindaEmondsEtAl2007)
-print(citations)
+unique.taxa <- unique(all.taxa)
 
-citations<-c(citations,"10K trees Carnivores, V1")
-embargoed<-c(embargoed,FALSE)
-harvard10k.carnivores.trees<-read.nexus("TreeBlock_10kTrees_Carnivora_Version1.nex")
-print(ls())
-studies[[length(studies)+1]]<-harvard10k.carnivores.trees
-rm(harvard10k.carnivores.trees)
-print(citations)
-
-citations<-c(citations,"10K trees Primates, V3")
-embargoed<-c(embargoed,FALSE)
-harvard10k.primates.trees<-read.nexus("TreeBlock_10kTrees_Primates_Version3.nex")
-print(ls())
-studies[[length(studies)+1]]<-harvard10k.primates.trees
-rm(harvard10k.primates.trees)
-print(citations)
-
-citations<-c(citations,"Alfaro et al. 2009")
-embargoed<-c(embargoed,FALSE)
-data(AlfaroEtAl2009)
-print(ls())
-studies[[length(studies)+1]]<-AlfaroEtAl2009_tree
-rm(AlfaroEtAl2009_tree)
-print(citations)
-
-citations<-c(citations,"Bergmann and Irschick 2012")
-embargoed<-c(embargoed,FALSE)
-data(BergmannEtAl2012)
-print(ls())
-studies[[length(studies)+1]]<-BergmannEtAl2012
-rm(BergmannEtAl2012)
-print(citations)
-
-# Eastman et al. unpublished tree of salamanders
-citations<-c(citations,"embargoed")
-embargoed<-c(embargoed,TRUE)
-data(Unpub1)
-print(ls())
-studies[[length(studies)+1]]<-Unpub1
-rm(Unpub1)
-print(citations)
-
-citations<-c(citations,"Oaks 2011")
-embargoed<-c(embargoed,FALSE)
-data(Oaks2012)
-print(ls())
-studies[[length(studies)+1]]<-Oaks2011
-rm(Oaks2011)
-print(citations)
-
-citations<-c(citations,"Jaffe et al. 2011")
-embargoed<-c(embargoed,FALSE)
-data(JaffeEtAl2011)
-print(ls())
-studies[[length(studies)+1]]<-JaffeEtAl2011
-rm(JaffeEtAl2011)
-print(citations)
-
-citations<-c(citations,"Zhang and Wake 2009")
-embargoed<-c(embargoed,FALSE)
-data(ZhangandWake2009)
-print(ls())
-studies[[length(studies)+1]]<-ZhangandWake2009
 print(citations)
 
 print(paste("number of studies = ",length(studies)))
 
-print(paste("number of species = ",length(unique(unlist(sapply(studies,rownames))))))
+print(paste("number of taxa = ", length(unique.taxa)))
 
-function(ifelse(class(x)=="multiPhylo", length(x), 1L)
-print(paste("number of trees total = ",sum(sapply(studies,dim)[3,])))
+print(paste("number of trees = ", ntrees))
 
-setwd(original.wd)
-
+save(list=ls(), file=paste(cleaned.data.dir,"StartFiles.Data"), compress=TRUE) #Note that this is saved with a different extension

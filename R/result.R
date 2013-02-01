@@ -16,7 +16,7 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
     randomtreesperstudy<-1000
   }
   tree.list<-list()
-  results.list<-lapply(studies,GetSubsetArrayBoth, taxa=cleaned.names, phy=phy) #need to change this to GetSubsetArrayBothFromPhylo, and change studies, once they are input and stored as phylo/multiphylo
+  results.list<-lapply(studies,GetSubsetArrayDispatch, taxa=cleaned.names, phy=phy) 
   median.patristic.matrices<-list()
   ages.matrix<-c() #will hold median, and 95% CI
   uncertainty<-as.numeric(uncertainty)/100 #make percentage
