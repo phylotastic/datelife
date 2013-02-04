@@ -34,6 +34,14 @@
  <option value="0">Assume +/- 0% of the age</option> 
 </select></p>
 
+<p>Taxonomic name resolution (converting input names to a standard taxonomy; will slow down analysis but increase chance of matching): <select name="usetnrs">
+<option value="no">No</option>
+</select><br />TNRS source:<select name="tnrssource">
+<option value="NCBI">NCBI (good for wide range of species)</option>
+<option value="iPlant_TNRS">iPlant (good for plants, can fix typos)</option>
+<option value="MSW3">Mammal Species of the World, Vol. 3</option>
+</select><br />Name resolution uses the <a href="http://taxosaurus.org">Taxosaurus</a> service.</p>
+
 
  <p><input type="submit" value="Send"></p>
 </form></p>
