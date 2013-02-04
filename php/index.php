@@ -2,7 +2,7 @@
 <?php include("pagestart.html"); ?>
 <p>This will give the age of the most recent common ancestor of a set of taxa, or stretch an input tree, based on available time-calibrated trees. It is still actively in development, so it may break at times. Currently it mostly has mammals in the database, but we are actively adding taxa. See the <a href="http://datelife.org/faq.php">FAQ</a> page for more info on this project, and the <a href="http://phylotastic.org">Phylotastic</a> page for more info on the overall hackathon, of which this was just one outcome.</p>
  <p><form action = "http://datelife.org/cgi-bin/R/result" method="get">
- <p>Use the syntax <code>Genus_species,Genus_species</code>: comma-delimited, no spaces, underscores in names, i.e., <br /><b>Rhinoceros_unicornis,Equus_caballus,Mus_musculus</b><br />for a list of species in the taxa box, <b>OR</b> a Newick tree string, ending with a semicolon: <br /><b>((Rhinoceros_unicornis,Equus_caballus),Mus_musculus);</b><br />The tree can have branch lengths. Note that stretching a tree is much slower than just getting ages for a list of taxa.</p>
+ <p>Use the syntax <code>Genus_species,Genus_species</code>: comma-delimited, no spaces, underscores in names, i.e., <br /><b>Rhinoceros_unicornis,Equus_caballus,Mus_musculus</b><br />for a list of species in the taxa box, <b>OR</b> a Newick tree string, ending with a semicolon: <br /><b>((Rhinoceros_unicornis,Equus_caballus),Mus_musculus);</b><br />The tree can have branch lengths. Note that stretching a tree is much slower than just getting ages for a list of taxa. It uses a method in review by Eastman et al.</p>
  <p>Input: <input type="text" name="input" value="" size="80"></p>
  
  <p>Return format: <select name="format">
