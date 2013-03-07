@@ -9,8 +9,8 @@
 #' nonmatching_by_row(dff)
 nonmatching_by_row <- function(df){
 	does_match <- function(y){ ifelse(y[,1] %in% y[,2], 0, 1) }
-	df2 <- data.frame(old=sort(df[,1]), new=sort(df[,2]))
-	temp <- adply(df2, 1, does_match)
+# 	df2 <- data.frame(old=sort(df[,1]), new=sort(df[,2]))
+	temp <- adply(df, 1, does_match)
 	outt <- temp[temp$V1 == 1,][,-3]
 	if(nrow(outt)==0){
 		message("all taxa matched, no changes")
@@ -23,10 +23,18 @@ nonmatching_by_row <- function(df){
 #' @import plyr
 #' @param input Input character vector
 #' @param by Number by which to split the input character vector
-slice <- function(input, by = 2) {
-	starts <- seq(1, length(input), by)
-	tt <- lapply(starts, function(y) input[y:(y + (by - 1))])
-	llply(tt, function(x) x[!is.na(x)])
+slice <- function(input, by = 2, equalpiecesof = NULL) {
+	if(is.null(equalpiecesof)){	
+		starts <- seq(1, length(input), by)
+		tt <- lapply(starts, function(y) input[y:(y + (by - 1))])
+		llply(tt, function(x) x[!is.na(x)])
+	} else
+	{
+		splitby <- round(length(input)/equalpiecesof)+1
+		starts <- seq(1, length(input), splitby)
+		tt <- lapply(starts, function(y) input[y:(y + (splitby - 1))])
+		llply(tt, function(x) x[!is.na(x)])
+	}
 }
 
 #' Function to detect messy names and remove them, and remove sp.'s
@@ -91,13 +99,13 @@ drop_epithets <- function(taxon){
 #' 
 #' # A phylo object - user suppressMessages() around the fxn
 #' mmm<-drop.tip(AlfaroEtAl2009, 1:190)
-#' out <- suppressMessages(checknames(phylo=mmm, source_="NCBI", byfilename=FALSE))
+#' out <- suppressMessages(checknames(phylo=phy, source_="NCBI", byfilename=FALSE))
 #' }
 checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
-	splitby = NULL, writefile = FALSE, writedir="~/", byfilename = TRUE)
+	writefile = FALSE, writedir="~/", byfilename = TRUE)
 {	
 	if(!is.null(phylo)){
-		if(byfilename){			
+		if(byfilename){
 			obj <- eval(parse( text=phylo ))
 		} else { obj <- phylo }
 		
@@ -127,7 +135,7 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 		} else stop("please provide an object in either phylo or charvector")
 	
 	# Run tnrs function from taxize to clean names
-	if(is.null(splitby)){
+	if(length(tree_tips) < 500){
 		out <- tnrs(tree_tips, getpost="POST", source_=source_) # get TNRS data
 		if(nrow(out)==0){ # if no rows in data.frame return X
 			out <- data.frame(submittedName=tree_tips, 
@@ -138,10 +146,10 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 		{
 			out <- out[,1:4]
 		}
-	} else
+	} else 
 	{
-		registerDoMC(cores=4)
-		out <- ldply(slice(tree_tips, splitby), function(x) tnrs(x, getpost="POST", source_=source_)[,1:4], .parallel=TRUE) # get TNRS data
+		registerDoMC(cores=8)
+		out <- ldply(slice(tree_tips, equalpiecesof=8), function(x) tnrs(x, getpost="POST", source_=source_)[,1:4], .parallel=TRUE) # get TNRS data
 		if(nrow(out)==0){ # if no rows in data.frame return X
 			out <- data.frame(submittedName=tree_tips, 
 												acceptedName=tree_tips, 
@@ -164,7 +172,7 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 			return(as.character(x$acceptedName))
 		}
 	} 
-	registerDoMC(4)
+	registerDoMC(8)
 	temp2 <- ddply(temp, .(submittedName), names_match, .parallel=TRUE)
 	
 	nosourcematch <- unique(out$submittedName[!out$submittedName %in% temp$submittedName]) # no match to source
@@ -254,9 +262,9 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 #' l_ply(treefilenames, function(x) load(paste("/Users/scottmac2/phyloorchard/pkg/data/",x,sep=""), .GlobalEnv))
 #' trees <- sapply(treefilenames, function(x) str_replace(x, ".rda", ""), USE.NAMES=F)
 #' binemonds <- BinindaEmondsEtAl2007[[1]]
-#' makesmallsubtrees <- function(phylo){
-#' 		drops <- c(2000,2500,3000,3500,4000,4100,4200,4300,4350,4400,4420,4450,4470,4500,4505)
-#' 		llply(rev(drops), function(x) drop.tip(phylo, tip=1:x))
+#'  makesmallsubtrees <- function(phylo){
+#'  		drops <- c(2000,2500,3000,3500,4000,4100,4200,4300,4350,4400,4420,4450,4470,4500,4505)
+#'  		llply(rev(drops), function(x) drop.tip(phylo, tip=1:x))
 #' }
 #' mytreelist <- makesmallsubtrees(phylo = binemonds)
 #' library(ggplot2); library(plyr); library(lubridate)
@@ -268,7 +276,7 @@ time_cleaning <- function(listoftrees, plotresults=FALSE){
 	checknames_safe <- plyr::failwith(NULL, checknames)
 	temp <- llply(listoftrees, function(tree){
 		start <- Sys.time()
-		result <- suppressMessages(checknames_safe(phylo=tree, source_="MSW3", splitby=100, byfilename=FALSE))
+		result <- suppressMessages(checknames_safe(phylo=tree, source_="MSW3", byfilename=FALSE))
 		stop_ <- Sys.time()
 		elapsed <- as.duration(stop_-start)
 		as.numeric(elapsed)
