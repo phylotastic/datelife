@@ -234,7 +234,11 @@ TestNameOrder <- function(patristic.matrix, standard.rownames, standard.colnames
 }
 
 BindMatrices <- function(patristic.matrix.list) {
+  original.size<-length(patristic.matrix.list)
   patristic.matrix.list<-lapply(patristic.matrix.list,ReorderMatrix)
+  if(length(patristic.matrix.list)<1) {
+    stop(paste("The patristic matrices you are trying to bind are too few; input was ", original.size, " and current length is ", length(patristic.matrix.list), sep=""))
+  }
   standard.rownames<-rownames(patristic.matrix.list[[1]])
   standard.colnames<-colnames(patristic.matrix.list[[1]])
   matching.names<-sapply(patristic.matrix.list,TestNameOrder,standard.rownames,standard.colnames)

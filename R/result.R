@@ -103,7 +103,10 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
         }
       }
     }
-    median.patristic.matrix<-SummaryPatristicMatrix(BindMatrices(median.patristic.matrices))
+    median.patristic.matrix<-matrix(ncol=1,nrow=1)
+    if(length(median.patristic.matrices)>0) {
+      median.patristic.matrix<-SummaryPatristicMatrix(BindMatrices(median.patristic.matrices))
+    }
     if (format=="html") {
       out("</table></p>")
       out(paste("<p>The best guess (median) for the estimate is ",median(ages.matrix[,1])," MY, ",sep=""))
