@@ -13,7 +13,8 @@
 <p><b>What is next?</b></p>
 <p>We are building up the back end database (please send us your published chronograms). We are also investigating incorporating fossil information.</p>
 <p><b>What do I cite?</b></p>
-<p>First, the papers for the trees and fossils you are using, if possible. It is like citing papers contributing data to GenBank: if you were to analyze one or two datasets, you would cite the papers that generated them; if you were to analyze all the plant rbcl sequences in GenBank, you might not. We also ask that you cite our website (we hope to have a peer-reviewed publication soon to cite instead).</p>
+<p>First, the papers for the trees and fossils you are using, if possible. It is like citing papers contributing data to GenBank: if you were to analyze one or two datasets, you would cite the papers that generated them; if you were to analyze all the plant rbcl sequences in GenBank, you might not. We also ask that you cite our website (we hope to have a peer-reviewed publication soon to cite instead). If you use the congruification method, you should also cite:
+<br />"Congruification: support for time scaling large phylogenetic trees" Eastman, Jonathan M; Harmon, Luke J; Tank, David C (2013) Methods in Ecology and Evolution, In press</p>
 <p><b>Who is "we"?</b></p>
 <p>Currently, Brian O'Meara, Jonathan Eastman, Tracy Heath, April Wright, Klaus Schliep, Scott Chamberlain, Peter Midford, Luke Harmon, Joseph Brown, Matt Pennell, Mike Alfaro. Maybe you, too?</p>
 <p><b>Who paid for this?</b></p>
