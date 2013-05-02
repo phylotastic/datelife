@@ -179,12 +179,17 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 	temp22 <- rbind(temp2, data.frame(submittedName=nosourcematch, V1=nosourcematch)) # add in species for which there was no match
 	
 	# replace spaces with underscores in both columns
-	temp22$submittedName <- str_replace_all(temp22$submittedName, " ", "_")
-	temp22$V1 <- str_replace_all(temp22$V1, " ", "_")
+# 	temp22$submittedName <- str_replace_all(temp22$submittedName, " ", "_")
+# 	temp22$V1 <- str_replace_all(temp22$V1, " ", "_")
 	
 	notnrsmatch <- orig_tips[!orig_tips %in% as.character(temp22$submittedName)] # no match at all
+  
+	# replace spaces with underscores in both columns
+	temp22$submittedName <- str_replace_all(temp22$submittedName, " ", "_")
+	temp22$V1 <- str_replace_all(temp22$V1, " ", "_")
+  
 	temp33 <- rbind(temp22, data.frame(submittedName=notnrsmatch, V1=notnrsmatch)) # add notnrsmatches to data.frame
-	order_ <- sapply(orig_tips, function(x) match(x, temp33$submittedName), USE.NAMES=F)
+	order_ <- sapply(str_replace(orig_tips," ","_"), function(x) match(x, temp33$submittedName), USE.NAMES=F)
 	temp3 <- temp33[order_,] # reorder data.frame to order of tip.labels
 	
 	# Keep names that match genera, but not those that don't match genera
@@ -198,13 +203,14 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 	df_3 <- droplevels(df_2_merge[df_2_merge$V1 == 1, ])
 	
 	genus_match <- function(x){
-		one <- str_split(x$old, "_")[[1]]
-		two <- str_split(x$new, "_")[[1]]
-		ifelse(one[[1]] %in% two[[1]], as.character(x$new), as.character(x$old))
+	  one <- str_split(str_replace(x$old, " ", "_"), "_")[[1]][[1]]
+	  two <- str_split(x$new, "_")[[1]][[1]]
+	  ifelse(one[[1]] %in% two[[1]], as.character(x$new), as.character(x$old))
 	}
 	asdf <- adply(df_3, 1, genus_match)
 	
 	if(!nrow(asdf)==0){
+	  asdf$old <- str_replace_all(asdf$old, " ", "_")
 		order_2 <- sapply(temp3[temp3$submittedName %in% asdf$old, "submittedName"], function(x) match(x, as.character(asdf$old)), USE.NAMES=F)
 		asdf2 <- asdf[order_2,]
 		temp3[temp3$submittedName %in% asdf$old, "V1"] <- asdf2$V1
