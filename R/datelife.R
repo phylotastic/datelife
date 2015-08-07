@@ -4,7 +4,7 @@ library(abind)
 library(phangorn)
 library(compare)
 library(geiger) #note this uses the next version of geiger, which has congruifier code. The relevant code is in auteur-congruify.R
-#library(datelife2) #Klaus Schliep's code for pruning efficiently. Eventually, this will be moved into phangorn
+library(datelife2) #Klaus Schliep's code for pruning efficiently. Eventually, this will be moved into phangorn
 library(parallel)
 library(doMC)
 library(stringr)
@@ -13,121 +13,6 @@ library(taxize)
 library(plyr)
 source("/Library/WebServer/Sites/datelife.org/datelife/R/cleaning.r")
 
-pruneTrees <- function (x, names) 
-{
-    if (class(x) == "phylo") {
-        tips = na.omit(match(names, x$tip))
-        if (length(tips) < 2) 
-            return(NULL)
-        y <- prune.phylo(x, tips)
-    }
-    if (class(x) == "multiPhylo") {
-        if (!is.null(attr(x, "TipLabel"))) {
-            tips = na.omit(match(names, attr(x, "TipLabel")))
-            if (length(tips) < 2) 
-                return(NULL)
-            x = .uncompressTipLabel(x)
-            x = unclass(x)
-            y = lapply(x, prune.phylo, tips)
-            class(y) = "multiPhylo"
-        }
-        else {
-            tips = na.omit(match(names, x[[1]]$tip.label))
-            if (length(tips) < 2) 
-                return(NULL)
-            x = unclass(x)
-            y = lapply(x, prune.phylo, names)
-            class(y) = "multiPhylo"
-        }
-    }
-    y
-}
-
-
-getAges <- function (x) 
-{
-    fun = function(x) {
-        anc = Ancestors(x, 1)
-        sum(x$edge.le[match(c(1, anc[-length(anc)]), x$edge[, 
-            2])])
-    }
-    height = NULL
-    if (class(x) == "phylo") 
-        height <- fun(x)
-    if (class(x) == "multiPhylo") {
-        if (!is.null(attr(x, "TipLabel"))) {
-            x = .uncompressTipLabel(x)
-            x = unclass(x)
-            height = sapply(x, fun)
-        }
-        else {
-            x = unclass(x)
-            height = sapply(x, fun)
-        }
-    }
-    height
-}
-
-prune.phylo <- function (x, tips, ...) 
-{
-    if (is.character(tips)) 
-        tips <- na.omit(match(tips, x$tip.label))
-    tips <- sort(tips)
-    x <- reorder(x)
-    nTips <- length(x$tip.label)
-    nTaxa <- length(tips)
-    edge1 = x$edge[, 1]
-    edge2 = x$edge[, 2]
-    m <- max(x$edge)
-    nodes <- integer(m)
-    nodes[tips] <- 1L
-    l <- as.integer(length(edge1))
-    tmp <- .C("prune_tree", as.integer(edge1), as.integer(edge2), 
-        as.integer(l), as.integer(nTaxa), integer(l), nodes)
-    ind1 = tmp[[5]] > 0
-    xmat <- x$edge[ind1, ]
-    elen <- NULL
-    if (!is.null(x$edge.length)) 
-        elen <- x$edge.length[ind1]
-    tx <- tabulate(xmat[, 1])
-    singles <- which(tx == 1)
-    if (length(singles) > 0) {
-        prev.nodes <- match(singles, xmat[, 2])
-        next.nodes <- match(singles, xmat[, 1])
-        if (!is.null(x$edge.length)) {
-            for (j in length(singles):1) {
-                i <- singles[j]
-                xmat[prev.nodes[j], 2] <- xmat[next.nodes[j], 
-                  2]
-                elen[prev.nodes[j]] <- elen[prev.nodes[j]] + 
-                  elen[next.nodes[j]]
-            }
-        }
-        xmat <- xmat[-next.nodes, ]
-        elen <- elen[-next.nodes]
-    }
-    nnode = length(unique(xmat[, 1]))
-    tmp = integer(max(xmat))
-    tmp[sort(unique(as.vector(xmat)))] = as.integer(c(1:(nTaxa + 
-        nnode)))
-    xmat[] = tmp[xmat]
-    x$edge <- xmat
-    x$edge.length <- elen
-    if (!is.null(x$node.label)) 
-        x$node.label <- x$node.label[sort(unique(xmat[, 1])) - 
-            length(tips)]
-    x$Nnode <- nnode
-    x$tip.label <- x$tip.label[tips]
-    reorder(x)
-}
-
-prune.phylo2 <- function (phy, taxa) 
-{
-    if (is.character(taxa)) 
-        labels <- phy$tip[is.na(match(phy$tip, taxa))]
-    else labels = c(1:length(phy$tip))[-taxa]
-    drop.tip(phy, labels)
-}
 
 
 
