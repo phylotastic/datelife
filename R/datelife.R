@@ -4,7 +4,7 @@ library(abind)
 library(phangorn)
 library(compare)
 library(geiger) #note this uses the next version of geiger, which has congruifier code. The relevant code is in auteur-congruify.R
-library(datelife2) #Klaus Schliep's code for pruning efficiently. Eventually, this will be moved into phangorn
+#library(datelife2) #Klaus Schliep's code for pruning efficiently. Eventually, this will be moved into phangorn
 library(parallel)
 library(doMC)
 library(stringr)
