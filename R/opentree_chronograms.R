@@ -16,7 +16,8 @@ for (chrono.index in sequence(length(chronogram.matches))) {
 	print(paste("tree number", chrono.index, "of", length(chronogram.matches)))
 	study.id <- unlist(unname(chronogram.matches[[chrono.index]][1]))
 	tree.id <- unname(unlist(chronogram.matches[[chrono.index]][[2]][[1]][2]))
-	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
+	new.tree <- NULL
+	try(new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name'))
 	print(new.tree)
 	if(HasBrlen(new.tree)) {
 		trees[[chrono.index]] <-new.tree
