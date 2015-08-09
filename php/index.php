@@ -47,9 +47,11 @@
 </form></p>
 <br /><hr>
 <p>Note source code is available at <a href="https://bitbucket.org/bomeara/datelife">https://bitbucket.org/bomeara/datelife</a></p>
-<p>We use the <a href="http://r-forge.r-project.org/projects/phyloorchard/">PhyloOrchard</a> R package to store trees; you can install it by doing<br />
+<p>We currently use the <a href="http://r-forge.r-project.org/projects/phyloorchard/">PhyloOrchard</a> R package to store trees but are transitioning (late 2015) to use OpenTree's tree store. If you want PhyloOrchard, you can install it by doing<br />
 <code>install.packages("PhyloOrchard", repos="http://R-Forge.R-project.org")</code></p>
 <br />
+<hr />
 <p>DateLife is part of the Phylotastic project, funded by NSF. It uses resources from the Open Tree of Life project, rOpenSci, and TreeBase. To help, please <a href="https://tree.opentreeoflife.org/curator">add trees</a> to OpenTree's database! [they can be yours or others']</p>
+<p><center><a href="http://www.nsf.gov"><img src="https://www.nsf.gov/images/logos/nsf1.jpg"></a></center></p>
 
 <?php include("pageend.html"); ?>
