@@ -12,11 +12,21 @@ HasBrlen <- function(x) {
 	return(brlen)
 }
 
+#temporary hack to allow trees with duplicate taxa to be read in, courtesy David Winter
+#note lack of underscores in ottaxonname in this fn
+get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ot:otttaxonname") {
+	tr <- rotl:::.get_study_tree(study_id=study_id, tree_id=tree_id, tip_label=tip_label, format="newick")
+	phy <- ape::read.tree(text=gsub(" ", "_", tr))
+	phy$tip.label <- gsub("_", " ", phy$tip.label)
+	return(	phy)
+}
+
 for (chrono.index in sequence(length(chronogram.matches))) {
 	print(paste("tree number", chrono.index, "of", length(chronogram.matches)))
 	study.id <- unlist(unname(chronogram.matches[[chrono.index]][1]))
 	tree.id <- unname(unlist(chronogram.matches[[chrono.index]][[2]][[1]][2]))
-	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
+#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
+	new.tree <- get_study_tree_with_dups(study_id=study.id, tree_id=tree.id)
 	print(new.tree)
 	if(HasBrlen(new.tree)) {
 		trees[[chrono.index]] <-new.tree
