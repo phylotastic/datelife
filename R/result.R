@@ -1,25 +1,36 @@
-run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600, usetnrs="no", tnrssource="NCBI", version="stable") {
+run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600, usetnrs="no", approximatematch="yes", prunenonmatch="yes", tnrssource="NCBI", version="stable") {
   if(version=="stable") {
     #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
     #  studies
     phy<-NULL
     input<-gsub("\\+"," ",input)
     input<-str_trim(input, side = "both")
- 
+ 	do_approximate_matching = TRUE
+ 	if (approximatematch=="no") {
+ 		do_approximate_matching = FALSE
+ 	}
+ 	prune_na = TRUE
+ 	if (prunenonmatch =="no") {
+ 		prune_na = FALSE
+ 	}
+
     if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
       phy<-read.tree(text=input)
     }
     cleaned.names<-""
     if(!is.null(phy)) {
       if(usetnrs=="yes") {
-        phy <- suppressMessages(checknames(phylo=phy, source_=tnrssource, byfilename=FALSE))
+       # phy <- suppressMessages(checknames(phylo=phy, source_=tnrssource, byfilename=FALSE))
+       phy <- tnrs_OToL(phylo=phy, do_approximate_matching, prune_na= prune_na)
       }
       cleaned.names<-phy$tip.label 
     } else {
       cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
       #cleaned.names<-lapply(cleaned.names, str_trim, side="both")
       if (usetnrs=="yes") {
-        cleaned.names <- checknames(charvector=cleaned.names, source_=tnrssource)
+        #cleaned.names <- checknames(charvector=cleaned.names, source_=tnrssource)
+        phy <- tnrs_OToL(phylo=phy, do_approximate_matching, prune_na= prune_na)
+
       }
     }
     
