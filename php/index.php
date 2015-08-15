@@ -68,6 +68,6 @@ Deprecated, given move to OpenTree TNRS
 <br />
 <hr />
 <p>DateLife is part of the Phylotastic project, funded by NSF. It uses resources from the Open Tree of Life project, rOpenSci, and TreeBase. To help, please <a href="https://tree.opentreeoflife.org/curator">add trees</a> to OpenTree's database! [they can be yours or others']</p>
-<p><center><a href="http://www.nsf.gov"><img src="https://www.nsf.gov/images/logos/nsf1.jpg"></a></center></p>
+<p><center><a href="http://www.nsf.gov"><img src="https://www.nsf.gov/images/logos/nsf1.jpg" width=50 height=50></a></center></p>
 
 <?php include("pageend.html"); ?>
