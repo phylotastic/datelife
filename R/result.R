@@ -21,7 +21,7 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
     if(!is.null(phy)) {
       if(usetnrs=="yes") {
        # phy <- suppressMessages(checknames(phylo=phy, source_=tnrssource, byfilename=FALSE))
-       phy <- tnrs_OToL(phylo=phy, do_approximate_matching, prune_na= prune_na)
+       phy <- tnrs_OToL_phylo(phylo=phy, do_approximate_matching, prune_na= prune_na)
       }
       cleaned.names<-phy$tip.label 
     } else {
@@ -29,7 +29,7 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
       #cleaned.names<-lapply(cleaned.names, str_trim, side="both")
       if (usetnrs=="yes") {
         #cleaned.names <- checknames(charvector=cleaned.names, source_=tnrssource)
-        phy <- tnrs_OToL(phylo=phy, do_approximate_matching, prune_na= prune_na)
+        phy <- tnrs_OToL_names(names=cleaned.names, do_approximate_matching, prune_na= prune_na)
 
       }
     }

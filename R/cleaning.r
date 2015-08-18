@@ -59,9 +59,9 @@ drop_epithets <- function(taxon){
 	return(remove_onechar_epithet)
 }
 
-tnrs_OToL <- function(phylo, do_approximate_matching=TRUE, prune_na=TRUE) {
+tnrs_OToL_phylo <- function(phylo, do_approximate_matching=TRUE, prune_na=TRUE) {
 	returned.names <- c()
-	suppressWarnings(returned.names <- tnrs_match_names(phylo$tip.label, do_approximate_matching= do_approximate_matching)$unique_name) #tested; works on up to 50K names, though with all names matching completely
+	suppressWarnings(returned.names <- tnrs_match_names(names=phylo$tip.label, do_approximate_matching= do_approximate_matching)$unique_name) #tested; works on up to 50K names, though with all names matching completely
 	if (length(which(is.na(returned.names)))>0) {
 		if(prune_na) {
 			phylo <- drop.tip(phylo, tip=which(is.na(returned.names)))
@@ -73,6 +73,21 @@ tnrs_OToL <- function(phylo, do_approximate_matching=TRUE, prune_na=TRUE) {
 	phylo$tip.label <- returned.names
 	return(phylo)
 }
+
+tnrs_OToL_names <- function(names, do_approximate_matching=TRUE, prune_na=TRUE) {
+	returned.names <- c()
+	original.names <- names
+	suppressWarnings(returned.names <- tnrs_match_names(names=names, do_approximate_matching= do_approximate_matching)$unique_name) #tested; works on up to 50K names, though with all names matching completely
+	if (length(which(is.na(returned.names)))>0) {
+		if(prune_na) {
+			returned.names <- returned.names[which(!is.na(returned.names))]
+		} else {
+			returned.names[which(is.na(returned.names))] <- original.names[which(is.na(returned.names))]
+		}
+	}
+	return(returned.names)
+}
+
 
 #' Function to check names on a species list or phylogeny.
 #' 
