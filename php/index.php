@@ -50,15 +50,6 @@
 </select>
 
 
-Deprecated, given move to OpenTree TNRS
-
-<br />TNRS source:<select name="tnrssource">
-<option value="NCBI">NCBI (good for wide range of species)</option>
-<option value="iPlant_TNRS">iPlant (good for plants, can fix typos)</option>
-<option value="MSW3">Mammal Species of the World, Vol. 3</option>
-</select><br />Name resolution uses the <a href="http://taxosaurus.org">Taxosaurus</a> service.</p>
-
-
  <p><input type="submit" value="Send"></p>
 </form></p>
 <br /><hr>
