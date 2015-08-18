@@ -35,8 +35,24 @@
 </select></p>
 
 <p>Taxonomic name resolution (converting input names to a standard taxonomy; will slow down analysis but increase chance of matching): <select name="usetnrs">
+<option value="yes">yes</option>
+<option value="no" selected="selected">No</option>
+</select>
+
+<p>Use approximate name matching (makes matching MUCH slower): <select name="approximatematch">
+<option value="yes" selected="selected">yes</option>
 <option value="no">No</option>
-</select><br />TNRS source:<select name="tnrssource">
+</select>
+
+<p>Prune taxa that don't match (otherwise, keep their original names): <select name="prunenonmatch">
+<option value="yes" selected="selected">yes</option>
+<option value="no">No</option>
+</select>
+
+
+Deprecated, given move to OpenTree TNRS
+
+<br />TNRS source:<select name="tnrssource">
 <option value="NCBI">NCBI (good for wide range of species)</option>
 <option value="iPlant_TNRS">iPlant (good for plants, can fix typos)</option>
 <option value="MSW3">Mammal Species of the World, Vol. 3</option>
@@ -52,6 +68,6 @@
 <br />
 <hr />
 <p>DateLife is part of the Phylotastic project, funded by NSF. It uses resources from the Open Tree of Life project, rOpenSci, and TreeBase. To help, please <a href="https://tree.opentreeoflife.org/curator">add trees</a> to OpenTree's database! [they can be yours or others']</p>
-<p><center><a href="http://www.nsf.gov"><img src="https://www.nsf.gov/images/logos/nsf1.jpg"></a></center></p>
+<p><center><a href="http://www.nsf.gov"><img src="https://www.nsf.gov/images/logos/nsf1.jpg" width=50 height=50></a></center></p>
 
 <?php include("pageend.html"); ?>
