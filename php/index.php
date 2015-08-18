@@ -34,12 +34,12 @@
  <option value="0">Assume +/- 0% of the age</option> 
 </select></p>
 
-<p>Taxonomic name resolution (converting input names to a standard taxonomy; will slow down analysis but increase chance of matching): <select name="usetnrs">
+<p>Taxonomic name resolution (converting input names to a standard taxonomy; will slow down analysis (~0.5s/taxon) but increase chance of matching): <select name="usetnrs">
 <option value="yes">yes</option>
 <option value="no" selected="selected">No</option>
 </select>
 
-<p>Use approximate name matching (makes matching MUCH slower): <select name="approximatematch">
+<p>Use approximate name matching (makes matching MUCH slower: perhaps 20s/taxon): <select name="approximatematch">
 <option value="yes" selected="selected">yes</option>
 <option value="no">No</option>
 </select>
