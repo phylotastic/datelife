@@ -60,10 +60,11 @@ drop_epithets <- function(taxon){
 }
 
 tnrs_OToL <- function(phylo, do_approximate_matching=TRUE, prune_na=TRUE) {
+	returned.names <- c()
 	suppressWarnings(returned.names <- tnrs_match_names(phylo$tip.label, do_approximate_matching= do_approximate_matching)$unique_name) #tested; works on up to 50K names, though with all names matching completely
-	if (length(which(is.na(returned.names)))>0)
+	if (length(which(is.na(returned.names)))>0) {
 		if(prune_na) {
-			phylo <- drop.tip(phylo, tip=which(is.na	(returned.names)))
+			phylo <- drop.tip(phylo, tip=which(is.na(returned.names)))
 			returned.names <- returned.names[which(!is.na(returned.names))]
 		} else {
 			returned.names[which(is.na(returned.names))] <- phylo$tip.label[which(is.na(returned.names))]
