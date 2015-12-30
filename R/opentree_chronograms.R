@@ -1,5 +1,5 @@
 library(devtools)
-install_github("ropensci/rotl", dependencies = TRUE, build_vignette=FALSE)
+#install_github("ropensci/rotl", dependencies = TRUE, build_vignette=FALSE)
 library(rotl)
 library(ape)
 library(knitcitations)
