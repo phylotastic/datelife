@@ -3,7 +3,7 @@ library(devtools)
 library(rotl)
 library(ape)
 library(knitcitations)
-chronogram.matches <- studies_find_trees(property="ot:branchLengthMode", value="ot:time")[[1]]
+chronogram.matches <- studies_find_trees(property="ot:branchLengthMode", value="ot:time")
 trees <- list()
 authors <- list()
 curators <- list()
@@ -26,23 +26,23 @@ get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ot:otttaxonna
 }
 
 
-
-for (chrono.index in sequence(length(chronogram.matches))) {
-	print(paste("tree number", chrono.index, "of", length(chronogram.matches)))
-	study.id <- unlist(unname(chronogram.matches[[chrono.index]][1]))
-	tree.id <- unname(unlist(chronogram.matches[[chrono.index]][[2]][[1]][2]))
+tree.count <- 0
+for (study.index in sequence(dim(chronogram.matches)[1])) {
+	for(chrono.index in sequence(length(chronogram.matches$n_matched_trees[study.index]))) {
+		study.id <- chronogram.matches$study_ids[study.index]
 #	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
-	new.tree <- get_study_tree_with_dups(study_id=study.id, tree_id=tree.id)
-	print(new.tree)
-	if(HasBrlen(new.tree)) {
-		doi <- NULL
-		try(doi <- gsub('http://dx.doi.org/', '', attr(get_publication(get_study_meta(study.id)), "DOI")))
-		try(authors <- append(authors, bib_metadata(doi)$author))
-		try(curators <- unlist(append(curators, get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]])))
-		trees[[chrono.index]] <-new.tree
-		names(trees)[chrono.index] <- get_publication(get_study_meta(study.id))[1]
+		new.tree <- get_study_tree_with_dups(study_id=study.id, tree_id=strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index])
+		if(HasBrlen(new.tree)) {
+			doi <- NULL
+			try(doi <- gsub('http://dx.doi.org/', '', attr(get_publication(get_study_meta(study.id)), "DOI")))
+			try(authors <- append(authors, bib_metadata(doi)$author))
+			try(curators <- unlist(append(curators, get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]])))
+			tree.count <- tree.count+1
+			trees[[tree.count]] <-new.tree
+			names(trees)[tree.count] <- get_publication(get_study_meta(study.id))[1]
+		}
+		save(list=ls(), file="opentree_chronograms.RData")
 	}
-	save(list=ls(), file="opentree_chronograms.RData")
 }
 
 #since some of the trees come in with missing brlen, and so all brlen are cut, delete these trees
