@@ -1,7 +1,7 @@
 
-library(phangorn)
-library(PhyloOrchard)
-library(datelife2) # getAges
+#library(phangorn)
+#library(PhyloOrchard)
+#library(datelife2) # getAges
 
 #
 # mrp.supertree slightly modified from Liam Revell's phytools package  
@@ -106,21 +106,21 @@ densiTree <- function(x, type="cladogram", alpha=1/length(x), optim=FALSE, scale
 
 
 
-data(Laurasiatherian)
-set.seed(1)
-bs <- bootstrap.phyDat(Laurasiatherian, FUN = function(x)upgma(dist.hamming(x)), bs=100, multicore=FALSE)
-class(bs) <- 'multiPhylo'
-bs = .compressTipLabel(bs)
-#cnet = consensusNet(bs, .3)
-#plot(cnet, show.edge.label=TRUE)
-
-# cladogram nice to show conflict
-densiTree(bs, optim=TRUE, type="cladogram", col="blue")
-
-# cladogram are nice to show different ages
-data(BinindaEmondsEtAl2007)
-BinindaEmondsEtAl2007 <- .compressTipLabel(BinindaEmondsEtAl2007) 
-densiTree(BinindaEmondsEtAl2007, type="phylogram", col="red")
+# data(Laurasiatherian)
+# set.seed(1)
+# bs <- bootstrap.phyDat(Laurasiatherian, FUN = function(x)upgma(dist.hamming(x)), bs=100, multicore=FALSE)
+# class(bs) <- 'multiPhylo'
+# bs = .compressTipLabel(bs)
+# #cnet = consensusNet(bs, .3)
+# #plot(cnet, show.edge.label=TRUE)
+# 
+# # cladogram nice to show conflict
+# densiTree(bs, optim=TRUE, type="cladogram", col="blue")
+# 
+# # cladogram are nice to show different ages
+# data(BinindaEmondsEtAl2007)
+# BinindaEmondsEtAl2007 <- .compressTipLabel(BinindaEmondsEtAl2007) 
+# densiTree(BinindaEmondsEtAl2007, type="phylogram", col="red")
 
 
 

@@ -1,3 +1,4 @@
+#' @export
 run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal",useembargoed="yes", uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600, usetnrs="no", approximatematch="yes", prunenonmatch="yes", tnrssource="NCBI", version="stable") {
   if(version=="stable") {
     #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
