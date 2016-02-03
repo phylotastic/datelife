@@ -4,16 +4,24 @@
 #library(ape)
 #library(knitcitations)
 
+#' Check for branch lengths in a tree
+#' @param x A phylo object
+#' @return A TRUE or FALSE
+#' @export
 HasBrlen <- function(x) {
 	brlen=TRUE
 	if(is.null(x$edge.length)) {
-		brlen=FALSE	
-	}	
+		brlen=FALSE
+	}
 	return(brlen)
 }
 
-#temporary hack to allow trees with duplicate taxa to be read in, courtesy David Winter
-#note lack of underscores in ottaxonname in this fn
+
+#' Allow trees with duplicate taxa to be read in, courtesy David Winter
+#' @param study_id Open Tree study id
+#' @param tree_id Open Tree tree id
+#' @param tip_label Which Open Tree tree label format you want
+#' @return A phylo object
 get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ot:otttaxonname") {
 	tr <- rotl:::.get_study_tree(study_id=study_id, tree_id=tree_id, tip_label=tip_label, format="newick")
 	phy <- ape::read.tree(text=gsub(" ", "_", tr))
@@ -21,11 +29,15 @@ get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ot:otttaxonna
 	return(	phy)
 }
 
+#' Get all chronograms from Open Tree of Life
+#' @return A list with elements for the trees, authors, curators, and study ids
+#' @export
 GetOToLChronograms <- function() {
-	chronogram.matches <- studies_find_trees(property="ot:branchLengthMode", value="ot:time")
+	chronogram.matches <- rotl::studies_find_trees(property="ot:branchLengthMode", value="ot:time")
 	trees <- list()
 	authors <- list()
 	curators <- list()
+	studies <- list()
 	tree.count <- 0
 	for (study.index in sequence(dim(chronogram.matches)[1])) {
 		for(chrono.index in sequence(length(chronogram.matches$n_matched_trees[study.index]))) {
@@ -35,23 +47,16 @@ GetOToLChronograms <- function() {
 			if(HasBrlen(new.tree)) {
 				doi <- NULL
 				try(doi <- gsub('http://dx.doi.org/', '', attr(get_publication(get_study_meta(study.id)), "DOI")))
-				try(authors <- append(authors, bib_metadata(doi)$author))
+				try(authors <- append(authors, list(paste(as.character(bib_metadata(doi)$author))))
 				try(curators <- unlist(append(curators, get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]])))
+				try(studies <- append(studies, study.id))
 				tree.count <- tree.count+1
 				trees[[tree.count]] <-new.tree
 				names(trees)[tree.count] <- get_publication(get_study_meta(study.id))[1]
 			}
-			save(list=ls(), file="opentree_chronograms.RData")
+			#save(list=ls(), file="opentree_chronograms.RData")
 		}
 	}
-
-	#since some of the trees come in with missing brlen, and so all brlen are cut, delete these trees
-
-#	print(t(t(sort(table(as.character(authors)), decreasing=TRUE))))
-#	print(t(t(sort(table(as.character(curators)), decreasing=TRUE))))
-
-
-	trees2 <- trees[sapply(trees, HasBrlen)]
-	save(list=ls(), file="opentree_chronograms.RData")
-	return(trees2)
+	result <- list(trees=trees, authors=authors, curators=curators, studies=studies)
+	return(result)
 }
