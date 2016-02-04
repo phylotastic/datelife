@@ -62,3 +62,12 @@ GetOToLChronograms <- function() {
 	result <- list(trees=trees, authors=authors, curators=curators, studies=studies)
 	return(result)
 }
+
+#' Save all chronograms from Open Tree of Life
+#' @param file Path including file name
+#' @return None
+#' @export
+SaveOToLChronograms <- function(file="opentree_chronograms.rda") {
+	results <- GetOToLChronograms()
+	save(results, file=file)
+}
