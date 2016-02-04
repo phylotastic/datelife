@@ -46,13 +46,15 @@ GetOToLChronograms <- function() {
 			new.tree <- get_study_tree_with_dups(study_id=study.id, tree_id=strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index])
 			if(HasBrlen(new.tree)) {
 				doi <- NULL
-				try(doi <- gsub('http://dx.doi.org/', '', attr(get_publication(get_study_meta(study.id)), "DOI")))
-				try(authors <- append(authors, list(paste(as.character(bib_metadata(doi)$author))))
-				try(curators <- unlist(append(curators, get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]])))
+				try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
+				authors <- append(authors, NA)
+				try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
+				curators <- append(curators, NA)
+				try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
 				try(studies <- append(studies, study.id))
 				tree.count <- tree.count+1
 				trees[[tree.count]] <-new.tree
-				names(trees)[tree.count] <- get_publication(get_study_meta(study.id))[1]
+				names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
 			}
 			#save(list=ls(), file="opentree_chronograms.RData")
 		}
