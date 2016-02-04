@@ -1,0 +1,30 @@
+Package: datelife
+Title: Underlying code for DateLife service
+Version: 0.1
+Authors: Brian O'Meara <omeara.brian@gmail.com>, and hackathon participants
+    (need to add soon)
+Description: This contains the core code for going from a tree or list of taxa
+    to a chronogram.
+Depends:
+    R (>= 3.2.3)
+Imports:
+    ape,
+    abind,
+    phangorn,
+    compare,
+    geiger,
+    parallel,
+    doMC,
+    stringr,
+    ggplot2,
+    taxize,
+    plyr,
+    rotl,
+    knitcitations,
+    devtools
+Suggests:
+    datelife2,
+    testthat
+License: GPL (>=2)
+LazyData: true
+RoxygenNote: 5.0.1
