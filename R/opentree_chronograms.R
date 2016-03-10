@@ -32,7 +32,7 @@ get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ot:otttaxonna
 #' Get all chronograms from Open Tree of Life
 #' @return A list with elements for the trees, authors, curators, and study ids
 #' @export
-GetOToLChronograms <- function() {
+GetOToLChronograms <- function(verbose=FALSE) {
 	chronogram.matches <- rotl::studies_find_trees(property="ot:branchLengthMode", value="ot:time")
 	trees <- list()
 	authors <- list()
@@ -40,11 +40,17 @@ GetOToLChronograms <- function() {
 	studies <- list()
 	tree.count <- 0
 	for (study.index in sequence(dim(chronogram.matches)[1])) {
+		if(verbose) {
+			print(paste("Downloading tree(s) from study", study.index, "of",dim(chronogram.matches)[1]))	
+		}
 		for(chrono.index in sequence(length(chronogram.matches$n_matched_trees[study.index]))) {
 			study.id <- chronogram.matches$study_ids[study.index]
 	#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
 			new.tree <- get_study_tree_with_dups(study_id=study.id, tree_id=strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index])
 			if(HasBrlen(new.tree)) {
+				if(verbose) {
+					print("has tree with branch lengths")	
+				}
 				doi <- NULL
 				try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
 				authors <- append(authors, NA)
