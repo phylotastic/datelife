@@ -91,11 +91,15 @@ GetSubsetArrayBothFromPhylo <- function(reference.trees, taxa, phy=NULL, phy4=NU
 
 }
 
+PruneTree <- function(phy, taxa) {
+	return(drop.tip(phy, tip=phy$tip.label[-(which(phy$tip.label %in% taxa))]))
+}
 
 GetSubsetArrayFromPhylo <- function(reference.trees, taxa, phy4=NULL) {
   final.size<-sum(reference.trees[[1]]$tip.label %in% taxa) # returns number of matches
   if(final.size>=2) { #it's worth doing the pruning
-    reference.trees<-pruneTrees(reference.trees, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
+    reference.trees<-PruneTree(reference.trees, taxa) 
+    #reference.trees<-pruneTrees(reference.trees, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
   }
   problem <- "none"
   patristic.matrix.array <- NA
@@ -120,7 +124,8 @@ GetSubsetArrayFromPhylo <- function(reference.trees, taxa, phy4=NULL) {
 GetSubsetArrayCongruifyFromPhylo <- function(reference.trees, taxa, phy=NULL) {
   final.size<-sum(reference.trees[[1]]$tip.label %in% taxa) # returns number of matches
   if(final.size>=2) { #it's worth doing the pruning
-    reference.trees<-pruneTrees(reference.trees, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
+   reference.trees<-PruneTree(reference.trees, taxa) 
+   #reference.trees<-pruneTrees(reference.trees, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
   }
   problem <- "none"
   patristic.matrix.array <- NA

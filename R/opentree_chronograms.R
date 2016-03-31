@@ -25,7 +25,7 @@ HasBrlen <- function(x) {
 get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ot:otttaxonname") {
 	tr <- rotl:::.get_study_tree(study_id=study_id, tree_id=tree_id, tip_label=tip_label, format="newick")
 	phy <- ape::read.tree(text=gsub(" ", "_", tr))
-	phy$tip.label <- gsub("_", " ", phy$tip.label)
+	phy$tip.label <- gsub("'", "", gsub("_", " ", phy$tip.label))
 	return(	phy)
 }
 
@@ -74,6 +74,6 @@ GetOToLChronograms <- function(verbose=FALSE) {
 #' @return None
 #' @export
 SaveOToLChronograms <- function(file="opentree_chronograms.rda") {
-	results <- GetOToLChronograms()
-	save(results, file=file)
+	datelife.cache <- GetOToLChronograms()
+	save(datelife.cache, file=file)
 }
