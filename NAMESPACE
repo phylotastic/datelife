@@ -3,6 +3,7 @@
 export(GetOToLChronograms)
 export(HasBrlen)
 export(SaveOToLChronograms)
+export(run)
 export(runOriginal)
 import(ggplot2)
 import(plyr)

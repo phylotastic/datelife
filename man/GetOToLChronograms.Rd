@@ -4,7 +4,7 @@
 \alias{GetOToLChronograms}
 \title{Get all chronograms from Open Tree of Life}
 \usage{
-GetOToLChronograms()
+GetOToLChronograms(verbose = FALSE)
 }
 \value{
 A list with elements for the trees, authors, curators, and study ids

@@ -1,6 +1,18 @@
-run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal", uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600, usetnrs="no", approximatematch="yes", prunenonmatch="yes", sourceinfo=datelife.cache) {
-  #remember we have from datelifeStarter.R the vectors citations and embargoed and the list of patristic.matrix.arrays
-  #  studies
+#' Core function to generate results
+#' @param input A newick string or vector of taxa
+#' @param format The output format
+#' @param partial How to deal with trees that have a subset of taxa in the query
+#' @param uncertainty How much to multiply the range by to represent uncertainty
+#' @param randomtreesperstudy IDK
+#' @param plot.width Width in pixels for output plot
+#' @param plot.height Height in pixels for output plot
+#' @param usetnrs Whether to use OpenTree's TNRS for the input
+#' @param approximatematch IDK
+#' @param pruneonmatch IDK
+#' @param datelife.cache The list of lists containing the input trees and other info
+#' @return Depends on options
+#' @export
+run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal", uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600, usetnrs="no", approximatematch="yes", prunenonmatch="yes", datelife.cache=datelife.cache) {
   phy<-NULL
   input<-gsub("\\+"," ",input)
   input<-str_trim(input, side = "both")
@@ -34,7 +46,7 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
       randomtreesperstudy<-1000
     }
     tree.list<-list()
-    results.list<-lapply(studies,GetSubsetArrayDispatch, taxa=cleaned.names, phy=phy)
+    results.list<-lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=cleaned.names, phy=phy)
     median.patristic.matrices<-list()
     ages.matrix<-c() #will hold median, and 95% CI
     uncertainty<-as.numeric(uncertainty)/100 #make percentage
@@ -50,7 +62,7 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
       out("<table border='1'><tr><th>Median</th><th>Min</th><th>2.5% quantile</th><th>97.5% quantile</th><th>Max</th><th>NTrees</th><th>Problems</th><th>Citation</th></tr>")
 
     }
-    for (i in sequence(length(studies))) {
+    for (i in sequence(length(datelife.cache$trees))) {
       result<-results.list[[i]]
       num.matching<-0
       if (!is.na(result$patristic.matrix.array)) { #happens if 0 return
@@ -79,7 +91,7 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
         }
         if (format=="html") {
           probs<-c(0.5,0,0.025,0.975,1)
-          out(paste("\n<tr>",VectorToTableRow(GetQuantiles(ages,probs)),"<td>",length(ages),"</td><td>",result$problem,"</td><td>",citations[i],"</td></tr>",sep="",collapse=""))
+          out(paste("\n<tr>",VectorToTableRow(GetQuantiles(ages,probs)),"<td>",length(ages),"</td><td>",result$problem,"</td><td>",names(datelife.cache$trees)[i],"</td></tr>",sep="",collapse=""))
         }
         if (format=="newick1000") {
           SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
@@ -151,9 +163,7 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
     }
     return(done())
   }
-  if (version=="bleedingedge") {
-    source("/Library/WebServer/Sites/datelife.org/datelife/R/bleedingedge.R", local=TRUE) #has commands to use
-  }
+ 
 
 
 
