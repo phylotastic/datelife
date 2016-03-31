@@ -33,9 +33,10 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
     if(usetnrs=="yes") {
       phy <- tnrs_OToL_phylo(phylo=phy, do_approximate_matching, prune_na= prune_na)
     }
-    cleaned.names<-phy$tip.label
+    	cleaned.names<-phy$tip.label
     } else {
-      cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
+      #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
+      cleaned.names <- input
       if (usetnrs=="yes") {
         phy <- tnrs_OToL_names(names=cleaned.names, do_approximate_matching, prune_na= prune_na)
 
@@ -66,7 +67,8 @@ run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", p
       result<-results.list[[i]]
       num.matching<-0
       if (!is.na(result$patristic.matrix.array)) { #happens if 0 return
-        num.matching<-dim(SplitArray(result$patristic.matrix.array)[[1]])[1] #take just the first array
+ #       num.matching<-dim(SplitArray(result$patristic.matrix.array)[[1]])[1] #take just the first array
+ 		num.matching <- dim(result$patristic.matrix.array)[1]
       }
       display.result<-FALSE
       if(num.matching == length(cleaned.names)) {

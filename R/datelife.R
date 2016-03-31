@@ -112,7 +112,7 @@ GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4=NULL) {
     }
   }
   if (final.size >= 2) {
-  	patristic.matrix.array <- BindMatrices(ComputePatristicDistance(reference.tree))
+  	patristic.matrix.array <- ComputePatristicDistance(reference.tree)
   }
   if(!is.null(phy4)) {
     if (length(descendants(phy4, MRCA(phy4, taxa), type="tips")) > taxa) {
@@ -140,7 +140,7 @@ GetSubsetArrayCongruifyFromPhylo <- function(reference.tree, taxa, phy=NULL) {
     }
   }
   if (final.size >= 3) {
-  	patristic.matrix.array <-   BindMatrices(CongruifyTreeFromPhylo(reference.tree, query.tree=phy))
+  	patristic.matrix.array <-   CongruifyTreeFromPhylo(reference.tree, query.tree=phy)
   }
   return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
 }

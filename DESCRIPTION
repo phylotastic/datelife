@@ -21,7 +21,9 @@ Imports:
     plyr,
     rotl,
     knitcitations,
-    devtools
+    devtools,
+    Rserve,
+    FastRWeb
 Suggests:
     datelife2,
     testthat
