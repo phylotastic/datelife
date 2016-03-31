@@ -78,15 +78,16 @@ GetSubsetArrayDispatch <- function(study.element, taxa, phy=NULL, phy4=NULL) {
   }
 }
 
-GetSubsetArrayBothFromPhylo <- function(reference.trees, taxa, phy=NULL, phy4=NULL) {
-  if (class(reference.trees)=="phylo") {
-    reference.trees<-c(reference.trees) #from here in, assumes multiphylo object, even if a single tree 
-  }
+GetSubsetArrayBothFromPhylo <- function(reference.tree, taxa, phy=NULL, phy4=NULL) {
+#COMMENTING OUT: OpenTree gives single trees, let's just standardize on those
+#  if (class(reference.tree)=="phylo") {
+#    reference.tree<-c(reference.tree) #from here in, assumes multiphylo object, even if a single tree 
+#  }
   if (is.null(phy)) {
-    return(GetSubsetArrayFromPhylo(reference.trees=reference.trees, taxa=taxa, phy4=phy4)) 
+    return(GetSubsetArrayFromPhylo(reference.tree=reference.tree, taxa=taxa, phy4=phy4)) 
   }
   else { #congruify
-    return(GetSubsetArrayCongruifyFromPhylo(reference.trees=reference.trees, taxa=taxa, phy=phy)) 
+    return(GetSubsetArrayCongruifyFromPhylo(reference.tree=reference.tree, taxa=taxa, phy=phy)) 
   }
 
 }
@@ -95,11 +96,11 @@ PruneTree <- function(phy, taxa) {
 	return(drop.tip(phy, tip=phy$tip.label[-(which(phy$tip.label %in% taxa))]))
 }
 
-GetSubsetArrayFromPhylo <- function(reference.trees, taxa, phy4=NULL) {
-  final.size<-sum(reference.trees[[1]]$tip.label %in% taxa) # returns number of matches
+GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4=NULL) {
+  final.size<-sum(reference.tree$tip.label %in% taxa) # returns number of matches
   if(final.size>=2) { #it's worth doing the pruning
-    reference.trees<-PruneTree(reference.trees, taxa) 
-    #reference.trees<-pruneTrees(reference.trees, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
+    reference.tree<-PruneTree(reference.tree, taxa) 
+    #reference.tree<-pruneTrees(reference.tree, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
   }
   problem <- "none"
   patristic.matrix.array <- NA
@@ -111,7 +112,7 @@ GetSubsetArrayFromPhylo <- function(reference.trees, taxa, phy4=NULL) {
     }
   }
   if (final.size >= 2) {
-  	patristic.matrix.array <- BindMatrices(lapply(reference.trees,ComputePatristicDistance))
+  	patristic.matrix.array <- BindMatrices(ComputePatristicDistance(reference.tree))
   }
   if(!is.null(phy4)) {
     if (length(descendants(phy4, MRCA(phy4, taxa), type="tips")) > taxa) {
@@ -121,11 +122,11 @@ GetSubsetArrayFromPhylo <- function(reference.trees, taxa, phy4=NULL) {
   return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
 }
 
-GetSubsetArrayCongruifyFromPhylo <- function(reference.trees, taxa, phy=NULL) {
-  final.size<-sum(reference.trees[[1]]$tip.label %in% taxa) # returns number of matches
+GetSubsetArrayCongruifyFromPhylo <- function(reference.tree, taxa, phy=NULL) {
+  final.size<-sum(reference.tree$tip.label %in% taxa) # returns number of matches
   if(final.size>=2) { #it's worth doing the pruning
-   reference.trees<-PruneTree(reference.trees, taxa) 
-   #reference.trees<-pruneTrees(reference.trees, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
+   reference.tree<-PruneTree(reference.tree, taxa) 
+   #reference.tree<-pruneTrees(reference.tree, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
   }
   problem <- "none"
   patristic.matrix.array <- NA
@@ -139,7 +140,7 @@ GetSubsetArrayCongruifyFromPhylo <- function(reference.trees, taxa, phy=NULL) {
     }
   }
   if (final.size >= 3) {
-  	patristic.matrix.array <- BindMatrices(lapply(reference.trees,CongruifyTreeFromPhylo, query.tree=phy)) #think about mclapply
+  	patristic.matrix.array <-   BindMatrices(CongruifyTreeFromPhylo(reference.tree, query.tree=phy))
   }
   return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
 }
@@ -163,12 +164,12 @@ CongruifyTree <- function(patristic.matrix, query.tree) {
   return(result.matrix)
 }
 
-CongruifyTreeFromPhylo <- function(reference.trees, query.tree) {
-  result.matrix<-matrix(nrow=Ntip(reference.trees), ncol=Ntip(reference.trees))
+CongruifyTreeFromPhylo <- function(reference.tree, query.tree) {
+  result.matrix<-matrix(nrow=Ntip(reference.tree), ncol=Ntip(reference.tree))
   if(is.null(query.tree$edge.length)) {
     query.tree$edge.length<-numeric(nrow(query.tree$edge)) #makes it so that branches that don't match reference tree get zero length
   }
-  try(result.matrix<-ComputePatristicDistance(congruify.phylo(reference.trees, query.tree, NULL, 0, scale="PATHd8")$phy))
+  try(result.matrix<-ComputePatristicDistance(congruify.phylo(reference.tree, query.tree, NULL, 0, scale="PATHd8")$phy))
   return(result.matrix)
 }
 
