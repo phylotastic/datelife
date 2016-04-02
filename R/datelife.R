@@ -14,8 +14,66 @@
 # library(rotl)
 # source("/Library/WebServer/Sites/datelife.org/datelife/R/cleaning.r")
 
+#' Take input string, figure out if it's newick or list of species
+#' @param input A newick string or vector of taxa
+#' @param usetnrs Whether to use OpenTree's TNRS for the input
+#' @param approximatematch IDK
+#' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
+ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs="no", approximatematch="yes") {
+ input<-gsub("\\+"," ",input)
+  input<-str_trim(input, side = "both")
+  phy <- NA
+  do_approximate_matching = TRUE
+  if (approximatematch=="no") {
+    do_approximate_matching = FALSE
+  }
+  prune_na = TRUE
+  if (prunenonmatch =="no") {
+    prune_na = FALSE
+  }
+  
+  if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
+    phy<-read.tree(text=input)
+  }
+  cleaned.names<-""
+  if(!is.null(phy)) {
+    if(usetnrs=="yes") {
+      phy <- tnrs_OToL_phylo(phylo=phy, do_approximate_matching, prune_na= prune_na)
+    }
+    	cleaned.names<-phy$tip.label
+    } else {
+      #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
+      cleaned.names <- input
+      if (usetnrs=="yes") {
+        phy <- tnrs_OToL_names(names=cleaned.names, do_approximate_matching, prune_na= prune_na)
 
+      }
+    }
+    return(list(phy=phy, cleaned.names=cleaned.names))
+}
 
+AllMatching <- function(patristic.matrix, taxa) {
+	return(sum(!(taxa %in% rownames(patristic.matrix) ))==0)
+}
+
+#' Take results.list and process it
+#' @param results.list A list returned from using GetSubsetArrayDispatch on datelife.cache$trees
+#' @return A list with the patristic.matrices that are not NA
+ProcessResultsList <- function(results.list, taxa=NULL, partial=FALSE) {
+	if(is.null(taxa)) {
+		taxa <- unique(unname(unlist(lapply(final.matrices, rownames))))
+	}
+	patristic.matrices <- lapply(results.list, "[[", "patristic.matrix.array")	
+	
+	final.matrices <- patristic.matrices[!is.na(patristic.matrices)]
+	if(!partial) {
+		final.matrices <- final.matrices[sapply(final.matrices, AllMatching, taxa=taxa)]
+	}
+	if(length(final.matrices)>0) {
+		final.matrices <- lapply(final.matrices, PadMatrix, all.taxa=taxa)	
+	}
+	return(final.matrices)
+}
 
 #Note that originally trees were stored as patristic matrices. This was intended
 #to make subsetting fast. The downside is large memory usage. Klaus Schliep wrote
@@ -217,20 +275,34 @@ GetAge <- function(patristic.matrix) {
   return(0.5 * max(patristic.matrix)) 
 }
 
-GetAges <- function(patristic.matrix.array) {
-  if (length(dim(patristic.matrix.array))==2) {
-    return(GetAge(patristic.matrix.array))
-  }
-  else if (dim(patristic.matrix.array)[3]==1) {
-    return(GetAge(patristic.matrix.array))
-  }
-  else {
-    return( sapply(SplitArray(patristic.matrix.array), GetAge ))
-  }
+GetAges <- function(filtered.results, partial=TRUE) {
+		
 }
+
+
+# GetAges <- function(patristic.matrix.array) {
+  # if (length(dim(patristic.matrix.array))==2) {
+    # return(GetAge(patristic.matrix.array))
+  # }
+  # else if (dim(patristic.matrix.array)[3]==1) {
+    # return(GetAge(patristic.matrix.array))
+  # }
+  # else {
+    # return( sapply(SplitArray(patristic.matrix.array), GetAge ))
+  # }
+# }
 
 ReorderMatrix <- function(patristic.matrix) {
   return(patristic.matrix[order(rownames(patristic.matrix)),order(colnames(patristic.matrix))]) 
+}
+
+#' Function to fill in empty cells
+PadMatrix <- function(patristic.matrix, all.taxa) {
+	final.matrix <- rbind(patristic.matrix, rep(NA, length(all.taxa) - dim(patristic.matrix)[1]))
+	final.matrix <- cbind(final.matrix, rep(NA, length(all.taxa) - dim(patristic.matrix)[1]))
+ 	rownames(final.matrix) <- c(rownames(patristic.matrix), all.taxa[-which(all.taxa %in% rownames(patristic.matrix))])
+ 	colnames(final.matrix) <- c(colnames(patristic.matrix), all.taxa[-which(all.taxa %in% colnames(patristic.matrix))])
+	return(ReorderMatrix(final.matrix))	
 }
 
 TestNameOrder <- function(patristic.matrix, standard.rownames, standard.colnames) {
@@ -253,7 +325,7 @@ BindMatrices <- function(patristic.matrix.list) {
   standard.colnames<-colnames(patristic.matrix.list[[1]])
   matching.names<-sapply(patristic.matrix.list,TestNameOrder,standard.rownames,standard.colnames)
   if (sum(matching.names)!=length(matching.names)) {
-    stop("The patristic matrices you are trying to bind to not have the same taxa")
+    stop("The patristic matrices you are trying to bind do not have the same taxa")
   }
   return(abind(patristic.matrix.list, along=3 ))
 }

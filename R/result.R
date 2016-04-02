@@ -12,43 +12,28 @@
 #' @param datelife.cache The list of lists containing the input trees and other info
 #' @return Depends on options
 #' @export
-run<-function(input=c("Rhinoceros_unicornis","Equus_caballus"), format="html", partial="liberal", uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600, usetnrs="no", approximatematch="yes", prunenonmatch="yes", datelife.cache=datelife.cache, do.out = TRUE) {
+run<-function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), format="html", partial="liberal", uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600, usetnrs="no", approximatematch="yes", prunenonmatch="yes", datelife.cache=datelife.cache, do.out = TRUE) {
   out.vector <- ""
-  phy<-NULL
-  input<-gsub("\\+"," ",input)
-  input<-str_trim(input, side = "both")
-  do_approximate_matching = TRUE
-  if (approximatematch=="no") {
-    do_approximate_matching = FALSE
-  }
-  prune_na = TRUE
-  if (prunenonmatch =="no") {
-    prune_na = FALSE
-  }
+ 
+    input.processed <- ProcessInput(input, usetnrs, approximatematch)
+    phy <- input.processed$phy
+    cleaned.names <- input.processed$cleaned.names
 
-  if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
-    phy<-read.tree(text=input)
-  }
-  cleaned.names<-""
-  if(!is.null(phy)) {
-    if(usetnrs=="yes") {
-      phy <- tnrs_OToL_phylo(phylo=phy, do_approximate_matching, prune_na= prune_na)
-    }
-    	cleaned.names<-phy$tip.label
-    } else {
-      #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
-      cleaned.names <- input
-      if (usetnrs=="yes") {
-        phy <- tnrs_OToL_names(names=cleaned.names, do_approximate_matching, prune_na= prune_na)
 
-      }
-    }
-
-    if(format=="newick1000") {
-      randomtreesperstudy<-1000
-    }
     tree.list<-list()
     results.list<-lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=cleaned.names, phy=phy)
+    filtered.results <- ProcessResultsList(results.list, taxa, partial)
+    
+    
+    #NOW START PROCESSING THE FILTERED.RESULTS: GET MAX AGE, GET TREES, ETC.
+    
+    
+    
+    
+    
+    
+    
+    
     median.patristic.matrices<-list()
     ages.matrix<-c() #will hold median, and 95% CI
     uncertainty<-as.numeric(uncertainty)/100 #make percentage
