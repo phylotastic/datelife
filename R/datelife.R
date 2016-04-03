@@ -57,8 +57,47 @@ AllMatching <- function(patristic.matrix, taxa) {
 	return(sum(!(taxa %in% rownames(patristic.matrix) ))==0)
 }
 
+
+#' Find the index of relevant studies in a datelife.cache object
+#' @param results.list A list returned from using GetSubsetArrayDispatch on datelife.cache$trees
+#' @param taxa A vector of taxa to match
+#' @param partial If TRUE, return matrices that have only partial matches
+#' @return A vector with the indices of studies that have relevant info
+#' @export
+FindMatchingStudyIndex <- function(results.list, taxa=NULL, partial=FALSE) {
+  results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
+  patristic.matrices <- lapply(results.list, "[[", "patristic.matrix.array")
+  results <- which(!is.na(patristic.matrices))
+  if(!partial) {
+  	results <- which(sapply(patristic.matrices, AllMatching, taxa=taxa))
+  }
+  return(results)
+}
+
+#' Return the relevant authors for a set of studies 
+#' @param results.index A vector from FindMatchingStudyIndex() with the indices of the relevant studies
+#' @param datelife.cache The cache
+#' @return A vector with counts of each author, with names equal to author names
+#' @export
+TabulateRelevantAuthors <- function(results.index, datelife.cache) {
+	authors <- datelife.cache$authors[results.index]
+	return(table(unlist(authors)))
+}
+
+#' Return the relevant curators for a set of studies 
+#' @param results.index A vector from FindMatchingStudyIndex() with the indices of the relevant studies
+#' @param datelife.cache The cache
+#' @return A vector with counts of each curator, with names equal to curator names
+#' @export
+TabulateRelevantCurators <- function(results.index, datelife.cache) {
+	curators <- datelife.cache$curators[results.index]
+	return(table(unlist(curators)))
+}
+
 #' Take results.list and process it
 #' @param results.list A list returned from using GetSubsetArrayDispatch on datelife.cache$trees
+#' @param taxa A vector of taxa to match
+#' @param partial If TRUE, return matrices that have only partial matches
 #' @return A list with the patristic.matrices that are not NA
 #' @export
 ProcessResultsList <- function(results.list, taxa=NULL, partial=FALSE) {
@@ -147,7 +186,8 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE) {
 		return(GetAges(filtered.results, partial=partial))	
 	}
 	if(output.format=="newick") {
-		return(sapply(filtered.results, PatristicMatrixToNewick))
+		trees <- sapply(filtered.results, PatristicMatrixToNewick)
+		return(trees[which(!is.na(trees))])
 	}
 	
 }
