@@ -2,11 +2,19 @@
 % Please edit documentation in R/datelife.R
 \name{PadMatrix}
 \alias{PadMatrix}
-\title{Function to fill in empty cells}
+\title{Function to fill in empty cells in a patristic matrix for missing taxa}
 \usage{
 PadMatrix(patristic.matrix, all.taxa)
 }
+\arguments{
+\item{patristic.matrix}{A patristic matrix with row and column names for taxa}
+
+\item{all.taxa}{A vector of the names of all taxa you want, including ones not in the patristic matrix}
+}
+\value{
+Patristic.matrix for all.taxa, with NA for entries between taxa where at least one was not in the original patristic.matrix
+}
 \description{
-Function to fill in empty cells
+Function to fill in empty cells in a patristic matrix for missing taxa
 }
 

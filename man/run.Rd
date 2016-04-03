@@ -5,7 +5,7 @@
 \title{Core function to generate results}
 \usage{
 run(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-  format = "html", partial = "liberal", uncertainty = 100,
+  format = "html", partial = TRUE, uncertainty = 100,
   randomtreesperstudy = 0, plot.width = 600, plot.height = 600,
   usetnrs = "no", approximatematch = "yes", prunenonmatch = "yes",
   datelife.cache = datelife.cache, do.out = TRUE)
@@ -30,6 +30,8 @@ run(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 \item{approximatematch}{IDK}
 
 \item{datelife.cache}{The list of lists containing the input trees and other info}
+
+\item{do.out}{Boolean on whether to use FastRWeb's out() fn}
 
 \item{pruneonmatch}{IDK}
 }

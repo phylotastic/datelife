@@ -19,6 +19,7 @@
 #' @param usetnrs Whether to use OpenTree's TNRS for the input
 #' @param approximatematch IDK
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
+#' @export
 ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs="no", approximatematch="yes") {
  input<-gsub("\\+"," ",input)
   input<-str_trim(input, side = "both")
@@ -59,6 +60,7 @@ AllMatching <- function(patristic.matrix, taxa) {
 #' Take results.list and process it
 #' @param results.list A list returned from using GetSubsetArrayDispatch on datelife.cache$trees
 #' @return A list with the patristic.matrices that are not NA
+#' @export
 ProcessResultsList <- function(results.list, taxa=NULL, partial=FALSE) {
 	if(is.null(taxa)) {
 		taxa <- unique(unname(unlist(lapply(final.matrices, rownames))))
@@ -100,11 +102,11 @@ ReadRDFTree <- function(identifier, format = "phylo") {
 ComputePatristicDistance <- function(phy, test=TRUE,tol=0.0001) {
 	# stores the distance between taxa
 	if (test) {
-		if (!is.ultrametric(phy,tol)) {
+		if (!ape::is.ultrametric(phy,tol)) {
 			stop("currently we require that chronograms be ultrametric") # can pad them so that terminals all reach to present
 		}
 	}
-	patristic.matrix<-cophenetic(phy)
+	patristic.matrix<-stats::cophenetic(phy)
 	return(patristic.matrix)
 }
 
@@ -121,13 +123,42 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
     }
   }
   if(!is.null(phy4)) {
-    if (length(descendants(phy4, MRCA(phy4, taxa), type="tips")) > taxa) {
+    if (length(phylobase::descendants(phy4, phylobase::MRCA(phy4, taxa), type="tips")) > taxa) {
        problem <- "set of taxa not a clade, so this is probably an overestimate"
     }
   }
   return(list(patristic.matrix=patristic.matrix,problem=problem))
 }
 
+#' Summarize a filtered results list in various ways
+#' @param filtered.results A list of patristic matrices; labels correspond to citations
+#' @param output.format The desired output format
+#' @return Depends on output format
+#' @export
+SummarizeResults <- function(filtered.results, output.format, partial=TRUE) {
+	if(!partial) {
+		filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
+	}
+	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick"))
+	if(output.format=="citations") {
+		return(names(filtered.results))	
+	}
+	if(output.format=="mrca") {
+		return(GetAges(filtered.results, partial=partial))	
+	}
+	if(output.format=="newick") {
+		return(sapply(filtered.results, PatristicMatrixToNewick))
+	}
+	
+}
+
+#' Figure out which subset function to use
+#' @param study.element The thing being passed in: an array or a phylo to serve as reference
+#' @param taxa Vector of taxon names to get a subset for
+#' @param phy A user tree to congruify in phylo format (ape)
+#' @param phy4 A user tree to congruify in phylo4 format (phylobase)
+#' @return A patristic matrix with for the taxa.
+#' @export
 GetSubsetArrayDispatch <- function(study.element, taxa, phy=NULL, phy4=NULL) {
   if(class(study.element)=="array") {
     return(GetSubsetArrayBoth(study.element, taxa, phy, phy4))
@@ -151,7 +182,7 @@ GetSubsetArrayBothFromPhylo <- function(reference.tree, taxa, phy=NULL, phy4=NUL
 }
 
 PruneTree <- function(phy, taxa) {
-	return(drop.tip(phy, tip=phy$tip.label[-(which(phy$tip.label %in% taxa))]))
+	return(ape::drop.tip(phy, tip=phy$tip.label[-(which(phy$tip.label %in% taxa))]))
 }
 
 GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4=NULL) {
@@ -173,7 +204,7 @@ GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4=NULL) {
   	patristic.matrix.array <- ComputePatristicDistance(reference.tree)
   }
   if(!is.null(phy4)) {
-    if (length(descendants(phy4, MRCA(phy4, taxa), type="tips")) > taxa) {
+    if (length(phylobase::descendants(phy4, phylobase::MRCA(phy4, taxa), type="tips")) > taxa) {
       problem <- "set of taxa not a clade, so this is probably an overestimate"
     }
   }
@@ -218,16 +249,16 @@ CongruifyTree <- function(patristic.matrix, query.tree) {
   if(is.null(query.tree$edge.length)) {
     query.tree$edge.length<-numeric(nrow(query.tree$edge))
   }
-  try(result.matrix<-ComputePatristicDistance(congruify.phylo(PatristicMatrixToTree(patristic.matrix), query.tree, NULL, 0, scale="PATHd8")$phy))
+  try(result.matrix<-ComputePatristicDistance(geiger::congruify.phylo(PatristicMatrixToTree(patristic.matrix), query.tree, NULL, 0, scale="PATHd8")$phy))
   return(result.matrix)
 }
 
 CongruifyTreeFromPhylo <- function(reference.tree, query.tree) {
-  result.matrix<-matrix(nrow=Ntip(reference.tree), ncol=Ntip(reference.tree))
+  result.matrix<-matrix(nrow=ape::Ntip(reference.tree), ncol=ape::Ntip(reference.tree))
   if(is.null(query.tree$edge.length)) {
     query.tree$edge.length<-numeric(nrow(query.tree$edge)) #makes it so that branches that don't match reference tree get zero length
   }
-  try(result.matrix<-ComputePatristicDistance(congruify.phylo(reference.tree, query.tree, NULL, 0, scale="PATHd8")$phy))
+  try(result.matrix<-ComputePatristicDistance(geiger::congruify.phylo(reference.tree, query.tree, NULL, 0, scale="PATHd8")$phy))
   return(result.matrix)
 }
 
@@ -263,40 +294,46 @@ GetSubsetArray <- function(patristic.matrix.array, taxa, phy4=NULL) {
     }
   }
   if(!is.null(phy4)) {
-    if (length(descendants(phy4, MRCA(phy4, taxa), type="tips")) > taxa) {
+    if (length(phylobase::descendants(phy4, phylobase::MRCA(phy4, taxa), type="tips")) > taxa) {
       problem <- "set of taxa not a clade, so this is probably an overestimate"
     }
   }
   return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
 }
 
-GetAge <- function(patristic.matrix) {
+#' Get time of MRCA from patristic matrix
+#' @param patristic.matrix A patristic matrix
+#' @param partial If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries
+#' @return The depth of the MRCA
+#' @export
+GetAge <- function(patristic.matrix, partial=TRUE) {
   # 0.5 since patristic distance is down to the root and back up
-  return(0.5 * max(patristic.matrix)) 
+  return(0.5 * max(patristic.matrix, na.rm=partial)) 
 }
 
+#' Get vector of MRCA from list of patristic matrices
+#' @param filtered.results List of patristic matrices
+#' @param partial If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries
+#' @return Vector of MRCA ages with names same as in filtered.results
+#' @export
 GetAges <- function(filtered.results, partial=TRUE) {
-		
+	ages <- sapply(filtered.results, GetAge, partial=partial)
+	return(ages)
 }
 
-
-# GetAges <- function(patristic.matrix.array) {
-  # if (length(dim(patristic.matrix.array))==2) {
-    # return(GetAge(patristic.matrix.array))
-  # }
-  # else if (dim(patristic.matrix.array)[3]==1) {
-    # return(GetAge(patristic.matrix.array))
-  # }
-  # else {
-    # return( sapply(SplitArray(patristic.matrix.array), GetAge ))
-  # }
-# }
-
+#' Function to reorder a matrix so that row and column labels are in alphabetical order
+#' @param patristic.matrix A patristic matrix with row and column names for taxa
+#' @return patristic.matrix A patristic matrix with row and column names for taxa in alphabetial order
+#' @export
 ReorderMatrix <- function(patristic.matrix) {
   return(patristic.matrix[order(rownames(patristic.matrix)),order(colnames(patristic.matrix))]) 
 }
 
-#' Function to fill in empty cells
+#' Function to fill in empty cells in a patristic matrix for missing taxa
+#' @param patristic.matrix A patristic matrix with row and column names for taxa
+#' @param all.taxa A vector of the names of all taxa you want, including ones not in the patristic matrix
+#' @return Patristic.matrix for all.taxa, with NA for entries between taxa where at least one was not in the original patristic.matrix
+#' @export
 PadMatrix <- function(patristic.matrix, all.taxa) {
 	final.matrix <- rbind(patristic.matrix, rep(NA, length(all.taxa) - dim(patristic.matrix)[1]))
 	final.matrix <- cbind(final.matrix, rep(NA, length(all.taxa) - dim(patristic.matrix)[1]))
@@ -347,9 +384,37 @@ VectorToTableRow <- function(x,digits=2) {
   return(paste(paste("<td>",round(x,digits),sep=""),"</td>",sep="",collapse=""))
 }
 
+#' Convert patristic matrix to a phylo object
+#' @param patristic.matrix A patristic matrix
+#' @return A rooted phylo object
+#' @export
 PatristicMatrixToTree <- function(patristic.matrix) {
-  return(midpoint(nj(patristic.matrix)))
+  if(anyNA(patristic.matrix)) {
+  	patristic.matrix <- patristic.matrix[rowSums(is.na(patristic.matrix)) != ncol(patristic.matrix),colSums(is.na(patristic.matrix)) != nrow(patristic.matrix)]	
+  }
+  if(dim(patristic.matrix)[1] < 3) {
+  	return(NA)	
+  }
+  tree <- ape::nj(patristic.matrix)
+  if(ape::Ntip(tree)>2) {
+    tree <- 	phangorn::midpoint(tree)
+  }
+  return(tree)
 }
+
+#' Convert patristic matrix to a newick string
+#' @param patristic.matrix A patristic matrix
+#' @return A newick string
+#' @export
+PatristicMatrixToNewick <- function(patristic.matrix) {
+  tree <- PatristicMatrixToTree(patristic.matrix)
+  if(class(tree)=="phylo") {
+  	return(ape::write.tree(tree))
+  }
+  return(NA)
+}
+
+
 
 SummaryPatristicMatrix <- function(patristic.matrix.array,fn=median) {
   return(apply(patristic.matrix.array,MARGIN=c(1,2),fn))

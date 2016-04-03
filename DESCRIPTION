@@ -1,8 +1,9 @@
 Package: datelife
 Title: Underlying code for DateLife service
 Version: 0.1
-Authors: Brian O'Meara <omeara.brian@gmail.com>, and hackathon participants
+Author: Brian O'Meara <omeara.brian@gmail.com>, and hackathon participants
     (need to add soon)
+Maintainer: Brian O'Meara <omeara.brian@gmail.com>
 Description: This contains the core code for going from a tree or list of taxa
     to a chronogram.
 Depends:
@@ -25,7 +26,6 @@ Imports:
     Rserve,
     FastRWeb
 Suggests:
-    datelife2,
     testthat
 License: GPL (>=2)
 LazyData: true
