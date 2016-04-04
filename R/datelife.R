@@ -26,7 +26,7 @@
 #' @export
 EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), format="phylo.median", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, datelife.cache=datelife.cache, method="PATHd8") {
 	filtered.results <- GetFilteredResults(input, partial, usetnrs, approximatematch, datelife.cache)
-	return(SummarizeResults(filtered.results, format=format))
+	return(SummarizeResults(filtered.results, format=format, datelife.cache=datelife.cache))
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
@@ -203,7 +203,7 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' @param datelife.cache The cached trees and other information
 #' @return Depends on output format
 #' @export
-SummarizeResults <- function(filtered.results, output.format, partial=TRUE, datelife.cache, suppress.citations=FALSE) {
+SummarizeResults <- function(filtered.results, output.format, partial=TRUE, datelife.cache=datelife.cache, suppress.citations=FALSE) {
 	if(!partial) {
 		filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 	}
