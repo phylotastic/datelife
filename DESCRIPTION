@@ -13,16 +13,13 @@ Imports:
     phangorn,
     compare,
     geiger,
-    parallel,
-    doMC,
     stringr,
     ggplot2,
     taxize,
     plyr,
     rotl,
     knitcitations,
-    devtools,
-    Rserve,
+    phylobase,
     FastRWeb
 Suggests:
     testthat
