@@ -4,7 +4,8 @@
 \alias{GetSubsetArrayDispatch}
 \title{Figure out which subset function to use}
 \usage{
-GetSubsetArrayDispatch(study.element, taxa, phy = NULL, phy4 = NULL)
+GetSubsetArrayDispatch(study.element, taxa, phy = NULL, phy4 = NULL,
+  method = "PATHd8")
 }
 \arguments{
 \item{study.element}{The thing being passed in: an array or a phylo to serve as reference}
@@ -14,6 +15,8 @@ GetSubsetArrayDispatch(study.element, taxa, phy = NULL, phy4 = NULL)
 \item{phy}{A user tree to congruify in phylo format (ape)}
 
 \item{phy4}{A user tree to congruify in phylo4 format (phylobase)}
+
+\item{method}{Which method to use for congruification}
 }
 \value{
 A patristic matrix with for the taxa.

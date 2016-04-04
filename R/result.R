@@ -2,29 +2,23 @@
 #' @param input A newick string or vector of taxa
 #' @param format The output format
 #' @param partial How to deal with trees that have a subset of taxa in the query
-#' @param uncertainty How much to multiply the range by to represent uncertainty
-#' @param randomtreesperstudy IDK
 #' @param plot.width Width in pixels for output plot
 #' @param plot.height Height in pixels for output plot
 #' @param usetnrs Whether to use OpenTree's TNRS for the input
-#' @param approximatematch IDK
-#' @param pruneonmatch IDK
+#' @param approximatematch If using TNRS, use approximate matching
 #' @param do.out Boolean on whether to use FastRWeb's out() fn
 #' @param datelife.cache The list of lists containing the input trees and other info
 #' @return Depends on options
 #' @export
-run<-function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), format="html", partial=TRUE, uncertainty=100, randomtreesperstudy=0, plot.width=600, plot.height=600, usetnrs="no", approximatematch="yes", prunenonmatch="yes", datelife.cache=datelife.cache, do.out = TRUE) {
-  out.vector <- ""
- 
-    input.processed <- ProcessInput(input, usetnrs, approximatematch)
-    phy <- input.processed$phy
-    cleaned.names <- input.processed$cleaned.names
+run<-function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), format="html", partial="yes", plot.width=600, plot.height=600, usetnrs="no", approximatematch="yes", datelife.cache=datelife.cache, do.out = TRUE) {
 
-
-    tree.list<-list()
-    results.list<-lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=cleaned.names, phy=phy)
-    filtered.results <- ProcessResultsList(results.list, taxa, partial)
-    
+  #convert from HTML input to Boolean
+  partial <- ifelse(partial=="yes", TRUE, FALSE)
+  usetnrs <- ifelse(usetnrs=="yes", TRUE, FALSE)
+  approximatematch <- ifelse(approximatematch=="yes", TRUE, FALSE)
+  
+     filtered.results <- GetFilteredResults(input, partial, usetnrs, approximatematch, datelife.cache)
+    out.vector <- SummarizeResults(filtered.results, output.format=format, partial, datelife.cache, suppress.citations=TRUE)  
     
     #NOW START PROCESSING THE FILTERED.RESULTS: GET MAX AGE, GET TREES, ETC.
     

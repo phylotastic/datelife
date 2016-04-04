@@ -4,12 +4,15 @@
 \alias{SummarizeResults}
 \title{Summarize a filtered results list in various ways}
 \usage{
-SummarizeResults(filtered.results, output.format, partial = TRUE)
+SummarizeResults(filtered.results, output.format, partial = TRUE,
+  datelife.cache, suppress.citations = FALSE)
 }
 \arguments{
 \item{filtered.results}{A list of patristic matrices; labels correspond to citations}
 
 \item{output.format}{The desired output format}
+
+\item{datelife.cache}{The cached trees and other information}
 }
 \value{
 Depends on output format

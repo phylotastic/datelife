@@ -27,14 +27,37 @@ test_that("Summarize as citations works correctly", {
   expect_gte(sum(grepl("Hedges", citation.results)),1) #the TimeTree phylogeny is an important one for this set, too
 })
 
-test_that("Summarize as newick works correctly", {
+test_that("Summarize as newick.all works correctly", {
   data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
   filtered.results <- ProcessResultsList(results.list, taxa, TRUE)
-  trees <- SummarizeResults(filtered.results, output.format="newick")
+  trees <- SummarizeResults(filtered.results, output.format="newick.all")
   expect_equal(class(trees), "character")
   expect_false(anyNA(trees))
   expect_equal(class(ape::read.tree(text=trees[1])), "phylo")
 })
 
+test_that("Summarize as newick.median works correctly", {
+  data(opentree_chronograms)
+  taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
+  results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
+  filtered.results <- ProcessResultsList(results.list, taxa, partial=FALSE)
+  tree <- SummarizeResults(filtered.results, output.format="newick.median")
+  expect_equal(class(tree), "character")
+  expect_false(anyNA(tree))
+  expect_equal(class(ape::read.tree(text=tree)), "phylo")
+})
+
+test_that("Processing input newick", {
+  data(opentree_chronograms)
+  input.processed <- ProcessInput(write.tree(rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), usetnrs=FALSE, approximatematch=TRUE)
+  expect_equal(class(input.processed$phy)=="phylo")  
+})
+
+
+test_that("Congruification works", {
+  data(opentree_chronograms)
+  filtered.results <- GetFilteredResults(write.tree(rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, datelife.cache=datelife.cache)
+  expect_gte(length(filtered.results, 4))  
+})

@@ -5,9 +5,8 @@
 \title{Core function to generate results}
 \usage{
 run(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-  format = "html", partial = TRUE, uncertainty = 100,
-  randomtreesperstudy = 0, plot.width = 600, plot.height = 600,
-  usetnrs = "no", approximatematch = "yes", prunenonmatch = "yes",
+  format = "html", partial = "yes", plot.width = 600, plot.height = 600,
+  usetnrs = "no", approximatematch = "yes",
   datelife.cache = datelife.cache, do.out = TRUE)
 }
 \arguments{
@@ -17,23 +16,17 @@ run(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 
 \item{partial}{How to deal with trees that have a subset of taxa in the query}
 
-\item{uncertainty}{How much to multiply the range by to represent uncertainty}
-
-\item{randomtreesperstudy}{IDK}
-
 \item{plot.width}{Width in pixels for output plot}
 
 \item{plot.height}{Height in pixels for output plot}
 
 \item{usetnrs}{Whether to use OpenTree's TNRS for the input}
 
-\item{approximatematch}{IDK}
+\item{approximatematch}{If using TNRS, use approximate matching}
 
 \item{datelife.cache}{The list of lists containing the input trees and other info}
 
 \item{do.out}{Boolean on whether to use FastRWeb's out() fn}
-
-\item{pruneonmatch}{IDK}
 }
 \value{
 Depends on options

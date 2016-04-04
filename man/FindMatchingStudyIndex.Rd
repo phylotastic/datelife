@@ -4,14 +4,12 @@
 \alias{FindMatchingStudyIndex}
 \title{Find the index of relevant studies in a datelife.cache object}
 \usage{
-FindMatchingStudyIndex(results.list, taxa = NULL, partial = FALSE)
+FindMatchingStudyIndex(filtered.results, datelife.cache)
 }
 \arguments{
-\item{results.list}{A list returned from using GetSubsetArrayDispatch on datelife.cache$trees}
+\item{filtered.results}{The patristic.matrices that will be used}
 
-\item{taxa}{A vector of taxa to match}
-
-\item{partial}{If TRUE, return matrices that have only partial matches}
+\item{datelife.cache}{The cache of studies}
 }
 \value{
 A vector with the indices of studies that have relevant info

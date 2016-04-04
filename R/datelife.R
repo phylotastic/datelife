@@ -14,64 +14,93 @@
 # library(rotl)
 # source("/Library/WebServer/Sites/datelife.org/datelife/R/cleaning.r")
 
+#' Core function to go from a vector of species, newick string, or phylo object get a chronogram or dates back
+#' @param input A vector of names, a newick string, or a phylo object
+#' @param format The desired output format. See details.
+#' @param partial If TRUE, use source trees even if they only match some of the desired taxa
+#' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
+#' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
+#' @param datelife.cache The cached set of chronograms and other info from data(opentree_chronograms)
+#' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
+#' @return Varies depending on the chosen format
+#' @export
+EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), format="phylo.median", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, datelife.cache=datelife.cache, method="PATHd8") {
+	filtered.results <- GetFilteredResults(input, partial, usetnrs, approximatematch, datelife.cache)
+	return(SummarizeResults(filtered.results, format=format))
+}
+
+#' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
+#' @param input A vector of names, a newick string, or a phylo object
+#' @param format The desired output format. See details.
+#' @param partial If TRUE, use source trees even if they only match some of the desired taxa
+#' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
+#' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
+#' @param datelife.cache The cached set of chronograms and other info from data(opentree_chronograms)
+#' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
+#' @return List of patristic matrices
+#' @export
+GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, datelife.cache=datelife.cache, method="PATHd8") {
+    input.processed <- ProcessInput(input, usetnrs, approximatematch)
+    phy <- input.processed$phy
+    cleaned.names <- input.processed$cleaned.names
+    results.list<-lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=cleaned.names, phy=phy, method=method)
+    filtered.results <- ProcessResultsList(results.list, taxa, partial)
+    return(filtered.results)
+}
+
 #' Take input string, figure out if it's newick or list of species
-#' @param input A newick string or vector of taxa
+#' @param input A newick string or vector of taxa, or a phylo object
 #' @param usetnrs Whether to use OpenTree's TNRS for the input
-#' @param approximatematch IDK
+#' @param approximatematch If using TNRS, use approximate matching
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
-ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs="no", approximatematch="yes") {
+ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE) {
+	if(class(input) == "phylo") {
+		input <- ape::write.tree(input)	
+	}
  input<-gsub("\\+"," ",input)
   input<-str_trim(input, side = "both")
   phy <- NA
-  do_approximate_matching = TRUE
-  if (approximatematch=="no") {
-    do_approximate_matching = FALSE
-  }
-  prune_na = TRUE
-  if (prunenonmatch =="no") {
-    prune_na = FALSE
-  }
-  
+   
   if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
     phy<-read.tree(text=input)
   }
   cleaned.names<-""
   if(!is.null(phy)) {
-    if(usetnrs=="yes") {
-      phy <- tnrs_OToL_phylo(phylo=phy, do_approximate_matching, prune_na= prune_na)
+    if(usetnrs) {
+      phy <- tnrs_OToL_phylo(phylo=phy, approximatematch, prune_na= TRUE)
     }
     	cleaned.names<-phy$tip.label
     } else {
       #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
       cleaned.names <- input
       if (usetnrs=="yes") {
-        phy <- tnrs_OToL_names(names=cleaned.names, do_approximate_matching, prune_na= prune_na)
+        phy <- tnrs_OToL_names(names=cleaned.names, approximatematch, prune_na= TRUE)
 
       }
     }
+    phy$tip.label <- gsub("_", " ", phy$tip.label)
+    cleaned.names <- gsub("_", " ", cleaned.names)
     return(list(phy=phy, cleaned.names=cleaned.names))
 }
 
+#' Are all desired taxa in the patristic.matrix?
+#' @param patristic.matric A patristic matrix, rownames and colnames must be taxa
+#' @param taxa A vector of taxon names
+#' @return A Boolean
+#' @export
 AllMatching <- function(patristic.matrix, taxa) {
 	return(sum(!(taxa %in% rownames(patristic.matrix) ))==0)
 }
 
 
 #' Find the index of relevant studies in a datelife.cache object
-#' @param results.list A list returned from using GetSubsetArrayDispatch on datelife.cache$trees
-#' @param taxa A vector of taxa to match
-#' @param partial If TRUE, return matrices that have only partial matches
+#' @param filtered.results The patristic.matrices that will be used
+#' @param datelife.cache The cache of studies
 #' @return A vector with the indices of studies that have relevant info
 #' @export
-FindMatchingStudyIndex <- function(results.list, taxa=NULL, partial=FALSE) {
-  results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
-  patristic.matrices <- lapply(results.list, "[[", "patristic.matrix.array")
-  results <- which(!is.na(patristic.matrices))
-  if(!partial) {
-  	results <- which(sapply(patristic.matrices, AllMatching, taxa=taxa))
-  }
-  return(results)
+FindMatchingStudyIndex <- function(filtered.results, datelife.cache) {
+    return(which(names(datelife.cache$trees) %in% names(filtered.results)))
 }
 
 #' Return the relevant authors for a set of studies 
@@ -172,24 +201,45 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' Summarize a filtered results list in various ways
 #' @param filtered.results A list of patristic matrices; labels correspond to citations
 #' @param output.format The desired output format
+#' @param datelife.cache The cached trees and other information
 #' @return Depends on output format
 #' @export
-SummarizeResults <- function(filtered.results, output.format, partial=TRUE) {
+SummarizeResults <- function(filtered.results, output.format, partial=TRUE, datelife.cache, suppress.citations=FALSE) {
 	if(!partial) {
 		filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 	}
-	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick"))
+	results.index <- FindMatchingStudyIndex(filtered.results, datelife.cache)
+	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.median", "phylo.median", "phylo.all"))
+	if((output.format != "citations") & !suppress.citations) {
+		print("Using trees from:")
+		print(names(filtered.results))
+	}
 	if(output.format=="citations") {
 		return(names(filtered.results))	
 	}
 	if(output.format=="mrca") {
 		return(GetAges(filtered.results, partial=partial))	
 	}
-	if(output.format=="newick") {
+	if(output.format=="newick.all") {
 		trees <- sapply(filtered.results, PatristicMatrixToNewick)
 		return(trees[which(!is.na(trees))])
 	}
-	
+	if(output.format=="newick.median") {
+		patristic.array <- BindMatrices(filtered.results)
+		median.matrix <- SummaryPatristicMatrixArray(patristic.array)
+		tree <- PatristicMatrixToNewick(median.matrix)
+		return(tree)
+	}
+	if(output.format=="phylo.median") {
+		patristic.array <- BindMatrices(filtered.results)
+		median.matrix <- SummaryPatristicMatrixArray(patristic.array)
+		tree <- PatristicMatrixToTree(median.matrix)
+		return(tree)
+	}
+	if(output.format=="phylo.all") {
+		trees <- lapply(filtered.results, PatristicMatrixToTree)
+		return(trees[which(!is.na(trees))])
+	}	
 }
 
 #' Figure out which subset function to use
@@ -197,26 +247,27 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE) {
 #' @param taxa Vector of taxon names to get a subset for
 #' @param phy A user tree to congruify in phylo format (ape)
 #' @param phy4 A user tree to congruify in phylo4 format (phylobase)
+#' @param method Which method to use for congruification
 #' @return A patristic matrix with for the taxa.
 #' @export
-GetSubsetArrayDispatch <- function(study.element, taxa, phy=NULL, phy4=NULL) {
+GetSubsetArrayDispatch <- function(study.element, taxa, phy=NULL, phy4=NULL, method="PATHd8") {
   if(class(study.element)=="array") {
-    return(GetSubsetArrayBoth(study.element, taxa, phy, phy4))
+    return(GetSubsetArrayBoth(study.element, taxa, phy, phy4, method))
   } else {
-    return(GetSubsetArrayBothFromPhylo(study.element, taxa, phy, phy4))
+    return(GetSubsetArrayBothFromPhylo(study.element, taxa, phy, phy4, method))
   }
 }
 
-GetSubsetArrayBothFromPhylo <- function(reference.tree, taxa, phy=NULL, phy4=NULL) {
+GetSubsetArrayBothFromPhylo <- function(reference.tree, taxa, phy=NULL, phy4=NULL, method="PATHd8") {
 #COMMENTING OUT: OpenTree gives single trees, let's just standardize on those
 #  if (class(reference.tree)=="phylo") {
 #    reference.tree<-c(reference.tree) #from here in, assumes multiphylo object, even if a single tree 
 #  }
   if (is.null(phy)) {
-    return(GetSubsetArrayFromPhylo(reference.tree=reference.tree, taxa=taxa, phy4=phy4)) 
+    return(GetSubsetArrayFromPhylo(reference.tree=reference.tree, taxa=taxa, phy4=phy4, method)) 
   }
   else { #congruify
-    return(GetSubsetArrayCongruifyFromPhylo(reference.tree=reference.tree, taxa=taxa, phy=phy)) 
+    return(GetSubsetArrayCongruifyFromPhylo(reference.tree=reference.tree, taxa=taxa, phy=phy, method)) 
   }
 
 }
@@ -225,7 +276,7 @@ PruneTree <- function(phy, taxa) {
 	return(ape::drop.tip(phy, tip=phy$tip.label[-(which(phy$tip.label %in% taxa))]))
 }
 
-GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4=NULL) {
+GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4=NULL, method="PATHd8") {
   final.size<-sum(reference.tree$tip.label %in% taxa) # returns number of matches
   if(final.size>=2) { #it's worth doing the pruning
     reference.tree<-PruneTree(reference.tree, taxa) 
@@ -251,7 +302,7 @@ GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4=NULL) {
   return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
 }
 
-GetSubsetArrayCongruifyFromPhylo <- function(reference.tree, taxa, phy=NULL) {
+GetSubsetArrayCongruifyFromPhylo <- function(reference.tree, taxa, phy=NULL, method="PATHd8") {
   final.size<-sum(reference.tree$tip.label %in% taxa) # returns number of matches
   if(final.size>=2) { #it's worth doing the pruning
    reference.tree<-PruneTree(reference.tree, taxa) 
@@ -275,34 +326,52 @@ GetSubsetArrayCongruifyFromPhylo <- function(reference.tree, taxa, phy=NULL) {
 }
 
 
-GetSubsetArrayBoth <- function(patristic.matrix.array, taxa, phy=NULL, phy4=NULL) {
+GetSubsetArrayBoth <- function(patristic.matrix.array, taxa, phy=NULL, phy4=NULL, method="PATHd8") {
   if (is.null(phy)) {
     return(GetSubsetArray(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy4=phy4)) 
   }
   else { #congruify
-    return(GetSubsetArrayCongruify(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy=phy)) 
+    return(GetSubsetArrayCongruify(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy=phy, method)) 
   }
 }
 
-CongruifyTree <- function(patristic.matrix, query.tree) {
+CongruifyTree <- function(patristic.matrix, query.tree, method="PATHd8") {
   result.matrix<-matrix(nrow=dim(patristic.matrix)[1], ncol=dim(patristic.matrix)[2])
   if(is.null(query.tree$edge.length)) {
     query.tree$edge.length<-numeric(nrow(query.tree$edge))
   }
-  try(result.matrix<-ComputePatristicDistance(geiger::congruify.phylo(PatristicMatrixToTree(patristic.matrix), query.tree, NULL, 0, scale="PATHd8")$phy))
+  try(result.matrix<-ComputePatristicDistance(ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(PatristicMatrixToTree(patristic.matrix)), ConvertSpacesToUnderscores(query.tree), NULL, 0, scale=method)$phy)))
   return(result.matrix)
 }
 
-CongruifyTreeFromPhylo <- function(reference.tree, query.tree) {
+CongruifyTreeFromPhylo <- function(reference.tree, query.tree, method="PATHd8") {
   result.matrix<-matrix(nrow=ape::Ntip(reference.tree), ncol=ape::Ntip(reference.tree))
   if(is.null(query.tree$edge.length)) {
     query.tree$edge.length<-numeric(nrow(query.tree$edge)) #makes it so that branches that don't match reference tree get zero length
   }
-  try(result.matrix<-ComputePatristicDistance(geiger::congruify.phylo(reference.tree, query.tree, NULL, 0, scale="PATHd8")$phy))
+  try(result.matrix<-ComputePatristicDistance(ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference.tree), ConvertSpacesToUnderscores(query.tree), NULL, 0, scale=method)$phy)))
   return(result.matrix)
 }
 
-GetSubsetArrayCongruify <- function(patristic.matrix.array, taxa, phy=NULL) {
+#' Convert spaces to underscores in trees 
+#' @param phy A phylo object
+#' @return A phylo object
+#' @export
+ConvertSpacesToUnderscores <- function(phy) {
+	phy$tip.label <- gsub(" ", "_", phy$tip.label)
+	return(phy)	
+}
+
+#' Convert underscores to spaces in trees 
+#' @param phy A phylo object
+#' @return A phylo object
+#' @export
+ConvertUnderscoresToSpaces <- function(phy) {
+	phy$tip.label <- gsub("_", " ", phy$tip.label)
+	return(phy)	
+}
+
+GetSubsetArrayCongruify <- function(patristic.matrix.array, taxa, phy=NULL, method="PATHd8") {
   #gets a subset of the patristic.matrix.array. 
   patristic.matrix.array <- patristic.matrix.array[ rownames(patristic.matrix.array) %in% taxa,colnames(patristic.matrix.array) %in% taxa,  ]
   problem <- "none"
@@ -317,7 +386,7 @@ GetSubsetArrayCongruify <- function(patristic.matrix.array, taxa, phy=NULL) {
     }
   }
   patristic.matrix.list <- SplitArray(patristic.matrix.array)
-  patristic.matrix.array<-BindMatrices(lapply(patristic.matrix.list, CongruifyTree, query.tree=phy)) #yes, this should be parallel
+  patristic.matrix.array<-BindMatrices(lapply(patristic.matrix.list, CongruifyTree, query.tree=phy, scale=method)) #yes, this should be parallel
   return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
 }
 
@@ -392,6 +461,10 @@ TestNameOrder <- function(patristic.matrix, standard.rownames, standard.colnames
   return(TRUE)
 }
 
+#' Convert list of patristic matrices to a 3D array
+#' @param patristic.matrix.list List of patristic matrices
+#' @return A 3d array of patristic matrices
+#' @export
 BindMatrices <- function(patristic.matrix.list) {
   original.size<-length(patristic.matrix.list)
   patristic.matrix.list<-lapply(patristic.matrix.list,ReorderMatrix)
@@ -404,7 +477,7 @@ BindMatrices <- function(patristic.matrix.list) {
   if (sum(matching.names)!=length(matching.names)) {
     stop("The patristic matrices you are trying to bind do not have the same taxa")
   }
-  return(abind(patristic.matrix.list, along=3 ))
+  return(abind::abind(patristic.matrix.list, along=3 ))
 }
 
 SplitArray <- function(patristic.matrix.array) {
@@ -412,7 +485,7 @@ SplitArray <- function(patristic.matrix.array) {
 }
 
 AsubForLapply <- function(idx, x, dims=3) {
-  return(asub(x, idx, dims)) 
+  return(abind::asub(x, idx, dims)) 
 }
 
 GetQuantiles <- function(ages,probs=c(0.5,0,0.025,0.975,1) ) {
@@ -455,9 +528,13 @@ PatristicMatrixToNewick <- function(patristic.matrix) {
 }
 
 
-
-SummaryPatristicMatrix <- function(patristic.matrix.array,fn=median) {
-  return(apply(patristic.matrix.array,MARGIN=c(1,2),fn))
+#' Summarize patristic matrix array (by default, median)
+#' @param patristic.matrix.array 3D array of patristic matrices
+#' @param fn The function to use ot summarize
+#' @return A 2d array with the median (or max, or mean, etc) of the input array
+#' @export
+SummaryPatristicMatrixArray <- function(patristic.matrix.array,fn=median) {
+  return(apply(patristic.matrix.array,MARGIN=c(1,2),fn, na.rm=TRUE))
 }
 
 SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {

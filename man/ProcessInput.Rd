@@ -5,14 +5,14 @@
 \title{Take input string, figure out if it's newick or list of species}
 \usage{
 ProcessInput(input = c("Rhea americana", "Pterocnemia pennata",
-  "Struthio camelus"), usetnrs = "no", approximatematch = "yes")
+  "Struthio camelus"), usetnrs = FALSE, approximatematch = TRUE)
 }
 \arguments{
-\item{input}{A newick string or vector of taxa}
+\item{input}{A newick string or vector of taxa, or a phylo object}
 
 \item{usetnrs}{Whether to use OpenTree's TNRS for the input}
 
-\item{approximatematch}{IDK}
+\item{approximatematch}{If using TNRS, use approximate matching}
 }
 \value{
 A list with the phy (or NA, if no tree) and cleaned vector of taxa
