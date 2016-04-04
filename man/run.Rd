@@ -7,7 +7,7 @@
 run(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
   format = "html", partial = "yes", plot.width = 600, plot.height = 600,
   usetnrs = "no", approximatematch = "yes",
-  datelife.cache = datelife.cache, do.out = TRUE)
+  datelife.cache = datelife.cache)
 }
 \arguments{
 \item{input}{A newick string or vector of taxa}
@@ -25,11 +25,9 @@ run(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 \item{approximatematch}{If using TNRS, use approximate matching}
 
 \item{datelife.cache}{The list of lists containing the input trees and other info}
-
-\item{do.out}{Boolean on whether to use FastRWeb's out() fn}
 }
 \value{
-Depends on options
+Nothing
 }
 \description{
 Core function to generate results

@@ -59,14 +59,15 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 		input <- ape::write.tree(input)	
 	}
  input<-gsub("\\+"," ",input)
-  input<-str_trim(input, side = "both")
+  input<-stringr::str_trim(input, side = "both")
   phy <- NA
-   
-  if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
-    phy<-read.tree(text=input)
+   if(length(input)==1) {
+	  if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
+	    phy<-read.tree(text=input)
+	  }
   }
   cleaned.names<-""
-  if(!is.null(phy)) {
+  if(!is.na(phy)) {
     if(usetnrs) {
       phy <- tnrs_OToL_phylo(phylo=phy, approximatematch, prune_na= TRUE)
     }
@@ -74,12 +75,10 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
     } else {
       #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
       cleaned.names <- input
-      if (usetnrs=="yes") {
-        phy <- tnrs_OToL_names(names=cleaned.names, approximatematch, prune_na= TRUE)
-
+      if (usetnrs) {
+        cleaned.names <- tnrs_OToL_names(names=cleaned.names, approximatematch, prune_na= TRUE)
       }
     }
-    phy$tip.label <- gsub("_", " ", phy$tip.label)
     cleaned.names <- gsub("_", " ", cleaned.names)
     return(list(phy=phy, cleaned.names=cleaned.names))
 }
@@ -240,6 +239,14 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, date
 		trees <- lapply(filtered.results, PatristicMatrixToTree)
 		return(trees[which(!is.na(trees))])
 	}	
+	if(output.format=="html") {
+		out.vector <- "<table border='1'><tr><th>MRCA Age (MY)</th><th>Ntax</th><th>Citation</th><th>Newick</th></tr>"
+		ages <- GetAges(filtered.results, partial=partial)
+		trees <- sapply(filtered.results, PatristicMatrixToNewick)
+		for(result.index in sequence(length(filtered.results))) {
+			out.vector <- paste(out.vector, paste("<tr><td>",ages[result.index],"</td><td>",dim(filtered.results[[result.index]])[1], "</td><td>", names(filtered.results)[result.index], "</td><td>", trees[result.index], "</td></tr>", sep=""), sep="")
+		}
+	}
 }
 
 #' Figure out which subset function to use

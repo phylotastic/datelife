@@ -61,3 +61,16 @@ test_that("Congruification works", {
   filtered.results <- GetFilteredResults(write.tree(rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, datelife.cache=datelife.cache)
   expect_gte(length(filtered.results, 4))  
 })
+
+test_that("TNRS with approximate match works", {
+	 taxa <- c("Rhea_americana", "Pterocnemia pennato", "Strutho camelus")
+ 	input.processed <- ProcessInput(taxa, usetnrs=TRUE, approximatematch=TRUE)
+ 	expect_true(all.equal(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), input.processed$cleaned.names))
+})
+
+
+test_that("TNRS with unmatchable taxa works", {
+	taxa <- c("Rhea_americana", "Pterocnemia pennato", "Oscar the grouch", "Strutho camelus")
+ 	input.processed <- ProcessInput(taxa, usetnrs=TRUE, approximatematch=TRUE)
+ 	expect_true(all.equal(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), input.processed$cleaned.names))
+})
