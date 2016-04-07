@@ -4,10 +4,10 @@
 #' 
 #' @format A list with four lists contained within it
 #' \describe{
-#'   \item{authors} List of lists of authors for the included studies
-#'   \item{curators} List of lists of curators for the included studies
-#'   \item{studies} List of study identifiers
-#'   \item{trees} List storing the chronograms from OpenTree
+#' \item{authors}{List of lists of authors for the included studies}
+#' \item{curators}{List of lists of curators for the included studies}
+#' \item{studies}{List of study identifiers}
+#' \item{trees}{List storing the chronograms from OpenTree}
 #' }
 #' @source \url{http://opentreeoflife.org}
 "datelife.cache"
