@@ -1,12 +1,13 @@
 # Including TNRS in Datelife
+# I am cutting the documentation for now
 
-#' Find only rows in a data.frame where the values don't match in a row
-#' 
-#' @import plyr
-#' @param df A data.frame
-#' @examples
-#' dff <- data.frame(FabreEtAl2009$tip.label, out$tip.label)
-#' nonmatching_by_row(dff)
+# #' Find only rows in a data.frame where the values don't match in a row
+# #' 
+# #' @import plyr
+# #' @param df A data.frame
+# #' @examples
+# #' dff <- data.frame(FabreEtAl2009$tip.label, out$tip.label)
+# #' nonmatching_by_row(dff)
 nonmatching_by_row <- function(df){
 	does_match <- function(y){ ifelse(y[,1] %in% y[,2], 0, 1) }
 # 	df2 <- data.frame(old=sort(df[,1]), new=sort(df[,2]))
@@ -18,11 +19,11 @@ nonmatching_by_row <- function(df){
 	{ outt }
 }
 
-#' Function to break up a vector by certain N sized chunks.
-#' 
-#' @import plyr
-#' @param input Input character vector
-#' @param by Number by which to split the input character vector
+# #' Function to break up a vector by certain N sized chunks.
+# #' 
+# #' @import plyr
+# #' @param input Input character vector
+# #' @param by Number by which to split the input character vector
 slice <- function(input, by = 2, equalpiecesof = NULL) {
 	if(is.null(equalpiecesof)){	
 		starts <- seq(1, length(input), by)
@@ -37,13 +38,13 @@ slice <- function(input, by = 2, equalpiecesof = NULL) {
 	}
 }
 
-#' Function to detect messy names and remove them, and remove sp.'s
-#' 
-#' @import stringr
-#' @param taxon Taxonomic name, or a vector of taxonomic names.
-#' @examples \dontrun{
-#' drop_epithets(taxon = Oaks2011$tip.label)
-#' }
+# #' Function to detect messy names and remove them, and remove sp.'s
+# #' 
+# #' @import stringr
+# #' @param taxon Taxonomic name, or a vector of taxonomic names.
+# #' @examples \dontrun{
+# #' drop_epithets(taxon = Oaks2011$tip.label)
+# #' }
 drop_epithets <- function(taxon){
 	# replace underscores
 	taxon2 <- str_replace_all(taxon, "_", " ")
@@ -89,48 +90,48 @@ tnrs_OToL_names <- function(names, do_approximate_matching=TRUE, prune_na=TRUE) 
 }
 
 
-#' Function to check names on a species list or phylogeny.
-#' 
-#' @import taxize
-#' @param phylo Phylogeny object, class phylo
-#' @param charvector Character vector.
-#' @param source_ Source to match names to. One of ncbi, iPlant
-#' @param splitby Length of chunks by which to split species list
-#' @param writefile Write file to directory or not. Remember to change directory to 
-#' 		write to in the function. Right now it is set to 
-#' 		"/Library/WebServer/Sites/datelife.org/datelife/data/"
-#' @param writedir A directory to write file to (defaults to "~/"); ignore if writefile = FALSE.
-#' @param byfilename Defaults to TRUE - if TRUE, then interprets the phylo argument input 
-#' 		using eval() so executes it (used in name fixing on stored trees). If FALSE, 
-#' 		then you can specify phylo as a phylo object instead of the name of that object.
-#' @examples \dontrun{
-#' # Cleaning stored trees
-#' # A phylogeny as input
-#' library(doMC); library(ape)
-#' out <- checknames(phylo="BergmannEtAl2012", source_="NCBI", splitby=200)
-#' out <- checknames(phylo="AlfaroEtAl2009", source_="NCBI", splitby=200)
-#' out <- checknames(phylo="EastmanEtAlUnpublished_tree", source_="NCBI", splitby=100)
-#' out <- checknames(phylo="HeathEtAl2012_tree", source_="NCBI")
-#' out <- checknames(phylo="JaffeEtAl2011", source_="NCBI", splitby=100)
-#' out <- checknames(phylo="Chaetodontidae2011", source_="NCBI")
-#' out <- checknames(phylo="Drosophila2012_large", source_="NCBI", splitby=50, writefile=TRUE)
-#' out <- checknames(phylo="Drosophila2012_small", source_="NCBI", splitby=50)
-#' 
-#' out <- checknames(phylo="Apogonidae2011", source_="NCBI")
-#' out <- checknames(phylo="BinindaEmondsEtAl2007", source_="NCBI", splitby=500)
-#' out <- checknames(phylo="HardyCook2012", source_="NCBI")
-#' out <- checknames(phylo="FabreEtAl2009", source_="NCBI", splitby=50)
-#' out <- checknames(phylo="PyronWiens2011", source_="NCBI", splitby=500, writefile=TRUE)
-#' out <- checknames(phylo="Unpub3", source_="NCBI", splitby=50, writefile=TRUE)
-#' 
-#' # Cleaning user input trees
-#' # A character vector as input (of species names)
-#' out <- checknames(charvector=AlfaroEtAl2009$tip.label[1:10], source_="NCBI")
-#' 
-#' # A phylo object - user suppressMessages() around the fxn
-#' mmm<-drop.tip(AlfaroEtAl2009, 1:190)
-#' out <- suppressMessages(checknames(phylo=phy, source_="NCBI", byfilename=FALSE))
-#' }
+# #' Function to check names on a species list or phylogeny.
+# #' 
+# #' @import taxize
+# #' @param phylo Phylogeny object, class phylo
+# #' @param charvector Character vector.
+# #' @param source_ Source to match names to. One of ncbi, iPlant
+# #' @param splitby Length of chunks by which to split species list
+# #' @param writefile Write file to directory or not. Remember to change directory to 
+# #' 		write to in the function. Right now it is set to 
+# #' 		"/Library/WebServer/Sites/datelife.org/datelife/data/"
+# #' @param writedir A directory to write file to (defaults to "~/"); ignore if writefile = FALSE.
+# #' @param byfilename Defaults to TRUE - if TRUE, then interprets the phylo argument input 
+# #' 		using eval() so executes it (used in name fixing on stored trees). If FALSE, 
+# #' 		then you can specify phylo as a phylo object instead of the name of that object.
+# #' @examples \dontrun{
+# #' # Cleaning stored trees
+# #' # A phylogeny as input
+# #' library(doMC); library(ape)
+# #' out <- checknames(phylo="BergmannEtAl2012", source_="NCBI", splitby=200)
+# #' out <- checknames(phylo="AlfaroEtAl2009", source_="NCBI", splitby=200)
+# #' out <- checknames(phylo="EastmanEtAlUnpublished_tree", source_="NCBI", splitby=100)
+# #' out <- checknames(phylo="HeathEtAl2012_tree", source_="NCBI")
+# #' out <- checknames(phylo="JaffeEtAl2011", source_="NCBI", splitby=100)
+# #' out <- checknames(phylo="Chaetodontidae2011", source_="NCBI")
+# #' out <- checknames(phylo="Drosophila2012_large", source_="NCBI", splitby=50, writefile=TRUE)
+# #' out <- checknames(phylo="Drosophila2012_small", source_="NCBI", splitby=50)
+# #' 
+# #' out <- checknames(phylo="Apogonidae2011", source_="NCBI")
+# #' out <- checknames(phylo="BinindaEmondsEtAl2007", source_="NCBI", splitby=500)
+# #' out <- checknames(phylo="HardyCook2012", source_="NCBI")
+# #' out <- checknames(phylo="FabreEtAl2009", source_="NCBI", splitby=50)
+# #' out <- checknames(phylo="PyronWiens2011", source_="NCBI", splitby=500, writefile=TRUE)
+# #' out <- checknames(phylo="Unpub3", source_="NCBI", splitby=50, writefile=TRUE)
+# #' 
+# #' # Cleaning user input trees
+# #' # A character vector as input (of species names)
+# #' out <- checknames(charvector=AlfaroEtAl2009$tip.label[1:10], source_="NCBI")
+# #' 
+# #' # A phylo object - user suppressMessages() around the fxn
+# #' mmm<-drop.tip(AlfaroEtAl2009, 1:190)
+# #' out <- suppressMessages(checknames(phylo=phy, source_="NCBI", byfilename=FALSE))
+# #' }
 checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 	writefile = FALSE, writedir="~/", byfilename = TRUE)
 {	
@@ -287,27 +288,27 @@ checknames <- function(phylo=NULL, charvector=NULL, source_ = "NCBI",
 		}
 }
 
-#' Test timing of name cleaning on datelife trees
-#' 
-#' @import plyr ggplot2 taxize stringr
-#' @param listoftrees List of trees, each tree in phylo format, not multiPhylo
-#' 		format. 
-#' @param plotresults Plot results or not.
-#' @examples \dontrun{
-#' treefilenames <- dir("/Users/scottmac2/phyloorchard/pkg/data")
-#' l_ply(treefilenames, function(x) load(paste("/Users/scottmac2/phyloorchard/pkg/data/",x,sep=""), .GlobalEnv))
-#' trees <- sapply(treefilenames, function(x) str_replace(x, ".rda", ""), USE.NAMES=F)
-#' binemonds <- BinindaEmondsEtAl2007[[1]]
-#'  makesmallsubtrees <- function(phylo){
-#'  		drops <- c(2000,2500,3000,3500,4000,4100,4200,4300,4350,4400,4420,4450,4470,4500,4505)
-#'  		llply(rev(drops), function(x) drop.tip(phylo, tip=1:x))
-#' }
-#' mytreelist <- makesmallsubtrees(phylo = binemonds)
-#' library(ggplot2); library(plyr); library(lubridate)
-#' out <- time_cleaning(listoftrees = mytreelist, plotresults=TRUE)
-#' out[[1]] # data.frame
-#' out[[2]] # plot
-#' }
+# #' Test timing of name cleaning on datelife trees
+# #' 
+# #' @import plyr ggplot2 taxize stringr
+# #' @param listoftrees List of trees, each tree in phylo format, not multiPhylo
+# #' 		format. 
+# #' @param plotresults Plot results or not.
+# #' @examples \dontrun{
+# #' treefilenames <- dir("/Users/scottmac2/phyloorchard/pkg/data")
+# #' l_ply(treefilenames, function(x) load(paste("/Users/scottmac2/phyloorchard/pkg/data/",x,sep=""), .GlobalEnv))
+# #' trees <- sapply(treefilenames, function(x) str_replace(x, ".rda", ""), USE.NAMES=F)
+# #' binemonds <- BinindaEmondsEtAl2007[[1]]
+# #'  makesmallsubtrees <- function(phylo){
+# #'  		drops <- c(2000,2500,3000,3500,4000,4100,4200,4300,4350,4400,4420,4450,4470,4500,4505)
+# #'  		llply(rev(drops), function(x) drop.tip(phylo, tip=1:x))
+# #' }
+# #' mytreelist <- makesmallsubtrees(phylo = binemonds)
+# #' library(ggplot2); library(plyr); library(lubridate)
+# #' out <- time_cleaning(listoftrees = mytreelist, plotresults=TRUE)
+# #' out[[1]] # data.frame
+# #' out[[2]] # plot
+# #' }
 time_cleaning <- function(listoftrees, plotresults=FALSE){
 	checknames_safe <- plyr::failwith(NULL, checknames)
 	temp <- llply(listoftrees, function(tree){

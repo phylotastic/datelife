@@ -50,15 +50,19 @@ test_that("Summarize as newick.median works correctly", {
 })
 
 test_that("Processing input newick", {
+	skip_on_cran()
+	skip_on_travis()
   data(opentree_chronograms)
-  input.processed <- ProcessInput(write.tree(rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), usetnrs=FALSE, approximatematch=TRUE)
+  input.processed <- ProcessInput(ape::write.tree(rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), usetnrs=FALSE, approximatematch=TRUE)
   expect_equal(class(input.processed$phy)=="phylo")  
 })
 
 
 test_that("Congruification works", {
+	skip_on_cran()
+	skip_on_travis()
   data(opentree_chronograms)
-  filtered.results <- GetFilteredResults(write.tree(rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, datelife.cache=datelife.cache)
+  filtered.results <- GetFilteredResults(ape::write.tree(rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, datelife.cache=datelife.cache)
   expect_gte(length(filtered.results, 4))  
 })
 
