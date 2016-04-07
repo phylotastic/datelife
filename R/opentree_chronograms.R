@@ -30,6 +30,7 @@ get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ot:otttaxonna
 }
 
 #' Get all chronograms from Open Tree of Life
+#' @param verbose If TRUE, give updates to the user
 #' @return A list with elements for the trees, authors, curators, and study ids
 #' @export
 GetOToLChronograms <- function(verbose=FALSE) {
@@ -71,6 +72,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 
 #' Save all chronograms from Open Tree of Life
 #' @param file Path including file name
+#' @param verbose If TRUE, give status updates to the user
 #' @return None
 #' @export
 SaveOToLChronograms <- function(file="opentree_chronograms.rda", verbose=FALSE) {

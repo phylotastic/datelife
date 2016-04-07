@@ -8,6 +8,8 @@ SaveOToLChronograms(file = "opentree_chronograms.rda", verbose = FALSE)
 }
 \arguments{
 \item{file}{Path including file name}
+
+\item{verbose}{If TRUE, give status updates to the user}
 }
 \value{
 None

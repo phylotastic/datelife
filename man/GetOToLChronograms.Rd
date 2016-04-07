@@ -6,6 +6,9 @@
 \usage{
 GetOToLChronograms(verbose = FALSE)
 }
+\arguments{
+\item{verbose}{If TRUE, give updates to the user}
+}
 \value{
 A list with elements for the trees, authors, curators, and study ids
 }

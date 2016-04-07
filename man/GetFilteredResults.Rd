@@ -21,8 +21,6 @@ GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
 \item{datelife.cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
 
 \item{method}{The method used for congruification. PATHd8 only right now, r8s and treePL later.}
-
-\item{format}{The desired output format. See details.}
 }
 \value{
 List of patristic matrices

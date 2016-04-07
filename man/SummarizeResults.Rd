@@ -12,7 +12,11 @@ SummarizeResults(filtered.results, output.format, partial = TRUE,
 
 \item{output.format}{The desired output format}
 
+\item{partial}{If TRUE, use source trees even if they only match some of the desired taxa}
+
 \item{datelife.cache}{The cached trees and other information}
+
+\item{suppress.citations}{If using a format that would normally print() citations, turn this off}
 }
 \value{
 Depends on output format

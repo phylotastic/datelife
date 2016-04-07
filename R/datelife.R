@@ -31,7 +31,6 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
 #' @param input A vector of names, a newick string, or a phylo object
-#' @param format The desired output format. See details.
 #' @param partial If TRUE, use source trees even if they only match some of the desired taxa
 #' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
@@ -84,7 +83,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 }
 
 #' Are all desired taxa in the patristic.matrix?
-#' @param patristic.matric A patristic matrix, rownames and colnames must be taxa
+#' @param patristic.matrix A patristic matrix, rownames and colnames must be taxa
 #' @param taxa A vector of taxon names
 #' @return A Boolean
 #' @export
@@ -200,7 +199,9 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' Summarize a filtered results list in various ways
 #' @param filtered.results A list of patristic matrices; labels correspond to citations
 #' @param output.format The desired output format
+#' @param partial If TRUE, use source trees even if they only match some of the desired taxa
 #' @param datelife.cache The cached trees and other information
+#' @param suppress.citations If using a format that would normally print() citations, turn this off
 #' @return Depends on output format
 #' @export
 SummarizeResults <- function(filtered.results, output.format, partial=TRUE, datelife.cache=datelife.cache, suppress.citations=FALSE) {

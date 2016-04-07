@@ -7,9 +7,9 @@
 AllMatching(patristic.matrix, taxa)
 }
 \arguments{
-\item{taxa}{A vector of taxon names}
+\item{patristic.matrix}{A patristic matrix, rownames and colnames must be taxa}
 
-\item{patristic.matric}{A patristic matrix, rownames and colnames must be taxa}
+\item{taxa}{A vector of taxon names}
 }
 \value{
 A Boolean
