@@ -16,7 +16,7 @@
 
 #' Core function to go from a vector of species, newick string, or phylo object get a chronogram or dates back
 #' @param input A vector of names, a newick string, or a phylo object
-#' @param format The desired output format. See details.
+#' @param output.format The desired output format. See details.
 #' @param partial If TRUE, use source trees even if they only match some of the desired taxa
 #' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
@@ -24,9 +24,9 @@
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
 #' @return Varies depending on the chosen format
 #' @export
-EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), format="phylo.median", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, datelife.cache=datelife.cache, method="PATHd8") {
+EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.median", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, datelife.cache=datelife.cache, method="PATHd8") {
 	filtered.results <- GetFilteredResults(input, partial, usetnrs, approximatematch, datelife.cache)
-	return(SummarizeResults(filtered.results, format=format, datelife.cache=datelife.cache))
+	return(SummarizeResults(filtered.results, output.format=output.format, datelife.cache=datelife.cache))
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
@@ -43,7 +43,7 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
     phy <- input.processed$phy
     cleaned.names <- input.processed$cleaned.names
     results.list<-lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=cleaned.names, phy=phy, method=method)
-    filtered.results <- ProcessResultsList(results.list, taxa, partial)
+    filtered.results <- ProcessResultsList(results.list, cleaned.names, partial)
     return(filtered.results)
 }
 
@@ -62,7 +62,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
   phy <- NA
    if(length(input)==1) {
 	  if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
-	    phy<-read.tree(text=input)
+	    phy<-ape::read.tree(text=input)
 	  }
   }
   cleaned.names<-""
@@ -156,13 +156,6 @@ ProcessResultsList <- function(results.list, taxa=NULL, partial=FALSE) {
 #pruning and converting 1000 trees takes 3 seconds). Subsetting 1000 trees from the patristic
 #distance matrix takes just 0.0013 seconds.
 
-ReadRDFTree <- function(identifier, format = "phylo") {
-	# reads a tree in RDF format from the hypothetical data store
-	tree<-read.file( identifier ) #do magic
-	if (format == "phylo") {
-		return(as.phylo(tree)) #assumes we have a converter
-	}
-}
 
 #in case we want to cache. Not clear we do
 ComputePatristicDistance <- function(phy, test=TRUE,tol=0.0001) {

@@ -5,14 +5,14 @@
 \title{Core function to go from a vector of species, newick string, or phylo object get a chronogram or dates back}
 \usage{
 EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
-  "Struthio camelus"), format = "phylo.median", partial = TRUE,
+  "Struthio camelus"), output.format = "phylo.median", partial = TRUE,
   usetnrs = FALSE, approximatematch = TRUE,
   datelife.cache = datelife.cache, method = "PATHd8")
 }
 \arguments{
 \item{input}{A vector of names, a newick string, or a phylo object}
 
-\item{format}{The desired output format. See details.}
+\item{output.format}{The desired output format. See details.}
 
 \item{partial}{If TRUE, use source trees even if they only match some of the desired taxa}
 
