@@ -9,7 +9,7 @@
 #' @param datelife.cache The list of lists containing the input trees and other info
 #' @return results in the desired format
 #' @export
-run<-function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), format="html", partial="yes", plot.width=600, plot.height=600, usetnrs="no", approximatematch="yes", datelife.cache=NULL) {
+run<-function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), format="citations", partial="yes", plot.width=600, plot.height=600, usetnrs="no", approximatematch="yes", datelife.cache=NULL) {
 	if(is.null(datelife.cache)) {
 	  data(opentree_chronograms)
 	  }
