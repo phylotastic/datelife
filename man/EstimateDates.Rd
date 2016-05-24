@@ -35,7 +35,6 @@ Core function to go from a vector of species, newick string, or phylo object get
 The output formats are citations, mrca, newick.all, newick.median, phylo.median, phylo.all
 }
 \examples{
-#data(opentree_chronograms)
-#age <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
+ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
 }
 

@@ -28,11 +28,12 @@
 #' @details
 #' The output formats are citations, mrca, newick.all, newick.median, phylo.median, phylo.all
 #' @examples
-#' #data(opentree_chronograms)
-#' #age <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
+#' ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
 EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.median", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=datelife.cache, method="PATHd8") {
-	filtered.results <- GetFilteredResults(input, partial, usetnrs, approximatematch, cache)
-	return(SummarizeResults(filtered.results, output.format, cache))
+	filtered.results.in <- GetFilteredResults(input, partial, usetnrs, approximatematch, cache)
+	output.format.in <- output.format
+	cache.in <- cache
+	return(SummarizeResults(filtered.results=filtered.results.in, output.format=output.format.in, cache=cache.in))
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
@@ -46,9 +47,9 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 #' @export
 GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=datelife.cache, method="PATHd8") {
     input.processed <- ProcessInput(input, usetnrs, approximatematch)
-    phy <- input.processed$phy
+    tree <- input.processed$phy
     cleaned.names <- input.processed$cleaned.names
-    results.list<-lapply(cache$trees,GetSubsetArrayDispatch, taxa=cleaned.names, phy=phy, method=method)
+    results.list<-lapply(cache$trees,GetSubsetArrayDispatch, taxa=cleaned.names, phy=tree, method=method)
     filtered.results <- ProcessResultsList(results.list, cleaned.names, partial)
     return(filtered.results)
 }
@@ -61,22 +62,22 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 #' @export
 ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE) {
 	if(class(input) == "phylo") {
-		input <- ape::write.tree(input)	
+		input <- ape::write.tree(input)
 	}
  input<-gsub("\\+"," ",input)
   input<-stringr::str_trim(input, side = "both")
-  phy <- NA
+  phy.new <- NA
    if(length(input)==1) {
 	  if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
-	    phy<-ape::read.tree(text=input)
+	    phy.new <-ape::read.tree(text=input)
 	  }
   }
   cleaned.names<-""
-  if(!is.na(phy)) {
+  if(!is.na(phy.new)) {
     if(usetnrs) {
-      phy <- tnrs_OToL_phylo(phylo=phy, approximatematch, prune_na= TRUE)
+      phy.new <- tnrs_OToL_phylo(phylo= phy.new, approximatematch, prune_na= TRUE)
     }
-    	cleaned.names<-phy$tip.label
+    	cleaned.names<-phy.new$tip.label
     } else {
       #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
       cleaned.names <- input
@@ -85,7 +86,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
       }
     }
     cleaned.names <- gsub("_", " ", cleaned.names)
-    return(list(phy=phy, cleaned.names=cleaned.names))
+    return(list(phy=phy.new, cleaned.names=cleaned.names))
 }
 
 #' Are all desired taxa in the patristic.matrix?
@@ -107,7 +108,7 @@ FindMatchingStudyIndex <- function(filtered.results, cache=datelife.cache) {
     return(which(names(cache$trees) %in% names(filtered.results)))
 }
 
-#' Return the relevant authors for a set of studies 
+#' Return the relevant authors for a set of studies
 #' @param results.index A vector from FindMatchingStudyIndex() with the indices of the relevant studies
 #' @param cache The cache
 #' @return A vector with counts of each author, with names equal to author names
@@ -117,7 +118,7 @@ TabulateRelevantAuthors <- function(results.index, cache=datelife.cache) {
 	return(table(unlist(authors)))
 }
 
-#' Return the relevant curators for a set of studies 
+#' Return the relevant curators for a set of studies
 #' @param results.index A vector from FindMatchingStudyIndex() with the indices of the relevant studies
 #' @param cache The cache
 #' @return A vector with counts of each curator, with names equal to curator names
@@ -137,14 +138,14 @@ ProcessResultsList <- function(results.list, taxa=NULL, partial=FALSE) {
 	if(is.null(taxa)) {
 		taxa <- unique(unname(unlist(lapply(final.matrices, rownames))))
 	}
-	patristic.matrices <- lapply(results.list, "[[", "patristic.matrix.array")	
-	
+	patristic.matrices <- lapply(results.list, "[[", "patristic.matrix.array")
+
 	final.matrices <- patristic.matrices[!is.na(patristic.matrices)]
 	if(!partial) {
 		final.matrices <- final.matrices[sapply(final.matrices, AllMatching, taxa=taxa)]
 	}
 	if(length(final.matrices)>0) {
-		final.matrices <- lapply(final.matrices, PadMatrix, all.taxa=taxa)	
+		final.matrices <- lapply(final.matrices, PadMatrix, all.taxa=taxa)
 	}
 	return(final.matrices)
 }
@@ -155,7 +156,7 @@ ProcessResultsList <- function(results.list, taxa=NULL, partial=FALSE) {
 #internally as objects of this type, but with the final output after pruning
 #going through patristic matrices.
 
-#Some trees are so large that they can't be stored as patristic distance matrices. For all others, 
+#Some trees are so large that they can't be stored as patristic distance matrices. For all others,
 #patristic matrices are better. For example, for the 20,000 HeathEtAl2012 trees of 35 taxa,
 #getting a subset down to two taxa takes 0.0475 seconds just for the pruning, 0.0504 seconds
 #for pruning and getting a subset, for a single tree (run times go up linearly with number of trees:
@@ -177,14 +178,14 @@ ComputePatristicDistance <- function(phy, test=TRUE,tol=0.0001) {
 
 GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
   #gets a subset of the patristic.matrix. If you give it a phylo4 object, it can check to see if taxa are a clade
-  patristic.matrix <- patristic.matrix[ rownames(patristic.matrix) %in% taxa,colnames(patristic.matrix) %in% taxa ]
-  problem <- "none"
-  final.size <- sum(rownames(patristic.matrix) %in% taxa) # returns number of matches
+  patristic.matrix.new <- patristic.matrix[ rownames(patristic.matrix) %in% taxa,colnames(patristic.matrix) %in% taxa ]
+  problem.new <- "none"
+  final.size <- sum(rownames(patristic.matrix.new) %in% taxa) # returns number of matches
   if (final.size < length(taxa)) {
-    problem <- "some of the queried taxa are not on this chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
+    problem.new <- "some of the queried taxa are not on this chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
     if (final.size < 2 ) {
-      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA 
-      patristic.matrix <- NA # to make sure no one uses the zero by mistake
+      problem.new <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
+      patristic.matrix.new <- NA # to make sure no one uses the zero by mistake
     }
   }
   if(!is.null(phy4)) {
@@ -192,14 +193,14 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
        problem <- "set of taxa not a clade, so this is probably an overestimate"
     }
   }
-  return(list(patristic.matrix=patristic.matrix,problem=problem))
+  return(list(patristic.matrix= patristic.matrix.new,problem= problem.new))
 }
 
 #' Summarize a filtered results list in various ways
 #' @param filtered.results A list of patristic matrices; labels correspond to citations
 #' @param output.format The desired output format
 #' @param partial If TRUE, use source trees even if they only match some of the desired taxa
-#' @param datelife.cache The cached trees and other information
+#' @param cache The cached trees and other information
 #' @param suppress.citations If using a format that would normally print() citations, turn this off
 #' @return Depends on output format
 #' @export
@@ -214,10 +215,10 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 		print(names(filtered.results))
 	}
 	if(output.format=="citations") {
-		return(names(filtered.results))	
+		return(names(filtered.results))
 	}
 	if(output.format=="mrca") {
-		return(GetAges(filtered.results, partial=partial))	
+		return(GetAges(filtered.results, partial=partial))
 	}
 	if(output.format=="newick.all") {
 		trees <- sapply(filtered.results, PatristicMatrixToNewick)
@@ -238,7 +239,7 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 	if(output.format=="phylo.all") {
 		trees <- lapply(filtered.results, PatristicMatrixToTree)
 		return(trees[which(!is.na(trees))])
-	}	
+	}
 	if(output.format=="html") {
 		out.vector <- "<table border='1'><tr><th>MRCA Age (MY)</th><th>Ntax</th><th>Citation</th><th>Newick</th></tr>"
 		ages <- GetAges(filtered.results, partial=partial)
@@ -265,16 +266,23 @@ GetSubsetArrayDispatch <- function(study.element, taxa, phy=NULL, phy4=NULL, met
   }
 }
 
-GetSubsetArrayBothFromPhylo <- function(reference.tree, taxa, phy=NULL, phy4=NULL, method="PATHd8") {
+GetSubsetArrayBothFromPhylo <- function(reference.tree.in, taxa.in, phy.in=NULL, phy4.in=NULL, method.in="PATHd8") {
 #COMMENTING OUT: OpenTree gives single trees, let's just standardize on those
 #  if (class(reference.tree)=="phylo") {
-#    reference.tree<-c(reference.tree) #from here in, assumes multiphylo object, even if a single tree 
+#    reference.tree<-c(reference.tree) #from here in, assumes multiphylo object, even if a single tree
 #  }
-  if (is.null(phy)) {
-    return(GetSubsetArrayFromPhylo(reference.tree=reference.tree, taxa=taxa, phy4=phy4, method)) 
+	congruify=FALSE
+	if(!is.null(phy.in)) {
+		congruify=TRUE
+		if(is.na(phy.in)) {
+			congruify=FALSE
+		}
+	}
+  if (!congruify) {
+    return(GetSubsetArrayFromPhylo(reference.tree=reference.tree.in, taxa=taxa.in, phy4=phy4.in, method.in))
   }
   else { #congruify
-    return(GetSubsetArrayCongruifyFromPhylo(reference.tree=reference.tree, taxa=taxa, phy=phy, method)) 
+    return(GetSubsetArrayCongruifyFromPhylo(reference.tree=reference.tree.in, taxa=taxa.in, phy=phy.in, method.in))
   }
 
 }
@@ -286,7 +294,7 @@ PruneTree <- function(phy, taxa) {
 GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4=NULL, method="PATHd8") {
   final.size<-sum(reference.tree$tip.label %in% taxa) # returns number of matches
   if(final.size>=2) { #it's worth doing the pruning
-    reference.tree<-PruneTree(reference.tree, taxa) 
+    reference.tree<-PruneTree(reference.tree, taxa)
     #reference.tree<-pruneTrees(reference.tree, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
   }
   problem <- "none"
@@ -294,7 +302,7 @@ GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4=NULL, method="PAT
   if (final.size < length(taxa)) {
     problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
     if (final.size < 2 ) {
-      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA 
+      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
       patristic.matrix.array <- NA # to make sure no one uses the zero by mistake
     }
   }
@@ -312,33 +320,33 @@ GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4=NULL, method="PAT
 GetSubsetArrayCongruifyFromPhylo <- function(reference.tree, taxa, phy=NULL, method="PATHd8") {
   final.size<-sum(reference.tree$tip.label %in% taxa) # returns number of matches
   if(final.size>=2) { #it's worth doing the pruning
-   reference.tree<-PruneTree(reference.tree, taxa) 
+   reference.tree<-PruneTree(reference.tree, taxa)
    #reference.tree<-pruneTrees(reference.tree, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
   }
-  problem <- "none"
-  patristic.matrix.array <- NA
+  problem.new <- "none"
+  patristic.matrix.array.new <- NA
   if (final.size < length(taxa)) {
-    problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
+    problem.new <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
     if (final.size < 3 ) {
-      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA 
-      patristic.matrix.array <- NA # to make sure no one uses the zero by mistake
-      return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
-      
+      problem.new <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
+      patristic.matrix.array.new <- NA # to make sure no one uses the zero by mistake
+      return(list(patristic.matrix.array= patristic.matrix.array.new,problem= problem.new))
+
     }
   }
   if (final.size >= 3) {
-  	patristic.matrix.array <-   CongruifyTreeFromPhylo(reference.tree, query.tree=phy)
+  	patristic.matrix.array.new <-   CongruifyTreeFromPhylo(reference.tree, query.tree=phy)
   }
-  return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
+  return(list(patristic.matrix.array= patristic.matrix.array.new,problem= problem.new))
 }
 
 
 GetSubsetArrayBoth <- function(patristic.matrix.array, taxa, phy=NULL, phy4=NULL, method="PATHd8") {
   if (is.null(phy)) {
-    return(GetSubsetArray(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy4=phy4)) 
+    return(GetSubsetArray(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy4=phy4))
   }
   else { #congruify
-    return(GetSubsetArrayCongruify(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy=phy, method)) 
+    return(GetSubsetArrayCongruify(patristic.matrix.array=patristic.matrix.array, taxa=taxa, phy=phy, method))
   }
 }
 
@@ -360,36 +368,36 @@ CongruifyTreeFromPhylo <- function(reference.tree, query.tree, method="PATHd8") 
   return(result.matrix)
 }
 
-#' Convert spaces to underscores in trees 
+#' Convert spaces to underscores in trees
 #' @param phy A phylo object
 #' @return A phylo object
 #' @export
 ConvertSpacesToUnderscores <- function(phy) {
 	phy$tip.label <- gsub(" ", "_", phy$tip.label)
-	return(phy)	
+	return(phy)
 }
 
-#' Convert underscores to spaces in trees 
+#' Convert underscores to spaces in trees
 #' @param phy A phylo object
 #' @return A phylo object
 #' @export
 ConvertUnderscoresToSpaces <- function(phy) {
 	phy$tip.label <- gsub("_", " ", phy$tip.label)
-	return(phy)	
+	return(phy)
 }
 
 GetSubsetArrayCongruify <- function(patristic.matrix.array, taxa, phy=NULL, method="PATHd8") {
-  #gets a subset of the patristic.matrix.array. 
+  #gets a subset of the patristic.matrix.array.
   patristic.matrix.array <- patristic.matrix.array[ rownames(patristic.matrix.array) %in% taxa,colnames(patristic.matrix.array) %in% taxa,  ]
   problem <- "none"
   final.size <- sum(rownames(patristic.matrix.array) %in% taxa) # returns number of matches
   if (final.size < length(taxa)) {
     problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
     if (final.size < 3 ) {
-      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA 
+      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
       patristic.matrix.array <- NA # to make sure no one uses the zero by mistake
       return(list(patristic.matrix.array=patristic.matrix.array,problem=problem))
-      
+
     }
   }
   patristic.matrix.list <- SplitArray(patristic.matrix.array)
@@ -405,7 +413,7 @@ GetSubsetArray <- function(patristic.matrix.array, taxa, phy4=NULL) {
   if (final.size < length(taxa)) {
     problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
     if (final.size < 2 ) {
-      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA 
+      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
       patristic.matrix.array <- NA # to make sure no one uses the zero by mistake
     }
   }
@@ -424,7 +432,7 @@ GetSubsetArray <- function(patristic.matrix.array, taxa, phy4=NULL) {
 #' @export
 GetAge <- function(patristic.matrix, partial=TRUE) {
   # 0.5 since patristic distance is down to the root and back up
-  return(0.5 * max(patristic.matrix, na.rm=partial)) 
+  return(0.5 * max(patristic.matrix, na.rm=partial))
 }
 
 #' Get vector of MRCA from list of patristic matrices
@@ -442,7 +450,7 @@ GetAges <- function(filtered.results, partial=TRUE) {
 #' @return patristic.matrix A patristic matrix with row and column names for taxa in alphabetial order
 #' @export
 ReorderMatrix <- function(patristic.matrix) {
-  return(patristic.matrix[order(rownames(patristic.matrix)),order(colnames(patristic.matrix))]) 
+  return(patristic.matrix[order(rownames(patristic.matrix)),order(colnames(patristic.matrix))])
 }
 
 #' Function to fill in empty cells in a patristic matrix for missing taxa
@@ -451,16 +459,20 @@ ReorderMatrix <- function(patristic.matrix) {
 #' @return Patristic.matrix for all.taxa, with NA for entries between taxa where at least one was not in the original patristic.matrix
 #' @export
 PadMatrix <- function(patristic.matrix, all.taxa) {
-	final.matrix <- rbind(patristic.matrix, rep(NA, length(all.taxa) - dim(patristic.matrix)[1]))
-	final.matrix <- cbind(final.matrix, rep(NA, length(all.taxa) - dim(patristic.matrix)[1]))
- 	rownames(final.matrix) <- c(rownames(patristic.matrix), all.taxa[-which(all.taxa %in% rownames(patristic.matrix))])
- 	colnames(final.matrix) <- c(colnames(patristic.matrix), all.taxa[-which(all.taxa %in% colnames(patristic.matrix))])
-	return(ReorderMatrix(final.matrix))	
+	number.missing <- length(all.taxa) - dim(patristic.matrix)[1]
+	final.matrix <- patristic.matrix
+	if(number.missing>0) {
+		final.matrix <- rbind(patristic.matrix, matrix(nrow=number.missing, ncol=dim(patristic.matrix)[2]))
+		final.matrix <- cbind(final.matrix, matrix(ncol=number.missing, nrow=dim(final.matrix)[1]))
+		rownames(final.matrix) <- c(rownames(patristic.matrix), all.taxa[-which(all.taxa %in% rownames(patristic.matrix))])
+	 	colnames(final.matrix) <- c(colnames(patristic.matrix), all.taxa[-which(all.taxa %in% colnames(patristic.matrix))])
+	}
+ 	return(ReorderMatrix(final.matrix))
 }
 
 TestNameOrder <- function(patristic.matrix, standard.rownames, standard.colnames) {
   if (compare::compare(rownames(patristic.matrix),standard.rownames)$result!=TRUE) {
-    return(FALSE) 
+    return(FALSE)
   }
   if (compare::compare(colnames(patristic.matrix),standard.colnames)$result!=TRUE) {
     return(FALSE)
@@ -492,7 +504,7 @@ SplitArray <- function(patristic.matrix.array) {
 }
 
 AsubForLapply <- function(idx, x, dims=3) {
-  return(abind::asub(x, idx, dims)) 
+  return(abind::asub(x, idx, dims))
 }
 
 GetQuantiles <- function(ages,probs=c(0.5,0,0.025,0.975,1) ) {
@@ -510,10 +522,10 @@ VectorToTableRow <- function(x,digits=2) {
 #' @export
 PatristicMatrixToTree <- function(patristic.matrix) {
   if(anyNA(patristic.matrix)) {
-  	patristic.matrix <- patristic.matrix[rowSums(is.na(patristic.matrix)) != ncol(patristic.matrix),colSums(is.na(patristic.matrix)) != nrow(patristic.matrix)]	
+  	patristic.matrix <- patristic.matrix[rowSums(is.na(patristic.matrix)) != ncol(patristic.matrix),colSums(is.na(patristic.matrix)) != nrow(patristic.matrix)]
   }
   if(dim(patristic.matrix)[1] < 3) {
-  	return(NA)	
+  	return(NA)
   }
   tree <- ape::nj(patristic.matrix)
   if(ape::Ntip(tree)>2) {
@@ -562,4 +574,3 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
   	return(patristic.matrix<-patristic.matrix.array[,,sample.int(1, size=dim(patristic.matrix.array)[3] )] )
  # }
 }
-
