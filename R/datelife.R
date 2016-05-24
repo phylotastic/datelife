@@ -15,18 +15,24 @@
 # source("/Library/WebServer/Sites/datelife.org/datelife/R/cleaning.r")
 
 #' Core function to go from a vector of species, newick string, or phylo object get a chronogram or dates back
+#' @aliases datelife
 #' @param input A vector of names, a newick string, or a phylo object
 #' @param output.format The desired output format. See details.
 #' @param partial If TRUE, use source trees even if they only match some of the desired taxa
 #' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
-#' @param datelife.cache The cached set of chronograms and other info from data(opentree_chronograms)
+#' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
 #' @return Varies depending on the chosen format
 #' @export
-EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.median", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, datelife.cache=datelife.cache, method="PATHd8") {
-	filtered.results <- GetFilteredResults(input, partial, usetnrs, approximatematch, datelife.cache)
-	return(SummarizeResults(filtered.results, output.format=output.format, datelife.cache=datelife.cache))
+#' @details
+#' The output formats are citations, mrca, newick.all, newick.median, phylo.median, phylo.all
+#' @examples
+#' #data(opentree_chronograms)
+#' #age <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
+EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.median", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=datelife.cache, method="PATHd8") {
+	filtered.results <- GetFilteredResults(input, partial, usetnrs, approximatematch, cache)
+	return(SummarizeResults(filtered.results, output.format, cache))
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
@@ -34,15 +40,15 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 #' @param partial If TRUE, use source trees even if they only match some of the desired taxa
 #' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
-#' @param datelife.cache The cached set of chronograms and other info from data(opentree_chronograms)
+#' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
 #' @return List of patristic matrices
 #' @export
-GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, datelife.cache=datelife.cache, method="PATHd8") {
+GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=datelife.cache, method="PATHd8") {
     input.processed <- ProcessInput(input, usetnrs, approximatematch)
     phy <- input.processed$phy
     cleaned.names <- input.processed$cleaned.names
-    results.list<-lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=cleaned.names, phy=phy, method=method)
+    results.list<-lapply(cache$trees,GetSubsetArrayDispatch, taxa=cleaned.names, phy=phy, method=method)
     filtered.results <- ProcessResultsList(results.list, cleaned.names, partial)
     return(filtered.results)
 }
@@ -94,30 +100,30 @@ AllMatching <- function(patristic.matrix, taxa) {
 
 #' Find the index of relevant studies in a datelife.cache object
 #' @param filtered.results The patristic.matrices that will be used
-#' @param datelife.cache The cache of studies
+#' @param cache The cache of studies
 #' @return A vector with the indices of studies that have relevant info
 #' @export
-FindMatchingStudyIndex <- function(filtered.results, datelife.cache) {
-    return(which(names(datelife.cache$trees) %in% names(filtered.results)))
+FindMatchingStudyIndex <- function(filtered.results, cache=datelife.cache) {
+    return(which(names(cache$trees) %in% names(filtered.results)))
 }
 
 #' Return the relevant authors for a set of studies 
 #' @param results.index A vector from FindMatchingStudyIndex() with the indices of the relevant studies
-#' @param datelife.cache The cache
+#' @param cache The cache
 #' @return A vector with counts of each author, with names equal to author names
 #' @export
-TabulateRelevantAuthors <- function(results.index, datelife.cache) {
-	authors <- datelife.cache$authors[results.index]
+TabulateRelevantAuthors <- function(results.index, cache=datelife.cache) {
+	authors <- cache$authors[results.index]
 	return(table(unlist(authors)))
 }
 
 #' Return the relevant curators for a set of studies 
 #' @param results.index A vector from FindMatchingStudyIndex() with the indices of the relevant studies
-#' @param datelife.cache The cache
+#' @param cache The cache
 #' @return A vector with counts of each curator, with names equal to curator names
 #' @export
-TabulateRelevantCurators <- function(results.index, datelife.cache) {
-	curators <- datelife.cache$curators[results.index]
+TabulateRelevantCurators <- function(results.index, cache=datelife.cache) {
+	curators <- cache$curators[results.index]
 	return(table(unlist(curators)))
 }
 
@@ -197,11 +203,11 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' @param suppress.citations If using a format that would normally print() citations, turn this off
 #' @return Depends on output format
 #' @export
-SummarizeResults <- function(filtered.results, output.format, partial=TRUE, datelife.cache=datelife.cache, suppress.citations=FALSE) {
+SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cache=datelife.cache, suppress.citations=FALSE) {
 	if(!partial) {
 		filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 	}
-	results.index <- FindMatchingStudyIndex(filtered.results, datelife.cache)
+	results.index <- FindMatchingStudyIndex(filtered.results, cache)
 	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.median", "phylo.median", "phylo.all"))
 	if((output.format != "citations") & !suppress.citations) {
 		print("Using trees from:")

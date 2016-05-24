@@ -5,9 +5,9 @@
 \title{Core function to generate results}
 \usage{
 run(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-  format = "html", partial = "yes", plot.width = 600, plot.height = 600,
-  usetnrs = "no", approximatematch = "yes",
-  datelife.cache = datelife.cache)
+  format = "citations", partial = "yes", plot.width = 600,
+  plot.height = 600, usetnrs = "no", approximatematch = "yes",
+  datelife.cache = NULL)
 }
 \arguments{
 \item{input}{A newick string or vector of taxa}
@@ -27,7 +27,7 @@ run(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 \item{datelife.cache}{The list of lists containing the input trees and other info}
 }
 \value{
-Nothing
+results in the desired format
 }
 \description{
 Core function to generate results

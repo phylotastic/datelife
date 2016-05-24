@@ -5,7 +5,7 @@
 \title{Summarize a filtered results list in various ways}
 \usage{
 SummarizeResults(filtered.results, output.format, partial = TRUE,
-  datelife.cache = datelife.cache, suppress.citations = FALSE)
+  cache = datelife.cache, suppress.citations = FALSE)
 }
 \arguments{
 \item{filtered.results}{A list of patristic matrices; labels correspond to citations}
@@ -14,9 +14,9 @@ SummarizeResults(filtered.results, output.format, partial = TRUE,
 
 \item{partial}{If TRUE, use source trees even if they only match some of the desired taxa}
 
-\item{datelife.cache}{The cached trees and other information}
-
 \item{suppress.citations}{If using a format that would normally print() citations, turn this off}
+
+\item{datelife.cache}{The cached trees and other information}
 }
 \value{
 Depends on output format

@@ -2,12 +2,13 @@
 % Please edit documentation in R/datelife.R
 \name{EstimateDates}
 \alias{EstimateDates}
+\alias{datelife}
 \title{Core function to go from a vector of species, newick string, or phylo object get a chronogram or dates back}
 \usage{
 EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), output.format = "phylo.median", partial = TRUE,
-  usetnrs = FALSE, approximatematch = TRUE,
-  datelife.cache = datelife.cache, method = "PATHd8")
+  usetnrs = FALSE, approximatematch = TRUE, cache = datelife.cache,
+  method = "PATHd8")
 }
 \arguments{
 \item{input}{A vector of names, a newick string, or a phylo object}
@@ -20,7 +21,7 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)}
 
-\item{datelife.cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
+\item{cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
 
 \item{method}{The method used for congruification. PATHd8 only right now, r8s and treePL later.}
 }
@@ -29,5 +30,12 @@ Varies depending on the chosen format
 }
 \description{
 Core function to go from a vector of species, newick string, or phylo object get a chronogram or dates back
+}
+\details{
+The output formats are citations, mrca, newick.all, newick.median, phylo.median, phylo.all
+}
+\examples{
+#data(opentree_chronograms)
+#age <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
 }
 

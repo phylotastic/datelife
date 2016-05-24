@@ -6,8 +6,7 @@
 \usage{
 GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
-  approximatematch = TRUE, datelife.cache = datelife.cache,
-  method = "PATHd8")
+  approximatematch = TRUE, cache = datelife.cache, method = "PATHd8")
 }
 \arguments{
 \item{input}{A vector of names, a newick string, or a phylo object}
@@ -18,7 +17,7 @@ GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)}
 
-\item{datelife.cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
+\item{cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
 
 \item{method}{The method used for congruification. PATHd8 only right now, r8s and treePL later.}
 }
