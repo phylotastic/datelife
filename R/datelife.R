@@ -80,7 +80,8 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
     	cleaned.names<-phy.new$tip.label
     } else {
       #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
-      cleaned.names <- input
+			cleaned.names <- stringr::str_trim(strsplit(input, ',')[[1]], side = "both")
+      #cleaned.names <- input
       if (usetnrs) {
         cleaned.names <- tnrs_OToL_names(names=cleaned.names, approximatematch, prune_na= TRUE)
       }
