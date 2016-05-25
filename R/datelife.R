@@ -26,7 +26,7 @@
 #' @return Varies depending on the chosen format
 #' @export
 #' @details
-#' The output formats are citations, mrca, newick.all, newick.median, phylo.median, phylo.all
+#' The output formats are citations, mrca, newick.all, newick.median, phylo.median, phylo.all, html
 #' @examples
 #' ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
 EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.median", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=datelife.cache, method="PATHd8") {
@@ -210,7 +210,7 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 		filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 	}
 	results.index <- FindMatchingStudyIndex(filtered.results, cache)
-	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.median", "phylo.median", "phylo.all"))
+	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.median", "phylo.median", "phylo.all", "html"))
 	if((output.format != "citations") & !suppress.citations) {
 		print("Using trees from:")
 		print(names(filtered.results))
@@ -248,6 +248,8 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 		for(result.index in sequence(length(filtered.results))) {
 			out.vector <- paste(out.vector, paste("<tr><td>",ages[result.index],"</td><td>",dim(filtered.results[[result.index]])[1], "</td><td>", names(filtered.results)[result.index], "</td><td>", trees[result.index], "</td></tr>", sep=""), sep="")
 		}
+		out.vector <- paste(out.vector, "</table>")
+		return(out.vector)
 	}
 }
 

@@ -32,7 +32,7 @@ Varies depending on the chosen format
 Core function to go from a vector of species, newick string, or phylo object get a chronogram or dates back
 }
 \details{
-The output formats are citations, mrca, newick.all, newick.median, phylo.median, phylo.all
+The output formats are citations, mrca, newick.all, newick.median, phylo.median, phylo.all, html
 }
 \examples{
 ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
