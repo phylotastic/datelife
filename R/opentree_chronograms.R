@@ -49,7 +49,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 	#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
 			new.tree <- NULL
 			try(new.tree <- get_study_tree_with_dups(study_id=study.id, tree_id=strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index]))
-			if(!is.null(new.tree)) {
+			if(!is.null(new.tree) & HasBrlen(new.tree)) {
 				new.tree <- CleanChronogram(new.tree)
 				if(HasBrlen(new.tree)) {
 					if(IsGoodChronogram(new.tree)) {
