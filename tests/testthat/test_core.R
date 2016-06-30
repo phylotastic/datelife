@@ -23,7 +23,7 @@ test_that("Summarize as citations works correctly", {
   filtered.results <- ProcessResultsList(results.list, taxa, TRUE)
   citation.results <- SummarizeResults(filtered.results, output.format="cit", cache=datelife.cache)
   expect_equal(class(citation.results), "character")
-  expect_gte(sum(grepl("Prum", citation.results)),1) #b/c any sort of list of bird phylogenies can't be complete without one authored by Joseph Brown
+  expect_gte(sum(grepl("Brown", citation.results)),1) #b/c any sort of list of bird phylogenies can't be complete without one authored by Joseph Brown
 })
 
 test_that("Summarize as newick.all works correctly", {
