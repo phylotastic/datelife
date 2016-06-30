@@ -16,8 +16,7 @@ Imports:
     stringr,
     rotl,
     knitcitations,
-    phylobase,
-    FastRWeb
+    phylobase
 Suggests:
     testthat
 License: GPL (>=2)
