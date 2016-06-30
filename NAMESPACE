@@ -2,6 +2,7 @@
 
 export(AllMatching)
 export(BindMatrices)
+export(CleanChronogram)
 export(ConvertSpacesToUnderscores)
 export(ConvertUnderscoresToSpaces)
 export(EstimateDates)

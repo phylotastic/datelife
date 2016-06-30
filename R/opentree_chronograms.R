@@ -44,25 +44,29 @@ GetOToLChronograms <- function(verbose=FALSE) {
 		if(verbose) {
 			print(paste("Downloading tree(s) from study", study.index, "of",dim(chronogram.matches)[1]))
 		}
-		for(chrono.index in sequence(length(chronogram.matches$n_matched_trees[study.index]))) {
+		for(chrono.index in sequence((chronogram.matches$n_matched_trees[study.index]))) {
 			study.id <- chronogram.matches$study_ids[study.index]
 	#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
-			new.tree <- get_study_tree_with_dups(study_id=study.id, tree_id=strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index])
-			if(HasBrlen(new.tree)) {
-				if(IsGoodChronogram(new.tree)) {
-					if(verbose) {
-						print("has tree with branch lengths")
+			new.tree <- NULL
+			try(new.tree <- get_study_tree_with_dups(study_id=study.id, tree_id=strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index]))
+			if(!is.null(new.tree)) {
+				new.tree <- CleanChronogram(new.tree)
+				if(HasBrlen(new.tree)) {
+					if(IsGoodChronogram(new.tree)) {
+						if(verbose) {
+							print("has tree with branch lengths")
+						}
+						doi <- NULL
+						try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
+						authors <- append(authors, NA)
+						try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
+						curators <- append(curators, NA)
+						try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
+						try(studies <- append(studies, study.id))
+						tree.count <- tree.count+1
+						trees[[tree.count]] <-new.tree
+						names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
 					}
-					doi <- NULL
-					try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
-					authors <- append(authors, NA)
-					try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
-					curators <- append(curators, NA)
-					try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
-					try(studies <- append(studies, study.id))
-					tree.count <- tree.count+1
-					trees[[tree.count]] <-new.tree
-					names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
 				}
 			}
 			#save(list=ls(), file="opentree_chronograms.RData")
@@ -101,4 +105,19 @@ IsGoodChronogram <- function(phy) {
 		passing <- FALSE
 	}
 	return(passing)
+}
+
+#' Clean up some issues with OToL chronograms
+#' @param phy Input phylo object
+#' @return A cleaned up phylo object
+#' @export
+CleanChronogram <- function(phy) {
+	bad.taxa <- c(which(nchar(phy$tip.label)<=2), which(grepl("not mapped", phy$tip.label)))
+	if(length(bad.taxa)>0) {
+		phy <- try(ape::drop.tip(phy, bad.taxa))
+	}
+	if(!ape::is.rooted(phy) & ape::is.ultrametric(phy)) {
+		phy$root.edge <- 0
+	}
+	return(phy)
 }

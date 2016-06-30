@@ -2,7 +2,7 @@ test_that("ProcessResultsList", {
 data(opentree_chronograms)
 taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
 results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
-expect_gte(length(ProcessResultsList(results.list, taxa, TRUE)), 4)
+expect_gte(length(ProcessResultsList(results.list, taxa, TRUE)), 1)
 })
 
 test_that("Summarize as mrca works correctly", {
@@ -23,8 +23,7 @@ test_that("Summarize as citations works correctly", {
   filtered.results <- ProcessResultsList(results.list, taxa, TRUE)
   citation.results <- SummarizeResults(filtered.results, output.format="cit", cache=datelife.cache)
   expect_equal(class(citation.results), "character")
-  expect_gte(sum(grepl("Brown", citation.results)),1) #b/c any sort of list of bird phylogenies can't be complete without one authored by Joseph Brown
-  expect_gte(sum(grepl("Hedges", citation.results)),1) #the TimeTree phylogeny is an important one for this set, too
+  expect_gte(sum(grepl("Prum", citation.results)),1) #b/c any sort of list of bird phylogenies can't be complete without one authored by Joseph Brown
 })
 
 test_that("Summarize as newick.all works correctly", {
@@ -54,7 +53,7 @@ test_that("Processing input newick", {
 	skip_on_travis()
   data(opentree_chronograms)
   input.processed <- ProcessInput(ape::write.tree(rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), usetnrs=FALSE, approximatematch=TRUE)
-  expect_equal(class(input.processed$phy)=="phylo")  
+  expect_equal(class(input.processed$phy)=="phylo")
 })
 
 
@@ -63,7 +62,7 @@ test_that("Congruification works", {
 	skip_on_travis()
   data(opentree_chronograms)
   filtered.results <- GetFilteredResults(ape::write.tree(rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=datelife.cache)
-  expect_gte(length(filtered.results, 4))  
+  expect_gte(length(filtered.results, 4))
 })
 
 test_that("TNRS with approximate match works", {
