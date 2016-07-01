@@ -115,11 +115,15 @@ IsGoodChronogram <- function(phy) {
 #' @return A cleaned up phylo object
 #' @export
 CleanChronogram <- function(phy) {
+	original.phy <- phy
 	if(class(phy)=="phylo") {
 		if(ape::Ntip(phy)>ape::Nnode(phy)) {
-			bad.taxa <- c(which(nchar(phy$tip.label)<=2), which(grepl("not mapped", phy$tip.label)))
+			bad.taxa <- unique(c(which(nchar(phy$tip.label)<=2), which(grepl("not mapped", phy$tip.label))))
 			if(length(bad.taxa)>0 & length(bad.taxa) < (ape::Ntip(phy)-3)) {
 				phy <- try(ape::drop.tip(phy, bad.taxa))
+				if(class(phy) =="try-error") {
+					return(original.phy)
+				}
 			}
 			if(!ape::is.rooted(phy) & ape::is.ultrametric(phy)) {
 				phy$root.edge <- 0
