@@ -107,6 +107,9 @@ IsGoodChronogram <- function(phy) {
 	if(!ape::is.rooted(phy)) {
 		passing <- FALSE
 	}
+	if(!ape::is.ultrametric(phy, tol=0.01)) {
+		passing <- FALSE
+	}
 	return(passing)
 }
 
