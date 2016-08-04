@@ -2,3 +2,7 @@ language: r
 sudo: false
 cache: packages
 warnings_are_errors: false
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+  - Rscript -e 'covr::codecov()'
