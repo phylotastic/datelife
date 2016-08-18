@@ -166,7 +166,7 @@ ProcessResultsList <- function(results.list, taxa=NULL, partial=FALSE) {
 
 
 #in case we want to cache. Not clear we do
-ComputePatristicDistance <- function(phy, test=TRUE,tol=0.0001) {
+ComputePatristicDistance <- function(phy, test=TRUE,tol=0.01) {
 	# stores the distance between taxa
 	if (test) {
 		if (!ape::is.ultrametric(phy,tol)) {
