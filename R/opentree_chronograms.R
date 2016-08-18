@@ -34,7 +34,7 @@ get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ot:otttaxonna
 #' @return A list with elements for the trees, authors, curators, and study ids
 #' @export
 GetOToLChronograms <- function(verbose=FALSE) {
-	chronogram.matches <- rotl::studies_find_trees(property="ot:branchLengthMode", value="ot:time")
+	chronogram.matches <- rotl::studies_find_trees(property="ot:branchLengthMode", value="ot:time", verbose=TRUE, detailed=TRUE)
 	trees <- list()
 	authors <- list()
 	curators <- list()
@@ -48,26 +48,31 @@ GetOToLChronograms <- function(verbose=FALSE) {
 			study.id <- chronogram.matches$study_ids[study.index]
 	#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
 			new.tree <- NULL
-			try(new.tree <- get_study_tree_with_dups(study_id=study.id, tree_id=strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index]))
-			if(!is.null(new.tree) & HasBrlen(new.tree)) {
-				new.tree <- CleanChronogram(new.tree)
-				if(HasBrlen(new.tree)) {
-					if(IsGoodChronogram(new.tree)) {
-						if(verbose) {
-							print("has tree with branch lengths")
+			tree.id <- strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index]
+			if(!grepl("\\.\\.\\.", tree.id) & !is.na(tree.id)) { #to deal with ellipsis bug
+				try(new.tree <- datelife:::get_study_tree_with_dups(study_id=study.id,tree_id=tree.id ))
+				if(!is.null(new.tree) & HasBrlen(new.tree)) {
+					new.tree <- CleanChronogram(new.tree)
+					if(HasBrlen(new.tree)) {
+						if(IsGoodChronogram(new.tree)) {
+							if(verbose) {
+								print("has tree with branch lengths")
+							}
+							doi <- NULL
+							try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
+							authors <- append(authors, NA)
+							try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
+							curators <- append(curators, NA)
+							try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
+							try(studies <- append(studies, study.id))
+							tree.count <- tree.count+1
+							trees[[tree.count]] <-new.tree
+							names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
 						}
-						doi <- NULL
-						try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
-						authors <- append(authors, NA)
-						try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
-						curators <- append(curators, NA)
-						try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
-						try(studies <- append(studies, study.id))
-						tree.count <- tree.count+1
-						trees[[tree.count]] <-new.tree
-						names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
 					}
 				}
+			} else {
+				warning("Not all trees could be loaded from this study due to ellipsis bug, https://github.com/ropensci/rotl/issues/85")
 			}
 			#save(list=ls(), file="opentree_chronograms.RData")
 		}
