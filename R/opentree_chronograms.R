@@ -67,7 +67,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 							try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
 							try(studies <- append(studies, study.id))
 							tree.count <- tree.count+1
-							try(dois <- append(dois, chronogram.matches$study_doi[study.index])
+							try(dois <- append(dois, chronogram.matches$study_doi[study.index]))
 							trees[[tree.count]] <-new.tree
 							names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
 						}
