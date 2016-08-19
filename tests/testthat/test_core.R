@@ -23,7 +23,7 @@ test_that("Summarize as citations works correctly", {
   filtered.results <- ProcessResultsList(results.list, taxa, TRUE)
   citation.results <- SummarizeResults(filtered.results, output.format="cit", cache=datelife.cache)
   expect_equal(class(citation.results), "character")
-  expect_gte(sum(grepl("Prum", citation.results)),1) 
+  expect_gte(sum(grepl("Prum", citation.results)),1)
  })
 
 test_that("Summarize as newick.all works correctly", {
@@ -54,6 +54,16 @@ test_that("Processing input newick", {
   data(opentree_chronograms)
   input.processed <- ProcessInput(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), usetnrs=FALSE, approximatematch=TRUE)
   expect_equal(class(input.processed$phy),"phylo")
+})
+
+
+
+test_that("Processing input string", {
+	skip_on_cran()
+	skip_on_travis()
+  data(opentree_chronograms)
+  input.processed <- ProcessInput(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE)
+  expect_equal(length(input.processed$cleaned.names),3)
 })
 
 

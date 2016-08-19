@@ -75,19 +75,20 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
   cleaned.names<-""
   if(!is.na(phy.new)) {
     if(usetnrs) {
-      phy.new <- tnrs_OToL_phylo(phylo= phy.new, approximatematch, prune_na= TRUE)
+			cleaned.names <- rotl::tnrs_match_names(phy.new$tip.label)$unique_name
+      phy.new$tip.label <- cleaned.names
     }
-    	cleaned.names<-phy.new$tip.label
-    } else {
-      #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
-			cleaned.names <- stringr::str_trim(strsplit(input, ',')[[1]], side = "both")
-      #cleaned.names <- input
-      if (usetnrs) {
-        cleaned.names <- tnrs_OToL_names(names=cleaned.names, approximatematch, prune_na= TRUE)
-      }
+  	cleaned.names<-phy.new$tip.label
+  } else {
+    #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
+		cleaned.names <- stringr::str_trim(strsplit(input, ','), side = "both")
+    #cleaned.names <- input
+    if (usetnrs) {
+      cleaned.names <- rotl::tnrs_match_names(taxa)$unique_name
     }
-    cleaned.names <- gsub("_", " ", cleaned.names)
-    return(list(phy=phy.new, cleaned.names=cleaned.names))
+  }
+  cleaned.names <- gsub("_", " ", cleaned.names)
+  return(list(phy=phy.new, cleaned.names=cleaned.names))
 }
 
 #' Are all desired taxa in the patristic.matrix?
