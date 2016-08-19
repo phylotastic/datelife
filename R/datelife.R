@@ -81,7 +81,10 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
   	cleaned.names<-phy.new$tip.label
   } else {
     #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
-		cleaned.names <- stringr::str_trim(strsplit(input, ','), side = "both")
+		if(length(input)==1) {
+			input <- strsplit(input, ',')[[1]]
+		}
+		cleaned.names <- stringr::str_trim(input, side = "both")
     #cleaned.names <- input
     if (usetnrs) {
       cleaned.names <- rotl::tnrs_match_names(taxa)$unique_name

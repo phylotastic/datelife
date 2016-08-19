@@ -39,6 +39,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 	authors <- list()
 	curators <- list()
 	studies <- list()
+	dois <- list()
 	tree.count <- 0
 	for (study.index in sequence(dim(chronogram.matches)[1])) {
 		if(verbose) {
@@ -66,6 +67,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 							try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
 							try(studies <- append(studies, study.id))
 							tree.count <- tree.count+1
+							try(dois <- append(dois, chronogram.matches$study_doi[study.index])
 							trees[[tree.count]] <-new.tree
 							names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
 						}
@@ -77,7 +79,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 			#save(list=ls(), file="opentree_chronograms.RData")
 		}
 	}
-	result <- list(trees=trees, authors=authors, curators=curators, studies=studies)
+	result <- list(trees=trees, authors=authors, curators=curators, studies=studies, dois=dois)
 	return(result)
 }
 
