@@ -214,7 +214,7 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 		filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 	}
 	results.index <- FindMatchingStudyIndex(filtered.results, cache)
-	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.median", "phylo.median", "phylo.all", "html"))
+	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.median", "phylo.median", "phylo.all", "html", "data.frame"))
 	if((output.format != "citations") & !suppress.citations) {
 		print("Using trees from:")
 		print(names(filtered.results))
@@ -250,11 +250,27 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 		ages <- GetAges(filtered.results, partial=partial)
 		trees <- sapply(filtered.results, PatristicMatrixToNewick)
 		for(result.index in sequence(length(filtered.results))) {
-			out.vector <- paste(out.vector, paste("<tr><td>",ages[result.index],"</td><td>",dim(filtered.results[[result.index]])[1], "</td><td>", names(filtered.results)[result.index], "</td><td>", trees[result.index], "</td></tr>", sep=""), sep="")
+			out.vector <- paste(out.vector, paste("<tr><td>",ages[result.index],"</td><td>",sum(!is.na(diag(filtered.results[[result.index]]))), "</td><td>", names(filtered.results)[result.index], "</td><td>", trees[result.index], "</td></tr>", sep=""), sep="")
 		}
 		out.vector <- paste(out.vector, "</table>")
 		return(out.vector)
 	}
+	if(output.format=="data.frame") {
+		out.df <- data.frame()
+		ages <- GetAges(filtered.results, partial=partial)
+		trees <- sapply(filtered.results, PatristicMatrixToNewick)
+		for(result.index in sequence(length(filtered.results))) {
+			out.line<- data.frame(Age=ages[result.index],Ntax=sum(!is.na(diag(filtered.results[[result.index]]))), Citation=names(filtered.results)[result.index], Newick= trees[result.index])
+			if(result.index==1) {
+				out.df <- out.line
+			} else {
+				out.df <- rbind(out.df, out.line)
+			}
+		}
+		rownames(out.df) <- NULL
+		return(out.df)
+	}
+
 }
 
 #' Figure out which subset function to use
