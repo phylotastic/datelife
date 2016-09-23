@@ -597,3 +597,27 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
   	return(patristic.matrix<-patristic.matrix.array[,,sample.int(1, size=dim(patristic.matrix.array)[3] )] )
  # }
 }
+
+
+#' Get all calibrations given trees in database
+#' @param input A vector of names, a newick string, or a phylo object
+#' @param partial If TRUE, use source trees even if they only match some of the desired taxa
+#' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
+#' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
+#' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
+#' @return data.frame of calibrations
+#' @export
+GetAllCalibrations <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=datelife.cache) {
+	phylo.results <- EstimateDates(input=input, partial=partial, usetnrs=usetnrs, approximatematch=approximatematch, cache=cache, output.format="phylo.all")
+	constraints.df <- data.frame()
+	for (i in sequence(length(phylo.results))) {
+		local.df <- congruify.phylo(reference=phylo.results[[i]], target=phylo.results[[i]], scale=NA)$calibrations
+		local.df$reference <- names(phylo.results)[i]
+		if(i==1) {
+			constraints.df <- local.df
+		} else {
+			constraints.df <- rbind(constraints.df, local.df)
+		}
+	}
+	return(constraints.df)
+}
