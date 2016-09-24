@@ -637,8 +637,6 @@ GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus", "Form
 		if(!(taxon %in% final.sequences.names)) {
 			seq <- strsplit(sequences$nucleotide[i],"")[[1]]
 			matching.index <- 1+sum(!is.na(final.sequences.names))
-			print(final.sequences.names)
-			print(matching.index)
 			final.sequences[matching.index, sequence(length(seq))] <- seq
 			final.sequences.names[matching.index] <- taxon
 		}
@@ -649,7 +647,7 @@ GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus", "Form
 	alignment <- ape::as.DNAbin(final.sequences)
 	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
 	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data=alignment)
-	pml.object$tree <- chronoMPL(pml.object$tree, se=FALSE, test=FALSE)
+	pml.object$tree <- ape::chronoMPL(pml.object$tree, se=FALSE, test=FALSE)
 	phy <- phangorn::optim.pml(pml.object, data=alignment, rearrangement="none", optRooted=TRUE)
 	return(phy)
 }
