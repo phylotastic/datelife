@@ -629,7 +629,7 @@ GetAllCalibrations <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 #' @export
 GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus", "Formica rufa"), marker="COI") {
 	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names=input)$ott_id, label_format="name"))
-	sequences <- bold_seqspec(taxon=input, marker=marker)
+	sequences <- bold::bold_seqspec(taxon=input, marker=marker)
 	final.sequences <- matrix("-", nrow=length(input), ncol=max(sapply(strsplit(sequences$nucleotides, ""), length)))
 	final.sequences.names <- rep(NA, length(input))
 	for (i in sequence(dim(sequences)[1])) {
