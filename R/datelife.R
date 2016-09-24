@@ -648,6 +648,6 @@ GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus", "Form
 	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
 	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data=alignment)
 	pml.object$tree <- ape::chronoMPL(pml.object$tree, se=FALSE, test=FALSE)
-	phy <- phangorn::optim.pml(pml.object, data=alignment, rearrangement="none", optRooted=TRUE)
+	phy <- phangorn::optim.pml(pml.object, data=alignment, rearrangement="none", optRooted=TRUE)$tree
 	return(phy)
 }
