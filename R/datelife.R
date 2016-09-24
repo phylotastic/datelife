@@ -630,7 +630,8 @@ GetAllCalibrations <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 #' @export
 GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus", "Formica rufa"), marker="COI", otol_version="v2") {
 	#otol returns error with missing taxa in v3 of rotl
-	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names=input, otl_v=otol_version)$ott_id,  otl_v=otol_version, label_format="name"))
+	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names=input)$ott_id, label_format="name",  otl_v=otol_version))
+	phy$tip.label <- gsub("_ott.*","", phy$tip.label)
 	sequences <- bold::bold_seqspec(taxon=input, marker=marker)
 	final.sequences <- matrix("-", nrow=length(input), ncol=max(sapply(strsplit(sequences$nucleotides, ""), length)))
 	final.sequences.names <- rep(NA, length(input))
