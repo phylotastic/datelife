@@ -621,3 +621,35 @@ GetAllCalibrations <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 	}
 	return(constraints.df)
 }
+
+#' Use Barcode of Life data to get branch lengths on the OToL tree
+#' @param input A vector of names
+#' @param marker Gene name to select
+#' @return A phylogeny with ML branch lengths
+#' @export
+GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus", "Formica rufa"), marker="COI") {
+	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names=input)$ott_id, label_format="name"))
+	sequences <- bold_seqspec(taxon=input, marker=marker)
+	final.sequences <- matrix("-", nrow=length(input), ncol=max(sapply(strsplit(sequences$nucleotides, ""), length)))
+	final.sequences.names <- rep(NA, length(input))
+	for (i in sequence(dim(sequences)[1])) {
+		taxon <- sequences$species_name[i]
+		if(!(taxon %in% final.sequences.names)) {
+			seq <- strsplit(sequences$nucleotide[i],"")[[1]]
+			matching.index <- 1+sum(!is.na(final.sequences.names))
+			print(final.sequences.names)
+			print(matching.index)
+			final.sequences[matching.index, sequence(length(seq))] <- seq
+			final.sequences.names[matching.index] <- taxon
+		}
+	}
+	rownames(final.sequences) <- gsub(" ", "_", final.sequences.names)
+	final.sequences <- final.sequences[!is.na(final.sequences.names),]
+
+	alignment <- ape::as.DNAbin(final.sequences)
+	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
+	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data=alignment)
+	pml.object$tree <- chronoMPL(pml.object$tree, se=FALSE, test=FALSE)
+	phy <- phangorn::optim.pml(pml.object, data=alignment, rearrangement="none", optRooted=TRUE)
+	return(phy)
+}

@@ -1,6 +1,6 @@
 Package: datelife
 Title: Underlying code for DateLife service
-Version: 0.2.3
+Version: 0.2.4
 Author: Brian O'Meara <omeara.brian@gmail.com>, Jonathan Eastman, Tracy Heath, April Wright, Klaus Schliep, Scott Chamberlain, Peter Midford, Luke Harmon, Joseph Brown, Matt Pennell, Mike Alfaro.
 Maintainer: Brian O'Meara <omeara.brian@gmail.com>
 Description: This contains the core code for going from a tree or list of taxa
@@ -11,6 +11,7 @@ Imports:
     ape,
     abind,
     phangorn,
+    ips,
     compare,
     geiger,
     stringr,
