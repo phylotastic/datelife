@@ -493,6 +493,18 @@ PadMatrix <- function(patristic.matrix, all.taxa) {
  	return(ReorderMatrix(final.matrix))
 }
 
+#' Function to remove missing taxa
+#' @param patristic.matrix A patristic matrix with row and column names for taxa
+#' @return Patristic.matrix for all.taxa
+#' @export
+UnpadMatrix <- function(patristic.matrix) {
+	bad.ones <- which(apply(is.na(patristic.matrix),2,all))
+	if(length(bad.ones)>0) {
+		patristic.matrix <- patristic.matrix[-bad.ones, -bad.ones]
+	}
+	return(patristic.matrix)
+}
+
 TestNameOrder <- function(patristic.matrix, standard.rownames, standard.colnames) {
   if (compare::compare(rownames(patristic.matrix),standard.rownames)$result!=TRUE) {
     return(FALSE)
@@ -654,3 +666,52 @@ GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus", "Form
 	phy <- phangorn::optim.pml(pml.object, data=alignment, rearrangement="none", optRooted=TRUE)$tree
 	return(phy)
 }
+#
+# ReadDistance <- function(file) {
+# 	data <- readLines(file, n=-1)[-1] #read in phylip distance, perhaps from SDM
+# 	data <- strsplit(data, " +")
+# 	data[sapply(data, length)>0] #trim trailing
+# 	final.matrix <- matrix(nrow=length(data), ncol=length(data))
+# 	all.names <- rep(NA, length(data))
+# 	for (data.index in sequence(length(data))) {
+# 		local.line <- data[[data.index]]
+# 		all.names[data.index] <- local.line[1]
+# 		local.line <- as.numeric(local.line[-1])
+#
+# 	}
+# }
+
+#
+# SDM <- function(filtered.results, weights=NULL)) {
+#
+# 	patristic.array <- BindMatrices(filtered.results)
+# 	k <- length(filtered.results)
+# 	if(is.null(weights)) {
+# 		weights <- rep(1/k, k)
+# 	} else {
+# 		weights <- weights/sum(weights) #just to make sure total weight is 1
+# 	}
+#
+# 	#Use their appendix and stick it in solve
+# 	#a*x=b
+# 	#The a matrix has a vector of alpha values, then a_i for matrix 1, a_i for matrix 2..., then
+#
+# }
+
+
+
+
+
+
+
+#' Function to compute the SDM supertree Criscuolo et al. 2006
+#' @details
+#' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006;55(5):740–55. doi: 10.1080/10635150600969872.
+RunSDM <- function(filtered.results) {
+	#todo: go from filtered results to set of arguments for SDM
+	# and size of each matrix, all on one row
+	unpadded.matrices <- lapply(filtered.results, UnpadMatrix)
+	SDM.result <- do.call(ape::SDM, c(unpadded.matrices, rep(10, length(unpadded.matrices))))[[1]]
+	#TODO
+	#NOW MAKE TREE
+	#Perhaps after dealing with missing taxa
