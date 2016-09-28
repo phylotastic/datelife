@@ -697,21 +697,210 @@ GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus", "Form
 # 	#The a matrix has a vector of alpha values, then a_i for matrix 1, a_i for matrix 2..., then
 #
 # }
-
-
-
-
-
-
-
-#' Function to compute the SDM supertree Criscuolo et al. 2006
-#' @details
-#' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006;55(5):740–55. doi: 10.1080/10635150600969872.
-RunSDM <- function(filtered.results) {
-	#todo: go from filtered results to set of arguments for SDM
-	# and size of each matrix, all on one row
-	unpadded.matrices <- lapply(filtered.results, UnpadMatrix)
-	SDM.result <- do.call(ape::SDM, c(unpadded.matrices, rep(10, length(unpadded.matrices))))[[1]]
-	#TODO
-	#NOW MAKE TREE
-	#Perhaps after dealing with missing taxa
+# 
+# #rewrite of code in ape by Andrei Popescu niteloserpopescu@gmail.com to allow for debugging
+# apeSDM <- function(...) {
+# 	st <- list(...)
+# 	k <- length(st)/2
+# 	ONEtoK <- seq_len(k)
+# 	for (i in ONEtoK) st[[i]] <- as.matrix(st[[i]])
+# 	ROWNAMES <- lapply(st[ONEtoK], rownames)
+# 	NROWS <- sapply(ROWNAMES, length)
+# 	tot <- sum(NROWS)
+# 	labels <- unique(unlist(ROWNAMES))
+# 	sp <- unlist(st[k + ONEtoK])
+# 	astart <- numeric(tot)
+# 	astart[1] <- k
+# 	for (i in 2:k) astart[i] <- astart[i - 1] + NROWS[i - 1]
+# 	n <- length(labels)
+# 	miustart <- k + tot
+# 	niustart <- miustart + n
+# 	lambstart <- niustart + k - 1
+# 	X <- matrix(0, n, n, dimnames = list(labels, labels))
+# 	V <- w <- X
+# 	tmp <- 2 * k + tot + n
+# 	col <- numeric(tmp)
+# 	for (i in 1:(n - 1)) {
+# 		for (j in (i + 1):n) {
+# 			for (p in ONEtoK) {
+# 				if (is.element(labels[i], ROWNAMES[[p]]) && is.element(labels[j],
+# 					ROWNAMES[[p]])) {
+# 						w[i, j] <- w[j, i] <- w[i, j] + sp[p]
+# 					}
+# 				}
+# 			}
+# 		}
+# 		ONEtoN <- seq_len(n)
+# 		Q <- matrix(0, tmp, tmp)
+# 		for (p in ONEtoK) {
+# 			d_p <- st[[p]]
+# 			for (l in ONEtoK) {
+# 				d <- st[[l]]
+# 				sum <- 0
+# 				dijp <- -1
+# 				if (l == p) {
+# 					for (i in ONEtoN) {
+# 						for (j in ONEtoN) {
+# 							if (i == j)
+# 							next
+# 							pos <- match(labels[c(i, j)], ROWNAMES[[l]])
+# 							if (all(!is.na(pos))) {
+# 								ipos <- pos[1L]
+# 								jpos <- pos[2L]
+# 								dij <- d[ipos, jpos]
+# 								sum <- sum + dij * dij - sp[l] * dij *
+# 								dij/w[i, j]
+# 								tmp2 <- dij - sp[l] * dij/w[i, j]
+# 								Q[p, astart[l] + ipos] <- Q[p, astart[l] +
+# 								ipos] + tmp2
+# 								Q[p, astart[l] + jpos] <- Q[p, astart[l] +
+# 								jpos] + tmp2
+# 							}
+# 						}
+# 					}
+# 				}
+# 				else {
+# 					for (i in ONEtoN) {
+# 						for (j in ONEtoN) {
+# 							if (i == j)
+# 							next
+# 							pos <- match(labels[c(i, j)], ROWNAMES[[l]])
+# 							posp <- match(labels[c(i, j)], ROWNAMES[[p]])
+# 							if (all(!is.na(pos)) && all(!is.na(posp))) {
+# 								ipos <- pos[1L]
+# 								jpos <- pos[2L]
+# 								dij <- d[ipos, jpos]
+# 								dijp <- d_p[posp[1L], posp[2L]]
+# 								sum <- sum - sp[l] * dij * dijp/w[i, j]
+# 								tmp2 <- sp[l] * dijp/w[i, j]
+# 								Q[p, astart[l] + ipos] <- Q[p, astart[l] +
+# 								ipos] - tmp2
+# 								Q[p, astart[l] + jpos] <- Q[p, astart[l] +
+# 								jpos] - tmp2
+# 							}
+# 						}
+# 					}
+# 				}
+# 				Q[p, l] <- sum
+# 			}
+# 			Q[p, lambstart + 1] <- 1
+# 		}
+# 		r <- k
+# 		for (p in ONEtoK) {
+# 			dp <- st[[p]]
+# 			for (i in ONEtoN) {
+# 				if (is.element(labels[i], ROWNAMES[[p]])) {
+# 					r <- r + 1
+# 					for (l in ONEtoK) {
+# 						d <- st[[l]]
+# 						if (l == p) {
+# 							ipos <- match(labels[i], ROWNAMES[[p]])
+# 							for (j in ONEtoN) {
+# 								if (i == j)
+# 								next
+# 								jpos <- match(labels[j], ROWNAMES[[p]])
+# 								if (!is.na(jpos)) {
+# 									dij <- d[ipos, jpos]
+# 									Q[r, l] <- Q[r, l] + dij - sp[l] * dij/w[i,
+# 									j]
+# 									tmp2 <- 1 - sp[l]/w[i, j]
+# 									Q[r, astart[l] + ipos] <- Q[r, astart[l] +
+# 									ipos] + tmp2
+# 									Q[r, astart[l] + jpos] <- Q[r, astart[l] +
+# 									jpos] + tmp2
+# 								}
+# 							}
+# 						}
+# 						else {
+# 							for (j in ONEtoN) {
+# 								if (i == j)
+# 								next
+# 								if (!is.element(labels[j], rownames(dp)))
+# 								next
+# 								pos <- match(labels[c(i, j)], ROWNAMES[[l]])
+# 								if (all(!is.na(pos))) {
+# 									ipos <- pos[1L]
+# 									jpos <- pos[2L]
+# 									dij <- d[ipos, jpos]
+# 									Q[r, l] <- Q[r, l] - sp[l] * dij/w[i,
+# 									j]
+# 									tmp2 <- sp[l]/w[i, j]
+# 									Q[r, astart[l] + ipos] <- Q[r, astart[l] +
+# 									ipos] - tmp2
+# 									Q[r, astart[l] + jpos] <- Q[r, astart[l] +
+# 									jpos] - tmp2
+# 								}
+# 							}
+# 						}
+# 					}
+# 					if (p < k)
+# 					Q[r, ] <- Q[r, ] * sp[p]
+# 					Q[r, miustart + i] <- 1
+# 					if (p < k)
+# 					Q[r, niustart + p] <- 1
+# 				}
+# 			}
+# 		}
+# 		r <- r + 1
+# 		col[r] <- k
+# 		Q[r, ONEtoK] <- 1
+# 		for (i in ONEtoN) {
+# 			r <- r + 1
+# 			for (p in ONEtoK) {
+# 				ipos <- match(labels[i], ROWNAMES[[p]])
+# 				if (!is.na(ipos))
+# 				Q[r, astart[p] + ipos] <- 1
+# 			}
+# 		}
+# 		for (p in 1:(k - 1)) {
+# 			r <- r + 1
+# 			for (i in ONEtoN) {
+# 				ipos <- match(labels[i], ROWNAMES[[p]])
+# 				if (!is.na(ipos))
+# 				Q[r, astart[p] + ipos] <- 1
+# 			}
+# 		}
+# 		a <- solve(Q, col, 1e-19)
+# 		for (i in ONEtoN) {
+# 			for (j in ONEtoN) {
+# 				if (i == j) {
+# 					X[i, j] <- V[i, j] <- 0
+# 					next
+# 				}
+# 				sum <- 0
+# 				sumv <- 0
+# 				for (p in ONEtoK) {
+# 					d <- st[[p]]
+# 					pos <- match(labels[c(i, j)], ROWNAMES[[p]])
+# 					if (all(!is.na(pos))) {
+# 						ipos <- pos[1L]
+# 						jpos <- pos[2L]
+# 						dij <- d[ipos, jpos]
+# 						sum <- sum + sp[p] * (a[p] * dij + a[astart[p] +
+# 							ipos] + a[astart[p] + jpos])
+# 							sumv <- sumv + sp[p] * (a[p] * dij)^2
+# 						}
+# 					}
+# 					X[i, j] <- sum/w[i, j]
+# 					V[i, j] <- sumv/(w[i, j])^2
+# 				}
+# 	}
+# 	list(X, V)
+# }
+#
+#
+#
+#
+#
+# #' Function to compute the SDM supertree Criscuolo et al. 2006
+# #' @details
+# #' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006;55(5):740–55. doi: 10.1080/10635150600969872.
+# RunSDM <- function(filtered.results) {
+# 	#todo: go from filtered results to set of arguments for SDM
+# 	# and size of each matrix, all on one row
+# 	unpadded.matrices <- lapply(filtered.results, UnpadMatrix)
+# 	SDM.result <- do.call(apeSDM, c(unpadded.matrices, rep(10, length(unpadded.matrices))))[[1]]
+# 	#NOW MAKE TREE
+# 	phy <- NA
+# 	#agnes in package cluster has UPGMA with missing data
+# 	try(phy <- upgma(SDM.result))
