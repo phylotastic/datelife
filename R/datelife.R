@@ -69,7 +69,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
   phy.new <- NA
    if(length(input)==1) {
 	  if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
-	    phy.new <-ape::read.tree(text=input)
+	    phy.new <-ape::read.tree(text=gsub(" ", "_", input))
 	  }
   }
   cleaned.names<-""
@@ -697,7 +697,7 @@ GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus", "Form
 # 	#The a matrix has a vector of alpha values, then a_i for matrix 1, a_i for matrix 2..., then
 #
 # }
-# 
+#
 # #rewrite of code in ape by Andrei Popescu niteloserpopescu@gmail.com to allow for debugging
 # apeSDM <- function(...) {
 # 	st <- list(...)
