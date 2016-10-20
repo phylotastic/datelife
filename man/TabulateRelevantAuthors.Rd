@@ -4,7 +4,7 @@
 \alias{TabulateRelevantAuthors}
 \title{Return the relevant authors for a set of studies}
 \usage{
-TabulateRelevantAuthors(results.index, cache = datelife.cache)
+TabulateRelevantAuthors(results.index, cache = get("datelife.cache"))
 }
 \arguments{
 \item{results.index}{A vector from FindMatchingStudyIndex() with the indices of the relevant studies}

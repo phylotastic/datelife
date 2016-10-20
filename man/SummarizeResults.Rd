@@ -5,7 +5,7 @@
 \title{Summarize a filtered results list in various ways}
 \usage{
 SummarizeResults(filtered.results, output.format, partial = TRUE,
-  cache = datelife.cache, suppress.citations = FALSE)
+  cache = get("datelife.cache"), suppress.citations = FALSE)
 }
 \arguments{
 \item{filtered.results}{A list of patristic matrices; labels correspond to citations}

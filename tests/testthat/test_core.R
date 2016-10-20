@@ -50,13 +50,17 @@ test_that("Summarize as newick.median works correctly", {
 
 test_that("Processing input newick", {
 	skip_on_cran()
-	skip_on_travis()
+	skip_on_travis() #b/c no pathd8
   data(opentree_chronograms)
   input.processed <- ProcessInput(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), usetnrs=FALSE, approximatematch=TRUE)
   expect_equal(class(input.processed$phy),"phylo")
 })
 
-
+test_that("Processing complex newick works", {
+	skip_on_cran()
+	skip_on_travis()
+	expect_error(EstimateDates("((((((Typha latifolia,(Phragmites australis,(Sporobolus alterniflorus,Sporobolus pumilus)Sporobolus)PACMAD clade)Poales,(((Hydrilla verticillata,Vallisneria americana)Hydrocharitaceae,Potamogeton perfoliatus),Zostera marina,Ruppia maritima)Alismatales),(Lythrum salicaria,Myriophyllum spicatum)),(Ulva,Caulerpa taxifolia))Chloroplastida,((Skeletonema,(Gomphonema,Didymosphenia geminata)Bacillariophyceae)Bacillariophytina,Prorocentrum)SAR),Microcystis)Eukaryota;", output.format="phylo.all"), NA)
+})
 
 test_that("Processing input string", {
 	skip_on_cran()

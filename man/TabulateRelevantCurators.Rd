@@ -4,7 +4,7 @@
 \alias{TabulateRelevantCurators}
 \title{Return the relevant curators for a set of studies}
 \usage{
-TabulateRelevantCurators(results.index, cache = datelife.cache)
+TabulateRelevantCurators(results.index, cache = get("datelife.cache"))
 }
 \arguments{
 \item{results.index}{A vector from FindMatchingStudyIndex() with the indices of the relevant studies}

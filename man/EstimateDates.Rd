@@ -7,7 +7,7 @@
 \usage{
 EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), output.format = "phylo.median", partial = TRUE,
-  usetnrs = FALSE, approximatematch = TRUE, cache = datelife.cache,
+  usetnrs = FALSE, approximatematch = TRUE, cache = get("datelife.cache"),
   method = "PATHd8")
 }
 \arguments{

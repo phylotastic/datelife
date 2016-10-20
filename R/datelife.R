@@ -29,7 +29,7 @@
 #' The output formats are citations, mrca, newick.all, newick.median, phylo.median, phylo.all, html
 #' @examples
 #' ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
-EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.median", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=datelife.cache, method="PATHd8") {
+EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.median", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), method="PATHd8") {
 	filtered.results.in <- GetFilteredResults(input, partial, usetnrs, approximatematch, cache)
 	output.format.in <- output.format
 	cache.in <- cache
@@ -45,7 +45,7 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
 #' @return List of patristic matrices
 #' @export
-GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=datelife.cache, method="PATHd8") {
+GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), method="PATHd8") {
     input.processed <- ProcessInput(input, usetnrs, approximatematch)
     tree <- input.processed$phy
     cleaned.names <- input.processed$cleaned.names
@@ -73,7 +73,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 	  }
   }
   cleaned.names<-""
-  if(!is.na(phy.new)) {
+  if(!is.na(phy.new[1])) {
     if(usetnrs) {
 			cleaned.names <- rotl::tnrs_match_names(phy.new$tip.label)$unique_name
       phy.new$tip.label <- cleaned.names
@@ -109,7 +109,7 @@ AllMatching <- function(patristic.matrix, taxa) {
 #' @param cache The cache of studies
 #' @return A vector with the indices of studies that have relevant info
 #' @export
-FindMatchingStudyIndex <- function(filtered.results, cache=datelife.cache) {
+FindMatchingStudyIndex <- function(filtered.results, cache=get("datelife.cache")) {
     return(which(names(cache$trees) %in% names(filtered.results)))
 }
 
@@ -118,7 +118,7 @@ FindMatchingStudyIndex <- function(filtered.results, cache=datelife.cache) {
 #' @param cache The cache
 #' @return A vector with counts of each author, with names equal to author names
 #' @export
-TabulateRelevantAuthors <- function(results.index, cache=datelife.cache) {
+TabulateRelevantAuthors <- function(results.index, cache=get("datelife.cache")) {
 	authors <- cache$authors[results.index]
 	return(table(unlist(authors)))
 }
@@ -128,7 +128,7 @@ TabulateRelevantAuthors <- function(results.index, cache=datelife.cache) {
 #' @param cache The cache
 #' @return A vector with counts of each curator, with names equal to curator names
 #' @export
-TabulateRelevantCurators <- function(results.index, cache=datelife.cache) {
+TabulateRelevantCurators <- function(results.index, cache=get("datelife.cache")) {
 	curators <- cache$curators[results.index]
 	return(table(unlist(curators)))
 }
@@ -172,12 +172,15 @@ ProcessResultsList <- function(results.list, taxa=NULL, partial=FALSE) {
 #in case we want to cache. Not clear we do
 ComputePatristicDistance <- function(phy, test=TRUE,tol=0.01) {
 	# stores the distance between taxa
-	if (test) {
-		if (!ape::is.ultrametric(phy,tol)) {
-			stop("currently we require that chronograms be ultrametric") # can pad them so that terminals all reach to present
+	patristic.matrix <- NA
+	if(class(phy)=="phylo") {
+		if (test) {
+			if (!ape::is.ultrametric(phy,tol)) {
+				stop("currently we require that chronograms be ultrametric") # can pad them so that terminals all reach to present
+			}
 		}
+		patristic.matrix<-stats::cophenetic(phy)
 	}
-	patristic.matrix<-stats::cophenetic(phy)
 	return(patristic.matrix)
 }
 
@@ -209,7 +212,7 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' @param suppress.citations If using a format that would normally print() citations, turn this off
 #' @return Depends on output format
 #' @export
-SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cache=datelife.cache, suppress.citations=FALSE) {
+SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cache=get("datelife.cache"), suppress.citations=FALSE) {
 	if(!partial) {
 		filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 	}
@@ -295,9 +298,9 @@ GetSubsetArrayBothFromPhylo <- function(reference.tree.in, taxa.in, phy.in=NULL,
 #    reference.tree<-c(reference.tree) #from here in, assumes multiphylo object, even if a single tree
 #  }
 	congruify=FALSE
-	if(!is.null(phy.in)) {
+	if(!is.null(phy.in[1])) {
 		congruify=TRUE
-		if(is.na(phy.in)) {
+		if(is.na(phy.in[1])) {
 			congruify=FALSE
 		}
 	}
@@ -373,22 +376,36 @@ GetSubsetArrayBoth <- function(patristic.matrix.array, taxa, phy=NULL, phy4=NULL
   }
 }
 
-CongruifyTree <- function(patristic.matrix, query.tree, method="PATHd8") {
+CongruifyTree <- function(patristic.matrix, query.tree, method="PATHd8", attempt.fix=TRUE) {
   result.matrix<-matrix(nrow=dim(patristic.matrix)[1], ncol=dim(patristic.matrix)[2])
   if(is.null(query.tree$edge.length)) {
     query.tree$edge.length<-numeric(nrow(query.tree$edge))
   }
-  try(result.matrix<-ComputePatristicDistance(ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(PatristicMatrixToTree(patristic.matrix)), ConvertSpacesToUnderscores(query.tree), NULL, 0, scale=method)$phy)))
+#	try(result.matrix<-ComputePatristicDistance(ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(PatristicMatrixToTree(patristic.matrix)), ConvertSpacesToUnderscores(query.tree), NULL, 0, scale=method)$phy)))
+try(result.matrix<-ComputePatristicDistance(CongruifyAndCheck(reference=PatristicMatrixToTree(patristic.matrix), target=query.tree, scale=method, attempt.fix=attempt.fix)))
   return(result.matrix)
 }
 
-CongruifyTreeFromPhylo <- function(reference.tree, query.tree, method="PATHd8") {
+CongruifyTreeFromPhylo <- function(reference.tree, query.tree, method="PATHd8", attempt.fix=TRUE) {
   result.matrix<-matrix(nrow=ape::Ntip(reference.tree), ncol=ape::Ntip(reference.tree))
   if(is.null(query.tree$edge.length)) {
     query.tree$edge.length<-numeric(nrow(query.tree$edge)) #makes it so that branches that don't match reference tree get zero length
   }
-  try(result.matrix<-ComputePatristicDistance(ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference.tree), ConvertSpacesToUnderscores(query.tree), NULL, 0, scale=method)$phy)))
+	try(result.matrix<-ComputePatristicDistance(CongruifyAndCheck(reference=reference.tree, target=query.tree, scale=method, attempt.fix=attempt.fix)))
   return(result.matrix)
+}
+
+CongruifyAndCheck <- function(reference, target, taxonomy=NULL, tol=0, scale="pathd8", attempt.fix=TRUE) {
+	new.tree <- ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference), ConvertSpacesToUnderscores(target), taxonomy, tol, scale)$phy)
+	if(anyNA(new.tree$edge.length) & attempt.fix) {
+		warning("Congruification resulted in NA edge lengths. Resolving polytomies and making up starting branch lengths")
+		new.tree <- ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference), ConvertSpacesToUnderscores(ape::compute.brlen(ape::multi2di(target))), taxonomy, tol, scale)$phy)
+		if(anyNA(new.tree$edge.length)) {
+			new.tree <- NA
+		}
+	} else {
+		new.tree <- NA
+	}
 }
 
 #' Convert spaces to underscores in trees
@@ -544,7 +561,7 @@ AsubForLapply <- function(idx, x, dims=3) {
 
 GetQuantiles <- function(ages,probs=c(0.5,0,0.025,0.975,1) ) {
   # just utility wrapper function with different defaults
-  return(quantile(ages,probs))
+  return(stats::quantile(ages,probs))
 }
 
 VectorToTableRow <- function(x,digits=2) {
@@ -587,7 +604,7 @@ PatristicMatrixToNewick <- function(patristic.matrix) {
 #' @param fn The function to use ot summarize
 #' @return A 2d array with the median (or max, or mean, etc) of the input array
 #' @export
-SummaryPatristicMatrixArray <- function(patristic.matrix.array,fn=median) {
+SummaryPatristicMatrixArray <- function(patristic.matrix.array,fn=stats::median) {
   return(apply(patristic.matrix.array,MARGIN=c(1,2),fn, na.rm=TRUE))
 }
 
@@ -619,11 +636,11 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @return data.frame of calibrations
 #' @export
-GetAllCalibrations <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=datelife.cache) {
+GetAllCalibrations <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache")) {
 	phylo.results <- EstimateDates(input=input, partial=partial, usetnrs=usetnrs, approximatematch=approximatematch, cache=cache, output.format="phylo.all")
 	constraints.df <- data.frame()
 	for (i in sequence(length(phylo.results))) {
-		local.df <- congruify.phylo(reference=phylo.results[[i]], target=phylo.results[[i]], scale=NA)$calibrations
+		local.df <- geiger::congruify.phylo(reference=phylo.results[[i]], target=phylo.results[[i]], scale=NA)$calibrations
 		local.df$reference <- names(phylo.results)[i]
 		if(i==1) {
 			constraints.df <- local.df

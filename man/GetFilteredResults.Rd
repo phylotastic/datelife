@@ -6,7 +6,8 @@
 \usage{
 GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
-  approximatematch = TRUE, cache = datelife.cache, method = "PATHd8")
+  approximatematch = TRUE, cache = get("datelife.cache"),
+  method = "PATHd8")
 }
 \arguments{
 \item{input}{A vector of names, a newick string, or a phylo object}

@@ -4,7 +4,7 @@
 \alias{FindMatchingStudyIndex}
 \title{Find the index of relevant studies in a datelife.cache object}
 \usage{
-FindMatchingStudyIndex(filtered.results, cache = datelife.cache)
+FindMatchingStudyIndex(filtered.results, cache = get("datelife.cache"))
 }
 \arguments{
 \item{filtered.results}{The patristic.matrices that will be used}
