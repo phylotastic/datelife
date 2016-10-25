@@ -51,7 +51,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 	#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
 			new.tree <- NULL
 			tree.id <- strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index]
-			potential.bad <- paste("tree.id='tree", tree.id, "', study.id='", study.id, "'", sep="")
+			potential.bad <- paste("tree.id='=", tree.id, "', study.id='", study.id, "'", sep="")
 
 			if(!grepl("\\.\\.\\.", tree.id) & !is.na(tree.id)) { #to deal with ellipsis bug
 				try(new.tree <- datelife:::get_study_tree_with_dups(study_id=study.id,tree_id=tree.id ))
@@ -78,21 +78,21 @@ GetOToLChronograms <- function(verbose=FALSE) {
 							names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
 							print("was good tree")
 							potential.bad <- NULL
-						} 
+						}
 					}
 				}
 			} else {
 				warning("Not all trees could be loaded from this study due to ellipsis bug, https://github.com/ropensci/rotl/issues/85")
 			}
 			if(!is.null(potential.bad)) {
-				bad.ones <- append(potential.bad)	
+				bad.ones <- append(bad.ones, potential.bad)
 			}
 			#save(list=ls(), file="opentree_chronograms.RData")
 		}
 	}
 	if(verbose) {
 		print("Problematic combos")
-		print(bad.ones)	
+		print(bad.ones)
 	}
 	result <- list(trees=trees, authors=authors, curators=curators, studies=studies, dois=dois)
 	return(result)
