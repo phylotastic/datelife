@@ -34,6 +34,9 @@ get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ot:otttaxonna
 #' @return A list with elements for the trees, authors, curators, and study ids
 #' @export
 GetOToLChronograms <- function(verbose=FALSE) {
+	if(verbose) {
+		options(warn=1)
+	}
 	chronogram.matches <- rotl::studies_find_trees(property="ot:branchLengthMode", value="ot:time", verbose=TRUE, detailed=TRUE)
 	trees <- list()
 	authors <- list()
@@ -116,21 +119,32 @@ IsGoodChronogram <- function(phy) {
 	passing <- TRUE
 	if(class(phy) != "phylo") {
 		passing <- FALSE
+		warning("tree failed over not being class phylo")
 	}
 	if(ape::Ntip(phy)<=ape::Nnode(phy)) {
 		passing <- FALSE
+		warning("tree failed over not being having more internal nodes than tips")
 	}
 	if(length(which(grepl("not mapped", phy$tip.label)))>0) {
+		warning("tree failed over not being not mapped taxa that should have been purged")
 		passing <- FALSE #not cleaned properly
 	}
-	if(min(nchar(phy$tip.label))<=2) {
+	if(any(is.na(phy$tip.label))) {
 		passing <- FALSE
+		warning("tree failed over not being having NA for tips")
+	}	else {
+		if(min(nchar(phy$tip.label))<=2) {
+			passing <- FALSE
+			warning("tree failed for having names of two or fewer characters")
+		}
 	}
 	if(!ape::is.rooted(phy)) {
 		passing <- FALSE
+		warning("tree failed over not being rooted")
 	}
 	if(!ape::is.ultrametric(phy, tol=0.01)) {
 		passing <- FALSE
+		warning("tree failed over not being ultrametric (NOTE: this condition should be removed for paleo trees)")
 	}
 	return(passing)
 }
