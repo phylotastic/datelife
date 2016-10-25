@@ -41,6 +41,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 	studies <- list()
 	dois <- list()
 	tree.count <- 0
+	bad.ones <- c()
 	for (study.index in sequence(dim(chronogram.matches)[1])) {
 		if(verbose) {
 			print(paste("Downloading tree(s) from study", study.index, "of",dim(chronogram.matches)[1]))
@@ -50,8 +51,13 @@ GetOToLChronograms <- function(verbose=FALSE) {
 	#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
 			new.tree <- NULL
 			tree.id <- strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index]
+			potential.bad <- paste("tree.id='tree", tree.id, "', study.id='", study.id, "'", sep="")
+
 			if(!grepl("\\.\\.\\.", tree.id) & !is.na(tree.id)) { #to deal with ellipsis bug
 				try(new.tree <- datelife:::get_study_tree_with_dups(study_id=study.id,tree_id=tree.id ))
+				if(verbose) {
+					print(paste("tree.id='tree", tree.id, "', study.id='", study.id, "'", sep=""))
+				}
 				if(!is.null(new.tree) & HasBrlen(new.tree)) {
 					new.tree <- CleanChronogram(new.tree)
 					if(HasBrlen(new.tree)) {
@@ -70,14 +76,23 @@ GetOToLChronograms <- function(verbose=FALSE) {
 							try(dois <- append(dois, chronogram.matches$study_doi[study.index]))
 							trees[[tree.count]] <-new.tree
 							names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
-						}
+							print("was good tree")
+							potential.bad <- NULL
+						} 
 					}
 				}
 			} else {
 				warning("Not all trees could be loaded from this study due to ellipsis bug, https://github.com/ropensci/rotl/issues/85")
 			}
+			if(!is.null(potential.bad)) {
+				bad.ones <- append(potential.bad)	
+			}
 			#save(list=ls(), file="opentree_chronograms.RData")
 		}
+	}
+	if(verbose) {
+		print("Problematic combos")
+		print(bad.ones)	
 	}
 	result <- list(trees=trees, authors=authors, curators=curators, studies=studies, dois=dois)
 	return(result)
@@ -129,7 +144,7 @@ CleanChronogram <- function(phy) {
 	if(class(phy)=="phylo") {
 		if(ape::Ntip(phy)>ape::Nnode(phy)) {
 			bad.taxa <- unique(c(which(nchar(phy$tip.label)<=2), which(grepl("not mapped", phy$tip.label))))
-			if(length(bad.taxa)>0 & length(bad.taxa) < (ape::Ntip(phy)-3)) {
+			if(length(bad.taxa)>0 & length(bad.taxa) < (ape::Ntip(phy)-1)) { #will return trees with as few as two unmapped tips
 				phy <- try(ape::drop.tip(phy, bad.taxa))
 				if(class(phy) =="try-error") {
 					return(original.phy)
