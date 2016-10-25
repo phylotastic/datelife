@@ -58,7 +58,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 
 			if(!grepl("\\.\\.\\.", tree.id) & !is.na(tree.id)) { #to deal with ellipsis bug
 				#try(new.tree <- datelife:::get_study_tree_with_dups(study_id=study.id,tree_id=tree.id ))
-				try(new.tree <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip.label="ott_taxon_name"))
+				try(new.tree <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name"))
 				if(verbose) {
 					print(paste("tree_id='", tree.id, "', study_id='", study.id, "'", sep=""))
 				}
