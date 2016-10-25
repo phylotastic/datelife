@@ -56,7 +56,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 			if(!grepl("\\.\\.\\.", tree.id) & !is.na(tree.id)) { #to deal with ellipsis bug
 				try(new.tree <- datelife:::get_study_tree_with_dups(study_id=study.id,tree_id=tree.id ))
 				if(verbose) {
-					print(paste("tree.id='tree", tree.id, "', study.id='", study.id, "'", sep=""))
+					print(paste("tree.id='", tree.id, "', study.id='", study.id, "'", sep=""))
 				}
 				if(!is.null(new.tree) & HasBrlen(new.tree)) {
 					new.tree <- CleanChronogram(new.tree)
