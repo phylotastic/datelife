@@ -67,6 +67,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 					new.tree <- CleanChronogram(new.tree)
 					if(HasBrlen(new.tree)) {
 						if(IsGoodChronogram(new.tree)) {
+							new.tree$tip.label <- gsub('_', ' ', new.tree$tip.label)
 							if(verbose) {
 								print("has tree with branch lengths")
 							}
