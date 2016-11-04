@@ -94,7 +94,7 @@ expect_gte(length(phylo.results), 2)
 test_that("GetFilteredResults works", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
-p  filtered.results.in <- GetFilteredResults(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"))
+  filtered.results.in <- GetFilteredResults(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"))
   expect_equal(class(filtered.results.in), "list")
   expect_gte(length(filtered.results.in),4) #as of Nov 4, 2016, had length 8
   expect_equal(class(filtered.results.in[[1]]), "matrix")
