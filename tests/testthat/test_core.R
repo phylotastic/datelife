@@ -127,7 +127,7 @@ test_that("Congruification works", {
 test_that("SDM correctly returns tree", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
-p  data(opentree_chronograms)
+  data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
   filtered.results <- ProcessResultsList(results.list, taxa, TRUE)
