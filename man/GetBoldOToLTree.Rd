@@ -5,7 +5,7 @@
 \title{Use Barcode of Life data to get branch lengths on the OToL tree}
 \usage{
 GetBoldOToLTree(input = c("Rhea americana", "Struthio camelus",
-  "Formica rufa"), marker = "COI", otol_version = "v2")
+  "Gallus gallus"), marker = "COI", otol_version = "v2", doML = FALSE)
 }
 \arguments{
 \item{input}{A vector of names}
@@ -13,6 +13,8 @@ GetBoldOToLTree(input = c("Rhea americana", "Struthio camelus",
 \item{marker}{Gene name to select}
 
 \item{otol_version}{Version of OToL to use}
+
+\item{doML}{Boolean; if TRUE, does ML brlen optimization}
 }
 \value{
 A phylogeny with ML branch lengths

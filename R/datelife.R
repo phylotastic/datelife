@@ -664,13 +664,63 @@ GetAllCalibrations <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 	return(constraints.df)
 }
 
+#' Use all calibrations given trees in database to date a tree
+#' @param phy A phylo object
+#' @param partial If TRUE, use source trees even if they only match some of the desired taxa
+#' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
+#' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
+#' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
+#' @param expand How much to expand by each step to get consistent calibrations
+#' @param giveup How many expansion to try before giving up
+#' @return list with chronogram, original calibrations, and expanded calibrations
+#' @export
+#' @details
+#' This will try to use the calibrations as fixed ages.
+#' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
+#' expand sets the expansion value: should be between 0 and 1
+UseAllCalibrations <- function(phy=GetBoldOToLTree(c("Rhea americana",  "Struthio camelus", "Gallus gallus")), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), expand=0.1, giveup=100) {
+	calibrations.df <- GetAllCalibrations(input=gsub('_', ' ', phy$tip.label), partial=partial, usetnrs=usetnrs, approximatematch=approximatematch, cache=cache)
+	phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.
+	calibrations.df$taxonA <- gsub(' ', '_', calibrations.df$taxonA)
+	calibrations.df$taxonB <- gsub(' ', '_', calibrations.df$taxonB)
+	calibrations.df <- calibrations.df[which(calibrations.df$taxonA %in% phy$tip.label),]
+	calibrations.df <- calibrations.df[which(calibrations.df$taxonB %in% phy$tip.label),]
+	original.calibrations.df <- calibrations.df
+	chronogram <- NULL
+	try(chronogram <- geiger::PATHd8.phylo(phy, calibrations.df))
+	attempts=0
+	if(expand!=0) {
+		while(is.null(chronogram) & attempts<giveup) {
+			calibrations.df <- original.calibrations.df
+			calibrations.df$MaxAge <- calibrations.df$MaxAge * ((1+expand)^attempts)
+			calibrations.df$MinAge <- calibrations.df$MinAge * ((1-expand)^attempts)
+
+			# We will have no fixed ages. Pathd8 just quietly gives up. So instead, we add a tiny branch with a zero calibration
+			# between it and its sister.
+			made.up.edgelength <- min(1e-9, .001*min(phy$edge.length))
+			phy2 <- phytools::bind.tip(reorder(phy), "tinytip", edge.length=made.up.edgelength, where=1, position=made.up.edgelength) #bind tip has weird behavior for non-reordered trees
+			calibrations.df[dim(calibrations.df)[1]+1,]<- c("fixed", 0, 0, phy$tip.label[1], "tinytip", "none")
+			try(chronogram <- geiger::PATHd8.phylo(phy2, calibrations.df))
+			if(!is.null(chronogram)) {
+				chronogram <- drop.tip(chronogram, "tinytip")
+			}
+			attempts <- attempts+1
+		}
+		if(attempts>0) {
+			warning("Dates are even more approximate than usual: had to expand constraints to have them agree")
+		}
+	}
+	return(list(phy=chronogram, calibrations.df=calibrations.df, original.calibrations.df=original.calibrations.df))
+}
+
 #' Use Barcode of Life data to get branch lengths on the OToL tree
 #' @param input A vector of names
 #' @param marker Gene name to select
 #' @param otol_version Version of OToL to use
+#' @param doML Boolean; if TRUE, does ML brlen optimization
 #' @return A phylogeny with ML branch lengths
 #' @export
-GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus", "Formica rufa"), marker="COI", otol_version="v2") {
+GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus","Gallus gallus"), marker="COI", otol_version="v2", doML=FALSE) {
 	#otol returns error with missing taxa in v3 of rotl
 	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names=input)$ott_id, label_format="name",  otl_v=otol_version))
 	phy$tip.label <- gsub("_ott.*","", phy$tip.label)
@@ -691,11 +741,23 @@ GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus", "Form
 
 	alignment <- ape::as.DNAbin(final.sequences)
 	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
+	taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
+	if(length(taxa.to.drop)>0) {
+		phy <- ape::drop.tip(phy, taxa.to.drop)
+	}
 	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data=alignment)
 	pml.object$tree <- ape::chronoMPL(pml.object$tree, se=FALSE, test=FALSE)
-	phy <- phangorn::optim.pml(pml.object, data=alignment, rearrangement="none", optRooted=TRUE)$tree
+	phy <- pml.object$tree
+	if(doML) {
+		phy <- phangorn::optim.pml(pml.object, data=alignment, rearrangement="none", optRooted=TRUE, optQ=TRUE)$tree
+	}
+	phy$tip.label <- gsub('_', ' ', phy$tip.label)
 	return(phy)
 }
+
+
+
+
 #
 # ReadDistance <- function(file) {
 # 	data <- readLines(file, n=-1)[-1] #read in phylip distance, perhaps from SDM
