@@ -107,6 +107,14 @@ test_that("Processing input string", {
   expect_equal(length(input.processed$cleaned.names),3)
 })
 
+test_that("Making OToL and BOLD tree works", {
+  phy.pars <- GetBoldOToLTree(input=c("Rhea americana",  "Struthio camelus","Gallus gallus", "Pterocnemia pennata"), marker="COI", otol_version="v2", doML=FALSE)
+  phy.ml <- GetBoldOToLTree(input=c("Rhea americana",  "Struthio camelus","Gallus gallus", "Pterocnemia pennata"), marker="COI", otol_version="v2", doML=TRUE)
+  expect_equal(class(phy.pars), "phylo")
+  expect_equal(class(phy.ml), "phylo")
+  expect_gte(max(phy.pars$edge.length), 1)
+  expect_lte(min(phy.ml$edge.length), 1)
+})
 
 test_that("Congruification works", {
 	skip_on_cran()
