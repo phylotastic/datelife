@@ -1004,7 +1004,7 @@ RunSDM <- function(filtered.results, weighting="flat") {
 		test.result <- NA
 		# Rationale here: some chronograms always cause errors with SDM, even when trying to get a consensus of them
 		# with themselves. For now, throw out of synthesis.
-		try(test.result <- mean(do.call(ape::SDM, c(unpadded.matrices[i], unpadded.matrices[i], rep(1, 2)))[[1]]))
+		try(test.result <- mean(do.call(ape::SDM, c(unpadded.matrices[i], unpadded.matrices[i], rep(1, 2)))[[1]]), silent=TRUE)
 		if(is.finite(test.result)) {
 			good.matrix.indices <- append(good.matrix.indices,i)
 		}
