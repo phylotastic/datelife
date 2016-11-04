@@ -1002,6 +1002,8 @@ RunSDM <- function(filtered.results, weighting="flat") {
 	good.matrix.indices <- c()
 	for(i in sequence(length(unpadded.matrices))) {
 		test.result <- NA
+		# Rationale here: some chronograms always cause errors with SDM, even when trying to get a consensus of them
+		# with themselves. For now, throw out of synthesis.
 		try(test.result <- mean(do.call(ape::SDM, c(unpadded.matrices[i], unpadded.matrices[i], rep(1, 2)))[[1]]))
 		if(is.finite(test.result)) {
 			good.matrix.indices <- append(good.matrix.indices,i)
