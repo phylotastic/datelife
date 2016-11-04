@@ -702,7 +702,7 @@ UseAllCalibrations <- function(phy=GetBoldOToLTree(c("Rhea americana",  "Struthi
 			calibrations.df[dim(calibrations.df)[1]+1,]<- c("fixed", 0, 0, phy$tip.label[1], "tinytip", "none")
 			try(chronogram <- geiger::PATHd8.phylo(phy2, calibrations.df))
 			if(!is.null(chronogram)) {
-				chronogram <- drop.tip(chronogram, "tinytip")
+				chronogram <- ape::drop.tip(chronogram, "tinytip")
 			}
 			attempts <- attempts+1
 		}

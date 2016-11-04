@@ -135,6 +135,11 @@ test_that("SDM correctly returns tree", {
   expect_equal(class(result.tree), "phylo")
 })
 
+test_that("UseAllCalibrations actually works", {
+  phy <- UseAllCalibrations()
+  expect_true(ape::is.ultrametric(phy, tol=0.00001))
+  expect_equal(class(phy), "phylo")
+})
 
 # test_that("TNRS with approximate match works", {
 	 # taxa <- c("Rhea_americana", "Pterocnemia pennato", "Strutho camelus")
