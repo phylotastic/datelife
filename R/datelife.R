@@ -26,10 +26,10 @@
 #' @return Varies depending on the chosen format
 #' @export
 #' @details
-#' The output formats are citations, mrca, newick.all, newick.median, phylo.median, phylo.all, html
+#' The output formats are citations, mrca, newick.all, newick.sdm, newick.median, phylo.sdm, phylo.median, phylo.all, html
 #' @examples
 #' ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
-EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.median", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), method="PATHd8") {
+EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), method="PATHd8") {
 	filtered.results.in <- GetFilteredResults(input, partial, usetnrs, approximatematch, cache)
 	output.format.in <- output.format
 	cache.in <- cache
@@ -217,36 +217,45 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 		filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 	}
 	results.index <- FindMatchingStudyIndex(filtered.results, cache)
-	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.median", "phylo.median", "phylo.all", "html", "data.frame"))
-	if((output.format != "citations") & !suppress.citations) {
-		print("Using trees from:")
-		print(names(filtered.results))
-	}
+	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
+	return.object <- NA
 	if(output.format=="citations") {
-		return(names(filtered.results))
+		return.object <- names(filtered.results)
 	}
 	if(output.format=="mrca") {
-		return(GetAges(filtered.results, partial=partial))
+		return.object <- GetAges(filtered.results, partial=partial)
 	}
 	if(output.format=="newick.all") {
 		trees <- sapply(filtered.results, PatristicMatrixToNewick)
-		return(trees[which(!is.na(trees))])
+		return.object <- trees[which(!is.na(trees))]
+	}
+	if(output.format=="newick.sdm") {
+		local.results <- RunSDM(filtered.results)
+		filtered.results <- local.results$filtered.results
+		tree <- local.results$phy
+		return.object <- ape::write.tree(tree)
+	}
+	if(output.format=="phylo.sdm") {
+		local.results <- RunSDM(filtered.results)
+		filtered.results <- local.results$filtered.results
+		tree <- local.results$phy
+		return.object <- tree
 	}
 	if(output.format=="newick.median") {
 		patristic.array <- BindMatrices(filtered.results)
 		median.matrix <- SummaryPatristicMatrixArray(patristic.array)
 		tree <- PatristicMatrixToNewick(median.matrix)
-		return(tree)
+		return.object <- tree
 	}
 	if(output.format=="phylo.median") {
 		patristic.array <- BindMatrices(filtered.results)
 		median.matrix <- SummaryPatristicMatrixArray(patristic.array)
 		tree <- PatristicMatrixToTree(median.matrix)
-		return(tree)
+		return.object <- tree
 	}
 	if(output.format=="phylo.all") {
 		trees <- lapply(filtered.results, PatristicMatrixToTree)
-		return(trees[which(!is.na(trees))])
+		return.object <- trees[which(!is.na(trees))]
 	}
 	if(output.format=="html") {
 		out.vector <- "<table border='1'><tr><th>MRCA Age (MY)</th><th>Ntax</th><th>Citation</th><th>Newick</th></tr>"
@@ -256,7 +265,7 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 			out.vector <- paste(out.vector, paste("<tr><td>",ages[result.index],"</td><td>",sum(!is.na(diag(filtered.results[[result.index]]))), "</td><td>", names(filtered.results)[result.index], "</td><td>", trees[result.index], "</td></tr>", sep=""), sep="")
 		}
 		out.vector <- paste(out.vector, "</table>")
-		return(out.vector)
+		return.object <- out.vector
 	}
 	if(output.format=="data.frame") {
 		out.df <- data.frame()
@@ -271,9 +280,13 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 			}
 		}
 		rownames(out.df) <- NULL
-		return(out.df)
+		return.object <- out.df
 	}
-
+	if((output.format != "citations") & !suppress.citations) {
+		print("Using trees from:")
+		print(names(filtered.results))
+	}
+	return(return.object)
 }
 
 #' Figure out which subset function to use
@@ -909,15 +922,42 @@ GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus", "Form
 #
 #
 #
-# #' Function to compute the SDM supertree Criscuolo et al. 2006
-# #' @details
-# #' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006;55(5):740–55. doi: 10.1080/10635150600969872.
-# RunSDM <- function(filtered.results) {
-# 	#todo: go from filtered results to set of arguments for SDM
-# 	# and size of each matrix, all on one row
-# 	unpadded.matrices <- lapply(filtered.results, UnpadMatrix)
-# 	SDM.result <- do.call(apeSDM, c(unpadded.matrices, rep(10, length(unpadded.matrices))))[[1]]
-# 	#NOW MAKE TREE
-# 	phy <- NA
-# 	#agnes in package cluster has UPGMA with missing data
-# 	try(phy <- upgma(SDM.result))
+#' Function to compute the SDM supertree Criscuolo et al. 2006
+#' @param filtered.results List of patristic matrices
+#' @param weighting flat, taxa, inverse
+#' @return A list containing phy (a chronogram), and filtered.results that were actually used
+#' @export
+#' @details
+#' Weighting is how much weight to give each input tree.
+#'    flat = all trees have equal weighting
+#'    taxa = weight is proportional to number of taxa
+#'    inverse = weight is proportional to 1 / number of taxa
+#' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006;55(5):740–55. doi: 10.1080/10635150600969872.
+RunSDM <- function(filtered.results, weighting="flat") {
+	phy <- NA
+	used.studies <- names(filtered.results)
+	unpadded.matrices <- lapply(filtered.results, UnpadMatrix)
+	good.matrix.indices <- c()
+	for(i in sequence(length(unpadded.matrices))) {
+		test.result <- NA
+		try(test.result <- mean(do.call(ape::SDM, c(unpadded.matrices[i], unpadded.matrices[i], rep(1, 2)))[[1]]))
+		if(is.finite(test.result)) {
+			good.matrix.indices <- append(good.matrix.indices,i)
+		}
+	}
+	if(length(good.matrix.indices)>0) {
+		unpadded.matrices <- unpadded.matrices[good.matrix.indices]
+		used.studies <- used.studies[good.matrix.indices]
+		weights = rep(1, length(unpadded.matrices))
+		if (weighting=="taxa") {
+			weights = unname(sapply(unpadded.matrices, dim)[1,])
+		}
+		if (weighting=="inverse") {
+			weights = 1/unname(sapply(unpadded.matrices, dim)[1,])
+		}
+		SDM.result <- do.call(ape::SDM, c(unpadded.matrices, weights))[[1]]
+		#agnes in package cluster has UPGMA with missing data; might make sense here
+		try(phy <- phangorn::upgma(SDM.result))
+	}
+	return(list(phy=phy, filtered.results=unpadded.matrices))
+}

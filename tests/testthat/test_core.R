@@ -79,6 +79,16 @@ test_that("Congruification works", {
   expect_gte(length(filtered.results), 2)
 })
 
+test_that("SDM correctly returns tree", {
+  data(opentree_chronograms)
+  taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
+  results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
+  filtered.results <- ProcessResultsList(results.list, taxa, TRUE)
+  result.tree <- RunSDM(filtered.results)$phy
+  expect_equal(class(result.tree), "phylo")
+})
+
+
 # test_that("TNRS with approximate match works", {
 	 # taxa <- c("Rhea_americana", "Pterocnemia pennato", "Strutho camelus")
  	# input.processed <- ProcessInput(taxa, usetnrs=TRUE, approximatematch=TRUE)
