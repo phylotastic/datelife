@@ -63,11 +63,14 @@ test_that("Processing complex newick works", {
 })
 
 test_that("EstimateDates returns phylo.all", {
-phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), output.format="phylo.all")
+  skip_on_cran()
+pphylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), output.format="phylo.all")
 expect_equal(class(phylo.results[[1]]),"phylo")
 })
 
 test_that("EstimateDates returns phylo.sdm", {
+  skip_on_cran()
+  skip_on_travis() #b/c no pathd8
 phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), output.format="phylo.sdm")
 expect_equal(class(phylo.results[[1]]),"phylo")
 expect_true(!is.null(phylo.results$edge.length))
@@ -75,19 +78,23 @@ expect_true(!is.null(phylo.results$edge.length))
 
 
 test_that("EstimateDates returns mrca", {
-phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), output.format="mrca")
+  skip_on_cran()
+pphylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), output.format="mrca")
 expect_equal(class(phylo.results),"numeric")
 expect_gte(length(phylo.results), 2)
 })
 
 test_that("EstimateDates returns mrca", {
-phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), output.format="mrca")
+  skip_on_cran()
+pphylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), output.format="mrca")
 expect_equal(class(phylo.results),"numeric")
 expect_gte(length(phylo.results), 2)
 })
 
 test_that("GetFilteredResults works", {
-  filtered.results.in <- GetFilteredResults(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"))
+  skip_on_cran()
+  skip_on_travis() #b/c no pathd8
+p  filtered.results.in <- GetFilteredResults(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"))
   expect_equal(class(filtered.results.in), "list")
   expect_gte(length(filtered.results.in),4) #as of Nov 4, 2016, had length 8
   expect_equal(class(filtered.results.in[[1]]), "matrix")
@@ -95,7 +102,6 @@ test_that("GetFilteredResults works", {
 
 test_that("Processing input string", {
 	skip_on_cran()
-	skip_on_travis()
   data(opentree_chronograms)
   input.processed <- ProcessInput(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE)
   expect_equal(length(input.processed$cleaned.names),3)
@@ -104,14 +110,16 @@ test_that("Processing input string", {
 
 test_that("Congruification works", {
 	skip_on_cran()
-	skip_on_travis()
+	skip_on_travis() #b/c no pathd8
   data(opentree_chronograms)
   filtered.results <- GetFilteredResults(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=datelife.cache)
   expect_gte(length(filtered.results), 2)
 })
 
 test_that("SDM correctly returns tree", {
-  data(opentree_chronograms)
+  skip_on_cran()
+  skip_on_travis() #b/c no pathd8
+p  data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
   filtered.results <- ProcessResultsList(results.list, taxa, TRUE)
