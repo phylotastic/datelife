@@ -11,12 +11,12 @@
 #' @export
 run<-function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), format="citations", partial="yes", plot.width=600, plot.height=600, usetnrs="no", approximatematch="yes", datelife.cache=NULL) {
 	if(is.null(datelife.cache)) {
-	  data(opentree_chronograms)
+	  utils::data(opentree_chronograms)
 	  }
   #convert from HTML input to Boolean
   partial <- ifelse(partial=="yes", TRUE, FALSE)
   usetnrs <- ifelse(usetnrs=="yes", TRUE, FALSE)
   approximatematch <- ifelse(approximatematch=="yes", TRUE, FALSE)
   filtered.results <- GetFilteredResults(input, partial, usetnrs, approximatematch, datelife.cache)
-  SummarizeResults(filtered.results, output.format=format, partial, datelife.cache, suppress.citations=TRUE) 
+  SummarizeResults(filtered.results, output.format=format, partial, datelife.cache, suppress.citations=TRUE)
 }

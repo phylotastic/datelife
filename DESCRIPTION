@@ -12,6 +12,7 @@ Imports:
     abind,
     bold,
     phangorn,
+    phytools,
     ips,
     compare,
     geiger,

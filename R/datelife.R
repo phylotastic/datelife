@@ -76,9 +76,9 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
   if(!is.na(phy.new[1])) {
     if(usetnrs) {
 			cleaned.names <- rotl::tnrs_match_names(phy.new$tip.label)$unique_name
-      phy.new$tip.label <- cleaned.names
+      phy.new$tip.label <- gsub("_", " ", cleaned.names)
     }
-  	cleaned.names<-phy.new$tip.label
+  	cleaned.names<-gsub("_", " ", phy.new$tip.label)
   } else {
     #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
 		if(length(input)==1) {
@@ -87,7 +87,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 		cleaned.names <- stringr::str_trim(input, side = "both")
     #cleaned.names <- input
     if (usetnrs) {
-      cleaned.names <- rotl::tnrs_match_names(taxa)$unique_name
+      cleaned.names <- gsub("_", " ", rotl::tnrs_match_names(taxa)$unique_name)
     }
   }
   cleaned.names <- gsub("_", " ", cleaned.names)
@@ -687,7 +687,7 @@ UseAllCalibrations <- function(phy=GetBoldOToLTree(c("Rhea americana",  "Struthi
 	calibrations.df <- calibrations.df[which(calibrations.df$taxonB %in% phy$tip.label),]
 	original.calibrations.df <- calibrations.df
 	chronogram <- NULL
-	try(chronogram <- geiger::PATHd8.phylo(phy, calibrations.df))
+	try(chronogram <- geiger::PATHd8.phylo(phy, calibrations.df), silent=TRUE)
 	attempts=0
 	if(expand!=0) {
 		while(is.null(chronogram) & attempts<giveup) {
@@ -698,7 +698,7 @@ UseAllCalibrations <- function(phy=GetBoldOToLTree(c("Rhea americana",  "Struthi
 			# We will have no fixed ages. Pathd8 just quietly gives up. So instead, we add a tiny branch with a zero calibration
 			# between it and its sister.
 			made.up.edgelength <- min(1e-9, .001*min(phy$edge.length))
-			phy2 <- phytools::bind.tip(reorder(phy), "tinytip", edge.length=made.up.edgelength, where=1, position=made.up.edgelength) #bind tip has weird behavior for non-reordered trees
+			phy2 <- phytools::bind.tip(ape::reorder.phylo(phy), "tinytip", edge.length=made.up.edgelength, where=1, position=made.up.edgelength) #bind tip has weird behavior for non-reordered trees
 			calibrations.df[dim(calibrations.df)[1]+1,]<- c("fixed", 0, 0, phy$tip.label[1], "tinytip", "none")
 			try(chronogram <- geiger::PATHd8.phylo(phy2, calibrations.df))
 			if(!is.null(chronogram)) {
@@ -707,7 +707,7 @@ UseAllCalibrations <- function(phy=GetBoldOToLTree(c("Rhea americana",  "Struthi
 			attempts <- attempts+1
 		}
 		if(attempts>0) {
-			warning("Dates are even more approximate than usual: had to expand constraints to have them agree")
+			print("Dates are even more approximate than usual: had to expand constraints to have them agree")
 		}
 	}
 	return(list(phy=chronogram, calibrations.df=calibrations.df, original.calibrations.df=original.calibrations.df))
