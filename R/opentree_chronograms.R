@@ -17,17 +17,17 @@ HasBrlen <- function(x) {
 }
 
 
-#' Allow trees with duplicate taxa to be read in, courtesy David Winter
-#' @param study_id Open Tree study id
-#' @param tree_id Open Tree tree id
-#' @param tip_label Which Open Tree tree label format you want
-#' @return A phylo object
-get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ot:otttaxonname") {
-	tr <- rotl:::.get_study_tree(study_id=study_id, tree_id=tree_id, tip_label=tip_label, format="newick")
-	phy <- ape::read.tree(text=gsub(" ", "_", tr))
-	phy$tip.label <- gsub("'", "", gsub("_", " ", phy$tip.label))
-	return(	phy)
-}
+# #' Allow trees with duplicate taxa to be read in, courtesy David Winter
+# #' @param study_id Open Tree study id
+# #' @param tree_id Open Tree tree id
+# #' @param tip_label Which Open Tree tree label format you want
+# #' @return A phylo object
+# get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ot:otttaxonname") {
+# 	tr <- rotl:::.get_study_tree(study_id=study_id, tree_id=tree_id, tip_label=tip_label, format="newick")
+# 	phy <- ape::read.tree(text=gsub(" ", "_", tr))
+# 	phy$tip.label <- gsub("'", "", gsub("_", " ", phy$tip.label))
+# 	return(	phy)
+# }
 
 #' Get all chronograms from Open Tree of Life
 #' @param verbose If TRUE, give updates to the user

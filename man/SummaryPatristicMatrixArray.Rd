@@ -4,7 +4,7 @@
 \alias{SummaryPatristicMatrixArray}
 \title{Summarize patristic matrix array (by default, median)}
 \usage{
-SummaryPatristicMatrixArray(patristic.matrix.array, fn = median)
+SummaryPatristicMatrixArray(patristic.matrix.array, fn = stats::median)
 }
 \arguments{
 \item{patristic.matrix.array}{3D array of patristic matrices}
