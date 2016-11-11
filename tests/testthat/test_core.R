@@ -56,12 +56,12 @@ test_that("Processing input newick", {
   expect_equal(class(input.processed$phy),"phylo")
 })
 
-test_that("Processing complex newick works", {
-	skip_on_cran()
-	skip_on_travis()
-  utils::data(opentree_chronograms)
-	expect_error(EstimateDates("((((((Typha latifolia,(Phragmites australis,(Sporobolus alterniflorus,Sporobolus pumilus)Sporobolus)PACMAD clade)Poales,(((Hydrilla verticillata,Vallisneria americana)Hydrocharitaceae,Potamogeton perfoliatus),Zostera marina,Ruppia maritima)Alismatales),(Lythrum salicaria,Myriophyllum spicatum)),(Ulva,Caulerpa taxifolia))Chloroplastida,((Skeletonema,(Gomphonema,Didymosphenia geminata)Bacillariophyceae)Bacillariophytina,Prorocentrum)SAR),Microcystis)Eukaryota;", output.format="phylo.all"), NA)
-})
+# test_that("Processing complex newick works", {
+# 	skip_on_cran()
+# 	skip_on_travis()
+#   utils::data(opentree_chronograms)
+# 	expect_error(EstimateDates("((((((Typha latifolia,(Phragmites australis,(Sporobolus alterniflorus,Sporobolus pumilus)Sporobolus)PACMAD clade)Poales,(((Hydrilla verticillata,Vallisneria americana)Hydrocharitaceae,Potamogeton perfoliatus),Zostera marina,Ruppia maritima)Alismatales),(Lythrum salicaria,Myriophyllum spicatum)),(Ulva,Caulerpa taxifolia))Chloroplastida,((Skeletonema,(Gomphonema,Didymosphenia geminata)Bacillariophyceae)Bacillariophytina,Prorocentrum)SAR),Microcystis)Eukaryota;", output.format="phylo.all"), NA)
+# })
 
 test_that("EstimateDates returns phylo.all", {
   skip_on_cran()
@@ -75,7 +75,7 @@ test_that("EstimateDates returns phylo.sdm", {
   skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
 phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), output.format="phylo.sdm")
-expect_equal(class(phylo.results[[1]]),"phylo")
+expect_equal(class(phylo.results),"phylo")
 expect_true(!is.null(phylo.results$edge.length))
 })
 
@@ -148,6 +148,32 @@ test_that("UseAllCalibrations actually works", {
   expect_true(ape::is.ultrametric(results$phy, tol=0.00001))
   expect_equal(class(results$phy), "phylo")
 })
+
+test_that("Crop plant taxa work", {
+  utils::data(opentree_chronograms)
+  taxa <- c("Zea mays", "Oryza sativa", "Arabidopsis thaliana", "Glycine max", "Medicago sativa", "Solanum lycopersicum")
+  results <- EstimateDates(input=taxa, output.format="phylo.all")
+  expect_equal(class(results), "list")
+  expect_equal(class(results[[1]]), "phylo")
+  expect_gte(length(results), 2)
+})
+
+test_that("Processing newick input works", {
+  processed <- ProcessInput("((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum));")
+  expect_equal(class(processed$phy), "phylo")
+  expect_equal(ape::Ntip(processed$phy), 6)
+  expect_equal(ape::Nnode(processed$phy), 5)
+  expect_equal(length(processed$cleaned.names), 6)
+})
+
+test_that("Crop plant newick works", {
+  skip_on_cran()
+	skip_on_travis() #b/c no pathd8
+
+trees <- EstimateDates(input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);", output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, cache = datelife.cache, method = "PATHd8")
+expect_equal(class(trees[[1]]), "phylo")
+})
+
 
 # test_that("TNRS with approximate match works", {
 	 # taxa <- c("Rhea_americana", "Pterocnemia pennato", "Strutho camelus")
