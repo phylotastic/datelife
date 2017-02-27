@@ -17,4 +17,3 @@ A vector with counts of each author, with names equal to author names
 \description{
 Return the relevant authors for a set of studies
 }
-

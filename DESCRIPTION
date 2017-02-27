@@ -1,6 +1,6 @@
 Package: datelife
 Title: Underlying code for DateLife service
-Version: 0.2.8
+Version: 0.2.9
 Author: Brian O'Meara <omeara.brian@gmail.com>, Jonathan Eastman, Tracy Heath, April Wright, Klaus Schliep, Scott Chamberlain, Peter Midford, Luke Harmon, Joseph Brown, Matt Pennell, Mike Alfaro.
 Maintainer: Brian O'Meara <omeara.brian@gmail.com>
 Description: This contains the core code for going from a tree or list of taxa
@@ -24,4 +24,4 @@ Suggests:
     testthat
 License: GPL (>=2)
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

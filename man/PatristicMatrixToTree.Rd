@@ -15,4 +15,3 @@ A rooted phylo object
 \description{
 Convert patristic matrix to a phylo object
 }
-

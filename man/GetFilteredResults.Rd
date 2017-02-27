@@ -28,4 +28,3 @@ List of patristic matrices
 \description{
 Go from a vector of species, newick string, or phylo object to a list of patristic matrices
 }
-

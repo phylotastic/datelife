@@ -24,4 +24,3 @@ A patristic matrix with for the taxa.
 \description{
 Figure out which subset function to use
 }
-

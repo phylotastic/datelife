@@ -37,4 +37,3 @@ The output formats are citations, mrca, newick.all, newick.sdm, newick.median, p
 \examples{
 ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
 }
-

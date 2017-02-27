@@ -16,4 +16,3 @@
 \description{
 A list with four elements for >100 chronograms from OpenTree
 }
-

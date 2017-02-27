@@ -87,7 +87,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 		cleaned.names <- stringr::str_trim(input, side = "both")
     #cleaned.names <- input
     if (usetnrs) {
-      cleaned.names <- gsub("_", " ", rotl::tnrs_match_names(taxa)$unique_name)
+      cleaned.names <- gsub("_", " ", rotl::tnrs_match_names(cleaned.names)$unique_name)
     }
   }
   cleaned.names <- gsub("_", " ", cleaned.names)

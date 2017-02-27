@@ -15,4 +15,3 @@ A list with elements for the trees, authors, curators, and study ids
 \description{
 Get all chronograms from Open Tree of Life
 }
-
