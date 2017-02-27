@@ -12,4 +12,4 @@
 #' \item{trees}{List storing the chronograms from OpenTree}
 #' }
 #' @source \url{http://opentreeoflife.org}
-NULL
+"opentree_chronograms"
