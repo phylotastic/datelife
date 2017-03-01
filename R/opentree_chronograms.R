@@ -111,7 +111,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 #' @export
 SaveOToLChronograms <- function(file="opentree_chronograms.rda", verbose=FALSE) {
 	opentree_chronograms <- GetOToLChronograms(verbose=verbose)
-	save(opentree_chronograms, file=file)
+	save(opentree_chronograms, file=file, compress="xz")
 }
 
 #' Check to see that a chronogram is valid
