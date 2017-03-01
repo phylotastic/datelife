@@ -29,7 +29,7 @@
 #' The output formats are citations, mrca, newick.all, newick.sdm, newick.median, phylo.sdm, phylo.median, phylo.all, html
 #' @examples
 #' ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
-EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), method="PATHd8") {
+EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8") {
 	filtered.results.in <- GetFilteredResults(input, partial, usetnrs, approximatematch, cache)
 	output.format.in <- output.format
 	cache.in <- cache
@@ -45,7 +45,7 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
 #' @return List of patristic matrices
 #' @export
-GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), method="PATHd8") {
+GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8") {
     input.processed <- ProcessInput(input, usetnrs, approximatematch)
     tree <- input.processed$phy
     cleaned.names <- input.processed$cleaned.names
@@ -104,12 +104,12 @@ AllMatching <- function(patristic.matrix, taxa) {
 }
 
 
-#' Find the index of relevant studies in a datelife.cache object
+#' Find the index of relevant studies in a opentree_chronograms object
 #' @param filtered.results The patristic.matrices that will be used
 #' @param cache The cache of studies
 #' @return A vector with the indices of studies that have relevant info
 #' @export
-FindMatchingStudyIndex <- function(filtered.results, cache=get("datelife.cache")) {
+FindMatchingStudyIndex <- function(filtered.results, cache=get("opentree_chronograms")) {
     return(which(names(cache$trees) %in% names(filtered.results)))
 }
 
@@ -118,7 +118,7 @@ FindMatchingStudyIndex <- function(filtered.results, cache=get("datelife.cache")
 #' @param cache The cache
 #' @return A vector with counts of each author, with names equal to author names
 #' @export
-TabulateRelevantAuthors <- function(results.index, cache=get("datelife.cache")) {
+TabulateRelevantAuthors <- function(results.index, cache=get("opentree_chronograms")) {
 	authors <- cache$authors[results.index]
 	return(table(unlist(authors)))
 }
@@ -128,13 +128,13 @@ TabulateRelevantAuthors <- function(results.index, cache=get("datelife.cache")) 
 #' @param cache The cache
 #' @return A vector with counts of each curator, with names equal to curator names
 #' @export
-TabulateRelevantCurators <- function(results.index, cache=get("datelife.cache")) {
+TabulateRelevantCurators <- function(results.index, cache=get("opentree_chronograms")) {
 	curators <- cache$curators[results.index]
 	return(table(unlist(curators)))
 }
 
 #' Take results.list and process it
-#' @param results.list A list returned from using GetSubsetArrayDispatch on datelife.cache$trees
+#' @param results.list A list returned from using GetSubsetArrayDispatch on opentree_chronograms$trees
 #' @param taxa A vector of taxa to match
 #' @param partial If TRUE, return matrices that have only partial matches
 #' @return A list with the patristic.matrices that are not NA
@@ -212,7 +212,7 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' @param suppress.citations If using a format that would normally print() citations, turn this off
 #' @return Depends on output format
 #' @export
-SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cache=get("datelife.cache"), suppress.citations=FALSE) {
+SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cache=get("opentree_chronograms"), suppress.citations=FALSE) {
 	if(!partial) {
 		filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 	}
@@ -649,7 +649,7 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @return data.frame of calibrations
 #' @export
-GetAllCalibrations <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache")) {
+GetAllCalibrations <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms")) {
 	phylo.results <- EstimateDates(input=input, partial=partial, usetnrs=usetnrs, approximatematch=approximatematch, cache=cache, output.format="phylo.all")
 	constraints.df <- data.frame()
 	for (i in sequence(length(phylo.results))) {
@@ -678,7 +678,7 @@ GetAllCalibrations <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 #' This will try to use the calibrations as fixed ages.
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
-UseAllCalibrations <- function(phy=GetBoldOToLTree(c("Rhea americana",  "Struthio camelus", "Gallus gallus")), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), expand=0.1, giveup=100) {
+UseAllCalibrations <- function(phy=GetBoldOToLTree(c("Rhea americana",  "Struthio camelus", "Gallus gallus")), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), expand=0.1, giveup=100) {
 	calibrations.df <- GetAllCalibrations(input=gsub('_', ' ', phy$tip.label), partial=partial, usetnrs=usetnrs, approximatematch=approximatematch, cache=cache)
 	phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.
 	calibrations.df$taxonA <- gsub(' ', '_', calibrations.df$taxonA)

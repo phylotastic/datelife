@@ -110,8 +110,8 @@ GetOToLChronograms <- function(verbose=FALSE) {
 #' @return None
 #' @export
 SaveOToLChronograms <- function(file="opentree_chronograms.rda", verbose=FALSE) {
-	datelife.cache <- GetOToLChronograms(verbose=verbose)
-	save(datelife.cache, file=file)
+	opentree_chronograms <- GetOToLChronograms(verbose=verbose)
+	save(opentree_chronograms, file=file)
 }
 
 #' Check to see that a chronogram is valid

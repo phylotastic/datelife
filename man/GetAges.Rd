@@ -17,3 +17,4 @@ Vector of MRCA ages with names same as in filtered.results
 \description{
 Get vector of MRCA from list of patristic matrices
 }
+

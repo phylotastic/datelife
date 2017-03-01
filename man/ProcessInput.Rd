@@ -20,3 +20,4 @@ A list with the phy (or NA, if no tree) and cleaned vector of taxa
 \description{
 Take input string, figure out if it's newick or list of species
 }
+

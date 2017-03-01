@@ -4,7 +4,7 @@
 \alias{TabulateRelevantCurators}
 \title{Return the relevant curators for a set of studies}
 \usage{
-TabulateRelevantCurators(results.index, cache = get("datelife.cache"))
+TabulateRelevantCurators(results.index, cache = get("opentree_chronograms"))
 }
 \arguments{
 \item{results.index}{A vector from FindMatchingStudyIndex() with the indices of the relevant studies}
@@ -17,3 +17,4 @@ A vector with counts of each curator, with names equal to curator names
 \description{
 Return the relevant curators for a set of studies
 }
+

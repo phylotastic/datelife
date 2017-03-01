@@ -6,8 +6,8 @@
 \usage{
 UseAllCalibrations(phy = GetBoldOToLTree(c("Rhea americana",
   "Struthio camelus", "Gallus gallus")), partial = TRUE, usetnrs = FALSE,
-  approximatematch = TRUE, cache = get("datelife.cache"), expand = 0.1,
-  giveup = 100)
+  approximatematch = TRUE, cache = get("opentree_chronograms"),
+  expand = 0.1, giveup = 100)
 }
 \arguments{
 \item{phy}{A phylo object}
@@ -35,3 +35,4 @@ This will try to use the calibrations as fixed ages.
 If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 expand sets the expansion value: should be between 0 and 1
 }
+

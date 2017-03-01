@@ -17,3 +17,4 @@ A 2d array with the median (or max, or mean, etc) of the input array
 \description{
 Summarize patristic matrix array (by default, median)
 }
+

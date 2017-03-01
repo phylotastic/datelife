@@ -7,8 +7,8 @@
 \usage{
 EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), output.format = "phylo.sdm", partial = TRUE,
-  usetnrs = FALSE, approximatematch = TRUE, cache = get("datelife.cache"),
-  method = "PATHd8")
+  usetnrs = FALSE, approximatematch = TRUE,
+  cache = get("opentree_chronograms"), method = "PATHd8")
 }
 \arguments{
 \item{input}{A vector of names, a newick string, or a phylo object}
@@ -37,3 +37,4 @@ The output formats are citations, mrca, newick.all, newick.sdm, newick.median, p
 \examples{
 ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
 }
+

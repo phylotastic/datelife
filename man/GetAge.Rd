@@ -17,3 +17,4 @@ The depth of the MRCA
 \description{
 Get time of MRCA from patristic matrix
 }
+

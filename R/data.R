@@ -3,7 +3,6 @@
 #' A list with four elements for >100 chronograms from OpenTree
 #'
 #' @name opentree_chronograms
-#' @export
 #' @format A list with four lists contained within it
 #' \describe{
 #' \item{authors}{List of lists of authors for the included studies}

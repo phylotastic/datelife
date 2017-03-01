@@ -7,7 +7,7 @@
 run(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
   format = "citations", partial = "yes", plot.width = 600,
   plot.height = 600, usetnrs = "no", approximatematch = "yes",
-  datelife.cache = NULL)
+  opentree_chronograms = NULL)
 }
 \arguments{
 \item{input}{A newick string or vector of taxa}
@@ -24,7 +24,7 @@ run(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 
 \item{approximatematch}{If using TNRS, use approximate matching}
 
-\item{datelife.cache}{The list of lists containing the input trees and other info}
+\item{opentree_chronograms}{The list of lists containing the input trees and other info}
 }
 \value{
 results in the desired format
@@ -32,3 +32,4 @@ results in the desired format
 \description{
 Core function to generate results
 }
+

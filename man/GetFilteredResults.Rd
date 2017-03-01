@@ -6,7 +6,7 @@
 \usage{
 GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
-  approximatematch = TRUE, cache = get("datelife.cache"),
+  approximatematch = TRUE, cache = get("opentree_chronograms"),
   method = "PATHd8")
 }
 \arguments{
@@ -28,3 +28,4 @@ List of patristic matrices
 \description{
 Go from a vector of species, newick string, or phylo object to a list of patristic matrices
 }
+

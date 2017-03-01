@@ -15,3 +15,4 @@ patristic.matrix A patristic matrix with row and column names for taxa in alphab
 \description{
 Function to reorder a matrix so that row and column labels are in alphabetical order
 }
+

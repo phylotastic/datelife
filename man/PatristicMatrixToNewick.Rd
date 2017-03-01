@@ -15,3 +15,4 @@ A newick string
 \description{
 Convert patristic matrix to a newick string
 }
+

@@ -7,7 +7,7 @@
 ProcessResultsList(results.list, taxa = NULL, partial = FALSE)
 }
 \arguments{
-\item{results.list}{A list returned from using GetSubsetArrayDispatch on datelife.cache$trees}
+\item{results.list}{A list returned from using GetSubsetArrayDispatch on opentree_chronograms$trees}
 
 \item{taxa}{A vector of taxa to match}
 
@@ -19,3 +19,4 @@ A list with the patristic.matrices that are not NA
 \description{
 Take results.list and process it
 }
+

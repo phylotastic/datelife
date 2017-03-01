@@ -4,7 +4,7 @@
 \alias{TabulateRelevantAuthors}
 \title{Return the relevant authors for a set of studies}
 \usage{
-TabulateRelevantAuthors(results.index, cache = get("datelife.cache"))
+TabulateRelevantAuthors(results.index, cache = get("opentree_chronograms"))
 }
 \arguments{
 \item{results.index}{A vector from FindMatchingStudyIndex() with the indices of the relevant studies}
@@ -17,3 +17,4 @@ A vector with counts of each author, with names equal to author names
 \description{
 Return the relevant authors for a set of studies
 }
+

@@ -17,3 +17,4 @@ Patristic.matrix for all.taxa, with NA for entries between taxa where at least o
 \description{
 Function to fill in empty cells in a patristic matrix for missing taxa
 }
+

@@ -17,3 +17,4 @@ A Boolean
 \description{
 Are all desired taxa in the patristic.matrix?
 }
+

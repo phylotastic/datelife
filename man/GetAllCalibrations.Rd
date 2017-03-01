@@ -6,7 +6,7 @@
 \usage{
 GetAllCalibrations(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
-  approximatematch = TRUE, cache = get("datelife.cache"))
+  approximatematch = TRUE, cache = get("opentree_chronograms"))
 }
 \arguments{
 \item{input}{A vector of names, a newick string, or a phylo object}
@@ -25,3 +25,4 @@ data.frame of calibrations
 \description{
 Get all calibrations given trees in database
 }
+

@@ -2,9 +2,9 @@
 % Please edit documentation in R/datelife.R
 \name{FindMatchingStudyIndex}
 \alias{FindMatchingStudyIndex}
-\title{Find the index of relevant studies in a datelife.cache object}
+\title{Find the index of relevant studies in a opentree_chronograms object}
 \usage{
-FindMatchingStudyIndex(filtered.results, cache = get("datelife.cache"))
+FindMatchingStudyIndex(filtered.results, cache = get("opentree_chronograms"))
 }
 \arguments{
 \item{filtered.results}{The patristic.matrices that will be used}
@@ -15,5 +15,6 @@ FindMatchingStudyIndex(filtered.results, cache = get("datelife.cache"))
 A vector with the indices of studies that have relevant info
 }
 \description{
-Find the index of relevant studies in a datelife.cache object
+Find the index of relevant studies in a opentree_chronograms object
 }
+
