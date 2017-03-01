@@ -1,16 +1,16 @@
 test_that("ProcessResultsList", {
 utils::data(opentree_chronograms)
 taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
+results.list <- lapply(opentree_chronograms$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
 expect_gte(length(ProcessResultsList(results.list, taxa, TRUE)), 1)
 })
 
 test_that("Summarize as mrca works correctly", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
+  results.list <- lapply(opentree_chronograms$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
   filtered.results <- ProcessResultsList(results.list, taxa, TRUE)
-  mrca.vector <- SummarizeResults(filtered.results, output.format="mrca", cache=datelife.cache)
+  mrca.vector <- SummarizeResults(filtered.results, output.format="mrca", cache=opentree_chronograms)
   expect_equal(class(mrca.vector), "numeric")
   expect_gte(min(mrca.vector),5)
   expect_lte(max(mrca.vector),150)
@@ -19,9 +19,9 @@ test_that("Summarize as mrca works correctly", {
 test_that("Summarize as citations works correctly", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
+  results.list <- lapply(opentree_chronograms$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
   filtered.results <- ProcessResultsList(results.list, taxa, TRUE)
-  citation.results <- SummarizeResults(filtered.results, output.format="cit", cache=datelife.cache)
+  citation.results <- SummarizeResults(filtered.results, output.format="cit", cache=opentree_chronograms)
   expect_equal(class(citation.results), "character")
   expect_gte(sum(grepl("Prum", citation.results)),1)
  })
@@ -29,9 +29,9 @@ test_that("Summarize as citations works correctly", {
 test_that("Summarize as newick.all works correctly", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
+  results.list <- lapply(opentree_chronograms$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
   filtered.results <- ProcessResultsList(results.list, taxa, TRUE)
-  trees <- SummarizeResults(filtered.results, output.format="newick.all", cache=datelife.cache)
+  trees <- SummarizeResults(filtered.results, output.format="newick.all", cache=opentree_chronograms)
   expect_equal(class(trees), "character")
   expect_false(anyNA(trees))
   expect_equal(class(ape::read.tree(text=trees[1])), "phylo")
@@ -40,9 +40,9 @@ test_that("Summarize as newick.all works correctly", {
 test_that("Summarize as newick.median works correctly", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
+  results.list <- lapply(opentree_chronograms$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
   filtered.results <- ProcessResultsList(results.list, taxa, partial=FALSE)
-  tree <- SummarizeResults(filtered.results, output.format="newick.median", cache=datelife.cache)
+  tree <- SummarizeResults(filtered.results, output.format="newick.median", cache=opentree_chronograms)
   expect_equal(class(tree), "character")
   expect_false(anyNA(tree))
   expect_equal(class(ape::read.tree(text=tree)), "phylo")
@@ -66,7 +66,7 @@ test_that("Processing input newick", {
 test_that("EstimateDates returns phylo.all", {
   skip_on_cran()
   utils::data(opentree_chronograms)
-  phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), output.format="phylo.all")
+  phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), output.format="phylo.all")
   expect_equal(class(phylo.results[[1]]),"phylo")
 })
 
@@ -74,7 +74,7 @@ test_that("EstimateDates returns phylo.sdm", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
-phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), output.format="phylo.sdm")
+phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), output.format="phylo.sdm")
 expect_equal(class(phylo.results),"phylo")
 expect_true(!is.null(phylo.results$edge.length))
 })
@@ -83,7 +83,7 @@ expect_true(!is.null(phylo.results$edge.length))
 test_that("EstimateDates returns mrca", {
   skip_on_cran()
   utils::data(opentree_chronograms)
-  phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), output.format="mrca")
+  phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), output.format="mrca")
 expect_equal(class(phylo.results),"numeric")
 expect_gte(length(phylo.results), 2)
 })
@@ -91,7 +91,7 @@ expect_gte(length(phylo.results), 2)
 test_that("EstimateDates returns mrca", {
   skip_on_cran()
   utils::data(opentree_chronograms)
-  phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"), output.format="mrca")
+  phylo.results <- EstimateDates(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), output.format="mrca")
 expect_equal(class(phylo.results),"numeric")
 expect_gte(length(phylo.results), 2)
 })
@@ -100,7 +100,7 @@ test_that("GetFilteredResults works", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
-  filtered.results.in <- GetFilteredResults(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("datelife.cache"))
+  filtered.results.in <- GetFilteredResults(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"))
   expect_equal(class(filtered.results.in), "list")
   expect_gte(length(filtered.results.in),4) #as of Nov 4, 2016, had length 8
   expect_equal(class(filtered.results.in[[1]]), "matrix")
@@ -136,7 +136,7 @@ test_that("SDM correctly returns tree", {
   skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results.list <- lapply(datelife.cache$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
+  results.list <- lapply(opentree_chronograms$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
   filtered.results <- ProcessResultsList(results.list, taxa, TRUE)
   result.tree <- RunSDM(filtered.results)$phy
   expect_equal(class(result.tree), "phylo")
@@ -170,7 +170,7 @@ test_that("Crop plant newick works", {
   skip_on_cran()
 	skip_on_travis() #b/c no pathd8
 
-trees <- EstimateDates(input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);", output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, cache = datelife.cache, method = "PATHd8")
+trees <- EstimateDates(input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);", output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, cache = opentree_chronograms, method = "PATHd8")
 expect_equal(class(trees[[1]]), "phylo")
 })
 
