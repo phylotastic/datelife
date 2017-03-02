@@ -146,11 +146,20 @@ ProcessResultsList <- function(results.list, taxa=NULL, partial=FALSE) {
 	patristic.matrices <- lapply(results.list, "[[", "patristic.matrix.array")
 
 	final.matrices <- patristic.matrices[!is.na(patristic.matrices)]
+
 	if(!partial) {
 		final.matrices <- final.matrices[sapply(final.matrices, AllMatching, taxa=taxa)]
 	}
 	if(length(final.matrices)>0) {
-		final.matrices <- lapply(final.matrices, PadMatrix, all.taxa=taxa)
+		to.delete <- c()
+		for (i in sequence(length(final.matrices))) {
+			if(all(is.na(final.matrices[[i]]))) {
+				to.delete <- c(to.delete, i)
+			}
+		}
+		if(length(to.delete)>0) {
+			final.matrices <- final.matrices[-to.delete]
+		}
 	}
 	return(final.matrices)
 }
@@ -408,7 +417,7 @@ CongruifyTreeFromPhylo <- function(reference.tree, query.tree, method="PATHd8", 
   return(result.matrix)
 }
 
-CongruifyAndCheck <- function(reference, target, taxonomy=NULL, tol=0, scale="pathd8", attempt.fix=TRUE) {
+CongruifyAndCheck <- function(reference, target, taxonomy=NULL, tol=0.01, scale="pathd8", attempt.fix=TRUE) {
 	new.tree <- ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference), ConvertSpacesToUnderscores(target), taxonomy, tol, scale)$phy)
 	if(anyNA(new.tree$edge.length) & attempt.fix) {
 		warning("Congruification resulted in NA edge lengths. Resolving polytomies and making up starting branch lengths")
