@@ -35,4 +35,3 @@ This will try to use the calibrations as fixed ages.
 If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 expand sets the expansion value: should be between 0 and 1
 }
-

@@ -167,8 +167,8 @@ test_that("Processing newick input works", {
 })
 
 test_that("Crop plant newick works", {
-  skip_on_cran()
-	skip_on_travis() #b/c no pathd8
+skip_on_cran()
+skip_on_travis() #b/c no pathd8
 
 trees <- EstimateDates(input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);", output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, cache = opentree_chronograms, method = "PATHd8")
 expect_equal(class(trees[[1]]), "phylo")

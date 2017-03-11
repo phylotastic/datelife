@@ -17,4 +17,3 @@ A vector with the indices of studies that have relevant info
 \description{
 Find the index of relevant studies in a opentree_chronograms object
 }
-

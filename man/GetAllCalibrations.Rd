@@ -25,4 +25,3 @@ data.frame of calibrations
 \description{
 Get all calibrations given trees in database
 }
-

@@ -24,4 +24,3 @@ Depends on output format
 \description{
 Summarize a filtered results list in various ways
 }
-

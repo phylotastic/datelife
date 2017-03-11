@@ -15,4 +15,3 @@ A TRUE or FALSE
 \description{
 Check for branch lengths in a tree
 }
-

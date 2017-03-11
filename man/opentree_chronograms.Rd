@@ -21,4 +21,3 @@ opentree_chronograms
 A list with four elements for >100 chronograms from OpenTree
 }
 \keyword{datasets}
-

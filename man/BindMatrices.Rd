@@ -15,4 +15,3 @@ A 3d array of patristic matrices
 \description{
 Convert list of patristic matrices to a 3D array
 }
-

@@ -418,16 +418,18 @@ CongruifyTreeFromPhylo <- function(reference.tree, query.tree, method="PATHd8", 
 }
 
 CongruifyAndCheck <- function(reference, target, taxonomy=NULL, tol=0.01, scale="pathd8", attempt.fix=TRUE) {
-	new.tree <- ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference), ConvertSpacesToUnderscores(target), taxonomy, tol, scale)$phy)
+  if(!ape::is.ultrametric(reference, tol=tol)) {
+    return(NA)
+  }
+	new.tree <- ConvertUnderscoresToSpaces(suppressWarnings(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference), ConvertSpacesToUnderscores(target), taxonomy=taxonomy, tol=tol, scale=scale)$phy)) #suppressing warnings b/c geiger ignores tolerance
 	if(anyNA(new.tree$edge.length) & attempt.fix) {
 		warning("Congruification resulted in NA edge lengths. Resolving polytomies and making up starting branch lengths")
 		new.tree <- ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference), ConvertSpacesToUnderscores(ape::compute.brlen(ape::multi2di(target))), taxonomy, tol, scale)$phy)
 		if(anyNA(new.tree$edge.length)) {
 			new.tree <- NA
 		}
-	} else {
-		new.tree <- NA
-	}
+	} 
+	return(new.tree)
 }
 
 #' Convert spaces to underscores in trees
