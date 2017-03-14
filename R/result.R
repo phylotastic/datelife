@@ -21,9 +21,4 @@ run<-function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus
   SummarizeResults(filtered.results, output.format=format, partial, opentree_chronograms, suppress.citations=TRUE)
 }
 
-dump.citations <- function() {
-  if(is.null(opentree_chronograms)) {
-    utils::data(opentree_chronograms)
-  }
-  return(sort(unique(names(opentree_chronograms$trees))) )
-}
+
