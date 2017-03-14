@@ -35,6 +35,8 @@ test_that("Summarize as newick.all works correctly", {
   expect_equal(class(trees), "character")
   expect_false(anyNA(trees))
   expect_equal(class(ape::read.tree(text=trees[1])), "phylo")
+  expect_equal(class(ape::read.tree(text=trees[length(trees)])), "phylo")
+  
 })
 
 test_that("Summarize as newick.median works correctly", {
@@ -106,10 +108,17 @@ test_that("GetFilteredResults works", {
   expect_equal(class(filtered.results.in[[1]]), "matrix")
 })
 
-test_that("Processing input string", {
+test_that("Processing input string with spaces", {
 	skip_on_cran()
   utils::data(opentree_chronograms)
   input.processed <- ProcessInput(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE)
+  expect_equal(length(input.processed$cleaned.names),3)
+})
+
+test_that("Processing input string with underscores", {
+  skip_on_cran()
+  utils::data(opentree_chronograms)
+  input.processed <- ProcessInput(c("Rhea_americana", "Pterocnemia_pennata", "Struthio_camelus"), usetnrs=FALSE, approximatematch=TRUE)
   expect_equal(length(input.processed$cleaned.names),3)
 })
 
@@ -160,6 +169,14 @@ test_that("Crop plant taxa work", {
 
 test_that("Processing newick input works", {
   processed <- ProcessInput("((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum));")
+  expect_equal(class(processed$phy), "phylo")
+  expect_equal(ape::Ntip(processed$phy), 6)
+  expect_equal(ape::Nnode(processed$phy), 5)
+  expect_equal(length(processed$cleaned.names), 6)
+})
+
+test_that("Processing newick input works with underscores", {
+  processed <- ProcessInput("((Zea_mays,Oryza_sativa),((Arabidopsis_thaliana,(Glycine_max,Medicago_sativa)),Solanum_lycopersicum));")
   expect_equal(class(processed$phy), "phylo")
   expect_equal(ape::Ntip(processed$phy), 6)
   expect_equal(ape::Nnode(processed$phy), 5)

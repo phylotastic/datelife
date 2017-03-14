@@ -68,7 +68,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
   input<-stringr::str_trim(input, side = "both")
   phy.new <- NA
    if(length(input)==1) {
-	  if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
+	  if(grepl("\\(.*\\).*;", input)) { #our test for newick
 	    phy.new <-ape::read.tree(text=gsub(" ", "_", input))
 	  }
   }
