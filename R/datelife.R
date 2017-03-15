@@ -428,7 +428,7 @@ CongruifyAndCheck <- function(reference, target, taxonomy=NULL, tol=0.01, scale=
 		if(anyNA(new.tree$edge.length)) {
 			new.tree <- NA
 		}
-	} 
+	}
 	return(new.tree)
 }
 
@@ -558,9 +558,14 @@ TestNameOrder <- function(patristic.matrix, standard.rownames, standard.colnames
 
 #' Convert list of patristic matrices to a 3D array
 #' @param patristic.matrix.list List of patristic matrices
+#' @param pad If TRUE, pad missing entries
 #' @return A 3d array of patristic matrices
 #' @export
-BindMatrices <- function(patristic.matrix.list) {
+BindMatrices <- function(patristic.matrix.list, pad=TRUE) {
+  all.taxa <- sort(unique(unname(unlist(lapply(patristic.matrix.list, rownames)))))
+  if(pad) {
+    patristic.matrix.list <- lapply(patristic.matrix.list, PadMatrix, all.taxa=all.taxa)
+  }
   original.size<-length(patristic.matrix.list)
   patristic.matrix.list<-lapply(patristic.matrix.list,ReorderMatrix)
   if(length(patristic.matrix.list)<1) {
