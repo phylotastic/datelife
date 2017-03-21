@@ -114,6 +114,8 @@ test_that("Processing input string", {
 })
 
 test_that("Making OToL and BOLD tree works", {
+  skip_on_cran()
+  skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
   phy.pars <- GetBoldOToLTree(input=c("Rhea americana",  "Struthio camelus","Gallus gallus", "Pterocnemia pennata"), marker="COI", otol_version="v2", doML=FALSE)
   phy.ml <- GetBoldOToLTree(input=c("Rhea americana",  "Struthio camelus","Gallus gallus", "Pterocnemia pennata"), marker="COI", otol_version="v2", doML=TRUE)
@@ -124,6 +126,12 @@ test_that("Making OToL and BOLD tree works", {
 })
 
 test_that("GetSubsetArrayCongruifyWorks", {
+  skip_on_cran()
+  skip_on_travis() #b/c no pathd8
+
+
+#TODO add test here
+
 
 })
 
@@ -147,6 +155,8 @@ test_that("SDM correctly returns tree", {
 })
 
 test_that("UseAllCalibrations actually works", {
+  skip_on_cran()
+  skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
   results <- UseAllCalibrations()
   expect_true(ape::is.ultrametric(results$phy, tol=0.00001))
