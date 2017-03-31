@@ -1,6 +1,17 @@
 Package: datelife
 Title: Underlying code for DateLife service
 Version: 0.2.10
+Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.brian@gmail.com"),
+  person("Jonathan", "Eastman", role=c("aut")),
+  person("Tracy", "Heath", role=c("aut")),
+  person("April", "Wright", role=c("aut")),
+  person("Klaus", "Schliep", role=c("aut")),
+  person("Scott", "Chamberlain", role=c("aut")),
+  person("Peter", "Midford", role=c("aut")),
+  person("Luke", "Harmon", role=c("aut")),
+  person("Joseph", "Brown", role=c("aut")),
+  person("Matt", "Pennell", role=c("aut")),
+  person("Mike", "Alfaro", role=c("aut")))
 Author: Brian O'Meara <omeara.brian@gmail.com>, Jonathan Eastman, Tracy Heath,
     April Wright, Klaus Schliep, Scott Chamberlain, Peter Midford, Luke Harmon,
     Joseph Brown, Matt Pennell, Mike Alfaro.
@@ -24,6 +35,7 @@ Imports:
     phylobase
 Suggests:
     testthat
+URL: https://github.com/phylotastic/datelife, http://www.datelife.org
 License: GPL (>=2)
 LazyData: true
 RoxygenNote: 6.0.1
