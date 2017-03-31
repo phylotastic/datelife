@@ -5,3 +5,7 @@ This has the core functionality of DateLife, part of Phylotastic (NSF-funded). I
 For now, requires github version of rotl:
 
 `devtools::install_github("ropensci/rotl")`
+
+Then install datelife:
+
+`devtools::install_github("phylotastic/datelife")`
