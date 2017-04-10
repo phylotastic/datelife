@@ -32,4 +32,3 @@ results in the desired format
 \description{
 Core function to generate results
 }
-

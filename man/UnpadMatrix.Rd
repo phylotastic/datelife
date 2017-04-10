@@ -15,4 +15,3 @@ Patristic.matrix for all.taxa
 \description{
 Function to remove missing taxa
 }
-

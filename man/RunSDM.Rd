@@ -24,4 +24,3 @@ Weighting is how much weight to give each input tree.
    inverse = weight is proportional to 1 / number of taxa
 Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006;55(5):740–55. doi: 10.1080/10635150600969872.
 }
-

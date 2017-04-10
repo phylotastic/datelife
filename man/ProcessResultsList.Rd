@@ -19,4 +19,3 @@ A list with the patristic.matrices that are not NA
 \description{
 Take results.list and process it
 }
-

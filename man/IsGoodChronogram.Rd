@@ -15,4 +15,3 @@ Boolean: TRUE if good tree
 \description{
 Check to see that a chronogram is valid
 }
-

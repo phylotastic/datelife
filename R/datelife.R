@@ -68,7 +68,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
   input<-stringr::str_trim(input, side = "both")
   phy.new <- NA
    if(length(input)==1) {
-	  if(grepl('\\(', input) & grepl('\\)', input) & (substr(input,nchar(input),nchar(input))==";")) { #our test for newick
+	  if(grepl("\\(.*\\).*;", input)) { #our test for newick
 	    phy.new <-ape::read.tree(text=gsub(" ", "_", input))
 	  }
   }
@@ -418,16 +418,18 @@ CongruifyTreeFromPhylo <- function(reference.tree, query.tree, method="PATHd8", 
 }
 
 CongruifyAndCheck <- function(reference, target, taxonomy=NULL, tol=0.01, scale="pathd8", attempt.fix=TRUE) {
-	new.tree <- ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference), ConvertSpacesToUnderscores(target), taxonomy, tol, scale)$phy)
+  if(!ape::is.ultrametric(reference, tol=tol)) {
+    return(NA)
+  }
+	new.tree <- ConvertUnderscoresToSpaces(suppressWarnings(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference), ConvertSpacesToUnderscores(target), taxonomy=taxonomy, tol=tol, scale=scale)$phy)) #suppressing warnings b/c geiger ignores tolerance
 	if(anyNA(new.tree$edge.length) & attempt.fix) {
 		warning("Congruification resulted in NA edge lengths. Resolving polytomies and making up starting branch lengths")
 		new.tree <- ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference), ConvertSpacesToUnderscores(ape::compute.brlen(ape::multi2di(target))), taxonomy, tol, scale)$phy)
 		if(anyNA(new.tree$edge.length)) {
 			new.tree <- NA
 		}
-	} else {
-		new.tree <- NA
 	}
+	return(new.tree)
 }
 
 #' Convert spaces to underscores in trees
@@ -556,9 +558,14 @@ TestNameOrder <- function(patristic.matrix, standard.rownames, standard.colnames
 
 #' Convert list of patristic matrices to a 3D array
 #' @param patristic.matrix.list List of patristic matrices
+#' @param pad If TRUE, pad missing entries
 #' @return A 3d array of patristic matrices
 #' @export
-BindMatrices <- function(patristic.matrix.list) {
+BindMatrices <- function(patristic.matrix.list, pad=TRUE) {
+  all.taxa <- sort(unique(unname(unlist(lapply(patristic.matrix.list, rownames)))))
+  if(pad) {
+    patristic.matrix.list <- lapply(patristic.matrix.list, PadMatrix, all.taxa=all.taxa)
+  }
   original.size<-length(patristic.matrix.list)
   patristic.matrix.list<-lapply(patristic.matrix.list,ReorderMatrix)
   if(length(patristic.matrix.list)<1) {

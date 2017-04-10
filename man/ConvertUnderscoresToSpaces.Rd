@@ -15,4 +15,3 @@ A phylo object
 \description{
 Convert underscores to spaces in trees
 }
-

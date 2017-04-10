@@ -17,4 +17,3 @@ A vector with counts of each curator, with names equal to curator names
 \description{
 Return the relevant curators for a set of studies
 }
-
