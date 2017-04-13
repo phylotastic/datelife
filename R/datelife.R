@@ -428,6 +428,7 @@ CongruifyAndCheck <- function(reference, target, taxonomy=NULL, tol=0.01, scale=
 		if(anyNA(new.tree$edge.length)) {
 			new.tree <- NA
 		}
+		new.tree$edge.length[which(new.tree$edge.length<0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
 	}
 	return(new.tree)
 }
