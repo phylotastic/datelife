@@ -4,10 +4,12 @@
 \alias{BindMatrices}
 \title{Convert list of patristic matrices to a 3D array}
 \usage{
-BindMatrices(patristic.matrix.list)
+BindMatrices(patristic.matrix.list, pad = TRUE)
 }
 \arguments{
 \item{patristic.matrix.list}{List of patristic matrices}
+
+\item{pad}{If TRUE, pad missing entries}
 }
 \value{
 A 3d array of patristic matrices

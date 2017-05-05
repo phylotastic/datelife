@@ -2,9 +2,11 @@
 
 export(AllMatching)
 export(BindMatrices)
+export(CalculateOverlapTable)
 export(CleanChronogram)
 export(ConvertSpacesToUnderscores)
 export(ConvertUnderscoresToSpaces)
+export(CreateContributorCache)
 export(EstimateDates)
 export(FindMatchingStudyIndex)
 export(GetAge)

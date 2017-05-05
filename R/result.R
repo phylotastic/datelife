@@ -20,5 +20,3 @@ run<-function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus
   filtered.results <- GetFilteredResults(input, partial, usetnrs, approximatematch, opentree_chronograms)
   SummarizeResults(filtered.results, output.format=format, partial, opentree_chronograms, suppress.citations=TRUE)
 }
-
-
