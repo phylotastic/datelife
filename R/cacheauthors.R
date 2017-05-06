@@ -36,6 +36,37 @@ CreateContributorCache <- function(outputfile="contributorcache.rda", verbose=TR
   return(list(author.results=author.results, curator.results=curator.results, author.pretty=author.pretty, curator.pretty=curator.pretty))
 }
 
+
+#' Create a cache from TreeBase
+#' @param outputfile Path including file name
+#' @param verbose If TRUE, give status updates to the user
+#' @return List containing author and curator results
+#' @export
+CreateTreeBaseCache <- function(outputfile="treebasecache.rda", verbose=TRUE) {
+  InvertNames <- function(author) {
+    return(paste(sapply(strsplit(author, ', '), rev), collapse=" "))
+  }
+  all.studies <- treebase::download_metadata("", by="all")
+  unlist(all.studies[[1]])[which(names( unlist(all.studies[[1]])) == "creator")]
+  author.results <- data.frame()
+  for (i in sequence(length(all.studies))) {
+    authors <- study.id <- NULL
+    try(authors <- unlist(all.studies[[i]])[which(names( unlist(all.studies[[i]])) == "creator")])
+    try(study.id <- unlist(all.studies[[i]])["identifier"])
+    if(!is.null(authors)) {
+      authors <- sapply(authors, InvertNames)
+      author.results <- rbind(author.results, expand.grid(person=authors, study=study.id, stringsAsFactors=FALSE))
+    }
+    if(verbose) {
+      print(paste(i, "of", length(all.studies), "done"))
+    }
+  }
+  tb.author.pretty <- CalculateOverlapTable(author.results)[,-3]
+  tb.author.results <- author.results
+  save(tb.author.results, tb.author.pretty, file=outputfile)
+  return(list(tb.author.results=tb.author.results, tb.author.pretty=tb.author.pretty))
+}
+
 #' Create an overlap table
 #' @param results.table An author.results or curator.results data.frame
 #' @return Data.frame with info on people and what clades they've worked on

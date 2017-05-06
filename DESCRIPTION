@@ -32,7 +32,8 @@ Imports:
     stringr,
     rotl,
     knitcitations,
-    phylobase
+    phylobase,
+    treebase
 Suggests:
     testthat
 URL: https://github.com/phylotastic/datelife, http://www.datelife.org
