@@ -613,6 +613,10 @@ PatristicMatrixToTree <- function(patristic.matrix) {
   if(ape::Ntip(tree)>2) {
     tree <- 	phangorn::midpoint(tree)
   }
+	if(length(which(tree$edge.length<0))>0) {
+		warning(paste("Converting from patristic distance matrix to a tree resulted in some negative branch lengths; the largest by magnitude was", min(tree$edge.length)))
+		tree$edge.length[which(tree$edge.length<0)] <- 0 #sometimes NJ returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+	}
   return(tree)
 }
 
@@ -705,6 +709,9 @@ UseAllCalibrations <- function(phy=GetBoldOToLTree(c("Rhea americana",  "Struthi
 	original.calibrations.df <- calibrations.df
 	chronogram <- NULL
 	try(chronogram <- geiger::PATHd8.phylo(phy, calibrations.df), silent=TRUE)
+	if(!is.null(chronogram)) {
+		chronogram$edge.length[which(chronogram$edge.length<0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+	}
 	attempts=0
 	if(expand!=0) {
 		while(is.null(chronogram) & attempts<giveup) {
@@ -719,6 +726,7 @@ UseAllCalibrations <- function(phy=GetBoldOToLTree(c("Rhea americana",  "Struthi
 			calibrations.df[dim(calibrations.df)[1]+1,]<- c("fixed", 0, 0, phy$tip.label[1], "tinytip", "none")
 			try(chronogram <- geiger::PATHd8.phylo(phy2, calibrations.df))
 			if(!is.null(chronogram)) {
+				chronogram$edge.length[which(chronogram$edge.length<0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
 				chronogram <- ape::drop.tip(chronogram, "tinytip")
 			}
 			attempts <- attempts+1

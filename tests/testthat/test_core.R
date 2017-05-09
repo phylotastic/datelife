@@ -194,7 +194,7 @@ test_that("We don't get negative brlen from pathd8", {
   skip_on_travis()
 
   tree <- EstimateDates(input = "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);", output.format = "phylo.median", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, method = "PATHd8")
-  expect_true(min(tree$edge.length)>0)
+  expect_true(min(tree$edge.length)>=0)
 
 })
 
