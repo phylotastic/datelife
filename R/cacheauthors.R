@@ -75,7 +75,7 @@ CalculateOverlapTable <- function(results.table) {
   unique.person <- unique(results.table$person)
   final.table <- data.frame()
   for (person.index in sequence(length(unique.person))) {
-    local.df <- subset(results.table, person==unique.person[person.index])
+    local.df <- subset(results.table, results.table$person==unique.person[person.index])
     clades <- table(as.character(local.df$clade))
     names(clades)[which(nchar(names(clades))==0)] <- "Unknown"
     clade.string <- paste(sort(paste0(names(clades), " (", clades, ")")), collapse=", ")
