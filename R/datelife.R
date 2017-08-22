@@ -316,7 +316,7 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 	}
 	if((output.format != "citations") & !suppress.citations) {
 		#print("Using trees from:")
-		cat("Using trees from:")
+		cat("Using trees from:", "\n")
 		print(names(filtered.results))
 	}
 	return(return.object)
