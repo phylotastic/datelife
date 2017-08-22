@@ -52,7 +52,7 @@
 #' ages.html <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="html")
 #' write(ages.html, file="some.bird.trees.html")
 #' system("open some.bird.trees.html")
-EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8") {
+EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", drop.taxa=TRUE) {
 	filtered.results.in <- GetFilteredResults(input, partial, usetnrs, approximatematch, cache)
 	output.format.in <- output.format
 	cache.in <- cache
