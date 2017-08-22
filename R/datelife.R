@@ -17,7 +17,7 @@
 #' Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.
 #' @aliases datelife
 #' @param input Target taxa: A vector of taxon names, a newick character string, or a phylo object
-#' @param output.format The desired output format for target chronograms (chronograms of target taxa). See details.
+#' @param output.format The desired output format for target chronograms (chronograms of target taxa defined in input). See details.
 #' @param partial If TRUE, use source trees even if they only match some of the desired taxa
 #' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
@@ -27,14 +27,14 @@
 #' @export
 #' @details
 #' The available output formats from EstimateDates function are:
-#' citations A character vector of references where available chronograms with (some or all of) the target taxa are found (source chronograms).
-#' mrca A named numeric vector of mrca ages of target taxa derived from the source chronograms. Names of mrca vector correspond to citations.
-#' newick.all A named character vector of newick strings of target chronograms derived from source chronograms. Names of newick.all vector correspond to citations.
-#' newick.sdm, A character vector with a newick string of a target chronogram obtained with SDM supertree method (Criscuolo et al. 2006) from source chronograms.
-#' newick.median A character vector with a newick string of a target chronogram obtained with median method from source chronograms.
-#' phylo.sdm A phylo object with a target chronogram obtained with SDM supertree method (Criscuolo et al. 2006) from source chronograms.
-#' phylo.median A phylo object with a target chronogram obtained with median method from source chronograms.
-#' phylo.all A named list of phylo objects with target chronograms derived from source chronograms. Names of phylo.all list correspond to citations.
+#' citations A character vector of references where chronograms with some or all of the target taxa are published (source chronograms).
+#' mrca A named numeric vector of most recent common ancestor (mrca) ages of target taxa defined in input, obtained from the source chronograms. Names of mrca vector are equal to citations.
+#' newick.all A named character vector of newick strings corresponding to target chronograms derived from source chronograms. Names of newick.all vector are equal to citations.
+#' newick.sdm, Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
+#' newick.median Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram from the median of all source chronograms.
+#' phylo.sdm Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
+#' phylo.median Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained from source chronograms with median method.
+#' phylo.all A named list of phylo objects corresponding to each target chronogram obtained from available source chronograms. Names of phylo.all list correspond to citations.
 #' html A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
 
 #' @examples
@@ -315,7 +315,8 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 		return.object <- out.df
 	}
 	if((output.format != "citations") & !suppress.citations) {
-		print("Using trees from:")
+		#print("Using trees from:")
+		cat("Using trees from:")
 		print(names(filtered.results))
 	}
 	return(return.object)
