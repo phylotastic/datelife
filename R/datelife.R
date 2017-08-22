@@ -23,7 +23,7 @@
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
-#' @return Varies depending on the chosen output.format
+#' @return Varies depending on the chosen output.format, see details.
 #' @export
 #' @details
 #' The available output formats from EstimateDates function are:
@@ -38,7 +38,7 @@
 #' html A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
 
 #' @examples
-#' obtain ages with median method and newick format output:
+#' obtain median ages from a set of source chronograms in newick format:
 #' ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="newick.median")
 #' # save the tree in newick format
 #' write(ages, file="some.bird.ages.txt")
@@ -756,7 +756,8 @@ UseAllCalibrations <- function(phy=GetBoldOToLTree(c("Rhea americana",  "Struthi
 			attempts <- attempts+1
 		}
 		if(attempts>0) {
-			print("Dates are even more approximate than usual: had to expand constraints to have them agree")
+			# print("Dates are even more approximate than usual: had to expand constraints to have them agree")
+			cat("Dates are even more approximate than usual: had to expand constraints to have them agree", "\n")
 		}
 	}
 	return(list(phy=chronogram, calibrations.df=calibrations.df, original.calibrations.df=original.calibrations.df))
