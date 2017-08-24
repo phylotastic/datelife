@@ -46,7 +46,8 @@
 #' #obtain ages with median method and phylo format output (will get same tree as above but in r format):
 #' ages.again <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="phylo.median")
 #' plot(ages.again)
-#' axisPhylo()
+#' library(ape)
+#' ape::axisPhylo()
 #' mtext("Time (million years ago)", side=1, line=2, at = (max(get("last_plot.phylo",envir = .PlotPhyloEnv)$xx) * 0.5))
 #' write.tree(ages.again, file="some.bird.tree.again.txt") # saves phylo object in newick format
 #' #obtain ages from all source chronograms and generate an html format output redable in any web browser:
