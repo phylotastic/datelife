@@ -23,6 +23,7 @@
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
+#' @param drop.taxa If TRUE, only include taxa present on at least one source chronogram
 #' @return Varies depending on the chosen output.format, see details.
 #' @export
 #' @details
