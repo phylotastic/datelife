@@ -47,19 +47,27 @@ phylo.all A named list of phylo objects corresponding to each target chronogram 
 html A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
 }
 \examples{
-#obtain median ages from a set of source chronograms in newick format:
-ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="newick.median")
+# obtain median ages from a set of source chronograms in newick format:
+ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
+		"Mus musculus"), output.format="newick.median")
 # save the tree in newick format
 write(ages, file="some.bird.ages.txt")
-#obtain ages with median method and phylo format output (will get same tree as above but in r format):
-ages.again <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="phylo.median")
+
+# obtain median ages from a set of source chronograms in phylo format
+# will produce same tree as above but in r phylo format:
+ages.again <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
+		"Mus musculus"), output.format="phylo.median")
 plot(ages.again)
 library(ape)
 ape::axisPhylo()
-mtext("Time (million years ago)", side=1, line=2, at = (max(get("last_plot.phylo",envir = .PlotPhyloEnv)$xx) * 0.5))
+mtext("Time (million years ago)", side=1, line=2, at = (max(get("last_plot.phylo",
+		envir = .PlotPhyloEnv)$xx) * 0.5))
 write.tree(ages.again, file="some.bird.tree.again.txt") # saves phylo object in newick format
-#obtain ages from all source chronograms and generate an html format output redable in any web browser:
-ages.html <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="html")
+
+# obtain mrca ages and target chronograms from all source chronograms
+# generate an html  output readable in any web browser:
+ages.html <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
+		"Mus musculus"), output.format="html")
 write(ages.html, file="some.bird.trees.html")
 system("open some.bird.trees.html")
 }
