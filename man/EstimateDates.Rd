@@ -3,17 +3,18 @@
 \name{EstimateDates}
 \alias{EstimateDates}
 \alias{datelife}
-\title{Core function to go from a vector of species, newick string, or phylo object get a chronogram or dates back}
+\title{Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.}
 \usage{
 EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), output.format = "phylo.sdm", partial = TRUE,
   usetnrs = FALSE, approximatematch = TRUE,
-  cache = get("opentree_chronograms"), method = "PATHd8")
+  cache = get("opentree_chronograms"), method = "PATHd8",
+  drop.taxa = TRUE)
 }
 \arguments{
-\item{input}{A vector of names, a newick string, or a phylo object}
+\item{input}{Target taxa: A vector of taxon names, a newick character string, or a phylo object}
 
-\item{output.format}{The desired output format. See details.}
+\item{output.format}{The desired output format for target chronograms (chronograms of target taxa defined in input). See details.}
 
 \item{partial}{If TRUE, use source trees even if they only match some of the desired taxa}
 
@@ -26,14 +27,36 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
 \item{method}{The method used for congruification. PATHd8 only right now, r8s and treePL later.}
 }
 \value{
-Varies depending on the chosen format
+Varies depending on the chosen output.format, see details.
 }
 \description{
-Core function to go from a vector of species, newick string, or phylo object get a chronogram or dates back
+Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.
 }
 \details{
-The output formats are citations, mrca, newick.all, newick.sdm, newick.median, phylo.sdm, phylo.median, phylo.all, html
+The available output formats from EstimateDates function are:
+citations A character vector of references where chronograms with some or all of the target taxa are published (source chronograms).
+mrca A named numeric vector of most recent common ancestor (mrca) ages of target taxa defined in input, obtained from the source chronograms. Names of mrca vector are equal to citations.
+newick.all A named character vector of newick strings corresponding to target chronograms derived from source chronograms. Names of newick.all vector are equal to citations.
+newick.sdm, Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
+newick.median Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram from the median of all source chronograms.
+phylo.sdm Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
+phylo.median Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained from source chronograms with median method.
+phylo.all A named list of phylo objects corresponding to each target chronogram obtained from available source chronograms. Names of phylo.all list correspond to citations.
+html A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
 }
 \examples{
-ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
+obtain median ages from a set of source chronograms in newick format:
+ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="newick.median")
+# save the tree in newick format
+write(ages, file="some.bird.ages.txt")
+obtain ages with median method and phylo format output (will get same tree as above but in r format):
+ages.again <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="phylo.median")
+plot(ages.again)
+axisPhylo()
+mtext("Time (million years ago)", side=1, line=2, at = (max(get("last_plot.phylo",envir = .PlotPhyloEnv)$xx) * 0.5))
+write.tree(ages.again, file="some.bird.tree.again.txt") # saves phylo object in newick format
+obtain ages from all source chronograms and generate an html format output redable in any web browser:
+ages.html <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="html")
+write(ages.html, file="some.bird.trees.html")
+system("open some.bird.trees.html")
 }
