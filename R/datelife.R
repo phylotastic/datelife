@@ -28,15 +28,23 @@
 #' @export
 #' @details
 #' The available output formats from EstimateDates function are:
-#' citations A character vector of references where chronograms with some or all of the target taxa are published (source chronograms).
-#' mrca A named numeric vector of most recent common ancestor (mrca) ages of target taxa defined in input, obtained from the source chronograms. Names of mrca vector are equal to citations.
-#' newick.all A named character vector of newick strings corresponding to target chronograms derived from source chronograms. Names of newick.all vector are equal to citations.
-#' newick.sdm, Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
-#' newick.median Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram from the median of all source chronograms.
-#' phylo.sdm Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
-#' phylo.median Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained from source chronograms with median method.
-#' phylo.all A named list of phylo objects corresponding to each target chronogram obtained from available source chronograms. Names of phylo.all list correspond to citations.
-#' html A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
+#' citations: A character vector of references where chronograms with some or all of the target taxa are published (source chronograms).
+#'
+#' mrca: A named numeric vector of most recent common ancestor (mrca) ages of target taxa defined in input, obtained from the source chronograms. Names of mrca vector are equal to citations.
+#'
+#' newick.all: A named character vector of newick strings corresponding to target chronograms derived from source chronograms. Names of newick.all vector are equal to citations.
+#'
+#' newick.sdm: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
+#'
+#' newick.median: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram from the median of all source chronograms.
+#'
+#' phylo.sdm: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
+#'
+#' phylo.median: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained from source chronograms with median method.
+#'
+#' phylo.all: A named list of phylo objects corresponding to each target chronogram obtained from available source chronograms. Names of phylo.all list correspond to citations.
+#'
+#' html: A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
 
 #' @examples
 #' # obtain median ages from a set of source chronograms in newick format:
