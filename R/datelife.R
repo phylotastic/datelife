@@ -93,7 +93,11 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
     cleaned.names <- input.processed$cleaned.names
     results.list<-lapply(cache$trees,GetSubsetArrayDispatch, taxa=cleaned.names, phy=tree, method=method)
     filtered.results <- ProcessResultsList(results.list, cleaned.names, partial)
-    return(filtered.results)
+	if(length(filtered.results)<1) {
+		warning(cat("input species were not found in the set of chronograms from cache", "\n"))
+		if(!usetnrs) cat("setting usetnrs=TRUE might change this, but it is time consuming", "\n")
+	}
+	return(filtered.results)
 }
 
 #' Take input string, figure out if it's newick or list of species
@@ -113,7 +117,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 	  if(grepl("\\(.*\\).*;", input)) { #our test for newick
 	    phy.new <-ape::read.tree(text=gsub(" ", "_", input))
 	  } else {
-		  stop("input is length 1; you must provide at least two species names as input")
+		  stop("input is length 1; you must provide at least two species names as input to perform a search")
 	  }
   }
   cleaned.names<-""
