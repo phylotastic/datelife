@@ -8,8 +8,7 @@
 EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), output.format = "phylo.sdm", partial = TRUE,
   usetnrs = FALSE, approximatematch = TRUE,
-  cache = get("opentree_chronograms"), method = "PATHd8",
-  drop.taxa = TRUE)
+  cache = get("opentree_chronograms"), method = "PATHd8")
 }
 \arguments{
 \item{input}{Target taxa: A vector of taxon names, a newick character string, or a phylo object}
@@ -25,8 +24,6 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
 \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
 
 \item{method}{The method used for congruification. PATHd8 only right now, r8s and treePL later.}
-
-\item{drop.taxa}{If TRUE, only include taxa present on at least one source chronogram}
 }
 \value{
 Varies depending on the chosen output.format, see details.
@@ -36,6 +33,7 @@ Core function to input a vector of species, newick string, or phylo object to ge
 }
 \details{
 The available output formats from EstimateDates function are:
+
 citations: A character vector of references where chronograms with some or all of the target taxa are published (source chronograms).
 
 mrca: A named numeric vector of most recent common ancestor (mrca) ages of target taxa defined in input, obtained from the source chronograms. Names of mrca vector are equal to citations.

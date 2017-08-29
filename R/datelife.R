@@ -23,11 +23,11 @@
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
-#' @param drop.taxa If TRUE, only include taxa present on at least one source chronogram
 #' @return Varies depending on the chosen output.format, see details.
 #' @export
 #' @details
 #' The available output formats from EstimateDates function are:
+#'
 #' citations: A character vector of references where chronograms with some or all of the target taxa are published (source chronograms).
 #'
 #' mrca: A named numeric vector of most recent common ancestor (mrca) ages of target taxa defined in input, obtained from the source chronograms. Names of mrca vector are equal to citations.
@@ -70,7 +70,8 @@
 #' 		"Mus musculus"), output.format="html")
 #' write(ages.html, file="some.bird.trees.html")
 #' system("open some.bird.trees.html")
-EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", drop.taxa=TRUE) {
+EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
+		output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8") {
 	filtered.results.in <- GetFilteredResults(input, partial, usetnrs, approximatematch, cache)
 	output.format.in <- output.format
 	cache.in <- cache
@@ -111,6 +112,8 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
    if(length(input)==1) {
 	  if(grepl("\\(.*\\).*;", input)) { #our test for newick
 	    phy.new <-ape::read.tree(text=gsub(" ", "_", input))
+	  } else {
+		  stop("input is length 1; you must provide at least two species names as input")
 	  }
   }
   cleaned.names<-""
