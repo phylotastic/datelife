@@ -799,9 +799,14 @@ UseAllCalibrations <- function(phy=GetBoldOToLTree(c("Rhea americana",  "Struthi
 #' @export
 GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus","Gallus gallus"), marker="COI", otol_version="v2", doML=FALSE) {
 	#otol returns error with missing taxa in v3 of rotl
+	sequences <- bold::bold_seqspec(taxon=input, marker=marker)
+	if(length(sequences)==1) {
+		cat("Cannot construct BoldOToL tree, no sequences were found in Bold for the input taxa.", "\n")
+		cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
+		stop("Names in input do not match Bold specimen records.")
+	}
 	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names=input)$ott_id, label_format="name",  otl_v=otol_version))
 	phy$tip.label <- gsub("_ott.*","", phy$tip.label)
-	sequences <- bold::bold_seqspec(taxon=input, marker=marker)
 	final.sequences <- matrix("-", nrow=length(input), ncol=max(sapply(strsplit(sequences$nucleotides, ""), length)))
 	final.sequences.names <- rep(NA, length(input))
 	for (i in sequence(dim(sequences)[1])) {
