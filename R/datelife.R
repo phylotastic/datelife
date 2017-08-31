@@ -74,6 +74,7 @@
 #' system("open some.bird.trees.html")
 EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 		output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker="COI") {
+	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
 	filtered.results.in <- GetFilteredResults(input, partial, usetnrs, approximatematch, cache, method, bold)
 	output.format.in <- output.format
 	cache.in <- cache
