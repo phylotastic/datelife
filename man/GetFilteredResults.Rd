@@ -7,7 +7,7 @@
 GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
   approximatematch = TRUE, cache = get("opentree_chronograms"),
-  method = "PATHd8")
+  method = "PATHd8", bold = FALSE, marker = "COI")
 }
 \arguments{
 \item{input}{A vector of names, a newick string, or a phylo object}
@@ -21,6 +21,10 @@ GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
 \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
 
 \item{method}{The method used for congruification. PATHd8 only right now, r8s and treePL later.}
+
+\item{bold}{Use Barcode of Life data to get branch lengths on the OToL tree with GetBoldOToLTree function.}
+
+\item{marker}{Gene name to select}
 }
 \value{
 List of patristic matrices

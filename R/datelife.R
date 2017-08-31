@@ -23,6 +23,8 @@
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
+#' @param bold Use Barcode of Life data to get branch lengths on the OToL tree with GetBoldOToLTree function.
+#' @param marker Gene name to select
 #' @return Varies depending on the chosen output.format, see details.
 #' @export
 #' @details
@@ -71,8 +73,8 @@
 #' write(ages.html, file="some.bird.trees.html")
 #' system("open some.bird.trees.html")
 EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8") {
-	filtered.results.in <- GetFilteredResults(input, partial, usetnrs, approximatematch, cache)
+		output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker="COI") {
+	filtered.results.in <- GetFilteredResults(input, partial, usetnrs, approximatematch, cache, method, bold)
 	output.format.in <- output.format
 	cache.in <- cache
 	return(SummarizeResults(filtered.results=filtered.results.in, output.format=output.format.in, cache=cache.in))
@@ -85,9 +87,11 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
+#' @param bold Use Barcode of Life data to get branch lengths on the OToL tree with GetBoldOToLTree function.
+#' @param marker Gene name to select
 #' @return List of patristic matrices
 #' @export
-GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8") {
+GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker="COI") {
     input.processed <- ProcessInput(input, usetnrs, approximatematch)
     tree <- input.processed$phy
     cleaned.names <- input.processed$cleaned.names
@@ -98,6 +102,15 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 		cat("No input species were found in the set of chronograms from cache.", "\n")
 		if(!usetnrs) cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
 	}
+	if(bold){
+		 bold.OToLTree <- GetBoldOToLTree(input=cleaned.names)
+		 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in=bold.OToLTree, taxa.in=cleaned.names, phy.in=tree, phy4.in=NULL, method.in=method)
+		 bold.data.processed <- ProcessResultsList(results.list=list(bold.data), taxa=cleaned.names, partial)
+	 	 names(bold.data.processed) <-  paste("BoldOToL tree (using ", marker, " as marker)", sep="")
+	   filtered.results <- c(filtered.results, bold.data.processed)
+	}
+
+	cat("\n")
 	return(filtered.results)
 }
 
@@ -799,10 +812,11 @@ UseAllCalibrations <- function(phy=GetBoldOToLTree(c("Rhea americana",  "Struthi
 #' @export
 GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus","Gallus gallus"), marker="COI", otol_version="v2", doML=FALSE) {
 	#otol returns error with missing taxa in v3 of rotl
+	cat("Estimating BoldOToL tree...", "\n")
 	sequences <- bold::bold_seqspec(taxon=input, marker=marker)
 	if(length(sequences)==1) {
 		cat("Cannot construct BoldOToL tree, no sequences were found in Bold for the input taxa.", "\n")
-		cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
+		# cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
 		stop("Names in input do not match Bold specimen records.")
 	}
 	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names=input)$ott_id, label_format="name",  otl_v=otol_version))
@@ -834,6 +848,7 @@ GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus","Gallu
 		phy <- phangorn::optim.pml(pml.object, data=alignment, rearrangement="none", optRooted=TRUE, optQ=TRUE)$tree
 	}
 	phy$tip.label <- gsub('_', ' ', phy$tip.label)
+	cat("Done.", "\n")
 	return(phy)
 }
 
