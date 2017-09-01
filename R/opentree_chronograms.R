@@ -110,7 +110,7 @@ GetOToLChronograms <- function(verbose=FALSE) {
 #' @param verbose If TRUE, give status updates to the user
 #' @return None
 #' @export
-SaveOToLChronograms <- function(file="opentree_chronograms.rda", verbose=FALSE) {
+SaveOToLChronograms <- function(file="opentree_chronograms.RData", verbose=FALSE) {
 	opentree_chronograms <- GetOToLChronograms(verbose=verbose)
 	save(opentree_chronograms, file=file, compress="xz")
 }
