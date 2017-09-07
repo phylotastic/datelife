@@ -47,6 +47,8 @@
 #' phylo.all: A named list of phylo objects corresponding to each target chronogram obtained from available source chronograms. Names of phylo.all list correspond to citations.
 #'
 #' html: A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
+#'
+#' data.frame A data.frame with data on target taxa: mrca, number of taxa, citations of source chronograms and newick string.
 
 #' @examples
 #' # obtain median ages from a set of source chronograms in newick format:
@@ -73,12 +75,13 @@
 #' write(ages.html, file="some.bird.trees.html")
 #' system("open some.bird.trees.html")
 EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker="COI") {
-	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
+		output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker="COI", suppress.citations=FALSE, missing.taxa=c("list", "data.frame", "none")) {
+	output.format.in <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
+	missing.taxa.in <- match.arg(missing.taxa, choices=c("list", "data.frame", "none"))
 	filtered.results.in <- GetFilteredResults(input, partial, usetnrs, approximatematch, cache, method, bold)
-	output.format.in <- output.format
+#	output.format.in <- output.format
 	cache.in <- cache
-	return(SummarizeResults(filtered.results=filtered.results.in, output.format=output.format.in, cache=cache.in))
+	return(SummarizeResults(filtered.results=filtered.results.in, output.format=output.format.in, cache=cache.in, missing.taxa=missing.taxa.in))
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
@@ -283,15 +286,29 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' @param partial If TRUE, use source trees even if they only match some of the desired taxa
 #' @param cache The cached trees and other information
 #' @param suppress.citations If using a format that would normally print() citations, turn this off
+#' @param missing.taxa A character vector specifying if a summary of missing taxa from source chronograms should be added to the output as a "list", as a "data.frame" or "none" if no summary should be displayed.
 #' @return Depends on output format
 #' @export
-SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cache=get("opentree_chronograms"), suppress.citations=FALSE) {
+SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cache=get("opentree_chronograms"), suppress.citations=FALSE, missing.taxa=c("list", "data.frame", "none")) {
 	if(!partial) {
 		filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 	}
 	results.index <- FindMatchingStudyIndex(filtered.results, cache)
 	output.format <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
+	missing.taxa <- match.arg(missing.taxa, choices=c("list", "data.frame", "none"))
 	return.object <- NA
+	if(missing.taxa=="data.frame"){
+		missing.taxa.list <- vector(mode="list")
+		tax <- rownames(filtered.results[[1]])
+		for(result.index in sequence(length(filtered.results))){
+			n <- base::rownames(filtered.results[[result.index]])
+			m <- base::match(tax,n)
+			missing.taxa.list[[result.index]] <- n[m]
+		}
+		missing.taxa.matrix <- do.call(rbind, missing.taxa.list)
+		colnames(missing.taxa.matrix) <- tax
+		missing.taxa.df <- data.frame(missing.taxa.matrix)
+	}
 	if(output.format=="citations") {
 		return.object <- names(filtered.results)
 	}
@@ -330,14 +347,27 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 		trees <- lapply(filtered.results, PatristicMatrixToTree)
 		return.object <- trees[which(!is.na(trees))]
 	}
+	if(missing.taxa=="data.frame" & any(grepl(output.format, c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all")))){
+		return.object <- list(return.object, missing.taxa=missing.taxa.df)
+		names(return.object)[1] <- output.format
+	}
 	if(output.format=="html") {
-		out.vector <- "<table border='1'><tr><th>MRCA Age (MY)</th><th>Ntax</th><th>Citation</th><th>Newick</th></tr>"
+		out.vector1 <- "<table border='1'><tr><th>MRCA Age (MY)</th><th>Ntax</th><th>Citation</th><th>Newick"
+		if(missing.taxa=="data.frame"){
+			out.vector1 <- paste(out.vector1, paste("</th><th>", colnames(missing.taxa.matrix), sep="", collapse=""), sep="")
+		}
+		out.vector1 <- paste(out.vector1, "</th></tr>", sep="")
 		ages <- GetAges(filtered.results, partial=partial)
 		trees <- sapply(filtered.results, PatristicMatrixToNewick)
+		out.vector2 <- c()
 		for(result.index in sequence(length(filtered.results))) {
-			out.vector <- paste(out.vector, paste("<tr><td>",ages[result.index],"</td><td>",sum(!is.na(diag(filtered.results[[result.index]]))), "</td><td>", names(filtered.results)[result.index], "</td><td>", trees[result.index], "</td></tr>", sep=""), sep="")
+			out.vector2 <- paste(out.vector2, "<tr><td>",agesX[result.index],"</td><td>",sum(!is.na(diag(filtered.results[[result.index]]))), "</td><td>", names(filtered.results)[result.index], "</td><td>", trees[result.index],  sep="")
+			if(missing.taxa=="data.frame"){
+				out.vector2 <- paste(out.vector2, paste("</td><td>", missing.taxa.matrix[result.index,], sep="", collapse=""), sep="")
+			}
+			out.vector2 <- paste(out.vector2, "</td></tr>", sep="")
 		}
-		out.vector <- paste(out.vector, "</table>")
+		out.vector <- paste(out.vector1, out.vector2, "</table>")
 		return.object <- out.vector
 	}
 	if(output.format=="data.frame") {
@@ -352,13 +382,34 @@ SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cach
 				out.df <- rbind(out.df, out.line)
 			}
 		}
+		if(missing.taxa=="data.frame"){
+			out.df <- cbind(out.df, missing.taxa.df)
+		}
 		rownames(out.df) <- NULL
 		return.object <- out.df
 	}
-	if((output.format != "citations") & !suppress.citations) {
+	if(!suppress.citations) {
 		#print("Using trees from:")
-		cat("Using trees from:", "\n")
-		print(names(filtered.results))
+		if(output.format == "citations"){
+			cat("Target taxa found in trees from:", "\n")
+			print(names(filtered.results), quote=FALSE)
+			cat("\n")
+		} else {
+			cat("Using trees from:", "\n")
+			print(names(filtered.results), quote=FALSE)
+			cat("\n")
+		}
+	}
+	if(missing.taxa=="list"){
+		tax <- rownames(filtered.results[[1]])
+		x <- rapply(filtered.results, rownames)
+		prop <- c()
+		for (taxon in tax){
+			prop <- c(prop, paste(length(which(taxon==x)), "/", length(filtered.results), sep=""))
+		}
+		missing.taxa.summary <- data.frame(Taxon=tax, Chronograms=prop)
+		cat("Target taxa presence in source chronograms:", "\n")
+		print(missing.taxa.summary)
 	}
 	return(return.object)
 }
