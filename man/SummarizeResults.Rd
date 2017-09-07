@@ -5,7 +5,8 @@
 \title{Summarize a filtered results list in various ways}
 \usage{
 SummarizeResults(filtered.results, output.format, partial = TRUE,
-  cache = get("opentree_chronograms"), suppress.citations = FALSE)
+  cache = get("opentree_chronograms"), suppress.citations = FALSE,
+  missing.taxa = c("list", "data.frame", "none"))
 }
 \arguments{
 \item{filtered.results}{A list of patristic matrices; labels correspond to citations}
@@ -17,6 +18,8 @@ SummarizeResults(filtered.results, output.format, partial = TRUE,
 \item{cache}{The cached trees and other information}
 
 \item{suppress.citations}{If using a format that would normally print() citations, turn this off}
+
+\item{missing.taxa}{A character vector specifying if a summary of missing taxa from source chronograms should be added to the output as a "list", as a "data.frame" or "none" if no summary should be displayed.}
 }
 \value{
 Depends on output format

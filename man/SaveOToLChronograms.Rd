@@ -4,7 +4,7 @@
 \alias{SaveOToLChronograms}
 \title{Save all chronograms from Open Tree of Life}
 \usage{
-SaveOToLChronograms(file = "opentree_chronograms.rda", verbose = FALSE)
+SaveOToLChronograms(file = "opentree_chronograms.RData", verbose = FALSE)
 }
 \arguments{
 \item{file}{Path including file name}
