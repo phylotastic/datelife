@@ -27,9 +27,9 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{method}{The method used for congruification. PATHd8 only right now, r8s and treePL later.}
 
-\item{bold}{Use Barcode of Life data and Open Tree of Life backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.}
+\item{bold}{Logical. If TRUE, use Barcode of Life repository data and Open Tree of Life backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.}
 
-\item{marker}{A character vector with the name of the gene to be used for GetBoldOToLTree construction.}
+\item{marker}{A character vector with the name of the gene from Barcode of Life repository to be used for GetBoldOToLTree construction.}
 
 \item{verbose}{A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
 
