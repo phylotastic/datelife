@@ -23,8 +23,8 @@
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms).
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
-#' @param bold Use Barcode of Life data and Open Tree of Life backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.
-#' @param marker A character vector with the name of the gene to be used for GetBoldOToLTree construction.
+#' @param bold Logical. If TRUE, use Barcode of Life repository data and Open Tree of Life backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.
+#' @param marker A character vector with the name of the gene from Barcode of Life repository to be used for GetBoldOToLTree construction.
 #' @param verbose A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
 #' @param missing.taxa A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.
 #' @export
@@ -911,17 +911,30 @@ GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus","Gallu
 	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
 	taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
 	if(length(taxa.to.drop)>0) {
+		cat("No", marker, "sequences found for", "taxa.to.drop", "\n")
 		phy <- ape::drop.tip(phy, taxa.to.drop)
+		cat("Dropping taxa from tree...", "\n")
 	}
 	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data=alignment)
-	pml.object$tree <- ape::chronoMPL(pml.object$tree, se=FALSE, test=FALSE)
-	phy <- pml.object$tree
-	if(doML) {
-		phy <- phangorn::optim.pml(pml.object, data=alignment, rearrangement="none", optRooted=TRUE, optQ=TRUE)$tree
+	if(!ape::is.binary.tree(pml.object$tree)){
+		cat(marker, "gene marker generates a non-dichotomous tree...", "\n", "BOLD chronogram cannot be constructed.", "\n")
+		return(NA)
+	} else {
+		pml.object$tree <- ape::chronoMPL(pml.object$tree, se=FALSE, test=FALSE)
+		phy <- pml.object$tree
+		if(any(pml.object$tree$edge.length<0)) {
+			cat("Negative branch lengths in BOLD chronogram...", "\n")
+			if(doML) cat("Cannot do ML branch length optimization.", "\n")
+		} else {
+			if(doML) {
+				phy <- phangorn::optim.pml(pml.object, data=alignment, rearrangement="none", optRooted=TRUE, optQ=TRUE)$tree
+			}
+		}
+		phy$tip.label <- gsub('_', ' ', phy$tip.label)
+		cat("Done.", "\n")
+		return(phy)
 	}
-	phy$tip.label <- gsub('_', ' ', phy$tip.label)
-	cat("Done.", "\n")
-	return(phy)
+
 }
 
 
