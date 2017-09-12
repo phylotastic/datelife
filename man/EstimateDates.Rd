@@ -9,36 +9,37 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), output.format = "phylo.sdm", partial = TRUE,
   usetnrs = FALSE, approximatematch = TRUE,
   cache = get("opentree_chronograms"), method = "PATHd8", bold = FALSE,
-  marker = "COI", suppress.citations = FALSE, missing.taxa = c("list",
-  "data.frame", "none"))
+  marker = "COI", verbose = c("citations", "taxa"),
+  missing.taxa = c("none", "summary", "matrix"))
 }
 \arguments{
-\item{input}{Target taxa: A vector of taxon names, a newick character string, or a phylo object}
+\item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
 
-\item{output.format}{The desired output format for target chronograms (chronograms of target taxa defined in input). See details.}
+\item{output.format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
 
-\item{partial}{If TRUE, use source trees even if they only match some of the desired taxa}
+\item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
 
-\item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer}
+\item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
-\item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)}
+\item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
 
-\item{cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
+\item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
 
 \item{method}{The method used for congruification. PATHd8 only right now, r8s and treePL later.}
 
-\item{bold}{Use Barcode of Life data to get branch lengths on the OToL tree with GetBoldOToLTree function.}
+\item{bold}{Use Barcode of Life data and Open Tree of Life backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.}
 
-\item{marker}{Gene name to select}
-}
-\value{
-Varies depending on the chosen output.format, see details.
+\item{marker}{A character vector with the name of the gene to be used for GetBoldOToLTree construction.}
+
+\item{verbose}{A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
+
+\item{missing.taxa}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.}
 }
 \description{
 Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.
 }
 \details{
-The available output formats from EstimateDates function are:
+Available output formats are:
 
 citations: A character vector of references where chronograms with some or all of the target taxa are published (source chronograms).
 

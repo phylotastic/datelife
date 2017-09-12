@@ -2,28 +2,47 @@
 % Please edit documentation in R/datelife.R
 \name{SummarizeResults}
 \alias{SummarizeResults}
-\title{Summarize a filtered results list in various ways}
+\title{Summarize a filtered results list from GetFilteredResults function in various ways}
 \usage{
 SummarizeResults(filtered.results, output.format, partial = TRUE,
-  cache = get("opentree_chronograms"), suppress.citations = FALSE,
-  missing.taxa = c("list", "data.frame", "none"))
+  cache = get("opentree_chronograms"), verbose = c("citations", "taxa"),
+  missing.taxa = c("none", "summary", "matrix"))
 }
 \arguments{
 \item{filtered.results}{A list of patristic matrices; labels correspond to citations}
 
-\item{output.format}{The desired output format}
-
-\item{partial}{If TRUE, use source trees even if they only match some of the desired taxa}
-
-\item{cache}{The cached trees and other information}
-
-\item{suppress.citations}{If using a format that would normally print() citations, turn this off}
-
-\item{missing.taxa}{A character vector specifying if a summary of missing taxa from source chronograms should be added to the output as a "list", as a "data.frame" or "none" if no summary should be displayed.}
-}
-\value{
-Depends on output format
+\item{...}{Arguments passed on to \code{EstimateDates}
+\describe{
+  \item{output.format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
+  \item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
+  \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
+  \item{verbose}{A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
+  \item{missing.taxa}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.}
+}}
 }
 \description{
-Summarize a filtered results list in various ways
+Summarize a filtered results list from GetFilteredResults function in various ways
+}
+\details{
+Available output formats are:
+
+citations: A character vector of references where chronograms with some or all of the target taxa are published (source chronograms).
+
+mrca: A named numeric vector of most recent common ancestor (mrca) ages of target taxa defined in input, obtained from the source chronograms. Names of mrca vector are equal to citations.
+
+newick.all: A named character vector of newick strings corresponding to target chronograms derived from source chronograms. Names of newick.all vector are equal to citations.
+
+newick.sdm: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
+
+newick.median: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram from the median of all source chronograms.
+
+phylo.sdm: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
+
+phylo.median: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained from source chronograms with median method.
+
+phylo.all: A named list of phylo objects corresponding to each target chronogram obtained from available source chronograms. Names of phylo.all list correspond to citations.
+
+html: A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
+
+data.frame A data.frame with data on target taxa: mrca, number of taxa, citations of source chronograms and newick string.
 }
