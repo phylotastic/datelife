@@ -18,5 +18,5 @@ run<-function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus
   usetnrs <- ifelse(usetnrs=="yes", TRUE, FALSE)
   approximatematch <- ifelse(approximatematch=="yes", TRUE, FALSE)
   filtered.results <- GetFilteredResults(input, partial, usetnrs, approximatematch, opentree_chronograms)
-  SummarizeResults(filtered.results, output.format=format, partial, opentree_chronograms, suppress.citations=TRUE)
+  SummarizeResults(filtered.results, output.format=format, partial, opentree_chronograms, verbose="none")
 }
