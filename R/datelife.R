@@ -911,7 +911,7 @@ GetBoldOToLTree <- function(input=c("Rhea americana",  "Struthio camelus","Gallu
 	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
 	taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
 	if(length(taxa.to.drop)>0) {
-		cat("No", marker, "sequences found for", "taxa.to.drop", "\n")
+		cat("No", marker, "sequences found for", taxa.to.drop, "\n")
 		phy <- ape::drop.tip(phy, taxa.to.drop)
 		cat("Dropping taxa from tree...", "\n")
 	}
