@@ -5,16 +5,19 @@
 \title{Use Barcode of Life data to get branch lengths on the OToL tree}
 \usage{
 GetBoldOToLTree(input = c("Rhea americana", "Struthio camelus",
-  "Gallus gallus"), marker = "COI", otol_version = "v2", doML = FALSE)
+  "Gallus gallus"), marker = "COI", otol_version = "v2",
+  chronogram = TRUE, doML = FALSE)
 }
 \arguments{
-\item{input}{A vector of names}
+\item{input}{A character vector of taxon names}
 
-\item{marker}{Gene name to select}
+\item{marker}{A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.}
 
 \item{otol_version}{Version of OToL to use}
 
-\item{doML}{Boolean; if TRUE, does ML brlen optimization}
+\item{chronogram}{Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.}
+
+\item{doML}{Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml}
 }
 \value{
 A phylogeny with ML branch lengths

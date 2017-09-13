@@ -5,9 +5,9 @@
 \title{Use all calibrations given trees in database to date a tree}
 \usage{
 UseAllCalibrations(phy = GetBoldOToLTree(c("Rhea americana",
-  "Struthio camelus", "Gallus gallus")), partial = TRUE, usetnrs = FALSE,
-  approximatematch = TRUE, cache = get("opentree_chronograms"),
-  expand = 0.1, giveup = 100)
+  "Struthio camelus", "Gallus gallus"), chronogram = FALSE), partial = TRUE,
+  usetnrs = FALSE, approximatematch = TRUE,
+  cache = get("opentree_chronograms"), expand = 0.1, giveup = 100)
 }
 \arguments{
 \item{phy}{A phylo object}

@@ -24,7 +24,13 @@ GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{bold}{Use Barcode of Life data to get branch lengths on the OToL tree with GetBoldOToLTree function.}
 
-\item{marker}{Gene name to select}
+\item{...}{Arguments passed on to \code{GetBoldOToLTree}
+\describe{
+  \item{marker}{A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.}
+  \item{otol_version}{Version of OToL to use}
+  \item{chronogram}{Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.}
+  \item{doML}{Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml}
+}}
 }
 \value{
 List of patristic matrices

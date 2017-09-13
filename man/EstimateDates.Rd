@@ -9,8 +9,8 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), output.format = "phylo.sdm", partial = TRUE,
   usetnrs = FALSE, approximatematch = TRUE,
   cache = get("opentree_chronograms"), method = "PATHd8", bold = FALSE,
-  marker = "COI", verbose = c("citations", "taxa"),
-  missing.taxa = c("none", "summary", "matrix"))
+  verbose = c("citations", "taxa"), missing.taxa = c("none", "summary",
+  "matrix"), ...)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
@@ -29,11 +29,17 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{bold}{Logical. If TRUE, use Barcode of Life repository data and Open Tree of Life backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.}
 
-\item{marker}{A character vector with the name of the gene from Barcode of Life repository to be used for GetBoldOToLTree construction.}
-
 \item{verbose}{A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
 
 \item{missing.taxa}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.}
+
+\item{...}{Arguments passed on to \code{GetBoldOToLTree}
+\describe{
+  \item{marker}{A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.}
+  \item{otol_version}{Version of OToL to use}
+  \item{chronogram}{Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.}
+  \item{doML}{Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml}
+}}
 }
 \description{
 Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.
