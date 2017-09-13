@@ -11,14 +11,13 @@ SummarizeResults(filtered.results, output.format, partial = TRUE,
 \arguments{
 \item{filtered.results}{A list of patristic matrices; labels correspond to citations}
 
-\item{...}{Arguments passed on to \code{EstimateDates}
-\describe{
-  \item{output.format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
-  \item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
-  \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
-  \item{verbose}{A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
-  \item{missing.taxa}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.}
-}}
+\item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
+
+\item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
+
+\item{verbose}{A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
+
+\item{missing.taxa}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.}
 }
 \description{
 Summarize a filtered results list from GetFilteredResults function in various ways

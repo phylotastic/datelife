@@ -27,11 +27,7 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{method}{The method used for congruification. PATHd8 only right now, r8s and treePL later.}
 
-\item{bold}{Logical. If TRUE, use Barcode of Life repository data and Open Tree of Life backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.}
-
-\item{verbose}{A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
-
-\item{missing.taxa}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.}
+\item{bold}{Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.}
 
 \item{...}{Arguments passed on to \code{GetBoldOToLTree}
 \describe{

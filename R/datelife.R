@@ -23,10 +23,8 @@
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms).
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
-#' @param bold Logical. If TRUE, use Barcode of Life repository data and Open Tree of Life backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.
+#' @param bold Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.
 #' @inheritDotParams GetBoldOToLTree marker otol_version chronogram doML
-#' @param verbose A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
-#' @param missing.taxa A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.
 #' @export
 #' @details
 #' Available output formats are:
@@ -284,14 +282,17 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 }
 
 #' Summarize a filtered results list from GetFilteredResults function in various ways
+#' @param partial If TRUE, use source chronograms even if they only match some of the desired taxa
+#' @param cache The cached set of chronograms and other info from data(opentree_chronograms).
+#' @param verbose A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
+#' @param missing.taxa A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.
 #' @param filtered.results A list of patristic matrices; labels correspond to citations
-#' @inheritDotParams EstimateDates output.format partial cache verbose missing.taxa
 #' @inherit EstimateDates return details
 #' @export
 SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cache=get("opentree_chronograms"), verbose= c("citations", "taxa"), missing.taxa=c("none", "summary", "matrix")) {
-	if(!partial) {
-		filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
-	}
+	# if(!partial) {
+	# 	filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
+	# }
 	results.index <- FindMatchingStudyIndex(filtered.results, cache)
 	output.format.in <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
 	missing.taxa.in <- match.arg(missing.taxa, choices=c("none", "summary", "matrix"))
