@@ -2,14 +2,18 @@
 % Please edit documentation in R/datelife.R
 \name{GetBoldOToLTree}
 \alias{GetBoldOToLTree}
-\title{Use Barcode of Life data to get branch lengths on the OToL tree}
+\title{Use Barcode of Life data to get branch lengths on the OToL tree of a set of taxa.}
 \usage{
 GetBoldOToLTree(input = c("Rhea americana", "Struthio camelus",
-  "Gallus gallus"), marker = "COI", otol_version = "v2",
-  chronogram = TRUE, doML = FALSE)
+  "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE,
+  marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE)
 }
 \arguments{
-\item{input}{A character vector of taxon names}
+\item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
+
+\item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
+
+\item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
 
 \item{marker}{A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.}
 
@@ -23,5 +27,5 @@ GetBoldOToLTree(input = c("Rhea americana", "Struthio camelus",
 A phylogeny with ML branch lengths
 }
 \description{
-Use Barcode of Life data to get branch lengths on the OToL tree
+Use Barcode of Life data to get branch lengths on the OToL tree of a set of taxa.
 }

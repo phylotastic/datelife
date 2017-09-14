@@ -7,22 +7,22 @@
 GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
   approximatematch = TRUE, cache = get("opentree_chronograms"),
-  method = "PATHd8", bold = FALSE, marker = "COI")
+  method = "PATHd8", bold = FALSE, ...)
 }
 \arguments{
-\item{input}{A vector of names, a newick string, or a phylo object}
+\item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
 
-\item{partial}{If TRUE, use source trees even if they only match some of the desired taxa}
+\item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
 
-\item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer}
+\item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
-\item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)}
+\item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
 
-\item{cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
+\item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
 
 \item{method}{The method used for congruification. PATHd8 only right now, r8s and treePL later.}
 
-\item{bold}{Use Barcode of Life data to get branch lengths on the OToL tree with GetBoldOToLTree function.}
+\item{bold}{Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.}
 
 \item{...}{Arguments passed on to \code{GetBoldOToLTree}
 \describe{
@@ -30,6 +30,9 @@ GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
   \item{otol_version}{Version of OToL to use}
   \item{chronogram}{Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.}
   \item{doML}{Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml}
+  \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
+  \item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
+  \item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
 }}
 }
 \value{

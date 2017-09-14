@@ -86,17 +86,11 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
-#' @param input A vector of names, a newick string, or a phylo object
-#' @param partial If TRUE, use source trees even if they only match some of the desired taxa
-#' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
-#' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
-#' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
-#' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
-#' @param bold Use Barcode of Life data to get branch lengths on the OToL tree with GetBoldOToLTree function.
-#' @inheritDotParams GetBoldOToLTree marker otol_version chronogram doML
+#' @inheritParams EstimateDates
+#' @inheritDotParams GetBoldOToLTree
 #' @return List of patristic matrices
 #' @export
-GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker="COI") {
+GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, ...) {
     input.processed <- ProcessInput(input, usetnrs, approximatematch)
     tree <- input.processed$phy
     cleaned.names <- input.processed$cleaned.names
@@ -108,7 +102,7 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 		if(!usetnrs) cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
 	}
 	if(bold){
-		 bold.OToLTree <- GetBoldOToLTree(input=cleaned.names)
+		 bold.OToLTree <- GetBoldOToLTree(input = cleaned.names, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, chronogram = chronogram, method = method)
 		 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in=bold.OToLTree, taxa.in=cleaned.names, phy.in=tree, phy4.in=NULL, method.in=method)
 		 bold.data.processed <- ProcessResultsList(results.list=list(bold.data), taxa=cleaned.names, partial)
 	 	 names(bold.data.processed) <-  paste("BoldOToL tree (using ", marker, " as marker)", sep="")
@@ -120,9 +114,7 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 }
 
 #' Take input string, figure out if it's newick or list of species
-#' @param input A newick string or vector of taxa, or a phylo object
-#' @param usetnrs Whether to use OpenTree's TNRS for the input
-#' @param approximatematch If using TNRS, use approximate matching
+#' @inheritParams EstimateDates
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
 ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE) {
@@ -794,26 +786,26 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
 #  	}
 #  }
 #  else {
-  	return(patristic.matrix<-patristic.matrix.array[,,sample.int(1, size=dim(patristic.matrix.array)[3] )] )
+  	return(patristic.matrix <- patristic.matrix.array[,,sample.int(1, size = dim(patristic.matrix.array)[3] )] )
  # }
 }
 
 
 #' Get all calibrations given trees in database
-#' @param input A vector of names, a newick string, or a phylo object
-#' @param partial If TRUE, use source trees even if they only match some of the desired taxa
-#' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
-#' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
+#' @param input vector of names, a newick string, or a phylo object
+#' @param partial Boolean; default TRUE: use source trees even if they only match some of the desired taxa
+#' @param usetnrs Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
+#' @param approximatematch Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @return data.frame of calibrations
 #' @export
-GetAllCalibrations <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms")) {
-	phylo.results <- EstimateDates(input=input, partial=partial, usetnrs=usetnrs, approximatematch=approximatematch, cache=cache, output.format="phylo.all")
+GetAllCalibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, cache = get("opentree_chronograms")) {
+	phylo.results <- EstimateDates(input = input, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, cache = cache, output.format = "phylo.all")
 	constraints.df <- data.frame()
 	for (i in sequence(length(phylo.results))) {
-		local.df <- geiger::congruify.phylo(reference=phylo.results[[i]], target=phylo.results[[i]], scale=NA)$calibrations
+		local.df <- geiger::congruify.phylo(reference = phylo.results[[i]], target = phylo.results[[i]], scale = NA)$calibrations
 		local.df$reference <- names(phylo.results)[i]
-		if(i==1) {
+		if(i == 1) {
 			constraints.df <- local.df
 		} else {
 			constraints.df <- rbind(constraints.df, local.df)
@@ -836,8 +828,8 @@ GetAllCalibrations <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 #' This will try to use the calibrations as fixed ages.
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
-UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"), chronogram=FALSE), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), expand=0.1, giveup=100) {
-	calibrations.df <- GetAllCalibrations(input=gsub('_', ' ', phy$tip.label), partial=partial, usetnrs=usetnrs, approximatematch=approximatematch, cache=cache)
+UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"), chronogram = FALSE), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, cache = get("opentree_chronograms"), expand = 0.1, giveup = 100) {
+	calibrations.df <- GetAllCalibrations(input = gsub('_', ' ', phy$tip.label), partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, cache = cache)
 	phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.
 	calibrations.df$taxonA <- gsub(' ', '_', calibrations.df$taxonA)
 	calibrations.df$taxonB <- gsub(' ', '_', calibrations.df$taxonB)
@@ -849,8 +841,8 @@ UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Strut
 	if(!is.null(chronogram)) {
 		chronogram$edge.length[which(chronogram$edge.length<0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
 	}
-	attempts=0
-	if(expand!=0) {
+	attempts = 0
+	if(expand != 0) {
 		while(is.null(chronogram) & attempts<giveup) {
 			calibrations.df <- original.calibrations.df
 			calibrations.df$MaxAge <- calibrations.df$MaxAge * ((1+expand)^attempts)
@@ -859,43 +851,46 @@ UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Strut
 			# We will have no fixed ages. Pathd8 just quietly gives up. So instead, we add a tiny branch with a zero calibration
 			# between it and its sister.
 			made.up.edgelength <- min(1e-9, .001*min(phy$edge.length))
-			phy2 <- phytools::bind.tip(ape::reorder.phylo(phy), "tinytip", edge.length=made.up.edgelength, where=1, position=made.up.edgelength) #bind tip has weird behavior for non-reordered trees
+			phy2 <- phytools::bind.tip(ape::reorder.phylo(phy), "tinytip", edge.length = made.up.edgelength, where = 1, position = made.up.edgelength) #bind tip has weird behavior for non-reordered trees
 			calibrations.df[dim(calibrations.df)[1]+1,]<- c("fixed", 0, 0, phy$tip.label[1], "tinytip", "none")
 			try(chronogram <- geiger::PATHd8.phylo(phy2, calibrations.df))
 			if(!is.null(chronogram)) {
-				chronogram$edge.length[which(chronogram$edge.length<0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+				chronogram$edge.length[which(chronogram$edge.length < 0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
 				chronogram <- ape::drop.tip(chronogram, "tinytip")
 			}
 			attempts <- attempts+1
 		}
-		if(attempts>0) {
+		if(attempts > 0) {
 			# print("Dates are even more approximate than usual: had to expand constraints to have them agree")
 			cat("Dates are even more approximate than usual: had to expand constraints to have them agree", "\n")
 		}
 	}
-	return(list(phy=chronogram, calibrations.df=calibrations.df, original.calibrations.df=original.calibrations.df))
+	return(list(phy = chronogram, calibrations.df = calibrations.df, original.calibrations.df = original.calibrations.df))
 }
 
-#' Use Barcode of Life data to get branch lengths on the OToL tree
-#' @param input A character vector of taxon names
+#' Use Barcode of Life data to get branch lengths on the OToL tree of a set of taxa.
+#' @inheritParams EstimateDates
 #' @param marker A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.
 #' @param otol_version Version of OToL to use
 #' @param chronogram Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.
 #' @param doML Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml
 #' @return A phylogeny with ML branch lengths
 #' @export
-GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus","Gallus gallus"), marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE) {
+GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE) {
 	#otol returns error with missing taxa in v3 of rotl
-	cat("Estimating BoldOToL tree...", "\n")
-	sequences <- bold::bold_seqspec(taxon=input, marker=marker)
-	if(length(sequences)==1) {
+	input.processed <- ProcessInput(input, usetnrs, approximatematch)
+	cleaned.names <- input.processed$cleaned.names
+	cat("After processing input, searching sequences for:", "\n", cleaned.names, "\n")
+	sequences <- bold::bold_seqspec(taxon = cleaned.names, marker = marker)
+	if(length(sequences) == 1) {
 		cat("Cannot construct tree, no sequences were found in BOLD for the input taxa...", "\n")
 		# cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
 		stop("Names in input do not match BOLD specimen records.")
 	}
-	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names=input)$ott_id, label_format="name",  otl_v=otol_version))
+	cat("Estimating BoldOToL tree...", "\n")
+	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names = input)$ott_id, label_format = "name",  otl_v = otol_version))
 	phy$tip.label <- gsub("_ott.*","", phy$tip.label)
-	final.sequences <- matrix("-", nrow=length(input), ncol=max(sapply(strsplit(sequences$nucleotides, ""), length)))
+	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
 	final.sequences.names <- rep(NA, length(input))
 	for (i in sequence(dim(sequences)[1])) {
 		taxon <- sequences$species_name[i]
@@ -912,7 +907,7 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus","Gal
 	alignment <- ape::as.DNAbin(final.sequences)
 	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
 	taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
-	if(length(taxa.to.drop)>0) {
+	if(length(taxa.to.drop) > 0) {
 		cat("No", marker, "sequences found for", taxa.to.drop, "\n")
 		phy <- ape::drop.tip(phy, taxa.to.drop)
 		cat("Dropping taxa from tree...", "\n")
@@ -925,15 +920,16 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus","Gal
 		phy <- pml.object$tree
 	}
 	if (chronogram) {
-		pml.object$tree <- ape::chronoMPL(pml.object$tree, se=FALSE, test=FALSE)
+		cat("Dating BoldOToL tree...", "\n")
+		pml.object$tree <- ape::chronoMPL(pml.object$tree, se = FALSE, test = FALSE)
 		phy <- pml.object$tree
 	}
-	if(any(pml.object$tree$edge.length<0)) {
-		cat("Negative branch lengths in BOLD chronogram...", "\n")
+	if(any(pml.object$tree$edge.length < 0)) {
+		cat("Negative branch lengths in BOLD chronogram.", "\n")
 		if(doML) cat("Cannot do ML branch length optimization.", "\n")
 	} else {
 		if(doML) {
-			phy <- phangorn::optim.pml(pml.object, data=alignment, rearrangement="none", optRooted=TRUE, optQ=TRUE)$tree
+			phy <- phangorn::optim.pml(pml.object, data = alignment, rearrangement = "none", optRooted = TRUE, optQ = TRUE)$tree
 		}
 	}
 	phy$tip.label <- gsub('_', ' ', phy$tip.label)
