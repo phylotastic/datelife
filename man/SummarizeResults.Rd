@@ -4,12 +4,15 @@
 \alias{SummarizeResults}
 \title{Summarize a filtered results list from GetFilteredResults function in various ways}
 \usage{
-SummarizeResults(filtered.results, output.format, partial = TRUE,
-  cache = get("opentree_chronograms"), verbose = c("citations", "taxa"),
-  missing.taxa = c("none", "summary", "matrix"))
+SummarizeResults(filtered.results = NULL, output.format = "citations",
+  partial = TRUE, cache = get("opentree_chronograms"),
+  verbose = c("citations", "taxa"), missing.taxa = c("none", "summary",
+  "matrix"))
 }
 \arguments{
 \item{filtered.results}{A list of patristic matrices; labels correspond to citations}
+
+\item{output.format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
 
 \item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
 

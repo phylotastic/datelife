@@ -18,13 +18,17 @@
 #' @aliases datelife
 #' @param input Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.
 #' @param output.format The desired output format for target chronograms (chronograms of target taxa). See details.
+#' @param verbose A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
+#' @param missing.taxa A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.
 #' @param partial If TRUE, use source chronograms even if they only match some of the desired taxa
 #' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).
+##' @param update_cache default to FALSE
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms).
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
 #' @param bold Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.
-#' @inheritDotParams GetBoldOToLTree marker otol_version chronogram doML
+#' @param marker A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.
+#' @inheritDotParams GetBoldOToLTree otol_version chronogram doML
 #' @export
 #' @details
 #' Available output formats are:
@@ -74,15 +78,11 @@
 #' system("open some.bird.trees.html")
 
 EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		output.format="phylo.sdm", partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, verbose= c("citations", "taxa"), missing.taxa=c("none", "summary", "matrix"), ...) {
-	output.format.in <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
-	missing.taxa.in <- match.arg(missing.taxa, choices=c("none", "summary", "matrix"))
-	verbose.in <- match.arg(verbose, c("citations", "taxa", "none"), several.ok=TRUE)
-	partial.in <- partial
-	filtered.results.in <- GetFilteredResults(input, partial.in, usetnrs, approximatematch, cache, method, bold)
-#	output.format.in <- output.format
-	cache.in <- cache
-	return(SummarizeResults(filtered.results=filtered.results.in, output.format=output.format.in, partial=partial.in, cache=cache.in, verbose=verbose.in, missing.taxa=missing.taxa.in))
+		output.format = "phylo.sdm", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, cache = get("opentree_chronograms"), method="PATHd8", bold=FALSE, verbose= c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"),  marker = "COI",...) {
+			#... only defines arguments to be passed to GetBoldOToLTree for now
+			# find a way not to repeat partial and cache arguments, which are used in both GetFilteredResults and SummarizeResults
+			filtered.results.here <- GetFilteredResults(input = input, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, cache = cache, method = method, bold = bold, marker = marker, ...)
+			return(SummarizeResults(filtered.results = filtered.results.here, output.format = output.format, partial = partial, cache = cache, verbose = verbose, missing.taxa = missing.taxa))
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
@@ -90,7 +90,7 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 #' @inheritDotParams GetBoldOToLTree
 #' @return List of patristic matrices
 #' @export
-GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, ...) {
+GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker = "COI", ...) {
     input.processed <- ProcessInput(input, usetnrs, approximatematch)
     tree <- input.processed$phy
     cleaned.names <- input.processed$cleaned.names
@@ -102,7 +102,7 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 		if(!usetnrs) cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
 	}
 	if(bold){
-		 bold.OToLTree <- GetBoldOToLTree(input = cleaned.names, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, chronogram = chronogram, method = method)
+		 bold.OToLTree <- GetBoldOToLTree(input = cleaned.names, usetnrs = usetnrs, approximatematch = approximatematch, marker = marker,  ...)
 		 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in=bold.OToLTree, taxa.in=cleaned.names, phy.in=tree, phy4.in=NULL, method.in=method)
 		 bold.data.processed <- ProcessResultsList(results.list=list(bold.data), taxa=cleaned.names, partial)
 	 	 names(bold.data.processed) <-  paste("BoldOToL tree (using ", marker, " as marker)", sep="")
@@ -274,21 +274,23 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 }
 
 #' Summarize a filtered results list from GetFilteredResults function in various ways
-#' @param partial If TRUE, use source chronograms even if they only match some of the desired taxa
-#' @param cache The cached set of chronograms and other info from data(opentree_chronograms).
-#' @param verbose A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
-#' @param missing.taxa A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.
 #' @param filtered.results A list of patristic matrices; labels correspond to citations
+#' @inheritParams EstimateDates
 #' @inherit EstimateDates return details
 #' @export
-SummarizeResults <- function(filtered.results, output.format, partial=TRUE, cache=get("opentree_chronograms"), verbose= c("citations", "taxa"), missing.taxa=c("none", "summary", "matrix")) {
+SummarizeResults <- function(filtered.results = NULL, output.format = "citations", partial=TRUE, cache=get("opentree_chronograms"), verbose= c("citations", "taxa"), missing.taxa=c("none", "summary", "matrix")) {
 	# if(!partial) {
 	# 	filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 	# }
-	results.index <- FindMatchingStudyIndex(filtered.results, cache)
+	if(is.null(filtered.results) | !is.list(filtered.results)){
+		cat("filtered.results argument must be a list from GetFilteredResults function.", "\n")
+		stop()
+	}
 	output.format.in <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
 	missing.taxa.in <- match.arg(missing.taxa, choices=c("none", "summary", "matrix"))
 	verbose.in <- match.arg(verbose, c("citations", "taxa", "none"), several.ok=TRUE)
+
+	results.index <- FindMatchingStudyIndex(filtered.results, cache)
 	return.object <- NA
 
 	if(missing.taxa.in=="matrix"){
@@ -829,7 +831,13 @@ GetAllCalibrations <- function(input = c("Rhea americana", "Pterocnemia pennata"
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
 UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"), chronogram = FALSE), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, cache = get("opentree_chronograms"), expand = 0.1, giveup = 100) {
+	if(!geiger::is.phylo(phy)){
+		cat("phy argument must be a phylo object.", "\n")
+		stop()
+	}
 	calibrations.df <- GetAllCalibrations(input = gsub('_', ' ', phy$tip.label), partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, cache = cache)
+#	useful if we decide to allow newick as input, would need to add some newick to phylo code in here
+# calibrations.df <- GetAllCalibrations(input = phy, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, cache = cache)
 	phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.
 	calibrations.df$taxonA <- gsub(' ', '_', calibrations.df$taxonA)
 	calibrations.df$taxonB <- gsub(' ', '_', calibrations.df$taxonB)
@@ -870,7 +878,6 @@ UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Strut
 
 #' Use Barcode of Life data to get branch lengths on the OToL tree of a set of taxa.
 #' @inheritParams EstimateDates
-#' @param marker A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.
 #' @param otol_version Version of OToL to use
 #' @param chronogram Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.
 #' @param doML Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml
