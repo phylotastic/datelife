@@ -4,6 +4,21 @@
 #library(ape)
 #library(knitcitations)
 
+#' update Open Tree of Life cache
+#' @param save Boolean; default TRUE: save all chronograms from Open Tree of Life to an RData file (default to opentree_chronograms.RData)
+#' @inheritParams SaveOToLChronograms
+#' @inherit GetOToLChronograms return
+#' @inherit SaveOToLChronograms return
+
+UpdateCache <- function(save = TRUE, file = "opentree_chronograms.RData", verbose = TRUE){
+	if (save) {
+		cache.update <- SaveOToLChronograms(file = file, verbose = verbose)
+	} else {
+		cache.update <- GetOToLChronograms(verbose = verbose)
+	}
+	return(cache.update)
+}
+
 #' Check for branch lengths in a tree
 #' @param x A phylo object
 #' @return A TRUE or FALSE

@@ -6,7 +6,8 @@
 \usage{
 GetBoldOToLTree(input = c("Rhea americana", "Struthio camelus",
   "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE,
-  marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE)
+  marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE,
+  process_input = TRUE)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
@@ -22,6 +23,8 @@ GetBoldOToLTree(input = c("Rhea americana", "Struthio camelus",
 \item{chronogram}{Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.}
 
 \item{doML}{Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml}
+
+\item{process_input}{default to TRUE}
 }
 \value{
 A phylogeny with ML branch lengths

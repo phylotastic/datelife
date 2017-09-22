@@ -102,7 +102,7 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 		if(!usetnrs) cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
 	}
 	if(bold){
-		 bold.OToLTree <- GetBoldOToLTree(input = cleaned.names, usetnrs = usetnrs, approximatematch = approximatematch, marker = marker,  ...)
+		 bold.OToLTree <- GetBoldOToLTree(input = cleaned.names, process_input = FALSE, usetnrs = usetnrs, approximatematch = approximatematch, marker = marker,  ...)
 		 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in=bold.OToLTree, taxa.in=cleaned.names, phy.in=tree, phy4.in=NULL, method.in=method)
 		 bold.data.processed <- ProcessResultsList(results.list=list(bold.data), taxa=cleaned.names, partial)
 	 	 names(bold.data.processed) <-  paste("BoldOToL tree (using ", marker, " as marker)", sep="")
@@ -121,24 +121,24 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 	if(class(input) == "phylo") {
 		input <- ape::write.tree(input)
 	}
- input<-gsub("\\+"," ",input)
-  input<-stringr::str_trim(input, side = "both")
+ 	input <- gsub("\\+"," ",input)
+  input <- stringr::str_trim(input, side = "both")
   phy.new <- NA
-   if(length(input)==1) {
+   if(length(input) == 1) {
 	  if(grepl("\\(.*\\).*;", input)) { #our test for newick
-	    phy.new <-ape::read.tree(text=gsub(" ", "_", input))
+	    phy.new <- ape::read.tree(text=gsub(" ", "_", input))
 	  } else {
 		  cat("You must provide at least two species names as input to perform a search.", "\n")
 		  stop("Input is length 1.")
 	  }
   }
-  cleaned.names<-""
+  cleaned.names <- ""
   if(!is.na(phy.new[1])) {
     if(usetnrs) {
 			cleaned.names <- rotl::tnrs_match_names(phy.new$tip.label)$unique_name
       phy.new$tip.label <- gsub("_", " ", cleaned.names)
     }
-  	cleaned.names<-gsub("_", " ", phy.new$tip.label)
+  	cleaned.names <- gsub("_", " ", phy.new$tip.label)
   } else {
     #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
 		if(length(input)==1) {
@@ -881,14 +881,17 @@ UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Strut
 #' @param otol_version Version of OToL to use
 #' @param chronogram Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.
 #' @param doML Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml
+#' @param process_input default to TRUE
 #' @return A phylogeny with ML branch lengths
 #' @export
-GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE) {
+GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, process_input = TRUE) {
 	#otol returns error with missing taxa in v3 of rotl
-	input.processed <- ProcessInput(input, usetnrs, approximatematch)
-	cleaned.names <- input.processed$cleaned.names
-	cat("After processing input, searching sequences for:", "\n", cleaned.names, "\n")
-	sequences <- bold::bold_seqspec(taxon = cleaned.names, marker = marker)
+	if (process_input) {
+		input.processed <- ProcessInput(input, usetnrs, approximatematch)
+		input <- input.processed$cleaned.names
+		cat("After processing input, searching sequences for:", "\n", input, "\n")
+	}
+	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
 	if(length(sequences) == 1) {
 		cat("Cannot construct tree, no sequences were found in BOLD for the input taxa...", "\n")
 		# cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")

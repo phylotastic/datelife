@@ -31,6 +31,7 @@ GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
   \item{otol_version}{Version of OToL to use}
   \item{chronogram}{Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.}
   \item{doML}{Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml}
+  \item{process_input}{default to TRUE}
   \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
   \item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
   \item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
