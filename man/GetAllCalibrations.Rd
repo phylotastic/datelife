@@ -6,7 +6,8 @@
 \usage{
 GetAllCalibrations(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
-  approximatematch = TRUE, cache = get("opentree_chronograms"))
+  approximatematch = TRUE, update_cache = FALSE,
+  cache = get("opentree_chronograms"))
 }
 \arguments{
 \item{input}{vector of names, a newick string, or a phylo object}
@@ -16,6 +17,8 @@ GetAllCalibrations(input = c("Rhea americana", "Pterocnemia pennata",
 \item{usetnrs}{Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer}
 
 \item{approximatematch}{Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)}
+
+\item{update_cache}{default to FALSE}
 
 \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
 }

@@ -6,8 +6,9 @@
 \usage{
 GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
-  approximatematch = TRUE, cache = get("opentree_chronograms"),
-  method = "PATHd8", bold = FALSE, marker = "COI", ...)
+  approximatematch = TRUE, update_cache = FALSE,
+  cache = get("opentree_chronograms"), method = "PATHd8", bold = FALSE,
+  marker = "COI", ...)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
@@ -17,6 +18,8 @@ GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
 \item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
 \item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
+
+\item{update_cache}{default to FALSE}
 
 \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
 

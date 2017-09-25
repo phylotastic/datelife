@@ -6,7 +6,7 @@
 \usage{
 UseAllCalibrations(phy = GetBoldOToLTree(c("Rhea americana",
   "Struthio camelus", "Gallus gallus"), chronogram = FALSE), partial = TRUE,
-  usetnrs = FALSE, approximatematch = TRUE,
+  usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), expand = 0.1, giveup = 100)
 }
 \arguments{
@@ -17,6 +17,8 @@ UseAllCalibrations(phy = GetBoldOToLTree(c("Rhea americana",
 \item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer}
 
 \item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)}
+
+\item{update_cache}{default to FALSE}
 
 \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
 

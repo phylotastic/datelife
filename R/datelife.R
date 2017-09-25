@@ -284,10 +284,10 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' @inheritParams EstimateDates
 #' @inherit EstimateDates return details
 #' @export
-SummarizeResults <- function(filtered.results = NULL, output.format = "citations", partial=TRUE, cache=get("opentree_chronograms"), verbose= c("citations", "taxa"), missing.taxa=c("none", "summary", "matrix")) {
+SummarizeResults <- function(filtered.results = NULL, output.format = "citations", partial=TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix")) {
 		# if(!partial) {
 		# 	filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
-		# }
+		# } # not necessary cause already filtered in GetFilteredResults
 		if(update_cache){
 			cache <- UpdateCache(save = TRUE)
 		}
@@ -302,7 +302,7 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "citations
 	results.index <- FindMatchingStudyIndex(filtered.results, cache)
 	return.object <- NA
 
-	if(missing.taxa.in=="matrix"){
+	if(missing.taxa.in == "matrix"){
 		missing.taxa.list <- vector(mode="list")
 		tax <- rownames(filtered.results[[1]])
 		for(result.index in sequence(length(filtered.results))){
@@ -316,7 +316,7 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "citations
 		rownames(missing.taxa.matrix) <- sequence(nrow(missing.taxa.matrix))
 	}
 
-	if(missing.taxa.in=="summary" | any(grepl("taxa", verbose.in))){
+	if(missing.taxa.in == "summary" | any(grepl("taxa", verbose.in))){
 		tax <- rownames(filtered.results[[1]])
 		x <- rapply(filtered.results, rownames)
 		prop <- c()
@@ -326,51 +326,51 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "citations
 		missing.taxa.summary <- data.frame(Taxon=tax, Chronograms=prop)
 	}
 
-	if(output.format.in=="citations") {
+	if(output.format.in == "citations") {
 		return.object <- names(filtered.results)
 	}
-	if(output.format.in=="mrca") {
+	if(output.format.in == "mrca") {
 		return.object <- GetAges(filtered.results, partial=partial)
 	}
-	if(output.format.in=="newick.all") {
+	if(output.format.in == "newick.all") {
 		trees <- sapply(filtered.results, PatristicMatrixToNewick)
 		return.object <- trees[which(!is.na(trees))]
 	}
-	if(output.format.in=="newick.sdm") {
+	if(output.format.in == "newick.sdm") {
 		local.results <- RunSDM(filtered.results)
 		filtered.results <- local.results$filtered.results
 		tree <- local.results$phy
 		return.object <- ape::write.tree(tree)
 	}
-	if(output.format.in=="phylo.sdm") {
+	if(output.format.in == "phylo.sdm") {
 		local.results <- RunSDM(filtered.results)
 		filtered.results <- local.results$filtered.results
 		tree <- local.results$phy
 		return.object <- tree
 	}
-	if(output.format.in=="newick.median") {
+	if(output.format.in == "newick.median") {
 		patristic.array <- BindMatrices(filtered.results)
 		median.matrix <- SummaryPatristicMatrixArray(patristic.array)
 		tree <- PatristicMatrixToNewick(median.matrix)
 		return.object <- tree
 	}
-	if(output.format.in=="phylo.median") {
+	if(output.format.in == "phylo.median") {
 		patristic.array <- BindMatrices(filtered.results)
 		median.matrix <- SummaryPatristicMatrixArray(patristic.array)
 		tree <- PatristicMatrixToTree(median.matrix)
 		return.object <- tree
 	}
-	if(output.format.in=="phylo.all") {
+	if(output.format.in == "phylo.all") {
 		trees <- lapply(filtered.results, PatristicMatrixToTree)
 		return.object <- trees[which(!is.na(trees))]
 	}
-	if(missing.taxa.in =="matrix" & !any(grepl(output.format.in, c("html", "data.frame")))){
+	if(missing.taxa.in == "matrix" & !any(grepl(output.format.in, c("html", "data.frame")))){
 		return.object <- list(return.object, missing.taxa=missing.taxa.matrix)
 		names(return.object)[1] <- output.format.in
 	}
-	if(output.format.in=="html") {
+	if(output.format.in == "html") {
 		out.vector1 <- "<table border='1'><tr><th>MRCA Age (MY)</th><th>Ntax</th><th>Citation</th><th>Newick"
-		if(missing.taxa.in =="matrix"){
+		if(missing.taxa.in == "matrix"){
 			out.vector1 <- paste(out.vector1, paste("</th><th>", colnames(missing.taxa.matrix), sep="", collapse=""), sep="")
 		}
 		out.vector1 <- paste(out.vector1, "</th></tr>", sep="")
@@ -379,13 +379,13 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "citations
 		out.vector2 <- c()
 		for(result.index in sequence(length(filtered.results))) {
 			out.vector2 <- paste(out.vector2, "<tr><td>",ages[result.index],"</td><td>",sum(!is.na(diag(filtered.results[[result.index]]))), "</td><td>", names(filtered.results)[result.index], "</td><td>", trees[result.index],  sep="")
-			if(missing.taxa.in=="matrix"){
+			if(missing.taxa.in == "matrix"){
 				out.vector2 <- paste(out.vector2, paste("</td><td>", missing.taxa.matrix[result.index,], sep="", collapse=""), sep="")
 			}
 			out.vector2 <- paste(out.vector2, "</td></tr>", sep="")
 		}
 		out.vector <- paste(out.vector1, out.vector2, "</table>")
-		if(missing.taxa.in=="summary"){
+		if(missing.taxa.in == "summary"){
 			missing.taxa.summ <- as.matrix(missing.taxa.summary)
 			out.vector3 <- "<p></p><table border='1'><tr><th>Taxon</th><th>Chronograms</th><tr>"
 			for (summary.index in sequence(nrow(missing.taxa.summ))){
@@ -395,25 +395,25 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "citations
 		}
 		return.object <- out.vector
 	}
-	if(output.format.in=="data.frame") {
+	if(output.format.in == "data.frame") {
 		out.df <- data.frame()
 		ages <- GetAges(filtered.results, partial=partial)
 		trees <- sapply(filtered.results, PatristicMatrixToNewick)
 		for(result.index in sequence(length(filtered.results))) {
 			out.line<- data.frame(Age=ages[result.index],Ntax=sum(!is.na(diag(filtered.results[[result.index]]))), Citation=names(filtered.results)[result.index], Newick= trees[result.index])
-			if(result.index==1) {
+			if(result.index == 1) {
 				out.df <- out.line
 			} else {
 				out.df <- rbind(out.df, out.line)
 			}
 		}
-		if(missing.taxa.in=="matrix"){
+		if(missing.taxa.in == "matrix"){
 			out.df <- cbind(out.df, missing.taxa.matrix)
 		}
 		rownames(out.df) <- NULL
 		return.object <- out.df
 	}
-	if(missing.taxa.in =="summary" & !any(grepl(output.format.in, c("html")))){
+	if(missing.taxa.in == "summary" & !any(grepl(output.format.in, c("html")))){
 		return.object <- list(return.object, missing.taxa=missing.taxa.summary)
 		names(return.object)[1] <- output.format.in
 	}
@@ -808,10 +808,11 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
 #' @param usetnrs Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
 #' @param approximatematch Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
+#' @inheritParams EstimateDates
 #' @return data.frame of calibrations
 #' @export
-GetAllCalibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, cache = get("opentree_chronograms")) {
-	phylo.results <- EstimateDates(input = input, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, cache = cache, output.format = "phylo.all")
+GetAllCalibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms")) {
+	phylo.results <- EstimateDates(input = input, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = update_cache, cache = cache, output.format = "phylo.all")
 	constraints.df <- data.frame()
 	for (i in sequence(length(phylo.results))) {
 		local.df <- geiger::congruify.phylo(reference = phylo.results[[i]], target = phylo.results[[i]], scale = NA)$calibrations
@@ -833,18 +834,19 @@ GetAllCalibrations <- function(input = c("Rhea americana", "Pterocnemia pennata"
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @param expand How much to expand by each step to get consistent calibrations
 #' @param giveup How many expansion to try before giving up
+#' @inheritParams EstimateDates
 #' @return list with chronogram, original calibrations, and expanded calibrations
 #' @export
 #' @details
 #' This will try to use the calibrations as fixed ages.
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
-UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"), chronogram = FALSE), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, cache = get("opentree_chronograms"), expand = 0.1, giveup = 100) {
+UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"), chronogram = FALSE), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1, giveup = 100) {
 	if(!geiger::is.phylo(phy)){
 		cat("phy argument must be a phylo object.", "\n")
 		stop()
 	}
-	calibrations.df <- GetAllCalibrations(input = gsub('_', ' ', phy$tip.label), partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, cache = cache)
+	calibrations.df <- GetAllCalibrations(input = gsub('_', ' ', phy$tip.label), partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = update_cache, cache = cache)
 #	useful if we decide to allow newick as input, would need to add some newick to phylo code in here
 # calibrations.df <- GetAllCalibrations(input = phy, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, cache = cache)
 	phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.

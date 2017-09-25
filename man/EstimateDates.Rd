@@ -7,7 +7,7 @@
 \usage{
 EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), output.format = "phylo.sdm", partial = TRUE,
-  usetnrs = FALSE, approximatematch = TRUE,
+  usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), method = "PATHd8", bold = FALSE,
   verbose = c("citations", "taxa"), missing.taxa = c("none", "summary",
   "matrix"), marker = "COI", ...)
@@ -22,6 +22,8 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
 \item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
 \item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
+
+\item{update_cache}{default to FALSE}
 
 \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
 
@@ -41,8 +43,6 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
   \item{chronogram}{Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.}
   \item{doML}{Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml}
 }}
-
-\item{update_cache}{default to FALSE}
 }
 \description{
 Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.
