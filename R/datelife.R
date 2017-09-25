@@ -23,7 +23,7 @@
 #' @param partial If TRUE, use source chronograms even if they only match some of the desired taxa
 #' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.
 #' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).
-##' @param update_cache default to FALSE
+#' @param update_cache default to FALSE
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms).
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
 #' @param bold Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.
@@ -78,11 +78,14 @@
 #' system("open some.bird.trees.html")
 
 EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		output.format = "phylo.sdm", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, cache = get("opentree_chronograms"), method="PATHd8", bold=FALSE, verbose= c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"),  marker = "COI",...) {
+		output.format = "phylo.sdm", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), method="PATHd8", bold=FALSE, verbose= c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"),  marker = "COI",...) {
 			#... only defines arguments to be passed to GetBoldOToLTree for now
 			# find a way not to repeat partial and cache arguments, which are used in both GetFilteredResults and SummarizeResults
-			filtered.results.here <- GetFilteredResults(input = input, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, cache = cache, method = method, bold = bold, marker = marker, ...)
-			return(SummarizeResults(filtered.results = filtered.results.here, output.format = output.format, partial = partial, cache = cache, verbose = verbose, missing.taxa = missing.taxa))
+			if(update_cache){
+				cache <- UpdateCache(save = TRUE)
+			}
+			filtered.results.here <- GetFilteredResults(input = input, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = FALSE, cache = cache, method = method, bold = bold, marker = marker, ...)
+			return(SummarizeResults(filtered.results = filtered.results.here, output.format = output.format, partial = partial, update_cache = FALSE, cache = cache, verbose = verbose, missing.taxa = missing.taxa))
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
@@ -90,7 +93,10 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 #' @inheritDotParams GetBoldOToLTree
 #' @return List of patristic matrices
 #' @export
-GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker = "COI", ...) {
+GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, update_cache = FALSE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker = "COI", ...) {
+		if(update_cache){
+			cache <- UpdateCache(save = TRUE)
+		}
     input.processed <- ProcessInput(input, usetnrs, approximatematch)
     tree <- input.processed$phy
     cleaned.names <- input.processed$cleaned.names
@@ -279,9 +285,12 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' @inherit EstimateDates return details
 #' @export
 SummarizeResults <- function(filtered.results = NULL, output.format = "citations", partial=TRUE, cache=get("opentree_chronograms"), verbose= c("citations", "taxa"), missing.taxa=c("none", "summary", "matrix")) {
-	# if(!partial) {
-	# 	filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
-	# }
+		# if(!partial) {
+		# 	filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
+		# }
+		if(update_cache){
+			cache <- UpdateCache(save = TRUE)
+		}
 	if(is.null(filtered.results) | !is.list(filtered.results)){
 		cat("filtered.results argument must be a list from GetFilteredResults function.", "\n")
 		stop()
