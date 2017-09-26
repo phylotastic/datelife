@@ -78,7 +78,7 @@
 #' system("open some.bird.trees.html")
 
 EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		output.format = "phylo.sdm", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), method="PATHd8", bold=FALSE, verbose= c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"),  marker = "COI",...) {
+		output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), method="PATHd8", bold=FALSE, verbose= c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"),  marker = "COI",...) {
 			#... only defines arguments to be passed to GetBoldOToLTree for now
 			# find a way not to repeat partial and cache arguments, which are used in both GetFilteredResults and SummarizeResults
 			if(update_cache){
@@ -109,7 +109,7 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 	}
 	if(bold){
 		 bold.OToLTree <- GetBoldOToLTree(input = cleaned.names, process_input = FALSE, usetnrs = usetnrs, approximatematch = approximatematch, marker = marker,  ...)
-		 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in=bold.OToLTree, taxa.in=cleaned.names, phy.in=tree, phy4.in=NULL, method.in=method)
+		 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in = bold.OToLTree, taxa.in = cleaned.names, phy.in = NULL, phy4.in = NULL, method.in = method)
 		 bold.data.processed <- ProcessResultsList(results.list=list(bold.data), taxa=cleaned.names, partial)
 	 	 names(bold.data.processed) <-  paste("BoldOToL tree (using ", marker, " as marker)", sep="")
 	   filtered.results <- c(filtered.results, bold.data.processed)
@@ -128,21 +128,21 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 		input <- ape::write.tree(input)
 	}
  	input <- gsub("\\+"," ",input)
-  input <- stringr::str_trim(input, side = "both")
-  phy.new <- NA
-   if(length(input) == 1) {
-	  if(grepl("\\(.*\\).*;", input)) { #our test for newick
-	    phy.new <- ape::read.tree(text=gsub(" ", "_", input))
-	  } else {
-		  cat("You must provide at least two species names as input to perform a search.", "\n")
+  	input <- stringr::str_trim(input, side = "both")
+  	phy.new <- NA
+   	if(length(input) == 1) {
+	  	if(grepl("\\(.*\\).*;", input)) { #our test for newick
+	    	phy.new <- ape::read.tree(text=gsub(" ", "_", input))
+	  	} else {
+		  cat("You must provide at least two taxon names as input to perform a search.", "\n")
 		  stop("Input is length 1.")
-	  }
-  }
+	  	}
+  	}
   cleaned.names <- ""
   if(!is.na(phy.new[1])) {
     if(usetnrs) {
-			cleaned.names <- rotl::tnrs_match_names(phy.new$tip.label)$unique_name
-      phy.new$tip.label <- gsub("_", " ", cleaned.names)
+		cleaned.names <- rotl::tnrs_match_names(phy.new$tip.label)$unique_name
+      	phy.new$tip.label <- gsub("_", " ", cleaned.names)
     }
   	cleaned.names <- gsub("_", " ", phy.new$tip.label)
   } else {
@@ -152,9 +152,9 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 		}
 		cleaned.names <- stringr::str_trim(input, side = "both")
     #cleaned.names <- input
-    if (usetnrs) {
-      cleaned.names <- gsub("_", " ", rotl::tnrs_match_names(cleaned.names)$unique_name)
-    }
+    	if (usetnrs) {
+      		cleaned.names <- gsub("_", " ", rotl::tnrs_match_names(cleaned.names)$unique_name)
+    	}
   }
   cleaned.names <- gsub("_", " ", cleaned.names)
   return(list(phy=phy.new, cleaned.names=cleaned.names))
@@ -284,7 +284,7 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' @inheritParams EstimateDates
 #' @inherit EstimateDates return details
 #' @export
-SummarizeResults <- function(filtered.results = NULL, output.format = "citations", partial=TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix")) {
+SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all", partial=TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix")) {
 		# if(!partial) {
 		# 	filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 		# } # not necessary cause already filtered in GetFilteredResults

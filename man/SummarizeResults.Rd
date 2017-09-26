@@ -4,7 +4,7 @@
 \alias{SummarizeResults}
 \title{Summarize a filtered results list from GetFilteredResults function in various ways}
 \usage{
-SummarizeResults(filtered.results = NULL, output.format = "citations",
+SummarizeResults(filtered.results = NULL, output.format = "phylo.all",
   partial = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), verbose = c("citations", "taxa"),
   missing.taxa = c("none", "summary", "matrix"))

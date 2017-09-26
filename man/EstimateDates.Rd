@@ -6,7 +6,7 @@
 \title{Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.}
 \usage{
 EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
-  "Struthio camelus"), output.format = "phylo.sdm", partial = TRUE,
+  "Struthio camelus"), output.format = "phylo.all", partial = TRUE,
   usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), method = "PATHd8", bold = FALSE,
   verbose = c("citations", "taxa"), missing.taxa = c("none", "summary",
