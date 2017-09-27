@@ -165,6 +165,8 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
     	}
   }
   cleaned.names <- gsub("_", " ", cleaned.names)
+  cleaned.names.print <- paste(cleaned.names, collapse = " | ")
+  cat("After processing input, searching for the following taxa:", "\n", cleaned.names.print, "\n")
   return(list(phy=phy.new, cleaned.names=cleaned.names))
 }
 
@@ -908,9 +910,8 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	if (process_input) {
 		input.processed <- ProcessInput(input, usetnrs, approximatematch)
 		input <- input.processed$cleaned.names
-		input.print <- paste(input, collapse = " | ")
-		cat("After processing input, searching sequences for:", "\n", input.print, "\n")
 	}
+	cat("Searching ", marker, " sequences for these taxa in BOLD...", "\n")
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
 	if(length(sequences) == 1) {
 		cat("Cannot construct tree, no sequences were found in BOLD for the input taxa...", "\n")
@@ -945,7 +946,7 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data=alignment)
 	phy <- pml.object$tree
 	if(!ape::is.binary.tree(pml.object$tree)){
-		cat(marker, "gene marker generates a non-dichotomous tree...", "\n", "Resolving with multi2di...", "\n")
+		cat(marker, " data available generates a non-dichotomous tree...", "\n", "Resolving with multi2di...", "\n")
 		pml.object$tree <- ape::multi2di(pml.object$tree)
 		phy <- pml.object$tree
 	}
