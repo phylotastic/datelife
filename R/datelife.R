@@ -120,7 +120,7 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 }
 #' Take input phylo object or character string and figure out if it's correct newick format or a list of species
 #' @inheritParams EstimateDates
-#' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
+#' @return A phylo object or NA if no tree
 #' @export
 ProcessPhy <- function(input){
 	if(class(input) == "phylo") {
@@ -911,10 +911,9 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 		if (length(input) == 1) {
 			input.print <- paste(input, ".", sep = "")
 		} else {
-			input.print <<- paste(input, " ,", sep = "")
-			input.print[length]
+			input.print <<- paste(input, " | ", sep = "")
 		}
-		cat("After processing input, searching sequences for:", "\n", input, "\n")
+		cat("After processing input, searching sequences for:", "\n", "\t", input.print, "\n")
 	}
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
 	if(length(sequences) == 1) {
