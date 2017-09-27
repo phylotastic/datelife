@@ -908,7 +908,7 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	if (process_input) {
 		input.processed <- ProcessInput(input, usetnrs, approximatematch)
 		input <- input.processed$cleaned.names
-		input.print <<- paste(input, collapse = " | ")
+		input.print <- paste(input, collapse = " | ")
 		cat("After processing input, searching sequences for:", "\n", input.print, "\n")
 	}
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)

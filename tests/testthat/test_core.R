@@ -197,23 +197,23 @@ test_that("We don't get negative brlen from pathd8", {
 
 })
 
-test_that("bold tree from EstimateDates is the same as the one from GetBoldOToLTree", {
-	tax2 <- c("Homo sapiens", "Macaca mulatta", "Melursus ursinus","Canis lupus pallipes", "Panthera pardus", "Panthera tigris", "Herpestes fuscus", "Elephas maximus", "Haliastur indus")
-	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"
-	b1 <- GetBoldOToLTree(input = other)
-	# nb1 <- length(b1$tiplabel)
-	ed1 <- EstimateDates(input = other, output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, method = "PATHd8", bold = TRUE)
-	# ned1 <- length(ed1[[length(ed1)]]$tip.label)
-	# expect_equal(nb1, ned1)
-	expect_equal(b1$tiplabel, ed1[[length(ed1)]]$tip.label) # tests both trees have the same taxa, in the same number and order. It's ok, cause it should be the same tree
-	# expect_identical(b1$tiplabel, ed1[[length(ed1)]]$tip.label)
-	b2 <- GetBoldOToLTree(input = tax2)
-	# nb1 <- length(b1$tiplabel)
-	ed2 <- EstimateDates(input = tax2, output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, method = "PATHd8", bold = TRUE)
-	# ned1 <- length(ed1[[length(ed1)]]$tip.label)
-	# expect_equal(nb1, ned1)
-	expect_equal(b2$tip.label, ed2[[length(ed2)]]$tip.label)
-})
+# test_that("bold tree from EstimateDates is the same as the one from GetBoldOToLTree", {
+# 	tax2 <- c("Homo sapiens", "Macaca mulatta", "Melursus ursinus","Canis lupus pallipes", "Panthera pardus", "Panthera tigris", "Herpestes fuscus", "Elephas maximus", "Haliastur indus")
+# 	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"
+# 	b1 <- GetBoldOToLTree(input = other)
+# 	# nb1 <- length(b1$tiplabel)
+# 	ed1 <- EstimateDates(input = other, output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, method = "PATHd8", bold = TRUE)
+# 	# ned1 <- length(ed1[[length(ed1)]]$tip.label)
+# 	# expect_equal(nb1, ned1)
+# 	expect_equal(b1$tiplabel, ed1[[length(ed1)]]$tip.label) # tests both trees have the same taxa, in the same number and order. It's ok, cause it should be the same tree
+# 	# expect_identical(b1$tiplabel, ed1[[length(ed1)]]$tip.label)
+# 	b2 <- GetBoldOToLTree(input = tax2)
+# 	# nb1 <- length(b1$tiplabel)
+# 	ed2 <- EstimateDates(input = tax2, output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, method = "PATHd8", bold = TRUE)
+# 	# ned1 <- length(ed1[[length(ed1)]]$tip.label)
+# 	# expect_equal(nb1, ned1)
+# 	expect_equal(b2$tip.label, ed2[[length(ed2)]]$tip.label)
+# })
 
 # test_that("TNRS with approximate match works", {
 	 # taxa <- c("Rhea_americana", "Pterocnemia pennato", "Strutho camelus")
