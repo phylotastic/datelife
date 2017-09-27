@@ -942,9 +942,9 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
 	taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
 	if(length(taxa.to.drop) > 0) {
-		cat("No", marker, "sequences found for", taxa.to.drop, "\n")
+		taxa.to.drop.print <- paste(taxa.to.drop, " | ", sep = "")
+		cat("No", marker, "sequences found for", taxa.to.drop.print, "\n", "Dropping taxa from tree.", "\n")
 		phy <- ape::drop.tip(phy, taxa.to.drop)
-		cat("Dropping taxa from tree...", "\n")
 	}
 	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data=alignment)
 	phy <- pml.object$tree
