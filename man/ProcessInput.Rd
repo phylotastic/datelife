@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife.R
 \name{ProcessInput}
 \alias{ProcessInput}
-\title{Take input string, figure out if it's newick or list of species}
+\title{Take input phylo object or character string, process it with ProcessPhy and clean taxon names}
 \usage{
 ProcessInput(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), usetnrs = FALSE, approximatematch = TRUE)
@@ -18,5 +18,5 @@ ProcessInput(input = c("Rhea americana", "Pterocnemia pennata",
 A list with the phy (or NA, if no tree) and cleaned vector of taxa
 }
 \description{
-Take input string, figure out if it's newick or list of species
+Take input phylo object or character string, process it with ProcessPhy and clean taxon names
 }

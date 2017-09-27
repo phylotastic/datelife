@@ -118,26 +118,34 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 	cat("\n")
 	return(filtered.results)
 }
-
-#' Take input string, figure out if it's newick or list of species
+#' Take input phylo object or character string and figure out if it's correct newick format or a list of species
 #' @inheritParams EstimateDates
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
-ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE) {
+ProcessPhy <- function(input){
 	if(class(input) == "phylo") {
 		input <- ape::write.tree(input)
 	}
  	input <- gsub("\\+"," ",input)
   	input <- stringr::str_trim(input, side = "both")
-  	phy.new <- NA
+  	phy.new.in <- NA
    	if(length(input) == 1) {
 	  	if(grepl("\\(.*\\).*;", input)) { #our test for newick
-	    	phy.new <- ape::read.tree(text=gsub(" ", "_", input))
+	    	phy.new.in <- ape::read.tree(text=gsub(" ", "_", input))
 	  	} else {
-		  cat("You must provide at least two taxon names as input to perform a search.", "\n")
-		  stop("Input is length 1.")
+		  cat("Input is length 1 and not in a good newick format.", "\n")
+		  stop("Please check newick character string, or provide at least two taxon names as input to perform a search.")
 	  	}
   	}
+	return(phy.new.in)
+}
+
+#' Take input phylo object or character string, process it with ProcessPhy and clean taxon names
+#' @inheritParams EstimateDates
+#' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
+#' @export
+ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE) {
+	phy.new <- ProcessPhy(input = input)
   cleaned.names <- ""
   if(!is.na(phy.new[1])) {
     if(usetnrs) {
@@ -900,6 +908,12 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	if (process_input) {
 		input.processed <- ProcessInput(input, usetnrs, approximatematch)
 		input <- input.processed$cleaned.names
+		if (length(input) == 1) {
+			input.print <- paste(input, ".", sep = "")
+		} else {
+			input.print <<- paste(input, " ,", sep = "")
+			input.print[length]
+		}
 		cat("After processing input, searching sequences for:", "\n", input, "\n")
 	}
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
