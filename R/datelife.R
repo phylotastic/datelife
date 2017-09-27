@@ -908,12 +908,8 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	if (process_input) {
 		input.processed <- ProcessInput(input, usetnrs, approximatematch)
 		input <- input.processed$cleaned.names
-		if (length(input) == 1) {
-			input.print <- paste(input, ".", sep = "")
-		} else {
-			input.print <<- paste(input, " | ", sep = "")
-		}
-		cat("After processing input, searching sequences for:", "\n", "\t", input.print, "\n")
+		input.print <<- paste(input, collapse = " | ")
+		cat("After processing input, searching sequences for:", "\n", input.print, "\n")
 	}
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
 	if(length(sequences) == 1) {
@@ -942,7 +938,7 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
 	taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
 	if(length(taxa.to.drop) > 0) {
-		taxa.to.drop.print <- paste(taxa.to.drop, " | ", sep = "")
+		taxa.to.drop.print <- paste(taxa.to.drop, collapse = " | ")
 		cat("No", marker, "sequences found for", taxa.to.drop.print, "\n", "Dropping taxa from tree.", "\n")
 		phy <- ape::drop.tip(phy, taxa.to.drop)
 	}
