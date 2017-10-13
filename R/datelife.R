@@ -146,6 +146,7 @@ ProcessPhy <- function(input){
 #' @export
 ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE) {
 	phy.new <- ProcessPhy(input = input)
+	cat("Processing input...", "\n")
   cleaned.names <- ""
   if(!is.na(phy.new[1])) {
     if(usetnrs) {
@@ -165,8 +166,9 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
     	}
   }
   cleaned.names <- gsub("_", " ", cleaned.names)
+  cat("\t", "OK.")
   cleaned.names.print <- paste(cleaned.names, collapse = " | ")
-  cat("After processing input, searching for the following taxa:", "\n", cleaned.names.print, "\n")
+  cat("Working with the following taxa:", "\n", "\t", cleaned.names.print, "\n")
   return(list(phy=phy.new, cleaned.names=cleaned.names))
 }
 
@@ -326,7 +328,7 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all
 		rownames(missing.taxa.matrix) <- sequence(nrow(missing.taxa.matrix))
 	}
 
-	if(missing.taxa.in == "summary" | any(grepl("taxa", verbose.in))){
+	if(missing.taxa.in == "summary" | any(grepl("taxa", verbose.in))){ # may add here another consdition: | makeup_brlen ==TRUE
 		tax <- rownames(filtered.results[[1]])
 		x <- rapply(filtered.results, rownames)
 		prop <- c()
@@ -911,53 +913,79 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 		input.processed <- ProcessInput(input, usetnrs, approximatematch)
 		input <- input.processed$cleaned.names
 	}
-	cat("Searching ", marker, " sequences for these taxa in BOLD...", "\n")
+	cat("Searching", marker, "sequences for these taxa in BOLD...", "\t")
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
-	if(length(sequences) == 1) {
-		cat("Cannot construct tree, no sequences were found in BOLD for the input taxa...", "\n")
-		# cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
+	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides) # preserve good nucleotide data, i.e., only A,T,G,C
+	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar)) # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
+	if(length(sequences) == 1) { # because it is length>1 (actually 82) even if there is only 1 sequence available
+		cat("No sequences were found in BOLD for the input taxa...", "\n", "\t", "Cannot construct tree.", "\n")
+		# if (usetnrs == FALSE) cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
 		stop("Names in input do not match BOLD specimen records.")
 	}
-	cat("Estimating BoldOToL tree...", "\n")
+	cat("OK.", "\n")
 	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names = input)$ott_id, label_format = "name",  otl_v = otol_version))
 	phy$tip.label <- gsub("_ott.*","", phy$tip.label)
 	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
 	final.sequences.names <- rep(NA, length(input))
-	for (i in sequence(dim(sequences)[1])) {
-		taxon <- sequences$species_name[i]
-		if(!(taxon %in% final.sequences.names)) {
-			seq <- strsplit(sequences$nucleotide[i],"")[[1]]
-			matching.index <- 1+sum(!is.na(final.sequences.names))
-			final.sequences[matching.index, sequence(length(seq))] <- seq
-			final.sequences.names[matching.index] <- taxon
+	# for (i in sequence(dim(sequences)[1])) {
+		# taxon <- sequences$species_name[i]
+		# if(!(taxon %in% final.sequences.names)) {
+			# seq <- strsplit(sequences$nucleotide[i],"")[[1]]
+			# matching.index <- 1+sum(!is.na(final.sequences.names))
+			# final.sequences[matching.index, sequence(length(seq))] <- seq
+			# final.sequences.names[matching.index] <- taxon
+		# }
+	# }
+	row.index <- 0
+	taxa.to.drop <- c()
+	for (i in input){
+		row.index <- row.index + 1
+		taxon.index <- which(grepl(i, sequences$species_name)) # what happens here if there are no sequences from the taxon????
+		if (length(taxon.index)>0){
+			seq.index <- which.max(sequences$nucleotide_ATGC_length[taxon.index])
+			# sequences[taxon.index,][seq.index,]
+			seq <- strsplit(sequences$nucleotides[taxon.index][seq.index], split = "")[[1]]
+			final.sequences[row.index, sequence(length(seq))] <- seq
+		} else {
+			taxa.to.drop <- c(taxa.to.drop, i)
 		}
+		final.sequences.names[row.index] <- i
 	}
 	rownames(final.sequences) <- gsub(" ", "_", final.sequences.names)
-	final.sequences <- final.sequences[!is.na(final.sequences.names),]
-
-	alignment <- ape::as.DNAbin(final.sequences)
-	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
-	taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
+	# final.sequences <- final.sequences[!is.na(final.sequences.names),]
+	# taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
+	if(length(input)-length(taxa.to.drop) == 1) {
+		cat("BOLD sequences found only for ", input[which(!input %in% taxa.to.drop)], "...","\n","\t", "Cannot construct a tree." )
+		stop("Not enough sequence coverage in BOLD to perform analysis of this set of taxa")
+		# if (usetnrs == FALSE) cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
+	}
 	if(length(taxa.to.drop) > 0) {
 		taxa.to.drop.print <- paste(taxa.to.drop, collapse = " | ")
-		cat("No", marker, "sequences found for", taxa.to.drop.print, "\n", "Dropping taxa from tree.", "\n")
+		cat("No", marker, "sequences found for", taxa.to.drop.print, "...", "\n", "\t", "Dropping taxa from tree.", "\n")
+		taxa.to.drop <- gsub(" ", "_", taxa.to.drop)
 		phy <- ape::drop.tip(phy, taxa.to.drop)
 	}
+	cat("Aligning with MAFFT...", "\n")
+	alignment <- ape::as.DNAbin(final.sequences)
+	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
+	cat( "\t", "OK.", "\n", "Estimating BoldOToL tree...", "\n")
 	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data=alignment)
 	phy <- pml.object$tree
 	if(!ape::is.binary.tree(pml.object$tree)){
-		cat(marker, " data available generates a non-dichotomous tree...", "\n", "Resolving with multi2di...", "\n")
+		cat("\t", marker, " sequence data available generates a non-dichotomous tree...", "\n", "\t", "Resolving with multi2di...", "\n")
 		pml.object$tree <- ape::multi2di(pml.object$tree)
 		phy <- pml.object$tree
 	}
+	cat("\t", "OK.", "\n")
 	if (chronogram) {
-		cat("Dating BoldOToL tree...", "\n")
+		cat("Dating BoldOToL tree with chronoMPL...", "\n")
 		pml.object$tree <- ape::chronoMPL(pml.object$tree, se = FALSE, test = FALSE)
 		phy <- pml.object$tree
 	}
+	cat("\t", "OK.", "\n")
 	if(any(pml.object$tree$edge.length < 0)) {
-		cat("Negative branch lengths in BOLD chronogram.", "\n")
-		if(doML) cat("Cannot do ML branch length optimization.", "\n")
+		cat("Negative branch lengths in BOLD chronogram...", "\n")
+		if(doML) cat("\t", "Cannot do ML branch length optimization.", "\n")
 	} else {
 		if(doML) {
 			phy <- phangorn::optim.pml(pml.object, data = alignment, rearrangement = "none", optRooted = TRUE, optQ = TRUE)$tree
@@ -967,8 +995,6 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	cat("Done.", "\n")
 	return(phy)
 }
-
-
 
 
 #
