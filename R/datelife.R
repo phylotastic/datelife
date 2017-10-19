@@ -166,7 +166,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
     	}
   }
   cleaned.names <- gsub("_", " ", cleaned.names)
-  cat("\t", "OK.")
+  cat("\t", "OK.", "\n")
   cleaned.names.print <- paste(cleaned.names, collapse = " | ")
   cat("Working with the following taxa:", "\n", "\t", cleaned.names.print, "\n")
   return(list(phy=phy.new, cleaned.names=cleaned.names))
@@ -913,7 +913,7 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 		input.processed <- ProcessInput(input, usetnrs, approximatematch)
 		input <- input.processed$cleaned.names
 	}
-	cat("Searching", marker, "sequences for these taxa in BOLD...", "\t")
+	cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
 	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides) # preserve good nucleotide data, i.e., only A,T,G,C
 	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar)) # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
@@ -922,7 +922,7 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 		# if (usetnrs == FALSE) cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
 		stop("Names in input do not match BOLD specimen records.")
 	}
-	cat("OK.", "\n")
+	cat("\t", "OK.", "\n")
 	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names = input)$ott_id, label_format = "name",  otl_v = otol_version))
 	phy$tip.label <- gsub("_ott.*","", phy$tip.label)
 	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
@@ -984,8 +984,8 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	}
 	cat("\t", "OK.", "\n")
 	if(any(pml.object$tree$edge.length < 0)) {
-		cat("Negative branch lengths in BOLD chronogram...", "\n")
-		if(doML) cat("\t", "Cannot do ML branch length optimization.", "\n")
+		cat("\t", "Negative branch lengths in BOLD chronogram.", "\n")
+		if(doML) cat("\t", "\t", "Cannot do ML branch length optimization.", "\n")
 	} else {
 		if(doML) {
 			phy <- phangorn::optim.pml(pml.object, data = alignment, rearrangement = "none", optRooted = TRUE, optQ = TRUE)$tree
