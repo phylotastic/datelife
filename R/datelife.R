@@ -100,15 +100,19 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
     input.processed <- ProcessInput(input, usetnrs, approximatematch)
     tree <- input.processed$phy
     cleaned.names <- input.processed$cleaned.names
-    results.list <- lapply(cache$trees,GetSubsetArrayDispatch, taxa=cleaned.names, phy=tree, method=method)
+	if(length(cleaned.names)==1){
+		cat("Cannot perform a search of divergence times with just one taxon. Provide at least two taxon names as input.", "\n")
+		stop("After being processed, input is length 1")
+	}
+    results.list <- lapply(cache$trees, GetSubsetArrayDispatch, taxa=cleaned.names, phy=tree, method=method)
     filtered.results <- ProcessResultsList(results.list, cleaned.names, partial)
 	if(length(filtered.results) < 1) {
 		warning("Output is empty.", call. = FALSE)
 		cat("No input species were found in the set of chronograms from cache.", "\n")
-		if(!usetnrs) cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
+		if(!usetnrs) cat("Setting usetnrs = TRUE might change this, but it is time consuming.", "\n")
 	}
 	if(bold){
-		 bold.OToLTree <- GetBoldOToLTree(input = cleaned.names, process_input = FALSE, usetnrs = usetnrs, approximatematch = approximatematch, marker = marker,  ...)
+		 bold.OToLTree <- GetBoldOToLTree(input = cleaned.names, process_input = FALSE, usetnrs = FALSE, approximatematch = FALSE, marker = marker,  ...)
 		 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in = bold.OToLTree, taxa.in = cleaned.names, phy.in = NULL, phy4.in = NULL, method.in = method)
 		 bold.data.processed <- ProcessResultsList(results.list=list(bold.data), taxa=cleaned.names, partial)
 	 	 names(bold.data.processed) <-  paste("BoldOToL tree (using ", marker, " as marker)", sep="")
@@ -133,8 +137,8 @@ ProcessPhy <- function(input){
 	  	if(grepl("\\(.*\\).*;", input)) { #our test for newick
 	    	phy.new.in <- ape::read.tree(text=gsub(" ", "_", input))
 	  	} else {
-		  cat("Input is length 1 and not in a good newick format.", "\n")
-		  stop("Please check newick character string, or provide at least two taxon names as input to perform a search.")
+			cat("Please provide a correct input newick character string, or at least two input taxon names to perform a search.", "\n")
+		  	stop("Input is length 1 and not in a good newick format.")
 	  	}
   	}
 	return(phy.new.in)
@@ -919,7 +923,7 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar)) # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
 	if(length(sequences) == 1) { # because it is length>1 (actually 82) even if there is only 1 sequence available
 		cat("No sequences were found in BOLD for the input taxa...", "\n", "\t", "Cannot construct tree.", "\n")
-		# if (usetnrs == FALSE) cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
+		# if (!usetnrs) cat("Setting usetnrs=TRUE might change this, but it can be slowish.", "\n")
 		stop("Names in input do not match BOLD specimen records.")
 	}
 	cat("\t", "OK.", "\n")
