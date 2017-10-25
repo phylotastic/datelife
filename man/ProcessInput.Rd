@@ -2,10 +2,11 @@
 % Please edit documentation in R/datelife.R
 \name{ProcessInput}
 \alias{ProcessInput}
-\title{Take input phylo object or character string, process it with ProcessPhy and clean taxon names}
+\title{Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with ProcessPhy first.}
 \usage{
 ProcessInput(input = c("Rhea americana", "Pterocnemia pennata",
-  "Struthio camelus"), usetnrs = FALSE, approximatematch = TRUE)
+  "Struthio camelus"), usetnrs = FALSE, approximatematch = TRUE,
+  sppfromtaxon = FALSE, ...)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
@@ -13,10 +14,17 @@ ProcessInput(input = c("Rhea americana", "Pterocnemia pennata",
 \item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
 \item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
+
+\item{sppfromtaxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.}
+
+\item{...}{Arguments passed on to \code{rphylotastic::GetSpeciesFromTaxon}
+\describe{
+  \item{filters}{A character vector of strings to exclude}
+}}
 }
 \value{
 A list with the phy (or NA, if no tree) and cleaned vector of taxa
 }
 \description{
-Take input phylo object or character string, process it with ProcessPhy and clean taxon names
+Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with ProcessPhy first.
 }

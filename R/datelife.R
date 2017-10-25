@@ -90,14 +90,15 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
 #' @inheritParams EstimateDates
+#' @inheritParams ProcessInput
 #' @inheritDotParams GetBoldOToLTree
 #' @return List of patristic matrices
 #' @export
-GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, update_cache = FALSE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker = "COI", ...) {
+GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, update_cache = FALSE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker = "COI", sppfromtaxon=FALSE, ...) {
 		if(update_cache){
 			cache <- UpdateCache(save = TRUE)
 		}
-    input.processed <- ProcessInput(input, usetnrs, approximatematch)
+    input.processed <- ProcessInput(input = input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon)
     tree <- input.processed$phy
     cleaned.names <- input.processed$cleaned.names
 	if(length(cleaned.names)==1){
@@ -124,9 +125,10 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 }
 #' Take input phylo object or character string and figure out if it's correct newick format or a list of species
 #' @inheritParams EstimateDates
+#' @inheritParams ProcessInput
 #' @return A phylo object or NA if no tree
 #' @export
-ProcessPhy <- function(input){
+ProcessPhy <- function(input, sppfromtaxon){
 	if(class(input) == "phylo") {
 		input <- ape::write.tree(input)
 	}
@@ -134,47 +136,77 @@ ProcessPhy <- function(input){
   	input <- stringr::str_trim(input, side = "both")
   	phy.new.in <- NA
    	if(length(input) == 1) {
+    	cat("\t", "Input is length 1.", "\n")
 	  	if(grepl("\\(.*\\).*;", input)) { #our test for newick
 	    	phy.new.in <- ape::read.tree(text=gsub(" ", "_", input))
+	    	cat("\t", "Input is in good newick format.", "\n")
 	  	} else {
-			cat("Please provide a correct input newick character string, or at least two input taxon names to perform a search.", "\n")
-		  	stop("Input is length 1 and not in a good newick format.")
+	  		if(any(!sppfromtaxon)){
+				cat("Please provide a correct input newick character string, at least two input taxon names to perform a search, or set sppfromtaxon = TRUE to perform a clade search.", "\n")
+			  	stop("Input is length 1 and not in a good newick format.")
+	  		}
 	  	}
   	}
 	return(phy.new.in)
 }
 
-#' Take input phylo object or character string, process it with ProcessPhy and clean taxon names
+
+#' Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with ProcessPhy first.
 #' @inheritParams EstimateDates
+#' @param sppfromtaxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.
+#' @inheritDotParams rphylotastic::GetSpeciesFromTaxon filters
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
-ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE) {
-	phy.new <- ProcessPhy(input = input)
+ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE, sppfromtaxon=FALSE, ...) {
 	cat("Processing input...", "\n")
-  cleaned.names <- ""
-  if(!is.na(phy.new[1])) {
-    if(usetnrs) {
-		cleaned.names <- rotl::tnrs_match_names(phy.new$tip.label)$unique_name
-      	phy.new$tip.label <- gsub("_", " ", cleaned.names)
+	phy.new <- ProcessPhy(input = input, sppfromtaxon = sppfromtaxon)
+	# cleaned.names <- ""
+	if(!is.na(phy.new[1])) {
+	    # if(usetnrs) {
+	      	# phy.new$tip.label <- gsub("_", " ", cleaned.names)
+	    # }
+	  	# cleaned.names <- gsub("_", " ", phy.new$tip.label)
+	  	input <- phy.new$tip.label
+	}
+	if(length(input)==1) {
+		input <- strsplit(input, ',')[[1]]
+	}
+	cleaned.input <- stringr::str_trim(input, side = "both")
+    if (usetnrs) {
+		cleaned.input <- rotl::tnrs_match_names(cleaned.input)$unique_name # process even if it's a "higher" taxon name
     }
-  	cleaned.names <- gsub("_", " ", phy.new$tip.label)
-  } else {
-    #cleaned.names<-strsplit( gsub("\\s","",input), ",")[[1]]
-		if(length(input)==1) {
-			input <- strsplit(input, ',')[[1]]
-		}
-		cleaned.names <- stringr::str_trim(input, side = "both")
-    #cleaned.names <- input
-    	if (usetnrs) {
-      		cleaned.names <- gsub("_", " ", rotl::tnrs_match_names(cleaned.names)$unique_name)
+	cleaned.names <- gsub("_", " ", cleaned.input)
+    if(any(sppfromtaxon)){
+    	if(length(sppfromtaxon)==1) sppfromtaxon <- rep(sppfromtaxon,length(cleaned.input))
+    	if(length(cleaned.input)!=length(sppfromtaxon)){
+    		cat("Specify all taxa in input to get species names from.", "\n")
+    		stop("input and sppfromtaxon arguments must have same length.")
     	}
-  }
-  cleaned.names <- gsub("_", " ", cleaned.names)
-  cat("\t", "OK.", "\n")
-  cleaned.names.print <- paste(cleaned.names, collapse = " | ")
-  cat("Working with the following taxa:", "\n", "\t", cleaned.names.print, "\n")
-  return(list(phy=phy.new, cleaned.names=cleaned.names))
+    	species.names <- vector()
+    	index <- 1
+	    for (i in sppfromtaxon){
+	    	if (i) {
+	    		spp <- rphylotastic::GetSpeciesFromTaxon(taxon = cleaned.names[index], ...)
+	    		if(length(spp)==0) {
+	    			cat("\t", " Did not get any species names for taxon ", cleaned.names[index], ".", "\n", sep="")
+	    			if (!usetnrs) cat("\t", "Setting usetnrs = TRUE might change this, but it can be slowish.", "\n")
+	    			warning(paste("No species names available for input taxon '", cleaned.names[index], "'", sep=""))
+	    		}
+	    		species.names <- c(species.names, spp)
+	    	} else {
+	    		species.names <- c(species.names, cleaned.names[index])
+	    	}
+	    	index <- index + 1
+	    }
+		cleaned.names <- gsub("_", " ", species.names)
+	}
+	cleaned.names <- unique(cleaned.names)
+    cat("OK.", "\n")
+  	cleaned.names.print <- paste(cleaned.names, collapse = " | ")
+  	cat("Working with the following taxa:", "\n", "\t", cleaned.names.print, "\n")
+   	return(list(phy=phy.new, cleaned.names=cleaned.names))
 }
+
 
 #' Are all desired taxa in the patristic.matrix?
 #' @param patristic.matrix A patristic matrix, rownames and colnames must be taxa
@@ -909,12 +941,13 @@ UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Strut
 #' @param chronogram Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.
 #' @param doML Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml
 #' @param process_input default to TRUE
+#' @inheritParams ProcessInput
 #' @return A phylogeny with ML branch lengths
 #' @export
-GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, process_input = TRUE) {
+GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, process_input = TRUE, sppfromtaxon=FALSE) {
 	#otol returns error with missing taxa in v3 of rotl
 	if (process_input) {
-		input.processed <- ProcessInput(input, usetnrs, approximatematch)
+		input.processed <- ProcessInput(input = input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon)
 		input <- input.processed$cleaned.names
 	}
 	cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")

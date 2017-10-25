@@ -7,7 +7,7 @@
 GetBoldOToLTree(input = c("Rhea americana", "Struthio camelus",
   "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE,
   marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE,
-  process_input = TRUE)
+  process_input = TRUE, sppfromtaxon = FALSE)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
@@ -25,6 +25,8 @@ GetBoldOToLTree(input = c("Rhea americana", "Struthio camelus",
 \item{doML}{Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml}
 
 \item{process_input}{default to TRUE}
+
+\item{sppfromtaxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.}
 }
 \value{
 A phylogeny with ML branch lengths
