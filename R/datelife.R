@@ -336,9 +336,9 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all
 		# if(!partial) {
 		# 	filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 		# } # not necessary cause already filtered in GetFilteredResults
-		if(update_cache){
-			cache <- UpdateCache(save = TRUE)
-		}
+	if(update_cache){
+		cache <- UpdateCache(save = TRUE)
+	}
 	if(is.null(filtered.results) | !is.list(filtered.results)){
 		cat("filtered.results argument must be a list from GetFilteredResults function.", "\n")
 		stop()
@@ -352,7 +352,7 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all
 
 	if(missing.taxa.in == "matrix"){
 		missing.taxa.list <- vector(mode="list")
-		tax <- rownames(filtered.results[[1]])
+		tax <- unique(rapply(filtered.results, rownames)) #rownames(filtered.results[[1]])
 		for(result.index in sequence(length(filtered.results))){
 			n <- rownames(filtered.results[[result.index]])
 			m <- match(tax,n)
@@ -365,7 +365,7 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all
 	}
 
 	if(missing.taxa.in == "summary" | any(grepl("taxa", verbose.in))){ # may add here another consdition: | makeup_brlen ==TRUE
-		tax <- rownames(filtered.results[[1]])
+		tax <- unique(rapply(filtered.results, rownames)) #rownames(filtered.results[[1]])
 		x <- rapply(filtered.results, rownames)
 		prop <- c()
 		for (taxon in tax){
@@ -1018,8 +1018,8 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 		cat("Dating BoldOToL tree with chronoMPL...", "\n")
 		pml.object$tree <- ape::chronoMPL(pml.object$tree, se = FALSE, test = FALSE)
 		phy <- pml.object$tree
+		cat("\t", "OK.", "\n")
 	}
-	cat("\t", "OK.", "\n")
 	if(any(pml.object$tree$edge.length < 0)) {
 		cat("\t", "Negative branch lengths in BOLD chronogram.", "\n")
 		if(doML) cat("\t", "\t", "Cannot do ML branch length optimization.", "\n")
