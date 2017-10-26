@@ -794,10 +794,15 @@ PatristicMatrixToTree <- function(patristic.matrix) {
   if(anyNA(patristic.matrix)) {
   	patristic.matrix <- patristic.matrix[rowSums(is.na(patristic.matrix)) != ncol(patristic.matrix),colSums(is.na(patristic.matrix)) != nrow(patristic.matrix)]
   }
-  if(dim(patristic.matrix)[1] < 3) {
+  if(dim(patristic.matrix)[1] < 2) {
   	return(NA)
   }
-  tree <- ape::nj(patristic.matrix)
+	tree <- NA
+	if(dim(patristic.matrix)[1] == 2) {
+		tree <- rtree(n=2, rooted=TRUE, tip.label=rownames(patristic.matrix), br=diag(patristic.matrix))
+	} else {
+  	tree <- ape::nj(patristic.matrix)
+	}
   if(ape::Ntip(tree)>2) {
     tree <- 	phangorn::midpoint(tree)
   }
