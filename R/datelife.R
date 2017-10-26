@@ -128,7 +128,7 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 #' @inheritParams ProcessInput
 #' @return A phylo object or NA if no tree
 #' @export
-ProcessPhy <- function(input, sppfromtaxon){
+ProcessPhy <- function(input, sppfromtaxon=FALSE){
 	if(class(input) == "phylo") {
 		input <- ape::write.tree(input)
 	}
@@ -140,11 +140,6 @@ ProcessPhy <- function(input, sppfromtaxon){
 	  	if(grepl("\\(.*\\).*;", input)) { #our test for newick
 	    	phy.new.in <- ape::read.tree(text=gsub(" ", "_", input))
 	    	cat("\t", "Input is in good newick format.", "\n")
-	  	} else {
-	  		if(any(!sppfromtaxon)){
-				cat("Please provide a correct input newick character string, at least two input taxon names to perform a search, or set sppfromtaxon = TRUE to perform a clade search.", "\n")
-			  	stop("Input is length 1 and not in a good newick format.")
-	  		}
 	  	}
   	}
 	return(phy.new.in)
@@ -170,6 +165,9 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 	}
 	if(length(input)==1) {
 		input <- strsplit(input, ',')[[1]]
+		cat("Please provide at least two input taxon names to perform a search.", "\n")
+		if(!sppfromtaxon[1]) cat("Setting sppfromtaxon = TRUE gets all species from a clade an accepts only one taxon name as input.", "\n")
+		stop("Input is length 1 and not in a good newick format.")
 	}
 	cleaned.input <- stringr::str_trim(input, side = "both")
     if (usetnrs) {
