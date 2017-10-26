@@ -8,7 +8,7 @@ GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
   approximatematch = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), method = "PATHd8", bold = FALSE,
-  marker = "COI", sppfromtaxon = FALSE, ...)
+  marker = "COI", process_input = TRUE, sppfromtaxon = FALSE, ...)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}

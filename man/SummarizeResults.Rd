@@ -4,12 +4,14 @@
 \alias{SummarizeResults}
 \title{Summarize a filtered results list from GetFilteredResults function in various ways}
 \usage{
-SummarizeResults(filtered.results = NULL, output.format = "phylo.all",
-  partial = TRUE, update_cache = FALSE,
+SummarizeResults(input = NULL, filtered.results = NULL,
+  output.format = "phylo.all", partial = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), verbose = c("citations", "taxa"),
   missing.taxa = c("none", "summary", "matrix"))
 }
 \arguments{
+\item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
+
 \item{filtered.results}{A list of patristic matrices; labels correspond to citations}
 
 \item{output.format}{The desired output format for target chronograms (chronograms of target taxa). See details.}

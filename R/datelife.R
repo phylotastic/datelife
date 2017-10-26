@@ -78,14 +78,15 @@
 #' system("open some.bird.trees.html")
 
 EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), method="PATHd8", bold=FALSE, verbose= c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"),  marker = "COI",...) {
+		output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), method="PATHd8", bold=FALSE, verbose= c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"),  marker = "COI", sppfromtaxon=FALSE, ...) {
 			#... only defines arguments to be passed to GetBoldOToLTree for now
 			# find a way not to repeat partial and cache arguments, which are used in both GetFilteredResults and SummarizeResults
 			if(update_cache){
 				cache <- UpdateCache(save = TRUE)
 			}
-			filtered.results.here <- GetFilteredResults(input = input, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = FALSE, cache = cache, method = method, bold = bold, marker = marker, ...)
-			return(SummarizeResults(filtered.results = filtered.results.here, output.format = output.format, partial = partial, update_cache = FALSE, cache = cache, verbose = verbose, missing.taxa = missing.taxa))
+			input.here <- ProcessInput(input=input, usetnrs=usetnrs, approximatematch=approximatematch, sppfromtaxon=sppfromtaxon)
+			filtered.results.here <- GetFilteredResults(input = input.here, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = FALSE, cache = cache, method = method, bold = bold, marker = marker, process_input=FALSE, ...)
+			return(SummarizeResults(input = input.here$cleaned.names, filtered.results = filtered.results.here, output.format = output.format, partial = partial, update_cache = FALSE, cache = cache, verbose = verbose, missing.taxa = missing.taxa))
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
@@ -94,13 +95,28 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 #' @inheritDotParams GetBoldOToLTree
 #' @return List of patristic matrices
 #' @export
-GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, update_cache = FALSE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker = "COI", sppfromtaxon=FALSE, ...) {
-		if(update_cache){
-			cache <- UpdateCache(save = TRUE)
+GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, update_cache = FALSE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker = "COI", process_input= TRUE, sppfromtaxon=FALSE, ...) {
+	stopping <- FALSE
+	if(update_cache){
+		cache <- UpdateCache(save = TRUE)
+	}
+    if (process_input){
+		input.processed <- ProcessInput(input = input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon)
+    	tree <- input.processed$phy
+    	cleaned.names <- input.processed$cleaned.names
+	} else {
+		if(is.list(input)){
+			if(any(grepl("phy", names(input))) & any(grepl("cleaned.names", names(input)))){
+				tree <- input$phy
+		    	cleaned.names <- input$cleaned.names
+			} else {
+				stopping <- TRUE
+			}
+		} else {
+			stopping <- TRUE
 		}
-    input.processed <- ProcessInput(input = input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon)
-    tree <- input.processed$phy
-    cleaned.names <- input.processed$cleaned.names
+	}
+	if(stopping) stop("input must have the correct output format from ProcessInput function")
 	if(length(cleaned.names)==1){
 		cat("Cannot perform a search of divergence times with just one taxon. Provide at least two taxon names as input.", "\n")
 		stop("After being processed, input is length 1")
@@ -128,7 +144,7 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 #' @inheritParams ProcessInput
 #' @return A phylo object or NA if no tree
 #' @export
-ProcessPhy <- function(input, sppfromtaxon=FALSE){
+ProcessPhy <- function(input){
 	if(class(input) == "phylo") {
 		input <- ape::write.tree(input)
 	}
@@ -154,7 +170,7 @@ ProcessPhy <- function(input, sppfromtaxon=FALSE){
 #' @export
 ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE, sppfromtaxon=FALSE, ...) {
 	cat("Processing input...", "\n")
-	phy.new <- ProcessPhy(input = input, sppfromtaxon = sppfromtaxon)
+	phy.new <- ProcessPhy(input = input)
 	# cleaned.names <- ""
 	if(!is.na(phy.new[1])) {
 	    # if(usetnrs) {
@@ -404,7 +420,7 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' @inheritParams EstimateDates
 #' @inherit EstimateDates return details
 #' @export
-SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all", partial=TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix")) {
+SummarizeResults <- function(input = NULL, filtered.results = NULL, output.format = "phylo.all", partial=TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix")) {
 		# if(!partial) {
 		# 	filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 		# } # not necessary cause already filtered in GetFilteredResults
@@ -412,8 +428,11 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all
 		cache <- UpdateCache(save = TRUE)
 	}
 	if(is.null(filtered.results) | !is.list(filtered.results)){
-		cat("filtered.results argument must be a list from GetFilteredResults function.", "\n")
-		stop()
+		stop("filtered.results argument must be a list from GetFilteredResults function.", "\n")
+	}
+	if(is.null(input)){
+		input <- unique(rapply(filtered.results, rownames))
+		warning("showing taxon summary from taxa found in at least one chronogram, this excludes input taxa not found in any chronogram")
 	}
 	output.format.in <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
 	missing.taxa.in <- match.arg(missing.taxa, choices=c("none", "summary", "matrix"))
@@ -424,26 +443,26 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all
 
 	if(missing.taxa.in == "matrix"){
 		missing.taxa.list <- vector(mode="list")
-		tax <- unique(rapply(filtered.results, rownames)) #rownames(filtered.results[[1]])
+		# tax <- unique(rapply(filtered.results, rownames)) #rownames(filtered.results[[1]])
 		for(result.index in sequence(length(filtered.results))){
 			n <- rownames(filtered.results[[result.index]])
-			m <- match(tax,n)
+			m <- match(input,n)
 			missing.taxa.list[[result.index]] <- n[m]
 		}
 		missing.taxa.matrix <- do.call(rbind, missing.taxa.list)
 		missing.taxa.matrix <- !is.na(missing.taxa.matrix)
-		colnames(missing.taxa.matrix) <- tax
+		colnames(missing.taxa.matrix) <- input
 		rownames(missing.taxa.matrix) <- sequence(nrow(missing.taxa.matrix))
 	}
 
 	if(missing.taxa.in == "summary" | any(grepl("taxa", verbose.in))){ # may add here another consdition: | makeup_brlen ==TRUE
-		tax <- unique(rapply(filtered.results, rownames)) #rownames(filtered.results[[1]])
+		# tax <- unique(rapply(filtered.results, rownames)) #rownames(filtered.results[[1]])
 		x <- rapply(filtered.results, rownames)
 		prop <- c()
-		for (taxon in tax){
+		for (taxon in input){
 			prop <- c(prop, paste(length(which(taxon==x)), "/", length(filtered.results), sep=""))
 		}
-		missing.taxa.summary <- data.frame(Taxon=tax, Chronograms=prop)
+		missing.taxa.summary <- data.frame(Taxon=input, Chronograms=prop)
 	}
 
 	if(output.format.in == "citations") {

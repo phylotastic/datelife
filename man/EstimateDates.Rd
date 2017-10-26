@@ -10,7 +10,7 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
   usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), method = "PATHd8", bold = FALSE,
   verbose = c("citations", "taxa"), missing.taxa = c("none", "summary",
-  "matrix"), marker = "COI", ...)
+  "matrix"), marker = "COI", sppfromtaxon = FALSE, ...)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
