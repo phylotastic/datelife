@@ -797,7 +797,7 @@ PatristicMatrixToTree <- function(patristic.matrix) {
   }
 	tree <- NA
 	if(dim(patristic.matrix)[1] == 2) {
-		tree <- rtree(n=2, rooted=TRUE, tip.label=rownames(patristic.matrix), br=diag(patristic.matrix))
+		tree <- ape::rtree(n=2, rooted=TRUE, tip.label=rownames(patristic.matrix), br=patristic.matrix[1,2]/2)
 	} else {
   	tree <- ape::nj(patristic.matrix)
 	}
