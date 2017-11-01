@@ -28,6 +28,7 @@
 #' @param method The method used for congruification. PATHd8 only right now, r8s and treePL later.
 #' @param bold Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.
 #' @param marker A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.
+#' @param sppfromtaxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.
 #' @inheritDotParams GetBoldOToLTree otol_version chronogram doML
 #' @export
 #' @details
@@ -92,6 +93,7 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
 #' @inheritParams EstimateDates
 #' @inheritParams ProcessInput
+#' @inheritParams GetBoldOToLTree
 #' @inheritDotParams GetBoldOToLTree
 #' @return List of patristic matrices
 #' @export
@@ -164,7 +166,6 @@ ProcessPhy <- function(input){
 
 #' Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with ProcessPhy first.
 #' @inheritParams EstimateDates
-#' @param sppfromtaxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.
 #' @inheritDotParams rphylotastic::GetSpeciesFromTaxon filters
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
@@ -420,7 +421,7 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' @inheritParams EstimateDates
 #' @inherit EstimateDates return details
 #' @export
-SummarizeResults <- function(input = NULL, filtered.results = NULL, output.format = "phylo.all", partial=TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix")) {
+SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all", input = NULL, partial=TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix")) {
 		# if(!partial) {
 		# 	filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 		# } # not necessary cause already filtered in GetFilteredResults
@@ -428,43 +429,52 @@ SummarizeResults <- function(input = NULL, filtered.results = NULL, output.forma
 		cache <- UpdateCache(save = TRUE)
 	}
 	if(is.null(filtered.results) | !is.list(filtered.results)){
-		stop("filtered.results argument must be a list from GetFilteredResults function.", "\n")
-	}
-	if(is.null(input)){
-		input <- unique(rapply(filtered.results, rownames))
-		warning("showing taxon summary from taxa found in at least one chronogram, this excludes input taxa not found in any chronogram")
+		stop("filtered.results argument must be a list from GetFilteredResults function.")
 	}
 	output.format.in <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
 	missing.taxa.in <- match.arg(missing.taxa, choices=c("none", "summary", "matrix"))
 	verbose.in <- match.arg(verbose, c("citations", "taxa", "none"), several.ok=TRUE)
-
+	if(is.null(input)){
+		input.in <- unique(rapply(filtered.results, rownames))
+		if(missing.taxa.in !="none") warning("showing taxon summary from taxa found in at least one chronogram, this excludes input taxa not found in any chronogram")
+	} else {
+		if(!is.character(input)) stop("input must be a character vector")
+		input.in <- input
+	}
 	results.index <- FindMatchingStudyIndex(filtered.results, cache)
 	return.object <- NA
-
+	input.match <- unique(rapply(filtered.results, rownames))
+	# if(any(!input.match %in% input)) warning("input does not contain all or any taxa from filteredresults object")
+	absent.input <- input.in[!input.in %in% input.match]
+	if(length(absent.input)<=0) {
+		if(is.null(input)){
+			absent.input <- "NULL"
+		} else {
+			absent.input <- "None"
+		}
+	}
 	if(missing.taxa.in == "matrix"){
 		missing.taxa.list <- vector(mode="list")
 		# tax <- unique(rapply(filtered.results, rownames)) #rownames(filtered.results[[1]])
 		for(result.index in sequence(length(filtered.results))){
 			n <- rownames(filtered.results[[result.index]])
-			m <- match(input,n)
+			m <- match(input.match,n)
 			missing.taxa.list[[result.index]] <- n[m]
 		}
-		missing.taxa.matrix <- do.call(rbind, missing.taxa.list)
-		missing.taxa.matrix <- !is.na(missing.taxa.matrix)
-		colnames(missing.taxa.matrix) <- input
+		missing.taxa.matrix <- do.call(rbind, missing.taxa.list) #transforms a list of names into a matrix of names
+		missing.taxa.matrix <- !is.na(missing.taxa.matrix) # makes a boolean matrix
+		colnames(missing.taxa.matrix) <- input.match
 		rownames(missing.taxa.matrix) <- sequence(nrow(missing.taxa.matrix))
 	}
-
-	if(missing.taxa.in == "summary" | any(grepl("taxa", verbose.in))){ # may add here another consdition: | makeup_brlen ==TRUE
+	if(missing.taxa.in == "summary" | any(grepl("taxa", verbose.in))){ # may add here another condition: | makeup_brlen ==TRUE
 		# tax <- unique(rapply(filtered.results, rownames)) #rownames(filtered.results[[1]])
 		x <- rapply(filtered.results, rownames)
 		prop <- c()
-		for (taxon in input){
+		for (taxon in input.match){
 			prop <- c(prop, paste(length(which(taxon==x)), "/", length(filtered.results), sep=""))
 		}
-		missing.taxa.summary <- data.frame(Taxon=input, Chronograms=prop)
+		missing.taxa.summary <- data.frame(Taxon=input.match, Chronograms=prop)
 	}
-
 	if(output.format.in == "citations") {
 		return.object <- names(filtered.results)
 	}
@@ -503,10 +513,6 @@ SummarizeResults <- function(input = NULL, filtered.results = NULL, output.forma
 		trees <- lapply(filtered.results, PatristicMatrixToTree)
 		return.object <- trees[which(!is.na(trees))]
 	}
-	if(missing.taxa.in == "matrix" & !any(grepl(output.format.in, c("html", "data.frame")))){
-		return.object <- list(return.object, missing.taxa=missing.taxa.matrix)
-		names(return.object)[1] <- output.format.in
-	}
 	if(output.format.in == "html") {
 		out.vector1 <- "<table border='1'><tr><th>MRCA Age (MY)</th><th>Ntax</th><th>Citation</th><th>Newick"
 		if(missing.taxa.in == "matrix"){
@@ -523,14 +529,23 @@ SummarizeResults <- function(input = NULL, filtered.results = NULL, output.forma
 			}
 			out.vector2 <- paste(out.vector2, "</td></tr>", sep="")
 		}
-		out.vector <- paste(out.vector1, out.vector2, "</table>")
+		out.vector <- paste(out.vector1, out.vector2, "</table>", sep="")
 		if(missing.taxa.in == "summary"){
 			missing.taxa.summ <- as.matrix(missing.taxa.summary)
 			out.vector3 <- "<p></p><table border='1'><tr><th>Taxon</th><th>Chronograms</th><tr>"
 			for (summary.index in sequence(nrow(missing.taxa.summ))){
-				out.vector3 <- paste(out.vector3, paste("</td><td>", missing.taxa.summ[summary.index,], sep="", collapse=""), "</td></tr>", sep="")					}
-			out.vector3 <- paste(out.vector3, "</table>", sep="")
-			out.vector <- paste(out.vector, out.vector3, sep="")
+				out.vector3 <- paste(out.vector3, paste("</td><td>", missing.taxa.summ[summary.index,], sep="", collapse=""), "</td></tr>", sep="")
+			}
+			out.vector <- paste(out.vector, out.vector3, "</table>", sep="")
+		}
+		# out.vector4 <- c()
+		if(missing.taxa.in != "none") {
+			out.vector4 <- "<p></p><table border='1'><tr><th> </th><th>Absent Taxa</th><tr>"
+			for (i in 1:length(absent.input)){
+				out.vector4 <- paste(out.vector4, "<tr><td>", i, "</td><td>", absent.input[i], "</td><tr>", sep="")
+			}
+			out.vector4 <- paste(out.vector4, "</table>", sep="")
+			out.vector <- paste(out.vector, out.vector4, sep="")
 		}
 		return.object <- out.vector
 	}
@@ -552,11 +567,23 @@ SummarizeResults <- function(input = NULL, filtered.results = NULL, output.forma
 		rownames(out.df) <- NULL
 		return.object <- out.df
 	}
-	if(missing.taxa.in == "summary" & !any(grepl(output.format.in, c("html")))){
-		return.object <- list(return.object, missing.taxa=missing.taxa.summary)
+	if(missing.taxa.in != "none" & output.format.in !="html"){
+		return.object <- list(return.object)
+		if(missing.taxa.in=="matrix") {
+			if(output.format.in !="data.frame") return.object <- c(return.object, list(missing.taxa=missing.taxa.matrix))
+		}
+		if(missing.taxa.in=="summary") {
+			return.object <- c(return.object, list(missing.taxa=missing.taxa.summary))
+		}
+		return.object <- c(return.object, list(absent.taxa=data.frame(Taxon=absent.input)))
 		names(return.object)[1] <- output.format.in
+		if(output.format.in =="data.frame"){
+			names(return.object)[1] <- "results"
+			if(missing.taxa.in == "matrix") names(return.object)[1] <- "results.and.missing.taxa"
+		}
 	}
-	if(any(grepl("citations", verbose.in)) & !any(grepl(output.format.in, c("citations", "html", "data.frame")))) {
+
+	if(any("citations" %in% verbose.in) & !any(output.format.in %in% c("citations", "html", "data.frame"))) {
 		#print("Using trees from:")
 		if(output.format.in == "citations"){
 			cat("Target taxa found in trees from:", "\n")
@@ -571,6 +598,9 @@ SummarizeResults <- function(input = NULL, filtered.results = NULL, output.forma
 	if(any(grepl("taxa", verbose.in)) & missing.taxa.in!="summary") {
 		cat("Target taxa presence in source chronograms:", "\n")
 		print(missing.taxa.summary)
+		cat("\n")
+		cat("Target taxa absent from source chronograms:", "\n")
+		print(data.frame(Taxon=absent.input))
 		cat("\n")
 	}
 	return(return.object)
@@ -1036,7 +1066,7 @@ UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Strut
 #' @param otol_version Version of OToL to use
 #' @param chronogram Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.
 #' @param doML Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml
-#' @param process_input default to TRUE
+#' @param process_input default to TRUE; specifies wether the input should be processed by ProcessInput function
 #' @inheritParams ProcessInput
 #' @return A phylogeny with ML branch lengths
 #' @export

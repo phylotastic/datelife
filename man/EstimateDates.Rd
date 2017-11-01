@@ -37,6 +37,8 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{marker}{A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.}
 
+\item{sppfromtaxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.}
+
 \item{...}{Arguments passed on to \code{GetBoldOToLTree}
 \describe{
   \item{otol_version}{Version of OToL to use}

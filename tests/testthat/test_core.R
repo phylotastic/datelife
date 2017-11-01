@@ -139,7 +139,7 @@ test_that("Congruification works", {
 	skip_on_cran()
 	skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
-  filtered.results <- GetFilteredResults(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE)
+  filtered.results <- GetFilteredResults(input=ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE)
   expect_gte(length(filtered.results), 2)
 })
 
