@@ -692,7 +692,7 @@ GetSubsetArrayCongruifyFromPhylo <- function(reference.tree, taxa, phy=NULL, met
     }
   }
   if (final.size >= 3) {
-  	patristic.matrix.array.new <-   CongruifyTreeFromPhylo(reference.tree, query.tree=phy)
+  	patristic.matrix.array.new <-   CongruifyTreeFromPhylo(reference.tree, query.tree=phy, method=method)
   }
   return(list(patristic.matrix.array= patristic.matrix.array.new,problem= problem.new))
 }

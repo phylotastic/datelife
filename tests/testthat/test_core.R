@@ -143,6 +143,14 @@ test_that("Congruification works", {
   expect_gte(length(filtered.results), 2)
 })
 
+test_that("Congruification works with treePL", {
+	skip_on_cran()
+	skip_on_travis() #b/c no treepl
+  utils::data(opentree_chronograms)
+  filtered.results <- GetFilteredResults(input=ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, method="treePL")
+  expect_gte(length(filtered.results), 2)
+})
+
 test_that("SDM correctly returns tree", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
