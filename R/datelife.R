@@ -235,7 +235,7 @@ FixNegBrLen <- function(tree, method = "zero"){
 	if(class(pos.tree)!="phylo") stop("tree must be a newick character string or in phylo format")
 	if(is.null(pos.tree$edge.length)) stop("tree must have branch lengths")
 	if(!ape::is.ultrametric(pos.tree)) stop("branch lengths must be relative to time")
-	method <- match.arg(method, c("zero", "bladj", "bd"))
+	method <- match.arg(method, c("zero", "bladj", "mrbayes"))
 
 	index <- which(pos.tree$edge.length<0)
 
@@ -244,7 +244,8 @@ FixNegBrLen <- function(tree, method = "zero"){
 			# snode <- pos.tree$edge[i,1]
 			# pool  <- pos.tree$edge[seq(nrow(pos.tree$edge))[-i], 1]
 			# sisedge <- which(pool==snode) # determines position of sister edge
-			# pos.tree$edge.length[sisedge] <- pos.tree$edge.length[sisedge] - pos.tree$edge.length[i] # adds neg branch length to sister branch, should add error to both sides???? or only to the daughter branches??
+			# pos.tree$edge.length[sisedge] <- pos.tree$edge.length[sisedge] - pos.tree$edge.length[i]
+			# adds neg branch length to sister branch, should add error to both sides???? or only to the daughter branches??
 			cnode <- pos.tree$edge[i,2]
 			dauedge <- which(pos.tree$edge[,1]==cnode)
 			pos.tree$edge.length[dauedge] <- pos.tree$edge.length[dauedge] + pos.tree$edge.length[i]
@@ -257,7 +258,7 @@ FixNegBrLen <- function(tree, method = "zero"){
 		tree$node.label <- treenl
 		treebt <- ape::branching.times(tree)
 		cnode <- tree$edge[index,2]
-		tobladj <- cnode-tree$Nnode-1
+		tobladj <- cnode-tree$Nnode+1 # or, -length(tree$tip.label)
 		nn <- treenl[-tobladj]
 		na <- treebt[-tobladj]
 		attributes(na) <- NULL
@@ -265,7 +266,7 @@ FixNegBrLen <- function(tree, method = "zero"){
 		# plot(pos.tree)
 	}
 
-	# if(method=="bd")# chunk for bd tree
+	# if(method=="mrbayes")# chunk for bd tree
 	#GetBdTree function
 	return(pos.tree)
 }
