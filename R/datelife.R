@@ -144,9 +144,10 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 #' Take input phylo object or character string and figure out if it's correct newick format or a list of species
 #' @inheritParams EstimateDates
 #' @inheritParams ProcessInput
+#' @param verbose Boolean. If TRUE, processing status will be printed.
 #' @return A phylo object or NA if no tree
 #' @export
-ProcessPhy <- function(input){
+ProcessPhy <- function(input, verbose=TRUE){
 	if(class(input) == "phylo") {
 		input <- ape::write.tree(input)
 	}
@@ -154,10 +155,10 @@ ProcessPhy <- function(input){
   	input <- stringr::str_trim(input, side = "both")
   	phy.new.in <- NA
    	if(length(input) == 1) {
-    	cat("\t", "Input is length 1.", "\n")
+    	if(verbose)cat("\t", "Input is length 1.", "\n")
 	  	if(grepl("\\(.*\\).*;", input)) { #our test for newick
 	    	phy.new.in <- ape::read.tree(text=gsub(" ", "_", input))
-	    	cat("\t", "Input is in good newick format.", "\n")
+	    	if(verbose) cat("\t", "Input is in good newick format.", "\n")
 	  	}
   	}
 	return(phy.new.in)
@@ -183,8 +184,8 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 	if(length(input)==1) {
 		input <- strsplit(input, ',')[[1]]
 		if(!sppfromtaxon[1]) {
-				cat("Please provide at least two input taxon names to perform a search.", "\n")
-				cat("Setting sppfromtaxon = TRUE gets all species from a clade an accepts only one taxon name as input.", "\n")
+				cat("Datelife needs at least two input taxon names to perform a search.", "\n")
+				cat("Setting sppfromtaxon = TRUE gets all species from a clade and accepts only one taxon name as input.", "\n")
 				stop("Input is length 1 and not in a good newick format.")
 		}
 	}
@@ -238,7 +239,7 @@ FixNegBrLen <- function(tree, method = "zero"){
 
 	index <- which(pos.tree$edge.length<0)
 
-	if(method=="zero") {# chunck for neg br len to zero
+	if(method=="zero") {# chunk for neg br len to zero
 		for (i in index){
 			# snode <- pos.tree$edge[i,1]
 			# pool  <- pos.tree$edge[seq(nrow(pos.tree$edge))[-i], 1]
@@ -251,7 +252,7 @@ FixNegBrLen <- function(tree, method = "zero"){
 		}
 	}
 
-	if(method=="bladj"){#chunck for bladj
+	if(method=="bladj"){#chunk for bladj
 		treenl <- paste("n", seq(tree$Nnode), sep="")
 		tree$node.label <- treenl
 		treebt <- ape::branching.times(tree)
@@ -264,7 +265,7 @@ FixNegBrLen <- function(tree, method = "zero"){
 		# plot(pos.tree)
 	}
 
-	# if(method=="bd")# chunck for bd tree
+	# if(method=="bd")# chunk for bd tree
 	#GetBdTree function
 	return(pos.tree)
 }
@@ -295,6 +296,137 @@ GetBladjTree <- function(nodenames, nodeages, tree, treeformat="newick"){
 	if(treeformat == "phylo") new.tree <- ape::read.tree(text = new.tree)
 	# plot(new.tree)
 	return(new.tree)
+}
+
+#' Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations
+#' @param phy The constraint tree: a phylo object or a newick character string, with or without branch lengths.
+#' @param ncalibration The node calibrations: a phylo object with branch lengths proportional to time; all nodes in ncalibration will be used as calibrations. In the future, it will also take a list with two elements: the first is a list of character vectors with the names of taxa constituting each calibration node; the second is a numeric vector with the ages to use as calibrations for each node.
+#' @param file A character vector specifying the name of mrBayes run file and outputs (can specify directory too).
+#' @return A phylo tree with branch lengths proportional to time. It will save all mrBayes outputs in the working directory.
+#' @export
+GetMrBayesTree <- function(phy=NULL, ncalibration=NULL, file="mrbayes_run.nexus"){
+	runfile <- MakeMrBayesRunFile(phy= phy, ncalibration= ncalibration, file=file)
+	new.tree <- MrBayesRun(file=runfile)
+	return(new.tree)
+}
+
+#' Makes a mrBayes run block file with a constraint topology and a set of node calibrations
+#' @inheritParams GetMrBayesTree
+#' @return A MrBayes block run file in nexus format.
+#' @export
+MakeMrBayesRunFile <- function(phy= NULL, ncalibration= NULL, file="mrbayes_run.nexus"){
+    if (!inherits(phy, "phylo")) {
+        phy <- ProcessPhy(input=phy, verbose=FALSE)
+    }
+    phy <- ConvertSpacesToUnderscores(phy)
+	constraints <- paleotree::createMrBayesConstraints(tree= phy, partial=FALSE) # this works perfectly
+	calibrations <- GetMrBayesNodeCalibrations(phy=phy, ncalibration=ncalibration, ncalibrationType = "fixed")
+	og <- IdentifySingletonOutgroup(phy)
+	if(!is.na(og)) ogroup <- paste0("outgroup ", og, ";")
+
+	bayes_data <- c(paste("   Begin DATA; \nDimensions ntax=", length(phy$tip.label), "nchar=1;"),
+	"Format datatype=DNA gap=- missing=?;",
+	"Matrix\n",
+	paste(phy$tip.label, "?"),
+	";")
+
+    bayes_set <- c("   Begin MRBAYES;",
+    	"unlink shape=(all) tratio=(all) statefreq=(all) revmat=(all) pinvar=(all);\n",
+    	constraints[-length(constraints)],
+    	ogroup, "",
+    	constraints[length(constraints)], "",
+    	"prset nodeagepr=calibrated;", "",
+    	calibrations, "\n",
+    	"   set usebeagle=no Beaglesse=no;", "",
+    	paste("prset ", c("brlenspr=clock:birthdeath", "Extinctionpr = Fixed(0)",
+    	"Speciationpr=exponential(1)", "clockvarpr=ibr", "ibrvarpr=exponential(10)"), ";", sep=""),
+    	"mcmcp nruns=1 nchains=1 ngen=50000000 samplefreq=1000;",
+    	"mcmc;", "",
+    	paste0("sumt filename=", file, " burnin=5000000 contype=halfcompat;\n"),
+    	"end;"
+    	)
+
+	all <- c(bayes_data, "\n", bayes_set)
+	write(all, file)
+}
+
+#' Runs MrBayes from R.
+#' @inheritParams GetMrBayesTree
+#' @return MrBayes outputs.
+MrBayesRun <- function(file=NULL){
+	# code borrowed from phyloch::mrbayes()
+	if(is.null(file)) stop("You must provide a block file for MrBayes run")
+	if (.Platform$OS.type == "unix"){
+		system(paste("mb > execute", file))
+	} else {
+		system(paste("mrbayes ", file, ".bayes", sep = ""))
+	}
+	tr <- ape::read.nexus(paste(file, ".con.tre", sep = ""))
+	return(tr)
+}
+
+#' Writes the node calibrations block for a MrBayes run file.
+#' @inheritParams GetMrBayesTree
+#' @param ncalibrationType A character string specifying the type of calibration. Only "fixed" implementd for now.
+#' @return A set of MrBayes calibration commands printed in console as character strings or as a text file with name specified in file.
+#' @export
+# This function is set to match node names with constraints obtained from paleotree::GetMrBayesConstraints
+GetMrBayesNodeCalibrations <- function(phy=NULL, ncalibration=NULL, ncalibrationType = "fixed", file = NULL){
+
+    if (!inherits(phy, "phylo")) {
+        phy <- ProcessPhy(input=phy, verbose=FALSE)
+    }
+    if (!inherits(ncalibration, "phylo")) {
+       ncalibration <- ProcessPhy(input=ncalibration, verbose=FALSE)
+    }
+        # if(!is.list(ncalibration))stop("ncalibration must be a tree or a list with taxon names and dates")
+    if(is.null(ncalibration$edge.length) | !ape::is.ultrametric(ncalibration))
+    	stop("ncalibration tree must have branch lengths and be ultrametric.")
+    phy <- ConvertSpacesToUnderscores(phy)
+    ncalibration <- ConvertSpacesToUnderscores(ncalibration)
+    splits.ncalibration <- ape::prop.part(ncalibration)
+    includes.ncalibration <- lapply(splits.ncalibration, function(x) ncalibration$tip.label[x])
+	nodes <- sapply(includes.ncalibration, function(tax)
+				phytools::findMRCA(phy, tax, type="node")) - length(phy$tip.label)
+	root <- which(nodes==1) # tests for the presence of a root calibration, which should be implemented with treeagepr and not with calibrate
+	if(length(root)!=0){
+		nodes <- nodes[-root]
+		ncalibration <- ape::branching.times(ncalibration)[-root]
+	}
+	calibrations <- paste0("calibrate node", nodes-1, " = ", ncalibrationType, "(", ncalibration, ");")
+	if(length(root)!=0){
+		calibrations <- c(calibrations, paste0("prset treeagepr = ", ncalibrationType, "(",
+		ape::branching.times(ncalibration)[root], ");"))
+	}
+    if (!is.null(file)) {
+        write(calibrations, file)
+    }
+    else {
+        return(calibrations)
+    }
+}
+
+#' Identifies the presence of a single lineage outgroup in a phylogeny.
+#' @inheritParams GetMrBayesTree
+#' @return A character vector with the name of the single lineage outgroup. Returns NA if there is none.
+#' @export
+IdentifySingletonOutgroup <- function(phy=NULL){
+    if (!inherits(phy, "phylo")) {
+        phy <- ProcessPhy(input=phy, verbose=FALSE)
+    }
+	phy <- ConvertSpacesToUnderscores(phy)
+    outgroup <- NA
+    splits <- ape::prop.part(phy)
+    if(length(splits)>1){
+    	index <- which.max(sapply(splits, length))
+    	s1 <- splits[[index]]
+    	index2 <- which.max(sapply(splits[-index], length))
+    	s2 <- splits[-index][[index2]]
+    	if(length(s1)-length(s2) == 1){
+    		outgroup <- phy$tip.label[s1[!(s1 %in% s2)]]
+    	}
+    }
+    return(outgroup)
 }
 
 #' Are all desired taxa in the patristic.matrix?
