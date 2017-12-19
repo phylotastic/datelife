@@ -254,21 +254,22 @@ FixNegBrLen <- function(phy=NULL, method = "zero"){
 		}
 	}
 
-	if(method=="bladj"){#chunk for bladj
+	if(any(method==c("bladj", "mrbayes"))) { #chunk for bladj and mrbayes
 		phynl <- paste("n", seq(phy$Nnode), sep="")
 		phy$node.label <- phynl
 		phybt <- ape::branching.times(phy)
 		cnode <- phy$edge[index,2]
-		tobladj <- cnode-phy$Nnode+1 # or, -length(phy$tip.label)
-		nn <- phynl[-tobladj]
-		na <- phybt[-tobladj]
+		tofix <- cnode-phy$Nnode+1 # or, -length(phy$tip.label)
+		nn <- phynl[-tofix]
+		na <- phybt[-tofix]
 		attributes(na) <- NULL
-		fixed.phy <- GetBladjTree(nodenames = nn, nodeages = na, phy = phy, phyformat = "phylo")
-		# plot(pos.phy)
+		if(method=="bladj")
+			fixed.phy <- GetBladjTree(nodenames = nn, nodeages = na, phy = phy, phyformat = "phylo")
+		if(method=="mrbayes") {
+			fixed.phy <-
+		}
 	}
 
-	# if(method=="mrbayes")# chunk for bd tree
-	#GetBdTree function
 	return(fixed.phy)
 }
 
@@ -286,7 +287,7 @@ GetBladjTree <- function(nodenames, nodeages, phy, phyformat="newick"){
 	if(!is.null(phy$edge.length)) phy$edge.length <- NULL
 	m <- match(nodenames, phy$node.label)
 	if(any(is.na(m))) stop("all nodenames must be in phy$node.label") # add a printed line saying which nodenames are not in phy$node.label
-	if(length(nodenames)!=length(nodeages)) stop("nodenames and nodeages musthave the same length")
+	if(length(nodenames)!=length(nodeages)) stop("nodenames and nodeages must have the same length")
 	if(!is.character(nodenames)) stop("nodenames must be a character vector")
 	if(!is.numeric(nodeages)) stop("nodeages must be a numeric vector")
 	ages_df <- data.frame(
@@ -302,7 +303,7 @@ GetBladjTree <- function(nodenames, nodeages, phy, phyformat="newick"){
 
 #' Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations
 #' @param phy The constraint tree: a phylo object or a newick character string, with or without branch lengths.
-#' @param ncalibration The node calibrations: a phylo object with branch lengths proportional to time; all nodes in ncalibration will be used as calibrations. In the future, it will also take a list with two elements: the first is a list of character vectors with the names of taxa constituting each calibration node; the second is a numeric vector with the ages to use as calibrations for each node.
+#' @param ncalibration The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.
 #' @param file A character vector specifying the name of mrBayes run file and outputs (can specify directory too).
 #' @return A phylo tree with branch lengths proportional to time. It will save all mrBayes outputs in the working directory.
 #' @export
