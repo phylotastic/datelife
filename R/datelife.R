@@ -226,65 +226,66 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 }
 
 #' Takes a tree and fixes negative branch lengths in several ways
-#' @param tree A tree either as a newick character string or phylo format
+#' @param phy A tree either as a newick character string or phylo format
 #' @param method A character vector specifying the method to fix negative branch lengths: "zero", "bladj", "bd"
 #' @return A tree in phylo format with non negative branch lengths
 #' @export
-FixNegBrLen <- function(tree, method = "zero"){
-	pos.tree <- ProcessPhy(tree)
-	if(class(pos.tree)!="phylo") stop("tree must be a newick character string or in phylo format")
-	if(is.null(pos.tree$edge.length)) stop("tree must have branch lengths")
-	if(!ape::is.ultrametric(pos.tree)) stop("branch lengths must be relative to time")
+FixNegBrLen <- function(phy=NULL, method = "zero"){
+	phy <- ProcessPhy(phy)
+	if(class(phy)!="phylo") stop("phy must be a newick character string or in phylo format")
+	if(is.null(phy$edge.length)) stop("phy must have branch lengths")
+	if(!ape::is.ultrametric(phy)) stop("branch lengths must be relative to time")
 	method <- match.arg(method, c("zero", "bladj", "mrbayes"))
 
-	index <- which(pos.tree$edge.length<0)
+	index <- which(phy$edge.length<0)
 
 	if(method=="zero") {# chunk for neg br len to zero
 		for (i in index){
-			# snode <- pos.tree$edge[i,1]
-			# pool  <- pos.tree$edge[seq(nrow(pos.tree$edge))[-i], 1]
+			# snode <- pos.phy$edge[i,1]
+			# pool  <- pos.phy$edge[seq(nrow(pos.phy$edge))[-i], 1]
 			# sisedge <- which(pool==snode) # determines position of sister edge
-			# pos.tree$edge.length[sisedge] <- pos.tree$edge.length[sisedge] - pos.tree$edge.length[i]
+			# pos.phy$edge.length[sisedge] <- pos.phy$edge.length[sisedge] - pos.phy$edge.length[i]
 			# adds neg branch length to sister branch, should add error to both sides???? or only to the daughter branches??
-			cnode <- pos.tree$edge[i,2]
-			dauedge <- which(pos.tree$edge[,1]==cnode)
-			pos.tree$edge.length[dauedge] <- pos.tree$edge.length[dauedge] + pos.tree$edge.length[i]
-			pos.tree$edge.length[i] <- 0
+			cnode <- phy$edge[i,2]
+			dauedge <- which(phy$edge[,1]==cnode)
+			phy$edge.length[dauedge] <- phy$edge.length[dauedge] + phy$edge.length[i]
+			phy$edge.length[i] <- 0
+			fixed.phy <- phy
 		}
 	}
 
 	if(method=="bladj"){#chunk for bladj
-		treenl <- paste("n", seq(tree$Nnode), sep="")
-		tree$node.label <- treenl
-		treebt <- ape::branching.times(tree)
-		cnode <- tree$edge[index,2]
-		tobladj <- cnode-tree$Nnode+1 # or, -length(tree$tip.label)
-		nn <- treenl[-tobladj]
-		na <- treebt[-tobladj]
+		phynl <- paste("n", seq(phy$Nnode), sep="")
+		phy$node.label <- phynl
+		phybt <- ape::branching.times(phy)
+		cnode <- phy$edge[index,2]
+		tobladj <- cnode-phy$Nnode+1 # or, -length(phy$tip.label)
+		nn <- phynl[-tobladj]
+		na <- phybt[-tobladj]
 		attributes(na) <- NULL
-		pos.tree <- GetBladjTree(nodenames = nn, nodeages = na, tree = tree, treeformat = "phylo")
-		# plot(pos.tree)
+		fixed.phy <- GetBladjTree(nodenames = nn, nodeages = na, phy = phy, phyformat = "phylo")
+		# plot(pos.phy)
 	}
 
 	# if(method=="mrbayes")# chunk for bd tree
 	#GetBdTree function
-	return(pos.tree)
+	return(fixed.phy)
 }
 
 
 #' Takes a tree and uses bladj to estimate node ages and branch lengths given a set of fixed node ages and respective node names
 #' @param nodenames A character vector with node names from tree with fixed ages
 #' @param nodeages A numeric vector with known or fixed node ages from tree
-#' @param tree A tree either as a newick character string or phylo format
-#' @param treeformat A character vector specifying tree output format, either "newick" (default) or "phylo"
+#' @param phy A tree either as a newick character string or phylo format
+#' @param phyformat A character vector specifying tree output format, either "newick" (default) or "phylo"
 #' @return A newick or phylo tree with non negative branch lengths
 #' @export
-GetBladjTree <- function(nodenames, nodeages, tree, treeformat="newick"){
-	treeformat <- match.arg(treeformat, choices = c("newick", "phylo"))
-	if(is.null(tree$node.label)) stop("tree must have node labels")
-	if(!is.null(tree$edge.length)) tree$edge.length <- NULL
-	m <- match(nodenames, tree$node.label)
-	if(any(is.na(m))) stop("all nodenames must be in tree$node.label") # add a printed line saying which nodenames are not in tree$node.label
+GetBladjTree <- function(nodenames, nodeages, phy, phyformat="newick"){
+	phyformat <- match.arg(phyformat, choices = c("newick", "phylo"))
+	if(is.null(phy$node.label)) stop("phy must have node labels")
+	if(!is.null(phy$edge.length)) phy$edge.length <- NULL
+	m <- match(nodenames, phy$node.label)
+	if(any(is.na(m))) stop("all nodenames must be in phy$node.label") # add a printed line saying which nodenames are not in phy$node.label
 	if(length(nodenames)!=length(nodeages)) stop("nodenames and nodeages musthave the same length")
 	if(!is.character(nodenames)) stop("nodenames must be a character vector")
 	if(!is.numeric(nodeages)) stop("nodeages must be a numeric vector")
@@ -292,11 +293,11 @@ GetBladjTree <- function(nodenames, nodeages, tree, treeformat="newick"){
 		a=nodenames,
 		b=nodeages
 	)
-	new.tree <- phylocomr::ph_bladj(ages = ages_df, phylo = tree)
-	attributes(new.tree) <- NULL
-	if(treeformat == "phylo") new.tree <- ape::read.tree(text = new.tree)
-	# plot(new.tree)
-	return(new.tree)
+	new.phy <- phylocomr::ph_bladj(ages = ages_df, phylo = phy)
+	attributes(new.phy) <- NULL
+	if(phyformat == "phylo") new.phy <- ape::read.tree(text = new.phy)
+	# plot(new.phy)
+	return(new.phy)
 }
 
 #' Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations
