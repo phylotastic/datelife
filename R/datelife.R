@@ -231,10 +231,13 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 #' @return A tree in phylo format with non negative branch lengths
 #' @export
 FixNegBrLen <- function(phy=NULL, method = "zero"){
-	phy <- ProcessPhy(phy)
-	if(class(phy)!="phylo") stop("phy must be a newick character string or in phylo format")
-	if(is.null(phy$edge.length)) stop("phy must have branch lengths")
-	if(!ape::is.ultrametric(phy)) stop("branch lengths must be relative to time")
+	phy <- ProcessPhy(input=phy, verbose=FALSE)
+	if (!inherits(phy, "phylo"))
+		stop("phy must be a newick character string or in phylo format")
+	if(is.null(phy$edge.length))
+		stop("phy must have branch lengths")
+	if(!ape::is.ultrametric(phy))
+		stop("branch lengths must be relative to time")
 	method <- match.arg(method, c("zero", "bladj", "mrbayes"))
 
 	index <- which(phy$edge.length<0)
@@ -255,24 +258,60 @@ FixNegBrLen <- function(phy=NULL, method = "zero"){
 	}
 
 	if(any(method==c("bladj", "mrbayes"))) { #chunk for bladj and mrbayes
+	# if(method=="bladj") { #chunk for bladj
 		phynl <- paste("n", seq(phy$Nnode), sep="")
 		phy$node.label <- phynl
 		phybt <- ape::branching.times(phy)
 		cnode <- phy$edge[index,2]
-		tofix <- cnode-phy$Nnode+1 # or, -length(phy$tip.label)
+		tofix <- cnode-length(phy$tip.label) #or,
 		nn <- phynl[-tofix]
 		na <- phybt[-tofix]
 		attributes(na) <- NULL
 		if(method=="bladj")
 			fixed.phy <- GetBladjTree(nodenames = nn, nodeages = na, phy = phy, phyformat = "phylo")
 		if(method=="mrbayes") {
-			fixed.phy <-
+			nnum <- (length(phy$tip.label)+1):(length(phy$tip.label)+phy$Nnode)
+			nt <- lapply(nnum[-tofix], function(x) GetTips(tree=phy, node=x))
+			nt <- lapply(nt, function(x) phy$tip.label[x])
+			mrbayes.file <- paste0("datelife_query", "_negBrLen_fixed.nexus")
+			phy1 <- AddOutgroup(phy=phy, outgroup="fake_outgroup", processphy=FALSE)
+			fixed.phy <- GetMrBayesTree(phy=ape::read.tree(text=phy1), ncalibration=list(nodetaxa=nt, nodeages=na), file=mrbayes.file)
+			fixed.phy <- ape::drop.tip(fixed.phy, "fake_outgroup")
 		}
 	}
-
+#	if(method=="mrbayes") { #chunk for mrbayes
+	#}
 	return(fixed.phy)
 }
 
+#' Function to add an outgroup to any phylogeny, in phylo or newick format
+#' @inheritParams GetMrBayesTree
+#' @return A character vector with the name of the single lineage outgroup. Returns NA if there is none.
+#' @export
+AddOutgroup <- function(phy=NULL, outgroup="outgroup", processphy=TRUE){
+    if (processphy) {
+		phy <- ProcessPhy(input=phy, verbose=FALSE)
+		if (!inherits(phy, "phylo")) {
+			stop("phy must be of class 'phylo'")
+		}
+    }
+    # if(phy$edge.length) # it doesn't matter if phy has branch lengths
+	phy <- ape::write.tree(phy)
+	phy <- gsub(";", ",", phy)
+	phy <- paste("(", phy, outgroup, ");", sep="")
+
+	return(phy)
+}
+
+#' To get tip numbers descending from any given node of a tree
+#' @inheritParams phytools::getDescendants
+#' @return A numeric vector with tip numbers descending from a node
+#' @export
+GetTips <- function(tree=NULL, node=NULL, curr=NULL){
+	des <- phytools::getDescendants(tree=tree, node=node, curr=NULL)
+	tips <- des[which(des<=length(tree$tip.label))]
+	return(tips)
+}
 
 #' Takes a tree and uses bladj to estimate node ages and branch lengths given a set of fixed node ages and respective node names
 #' @param nodenames A character vector with node names from tree with fixed ages
@@ -281,7 +320,7 @@ FixNegBrLen <- function(phy=NULL, method = "zero"){
 #' @param phyformat A character vector specifying tree output format, either "newick" (default) or "phylo"
 #' @return A newick or phylo tree with non negative branch lengths
 #' @export
-GetBladjTree <- function(nodenames, nodeages, phy, phyformat="newick"){
+GetBladjTree <- function(nodenames=NULL, nodeages=NULL, phy=NULL, phyformat="newick"){
 	phyformat <- match.arg(phyformat, choices = c("newick", "phylo"))
 	if(is.null(phy$node.label)) stop("phy must have node labels")
 	if(!is.null(phy$edge.length)) phy$edge.length <- NULL
@@ -308,8 +347,8 @@ GetBladjTree <- function(nodenames, nodeages, phy, phyformat="newick"){
 #' @return A phylo tree with branch lengths proportional to time. It will save all mrBayes outputs in the working directory.
 #' @export
 GetMrBayesTree <- function(phy=NULL, ncalibration=NULL, file="mrbayes_run.nexus"){
-	runfile <- MakeMrBayesRunFile(phy= phy, ncalibration= ncalibration, file=file)
-	new.tree <- MrBayesRun(file=runfile)
+	MakeMrBayesRunFile(phy= phy, ncalibration= ncalibration, file=file)
+	new.tree <- MrBayesRun(file=file)
 	return(new.tree)
 }
 
@@ -318,8 +357,9 @@ GetMrBayesTree <- function(phy=NULL, ncalibration=NULL, file="mrbayes_run.nexus"
 #' @return A MrBayes block run file in nexus format.
 #' @export
 MakeMrBayesRunFile <- function(phy= NULL, ncalibration= NULL, file="mrbayes_run.nexus"){
-    if (!inherits(phy, "phylo")) {
-        phy <- ProcessPhy(input=phy, verbose=FALSE)
+    phy <- ProcessPhy(input=phy, verbose=FALSE)
+	if (!inherits(phy, "phylo")) {
+		stop("phy must be a newick character string or in phylo format")
     }
     phy <- ConvertSpacesToUnderscores(phy)
 	constraints <- paleotree::createMrBayesConstraints(tree= phy, partial=FALSE) # this works perfectly
@@ -370,34 +410,43 @@ MrBayesRun <- function(file=NULL){
 
 #' Writes the node calibrations block for a MrBayes run file.
 #' @inheritParams GetMrBayesTree
-#' @param ncalibrationType A character string specifying the type of calibration. Only "fixed" implementd for now.
+#' @param ncalibrationType A character string specifying the type of calibration. Only "fixed" is implemented for now.
 #' @return A set of MrBayes calibration commands printed in console as character strings or as a text file with name specified in file.
 #' @export
 # This function is set to match node names with constraints obtained from paleotree::GetMrBayesConstraints
 GetMrBayesNodeCalibrations <- function(phy=NULL, ncalibration=NULL, ncalibrationType = "fixed", file = NULL){
-
+	phy <- ProcessPhy(input=phy, verbose=FALSE)
     if (!inherits(phy, "phylo")) {
-        phy <- ProcessPhy(input=phy, verbose=FALSE)
+		stop("phy must be a newick character string or in phylo format")
     }
-    if (!inherits(ncalibration, "phylo")) {
-       ncalibration <- ProcessPhy(input=ncalibration, verbose=FALSE)
-    }
-        # if(!is.list(ncalibration))stop("ncalibration must be a tree or a list with taxon names and dates")
-    if(is.null(ncalibration$edge.length) | !ape::is.ultrametric(ncalibration))
-    	stop("ncalibration tree must have branch lengths and be ultrametric.")
-    phy <- ConvertSpacesToUnderscores(phy)
-    ncalibration <- ConvertSpacesToUnderscores(ncalibration)
-    splits.ncalibration <- ape::prop.part(ncalibration)
-    includes.ncalibration <- lapply(splits.ncalibration, function(x) ncalibration$tip.label[x])
+	if(length(ncalibration)==2){ # if it is a list of taxon names and ages
+		if(!is.list(ncalibration)) {
+			stop("ncalibration must be a newick character string, in phylo format or a list with taxon names and dates")
+		}
+		includes.ncalibration <- lapply(ncalibration$nodetaxa, function(x) gsub(" ", "_", x))
+		nages <- ncalibration$nodeages
+
+	} else { #if it is a tree
+		ncalibration <- ProcessPhy(input=ncalibration, verbose=FALSE)
+		if (!inherits(ncalibration, "phylo")) {
+			stop("ncalibration must be a newick character string, in phylo format or a list with taxon names and dates")
+	    }
+		if(is.null(ncalibration$edge.length) | !ape::is.ultrametric(ncalibration)) {
+	    	stop("ncalibration tree must have branch lengths and be ultrametric")
+		}
+	    phy <- ConvertSpacesToUnderscores(phy)
+	    ncalibration <- ConvertSpacesToUnderscores(ncalibration)
+	    splits.ncalibration <- ape::prop.part(ncalibration)
+	    includes.ncalibration <- lapply(splits.ncalibration, function(x) ncalibration$tip.label[x])
+		nages <- ape::branching.times(ncalibration)
+	}
 	nodes <- sapply(includes.ncalibration, function(tax)
 				phytools::findMRCA(phy, tax, type="node")) - length(phy$tip.label)
+	calibrations <- paste0("calibrate node", nodes-1, " = ", ncalibrationType, "(", nages, ");")
 	root <- which(nodes==1) # tests for the presence of a root calibration, which should be implemented with treeagepr and not with calibrate
 	if(length(root)!=0){
 		nodes <- nodes[-root]
-		ncalibration <- ape::branching.times(ncalibration)[-root]
-	}
-	calibrations <- paste0("calibrate node", nodes-1, " = ", ncalibrationType, "(", ncalibration, ");")
-	if(length(root)!=0){
+		nages <- ape::branching.times(ncalibration)[-root]
 		calibrations <- c(calibrations, paste0("prset treeagepr = ", ncalibrationType, "(",
 		ape::branching.times(ncalibration)[root], ");"))
 	}
