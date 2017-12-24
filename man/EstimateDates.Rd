@@ -45,6 +45,8 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
   \item{chronogram}{Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.}
   \item{doML}{Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml}
 }}
+
+\item{showstatus}{Boolean. If TRUE, processing status will be printed.}
 }
 \description{
 Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.

@@ -29,6 +29,7 @@
 #' @param bold Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.
 #' @param marker A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.
 #' @param sppfromtaxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.
+#' @param showstatus Boolean. If TRUE, processing status will be printed.
 #' @inheritDotParams GetBoldOToLTree otol_version chronogram doML
 #' @export
 #' @details
@@ -144,25 +145,30 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 #' Take input phylo object or character string and figure out if it's correct newick format or a list of species
 #' @inheritParams EstimateDates
 #' @inheritParams ProcessInput
-#' @param verbose Boolean. If TRUE, processing status will be printed.
+#' @param showstatus Boolean. If TRUE, processing status will be printed.
 #' @return A phylo object or NA if no tree
 #' @export
-ProcessPhy <- function(input, verbose=TRUE){
+ProcessPhy <- function(input, showstatus=TRUE){
+  	if(class(input) == "multiPhylo") stop("Only one phylogeny can be processed at a time.")
 	if(class(input) == "phylo") {
 		input <- ape::write.tree(input)
 	}
  	input <- gsub("\\+"," ",input)
   	input <- stringr::str_trim(input, side = "both")
   	phy.new.in <- NA
-   	if(length(input) == 1) {
-    	if(verbose)cat("\t", "Input is length 1.", "\n")
-	  	if(grepl("\\(.*\\).*;", input)) { #our test for newick
-	    	phy.new.in <- ape::read.tree(text=gsub(" ", "_", input))
-	    	if(verbose) cat("\t", "Input is in good newick format.", "\n")
+   	# if(length(input) == 1) {
+    	# if(verbose)cat("\t", "Input is length 1.", "\n")
+	  	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
+	  		if(length(input)!=1) stop("Only one phylogeny can be processed at a time.")
+	    	phy.new.in <- ape::collapse.singles(phytools::read.newick(text=gsub(" ", "_", input)))
+	    	if(showstatus) {cat("\t", "Input is a phylogeny and it is correcly formatted.", "\n")}
+	  	} else {
+	  		if(showstatus) {cat("\t", "Input is not a phylogeny.", "\n")}
 	  	}
-  	}
+  	# }
 	return(phy.new.in)
 }
+
 
 
 #' Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with ProcessPhy first.
@@ -170,9 +176,9 @@ ProcessPhy <- function(input, verbose=TRUE){
 #' @inheritDotParams rphylotastic::GetSpeciesFromTaxon filters
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
-ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE, sppfromtaxon=FALSE, ...) {
+ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE, sppfromtaxon=FALSE, showstatus=TRUE, ...) {
 	cat("Processing input...", "\n")
-	phy.new <- ProcessPhy(input = input)
+	phy.new <- ProcessPhy(input = input, showstatus=showstatus)
 	# cleaned.names <- ""
 	if(!is.na(phy.new[1])) {
 	    # if(usetnrs) {
@@ -231,7 +237,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 #' @return A tree in phylo format with non negative branch lengths
 #' @export
 FixNegBrLen <- function(phy=NULL, method = "zero"){
-	phy <- ProcessPhy(input=phy, verbose=FALSE)
+	phy <- ProcessPhy(input=phy, showstatus=FALSE)
 	if (!inherits(phy, "phylo"))
 		stop("phy must be a newick character string or in phylo format")
 	if(is.null(phy$edge.length))
@@ -290,7 +296,7 @@ FixNegBrLen <- function(phy=NULL, method = "zero"){
 #' @export
 AddOutgroup <- function(phy=NULL, outgroup="outgroup", processphy=TRUE){
     if (processphy) {
-		phy <- ProcessPhy(input=phy, verbose=FALSE)
+		phy <- ProcessPhy(input=phy, showstatus=FALSE)
 		if (!inherits(phy, "phylo")) {
 			stop("phy must be of class 'phylo'")
 		}
@@ -357,7 +363,7 @@ GetMrBayesTree <- function(phy=NULL, ncalibration=NULL, file="mrbayes_run.nexus"
 #' @return A MrBayes block run file in nexus format.
 #' @export
 MakeMrBayesRunFile <- function(phy= NULL, ncalibration= NULL, file="mrbayes_run.nexus"){
-    phy <- ProcessPhy(input=phy, verbose=FALSE)
+    phy <- ProcessPhy(input=phy, showstatus=FALSE)
 	if (!inherits(phy, "phylo")) {
 		stop("phy must be a newick character string or in phylo format")
     }
@@ -415,7 +421,7 @@ MrBayesRun <- function(file=NULL){
 #' @export
 # This function is set to match node names with constraints obtained from paleotree::GetMrBayesConstraints
 GetMrBayesNodeCalibrations <- function(phy=NULL, ncalibration=NULL, ncalibrationType = "fixed", file = NULL){
-	phy <- ProcessPhy(input=phy, verbose=FALSE)
+	phy <- ProcessPhy(input=phy, showstatus=FALSE)
     if (!inherits(phy, "phylo")) {
 		stop("phy must be a newick character string or in phylo format")
     }
@@ -427,7 +433,7 @@ GetMrBayesNodeCalibrations <- function(phy=NULL, ncalibration=NULL, ncalibration
 		nages <- ncalibration$nodeages
 
 	} else { #if it is a tree
-		ncalibration <- ProcessPhy(input=ncalibration, verbose=FALSE)
+		ncalibration <- ProcessPhy(input=ncalibration, showstatus=FALSE)
 		if (!inherits(ncalibration, "phylo")) {
 			stop("ncalibration must be a newick character string, in phylo format or a list with taxon names and dates")
 	    }
@@ -464,7 +470,7 @@ GetMrBayesNodeCalibrations <- function(phy=NULL, ncalibration=NULL, ncalibration
 #' @export
 IdentifySingletonOutgroup <- function(phy=NULL){
     if (!inherits(phy, "phylo")) {
-        phy <- ProcessPhy(input=phy, verbose=FALSE)
+        phy <- ProcessPhy(input=phy, showstatus=FALSE)
     }
 	phy <- ConvertSpacesToUnderscores(phy)
     outgroup <- NA

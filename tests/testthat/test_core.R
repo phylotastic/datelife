@@ -214,6 +214,24 @@ test_that("We can get trees of two taxa back", {
   expect_gte(tree$edge.length[1], 10)
 })
 
+test_that("ProcessPhy works", {
+	new <- "(((((Pterois miles,Pterois volitans)Pteroinae)Teleostei)Chordata,Lymnaea))Metazoa;"
+	phy <- ape::read.tree(text="((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);")
+	notnew <- "a,b;"
+	expect_error(ProcessPhy(c(new, new))) #trying to process two phylogenies will give an error
+	expect_error(ProcessPhy(c(phy, phy))) #trying to process two phylogenies will give an error
+	expect_output(x <- ProcessPhy(new)) # when showstatus=TRUE it will give a printed message
+	expect_output(x <- ProcessPhy(phy)) # idem
+	expect_output(x <- ProcessPhy(notnew)) # idem
+	expect_output(x <- ProcessPhy(new, showstatus=FALSE), NA) # when showstatus=FALSE there is no printed message
+	expect_output(x <- ProcessPhy(notnew, showstatus=FALSE), NA) # idem
+	expect_output(x <- ProcessPhy("purrr", showstatus=FALSE), NA) # idem
+	expect_type(x <- ProcessPhy(notnew, showstatus=FALSE), "logical") # output is NA
+	expect_type(x <- ProcessPhy("purrr", showstatus=FALSE), "logical") # output is NA
+	expect_s3_class(x <- ProcessPhy(new, showstatus=FALSE), "phylo") # output is phylo
+	expect_s3_class(x <- ProcessPhy(phy, showstatus=FALSE), "phylo") # output is phylo
+})
+
 # test_that("bold tree from EstimateDates is the same as the one from GetBoldOToLTree", {
 # 	tax2 <- c("Homo sapiens", "Macaca mulatta", "Melursus ursinus","Canis lupus pallipes", "Panthera pardus", "Panthera tigris", "Herpestes fuscus", "Elephas maximus", "Haliastur indus")
 # 	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"

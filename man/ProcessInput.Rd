@@ -6,7 +6,7 @@
 \usage{
 ProcessInput(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), usetnrs = FALSE, approximatematch = TRUE,
-  sppfromtaxon = FALSE, ...)
+  sppfromtaxon = FALSE, showstatus = TRUE, ...)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
@@ -16,6 +16,8 @@ ProcessInput(input = c("Rhea americana", "Pterocnemia pennata",
 \item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
 
 \item{sppfromtaxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.}
+
+\item{showstatus}{Boolean. If TRUE, processing status will be printed.}
 
 \item{...}{Arguments passed on to \code{rphylotastic::GetSpeciesFromTaxon}
 \describe{
