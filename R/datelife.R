@@ -212,8 +212,8 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 	    	if (i) {
 	    		spp <- rphylotastic::GetSpeciesFromTaxon(taxon = cleaned.names[index], ...)
 	    		if(length(spp)==0) {
-	    			cat("\t", " Did not get any species names for taxon ", cleaned.names[index], ".", "\n", sep="")
-	    			if (!usetnrs) cat("\t", "Setting usetnrs = TRUE might change this, but it can be slowish.", "\n")
+	    			cat("\t", " No species names found for taxon ", cleaned.names[index], ".", "\n", sep="")
+	    			if (!usetnrs) cat("\t", "Setting usetnrs = TRUE might change this, but it can be slow.", "\n")
 	    			warning(paste("No species names available for input taxon '", cleaned.names[index], "'", sep=""))
 	    		}
 	    		species.names <- c(species.names, spp)
@@ -228,13 +228,13 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
     cat("OK.", "\n")
   	cleaned.names.print <- paste(cleaned.names, collapse = " | ")
   	cat("Working with the following taxa:", "\n", "\t", cleaned.names.print, "\n")
-   	return(list(phy=phy.new, cleaned.names=cleaned.names))
+   	return(list(cleaned.names=cleaned.names, phy=phy.new))
 }
 
 #' Takes a tree and fixes negative branch lengths in several ways
-#' @param phy A tree either as a newick character string or phylo format
-#' @param method A character vector specifying the method to fix negative branch lengths: "zero", "bladj", "bd"
-#' @return A tree in phylo format with non negative branch lengths
+#' @param phy A tree either as a newick character string or as a phylo object
+#' @param method A character vector specifying the method to fix negative branch lengths: "zero", "bladj" or "mrbayes"
+#' @return A phylo object with no negative branch lengths
 #' @export
 FixNegBrLen <- function(phy=NULL, method = "zero"){
 	phy <- ProcessPhy(input=phy, showstatus=FALSE)
@@ -437,7 +437,7 @@ GetMrBayesNodeCalibrations <- function(phy=NULL, ncalibration=NULL, ncalibration
 	} else { #if it is a tree
 		ncalibration <- ProcessPhy(input=ncalibration, showstatus=FALSE)
 		if (!inherits(ncalibration, "phylo")) {
-			stop("ncalibration must be a newick character string, in phylo format or a list with taxon names and dates")
+			stop("ncalibration must be a newick character string, a phylo object or a list with taxon names and dates")
 	    }
 		if(is.null(ncalibration$edge.length) | !ape::is.ultrametric(ncalibration)) {
 	    	stop("ncalibration tree must have branch lengths and be ultrametric")
