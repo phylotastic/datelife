@@ -159,7 +159,7 @@ ProcessPhy <- function(input, showstatus=TRUE){
    	# if(length(input) == 1) {
     	# if(verbose)cat("\t", "Input is length 1.", "\n")
 	  	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
-	  		if(length(input)!=1) stop("Only one phylogeny can be processed at a time.")
+	  		if(length(input)>1) stop("Only one phylogeny can be processed at a time.")
 	    	phy.new.in <- ape::collapse.singles(phytools::read.newick(text=gsub(" ", "_", input)))
 	    	if(showstatus) {cat("\t", "Input is a phylogeny and it is correcly formatted.", "\n")}
 	  	} else {
@@ -292,19 +292,21 @@ FixNegBrLen <- function(phy=NULL, method = "zero"){
 
 #' Function to add an outgroup to any phylogeny, in phylo or newick format
 #' @inheritParams GetMrBayesTree
-#' @return A character vector with the name of the single lineage outgroup. Returns NA if there is none.
+#' @param outgroup A character vector with the name of the outgroup. If it has length>1, only first element will be used.
+#' @param processphy Boolean. If true, phy will be processed with ProcessPhy function.
+#' @return A character vector with a newick string.
 #' @export
 AddOutgroup <- function(phy=NULL, outgroup="outgroup", processphy=TRUE){
     if (processphy) {
-		phy <- ProcessPhy(input=phy, showstatus=FALSE)
-		if (!inherits(phy, "phylo")) {
-			stop("phy must be of class 'phylo'")
-		}
+			phy <- ProcessPhy(input=phy, showstatus=FALSE)
+			if (!inherits(phy, "phylo")) {
+				stop("phy must be of class 'phylo'")
+			}
     }
-    # if(phy$edge.length) # it doesn't matter if phy has branch lengths
+    # if(phy$edge.length) # comment cause it doesn't matter if phy has branch lengths
 	phy <- ape::write.tree(phy)
 	phy <- gsub(";", ",", phy)
-	phy <- paste("(", phy, outgroup, ");", sep="")
+	phy <- paste("(", phy, outgroup[1], ");", sep="")
 
 	return(phy)
 }
