@@ -8,7 +8,7 @@ GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
   approximatematch = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), method = "PATHd8", bold = FALSE,
-  marker = "COI", process_input = TRUE, sppfromtaxon = FALSE, ...)
+  marker = "COI", sppfromtaxon = FALSE, ...)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
@@ -28,8 +28,6 @@ GetFilteredResults(input = c("Rhea americana", "Pterocnemia pennata",
 \item{bold}{Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.}
 
 \item{marker}{A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.}
-
-\item{process_input}{default to TRUE; specifies wether the input should be processed by ProcessInput function}
 
 \item{sppfromtaxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.}
 

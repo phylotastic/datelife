@@ -98,39 +98,17 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 #' @inheritDotParams GetBoldOToLTree
 #' @return List of patristic matrices
 #' @export
-GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, update_cache = FALSE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker = "COI", process_input= TRUE, sppfromtaxon=FALSE, ...) {
-	stopping <- FALSE
+GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, update_cache = FALSE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker = "COI", sppfromtaxon=FALSE, ...) {
 	if(update_cache){
 		cache <- UpdateCache(save = TRUE)
 	}
-    if (process_input){
-		input.processed <- ProcessInput(input = input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon)
-    	tree <- input.processed$phy
-    	cleaned.names <- input.processed$cleaned.names
-	} else {
-		if(is.list(input)){
-			if(any(grepl("phy", names(input))) & any(grepl("cleaned.names", names(input)))){
-				tree <- input$phy
-		    	cleaned.names <- input$cleaned.names
-			} else {
-				stopping <- TRUE
-			}
-		} else {
-			stopping <- TRUE
-		}
-	}
-	if(stopping) stop("input must have the correct output format from ProcessInput function")
-	if(length(cleaned.names)==1){
-		cat("Cannot perform a search of divergence times with just one taxon. Provide at least two taxon names as input.", "\n")
-		stop("After being processed, input is length 1")
-	}
-    results.list <- lapply(cache$trees, GetSubsetArrayDispatch, taxa=cleaned.names, phy=tree, method=method)
-    filtered.results <- ProcessResultsList(results.list, cleaned.names, partial)
-	if(length(filtered.results) < 1) {
-		warning("Output is empty.", call. = FALSE)
-		cat("No input species were found in the set of chronograms from cache.", "\n")
-		if(!usetnrs) cat("Setting usetnrs = TRUE might change this, but it is time consuming.", "\n")
-	}
+	input <- CheckInput(input=input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon)
+	tree <- input$phy
+	cleaned.names <- input$cleaned.names
+	CheckCleanedNames(cleaned.names=cleaned.names, sppfromtaxon=sppfromtaxon)
+  results.list <- lapply(cache$trees, GetSubsetArrayDispatch, taxa=cleaned.names, phy=tree, method=method)
+  filtered.results <- ProcessResultsList(results.list, cleaned.names, partial)
+	CheckFilteredResults(filtered.results, usetnrs)
 	if(bold){
 		 bold.OToLTree <- GetBoldOToLTree(input = cleaned.names, process_input = FALSE, usetnrs = FALSE, approximatematch = FALSE, marker = marker,  ...)
 		 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in = bold.OToLTree, taxa.in = cleaned.names, phy.in = NULL, phy4.in = NULL, method.in = method)
@@ -138,14 +116,48 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
 	 	 names(bold.data.processed) <-  paste("BoldOToL tree (using ", marker, " as marker)", sep="")
 	   filtered.results <- c(filtered.results, bold.data.processed)
 	}
-
-	cat("\n")
+#	cat("\n")
 	return(filtered.results)
+}
+
+#' checks if input has already been processed, otherwise it uses ProcessInput
+#' @inheritParams EstimateDates
+#' @inheritDotParams ProcessInput
+CheckInput <- function(input, ...){
+	badformat <- TRUE
+	if(is.list(input) & "phy" %in% names(input) & "cleaned.names" %in% names(input)) badformat <- FALSE
+	if(badformat){
+		input <- ProcessInput(input = input, ...)
+	}
+	return(input)
+}
+#' checks that we have at least two taxon names to perform a search
+#' @inheritParams EstimateDates
+#' @param cleaned.names A character vector; usually an output from ProcessInput function
+CheckCleanedNames <- function(cleaned.names, sppfromtaxon){
+	if(length(cleaned.names)==1){
+		cat("Cannot perform a search of divergence times with just one taxon.", "\n")
+		if(sppfromtaxon) {
+			cat("Clade contains only one lineage.", "\n")
+		} else {
+			cat("Performing a clade search? set sppfromtaxon=TRUE.", "\n")
+		}
+		stop("input is length 1")
+	}
+}
+#' checks if we obtained an empty search with the set of input taxon names
+#' @inheritParams EstimateDates
+#' @param filtered.results An object output from GetFilteredResults function
+CheckFilteredResults <- function(filtered.results, usetnrs){
+	if(length(filtered.results) < 1) {
+		warning("Output is empty.", call. = FALSE)
+		cat("No input species were found in the set of chronograms from cache.", "\n")
+		if(!usetnrs) cat("Setting usetnrs = TRUE might change this, but it is time consuming.", "\n")
+	}
 }
 #' Take input phylo object or character string and figure out if it's correct newick format or a list of species
 #' @inheritParams EstimateDates
 #' @inheritParams ProcessInput
-#' @param showstatus Boolean. If TRUE, processing status will be printed.
 #' @return A phylo object or NA if no tree
 #' @export
 ProcessPhy <- function(input, showstatus=TRUE){
