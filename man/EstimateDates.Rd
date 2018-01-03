@@ -9,8 +9,8 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), output.format = "phylo.all", partial = TRUE,
   usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), method = "PATHd8", bold = FALSE,
-  verbose = c("citations", "taxa"), missing.taxa = c("none", "summary",
-  "matrix"), marker = "COI", sppfromtaxon = FALSE, ...)
+  showSummary = c("citations", "taxa"), missing.taxa = c("none", "summary",
+  "matrix"), marker = "COI", sppfromtaxon = FALSE, verbose = FALSE, ...)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
@@ -31,7 +31,7 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{bold}{Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.}
 
-\item{verbose}{A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
+\item{showSummary}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
 
 \item{missing.taxa}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.}
 
@@ -39,14 +39,14 @@ EstimateDates(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{sppfromtaxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.}
 
+\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+
 \item{...}{Arguments passed on to \code{GetBoldOToLTree}
 \describe{
   \item{otol_version}{Version of OToL to use}
   \item{chronogram}{Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.}
   \item{doML}{Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml}
 }}
-
-\item{showstatus}{Boolean. If TRUE, processing status will be printed.}
 }
 \description{
 Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.

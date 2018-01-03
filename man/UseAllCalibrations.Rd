@@ -5,9 +5,10 @@
 \title{Use all calibrations given trees in database to date a tree}
 \usage{
 UseAllCalibrations(phy = GetBoldOToLTree(c("Rhea americana",
-  "Struthio camelus", "Gallus gallus"), chronogram = FALSE), partial = TRUE,
-  usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE,
-  cache = get("opentree_chronograms"), expand = 0.1, giveup = 100)
+  "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE),
+  partial = TRUE, usetnrs = FALSE, approximatematch = TRUE,
+  update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1,
+  giveup = 100, verbose = FALSE)
 }
 \arguments{
 \item{phy}{A phylo object}
@@ -25,6 +26,8 @@ UseAllCalibrations(phy = GetBoldOToLTree(c("Rhea americana",
 \item{expand}{How much to expand by each step to get consistent calibrations}
 
 \item{giveup}{How many expansion to try before giving up}
+
+\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
 \value{
 list with chronogram, original calibrations, and expanded calibrations

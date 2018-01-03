@@ -6,8 +6,8 @@
 \usage{
 SummarizeResults(filtered.results = NULL, output.format = "phylo.all",
   input = NULL, partial = TRUE, update_cache = FALSE,
-  cache = get("opentree_chronograms"), verbose = c("citations", "taxa"),
-  missing.taxa = c("none", "summary", "matrix"))
+  cache = get("opentree_chronograms"), showSummary = c("citations", "taxa"),
+  missing.taxa = c("none", "summary", "matrix"), verbose = FALSE)
 }
 \arguments{
 \item{filtered.results}{A list of patristic matrices; labels correspond to citations}
@@ -22,9 +22,11 @@ SummarizeResults(filtered.results = NULL, output.format = "phylo.all",
 
 \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
 
-\item{verbose}{A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
+\item{showSummary}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
 
 \item{missing.taxa}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.}
+
+\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
 \description{
 Summarize a filtered results list from GetFilteredResults function in various ways

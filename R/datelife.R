@@ -18,7 +18,7 @@
 #' @aliases datelife
 #' @param input Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.
 #' @param output.format The desired output format for target chronograms (chronograms of target taxa). See details.
-#' @param verbose A character vector specifying type of information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
+#' @param showSummary A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
 #' @param missing.taxa A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.
 #' @param partial If TRUE, use source chronograms even if they only match some of the desired taxa
 #' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.
@@ -29,7 +29,7 @@
 #' @param bold Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using GetBoldOToLTree function.
 #' @param marker A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.
 #' @param sppfromtaxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.
-#' @param showstatus Boolean. If TRUE, processing status will be printed.
+#' @param verbose Boolean. If TRUE, it gives printed updates to the user.
 #' @inheritDotParams GetBoldOToLTree otol_version chronogram doML
 #' @export
 #' @details
@@ -80,15 +80,15 @@
 #' system("open some.bird.trees.html")
 
 EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), method="PATHd8", bold=FALSE, verbose= c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"),  marker = "COI", sppfromtaxon=FALSE, ...) {
+		output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), method="PATHd8", bold=FALSE, showSummary= c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"),  marker = "COI", sppfromtaxon=FALSE, verbose=FALSE, ...) {
 			#... only defines arguments to be passed to GetBoldOToLTree for now
 			# find a way not to repeat partial and cache arguments, which are used in both GetFilteredResults and SummarizeResults
 			if(update_cache){
-				cache <- UpdateCache(save = TRUE)
+				cache <- UpdateCache(save = TRUE, verbose=verbose)
 			}
-			input.here <- ProcessInput(input=input, usetnrs=usetnrs, approximatematch=approximatematch, sppfromtaxon=sppfromtaxon)
-			filtered.results.here <- GetFilteredResults(input = input.here, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = FALSE, cache = cache, method = method, bold = bold, marker = marker, process_input=FALSE, ...)
-			return(SummarizeResults(input = input.here$cleaned.names, filtered.results = filtered.results.here, output.format = output.format, partial = partial, update_cache = FALSE, cache = cache, verbose = verbose, missing.taxa = missing.taxa))
+			input.here <- ProcessInput(input=input, usetnrs=usetnrs, approximatematch=approximatematch, sppfromtaxon=sppfromtaxon, verbose=verbose)
+			filtered.results.here <- GetFilteredResults(input = input.here, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = FALSE, cache = cache, method = method, bold = bold, marker = marker, verbose=verbose, ...)
+			return(SummarizeResults(input = input.here$cleaned.names, filtered.results = filtered.results.here, output.format = output.format, partial = partial, update_cache = FALSE, cache = cache, showSummary = showSummary, missing.taxa = missing.taxa, verbose=verbose))
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
@@ -98,19 +98,19 @@ EstimateDates <- function(input=c("Rhea americana", "Pterocnemia pennata", "Stru
 #' @inheritDotParams GetBoldOToLTree
 #' @return List of patristic matrices
 #' @export
-GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, update_cache = FALSE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker = "COI", sppfromtaxon=FALSE, ...) {
+GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE, update_cache = FALSE, cache=get("opentree_chronograms"), method="PATHd8", bold=FALSE, marker = "COI", sppfromtaxon=FALSE, verbose=FALSE, ...) {
 	if(update_cache){
-		cache <- UpdateCache(save = TRUE)
+		cache <- UpdateCache(save = TRUE, verbose=verbose)
 	}
-	input <- CheckInput(input=input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon)
+	input <- CheckInput(input=input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon, verbose=verbose)
 	tree <- input$phy
 	cleaned.names <- input$cleaned.names
-	CheckCleanedNames(cleaned.names=cleaned.names, sppfromtaxon=sppfromtaxon)
+	CheckCleanedNames(cleaned.names=cleaned.names, sppfromtaxon=sppfromtaxon, verbose=verbose)
   results.list <- lapply(cache$trees, GetSubsetArrayDispatch, taxa=cleaned.names, phy=tree, method=method)
   filtered.results <- ProcessResultsList(results.list, cleaned.names, partial)
 	CheckFilteredResults(filtered.results, usetnrs)
 	if(bold){
-		 bold.OToLTree <- GetBoldOToLTree(input = cleaned.names, process_input = FALSE, usetnrs = FALSE, approximatematch = FALSE, marker = marker,  ...)
+		 bold.OToLTree <- GetBoldOToLTree(input = cleaned.names, usetnrs = FALSE, approximatematch = FALSE, marker = marker, verbose=verbose,  ...)
 		 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in = bold.OToLTree, taxa.in = cleaned.names, phy.in = NULL, phy4.in = NULL, method.in = method)
 		 bold.data.processed <- ProcessResultsList(results.list=list(bold.data), taxa=cleaned.names, partial)
 	 	 names(bold.data.processed) <-  paste("BoldOToL tree (using ", marker, " as marker)", sep="")
@@ -134,13 +134,13 @@ CheckInput <- function(input, ...){
 #' checks that we have at least two taxon names to perform a search
 #' @inheritParams EstimateDates
 #' @param cleaned.names A character vector; usually an output from ProcessInput function
-CheckCleanedNames <- function(cleaned.names, sppfromtaxon){
+CheckCleanedNames <- function(cleaned.names, sppfromtaxon, verbose=FALSE){
 	if(length(cleaned.names)==1){
-		cat("Cannot perform a search of divergence times with just one taxon.", "\n")
+		if(verbose) cat("Cannot perform a search of divergence times with just one taxon.", "\n")
 		if(sppfromtaxon) {
-			cat("Clade contains only one lineage.", "\n")
+			if(verbose) cat("Clade contains only one lineage.", "\n")
 		} else {
-			cat("Performing a clade search? set sppfromtaxon=TRUE.", "\n")
+			if(verbose) cat("Performing a clade search? set sppfromtaxon=TRUE.", "\n")
 		}
 		stop("input is length 1")
 	}
@@ -148,11 +148,11 @@ CheckCleanedNames <- function(cleaned.names, sppfromtaxon){
 #' checks if we obtained an empty search with the set of input taxon names
 #' @inheritParams EstimateDates
 #' @param filtered.results An object output from GetFilteredResults function
-CheckFilteredResults <- function(filtered.results, usetnrs){
+CheckFilteredResults <- function(filtered.results, usetnrs, verbose=FALSE){
 	if(length(filtered.results) < 1) {
 		warning("Output is empty.", call. = FALSE)
-		cat("Iput species were not found in any chronograms available in cache.", "\n")
-		if(!usetnrs) cat("Setting usetnrs = TRUE might change this, but it is time consuming.", "\n")
+		if(verbose) cat("Input species were not found in any chronograms available in cache.", "\n")
+		if(!usetnrs & verbose) cat("Setting usetnrs = TRUE might change this, but it is time consuming.", "\n")
 	}
 }
 #' Take input phylo object or character string and figure out if it's correct newick format or a list of species
@@ -160,7 +160,7 @@ CheckFilteredResults <- function(filtered.results, usetnrs){
 #' @inheritParams ProcessInput
 #' @return A phylo object or NA if no tree
 #' @export
-ProcessPhy <- function(input, showstatus=TRUE){
+ProcessPhy <- function(input, verbose=FALSE){
   	if(class(input) == "multiPhylo") stop("Only one phylogeny can be processed at a time.")
 	if(class(input) == "phylo") {
 		input <- ape::write.tree(input)
@@ -169,13 +169,13 @@ ProcessPhy <- function(input, showstatus=TRUE){
   	input <- stringr::str_trim(input, side = "both")
   	phy.new.in <- NA
    	# if(length(input) == 1) {
-    	# if(verbose)cat("\t", "Input is length 1.", "\n")
+    	# if(showSummary)cat("\t", "Input is length 1.", "\n")
 	  	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
 	  		if(length(input)>1) stop("Only one phylogeny can be processed at a time.")
 	    	phy.new.in <- ape::collapse.singles(phytools::read.newick(text=gsub(" ", "_", input)))
-	    	if(showstatus) {cat("\t", "Input is a phylogeny and it is correcly formatted.", "\n")}
+	    	if(verbose) {cat("\t", "Input is a phylogeny and it is correcly formatted.", "\n")}
 	  	} else {
-	  		if(showstatus) {cat("\t", "Input is not a phylogeny.", "\n")}
+	  		if(verbose) {cat("Input is not a phylogeny.")} #not a warning nor stop, 'cause it is not a requirement for input to be a phylogeny at this step
 	  	}
   	# }
 	return(phy.new.in)
@@ -188,9 +188,9 @@ ProcessPhy <- function(input, showstatus=TRUE){
 #' @inheritDotParams rphylotastic::GetSpeciesFromTaxon filters
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
-ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE, sppfromtaxon=FALSE, showstatus=TRUE, ...) {
+ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE, sppfromtaxon=FALSE, verbose=FALSE, ...) {
 	cat("Processing input...", "\n")
-	phy.new <- ProcessPhy(input = input, showstatus=showstatus)
+	phy.new <- ProcessPhy(input = input, verbose=verbose)
 	# cleaned.names <- ""
 	if(!is.na(phy.new[1])) {
 	    # if(usetnrs) {
@@ -202,8 +202,10 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 	if(length(input)==1) {
 		input <- strsplit(input, ',')[[1]]
 		if(!sppfromtaxon[1]) {
-				cat("Datelife needs at least two input taxon names to perform a search.", "\n")
-				cat("Setting sppfromtaxon = TRUE gets all species from a clade and accepts only one taxon name as input.", "\n")
+				if(verbose) {
+					cat("Datelife needs at least two input taxon names to perform a search.", "\n")
+					cat("Setting sppfromtaxon = TRUE gets all species from a clade and accepts only one taxon name as input.", "\n")
+				}
 				stop("Input is length 1 and not in a good newick format.")
 		}
 	}
@@ -215,7 +217,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
     if(any(sppfromtaxon)){
     	if(length(sppfromtaxon)==1) sppfromtaxon <- rep(sppfromtaxon,length(cleaned.input))
     	if(length(cleaned.input)!=length(sppfromtaxon)){
-    		cat("Specify all taxa in input to get species names from.", "\n")
+    		if(verbose) cat("Specify all taxa in input to get species names from.", "\n")
     		stop("input and sppfromtaxon arguments must have same length.")
     	}
     	species.names <- vector()
@@ -224,8 +226,8 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 	    	if (i) {
 	    		spp <- rphylotastic::GetSpeciesFromTaxon(taxon = cleaned.names[index], ...)
 	    		if(length(spp)==0) {
-	    			cat("\t", " No species names found for taxon ", cleaned.names[index], ".", "\n", sep="")
-	    			if (!usetnrs) cat("\t", "Setting usetnrs = TRUE might change this, but it can be slow.", "\n")
+	    			if(verbose) cat("\t", " No species names found for taxon ", cleaned.names[index], ".", "\n", sep="")
+	    			if (!usetnrs & verbose) cat("\t", "Setting usetnrs = TRUE might change this, but it can be slow.", "\n")
 	    			warning(paste("No species names available for input taxon '", cleaned.names[index], "'", sep=""))
 	    		}
 	    		species.names <- c(species.names, spp)
@@ -237,9 +239,9 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 		cleaned.names <- gsub("_", " ", species.names)
 	}
 	cleaned.names <- unique(cleaned.names)
-    cat("OK.", "\n")
+    if(verbose) cat("OK.", "\n")
   	cleaned.names.print <- paste(cleaned.names, collapse = " | ")
-  	cat("Working with the following taxa:", "\n", "\t", cleaned.names.print, "\n")
+  	if(verbose) cat("Working with the following taxa:", "\n", "\t", cleaned.names.print, "\n")
    	return(list(cleaned.names=cleaned.names, phy=phy.new))
 }
 
@@ -249,7 +251,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
 #' @return A phylo object with no negative branch lengths
 #' @export
 FixNegBrLen <- function(phy=NULL, method = "zero"){
-	phy <- ProcessPhy(input=phy, showstatus=FALSE)
+	phy <- ProcessPhy(input=phy, verbose=FALSE)
 	if (!inherits(phy, "phylo"))
 		stop("phy must be a newick character string or in phylo format")
 	if(is.null(phy$edge.length))
@@ -310,7 +312,7 @@ FixNegBrLen <- function(phy=NULL, method = "zero"){
 #' @export
 AddOutgroup <- function(phy=NULL, outgroup="outgroup", processphy=TRUE){
     if (processphy) {
-			phy <- ProcessPhy(input=phy, showstatus=FALSE)
+			phy <- ProcessPhy(input=phy, verbose=FALSE)
 			if (!inherits(phy, "phylo")) {
 				stop("phy must be of class 'phylo'")
 			}
@@ -377,7 +379,7 @@ GetMrBayesTree <- function(phy=NULL, ncalibration=NULL, file="mrbayes_run.nexus"
 #' @return A MrBayes block run file in nexus format.
 #' @export
 MakeMrBayesRunFile <- function(phy= NULL, ncalibration= NULL, file="mrbayes_run.nexus"){
-    phy <- ProcessPhy(input=phy, showstatus=FALSE)
+    phy <- ProcessPhy(input=phy, verbose=FALSE)
 	if (!inherits(phy, "phylo")) {
 		stop("phy must be a newick character string or in phylo format")
     }
@@ -435,7 +437,7 @@ MrBayesRun <- function(file=NULL){
 #' @export
 # This function is set to match node names with constraints obtained from paleotree::GetMrBayesConstraints
 GetMrBayesNodeCalibrations <- function(phy=NULL, ncalibration=NULL, ncalibrationType = "fixed", file = NULL){
-	phy <- ProcessPhy(input=phy, showstatus=FALSE)
+	phy <- ProcessPhy(input=phy, verbose=FALSE)
     if (!inherits(phy, "phylo")) {
 		stop("phy must be a newick character string or in phylo format")
     }
@@ -447,7 +449,7 @@ GetMrBayesNodeCalibrations <- function(phy=NULL, ncalibration=NULL, ncalibration
 		nages <- ncalibration$nodeages
 
 	} else { #if it is a tree
-		ncalibration <- ProcessPhy(input=ncalibration, showstatus=FALSE)
+		ncalibration <- ProcessPhy(input=ncalibration, verbose=FALSE)
 		if (!inherits(ncalibration, "phylo")) {
 			stop("ncalibration must be a newick character string, a phylo object or a list with taxon names and dates")
 	    }
@@ -484,7 +486,7 @@ GetMrBayesNodeCalibrations <- function(phy=NULL, ncalibration=NULL, ncalibration
 #' @export
 IdentifySingletonOutgroup <- function(phy=NULL){
     if (!inherits(phy, "phylo")) {
-        phy <- ProcessPhy(input=phy, showstatus=FALSE)
+        phy <- ProcessPhy(input=phy, verbose=FALSE)
     }
 	phy <- ConvertSpacesToUnderscores(phy)
     outgroup <- NA
@@ -625,19 +627,19 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4=NULL) {
 #' @inheritParams EstimateDates
 #' @inherit EstimateDates return details
 #' @export
-SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all", input = NULL, partial=TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix")) {
+SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all", input = NULL, partial=TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), showSummary = c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"), verbose=FALSE) {
 		# if(!partial) {
 		# 	filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
 		# } # not necessary cause already filtered in GetFilteredResults
 	if(update_cache){
-		cache <- UpdateCache(save = TRUE)
+		cache <- UpdateCache(save = TRUE, verbose=verbose)
 	}
 	if(is.null(filtered.results) | !is.list(filtered.results)){
 		stop("filtered.results argument must be a list from GetFilteredResults function.")
 	}
 	output.format.in <- match.arg(output.format, choices=c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
 	missing.taxa.in <- match.arg(missing.taxa, choices=c("none", "summary", "matrix"))
-	verbose.in <- match.arg(verbose, c("citations", "taxa", "none"), several.ok=TRUE)
+	showSummary.in <- match.arg(showSummary, c("citations", "taxa", "none"), several.ok=TRUE)
 	if(is.null(input)){
 		input.in <- unique(rapply(filtered.results, rownames))
 		if(missing.taxa.in !="none") warning("showing taxon summary from taxa found in at least one chronogram, this excludes input taxa not found in any chronogram")
@@ -670,7 +672,7 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all
 		colnames(missing.taxa.matrix) <- input.match
 		rownames(missing.taxa.matrix) <- sequence(nrow(missing.taxa.matrix))
 	}
-	if(missing.taxa.in == "summary" | any(grepl("taxa", verbose.in))){ # may add here another condition: | makeup_brlen ==TRUE
+	if(missing.taxa.in == "summary" | any(grepl("taxa", showSummary.in))){ # may add here another condition: | makeup_brlen ==TRUE
 		# tax <- unique(rapply(filtered.results, rownames)) #rownames(filtered.results[[1]])
 		x <- rapply(filtered.results, rownames)
 		prop <- c()
@@ -787,7 +789,7 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all
 		}
 	}
 
-	if(any("citations" %in% verbose.in) & !any(output.format.in %in% c("citations", "html", "data.frame"))) {
+	if(any("citations" %in% showSummary.in) & !any(output.format.in %in% c("citations", "html", "data.frame"))) {
 		#print("Using trees from:")
 		if(output.format.in == "citations"){
 			cat("Target taxa found in trees from:", "\n")
@@ -799,7 +801,7 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all
 			cat("\n")
 		}
 	}
-	if(any(grepl("taxa", verbose.in)) & missing.taxa.in!="summary") {
+	if(any(grepl("taxa", showSummary.in)) & missing.taxa.in!="summary") {
 		cat("Target taxa presence in source chronograms:", "\n")
 		print(missing.taxa.summary)
 		cat("\n")
@@ -1189,8 +1191,8 @@ SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
 #' @inheritParams EstimateDates
 #' @return data.frame of calibrations
 #' @export
-GetAllCalibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms")) {
-	phylo.results <- EstimateDates(input = input, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = update_cache, cache = cache, output.format = "phylo.all")
+GetAllCalibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose=FALSE) {
+	phylo.results <- EstimateDates(input = input, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = update_cache, cache = cache, output.format = "phylo.all", verbose=verbose)
 	constraints.df <- data.frame()
 	for (i in sequence(length(phylo.results))) {
 		local.df <- geiger::congruify.phylo(reference = phylo.results[[i]], target = phylo.results[[i]], scale = NA)$calibrations
@@ -1219,14 +1221,14 @@ GetAllCalibrations <- function(input = c("Rhea americana", "Pterocnemia pennata"
 #' This will try to use the calibrations as fixed ages.
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
-UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"), chronogram = FALSE), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1, giveup = 100) {
-	if(!geiger::is.phylo(phy)){
-		cat("phy argument must be a phylo object.", "\n")
-		stop()
-	}
-	calibrations.df <- GetAllCalibrations(input = gsub('_', ' ', phy$tip.label), partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = update_cache, cache = cache)
-#	useful if we decide to allow newick as input, would need to add some newick to phylo code in here
-# calibrations.df <- GetAllCalibrations(input = phy, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, cache = cache)
+UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose=FALSE), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1, giveup = 100, verbose=FALSE) {
+	# if(!geiger::is.phylo(phy)){
+	# 	cat("phy argument must be a phylo object.", "\n")
+	# 	stop()
+	# }
+	#	[code above] useful if we decide to allow newick as input, would need to add some newick to phylo code in here... OK! It is now implemented in ProcessPhy function:
+	input <- ProcessPhy(input=phy, verbose=verbose)
+	calibrations.df <- GetAllCalibrations(input = gsub('_', ' ', phy$tip.label), partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = update_cache, cache = cache, verbose=verbose)
 	phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.
 	calibrations.df$taxonA <- gsub(' ', '_', calibrations.df$taxonA)
 	calibrations.df$taxonB <- gsub(' ', '_', calibrations.df$taxonB)
@@ -1270,26 +1272,23 @@ UseAllCalibrations <- function(phy = GetBoldOToLTree(c("Rhea americana",  "Strut
 #' @param otol_version Version of OToL to use
 #' @param chronogram Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.
 #' @param doML Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml
-#' @param process_input default to TRUE; specifies wether the input should be processed by ProcessInput function
 #' @inheritParams ProcessInput
 #' @return A phylogeny with ML branch lengths
 #' @export
-GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, process_input = TRUE, sppfromtaxon=FALSE) {
+GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, sppfromtaxon=FALSE, verbose=FALSE) {
 	#otol returns error with missing taxa in v3 of rotl
-	if (process_input) {
-		input.processed <- ProcessInput(input = input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon)
-		input <- input.processed$cleaned.names
-	}
-	cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
+	input <- CheckInput(input=input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon, verbose=verbose)
+	input <- input$cleaned.names
+	if (verbose) cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
 	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides) # preserve good nucleotide data, i.e., only A,T,G,C
 	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar)) # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
 	if(length(sequences) == 1) { # because it is length>1 (actually 82) even if there is only 1 sequence available
-		cat("No sequences were found in BOLD for the input taxa...", "\n", "\t", "Cannot construct tree.", "\n")
+		if (verbose) cat("No sequences were found in BOLD for the input taxa...", "\n", "\t", "Cannot construct tree.", "\n")
 		# if (!usetnrs) cat("Setting usetnrs=TRUE might change this, but it can be slowish.", "\n")
 		stop("Names in input do not match BOLD specimen records.")
 	}
-	cat("\t", "OK.", "\n")
+	if (verbose) cat("\t", "OK.", "\n")
 	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names = input)$ott_id, label_format = "name",  otl_v = otol_version))
 	phy$tip.label <- gsub("_ott.*","", phy$tip.label)
 	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
@@ -1322,44 +1321,45 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	# final.sequences <- final.sequences[!is.na(final.sequences.names),]
 	# taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
 	if(length(input)-length(taxa.to.drop) == 1) {
-		cat("BOLD sequences found only for ", input[which(!input %in% taxa.to.drop)], "...","\n","\t", "Cannot construct a tree." )
+		if (verbose) cat("BOLD sequences found only for ", input[which(!input %in% taxa.to.drop)], "...","\n","\t", "Cannot construct a tree." )
 		stop("Not enough sequence coverage in BOLD to perform analysis of this set of taxa")
 		# if (usetnrs == FALSE) cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
 	}
 	if(length(taxa.to.drop) > 0) {
 		taxa.to.drop.print <- paste(taxa.to.drop, collapse = " | ")
-		cat("No", marker, "sequences found for", taxa.to.drop.print, "...", "\n", "\t", "Dropping taxa from tree.", "\n")
+		if (verbose) cat("No", marker, "sequences found for", taxa.to.drop.print, "...", "\n", "\t", "Dropping taxa from tree.", "\n")
+		warning("No", marker, "sequences found for", taxa.to.drop.print, "...", "\n", "\t", "Taxa dropped from tree.")
 		taxa.to.drop <- gsub(" ", "_", taxa.to.drop)
 		phy <- ape::drop.tip(phy, taxa.to.drop)
 	}
-	cat("Aligning with MAFFT...", "\n")
+	if (verbose) cat("Aligning with MAFFT...", "\n")
 	alignment <- ape::as.DNAbin(final.sequences)
 	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
-	cat( "\t", "OK.", "\n", "Estimating BoldOToL tree...", "\n")
+	if (verbose) cat( "\t", "OK.", "\n", "Estimating BoldOToL tree...", "\n")
 	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data=alignment)
 	phy <- pml.object$tree
 	if(!ape::is.binary.tree(pml.object$tree)){
-		cat("\t", marker, " sequence data available generates a non-dichotomous tree...", "\n", "\t", "Resolving with multi2di...", "\n")
+		if (verbose) cat("\t", marker, " sequence data available generates a non-dichotomous tree...", "\n", "\t", "Resolving with multi2di...", "\n")
 		pml.object$tree <- ape::multi2di(pml.object$tree)
 		phy <- pml.object$tree
 	}
-	cat("\t", "OK.", "\n")
+	if (verbose) cat("\t", "OK.", "\n")
 	if (chronogram) {
-		cat("Dating BoldOToL tree with chronoMPL...", "\n")
+		if (verbose) cat("Dating BoldOToL tree with chronoMPL...", "\n")
 		pml.object$tree <- ape::chronoMPL(pml.object$tree, se = FALSE, test = FALSE)
 		phy <- pml.object$tree
-		cat("\t", "OK.", "\n")
+		if (verbose) cat("\t", "OK.", "\n")
 	}
 	if(any(pml.object$tree$edge.length < 0)) {
-		cat("\t", "Negative branch lengths in BOLD chronogram.", "\n")
-		if(doML) cat("\t", "\t", "Cannot do ML branch length optimization.", "\n")
+		warning("\t", "Negative branch lengths in BOLD chronogram.", "\n")
+		if(doML) warning("\t", "\t", "Cannot do ML branch length optimization.", "\n")
 	} else {
 		if(doML) {
 			phy <- phangorn::optim.pml(pml.object, data = alignment, rearrangement = "none", optRooted = TRUE, optQ = TRUE)$tree
 		}
 	}
 	phy$tip.label <- gsub('_', ' ', phy$tip.label)
-	cat("Done.", "\n")
+	if (verbose) cat("Done.", "\n")
 	return(phy)
 }
 

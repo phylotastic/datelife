@@ -7,7 +7,7 @@
 GetAllCalibrations(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
   approximatematch = TRUE, update_cache = FALSE,
-  cache = get("opentree_chronograms"))
+  cache = get("opentree_chronograms"), verbose = FALSE)
 }
 \arguments{
 \item{input}{vector of names, a newick string, or a phylo object}
@@ -21,6 +21,8 @@ GetAllCalibrations(input = c("Rhea americana", "Pterocnemia pennata",
 \item{update_cache}{default to FALSE}
 
 \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
+
+\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
 \value{
 data.frame of calibrations
