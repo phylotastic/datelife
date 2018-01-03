@@ -151,7 +151,7 @@ CheckCleanedNames <- function(cleaned.names, sppfromtaxon){
 CheckFilteredResults <- function(filtered.results, usetnrs){
 	if(length(filtered.results) < 1) {
 		warning("Output is empty.", call. = FALSE)
-		cat("No input species were found in the set of chronograms from cache.", "\n")
+		cat("Iput species were not found in any chronograms available in cache.", "\n")
 		if(!usetnrs) cat("Setting usetnrs = TRUE might change this, but it is time consuming.", "\n")
 	}
 }
