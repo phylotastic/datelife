@@ -189,7 +189,7 @@ ProcessPhy <- function(input, verbose=FALSE){
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
 ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE, sppfromtaxon=FALSE, verbose=FALSE, ...) {
-	cat("Processing input...", "\n")
+	if(verbose) cat("Processing input...", "\n")
 	phy.new <- ProcessPhy(input = input, verbose=verbose)
 	# cleaned.names <- ""
 	if(!is.na(phy.new[1])) {
@@ -260,7 +260,7 @@ FixNegBrLen <- function(phy=NULL, method = "zero"){
 		stop("branch lengths must be relative to time")
 	method <- match.arg(method, c("zero", "bladj", "mrbayes"))
 
-	index <- which(phy$edge.length<0)
+	index <- which(phy$edge.length<0)  # identifies edge numbers with negative edge lengths value
 
 	if(method=="zero") {# chunk for neg br len to zero
 		for (i in index){
@@ -279,50 +279,131 @@ FixNegBrLen <- function(phy=NULL, method = "zero"){
 
 	if(any(method==c("bladj", "mrbayes"))) { #chunk for bladj and mrbayes
 	# if(method=="bladj") { #chunk for bladj
-		phynl <- paste("n", seq(phy$Nnode), sep="")
-		phy$node.label <- phynl
-		phybt <- ape::branching.times(phy)
-		cnode <- phy$edge[index,2]
-		tofix <- cnode-length(phy$tip.label) #or,
-		nn <- phynl[-tofix]
-		na <- phybt[-tofix]
-		attributes(na) <- NULL
+		phy <- add_node_labels(phy=phy)  # all nodes need to be named
+		cnode <- phy$edge[index,2]  # we assume that the negative edge length is the one that needs to be changed (but it could be the sister edge that should be shorter)
+		tofix <- cnode-length(phy$tip.label)  # so, we take the crown node number of the negative branch lengths
 		if(method=="bladj")
-			fixed.phy <- GetBladjTree(nodenames = nn, nodeages = na, phy = phy, phyformat = "phylo")
+			fixed.phy <- GetBladjTree(nodenames = phy$node.label[-tofix], nodeages = get_node_data(phy=phy, node_data="node_age")$node_age[-tofix], phy = phy, phyformat = "phylo")
 		if(method=="mrbayes") {
-			nnum <- (length(phy$tip.label)+1):(length(phy$tip.label)+phy$Nnode)
-			nt <- lapply(nnum[-tofix], function(x) GetTips(tree=phy, node=x))
-			nt <- lapply(nt, function(x) phy$tip.label[x])
-			mrbayes.file <- paste0("datelife_query", "_negBrLen_fixed.nexus")
+			mrbayes.file <- paste0("datelife_query", "_negBrLen_fixed.nexus") # make this an argument
+			ncalibration <- get_node_data(phy, node_data=c("descendant_tips_label", "node_age"))
+			ncalibration <- lapply(ncalibration, "[", seq(phy$Nnode)[-tofix])
 			phy1 <- AddOutgroup(phy=phy, outgroup="fake_outgroup", processphy=FALSE)
-			fixed.phy <- GetMrBayesTree(phy=ape::read.tree(text=phy1), ncalibration=list(nodetaxa=nt, nodeages=na), file=mrbayes.file)
+			fixed.phy <- GetMrBayesTree(phy=phy1, ncalibration=ncalibration, file=mrbayes.file)
 			fixed.phy <- ape::drop.tip(fixed.phy, "fake_outgroup")
 		}
 	}
-#	if(method=="mrbayes") { #chunk for mrbayes
-	#}
 	return(fixed.phy)
+}
+
+#' Gets ages, node numbers, node names and descendant tips number and label of all nodes from a dated tree
+#' @inheritParams FixNegBrLen
+#' @param node_data A character vector containing one or all from: "node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label"
+#' @return A list
+get_node_data <- function(phy=NULL, node_data=c("node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label")){
+	res <- vector(mode="list")
+	phy <- ProcessPhy(input=phy)
+	phy <- CheckPhylo(phylo = phy, dated=TRUE)
+	nn <- get_node_numbers(phy)
+	if("node_number" %in% node_data){
+		res <- c(res, list(node_number = nn))
+	}
+	if("node_label" %in% node_data){
+		res <- c(res, list(node_label = phy$node.label))
+	}
+	if("node_age" %in% node_data){
+		res <- c(res, list(node_age = ape::branching.times(phy)))
+	}
+	if(any(c("descendant_tips_number", "descendant_tips_label") %in% node_data)){
+		dt_num <- lapply(nn, function(x) GetTips(tree=phy, node=x))# tip numbers stemming from node
+		names(dt_num) <- nn
+		dt_lab <- lapply(dt_num, function(x) phy$tip.label[x]) # tip labels corresponding to those tips numbers
+		names(dt_lab) <- nn
+		if("descendant_tips_number" %in% node_data) {
+			res <- c(res, list(descendant_tips_number=dt_num))
+		}
+		if("descendant_tips_label" %in% node_data) {
+			res <- c(res, list(descendant_tips_label=dt_lab))
+		}
+	}
+	return(res)
+}
+
+#' Adds labels to nodes with no asigned label
+#' @inheritParams FixNegBrLen
+#' @param node_prefix Character vector. If length 1, it will be used to name all nodes with no labels, followed by a number which can be the node_number or consecutive, as specified in node_number
+#' @param node_index Character vector choosing one of "consecutive" or "node_number" as node label index. It will use consecutive numbers from 1 to total node number in the first case and node numbers in the second case.
+#' @return A phylo object
+add_node_labels <- function(phy=NULL, node_prefix="n", node_index="node_number"){
+	phy <- ProcessPhy(input = phy)
+	phy <- CheckPhylo(phylo=phy, dated=FALSE)
+	node_index <- match.arg(arg=node_index, choices=c("consecutive","node_number"), several.ok = FALSE)
+	if("node_number" %in% node_index){
+		node_number <- get_node_numbers(phylo = phy)
+	}
+	if("consecutive" %in% node_index){
+		node_number <- seq(phy$Nnode)
+	}
+	if(is.null(phy$node.label)){
+		phy$node.label <- paste0(node_prefix, node_index)
+	} else {
+		en <- which(phy$node.label=="")
+		phy$node.label[en] <- paste0(node_prefix, en)
+	}
+	return(phy)
+}
+
+#' Gets node numbers from any phylogeny
+#' @inheritParams CheckPhylo
+#' @return A numeric vector with node numbers
+get_node_numbers <- function(phylo){
+	node_numbers <- (length(phylo$tip.label)+1):(length(phylo$tip.label)+phylo$Nnode)
+	return(node_numbers)
 }
 
 #' Function to add an outgroup to any phylogeny, in phylo or newick format
 #' @inheritParams GetMrBayesTree
 #' @param outgroup A character vector with the name of the outgroup. If it has length>1, only first element will be used.
 #' @param processphy Boolean. If true, phy will be processed with ProcessPhy function.
-#' @return A character vector with a newick string.
+#' @return A phylo object.
 #' @export
 AddOutgroup <- function(phy=NULL, outgroup="outgroup", processphy=TRUE){
     if (processphy) {
 			phy <- ProcessPhy(input=phy, verbose=FALSE)
-			if (!inherits(phy, "phylo")) {
-				stop("phy must be of class 'phylo'")
-			}
+			phy <- CheckPhylo(phylo=phy, dated=FALSE)
     }
     # if(phy$edge.length) # comment cause it doesn't matter if phy has branch lengths
-	phy <- ape::write.tree(phy)
-	phy <- gsub(";", ",", phy)
-	phy <- paste("(", phy, outgroup[1], ");", sep="")
-
+    outgroup_edge <- c()
+    ingroup_edge <- c()
+    if(!is.null(phy$edge.length)){
+    	mbt <- max(ape::branching.times(phy))
+    	outgroup_edge <- mbt + mbt*0.10
+    	ingroup_edge <- paste0(":", outgroup_edge-mbt)
+    	outgroup_edge <- paste0(":", outgroup_edge)
+    }
+	phy <- gsub(";", "", ape::write.tree(phy))
+	phy <- paste("(", phy, ingroup_edge, ",", outgroup[1], outgroup_edge, ");", sep="")
+	phy <-  phytools::read.newick(text=phy)
 	return(phy)
+}
+
+#' Checks if phy is a phylo class object and a chronogram
+#' @param phylo A phylo object
+#' @param dated Boolean. If TRUE it checks if phylo object has branch lengths and is ultrametric.
+#' @return A phylo object
+CheckPhylo <- function(phylo, dated=FALSE){
+	if (!inherits(phylo, "phylo")){
+		stop("phy is not a phylo object")
+	}
+	if(dated){
+		if(is.null(phylo$edge.length))
+			stop("phylo object must have branch lengths")
+		if(!ape::is.ultrametric(phylo)){
+			warning("branch lengths in phylo object should be proportional to time")
+			stop("phylo object must be ultrametric")  # is this true?  # Think how to incorporate trees with extinct taxa
+		}
+	}
+	return(phylo)
 }
 
 #' To get tip numbers descending from any given node of a tree
@@ -365,11 +446,12 @@ GetBladjTree <- function(nodenames=NULL, nodeages=NULL, phy=NULL, phyformat="new
 #' Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations
 #' @param phy The constraint tree: a phylo object or a newick character string, with or without branch lengths.
 #' @param ncalibration The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.
+#' @inheritParams CheckMissingTaxa
 #' @param file A character vector specifying the name of mrBayes run file and outputs (can specify directory too).
 #' @return A phylo tree with branch lengths proportional to time. It will save all mrBayes outputs in the working directory.
 #' @export
-GetMrBayesTree <- function(phy=NULL, ncalibration=NULL, file="mrbayes_run.nexus"){
-	MakeMrBayesRunFile(phy= phy, ncalibration= ncalibration, file=file)
+GetMrBayesTree <- function(phy=NULL, ncalibration=NULL, missingTaxa = NULL, file="mrbayes_run.nexus"){
+	MakeMrBayesRunFile(phy= phy, ncalibration= ncalibration, missingTaxa = missingTaxa, file=file)
 	new.tree <- MrBayesRun(file=file)
 	return(new.tree)
 }
@@ -378,21 +460,27 @@ GetMrBayesTree <- function(phy=NULL, ncalibration=NULL, file="mrbayes_run.nexus"
 #' @inheritParams GetMrBayesTree
 #' @return A MrBayes block run file in nexus format.
 #' @export
-MakeMrBayesRunFile <- function(phy= NULL, ncalibration= NULL, file="mrbayes_run.nexus"){
-    phy <- ProcessPhy(input=phy, verbose=FALSE)
+MakeMrBayesRunFile <- function(phy= NULL, ncalibration= NULL, missingTaxa = NULL, file="mrbayes_run.nexus"){
+  phy <- ProcessPhy(input=phy, verbose=FALSE) # add outgroup=TRUE argument
 	if (!inherits(phy, "phylo")) {
 		stop("phy must be a newick character string or in phylo format")
     }
-    phy <- ConvertSpacesToUnderscores(phy)
+  phy <- ConvertSpacesToUnderscores(phy)
+	taxa <- phy$tip.label
 	constraints <- paleotree::createMrBayesConstraints(tree= phy, partial=FALSE) # this works perfectly
 	calibrations <- GetMrBayesNodeCalibrations(phy=phy, ncalibration=ncalibration, ncalibrationType = "fixed")
-	og <- IdentifySingletonOutgroup(phy)
+	og <- IdentifySingletonOutgroup(phy) #if(outgroup)
 	if(!is.na(og)) ogroup <- paste0("outgroup ", og, ";")
-
-	bayes_data <- c(paste("   Begin DATA; \nDimensions ntax=", length(phy$tip.label), "nchar=1;"),
+	missingTaxa <- CheckMissingTaxa(missingTaxa)
+	if(!is.null(missingTaxa)){
+		if(is.vector(missingTaxa)){
+			taxa <- c(taxa, missingTaxa)
+		}
+	}
+	bayes_data <- c(paste("   Begin DATA; \nDimensions ntax=", length(taxa), "nchar=1;"),
 	"Format datatype=DNA gap=- missing=?;",
 	"Matrix\n",
-	paste(phy$tip.label, "?"),
+	paste(taxa, "?"),
 	";")
 
     bayes_set <- c("   Begin MRBAYES;",
@@ -415,6 +503,61 @@ MakeMrBayesRunFile <- function(phy= NULL, ncalibration= NULL, file="mrbayes_run.
 	write(all, file)
 }
 
+#' Makes up dates on an already dated tree for missing taxa.
+#' @param  missingTaxa either a tree (as phylo object or as a newick character string, with or without branch lengths) with all the taxa you want at the end, or a data frame assigning missing taxa to nodes in dated tree.
+#' @param datedTree a phylo object with branch lengths proportional to absolute time
+#' @param method character string; one of "bladj" or "mrbayes"
+#' @inheritParams GetMrBayesTree
+#' @return A phylo object
+MakeUpDates <- function(datedTree = NULL, missingTaxa = NULL, method = "mrbayes", file="mrbayes_makeupdates.nexus"){
+	datedTree <- ProcessPhy(input = datedTree)
+	datedTree <- CheckPhylo(phylo=datedTree, dated=TRUE)
+	method <- match.arg(method, c("bladj", "mrbayes"))
+	mrbayes.file <- file
+	datedTree <- AddOutgroup(phy=datedTree, outgroup="fake_outgroup", processphy=FALSE)
+	ncalibration <- get_node_data(phy=datedTree, node_data=c("node_age", "descendant_tips_label"))
+	new.phy <- GetMrBayesTree(phy=datedTree, ncalibration= ncalibration, missingTaxa=missingTaxa, file=mrbayes.file)
+	new.phy <- ape::drop.tip(new.phy, "fake_outgroup")
+	return(new.phy)
+}
+
+#' Checks that missingTaxa argument is ok to be used by MakeMrBayesRunFile function
+#' @param missingTaxa A phylo object, a newick character string or a dataframe with taxonomic assignations
+#' @return A phylo object, a newick character string or a dataframe with taxonomic assignations
+CheckMissingTaxa <- function(missingTaxa){
+	if(is.data.frame(missingTaxa)){ # or is.matrix??
+		stop("not implemented yet")
+		# checkPastisData
+		return(missingTaxa)
+	}
+	if(is.vector(missingTaxa)){
+		missingTaxa <- as.character(missingTaxa)
+		return(missingTaxa)
+	}
+	if(is.null(missingTaxa)) {
+		return(NULL)
+	}
+	missingTaxa <- ProcessPhy(missingTaxa)
+	if(inherits(missingTaxa, "phylo")){
+		stop("not implemented yet")
+	}
+	tryCatch(CheckPhylo(phylo = missingTaxa), error=function(e) stop("missing taxa must be one of: NULL; a vector with species names; a dataframe with taxonomic assignations; a newick character string; a phylo object"))
+	# IMPORTANT: Add a check that taxa in dated.trees is in reference.tree and viceversa
+	return(missingTaxa)
+	# if (is.null(reference.tree)){
+		# if (is.null(missing.taxa)) {
+			# cat("specify a reference.tree or missing.taxa to be added to the dated.trees")
+			# stop("")
+		# } else {
+			# # construct a tree with phylotastic or take that from otol?
+			# cat("Constructing a reference.tree with taxa from dated.tree and missing.taxa")
+		# }
+	# } else {
+		# if(!is.null(missing.taxa)){
+			# cat("A reference.tree was given, missing.taxa argument is ignored")
+		# }
+}
+
 #' Runs MrBayes from R.
 #' @inheritParams GetMrBayesTree
 #' @return MrBayes outputs.
@@ -430,7 +573,7 @@ MrBayesRun <- function(file=NULL){
 	return(tr)
 }
 
-#' Writes the node calibrations block for a MrBayes run file.
+#' Writes a node calibrations block for a MrBayes run file.
 #' @inheritParams GetMrBayesTree
 #' @param ncalibrationType A character string specifying the type of calibration. Only "fixed" is implemented for now.
 #' @return A set of MrBayes calibration commands printed in console as character strings or as a text file with name specified in file.
@@ -441,36 +584,36 @@ GetMrBayesNodeCalibrations <- function(phy=NULL, ncalibration=NULL, ncalibration
     if (!inherits(phy, "phylo")) {
 		stop("phy must be a newick character string or in phylo format")
     }
-	if(length(ncalibration)==2){ # if it is a list of taxon names and ages
+	if(length(ncalibration)==2){  # if it is a list of descendant tips labels and node ages, from get_node_data function
 		if(!is.list(ncalibration)) {
 			stop("ncalibration must be a newick character string, in phylo format or a list with taxon names and dates")
 		}
-		includes.ncalibration <- lapply(ncalibration$nodetaxa, function(x) gsub(" ", "_", x))
-		nages <- ncalibration$nodeages
+		includes.ncalibration <- lapply(ncalibration$descendant_tips_label, function(x) gsub(" ", "_", x))
+		nages <- ncalibration$node_age
 
-	} else { #if it is a tree
-		ncalibration <- ProcessPhy(input=ncalibration, verbose=FALSE)
-		if (!inherits(ncalibration, "phylo")) {
-			stop("ncalibration must be a newick character string, a phylo object or a list with taxon names and dates")
+	} else {  # if it is a tree
+			ncalibration <- ProcessPhy(input=ncalibration, verbose=FALSE)
+			if (!inherits(ncalibration, "phylo")) {
+					stop("ncalibration must be a newick character string, a phylo object or a list with taxon names and dates")
 	    }
-		if(is.null(ncalibration$edge.length) | !ape::is.ultrametric(ncalibration)) {
+			if(is.null(ncalibration$edge.length) | !ape::is.ultrametric(ncalibration)) {
 	    	stop("ncalibration tree must have branch lengths and be ultrametric")
-		}
+			}
 	    phy <- ConvertSpacesToUnderscores(phy)
 	    ncalibration <- ConvertSpacesToUnderscores(ncalibration)
 	    splits.ncalibration <- ape::prop.part(ncalibration)
 	    includes.ncalibration <- lapply(splits.ncalibration, function(x) ncalibration$tip.label[x])
-		nages <- ape::branching.times(ncalibration)
+			nages <- ape::branching.times(ncalibration)
 	}
 	nodes <- sapply(includes.ncalibration, function(tax)
 				phytools::findMRCA(phy, tax, type="node")) - length(phy$tip.label)
 	calibrations <- paste0("calibrate node", nodes-1, " = ", ncalibrationType, "(", nages, ");")
-	root <- which(nodes==1) # tests for the presence of a root calibration, which should be implemented with treeagepr and not with calibrate
+	root <- which(nodes==1)  # tests for the presence of a root calibration, which should be implemented with treeagepr and not with calibrate
 	if(length(root)!=0){
 		nodes <- nodes[-root]
-		nages <- ape::branching.times(ncalibration)[-root]
+		nages <- nages[-root]
 		calibrations <- c(calibrations, paste0("prset treeagepr = ", ncalibrationType, "(",
-		ape::branching.times(ncalibration)[root], ");"))
+		nages[root], ");"))
 	}
     if (!is.null(file)) {
         write(calibrations, file)
@@ -790,13 +933,12 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all
 	}
 
 	if(any("citations" %in% showSummary.in) & !any(output.format.in %in% c("citations", "html", "data.frame"))) {
-		#print("Using trees from:")
 		if(output.format.in == "citations"){
 			cat("Target taxa found in trees from:", "\n")
 			print(names(filtered.results), quote=FALSE)
 			cat("\n")
 		} else {
-			cat("Using trees from:", "\n")
+			cat("Source chronograms from:", "\n")
 			print(names(filtered.results), quote=FALSE)
 			cat("\n")
 		}
@@ -805,7 +947,7 @@ SummarizeResults <- function(filtered.results = NULL, output.format = "phylo.all
 		cat("Target taxa presence in source chronograms:", "\n")
 		print(missing.taxa.summary)
 		cat("\n")
-		cat("Target taxa absent from source chronograms:", "\n")
+		cat("Target taxa completely absent from source chronograms:", "\n")
 		print(data.frame(Taxon=absent.input))
 		cat("\n")
 	}
@@ -1328,7 +1470,7 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	if(length(taxa.to.drop) > 0) {
 		taxa.to.drop.print <- paste(taxa.to.drop, collapse = " | ")
 		if (verbose) cat("No", marker, "sequences found for", taxa.to.drop.print, "...", "\n", "\t", "Dropping taxa from tree.", "\n")
-		warning("No", marker, "sequences found for", taxa.to.drop.print, "...", "\n", "\t", "Taxa dropped from tree.")
+		#warning("No ", marker, " sequences found for ", taxa.to.drop.print, "...", "\n", "\t", "Taxa dropped from tree.")
 		taxa.to.drop <- gsub(" ", "_", taxa.to.drop)
 		phy <- ape::drop.tip(phy, taxa.to.drop)
 	}
