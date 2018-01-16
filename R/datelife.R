@@ -1433,6 +1433,7 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	}
 	if (verbose) cat("\t", "OK.", "\n")
 	rr <- rotl::tnrs_match_names(names = input)
+	rr <- rr[!is.na(rr$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
 	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rr$ott_id, label_format = "name",  otl_v = otol_version))
 	phy$tip.label <- gsub("_ott.*","", phy$tip.label)
 	# when there are synonyms among the input names, phy will conserve the accepted name (rr$uniqe_name) instead of the original query name from input (rr$search_string)
