@@ -110,7 +110,7 @@ GetFilteredResults <- function(input=c("Rhea americana", "Pterocnemia pennata", 
   filtered.results <- ProcessResultsList(results.list, cleaned.names, partial)
 	CheckFilteredResults(filtered.results, usetnrs)
 	if(bold){
-		 bold.OToLTree <- GetBoldOToLTree(input = cleaned.names, usetnrs = FALSE, approximatematch = FALSE, marker = marker, verbose=verbose,  ...)
+		 bold.OToLTree <- GetBoldOToLTree(input = input, usetnrs = FALSE, approximatematch = FALSE, marker = marker, verbose=verbose,  ...)
 		 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in = bold.OToLTree, taxa.in = cleaned.names, phy.in = NULL, phy4.in = NULL, method.in = method)
 		 bold.data.processed <- ProcessResultsList(results.list=list(bold.data), taxa=cleaned.names, partial)
 	 	 names(bold.data.processed) <-  paste("BoldOToL tree (using ", marker, " as marker)", sep="")
@@ -1425,14 +1425,20 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
 	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides) # preserve good nucleotide data, i.e., only A,T,G,C
 	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar)) # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
-	if(length(sequences) == 1) { # because it is length>1 (actually 82) even if there is only 1 sequence available
+	if(length(sequences) == 1) {  # because it is length>1 (actually 82) even if there is only 1 sequence available
 		if (verbose) cat("No sequences were found in BOLD for the input taxa...", "\n", "\t", "Cannot construct tree.", "\n")
 		# if (!usetnrs) cat("Setting usetnrs=TRUE might change this, but it can be slowish.", "\n")
 		stop("Names in input do not match BOLD specimen records.")
 	}
 	if (verbose) cat("\t", "OK.", "\n")
-	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rotl::tnrs_match_names(names = input)$ott_id, label_format = "name",  otl_v = otol_version))
+	rr <- rotl::tnrs_match_names(names = input)
+	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rr$ott_id, label_format = "name",  otl_v = otol_version))
 	phy$tip.label <- gsub("_ott.*","", phy$tip.label)
+	# when there are synonyms among the input names, phy will conserve the accepted name (rr$uniqe_name) instead of the original query name from input (rr$search_string)
+	# this produces an error downstream, while using phangorn::pml()
+	# to avoid this error, we replace the unique name by the original query name in phy$tip.label:
+	mm <- match(phy$tip.label, gsub(" ","_", rr$unique_name))  # this gets the order of tip labels in phy
+	phy$tip.label <- gsub(" ","_", input[mm])  # this overlaps the original query over phy$tip.labels in the correct order
 	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
 	final.sequences.names <- rep(NA, length(input))
 	# for (i in sequence(dim(sequences)[1])) {
@@ -1448,7 +1454,7 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	taxa.to.drop <- c()
 	for (i in input){
 		row.index <- row.index + 1
-		taxon.index <- which(grepl(i, sequences$species_name)) # what happens here if there are no sequences from the taxon????
+		taxon.index <- which(grepl(i, sequences$species_name))  # what happens here if there are no sequences from the taxon????
 		if (length(taxon.index)>0){
 			seq.index <- which.max(sequences$nucleotide_ATGC_length[taxon.index])
 			# sequences[taxon.index,][seq.index,]
