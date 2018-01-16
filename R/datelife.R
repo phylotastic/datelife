@@ -1423,12 +1423,13 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	input <- input$cleaned.names
 	if (verbose) cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
-	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides) # preserve good nucleotide data, i.e., only A,T,G,C
-	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar)) # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
-	if(length(sequences) == 1) {  # because it is length>1 (actually 82) even if there is only 1 sequence available
-		if (verbose) cat("No sequences were found in BOLD for the input taxa...", "\n", "\t", "Cannot construct tree.", "\n")
+	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides)  # preserve good nucleotide data, i.e., only A,T,G,C
+	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
+	if(length(sequences) == 1) {  # it is length == 82 when there is at least 1 sequence available, if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
+		if (verbose) cat("No sequences found in BOLD for input taxa...", "\n")
 		# if (!usetnrs) cat("Setting usetnrs=TRUE might change this, but it can be slowish.", "\n")
-		stop("Names in input do not match BOLD specimen records.")
+		warning("Names in input do not match BOLD specimen records. No tree was constructed.")
+		return(NA)
 	}
 	if (verbose) cat("\t", "OK.", "\n")
 	rr <- rotl::tnrs_match_names(names = input)
@@ -1469,9 +1470,10 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	# final.sequences <- final.sequences[!is.na(final.sequences.names),]
 	# taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
 	if(length(input)-length(taxa.to.drop) == 1) {
-		if (verbose) cat("BOLD sequences found only for ", input[which(!input %in% taxa.to.drop)], "...","\n","\t", "Cannot construct a tree." )
-		stop("Not enough sequence coverage in BOLD to perform analysis of this set of taxa")
+		if (verbose) cat("BOLD sequences found only for one input name", input[which(!input %in% taxa.to.drop)], "...","\n","\t", "Cannot construct a tree." )
+		warning("Not enough sequences available in BOLD. No tree was constructed.")
 		# if (usetnrs == FALSE) cat("Setting usetnrs=TRUE might change this, but it is time consuming.", "\n")
+		return(NA)
 	}
 	if(length(taxa.to.drop) > 0) {
 		taxa.to.drop.print <- paste(taxa.to.drop, collapse = " | ")
