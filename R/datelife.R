@@ -1423,7 +1423,7 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	input <- input$cleaned.names
 	if (verbose) cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
-	if(length(sequences) == 1) {  # it is length == 82 when there is at least 1 sequence available, if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
+	if(length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available, if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
 		if (verbose) cat("No sequences found in BOLD for input taxa...", "\n")
 		# if (!usetnrs) cat("Setting usetnrs=TRUE might change this, but it can be slowish.", "\n")
 		warning("Names in input do not match BOLD specimen records. No tree was constructed.")
@@ -1432,14 +1432,14 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides)  # preserve good nucleotide data, i.e., only A,T,G,C
 	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
 	if (verbose) cat("\t", "OK.", "\n")
-	rr <- rotl::tnrs_match_names(names = input)
+	rr <- rotl::tnrs_match_names(names = input)  # rr has the same order as input
 	rr <- rr[!is.na(rr$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
 	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids=rr$ott_id, label_format = "name",  otl_v = otol_version))
-	phy$tip.label <- gsub("_ott.*","", phy$tip.label)
+	phy$tip.label <- gsub(".*_ott","", phy$tip.label)  # leaves only the ott_id as tip.label, it's safer than matching by name
 	# when there are synonyms among the input names, phy will conserve the accepted name (rr$uniqe_name) instead of the original query name from input (rr$search_string)
 	# this produces an error downstream, while using phangorn::pml()
 	# to avoid this error, we replace the unique name by the original query name in phy$tip.label:
-	mm <- match(phy$tip.label, gsub(" ","_", rr$unique_name))  # this gets the order of tip labels in phy
+	mm <- match(phy$tip.label, gsub(" ","_", rr$ott_id))  # this gets the order of tip labels in phy
 	phy$tip.label <- gsub(" ","_", input[mm])  # this overlaps the original query over phy$tip.labels in the correct order
 	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
 	final.sequences.names <- rep(NA, length(input))
@@ -1479,26 +1479,38 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 		return(NA)
 	}
 	if(length(taxa.to.drop) > 0) {
-		taxa.to.drop.print <- paste(taxa.to.drop, collapse = " | ")
-		if (verbose) cat("No", marker, "sequences found for", taxa.to.drop.print, "...", "\n", "\t", "Dropping taxa from tree.", "\n")
+		if (verbose) {
+			taxa.to.drop.print <- paste(taxa.to.drop, collapse = " | ")
+			cat("No", marker, "sequences found for", taxa.to.drop.print, "...", "\n", "\t", "Dropping taxa from tree.", "\n")
+		}
 		#warning("No ", marker, " sequences found for ", taxa.to.drop.print, "...", "\n", "\t", "Taxa dropped from tree.")
 		taxa.to.drop <- gsub(" ", "_", taxa.to.drop)
 		phy <- ape::drop.tip(phy, taxa.to.drop)
 	}
-	if (verbose) cat("Aligning with MAFFT...", "\n")
+	if (verbose) {
+		cat("Aligning with MAFFT...", "\n")
+	}
 	alignment <- ape::as.DNAbin(final.sequences)
 	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
-	if (verbose) cat( "\t", "OK.", "\n", "Estimating BoldOToL tree...", "\n")
+	if (verbose) {
+		cat( "\t", "OK.", "\n", "Estimating BoldOToL tree...", "\n")
+	}
 	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data=alignment)
 	phy <- pml.object$tree
 	if(!ape::is.binary.tree(pml.object$tree)){
-		if (verbose) cat("\t", marker, " sequence data available generates a non-dichotomous tree...", "\n", "\t", "Resolving with multi2di...", "\n")
+		if (verbose) {
+			cat("\t", marker, " sequence data available generates a non-dichotomous tree...", "\n", "\t", "Resolving with multi2di...", "\n")
+		}
 		pml.object$tree <- ape::multi2di(pml.object$tree)
 		phy <- pml.object$tree
 	}
-	if (verbose) cat("\t", "OK.", "\n")
+	if (verbose) {
+		cat("\t", "OK.", "\n")
+	}
 	if (chronogram) {
-		if (verbose) cat("Dating BoldOToL tree with chronoMPL...", "\n")
+		if (verbose) {
+			cat("Dating BoldOToL tree with chronoMPL...", "\n")
+		}
 		pml.object$tree <- ape::chronoMPL(pml.object$tree, se = FALSE, test = FALSE)
 		phy <- pml.object$tree
 		if (verbose) cat("\t", "OK.", "\n")
@@ -1512,7 +1524,9 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 		}
 	}
 	phy$tip.label <- gsub('_', ' ', phy$tip.label)
-	if (verbose) cat("Done.", "\n")
+	if (verbose) {
+		cat("Done.", "\n")
+	}
 	return(phy)
 }
 
