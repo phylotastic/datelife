@@ -1423,14 +1423,14 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	input <- input$cleaned.names
 	if (verbose) cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
-	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides)  # preserve good nucleotide data, i.e., only A,T,G,C
-	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
 	if(length(sequences) == 1) {  # it is length == 82 when there is at least 1 sequence available, if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
 		if (verbose) cat("No sequences found in BOLD for input taxa...", "\n")
 		# if (!usetnrs) cat("Setting usetnrs=TRUE might change this, but it can be slowish.", "\n")
 		warning("Names in input do not match BOLD specimen records. No tree was constructed.")
 		return(NA)
 	}
+	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides)  # preserve good nucleotide data, i.e., only A,T,G,C
+	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
 	if (verbose) cat("\t", "OK.", "\n")
 	rr <- rotl::tnrs_match_names(names = input)
 	rr <- rr[!is.na(rr$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
@@ -1456,7 +1456,9 @@ GetBoldOToLTree <- function(input = c("Rhea americana",  "Struthio camelus", "Ga
 	taxa.to.drop <- c()
 	for (i in input){
 		row.index <- row.index + 1
-		taxon.index <- which(grepl(i, sequences$species_name))  # what happens here if there are no sequences from the taxon????
+		taxon.index <- which(grepl(i, sequences$species_name))
+		# if there are no sequences from any taxon, taxon.index is empty
+		# but we make sure this is filtered steps before
 		if (length(taxon.index)>0){
 			seq.index <- which.max(sequences$nucleotide_ATGC_length[taxon.index])
 			# sequences[taxon.index,][seq.index,]
