@@ -185,7 +185,7 @@ ProcessPhy <- function(input, verbose=FALSE){
 
 #' Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with ProcessPhy first.
 #' @inheritParams EstimateDates
-#' @inheritDotParams rphylotastic::GetSpeciesFromTaxon filters
+#' @inheritDotParams rphylotastic::taxon_get_species filters
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
 ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE, sppfromtaxon=FALSE, verbose=FALSE, ...) {
@@ -224,7 +224,7 @@ ProcessInput <- function(input=c("Rhea americana", "Pterocnemia pennata", "Strut
     	index <- 1
 	    for (i in sppfromtaxon){
 	    	if (i) {
-	    		spp <- rphylotastic::GetSpeciesFromTaxon(taxon = cleaned.names[index], ...)
+	    		spp <- rphylotastic::taxon_get_species(taxon = cleaned.names[index], ...)
 	    		if(length(spp)==0) {
 	    			if(verbose) cat("\t", " No species names found for taxon ", cleaned.names[index], ".", "\n", sep="")
 	    			if (!usetnrs & verbose) cat("\t", "Setting usetnrs = TRUE might change this, but it can be slow.", "\n")
