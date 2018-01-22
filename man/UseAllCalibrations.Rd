@@ -4,7 +4,7 @@
 \alias{UseAllCalibrations}
 \title{Use all calibrations given trees in database to date a tree}
 \usage{
-UseAllCalibrations(phy = GetBoldOToLTree(c("Rhea americana",
+UseAllCalibrations(phy = make_bold_otol_tree(c("Rhea americana",
   "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE),
   partial = TRUE, usetnrs = FALSE, approximatematch = TRUE,
   update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1,

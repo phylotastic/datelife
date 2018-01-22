@@ -17,6 +17,6 @@ run<-function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus
   partial <- ifelse(partial=="yes", TRUE, FALSE)
   usetnrs <- ifelse(usetnrs=="yes", TRUE, FALSE)
   approximatematch <- ifelse(approximatematch=="yes", TRUE, FALSE)
-  filtered.results <- GetFilteredResults(input, partial, usetnrs, approximatematch, opentree_chronograms)
-  SummarizeResults(filtered.results, output.format=format, partial, opentree_chronograms, verbose="none")
+  filtered.results <- get_datelife_result(input, partial, usetnrs, approximatematch, opentree_chronograms)
+  summarize_datelife_result(filtered.results, output.format=format, partial, opentree_chronograms, verbose="none")
 }

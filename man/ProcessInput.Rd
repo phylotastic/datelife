@@ -19,7 +19,7 @@ ProcessInput(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 
-\item{...}{Arguments passed on to \code{rphylotastic::GetSpeciesFromTaxon}
+\item{...}{Arguments passed on to \code{rphylotastic::taxon_get_species}
 \describe{
   \item{filters}{A character vector of strings to exclude}
 }}

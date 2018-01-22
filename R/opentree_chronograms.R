@@ -10,7 +10,7 @@
 #' @inherit GetOToLChronograms return
 #' @inherit SaveOToLChronograms return
 
-UpdateCache <- function(save = TRUE, file = "opentree_chronograms.RData", verbose = TRUE){
+update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RData", verbose = TRUE){
 	if (save) {
 		cache.update <- SaveOToLChronograms(file = file, verbose = verbose)
 	} else {
