@@ -52,7 +52,7 @@ test_that("Processing input newick", {
 	skip_on_cran()
 	skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
-  input.processed <- ProcessInput(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), usetnrs=FALSE, approximatematch=TRUE)
+  input.processed <- make_datelife_query(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), usetnrs=FALSE, approximatematch=TRUE)
   expect_equal(class(input.processed$phy),"phylo")
 })
 
@@ -109,7 +109,7 @@ test_that("get_datelife_result works", {
 test_that("Processing input string", {
 	skip_on_cran()
   utils::data(opentree_chronograms)
-  input.processed <- ProcessInput(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE)
+  input.processed <- make_datelife_query(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs=FALSE, approximatematch=TRUE)
   expect_equal(length(input.processed$cleaned.names),3)
 })
 
@@ -143,6 +143,14 @@ test_that("Congruification works", {
   expect_gte(length(filtered.results), 2)
 })
 
+test_that("Congruification works with treePL", {
+    skip_on_cran()
+    skip_on_travis() #b/c no treepl
+    utils::data(opentree_chronograms)
+    filtered.results <- get_datelife_result(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, usetnrs=FALSE, approximatematch=TRUE)
+    expect_gte(length(filtered.results), 2)
+ })
+
 test_that("SDM correctly returns tree", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
@@ -173,7 +181,7 @@ test_that("Crop plant taxa work", {
 })
 
 test_that("Processing newick input works", {
-  processed <- ProcessInput("((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum));")
+  processed <- make_datelife_query("((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum));")
   expect_equal(class(processed$phy), "phylo")
   expect_equal(ape::Ntip(processed$phy), 6)
   expect_equal(ape::Nnode(processed$phy), 5)
@@ -197,17 +205,70 @@ test_that("We don't get negative brlen from pathd8", {
   expect_true(min(tree$edge.length)>=0)
 
 })
+test_that("We can get trees of two taxa back", {
+skip_on_cran()
+res <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="data.frame")
+two.taxon <- which(res$Ntax==2)[1]
+tree <- ape::read.tree(text=as.character(res$Newick[two.taxon]))
+expect_equal(ape::Ntip(tree), 2)
+expect_gte(tree$edge.length[1], 10)
+})
 
+test_that("check_datelife_query works", {
+	new <- "(((((Pterois miles,Pterois volitans)Pteroinae)Teleostei)Chordata,Lymnaea))Metazoa;"
+	phy <- ape::read.tree(text="((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);")
+	notnew <- "a,b;"
+	expect_error(check_datelife_query(c(new, new)), verbose=TRUE) #trying to process two phylogenies will give an error
+	expect_error(check_datelife_query(c(phy, phy)), verbose=TRUE) #trying to process two phylogenies will give an error
+	expect_output(x <- check_datelife_query(new, verbose=TRUE)) # when verbose=TRUE it will give a printed message
+	expect_output(x <- check_datelife_query(phy, verbose=TRUE)) # idem
+	expect_output(x <- check_datelife_query(notnew, verbose=TRUE)) # idem
+	expect_output(x <- check_datelife_query(new, verbose=FALSE), NA) # when verbose=FALSE there is no printed message
+	expect_output(x <- check_datelife_query(notnew, verbose=FALSE), NA) # idem
+	expect_output(x <- check_datelife_query("purrr", verbose=FALSE), NA) # idem
+	expect_type(x <- check_datelife_query(notnew, verbose=FALSE), "logical") # output is NA
+	expect_type(x <- check_datelife_query("purrr", verbose=FALSE), "logical") # output is NA
+	expect_s3_class(x <- check_datelife_query(new, verbose=FALSE), "phylo") # output is phylo
+	expect_s3_class(x <- check_datelife_query(phy, verbose=FALSE), "phylo") # output is phylo
+})
+
+test_that("phylo_fix_brlen works", {
+    utils::data(plant_bold_otol_tree)
+    x1 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = 0)
+    x2 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
+    x3 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "mrbayes")
+    expect_true(ape::is.ultrametric(x1))
+    expect_true(ape::is.ultrametric(x2))
+    expect_true(ape::is.ultrametric(x3))
+})
+
+    # test_that("bold tree from EstimateDates is the same as the one from GetBoldOToLTree", {
+# 	tax2 <- c("Homo sapiens", "Macaca mulatta", "Melursus ursinus","Canis lupus pallipes", "Panthera pardus", "Panthera tigris", "Herpestes fuscus", "Elephas maximus", "Haliastur indus")
+# 	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"
+# 	b1 <- GetBoldOToLTree(input = other)
+# 	# nb1 <- length(b1$tiplabel)
+# 	ed1 <- EstimateDates(input = other, output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, method = "PATHd8", bold = TRUE)
+# 	# ned1 <- length(ed1[[length(ed1)]]$tip.label)
+# 	# expect_equal(nb1, ned1)
+# 	expect_equal(b1$tiplabel, ed1[[length(ed1)]]$tip.label) # tests both trees have the same taxa, in the same number and order. It's ok, cause it should be the same tree
+# 	# expect_identical(b1$tiplabel, ed1[[length(ed1)]]$tip.label)
+# 	b2 <- GetBoldOToLTree(input = tax2)
+# 	# nb1 <- length(b1$tiplabel)
+# 	ed2 <- EstimateDates(input = tax2, output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, method = "PATHd8", bold = TRUE)
+# 	# ned1 <- length(ed1[[length(ed1)]]$tip.label)
+# 	# expect_equal(nb1, ned1)
+# 	expect_equal(b2$tip.label, ed2[[length(ed2)]]$tip.label)
+# })
 
 # test_that("TNRS with approximate match works", {
 	 # taxa <- c("Rhea_americana", "Pterocnemia pennato", "Strutho camelus")
- 	# input.processed <- ProcessInput(taxa, usetnrs=TRUE, approximatematch=TRUE)
+ 	# input.processed <- make_datelife_query(taxa, usetnrs=TRUE, approximatematch=TRUE)
  	# expect_true(all.equal(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), input.processed$cleaned.names))
 # })
 
 
 # test_that("TNRS with unmatchable taxa works", {
 	# taxa <- c("Rhea_americana", "Pterocnemia pennato", "Oscar the grouch", "Strutho camelus")
- 	# input.processed <- ProcessInput(taxa, usetnrs=TRUE, approximatematch=TRUE)
+ 	# input.processed <- make_datelife_query(taxa, usetnrs=TRUE, approximatematch=TRUE)
  	# expect_true(all.equal(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), input.processed$cleaned.names))
 # })
