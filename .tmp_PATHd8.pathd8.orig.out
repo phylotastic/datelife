@@ -1,0 +1,32 @@
+
+
+************************************************************************************************
+*  d 8   C A L C U L A T I O N                                                                 *
+************************************************************************************************
+
+Number of informative fixnodes:   8
+Number of informative minnodes:   0
+Number of informative maxnodes:   0
+
+d8 tree    : (((((((Homo_sapiens:320.523823,(Ara_ararauna:238.336866,Alligator_mississippiensis:238.336866)18ce6505fb16fd2c712c8a68c82c04cb:82.186957)75d01340e4b8b38dda2a209fa91a34ab:35.218288,Salamandra_atra:355.742111)d86bd799041fc999e67df5aee4ebb854:73.879843,Katsuwonus_pelamis:429.621954)70f8640bf405fbbfeab17e1f9d890e7d:303.378046,Carcharodon_carcharias:733.000000):0.000000,Asymmetron_lucayanum:733.000000)a62212fe84c67d499bdbe5faf17f7ab8:113.999406,(Echinus_esculentus:846.999406,Linckia_columbiae:846.999406):0.000000):0.000000,(((((Procambarus_alleni:322.000000,Homarus_americanus:322.000000):0.000000,Callinectes_sapidus:322.000000)27bbd92a7de4e20c26d45c92f1b2b20a:274.000000,(Bombus_balteatus:596.000000,Periplaneta_americana:596.000000):0.000000)37eb033f1f7e34541a58551ae88f4711:250.999406,Latrodectus_mactans:846.999406):0.000000,((Lineus_longissimus:846.999406,(Octopus_vulgaris:846.999406,Helix_aspersa:846.999406):0.000000):0.000000,Lumbricus_terrestris:846.999406):0.000000):0.000000)defbd45b169710c1cc400b5815eeb6f0:0;
+
+
+
+************************************************************************************************
+*  M P L  C A L C U L A T I O N                                                                *
+************************************************************************************************
+
+Clock test confidence: 0.950000
+Clock tests          : 18   (one for each node)
+Accepted             : 18
+Rejected             : 0
+
+MPL tree   : (((((((Homo_sapiens:0.000000,(Ara_ararauna:0.000000,Alligator_mississippiensis:0.000000)18ce6505fb16fd2c712c8a68c82c04cb:0.000000)75d01340e4b8b38dda2a209fa91a34ab:0.000000,Salamandra_atra:0.000000)d86bd799041fc999e67df5aee4ebb854:0.000000,Katsuwonus_pelamis:0.000000)70f8640bf405fbbfeab17e1f9d890e7d:0.000000,Carcharodon_carcharias:0.000000):0.000000,Asymmetron_lucayanum:0.000000)a62212fe84c67d499bdbe5faf17f7ab8:0.000000,(Echinus_esculentus:0.000000,Linckia_columbiae:0.000000):0.000000):0.000000,(((((Procambarus_alleni:0.000000,Homarus_americanus:0.000000):0.000000,Callinectes_sapidus:0.000000)27bbd92a7de4e20c26d45c92f1b2b20a:0.000000,(Bombus_balteatus:0.000000,Periplaneta_americana:0.000000):0.000000)37eb033f1f7e34541a58551ae88f4711:0.000000,Latrodectus_mactans:0.000000):0.000000,((Lineus_longissimus:0.000000,(Octopus_vulgaris:0.000000,Helix_aspersa:0.000000):0.000000):0.000000,Lumbricus_terrestris:0.000000):0.000000):0.000000)defbd45b169710c1cc400b5815eeb6f0:0;
+
+
+
+************************************************************************************************
+*  E N D  C A L C U L A T I O N                                                                *
+************************************************************************************************
+
+Calculation finished.

@@ -1,0 +1,19 @@
+(((((((Homo_sapiens:0,(Ara_ararauna:0,Alligator_mississippiensis:0):0):0,Salamandra_atra:0):0,Katsuwonus_pelamis:0):0,Carcharodon_carcharias:0):0,Asymmetron_lucayanum:0):0,(Echinus_esculentus:0,Linckia_columbiae:0):0):0,(((((Procambarus_alleni:0,Homarus_americanus:0):0,Callinectes_sapidus:0):0,(Bombus_balteatus:0,Periplaneta_americana:0):0):0,Latrodectus_mactans:0):0,((Lineus_longissimus:0,(Octopus_vulgaris:0,Helix_aspersa:0):0):0,Lumbricus_terrestris:0):0):0);
+
+mrca: Homo_sapiens, Procambarus_alleni,  fixage=846.999406;
+mrca: Homo_sapiens, Asymmetron_lucayanum,  fixage=733;
+mrca: Homo_sapiens, Katsuwonus_pelamis,  fixage=429.621954;
+mrca: Homo_sapiens, Salamandra_atra,  fixage=355.742111;
+mrca: Homo_sapiens, Ara_ararauna,  fixage=320.523823;
+mrca: Ara_ararauna, Alligator_mississippiensis,  fixage=238.336866;
+mrca: Procambarus_alleni, Bombus_balteatus,  fixage=596;
+mrca: Procambarus_alleni, Callinectes_sapidus,  fixage=322;
+
+name of mrca:  Homo_sapiens, Procambarus_alleni,  name=defbd45b169710c1cc400b5815eeb6f0;
+name of mrca:  Homo_sapiens, Asymmetron_lucayanum,  name=a62212fe84c67d499bdbe5faf17f7ab8;
+name of mrca:  Homo_sapiens, Katsuwonus_pelamis,  name=70f8640bf405fbbfeab17e1f9d890e7d;
+name of mrca:  Homo_sapiens, Salamandra_atra,  name=d86bd799041fc999e67df5aee4ebb854;
+name of mrca:  Homo_sapiens, Ara_ararauna,  name=75d01340e4b8b38dda2a209fa91a34ab;
+name of mrca:  Ara_ararauna, Alligator_mississippiensis,  name=18ce6505fb16fd2c712c8a68c82c04cb;
+name of mrca:  Procambarus_alleni, Bombus_balteatus,  name=37eb033f1f7e34541a58551ae88f4711;
+name of mrca:  Procambarus_alleni, Callinectes_sapidus,  name=27bbd92a7de4e20c26d45c92f1b2b20a;
