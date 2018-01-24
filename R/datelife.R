@@ -295,10 +295,10 @@ phylo_fix_brlen <- function(phy = NULL, fixing_criterion = "negative", fixing_me
 			fixed.phy <- make_bladj_tree(nodenames = phy$node.label[-tofix], nodeages = phylo_get_node_data(phy = phy, node_data="node_age")$node_age[-tofix], phy = phy, phyformat = "phylo")
 		if(fixing_method=="mrbayes") {
 			mrbayes.file <- paste0("phylo", "_brlen_fixed.nexus")  # make "phylo" an argument?
-			ncalibration <- phylo_get_node_data(phy, node_data = c("descendant_tips_label", "node_age"))
+			ncalibration <- phylo_get_node_data(phy = phy, node_data = c("descendant_tips_label", "node_age"))
 			ncalibration <- lapply(ncalibration, "[", seq(phy$Nnode)[-tofix])
-			phy1 <- phylo_add_outgroup(phy = phy, outgroup="fake_outgroup")
-			fixed.phy <- make_mrbayes_tree(constraint = phy1, ncalibration = ncalibration, file = mrbayes.file)
+			phy <- phylo_add_outgroup(phy = phy, outgroup="fake_outgroup")
+			fixed.phy <- make_mrbayes_tree(constraint = phy, ncalibration = ncalibration, file = mrbayes.file)
 			fixed.phy <- ape::drop.tip(fixed.phy, "fake_outgroup")
 		}
 	}
@@ -375,11 +375,11 @@ phylo_get_node_numbers <- function(phy){
 #' @param outgroup A character vector with the name of the outgroup. If it has length>1, only first element will be used.
 #' @return A phylo object.
 #' @export
-phylo_add_outgroup <- function(phy = NULL, outgroup="outgroup"){
+phylo_add_outgroup <- function(phy = NULL, outgroup = "outgroup"){
 		phy <- tryCatch({
 			check_phylo(phy = phy, dated = FALSE)
 		}, error = function(e){
-			check_datelife_query(input = phy, verbose = FALSE)
+			phy <- check_datelife_query(input = phy, verbose = FALSE)
 			check_phylo(phy = phy, dated = FALSE)
 		})
     outgroup_edge <- c()
@@ -424,7 +424,7 @@ phylo_tips_from_node <- function(phy = NULL, node = NULL, curr = NULL){
 	phy <- tryCatch({
 		check_phylo(phy = phy, dated = FALSE)
 	}, error = function(e){
-		check_datelife_query(input = phy, verbose = FALSE)
+		phy <- check_datelife_query(input = phy, verbose = FALSE)
 		check_phylo(phy = phy, dated = FALSE)
 	})
 	des <- phytools::getDescendants(tree = phy, node = node, curr = NULL)
@@ -443,7 +443,7 @@ make_bladj_tree <- function(nodenames = NULL, nodeages = NULL, phy = NULL, phyfo
 	phy <- tryCatch({
 		check_phylo(phy = phy, dated = FALSE)
 	}, error = function(e){
-		check_datelife_query(input = phy, verbose = FALSE)
+		phy <- check_datelife_query(input = phy, verbose = FALSE)
 		check_phylo(phy = phy, dated = FALSE)
 	})
 	phyformat <- match.arg(phyformat, choices = c("newick", "phylo"))
@@ -474,6 +474,7 @@ make_bladj_tree <- function(nodenames = NULL, nodeages = NULL, phy = NULL, phyfo
 #' @export
 make_mrbayes_tree <- function(constraint = NULL, ncalibration = NULL, missingTaxa = NULL, file = "mrbayes_run.nexus"){
 	make_mrbayes_runfile(constraint = constraint, ncalibration = ncalibration, missingTaxa = missingTaxa, file = file)
+	message("Starting MrBayes run. This might take a while...")
 	new.tree <- run_mrbayes(file = file)
 	return(new.tree)
 }
@@ -483,15 +484,15 @@ make_mrbayes_tree <- function(constraint = NULL, ncalibration = NULL, missingTax
 #' @return A MrBayes block run file in nexus format.
 #' @export
 make_mrbayes_runfile <- function(constraint = NULL, ncalibration = NULL, missingTaxa = NULL, file = "mrbayes_run.nexus"){
-  phy <- check_datelife_query(input = phy, verbose = FALSE) # add outgroup = TRUE argument
-	if (!inherits(phy, "phylo")) {
-		stop("phy must be a newick character string or in phylo format")
+  constraint <- check_datelife_query(input = constraint, verbose = FALSE) # add outgroup = TRUE argument
+	if (!inherits(constraint, "phylo")) {
+		stop("constraint must be a newick character string or in phylo format")
     }
-  phy <- ConvertSpacesToUnderscores(phy)
-	taxa <- phy$tip.label
-	constraints <- paleotree::createMrBayesConstraints(tree = phy, partial = FALSE) # this works perfectly
-	calibrations <- GetMrBayesNodeCalibrations(phy = phy, ncalibration = ncalibration, ncalibrationType = "fixed")
-	og <- phylo_get_singleton_outgroup(phy) #if(outgroup)
+  constraint <- ConvertSpacesToUnderscores(constraint)
+	taxa <- constraint$tip.label
+	constraints <- paleotree::createMrBayesConstraints(tree = constraint, partial = FALSE) # this works perfectly
+	calibrations <- GetMrBayesNodeCalibrations(phy = constraint, ncalibration = ncalibration, ncalibrationType = "fixed")
+	og <- phylo_get_singleton_outgroup(constraint) #if(outgroup)
 	ogroup <- c()
 	if(!is.na(og)) {
 		ogroup <- paste0("outgroup ", og, ";")
@@ -538,7 +539,7 @@ phylo_fabricate_dates <- function(dated_phy = NULL, missingTaxa = NULL, dating_m
 	dated_phy <- tryCatch({
 		check_phylo(phy = dated_phy, dated = TRUE)
 	}, error = function(e){
-		check_datelife_query(input = dated_phy, verbose = FALSE)
+		dated_phy <- check_datelife_query(input = dated_phy, verbose = FALSE)
 		check_phylo(phy = dated_phy, dated = TRUE)
 	})
 	dating_method <- match.arg(dating_method, c("bladj", "mrbayes"))
@@ -637,7 +638,7 @@ GetMrBayesNodeCalibrations <- function(phy = NULL, ncalibration = NULL, ncalibra
 	}
 	nodes <- sapply(includes.ncalibration, function(tax)
 				phytools::findMRCA(phy, tax, type="node")) - length(phy$tip.label)
-	calibrations <- paste0("calibrate node", nodes-1, " = ", ncalibrationType, "(", nages, ");")
+	calibrations <- paste0("calibrate node", nodes, " = ", ncalibrationType, "(", nages, ");")
 	root <- which(nodes==1)  # tests for the presence of a root calibration, which should be implemented with treeagepr and not with calibrate
 	if(length(root)!=0){
 		nodes <- nodes[-root]
