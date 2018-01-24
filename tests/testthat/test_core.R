@@ -237,9 +237,9 @@ test_that("phylo_fix_brlen works", {
     x1 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = 0)
     x2 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
     x3 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "mrbayes")
-    expect_true(ape::is.ultrametric(x1))
-    expect_true(ape::is.ultrametric(x2))
-    expect_true(ape::is.ultrametric(x3))
+    expect_true(ape::is.ultrametric(x1, option = 2))
+    expect_true(ape::is.ultrametric(x2, option = 2))
+    expect_true(ape::is.ultrametric(x3, option = 2))  # prefer option = 2, using the variance to test ultrametricity, cf. E, Paradis' comments on this post http://blog.phytools.org/2017/03/forceultrametric-method-for-ultrametric.html
 })
 
     # test_that("bold tree from EstimateDates is the same as the one from GetBoldOToLTree", {

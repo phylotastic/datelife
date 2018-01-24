@@ -543,11 +543,16 @@ phylo_fabricate_dates <- function(dated_phy = NULL, missingTaxa = NULL, dating_m
 		check_phylo(phy = dated_phy, dated = TRUE)
 	})
 	dating_method <- match.arg(dating_method, c("bladj", "mrbayes"))
-	mrbayes.file <- file
-	dated_phy <- phylo_add_outgroup(phy = dated_phy, outgroup = "fake_outgroup")
-	ncalibration <- phylo_get_node_data(phy = dated_phy, node_data = c("node_age", "descendant_tips_label"))
-	new.phy <- make_mrbayes_tree(constraint = dated_phy, ncalibration = ncalibration, missingTaxa = missingTaxa, file = mrbayes.file)
-	new.phy <- ape::drop.tip(new.phy, "fake_outgroup")
+	if(dating_method=="bladj"){
+
+	}
+	if(dating_method=="mrbayes"){
+		mrbayes.file <- file
+		dated_phy <- phylo_add_outgroup(phy = dated_phy, outgroup = "fake_outgroup")
+		ncalibration <- phylo_get_node_data(phy = dated_phy, node_data = c("node_age", "descendant_tips_label"))
+		new.phy <- make_mrbayes_tree(constraint = dated_phy, ncalibration = ncalibration, missingTaxa = missingTaxa, file = mrbayes.file)
+		new.phy <- ape::drop.tip(new.phy, "fake_outgroup")
+	}
 	return(new.phy)
 }
 
