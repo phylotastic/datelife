@@ -2,13 +2,13 @@
 % Please edit documentation in R/datelife.R
 \name{GetMrBayesNodeCalibrations}
 \alias{GetMrBayesNodeCalibrations}
-\title{Writes the node calibrations block for a MrBayes run file.}
+\title{Writes a node calibrations block for a MrBayes run file.}
 \usage{
 GetMrBayesNodeCalibrations(phy = NULL, ncalibration = NULL,
   ncalibrationType = "fixed", file = NULL)
 }
 \arguments{
-\item{phy}{The constraint tree: a phylo object or a newick character string, with or without branch lengths.}
+\item{phy}{A tree either as a newick character string or as a phylo object}
 
 \item{ncalibration}{The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.}
 
@@ -20,5 +20,5 @@ GetMrBayesNodeCalibrations(phy = NULL, ncalibration = NULL,
 A set of MrBayes calibration commands printed in console as character strings or as a text file with name specified in file.
 }
 \description{
-Writes the node calibrations block for a MrBayes run file.
+Writes a node calibrations block for a MrBayes run file.
 }

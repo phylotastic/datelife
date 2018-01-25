@@ -7,7 +7,7 @@
 CheckFilteredResults(filtered.results, usetnrs, verbose = FALSE)
 }
 \arguments{
-\item{filtered.results}{An object output from GetFilteredResults function}
+\item{filtered.results}{An object output from get_datelife_result function}
 
 \item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
