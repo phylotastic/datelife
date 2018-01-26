@@ -26,11 +26,10 @@
 #' @param update_cache default to FALSE
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms).
 #' @param dating_method The method used for tree dating.
-#' @param bold Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using make_bold_otol_tree function.
-#' @param marker A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.
+# #' @param bold Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using make_bold_otol_tree function.
 #' @param sppfromtaxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.
 #' @param verbose Boolean. If TRUE, it gives printed updates to the user.
-#' @inheritDotParams make_bold_otol_tree otol_version chronogram doML
+# #' @inheritDotParams make_bold_otol_tree otol_version chronogram doML
 #' @export
 #' @details
 #' Available output formats are:
@@ -80,25 +79,24 @@
 #' system("open some.bird.trees.html")
 
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", bold = FALSE, showSummary= c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"),  marker = "COI", sppfromtaxon = FALSE, verbose = FALSE, ...) {
-			#... only defines arguments to be passed to make_bold_otol_tree for now
+		output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", showSummary= c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"),  sppfromtaxon = FALSE, verbose = FALSE) {
 			# find a way not to repeat partial and cache arguments, which are used in both get_datelife_result and summarize_datelife_result
 			if(update_cache){
 				cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 			}
 			input.here <- make_datelife_query(input = input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon, verbose = verbose)
-			filtered.results.here <- get_datelife_result(input = input.here, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = FALSE, cache = cache, dating_method = dating_method, bold = bold, marker = marker, verbose = verbose, ...)
+			filtered.results.here <- get_datelife_result(input = input.here, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = FALSE, cache = cache, dating_method = dating_method, verbose = verbose)
 			return(summarize_datelife_result(input = input.here$cleaned.names, filtered.results = filtered.results.here, output.format = output.format, partial = partial, update_cache = FALSE, cache = cache, showSummary = showSummary, missing.taxa = missing.taxa, verbose = verbose))
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
 #' @inheritParams datelife_search
 #' @inheritParams make_datelife_query
-#' @inheritParams make_bold_otol_tree
-#' @inheritDotParams make_bold_otol_tree
+# #' @inheritParams make_bold_otol_tree
+# #' @inheritDotParams make_bold_otol_tree
 #' @return List of patristic matrices
 #' @export
-get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", bold = FALSE, marker = "COI", sppfromtaxon = FALSE, verbose = FALSE, ...) {
+get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", sppfromtaxon = FALSE, verbose = FALSE) {
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
@@ -109,13 +107,13 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
   results.list <- lapply(cache$trees, GetSubsetArrayDispatch, taxa = cleaned.names, phy = tree, dating_method = dating_method)
   filtered.results <- ProcessResultsList(results.list, cleaned.names, partial)
 	CheckFilteredResults(filtered.results, usetnrs)
-	if(bold){
-		 bold.OToLTree <- make_bold_otol_tree(input = input, usetnrs = FALSE, approximatematch = FALSE, marker = marker, verbose = verbose,  ...)
-		 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in = bold.OToLTree, taxa.in = cleaned.names, phy.in = NULL, phy4.in = NULL, dating_method.in = dating_method)
-		 bold.data.processed <- ProcessResultsList(results.list = list(bold.data), taxa = cleaned.names, partial)
-	 	 names(bold.data.processed) <-  paste("BOLD-OToL tree (using ", marker, " as marker)", sep="")
-	   filtered.results <- c(filtered.results, bold.data.processed)
-	}
+	# if(bold){
+	# 	 bold.OToLTree <- make_bold_otol_tree(input = input, usetnrs = FALSE, approximatematch = FALSE, marker = marker, verbose = verbose,  ...)
+	# 	 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in = bold.OToLTree, taxa.in = cleaned.names, phy.in = NULL, phy4.in = NULL, dating_method.in = dating_method)
+	# 	 bold.data.processed <- ProcessResultsList(results.list = list(bold.data), taxa = cleaned.names, partial)
+	#  	 names(bold.data.processed) <-  paste("BOLD-OToL tree (using ", marker, " as marker)", sep="")
+	#    filtered.results <- c(filtered.results, bold.data.processed)
+	# }
 #	cat("\n")
 	return(filtered.results)
 }
@@ -181,11 +179,9 @@ check_datelife_query <- function(input, verbose = FALSE){
 	return(phy.new.in)
 }
 
-
-
 #' Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with check_datelife_query first.
 #' @inheritParams datelife_search
-#' @inheritDotParams rphylotastic::taxon_get_species filters
+#' @inheritDotParams rphylotastic::taxon_get_species
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs = FALSE, approximatematch = TRUE, sppfromtaxon = FALSE, verbose = FALSE, ...) {
@@ -248,7 +244,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 
 #' Takes a tree and fixes negative branch lengths in several ways
 #' @param phy A tree either as a newick character string or as a phylo object
-#' @param fixing_criterion A character vector specifying the type of branches to be fixed: "negative" or "null"
+#' @param fixing_criterion A character vector specifying the type of branches to be fixed: "negative" or "zero"
 #' @param fixing_method A character vector specifying the method to fix negative branch lengths: "bladj", "mrbayes" or a number to assign to all branches
 #' @return A phylo object with no negative branch lengths
 #' @export
@@ -263,7 +259,7 @@ phylo_fix_brlen <- function(phy = NULL, fixing_criterion = "negative", fixing_me
 	if(!is.numeric(fixing_method)){
 		fixing_method <- match.arg(fixing_method, c("bladj", "mrbayes"))
 	}
-	fixing_criterion <- match.arg(arg = fixing_criterion, choices = c("negative", "null"), several.ok = FALSE)
+	fixing_criterion <- match.arg(arg = fixing_criterion, choices = c("negative", "zero"), several.ok = FALSE)
 	if(fixing_criterion=="negative"){
 		index <- which(phy$edge.length<0)  # identifies edge numbers with negative edge lengths value
 	} else {
@@ -488,7 +484,7 @@ make_mrbayes_runfile <- function(constraint = NULL, ncalibration = NULL, missing
 	if (!inherits(constraint, "phylo")) {
 		stop("constraint must be a newick character string or in phylo format")
     }
-  constraint <- ConvertSpacesToUnderscores(constraint)
+  constraint <- phylo_tiplabel_space_to_underscore(constraint)
 	taxa <- constraint$tip.label
 	constraints <- paleotree::createMrBayesConstraints(tree = constraint, partial = FALSE) # this works perfectly
 	calibrations <- GetMrBayesNodeCalibrations(phy = constraint, ncalibration = ncalibration, ncalibrationType = "fixed")
@@ -635,8 +631,8 @@ GetMrBayesNodeCalibrations <- function(phy = NULL, ncalibration = NULL, ncalibra
 			if(is.null(ncalibration$edge.length) | !ape::is.ultrametric(ncalibration)) {
 	    	stop("ncalibration tree must have branch lengths and be ultrametric")
 			}
-	    phy <- ConvertSpacesToUnderscores(phy)
-	    ncalibration <- ConvertSpacesToUnderscores(ncalibration)
+	    phy <- phylo_tiplabel_space_to_underscore(phy)
+	    ncalibration <- phylo_tiplabel_space_to_underscore(ncalibration)
 	    splits.ncalibration <- ape::prop.part(ncalibration)
 	    includes.ncalibration <- lapply(splits.ncalibration, function(x) ncalibration$tip.label[x])
 			nages <- ape::branching.times(ncalibration)
@@ -668,7 +664,7 @@ phylo_get_singleton_outgroup <- function(phy = NULL){
     if (!inherits(phy, "phylo")) {
         phy <- check_datelife_query(input = phy, verbose = FALSE)
     }
-	phy <- ConvertSpacesToUnderscores(phy)
+	phy <- phylo_tiplabel_space_to_underscore(phy)
     outgroup <- NA
     splits <- ape::prop.part(phy)
     if(length(splits)>1){
@@ -683,124 +679,6 @@ phylo_get_singleton_outgroup <- function(phy = NULL){
     return(outgroup)
 }
 
-#' Are all desired taxa in the patristic.matrix?
-#' @param patristic.matrix A patristic matrix, rownames and colnames must be taxa
-#' @param taxa A vector of taxon names
-#' @return A Boolean
-#' @export
-AllMatching <- function(patristic.matrix, taxa) {
-	return(sum(!(taxa %in% rownames(patristic.matrix) ))==0)
-}
-
-
-#' Find the index of relevant studies in a opentree_chronograms object
-#' @param filtered.results The patristic.matrices that will be used
-#' @param cache The cache of studies
-#' @return A vector with the indices of studies that have relevant info
-#' @export
-FindMatchingStudyIndex <- function(filtered.results, cache = get("opentree_chronograms")) {
-    return(which(names(cache$trees) %in% names(filtered.results)))
-}
-
-#' Return the relevant authors for a set of studies
-#' @param results.index A vector from FindMatchingStudyIndex() with the indices of the relevant studies
-#' @param cache The cache
-#' @return A vector with counts of each author, with names equal to author names
-#' @export
-TabulateRelevantAuthors <- function(results.index, cache = get("opentree_chronograms")) {
-	authors <- cache$authors[results.index]
-	return(table(unlist(authors)))
-}
-
-#' Return the relevant curators for a set of studies
-#' @param results.index A vector from FindMatchingStudyIndex() with the indices of the relevant studies
-#' @param cache The cache
-#' @return A vector with counts of each curator, with names equal to curator names
-#' @export
-TabulateRelevantCurators <- function(results.index, cache = get("opentree_chronograms")) {
-	curators <- cache$curators[results.index]
-	return(table(unlist(curators)))
-}
-
-#' Take results.list and process it
-#' @param results.list A list returned from using GetSubsetArrayDispatch on opentree_chronograms$trees
-#' @param taxa A vector of taxa to match
-#' @param partial If TRUE, return matrices that have only partial matches
-#' @return A list with the patristic.matrices that are not NA
-#' @export
-ProcessResultsList <- function(results.list, taxa = NULL, partial = FALSE) {
-	if(is.null(taxa)) {
-		taxa <- unique(unname(unlist(lapply(final.matrices, rownames))))
-	}
-	patristic.matrices <- lapply(results.list, "[[", "patristic.matrix.array")
-
-	final.matrices <- patristic.matrices[!is.na(patristic.matrices)]
-
-	if(!partial) {
-		final.matrices <- final.matrices[sapply(final.matrices, AllMatching, taxa = taxa)]
-	}
-	if(length(final.matrices)>0) {
-		to.delete <- c()
-		for (i in sequence(length(final.matrices))) {
-			if(all(is.na(final.matrices[[i]]))) {
-				to.delete <- c(to.delete, i)
-			}
-		}
-		if(length(to.delete)>0) {
-			final.matrices <- final.matrices[-to.delete]
-		}
-	}
-	return(final.matrices)
-}
-
-#Note that originally trees were stored as patristic matrices. This was intended
-#to make subsetting fast. The downside is large memory usage. Klaus Schliep wrote
-#fast tree subsetting for phylo and multiphylo objects, so now trees are stored
-#internally as objects of this type, but with the final output after pruning
-#going through patristic matrices.
-
-#Some trees are so large that they can't be stored as patristic distance matrices. For all others,
-#patristic matrices are better. For example, for the 20,000 HeathEtAl2012 trees of 35 taxa,
-#getting a subset down to two taxa takes 0.0475 seconds just for the pruning, 0.0504 seconds
-#for pruning and getting a subset, for a single tree (run times go up linearly with number of trees:
-#pruning and converting 1000 trees takes 3 seconds). Subsetting 1000 trees from the patristic
-#distance matrix takes just 0.0013 seconds.
-
-
-#in case we want to cache. Not clear we do
-ComputePatristicDistance <- function(phy, test = TRUE,tol = 0.01) {
-	# stores the distance between taxa
-	patristic.matrix <- NA
-	if(class(phy) == "phylo") {
-		if (test) {
-			if (!ape::is.ultrametric(phy,tol)) {
-				stop("currently we require that chronograms be ultrametric") # can pad them so that terminals all reach to present
-			}
-		}
-		patristic.matrix<-stats::cophenetic(phy)
-	}
-	return(patristic.matrix)
-}
-
-GetSubsetMatrix <- function(patristic.matrix, taxa, phy4 = NULL) {
-  #gets a subset of the patristic.matrix. If you give it a phylo4 object, it can check to see if taxa are a clade
-  patristic.matrix.new <- patristic.matrix[ rownames(patristic.matrix) %in% taxa,colnames(patristic.matrix) %in% taxa ]
-  problem.new <- "none"
-  final.size <- sum(rownames(patristic.matrix.new) %in% taxa) # returns number of matches
-  if (final.size < length(taxa)) {
-    problem.new <- "some of the queried taxa are not on this chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
-    if (final.size < 2 ) {
-      problem.new <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
-      patristic.matrix.new <- NA # to make sure no one uses the zero by mistake
-    }
-  }
-  if(!is.null(phy4)) {
-    if (length(phylobase::descendants(phy4, phylobase::MRCA(phy4, taxa), type = "tips")) > taxa) {
-       problem <- "set of taxa not a clade, so this is probably an overestimate"
-    }
-  }
-  return(list(patristic.matrix= patristic.matrix.new,problem= problem.new))
-}
 
 #' Summarize a filtered results list from get_datelife_result function in various ways
 #' @param filtered.results A list of patristic matrices; labels correspond to citations
@@ -992,199 +870,9 @@ summarize_datelife_result <- function(filtered.results = NULL, output.format = "
 }
 
 
-#' Figure out which subset function to use
-#' @param study.element The thing being passed in: an array or a phylo to serve as reference
-#' @param taxa Vector of taxon names to get a subset for
-#' @param phy A user tree to congruify in phylo format (ape)
-#' @param phy4 A user tree to congruify in phylo4 format (phylobase)
-#' @inheritParams datelife_search
-#' @return A patristic matrix with for the taxa.
-#' @export
-GetSubsetArrayDispatch <- function(study.element, taxa, phy = NULL, phy4 = NULL, dating_method = "PATHd8") {
-  if(class(study.element) == "array") {
-    return(GetSubsetArrayBoth(study.element, taxa, phy, phy4, dating_method))
-  } else {
-    return(GetSubsetArrayBothFromPhylo(reference.tree.in = study.element, taxa.in = taxa, phy.in = phy, phy4.in = phy4, dating_method.in = dating_method))
-  }
-}
-
-GetSubsetArrayBothFromPhylo <- function(reference.tree.in, taxa.in, phy.in = NULL, phy4.in = NULL, dating_method.in = "PATHd8") {
-#COMMENTING OUT: OpenTree gives single trees, let's just standardize on those
-#  if (class(reference.tree)=="phylo") {
-#    reference.tree<-c(reference.tree) #from here in, assumes multiphylo object, even if a single tree
-#  }
-	congruify = FALSE
-	if(!is.null(phy.in[1])) {
-		congruify = TRUE
-		if(is.na(phy.in[1])) {
-			congruify = FALSE
-		}
-	}
-  if (!congruify) {
-    return(GetSubsetArrayFromPhylo(reference.tree = reference.tree.in, taxa = taxa.in, phy4 = phy4.in, dating_method.in))
-  }
-  else { #congruify
-    return(GetSubsetArrayCongruifyFromPhylo(reference.tree = reference.tree.in, taxa = taxa.in, phy = phy.in, dating_method.in))
-  }
-
-}
-
-PruneTree <- function(phy, taxa) {
-	return(ape::drop.tip(phy, tip = phy$tip.label[-(which(phy$tip.label %in% taxa))]))
-}
-
-GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4 = NULL, dating_method="PATHd8") {
-  final.size<-sum(reference.tree$tip.label %in% taxa) # returns number of matches
-  if(final.size>=2) { #it's worth doing the pruning
-    reference.tree<-PruneTree(reference.tree, taxa)
-    #reference.tree<-pruneTrees(reference.tree, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
-  }
-  problem <- "none"
-  patristic.matrix.array <- NA
-  if (final.size < length(taxa)) {
-    problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
-    if (final.size < 2 ) {
-      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
-      patristic.matrix.array <- NA # to make sure no one uses the zero by mistake
-    }
-  }
-  if (final.size >= 2) {
-  	patristic.matrix.array <- ComputePatristicDistance(reference.tree)
-  }
-  if(!is.null(phy4)) {
-    if (length(phylobase::descendants(phy4, phylobase::MRCA(phy4, taxa), type = "tips")) > taxa) {
-      problem <- "set of taxa not a clade, so this is probably an overestimate"
-    }
-  }
-  return(list(patristic.matrix.array = patristic.matrix.array,problem = problem))
-}
-
-GetSubsetArrayCongruifyFromPhylo <- function(reference.tree, taxa, phy = NULL, dating_method = "PATHd8") {
-  final.size<-sum(reference.tree$tip.label %in% taxa) # returns number of matches
-  if(final.size>=2) { #it's worth doing the pruning
-   reference.tree<-PruneTree(reference.tree, taxa)
-   #reference.tree<-pruneTrees(reference.tree, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
-  }
-  problem.new <- "none"
-  patristic.matrix.array.new <- NA
-  if (final.size < length(taxa)) {
-    problem.new <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
-    if (final.size < 3 ) {
-      problem.new <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
-      patristic.matrix.array.new <- NA # to make sure no one uses the zero by mistake
-      return(list(patristic.matrix.array = patristic.matrix.array.new, problem = problem.new))
-
-    }
-  }
-  if (final.size >= 3) {
-  	patristic.matrix.array.new <-   CongruifyTreeFromPhylo(reference.tree, query.tree = phy, dating_method = dating_method)
-  }
-  return(list(patristic.matrix.array= patristic.matrix.array.new,problem= problem.new))
-}
 
 
-GetSubsetArrayBoth <- function(patristic.matrix.array, taxa, phy = NULL, phy4 = NULL, dating_method = "PATHd8") {
-  if (is.null(phy)) {
-    return(GetSubsetArray(patristic.matrix.array = patristic.matrix.array, taxa = taxa, phy4 = phy4))
-  }
-  else { #congruify
-    return(GetSubsetArrayCongruify(patristic.matrix.array = patristic.matrix.array, taxa = taxa, phy = phy, dating_method))
-  }
-}
-
-CongruifyTree <- function(patristic.matrix, query.tree, dating_method = "PATHd8", attempt.fix = TRUE) {
-  result.matrix<-matrix(nrow = dim(patristic.matrix)[1], ncol = dim(patristic.matrix)[2])
-  if(is.null(query.tree$edge.length)) {
-    query.tree$edge.length<-numeric(nrow(query.tree$edge))
-  }
-#	try(result.matrix<-ComputePatristicDistance(ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(PatristicMatrixToTree(patristic.matrix)), ConvertSpacesToUnderscores(query.tree), NULL, 0, scale = dating_method)$phy)))
-try(result.matrix<-ComputePatristicDistance(CongruifyAndCheck(reference = PatristicMatrixToTree(patristic.matrix), target = query.tree, scale = dating_method, attempt.fix = attempt.fix)))
-  return(result.matrix)
-}
-
-CongruifyTreeFromPhylo <- function(reference.tree, query.tree, dating_method = "PATHd8", attempt.fix = TRUE) {
-  result.matrix<-matrix(nrow = ape::Ntip(reference.tree), ncol = ape::Ntip(reference.tree))
-  if(is.null(query.tree$edge.length)) {
-    query.tree$edge.length<-numeric(nrow(query.tree$edge)) #makes it so that branches that don't match reference tree get zero length
-  }
-	try(result.matrix<-ComputePatristicDistance(CongruifyAndCheck(reference = reference.tree, target = query.tree, scale = dating_method, attempt.fix = attempt.fix)))
-  return(result.matrix)
-}
-
-CongruifyAndCheck <- function(reference, target, taxonomy = NULL, tol = 0.01, scale = "pathd8", attempt.fix = TRUE) {
-  if(!ape::is.ultrametric(reference, tol = tol)) {
-    return(NA)
-  }
-	new.tree <- ConvertUnderscoresToSpaces(suppressWarnings(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference), ConvertSpacesToUnderscores(target), taxonomy = taxonomy, tol = tol, scale = scale)$phy)) #suppressing warnings b/c geiger ignores tolerance
-	if(anyNA(new.tree$edge.length) & attempt.fix) {
-		warning("Congruification resulted in NA edge lengths. Resolving polytomies and making up starting branch lengths")
-		new.tree <- ConvertUnderscoresToSpaces(geiger::congruify.phylo(ConvertSpacesToUnderscores(reference), ConvertSpacesToUnderscores(ape::compute.brlen(ape::multi2di(target))), taxonomy, tol, scale)$phy)
-		if(anyNA(new.tree$edge.length)) {
-			new.tree <- NA
-		}
-	}
-	new.tree$edge.length[which(new.tree$edge.length<0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
-	return(new.tree)
-}
-
-#' Convert spaces to underscores in trees
-#' @param phy A phylo object
-#' @return A phylo object
-#' @export
-ConvertSpacesToUnderscores <- function(phy) {
-	phy$tip.label <- gsub(" ", "_", phy$tip.label)
-	return(phy)
-}
-
-#' Convert underscores to spaces in trees
-#' @param phy A phylo object
-#' @return A phylo object
-#' @export
-ConvertUnderscoresToSpaces <- function(phy) {
-	phy$tip.label <- gsub("_", " ", phy$tip.label)
-	return(phy)
-}
-
-GetSubsetArrayCongruify <- function(patristic.matrix.array, taxa, phy = NULL, dating_method = "PATHd8") {
-  #gets a subset of the patristic.matrix.array.
-  patristic.matrix.array <- patristic.matrix.array[ rownames(patristic.matrix.array) %in% taxa,colnames(patristic.matrix.array) %in% taxa,  ]
-  problem <- "none"
-  final.size <- sum(rownames(patristic.matrix.array) %in% taxa) # returns number of matches
-  if (final.size < length(taxa)) {
-    problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
-    if (final.size < 3 ) {
-      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
-      patristic.matrix.array <- NA # to make sure no one uses the zero by mistake
-      return(list(patristic.matrix.array = patristic.matrix.array, problem = problem))
-
-    }
-  }
-  patristic.matrix.list <- SplitArray(patristic.matrix.array)
-  patristic.matrix.array<-BindMatrices(lapply(patristic.matrix.list, CongruifyTree, query.tree = phy, scale = dating_method)) #yes, this should be parallel
-  return(list(patristic.matrix.array = patristic.matrix.array, problem = problem))
-}
-
-GetSubsetArray <- function(patristic.matrix.array, taxa, phy4 = NULL) {
-  #gets a subset of the patristic.matrix.array. If you give it a phylo4 object, it can check to see if taxa are a clade
-  patristic.matrix.array <- patristic.matrix.array[ rownames(patristic.matrix.array) %in% taxa,colnames(patristic.matrix.array) %in% taxa,  ]
-  problem <- "none"
-  final.size <- sum(rownames(patristic.matrix.array) %in% taxa) # returns number of matches
-  if (final.size < length(taxa)) {
-    problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
-    if (final.size < 2 ) {
-      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
-      patristic.matrix.array <- NA # to make sure no one uses the zero by mistake
-    }
-  }
-  if(!is.null(phy4)) {
-    if (length(phylobase::descendants(phy4, phylobase::MRCA(phy4, taxa), type = "tips")) > taxa) {
-      problem <- "set of taxa not a clade, so this is probably an overestimate"
-    }
-  }
-  return(list(patristic.matrix.array = patristic.matrix.array,problem = problem))
-}
-
-#' Get time of MRCA from patristic matrix
+#' Get time of MRCA from patristic matrix. Used in: summarize_datelife_result.
 #' @param patristic.matrix A patristic matrix
 #' @param partial If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries
 #' @return The depth of the MRCA
@@ -1194,7 +882,7 @@ GetAge <- function(patristic.matrix, partial = TRUE) {
   return(0.5 * max(patristic.matrix, na.rm = partial))
 }
 
-#' Get vector of MRCA from list of patristic matrices
+#' Get vector of MRCA from list of patristic matrices. Used in: summarize_datelife_result.
 #' @param filtered.results List of patristic matrices
 #' @param partial If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries
 #' @return Vector of MRCA ages with names same as in filtered.results
@@ -1204,32 +892,7 @@ GetAges <- function(filtered.results, partial = TRUE) {
 	return(ages)
 }
 
-#' Function to reorder a matrix so that row and column labels are in alphabetical order
-#' @param patristic.matrix A patristic matrix with row and column names for taxa
-#' @return patristic.matrix A patristic matrix with row and column names for taxa in alphabetial order
-#' @export
-ReorderMatrix <- function(patristic.matrix) {
-  return(patristic.matrix[order(rownames(patristic.matrix)),order(colnames(patristic.matrix))])
-}
-
-#' Function to fill in empty cells in a patristic matrix for missing taxa
-#' @param patristic.matrix A patristic matrix with row and column names for taxa
-#' @param all.taxa A vector of the names of all taxa you want, including ones not in the patristic matrix
-#' @return Patristic.matrix for all.taxa, with NA for entries between taxa where at least one was not in the original patristic.matrix
-#' @export
-PadMatrix <- function(patristic.matrix, all.taxa) {
-	number.missing <- length(all.taxa) - dim(patristic.matrix)[1]
-	final.matrix <- patristic.matrix
-	if(number.missing>0) {
-		final.matrix <- rbind(patristic.matrix, matrix(nrow = number.missing, ncol = dim(patristic.matrix)[2]))
-		final.matrix <- cbind(final.matrix, matrix(ncol = number.missing, nrow = dim(final.matrix)[1]))
-		rownames(final.matrix) <- c(rownames(patristic.matrix), all.taxa[-which(all.taxa %in% rownames(patristic.matrix))])
-	 	colnames(final.matrix) <- c(colnames(patristic.matrix), all.taxa[-which(all.taxa %in% colnames(patristic.matrix))])
-	}
- 	return(ReorderMatrix(final.matrix))
-}
-
-#' Function to remove missing taxa
+#' Function to remove missing taxa. Used in: RunSDM.
 #' @param patristic.matrix A patristic matrix with row and column names for taxa
 #' @return Patristic.matrix for all.taxa
 #' @export
@@ -1251,321 +914,12 @@ TestNameOrder <- function(patristic.matrix, standard.rownames, standard.colnames
   return(TRUE)
 }
 
-#' Convert list of patristic matrices to a 3D array
-#' @param patristic.matrix.list List of patristic matrices
-#' @param pad If TRUE, pad missing entries
-#' @return A 3d array of patristic matrices
-#' @export
-BindMatrices <- function(patristic.matrix.list, pad = TRUE) {
-  all.taxa <- sort(unique(unname(unlist(lapply(patristic.matrix.list, rownames)))))
-  if(pad) {
-    patristic.matrix.list <- lapply(patristic.matrix.list, PadMatrix, all.taxa = all.taxa)
-  }
-  original.size<-length(patristic.matrix.list)
-  patristic.matrix.list<-lapply(patristic.matrix.list,ReorderMatrix)
-  if(length(patristic.matrix.list)<1) {
-    stop(paste("The patristic matrices you are trying to bind are too few; input was ", original.size, " and current length is ", length(patristic.matrix.list), sep = ""))
-  }
-  standard.rownames<-rownames(patristic.matrix.list[[1]])
-  standard.colnames<-colnames(patristic.matrix.list[[1]])
-  matching.names<-sapply(patristic.matrix.list,TestNameOrder,standard.rownames,standard.colnames)
-  if (sum(matching.names) != length(matching.names)) {
-    stop("The patristic matrices you are trying to bind do not have the same taxa")
-  }
-  return(abind::abind(patristic.matrix.list, along = 3 ))
-}
-
-SplitArray <- function(patristic.matrix.array) {
-  return(lapply(sequence(dim(patristic.matrix.array)[3]),AsubForLapply,patristic.matrix.array))
-}
-
-AsubForLapply <- function(idx, x, dims = 3) {
-  return(abind::asub(x, idx, dims))
-}
-
-GetQuantiles <- function(ages,probs = c(0.5,0,0.025,0.975,1) ) {
-  # just utility wrapper function with different defaults
-  return(stats::quantile(ages,probs))
-}
-
-VectorToTableRow <- function(x,digits = 2) {
-  return(paste(paste("<td>",round(x,digits),sep = ""),"</td>",sep = "",collapse = ""))
-}
-
-#' Convert patristic matrix to a phylo object
-#' @param patristic.matrix A patristic matrix
-#' @return A rooted phylo object
-#' @export
-PatristicMatrixToTree <- function(patristic.matrix) {
-  if(anyNA(patristic.matrix)) {
-  	patristic.matrix <- patristic.matrix[rowSums(is.na(patristic.matrix)) != ncol(patristic.matrix),colSums(is.na(patristic.matrix)) != nrow(patristic.matrix)]
-  }
-  if(dim(patristic.matrix)[1] < 2) {
-  	return(NA)
-  }
-	tree <- NA
-	if(dim(patristic.matrix)[1] == 2) {
-		tree <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic.matrix), br = patristic.matrix[1,2]/2)
-	} else {
-  	tree <- ape::nj(patristic.matrix)
-	}
-  if(ape::Ntip(tree)>2) {
-    tree <- 	phangorn::midpoint(tree)
-  }
-	if(length(which(tree$edge.length<0))>0) {
-		warning(paste("Converting from patristic distance matrix to a tree resulted in some negative branch lengths; the largest by magnitude was", min(tree$edge.length)))
-		tree$edge.length[which(tree$edge.length<0)] <- 0 #sometimes NJ returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
-	}
-  return(tree)
-}
-
-#' Convert patristic matrix to a newick string
-#' @param patristic.matrix A patristic matrix
-#' @return A newick string
-#' @export
-PatristicMatrixToNewick <- function(patristic.matrix) {
-  tree <- PatristicMatrixToTree(patristic.matrix)
-  if(class(tree)=="phylo") {
-  	return(ape::write.tree(tree))
-  }
-  return(NA)
-}
 
 
-#' Summarize patristic matrix array (by default, median)
-#' @param patristic.matrix.array 3D array of patristic matrices
-#' @param fn The function to use ot summarize
-#' @return A 2d array with the median (or max, or mean, etc) of the input array
-#' @export
-SummaryPatristicMatrixArray <- function(patristic.matrix.array,fn = stats::median) {
-  return(apply(patristic.matrix.array,MARGIN = c(1,2),fn, na.rm = TRUE))
-}
-
-SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
- # if (dim(patristic.matrix.array)[3] == 1) {
- # 	patristic.matrix<-patristic.matrix.array[,,1]
- # 	#need order of node depths, from just the upper triangular and diagonal part of the matrix
- # 	element.order<-order(patristic.matrix[upper.tri(patristic.matrix,diag = FALSE)],decreasing = TRUE)
- # 	new.patristic.matrix<-patristic.matrix*0
- # 	cur.val<-patristic.matrix[upper.tri(patristic.matrix,diag = FALSE)][element.order[1]]
- #   new.patristic.matrix[upper.tri(new.patristic.matrix,diag = FALSE)][element.order[1]] <- cur.val + runif(1, -cur.val*uncertainty/100, cur.val*uncertainty/100)
-#	element.order<-element.order[-1]
-#  	for (i in sequence(length(element.order))) {
-#  		cur.val<-patristic.matrix[upper.tri(patristic.matrix,diag = FALSE)][element.order[i]]
-#  		new.patristic.matrix[upper.tri(new.patristic.matrix,diag = FALSE)][element.order[i]] <- cur.val + runif(1, -cur.val*uncertainty/100, min(cur.val*uncertainty/100, min( ))
-#  	}
-#  }
-#  else {
-  	return(patristic.matrix <- patristic.matrix.array[,,sample.int(1, size = dim(patristic.matrix.array)[3] )] )
- # }
-}
 
 
-#' Get all calibrations given trees in database
-#' @param input vector of names, a newick string, or a phylo object
-#' @param partial Boolean; default TRUE: use source trees even if they only match some of the desired taxa
-#' @param usetnrs Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
-#' @param approximatematch Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
-#' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
-#' @inheritParams datelife_search
-#' @return data.frame of calibrations
-#' @export
-GetAllCalibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = FALSE) {
-	phylo.results <- datelife_search(input = input, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = update_cache, cache = cache, output.format = "phylo.all", verbose = verbose)
-	constraints.df <- data.frame()
-	for (i in sequence(length(phylo.results))) {
-		local.df <- geiger::congruify.phylo(reference = phylo.results[[i]], target = phylo.results[[i]], scale = NA)$calibrations
-		local.df$reference <- names(phylo.results)[i]
-		if(i == 1) {
-			constraints.df <- local.df
-		} else {
-			constraints.df <- rbind(constraints.df, local.df)
-		}
-	}
-	return(constraints.df)
-}
 
-#' Use all calibrations given trees in database to date a tree
-#' @param phy A phylo object
-#' @param partial If TRUE, use source trees even if they only match some of the desired taxa
-#' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
-#' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
-#' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
-#' @param expand How much to expand by each step to get consistent calibrations
-#' @param giveup How many expansion to try before giving up
-#' @inheritParams datelife_search
-#' @return list with chronogram, original calibrations, and expanded calibrations
-#' @export
-#' @details
-#' This will try to use the calibrations as fixed ages.
-#' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
-#' expand sets the expansion value: should be between 0 and 1
-UseAllCalibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1, giveup = 100, verbose = FALSE) {
-	# if(!geiger::is.phylo(phy)){
-	# 	cat("phy argument must be a phylo object.", "\n")
-	# 	stop()
-	# }
-	#	[code above] useful if we decide to allow newick as input, would need to add some newick to phylo code in here... OK! It is now implemented in check_datelife_query function:
-	input <- check_datelife_query(input = phy, verbose = verbose)
-	calibrations.df <- GetAllCalibrations(input = gsub('_', ' ', phy$tip.label), partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = update_cache, cache = cache, verbose = verbose)
-	phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.
-	calibrations.df$taxonA <- gsub(' ', '_', calibrations.df$taxonA)
-	calibrations.df$taxonB <- gsub(' ', '_', calibrations.df$taxonB)
-	calibrations.df <- calibrations.df[which(calibrations.df$taxonA %in% phy$tip.label),]
-	calibrations.df <- calibrations.df[which(calibrations.df$taxonB %in% phy$tip.label),]
-	original.calibrations.df <- calibrations.df
-	chronogram <- NULL
-	try(chronogram <- geiger::PATHd8.phylo(phy, calibrations.df), silent = TRUE)
-	if(!is.null(chronogram)) {
-		chronogram$edge.length[which(chronogram$edge.length<0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
-	}
-	attempts = 0
-	if(expand != 0) {
-		while(is.null(chronogram) & attempts<giveup) {
-			calibrations.df <- original.calibrations.df
-			calibrations.df$MaxAge <- calibrations.df$MaxAge * ((1+expand)^attempts)
-			calibrations.df$MinAge <- calibrations.df$MinAge * ((1-expand)^attempts)
 
-			# We will have no fixed ages. Pathd8 just quietly gives up. So instead, we add a tiny branch with a zero calibration
-			# between it and its sister.
-			made.up.edgelength <- min(1e-9, .001*min(phy$edge.length))
-			phy2 <- phytools::bind.tip(ape::reorder.phylo(phy), "tinytip", edge.length = made.up.edgelength, where = 1, position = made.up.edgelength) #bind tip has weird behavior for non-reordered trees
-			calibrations.df[dim(calibrations.df)[1]+1,]<- c("fixed", 0, 0, phy$tip.label[1], "tinytip", "none")
-			try(chronogram <- geiger::PATHd8.phylo(phy2, calibrations.df))
-			if(!is.null(chronogram)) {
-				chronogram$edge.length[which(chronogram$edge.length < 0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
-				chronogram <- ape::drop.tip(chronogram, "tinytip")
-			}
-			attempts <- attempts+1
-		}
-		if(attempts > 0) {
-			# print("Dates are even more approximate than usual: had to expand constraints to have them agree")
-			cat("Dates are even more approximate than usual: had to expand constraints to have them agree", "\n")
-		}
-	}
-	return(list(phy = chronogram, calibrations.df = calibrations.df, original.calibrations.df = original.calibrations.df))
-}
-
-#' Use Barcode of Life data to get branch lengths on the OToL tree of a set of taxa.
-#' @inheritParams datelife_search
-#' @param otol_version Version of OToL to use
-#' @param chronogram Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.
-#' @param doML Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml
-#' @inheritParams make_datelife_query
-#' @return A phylogeny with ML branch lengths
-#' @export
-make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, sppfromtaxon = FALSE, verbose = FALSE) {
-	#otol returns error with missing taxa in v3 of rotl
-	input <- CheckInput(input = input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon, verbose = verbose)
-	input <- input$cleaned.names
-	if (verbose) cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
-	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
-	if(length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available, if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
-		if (verbose) cat("No sequences found in BOLD for input taxa...", "\n")
-		# if (!usetnrs) cat("Setting usetnrs = TRUE might change this, but it can be slowish.", "\n")
-		warning("Names in input do not match BOLD specimen records. No tree was constructed.")
-		return(NA)
-	}
-	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides)  # preserve good nucleotide data, i.e., only A,T,G,C
-	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
-	if (verbose) cat("\t", "OK.", "\n")
-	rr <- rotl::tnrs_match_names(names = input)  # rr has the same order as input
-	rr <- rr[!is.na(rr$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
-	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids = rr$ott_id, label_format = "name",  otl_v = otol_version))
-	phy$tip.label <- gsub(".*_ott","", phy$tip.label)  # leaves only the ott_id as tip.label, it's safer than matching by name
-	# when there are synonyms among the input names, phy will conserve the accepted name (rr$uniqe_name) instead of the original query name from input (rr$search_string)
-	# this produces an error downstream, while using phangorn::pml()
-	# to avoid this error, we replace the unique name by the original query name in phy$tip.label:
-	mm <- match(phy$tip.label, gsub(" ","_", rr$ott_id))  # this gets the order of tip labels in phy
-	phy$tip.label <- gsub(" ","_", input[mm])  # this overlaps the original query over phy$tip.labels in the correct order
-	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
-	final.sequences.names <- rep(NA, length(input))
-	# for (i in sequence(dim(sequences)[1])) {
-		# taxon <- sequences$species_name[i]
-		# if(!(taxon %in% final.sequences.names)) {
-			# seq <- strsplit(sequences$nucleotide[i],"")[[1]]
-			# matching.index <- 1+sum(!is.na(final.sequences.names))
-			# final.sequences[matching.index, sequence(length(seq))] <- seq
-			# final.sequences.names[matching.index] <- taxon
-		# }
-	# }
-	row.index <- 0
-	taxa.to.drop <- c()
-	for (i in input){
-		row.index <- row.index + 1
-		taxon.index <- which(grepl(i, sequences$species_name))
-		# if there are no sequences from any taxon, taxon.index is empty
-		# but we make sure this is filtered steps before
-		if (length(taxon.index)>0){
-			seq.index <- which.max(sequences$nucleotide_ATGC_length[taxon.index])
-			# sequences[taxon.index,][seq.index,]
-			seq <- strsplit(sequences$nucleotides[taxon.index][seq.index], split = "")[[1]]
-			final.sequences[row.index, sequence(length(seq))] <- seq
-		} else {
-			taxa.to.drop <- c(taxa.to.drop, i)
-		}
-		final.sequences.names[row.index] <- i
-	}
-	rownames(final.sequences) <- gsub(" ", "_", final.sequences.names)
-	# final.sequences <- final.sequences[!is.na(final.sequences.names),]
-	# taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
-	if(length(input)-length(taxa.to.drop) == 1) {
-		if (verbose) cat("BOLD sequences found only for one input name", input[which(!input %in% taxa.to.drop)], "...","\n","\t", "Cannot construct a tree." )
-		warning("Not enough sequences available in BOLD. No tree was constructed.")
-		# if (usetnrs == FALSE) cat("Setting usetnrs = TRUE might change this, but it is time consuming.", "\n")
-		return(NA)
-	}
-	if(length(taxa.to.drop) > 0) {
-		if (verbose) {
-			taxa.to.drop.print <- paste(taxa.to.drop, collapse = " | ")
-			cat("No", marker, "sequences found for", taxa.to.drop.print, "...", "\n", "\t", "Dropping taxa from tree.", "\n")
-		}
-		#warning("No ", marker, " sequences found for ", taxa.to.drop.print, "...", "\n", "\t", "Taxa dropped from tree.")
-		taxa.to.drop <- gsub(" ", "_", taxa.to.drop)
-		phy <- ape::drop.tip(phy, taxa.to.drop)
-	}
-	if (verbose) {
-		cat("Aligning with MAFFT...", "\n")
-	}
-	alignment <- ape::as.DNAbin(final.sequences)
-	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
-	if (verbose) {
-		cat( "\t", "OK.", "\n", "Estimating BOLD-OToL tree...", "\n")
-	}
-	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data = alignment)
-	phy <- pml.object$tree
-	if(!ape::is.binary.tree(pml.object$tree)){
-		if (verbose) {
-			cat("\t", marker, " sequence data available generates a non-dichotomous tree...", "\n", "\t", "Resolving with multi2di...", "\n")
-		}
-		pml.object$tree <- ape::multi2di(pml.object$tree)
-		phy <- pml.object$tree
-	}
-	if (verbose) {
-		cat("\t", "OK.", "\n")
-	}
-	if (chronogram) {
-		if (verbose) {
-			cat("Dating BOLD-OToL tree with chronoMPL...", "\n")
-		}
-		pml.object$tree <- ape::chronoMPL(pml.object$tree, se = FALSE, test = FALSE)
-		phy <- pml.object$tree
-		if (verbose) cat("\t", "OK.", "\n")
-	}
-	if(any(pml.object$tree$edge.length < 0)) {
-		warning("\t", "Negative branch lengths in BOLD chronogram.", "\n")
-		if(doML) warning("\t", "\t", "Cannot do ML branch length optimization.", "\n")
-	} else {
-		if(doML) {
-			phy <- phangorn::optim.pml(pml.object, data = alignment, rearrangement = "none", optRooted = TRUE, optQ = TRUE)$tree
-		}
-	}
-	phy$tip.label <- gsub('_', ' ', phy$tip.label)
-	if (verbose) {
-		cat("Done.", "\n")
-	}
-	return(phy)
-}
 
 
 #

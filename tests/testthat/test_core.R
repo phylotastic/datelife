@@ -162,12 +162,13 @@ test_that("SDM correctly returns tree", {
   expect_equal(class(result.tree), "phylo")
 })
 
-test_that("UseAllCalibrations actually works", {
+test_that("use_all_calibrations actually works", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
-  results <- UseAllCalibrations()
-  expect_true(ape::is.ultrametric(results$phy, tol=0.00001))
+  results <- use_all_calibrations()
+  # expect_true(ape::is.ultrametric(results$phy, tol=0.0000))
+  expect_true(ape::is.ultrametric(results$phy, option = 2))
   expect_equal(class(results$phy), "phylo")
 })
 
@@ -207,7 +208,7 @@ test_that("We don't get negative brlen from pathd8", {
 })
 test_that("We can get trees of two taxa back", {
 skip_on_cran()
-res <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="data.frame")
+res <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), output.format="data.frame")
 two.taxon <- which(res$Ntax==2)[1]
 tree <- ape::read.tree(text=as.character(res$Newick[two.taxon]))
 expect_equal(ape::Ntip(tree), 2)
@@ -236,25 +237,28 @@ test_that("phylo_fix_brlen works", {
     utils::data(plant_bold_otol_tree)
     x1 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = 0)
     x2 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
+    wwdd <- getwd()
+    setwd("~/")
     x3 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "mrbayes")
+    setwd(wwdd)
     expect_true(ape::is.ultrametric(x1, option = 2))
     expect_true(ape::is.ultrametric(x2, option = 2))
     expect_true(ape::is.ultrametric(x3, option = 2))  # prefer option = 2, using the variance to test ultrametricity, cf. E, Paradis' comments on this post http://blog.phytools.org/2017/03/forceultrametric-method-for-ultrametric.html
 })
 
-    # test_that("bold tree from EstimateDates is the same as the one from GetBoldOToLTree", {
+    # test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {
 # 	tax2 <- c("Homo sapiens", "Macaca mulatta", "Melursus ursinus","Canis lupus pallipes", "Panthera pardus", "Panthera tigris", "Herpestes fuscus", "Elephas maximus", "Haliastur indus")
 # 	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"
-# 	b1 <- GetBoldOToLTree(input = other)
+# 	b1 <- make_bold_otol_tree(input = other)
 # 	# nb1 <- length(b1$tiplabel)
-# 	ed1 <- EstimateDates(input = other, output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, method = "PATHd8", bold = TRUE)
+# 	ed1 <- datelife_search(input = other, output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, method = "PATHd8", bold = TRUE)
 # 	# ned1 <- length(ed1[[length(ed1)]]$tip.label)
 # 	# expect_equal(nb1, ned1)
 # 	expect_equal(b1$tiplabel, ed1[[length(ed1)]]$tip.label) # tests both trees have the same taxa, in the same number and order. It's ok, cause it should be the same tree
 # 	# expect_identical(b1$tiplabel, ed1[[length(ed1)]]$tip.label)
-# 	b2 <- GetBoldOToLTree(input = tax2)
+# 	b2 <- make_bold_otol_tree(input = tax2)
 # 	# nb1 <- length(b1$tiplabel)
-# 	ed2 <- EstimateDates(input = tax2, output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, method = "PATHd8", bold = TRUE)
+# 	ed2 <- datelife_search(input = tax2, output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, method = "PATHd8", bold = TRUE)
 # 	# ned1 <- length(ed1[[length(ed1)]]$tip.label)
 # 	# expect_equal(nb1, ned1)
 # 	expect_equal(b2$tip.label, ed2[[length(ed2)]]$tip.label)

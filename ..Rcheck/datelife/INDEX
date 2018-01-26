@@ -3,14 +3,14 @@ BindMatrices            Convert list of patristic matrices to a 3D
                         array
 CalculateOverlapTable   Create an overlap table
 CleanChronogram         Clean up some issues with OToL chronograms
-ConvertSpacesToUnderscores
+phylo_tiplabel_space_to_underscore
                         Convert spaces to underscores in trees
-ConvertUnderscoresToSpaces
+phylo_tiplabel_underscore_to_space
                         Convert underscores to spaces in trees
 CreateContributorCache
                         Create a cache from Open Tree of Life
 CreateTreeBaseCache     Create a cache from TreeBase
-EstimateDates           Core function to go from a vector of species,
+datelife_search           Core function to go from a vector of species,
                         newick string, or phylo object get a chronogram
                         or dates back
 FindMatchingStudyIndex
@@ -19,10 +19,10 @@ FindMatchingStudyIndex
 GetAge                  Get time of MRCA from patristic matrix
 GetAges                 Get vector of MRCA from list of patristic
                         matrices
-GetAllCalibrations      Get all calibrations given trees in database
-GetBoldOToLTree         Use Barcode of Life data to get branch lengths
+get_all_calibrations      Get all calibrations given trees in database
+make_bold_otol_tree         Use Barcode of Life data to get branch lengths
                         on the OToL tree
-GetFilteredResults      Go from a vector of species, newick string, or
+get_datelife_result      Go from a vector of species, newick string, or
                         phylo object to a list of patristic matrices
 GetOToLChronograms      Get all chronograms from Open Tree of Life
 GetSubsetArrayDispatch
@@ -42,7 +42,7 @@ ReorderMatrix           Function to reorder a matrix so that row and
 RunSDM                  Function to compute the SDM supertree Criscuolo
                         et al. 2006
 SaveOToLChronograms     Save all chronograms from Open Tree of Life
-SummarizeResults        Summarize a filtered results list in various
+summarize_datelife_result        Summarize a filtered results list in various
                         ways
 SummaryPatristicMatrixArray
                         Summarize patristic matrix array (by default,
@@ -54,6 +54,6 @@ TabulateRelevantCurators
                         Return the relevant curators for a set of
                         studies
 UnpadMatrix             Function to remove missing taxa
-UseAllCalibrations      Use all calibrations given trees in database to
+use_all_calibrations      Use all calibrations given trees in database to
                         date a tree
 run                     Core function to generate results

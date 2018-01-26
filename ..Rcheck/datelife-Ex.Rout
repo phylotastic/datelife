@@ -24,19 +24,19 @@ Type 'q()' to quit R.
 > 
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 > cleanEx()
-> nameEx("EstimateDates")
-> ### * EstimateDates
+> nameEx("datelife_search")
+> ### * datelife_search
 > 
 > flush(stderr()); flush(stdout())
 > 
-> ### Name: EstimateDates
+> ### Name: datelife_search
 > ### Title: Core function to go from a vector of species, newick string, or
 > ###   phylo object get a chronogram or dates back
-> ### Aliases: EstimateDates datelife
+> ### Aliases: datelife_search datelife
 > 
 > ### ** Examples
 > 
-> ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
+> ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
 Using trees from: 
 [1] "Grealy, Alicia, Matthew Phillips, Gifford Miller, M. Thomas P. Gilbert, Jean-Marie Rouillard, David Lambert, Michael Bunce, James Haile. 2017. Eggshell palaeogenomics: Palaeognath evolutionary history revealed through ancient nuclear and mitochondrial DNA from Madagascan elephant bird (Aepyornis sp.) eggshell. Molecular Phylogenetics and Evolution 109: 151-163"
 [2] "Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845"                                                                                                                                                                      

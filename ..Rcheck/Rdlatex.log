@@ -87,7 +87,7 @@ Overfull \hbox (25.81702pt too wide) in paragraph at lines 255--256
 .sdm, newick.median, phylo.sdm, phylo.median,
 [5]
 Overfull \hbox (143.25021pt too wide) in paragraph at lines 264--264
- []\T1/zi4/m/n/9 ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata
+ []\T1/zi4/m/n/9 ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata
 ", "Struthio camelus", "Mus musculus"), output.format="mrca")[] 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [6]
@@ -228,7 +228,7 @@ Overfull \hbox (25.81702pt too wide) in paragraph at lines 255--256
 .sdm, newick.median, phylo.sdm, phylo.median,
 [6]
 Overfull \hbox (143.25021pt too wide) in paragraph at lines 264--264
- []\T1/zi4/m/n/9 ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata
+ []\T1/zi4/m/n/9 ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata
 ", "Struthio camelus", "Mus musculus"), output.format="mrca")[] 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [7]
@@ -376,7 +376,7 @@ Overfull \hbox (25.81702pt too wide) in paragraph at lines 255--256
 .sdm, newick.median, phylo.sdm, phylo.median,
 [6]
 Overfull \hbox (143.25021pt too wide) in paragraph at lines 264--264
- []\T1/zi4/m/n/9 ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata
+ []\T1/zi4/m/n/9 ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata
 ", "Struthio camelus", "Mus musculus"), output.format="mrca")[] 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/utf8.def) [7]

@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife.R
 \name{GetAge}
 \alias{GetAge}
-\title{Get time of MRCA from patristic matrix}
+\title{Get time of MRCA from patristic matrix. Used in: summarize_datelife_result.}
 \usage{
 GetAge(patristic.matrix, partial = TRUE)
 }
@@ -15,5 +15,5 @@ GetAge(patristic.matrix, partial = TRUE)
 The depth of the MRCA
 }
 \description{
-Get time of MRCA from patristic matrix
+Get time of MRCA from patristic matrix. Used in: summarize_datelife_result.
 }

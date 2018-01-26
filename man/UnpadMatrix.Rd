@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife.R
 \name{UnpadMatrix}
 \alias{UnpadMatrix}
-\title{Function to remove missing taxa}
+\title{Function to remove missing taxa. Used in: RunSDM.}
 \usage{
 UnpadMatrix(patristic.matrix)
 }
@@ -13,5 +13,5 @@ UnpadMatrix(patristic.matrix)
 Patristic.matrix for all.taxa
 }
 \description{
-Function to remove missing taxa
+Function to remove missing taxa. Used in: RunSDM.
 }

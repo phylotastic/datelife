@@ -5,19 +5,19 @@ library('datelife')
 
 base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 cleanEx()
-nameEx("EstimateDates")
-### * EstimateDates
+nameEx("datelife_search")
+### * datelife_search
 
 flush(stderr()); flush(stdout())
 
-### Name: EstimateDates
+### Name: datelife_search
 ### Title: Core function to go from a vector of species, newick string, or
 ###   phylo object get a chronogram or dates back
-### Aliases: EstimateDates datelife
+### Aliases: datelife_search datelife
 
 ### ** Examples
 
-ages <- EstimateDates(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
+ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
 
 
 

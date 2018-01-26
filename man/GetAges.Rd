@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife.R
 \name{GetAges}
 \alias{GetAges}
-\title{Get vector of MRCA from list of patristic matrices}
+\title{Get vector of MRCA from list of patristic matrices. Used in: summarize_datelife_result.}
 \usage{
 GetAges(filtered.results, partial = TRUE)
 }
@@ -15,5 +15,5 @@ GetAges(filtered.results, partial = TRUE)
 Vector of MRCA ages with names same as in filtered.results
 }
 \description{
-Get vector of MRCA from list of patristic matrices
+Get vector of MRCA from list of patristic matrices. Used in: summarize_datelife_result.
 }
