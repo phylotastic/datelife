@@ -16,6 +16,7 @@ CreateContributorCache <- function(outputfile="contributorcache.rda", verbose=TR
     doi <- authors <- clade.name <- curator <- study.year <- NULL
     try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(all.studies[[i]]), "DOI")))
     try(authors <- as.character(knitcitations::bib_metadata(doi)$author))
+
     try(clade.name <- all.studies[i][[1]]$nexml$`^ot:focalCladeOTTTaxonName`)
     try(curators <- unique(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]][[1]]))
     if(!is.null(authors)) {
@@ -31,7 +32,11 @@ CreateContributorCache <- function(outputfile="contributorcache.rda", verbose=TR
     }
   }
   author.pretty <- CalculateOverlapTable(author.results)
+  try(Encoding(author.pretty) <- "latin1")
+  try(author.pretty <- iconv(author.pretty, "latin1", "UTF-8"))
   curator.pretty <- CalculateOverlapTable(curator.results)
+  try(Encoding(curator.pretty) <- "latin1")
+  try(curator.pretty <- iconv(curator.pretty, "latin1", "UTF-8"))
   save(author.results, curator.results, author.pretty, curator.pretty, file=outputfile)
   return(list(author.results=author.results, curator.results=curator.results, author.pretty=author.pretty, curator.pretty=curator.pretty))
 }
