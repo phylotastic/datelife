@@ -5,14 +5,14 @@
 \title{Makes a mrBayes run block file with a constraint topology and a set of node calibrations}
 \usage{
 make_mrbayes_runfile(constraint = NULL, ncalibration = NULL,
-  missingTaxa = NULL, file = "mrbayes_run.nexus")
+  missing_taxa = NULL, file = "mrbayes_run.nexus")
 }
 \arguments{
 \item{constraint}{The constraint tree: a phylo object or a newick character string, with or without branch lengths.}
 
 \item{ncalibration}{The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.}
 
-\item{missingTaxa}{A phylo object, a newick character string or a dataframe with taxonomic assignations}
+\item{missing_taxa}{either a tree (as phylo object or as a newick character string, with or without branch lengths) with all the taxa you want at the end, or a data frame assigning missing taxa to nodes in dated tree.}
 
 \item{file}{A character vector specifying the name of mrBayes run file and outputs (can specify directory too).}
 }

@@ -6,7 +6,7 @@
 \usage{
 use_all_calibrations(phy = make_bold_otol_tree(c("Rhea americana",
   "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE),
-  partial = TRUE, usetnrs = FALSE, approximatematch = TRUE,
+  partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
   update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1,
   giveup = 100, verbose = FALSE)
 }
@@ -15,9 +15,9 @@ use_all_calibrations(phy = make_bold_otol_tree(c("Rhea americana",
 
 \item{partial}{If TRUE, use source trees even if they only match some of the desired taxa}
 
-\item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer}
+\item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer}
 
-\item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)}
+\item{approximate_match}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)}
 
 \item{update_cache}{default to FALSE}
 

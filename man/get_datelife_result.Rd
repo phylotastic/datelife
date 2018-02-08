@@ -5,19 +5,19 @@
 \title{Go from a vector of species, newick string, or phylo object to a list of patristic matrices}
 \usage{
 get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata",
-  "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
-  approximatematch = TRUE, update_cache = FALSE,
+  "Struthio camelus"), partial = TRUE, use_tnrs = FALSE,
+  approximate_match = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), dating_method = "PATHd8",
-  sppfromtaxon = FALSE, verbose = FALSE)
+  get_spp_from_taxon = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
 
 \item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
 
-\item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
+\item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
-\item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
+\item{approximate_match}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
 
 \item{update_cache}{default to FALSE}
 
@@ -25,7 +25,7 @@ get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{dating_method}{The method used for tree dating.}
 
-\item{sppfromtaxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.}
+\item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }

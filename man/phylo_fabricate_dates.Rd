@@ -4,13 +4,13 @@
 \alias{phylo_fabricate_dates}
 \title{Fabricates dates of missing taxa on an already dated tree.}
 \usage{
-phylo_fabricate_dates(dated_phy = NULL, missingTaxa = NULL,
+phylo_fabricate_dates(dated_phy = NULL, missing_taxa = NULL,
   dating_method = "mrbayes", file = "mrbayes_phylo_fabricate_dates.nexus")
 }
 \arguments{
 \item{dated_phy}{a tree (newick or phylo) with branch lengths proportional to absolute time}
 
-\item{missingTaxa}{either a tree (as phylo object or as a newick character string, with or without branch lengths) with all the taxa you want at the end, or a data frame assigning missing taxa to nodes in dated tree.}
+\item{missing_taxa}{either a tree (as phylo object or as a newick character string, with or without branch lengths) with all the taxa you want at the end, or a data frame assigning missing taxa to nodes in dated tree.}
 
 \item{dating_method}{The method used for tree dating.}
 

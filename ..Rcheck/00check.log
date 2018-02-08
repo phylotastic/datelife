@@ -72,8 +72,8 @@ Most likely, these were included erroneously.
 * checking foreign function calls ... OK
 * checking R code for possible problems ... OK
 * checking Rd files ... WARNING
-RunSDM.Rd: non-ASCII input and no declared encoding
-problem found in ‘RunSDM.Rd’
+datelife_result_sdm.Rd: non-ASCII input and no declared encoding
+problem found in ‘datelife_result_sdm.Rd’
 * checking Rd metadata ... OK
 * checking Rd cross-references ... OK
 * checking for missing documentation entries ... WARNING

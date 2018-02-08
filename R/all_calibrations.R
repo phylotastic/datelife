@@ -3,8 +3,8 @@
 #' Use all calibrations from chronograms in a database to date a tree.
 #' @param phy A phylo object
 #' @param partial If TRUE, use source trees even if they only match some of the desired taxa
-#' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
-#' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
+#' @param use_tnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
+#' @param approximate_match If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @param expand How much to expand by each step to get consistent calibrations
 #' @param giveup How many expansion to try before giving up
@@ -15,14 +15,14 @@
 #' This will try to use the calibrations as fixed ages.
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
-use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1, giveup = 100, verbose = FALSE) {
+use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1, giveup = 100, verbose = FALSE) {
 	# if(!geiger::is.phylo(phy)){
 	# 	cat("phy argument must be a phylo object.", "\n")
 	# 	stop()
 	# }
-	#	[code above] useful if we decide to allow newick as input, would need to add some newick to phylo code in here... OK! It is now implemented in check_datelife_query function:
-	input <- check_datelife_query(input = phy, verbose = verbose)
-	calibrations.df <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = update_cache, cache = cache, verbose = verbose)
+	#	[code above] useful if we decide to allow newick as input, would need to add some newick to phylo code in here... OK! It is now implemented in input_process function:
+	input <- input_process(input = phy, verbose = verbose)
+	calibrations.df <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = update_cache, cache = cache, verbose = verbose)
 	phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.
 	calibrations.df$taxonA <- gsub(' ', '_', calibrations.df$taxonA)
 	calibrations.df$taxonB <- gsub(' ', '_', calibrations.df$taxonB)
@@ -64,14 +64,14 @@ use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",  
 #' Get all calibrations from chronograms in a database (specified in cache).
 #' @param input vector of names, a newick string, or a phylo object
 #' @param partial Boolean; default TRUE: use source trees even if they only match some of the desired taxa
-#' @param usetnrs Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
-#' @param approximatematch Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
+#' @param use_tnrs Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
+#' @param approximate_match Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @inheritParams datelife_search
 #' @return data.frame of calibrations
 #' @export
-get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = FALSE) {
-	phylo.results <- datelife_search(input = input, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = update_cache, cache = cache, output.format = "phylo.all", verbose = verbose)
+get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = FALSE) {
+	phylo.results <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = update_cache, cache = cache, summary_format = "phylo.all", verbose = verbose)
 	constraints.df <- data.frame()
 	for (i in sequence(length(phylo.results))) {
 		local.df <- geiger::congruify.phylo(reference = phylo.results[[i]], target = phylo.results[[i]], scale = NA)$calibrations
@@ -94,15 +94,15 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 #' @inheritParams make_datelife_query
 #' @return A phylogeny with ML branch lengths
 #' @export
-make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, sppfromtaxon = FALSE, verbose = FALSE) {
+make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, get_spp_from_taxon = FALSE, verbose = FALSE) {
 	#otol returns error with missing taxa in v3 of rotl
-	input <- CheckInput(input = input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon, verbose = verbose)
+	input <- input_check(input = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
 	input <- input$cleaned.names
 	if (verbose) cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
 	if(length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available, if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
 		if (verbose) cat("No sequences found in BOLD for input taxa...", "\n")
-		# if (!usetnrs) cat("Setting usetnrs = TRUE might change this, but it can be slowish.", "\n")
+		# if (!use_tnrs) cat("Setting use_tnrs = TRUE might change this, but it can be slowish.", "\n")
 		warning("Names in input do not match BOLD specimen records. No tree was constructed.")
 		return(NA)
 	}
@@ -152,7 +152,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	if(length(input)-length(taxa.to.drop) == 1) {
 		if (verbose) cat("BOLD sequences found only for one input name", input[which(!input %in% taxa.to.drop)], "...","\n","\t", "Cannot construct a tree." )
 		warning("Not enough sequences available in BOLD. No tree was constructed.")
-		# if (usetnrs == FALSE) cat("Setting usetnrs = TRUE might change this, but it is time consuming.", "\n")
+		# if (use_tnrs == FALSE) cat("Setting use_tnrs = TRUE might change this, but it is time consuming.", "\n")
 		return(NA)
 	}
 	if(length(taxa.to.drop) > 0) {

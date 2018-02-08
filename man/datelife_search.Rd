@@ -6,22 +6,22 @@
 \title{Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.}
 \usage{
 datelife_search(input = c("Rhea americana", "Pterocnemia pennata",
-  "Struthio camelus"), output.format = "phylo.all", partial = TRUE,
-  usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE,
+  "Struthio camelus"), summary_format = "phylo.all", partial = TRUE,
+  use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), dating_method = "PATHd8",
-  showSummary = c("citations", "taxa"), missing.taxa = c("none", "summary",
-  "matrix"), sppfromtaxon = FALSE, verbose = FALSE)
+  summary_print = c("citations", "taxa"), add_taxon_distribution = c("none",
+  "summary", "matrix"), get_spp_from_taxon = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
 
-\item{output.format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
+\item{summary_format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
 
 \item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
 
-\item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
+\item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
-\item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
+\item{approximate_match}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
 
 \item{update_cache}{default to FALSE}
 
@@ -29,11 +29,11 @@ datelife_search(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{dating_method}{The method used for tree dating.}
 
-\item{showSummary}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
+\item{summary_print}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
 
-\item{missing.taxa}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.}
+\item{add_taxon_distribution}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on add_taxon_distribution added to the output.}
 
-\item{sppfromtaxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.}
+\item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
@@ -66,14 +66,14 @@ data.frame A data.frame with data on target taxa: mrca, number of taxa, citation
 \examples{
 # obtain median ages from a set of source chronograms in newick format:
 ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-		"Mus musculus"), output.format="newick.median")
+		"Mus musculus"), summary_format="newick.median")
 # save the tree in newick format
 write(ages, file="some.bird.ages.txt")
 
 # obtain median ages from a set of source chronograms in phylo format
 # will produce same tree as above but in r phylo format:
 ages.again <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-		"Mus musculus"), output.format="phylo.median")
+		"Mus musculus"), summary_format="phylo.median")
 plot(ages.again)
 library(ape)
 ape::axisPhylo()
@@ -84,7 +84,7 @@ write.tree(ages.again, file="some.bird.tree.again.txt") # saves phylo object in 
 # obtain mrca ages and target chronograms from all source chronograms
 # generate an html  output readable in any web browser:
 ages.html <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-		"Mus musculus"), output.format="html")
+		"Mus musculus"), summary_format="html")
 write(ages.html, file="some.bird.trees.html")
 system("open some.bird.trees.html")
 }

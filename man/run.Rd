@@ -6,7 +6,7 @@
 \usage{
 run(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
   format = "citations", partial = "yes", plot.width = 600,
-  plot.height = 600, usetnrs = "no", approximatematch = "yes",
+  plot.height = 600, use_tnrs = "no", approximate_match = "yes",
   opentree_chronograms = NULL)
 }
 \arguments{
@@ -20,9 +20,9 @@ run(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 
 \item{plot.height}{Height in pixels for output plot}
 
-\item{usetnrs}{Whether to use OpenTree's TNRS for the input}
+\item{use_tnrs}{Whether to use OpenTree's TNRS for the input}
 
-\item{approximatematch}{If using TNRS, use approximate matching}
+\item{approximate_match}{If using TNRS, use approximate matching}
 
 \item{opentree_chronograms}{The list of lists containing the input trees and other info}
 }

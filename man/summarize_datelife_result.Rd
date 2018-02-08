@@ -4,16 +4,16 @@
 \alias{summarize_datelife_result}
 \title{Summarize a filtered results list from get_datelife_result function in various ways}
 \usage{
-summarize_datelife_result(filtered.results = NULL,
-  output.format = "phylo.all", input = NULL, partial = TRUE,
+summarize_datelife_result(datelife_result = NULL,
+  summary_format = "phylo.all", input = NULL, partial = TRUE,
   update_cache = FALSE, cache = get("opentree_chronograms"),
-  showSummary = c("citations", "taxa"), missing.taxa = c("none", "summary",
-  "matrix"), verbose = FALSE)
+  summary_print = c("citations", "taxa"), add_taxon_distribution = c("none",
+  "summary", "matrix"), verbose = FALSE)
 }
 \arguments{
-\item{filtered.results}{A list of patristic matrices; labels correspond to citations}
+\item{datelife_result}{A list of patristic matrices; labels correspond to citations}
 
-\item{output.format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
+\item{summary_format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
 
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
 
@@ -23,9 +23,9 @@ summarize_datelife_result(filtered.results = NULL,
 
 \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
 
-\item{showSummary}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
+\item{summary_print}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
 
-\item{missing.taxa}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.}
+\item{add_taxon_distribution}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on add_taxon_distribution added to the output.}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }

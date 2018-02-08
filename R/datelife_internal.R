@@ -2,19 +2,19 @@
 
 #' Summarize patristic matrix array (by default, median). Used inside: summarize_datelife_result.
 #' @param patristic.matrix.array 3D array of patristic matrices
-#' @param fn The function to use ot summarize
+#' @param fn The function to use to summarize
 #' @return A 2d array with the median (or max, or mean, etc) of the input array
 #' @export
-SummaryPatristicMatrixArray <- function(patristic.matrix.array,fn = stats::median) {
-  return(apply(patristic.matrix.array,MARGIN = c(1,2),fn, na.rm = TRUE))
+SummaryPatristicMatrixArray <- function(patristic.matrix.array, fn = stats::median) {
+  return(apply(patristic.matrix.array, MARGIN = c(1,2), fn, na.rm = TRUE))
 }
 
 #' Convert patristic matrix to a newick string. Used inside: summarize_datelife_result.
 #' @param patristic.matrix A patristic matrix
 #' @return A newick string
 #' @export
-PatristicMatrixToNewick <- function(patristic.matrix) {
-  tree <- PatristicMatrixToTree(patristic.matrix)
+patristic_matrix_to_newick <- function(patristic.matrix) {
+  tree <- patristic_matrix_to_phylo(patristic.matrix)
   if(class(tree)=="phylo") {
   	return(ape::write.tree(tree))
   }
@@ -22,19 +22,39 @@ PatristicMatrixToNewick <- function(patristic.matrix) {
 }
 
 #' Find the index of relevant studies in a opentree_chronograms object. Used inside: summarize_datelife_result.
-#' @param filtered.results The patristic.matrices that will be used
+#' @param datelife_result The patristic.matrices that will be used
 #' @param cache The cache of studies
 #' @return A vector with the indices of studies that have relevant info
 #' @export
-FindMatchingStudyIndex <- function(filtered.results, cache = get("opentree_chronograms")) {
-    return(which(names(cache$trees) %in% names(filtered.results)))
+FindMatchingStudyIndex <- function(datelife_result, cache = get("opentree_chronograms")) {
+    return(which(names(cache$trees) %in% names(datelife_result)))
+}
+
+#' Get time of MRCA from patristic matrix. Used in: datelife_result_MRCA.
+#' @param patristic.matrix A patristic matrix
+#' @param partial If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries
+#' @return The depth of the MRCA
+#' @export
+patristic_matrix_MRCA <- function(patristic.matrix, partial = TRUE) {
+  # 0.5 since patristic distance is down to the root and back up
+  return(0.5 * max(patristic.matrix, na.rm = partial))
+}
+
+#' Get vector of MRCAs from a datelifeResult object. Used in: summarize_datelife_result.
+#' @param datelife_result An object from get_datelife_result function.
+#' @param partial If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries
+#' @return Vector of MRCA ages with names same as in datelife_result
+#' @export
+datelife_result_MRCA <- function(datelife_result, partial = TRUE) {
+	ages <- sapply(datelife_result, patristic_matrix_MRCA, partial = partial)
+	return(ages)
 }
 
 #' Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruiyTree.
 #' @param patristic.matrix A patristic matrix
 #' @return A rooted phylo object
 #' @export
-PatristicMatrixToTree <- function(patristic.matrix) {
+patristic_matrix_to_phylo <- function(patristic.matrix) {
   if(anyNA(patristic.matrix)) {
   	patristic.matrix <- patristic.matrix[rowSums(is.na(patristic.matrix)) != ncol(patristic.matrix),colSums(is.na(patristic.matrix)) != nrow(patristic.matrix)]
   }
@@ -144,10 +164,10 @@ GetSubsetArray <- function(patristic.matrix.array, taxa, phy4 = NULL) {
   return(list(patristic.matrix.array = patristic.matrix.array,problem = problem))
 }
 
-# Used inside: GetSubsetArrayBoth
+# Used inside: GetSubsetArrayBoth.
 GetSubsetArrayCongruify <- function(patristic.matrix.array, taxa, phy = NULL, dating_method = "PATHd8") {
   #gets a subset of the patristic.matrix.array.
-  patristic.matrix.array <- patristic.matrix.array[ rownames(patristic.matrix.array) %in% taxa,colnames(patristic.matrix.array) %in% taxa,  ]
+  patristic.matrix.array <- patristic.matrix.array[ rownames(patristic.matrix.array) %in% taxa, colnames(patristic.matrix.array) %in% taxa,  ]
   problem <- "none"
   final.size <- sum(rownames(patristic.matrix.array) %in% taxa) # returns number of matches
   if (final.size < length(taxa)) {
@@ -160,7 +180,7 @@ GetSubsetArrayCongruify <- function(patristic.matrix.array, taxa, phy = NULL, da
     }
   }
   patristic.matrix.list <- SplitArray(patristic.matrix.array)
-  patristic.matrix.array<-BindMatrices(lapply(patristic.matrix.list, CongruifyTree, query.tree = phy, scale = dating_method)) #yes, this should be parallel
+  patristic.matrix.array <- datelife_result_bind(lapply(patristic.matrix.list, CongruifyTree, query.tree = phy, scale = dating_method)) #yes, this should be parallel
   return(list(patristic.matrix.array = patristic.matrix.array, problem = problem))
 }
 
@@ -179,13 +199,13 @@ AsubForLapply <- function(idx, x, dims = 3) {
 #' @param pad If TRUE, pad missing entries
 #' @return A 3d array of patristic matrices
 #' @export
-BindMatrices <- function(patristic.matrix.list, pad = TRUE) {
+datelife_result_bind <- function(patristic.matrix.list, pad = TRUE) {
   all.taxa <- sort(unique(unname(unlist(lapply(patristic.matrix.list, rownames)))))
   if(pad) {
-    patristic.matrix.list <- lapply(patristic.matrix.list, PadMatrix, all.taxa = all.taxa)
+    patristic.matrix.list <- lapply(patristic.matrix.list, datelife_result_pad, all.taxa = all.taxa)
   }
   original.size<-length(patristic.matrix.list)
-  patristic.matrix.list<-lapply(patristic.matrix.list,ReorderMatrix)
+  patristic.matrix.list<-lapply(patristic.matrix.list,patristic_matrix_reorder)
   if(length(patristic.matrix.list)<1) {
     stop(paste("The patristic matrices you are trying to bind are too few; input was ", original.size, " and current length is ", length(patristic.matrix.list), sep = ""))
   }
@@ -198,12 +218,12 @@ BindMatrices <- function(patristic.matrix.list, pad = TRUE) {
   return(abind::abind(patristic.matrix.list, along = 3 ))
 }
 
-#' Function to fill in empty cells in a patristic matrix for missing taxa. Used in: BindMatrices.
+#' Function to fill in empty cells in a patristic matrix for missing taxa. Used in: datelife_result_bind.
 #' @param patristic.matrix A patristic matrix with row and column names for taxa
 #' @param all.taxa A vector of the names of all taxa you want, including ones not in the patristic matrix
 #' @return Patristic.matrix for all.taxa, with NA for entries between taxa where at least one was not in the original patristic.matrix
 #' @export
-PadMatrix <- function(patristic.matrix, all.taxa) {
+datelife_result_pad <- function(patristic.matrix, all.taxa) {
 	number.missing <- length(all.taxa) - dim(patristic.matrix)[1]
 	final.matrix <- patristic.matrix
 	if(number.missing>0) {
@@ -212,27 +232,37 @@ PadMatrix <- function(patristic.matrix, all.taxa) {
 		rownames(final.matrix) <- c(rownames(patristic.matrix), all.taxa[-which(all.taxa %in% rownames(patristic.matrix))])
 	 	colnames(final.matrix) <- c(colnames(patristic.matrix), all.taxa[-which(all.taxa %in% colnames(patristic.matrix))])
 	}
- 	return(ReorderMatrix(final.matrix))
+ 	return(patristic_matrix_reorder(final.matrix))
 }
 
-#' Function to reorder a matrix so that row and column labels are in alphabetical order. Used in: PadMatrix.
+#' Function to reorder a matrix so that row and column labels are in alphabetical order. Used in: datelife_result_pad.
 #' @param patristic.matrix A patristic matrix with row and column names for taxa
 #' @return patristic.matrix A patristic matrix with row and column names for taxa in alphabetial order
 #' @export
-ReorderMatrix <- function(patristic.matrix) {
+patristic_matrix_reorder <- function(patristic.matrix) {
   return(patristic.matrix[order(rownames(patristic.matrix)),order(colnames(patristic.matrix))])
 }
 
+# Used in: datelife_result_bind.
+TestNameOrder <- function(patristic.matrix, standard.rownames, standard.colnames) {
+  if (compare::compare(rownames(patristic.matrix),standard.rownames)$result!= TRUE) {
+    return(FALSE)
+  }
+  if (compare::compare(colnames(patristic.matrix),standard.colnames)$result!= TRUE) {
+    return(FALSE)
+  }
+  return(TRUE)
+}
 
-# Used inside:
+# Used inside: GetSubsetArrayCongruify.
 CongruifyTree <- function(patristic.matrix, query.tree, dating_method = "PATHd8", attempt.fix = TRUE) {
-  	result.matrix<-matrix(nrow = dim(patristic.matrix)[1], ncol = dim(patristic.matrix)[2])
+  	result.matrix <- matrix(nrow = dim(patristic.matrix)[1], ncol = dim(patristic.matrix)[2])
   	if(is.null(query.tree$edge.length)) {
     	query.tree$edge.length<-numeric(nrow(query.tree$edge))
   	}
-#	try(result.matrix<-ComputePatristicDistance(phylo_tiplabel_underscore_to_space(geiger::congruify.phylo(phylo_tiplabel_space_to_underscore(PatristicMatrixToTree(patristic.matrix)), phylo_tiplabel_space_to_underscore(query.tree), NULL, 0, scale = dating_method)$phy)))
-	try(result.matrix<-ComputePatristicDistance(CongruifyAndCheck(reference = PatristicMatrixToTree(patristic.matrix), target = query.tree, scale = dating_method, attempt.fix = attempt.fix)))
-  	return(result.matrix)
+#	try(result.matrix<-phylo_to_patristic_matrix(phylo_tiplabel_underscore_to_space(geiger::congruify.phylo(phylo_tiplabel_space_to_underscore(patristic_matrix_to_phylo(patristic.matrix)), phylo_tiplabel_space_to_underscore(query.tree), NULL, 0, scale = dating_method)$phy)))
+	try(result.matrix <- phylo_to_patristic_matrix(CongruifyAndCheck(reference = patristic_matrix_to_phylo(patristic.matrix), target = query.tree, scale = dating_method, attempt.fix = attempt.fix)))
+  return(result.matrix)
 }
 
 #Note that originally trees were stored as patristic matrices. This was intended
@@ -249,17 +279,17 @@ CongruifyTree <- function(patristic.matrix, query.tree, dating_method = "PATHd8"
 #distance matrix takes just 0.0013 seconds.
 
 #in case we want to cache. Not clear we do.
-# Used inside:
-ComputePatristicDistance <- function(phy, test = TRUE,tol = 0.01) {
+# Used inside: CongruifyTree, GetSubsetArrayFromPhylo and CongruifyTreeFromPhylo
+phylo_to_patristic_matrix <- function(phy, test = TRUE, tol = 0.01, option = 2) {
 	# stores the distance between taxa
 	patristic.matrix <- NA
 	if(class(phy) == "phylo") {
 		if (test) {
-			if (!ape::is.ultrametric(phy,tol)) {
+			if (!ape::is.ultrametric(phy, tol = tol, option = option)) {
 				stop("currently we require that chronograms be ultrametric") # can pad them so that terminals all reach to present
 			}
 		}
-		patristic.matrix<-stats::cophenetic(phy)
+		patristic.matrix <- stats::cophenetic(phy)
 	}
 	return(patristic.matrix)
 }
@@ -286,11 +316,11 @@ GetSubsetArrayBothFromPhylo <- function(reference.tree.in, taxa.in, phy.in = NUL
 
 }
 
-# Used inside:
+# Used inside: GetSubsetArrayBothFromPhylo.
 GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4 = NULL, dating_method="PATHd8") {
   final.size<-sum(reference.tree$tip.label %in% taxa) # returns number of matches
   if(final.size>=2) { #it's worth doing the pruning
-    reference.tree<-PruneTree(reference.tree, taxa)
+    reference.tree <- PruneTree(reference.tree, taxa)
     #reference.tree<-pruneTrees(reference.tree, taxa) #pruneTrees is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
   }
   problem <- "none"
@@ -303,7 +333,7 @@ GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4 = NULL, dating_me
     }
   }
   if (final.size >= 2) {
-  	patristic.matrix.array <- ComputePatristicDistance(reference.tree)
+  	patristic.matrix.array <- phylo_to_patristic_matrix(reference.tree)
   }
   if(!is.null(phy4)) {
     if (length(phylobase::descendants(phy4, phylobase::MRCA(phy4, taxa), type = "tips")) > taxa) {
@@ -313,7 +343,7 @@ GetSubsetArrayFromPhylo <- function(reference.tree, taxa, phy4 = NULL, dating_me
   return(list(patristic.matrix.array = patristic.matrix.array,problem = problem))
 }
 
-# Used inside:
+# Used inside: GetSubsetArrayBothFromPhylo.
 GetSubsetArrayCongruifyFromPhylo <- function(reference.tree, taxa, phy = NULL, dating_method = "PATHd8") {
   final.size<-sum(reference.tree$tip.label %in% taxa) # returns number of matches
   if(final.size>=2) { #it's worth doing the pruning
@@ -332,29 +362,29 @@ GetSubsetArrayCongruifyFromPhylo <- function(reference.tree, taxa, phy = NULL, d
     }
   }
   if (final.size >= 3) {
-  	patristic.matrix.array.new <-   CongruifyTreeFromPhylo(reference.tree, query.tree = phy, dating_method = dating_method)
+  	patristic.matrix.array.new <- CongruifyTreeFromPhylo(reference.tree, query.tree = phy, dating_method = dating_method)
   }
   return(list(patristic.matrix.array= patristic.matrix.array.new,problem= problem.new))
 }
 
-# Used inside:
+# Used inside: GetSubsetArrayFromPhylo and GetSubsetArrayCongruifyFromPhylo.
 PruneTree <- function(phy, taxa) {
 	return(ape::drop.tip(phy, tip = phy$tip.label[-(which(phy$tip.label %in% taxa))]))
 }
 
-# Used inside:
+# Used inside: GetSubsetArrayCongruifyFromPhylo.
 CongruifyTreeFromPhylo <- function(reference.tree, query.tree, dating_method = "PATHd8", attempt.fix = TRUE) {
-  result.matrix<-matrix(nrow = ape::Ntip(reference.tree), ncol = ape::Ntip(reference.tree))
+  result.matrix <- matrix(nrow = ape::Ntip(reference.tree), ncol = ape::Ntip(reference.tree))
   if(is.null(query.tree$edge.length)) {
     query.tree$edge.length<-numeric(nrow(query.tree$edge)) #makes it so that branches that don't match reference tree get zero length
   }
-	try(result.matrix<-ComputePatristicDistance(CongruifyAndCheck(reference = reference.tree, target = query.tree, scale = dating_method, attempt.fix = attempt.fix)))
+	try(result.matrix <- phylo_to_patristic_matrix(CongruifyAndCheck(reference = reference.tree, target = query.tree, scale = dating_method, attempt.fix = attempt.fix)))
   return(result.matrix)
 }
 
-# Used inside:
-CongruifyAndCheck <- function(reference, target, taxonomy = NULL, tol = 0.01, scale = "pathd8", attempt.fix = TRUE) {
-  if(!ape::is.ultrametric(reference, tol = tol)) {
+# Used inside: CongruifyTree and CongruifyTreeFromPhylo.
+CongruifyAndCheck <- function(reference, target, taxonomy = NULL, tol = 0.01, option = 2, scale = "pathd8", attempt.fix = TRUE) {
+  if(!ape::is.ultrametric(reference, tol = tol, option = option)) {
     return(NA)
   }
 	new.tree <- phylo_tiplabel_underscore_to_space(suppressWarnings(geiger::congruify.phylo(phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(target), taxonomy = taxonomy, tol = tol, scale = scale)$phy)) #suppressing warnings b/c geiger ignores tolerance
@@ -370,7 +400,7 @@ CongruifyAndCheck <- function(reference, target, taxonomy = NULL, tol = 0.01, sc
 }
 
 
-#' Convert spaces to underscores in trees. Used in: make_mrbayes_runfile, GetMrBayesNodeCalibrations, phylo_get_singleton_outgroup, CongruifyAndCheck, CongruifyTree.
+#' Convert spaces to underscores in trees. Used in: make_mrbayes_runfile, get_mrbayes_node_calibrations, phylo_get_singleton_outgroup, CongruifyAndCheck, CongruifyTree.
 #' @param phy A phylo object
 #' @return A phylo object
 #' @export
@@ -386,4 +416,15 @@ phylo_tiplabel_space_to_underscore <- function(phy) {
 phylo_tiplabel_underscore_to_space <- function(phy) {
 	phy$tip.label <- gsub("_", " ", phy$tip.label)
 	return(phy)
+}
+#' Function to remove missing taxa from a datelifeResult object. Used in: datelife_result_sdm.
+#' @param patristic.matrix A patristic matrix with row and column names for taxa
+#' @return Patristic.matrix for all.taxa
+#' @export
+patristic_matrix_unpad <- function(patristic.matrix) {
+	bad.ones <- which(apply(is.na(patristic.matrix),2,all))
+	if(length(bad.ones)>0) {
+		patristic.matrix <- patristic.matrix[-bad.ones, -bad.ones]
+	}
+	return(patristic.matrix)
 }

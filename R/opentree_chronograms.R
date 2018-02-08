@@ -161,7 +161,7 @@ IsGoodChronogram <- function(phy) {
 		passing <- FALSE
 		warning("tree failed over not being rooted")
 	}
-	if(!ape::is.ultrametric(phy, tol=0.01)) {
+	if(!ape::is.ultrametric(phy, tol=0.01, option = 2)) {
 		passing <- FALSE
 		warning("tree failed over not being ultrametric (NOTE: this condition should be removed for paleo trees)")
 	}
@@ -183,7 +183,7 @@ CleanChronogram <- function(phy) {
 					return(original.phy)
 				}
 			}
-			if(!ape::is.rooted(phy) & ape::is.ultrametric(phy)) {
+			if(!ape::is.rooted(phy) & ape::is.ultrametric(phy, option = 2)) {
 				phy$root.edge <- 0
 			}
 		}

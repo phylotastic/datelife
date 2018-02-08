@@ -17,7 +17,7 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), output.format="mrca")
+ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus"), summary_format="mrca")
 
 
 

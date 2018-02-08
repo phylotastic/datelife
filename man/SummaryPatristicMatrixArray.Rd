@@ -9,7 +9,7 @@ SummaryPatristicMatrixArray(patristic.matrix.array, fn = stats::median)
 \arguments{
 \item{patristic.matrix.array}{3D array of patristic matrices}
 
-\item{fn}{The function to use ot summarize}
+\item{fn}{The function to use to summarize}
 }
 \value{
 A 2d array with the median (or max, or mean, etc) of the input array

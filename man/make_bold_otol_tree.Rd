@@ -5,16 +5,16 @@
 \title{Use Barcode of Life data to get branch lengths on the OToL tree of a set of taxa.}
 \usage{
 make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus",
-  "Gallus gallus"), usetnrs = FALSE, approximatematch = TRUE,
+  "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE,
   marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE,
-  sppfromtaxon = FALSE, verbose = FALSE)
+  get_spp_from_taxon = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
 
-\item{usetnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
+\item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
-\item{approximatematch}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
+\item{approximate_match}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
 
 \item{marker}{A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.}
 
@@ -24,7 +24,7 @@ make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus",
 
 \item{doML}{Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml}
 
-\item{sppfromtaxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.}
+\item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }

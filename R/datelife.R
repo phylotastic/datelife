@@ -17,17 +17,17 @@
 #' Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.
 #' @aliases datelife
 #' @param input Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.
-#' @param output.format The desired output format for target chronograms (chronograms of target taxa). See details.
-#' @param showSummary A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
-#' @param missing.taxa A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on missing.taxa added to the output.
+#' @param summary_format The desired output format for target chronograms (chronograms of target taxa). See details.
+#' @param summary_print A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
+#' @param add_taxon_distribution A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on add_taxon_distribution added to the output.
 #' @param partial If TRUE, use source chronograms even if they only match some of the desired taxa
-#' @param usetnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.
-#' @param approximatematch If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).
+#' @param use_tnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.
+#' @param approximate_match If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).
 #' @param update_cache default to FALSE
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms).
 #' @param dating_method The method used for tree dating.
 # #' @param bold Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using make_bold_otol_tree function.
-#' @param sppfromtaxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of sppfromtaxon will match phy$tip.label.
+#' @param get_spp_from_taxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.
 #' @param verbose Boolean. If TRUE, it gives printed updates to the user.
 # #' @inheritDotParams make_bold_otol_tree otol_version chronogram doML
 #' @export
@@ -56,14 +56,14 @@
 #' @examples
 #' # obtain median ages from a set of source chronograms in newick format:
 #' ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-#' 		"Mus musculus"), output.format="newick.median")
+#' 		"Mus musculus"), summary_format="newick.median")
 #' # save the tree in newick format
 #' write(ages, file="some.bird.ages.txt")
 #'
 #' # obtain median ages from a set of source chronograms in phylo format
 #' # will produce same tree as above but in r phylo format:
 #' ages.again <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-#' 		"Mus musculus"), output.format="phylo.median")
+#' 		"Mus musculus"), summary_format="phylo.median")
 #' plot(ages.again)
 #' library(ape)
 #' ape::axisPhylo()
@@ -74,19 +74,19 @@
 #' # obtain mrca ages and target chronograms from all source chronograms
 #' # generate an html  output readable in any web browser:
 #' ages.html <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-#' 		"Mus musculus"), output.format="html")
+#' 		"Mus musculus"), summary_format="html")
 #' write(ages.html, file="some.bird.trees.html")
 #' system("open some.bird.trees.html")
 
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		output.format = "phylo.all", partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", showSummary= c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"),  sppfromtaxon = FALSE, verbose = FALSE) {
+		summary_format = "phylo.all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", summary_print= c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"),  get_spp_from_taxon = FALSE, verbose = FALSE) {
 			# find a way not to repeat partial and cache arguments, which are used in both get_datelife_result and summarize_datelife_result
 			if(update_cache){
 				cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 			}
-			input.here <- make_datelife_query(input = input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon, verbose = verbose)
-			filtered.results.here <- get_datelife_result(input = input.here, partial = partial, usetnrs = usetnrs, approximatematch = approximatematch, update_cache = FALSE, cache = cache, dating_method = dating_method, verbose = verbose)
-			return(summarize_datelife_result(input = input.here$cleaned.names, filtered.results = filtered.results.here, output.format = output.format, partial = partial, update_cache = FALSE, cache = cache, showSummary = showSummary, missing.taxa = missing.taxa, verbose = verbose))
+			datelife_query <- make_datelife_query(input = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
+			datelife_result.here <- get_datelife_result(input = datelife_query, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = FALSE, cache = cache, dating_method = dating_method, verbose = verbose)
+			return(summarize_datelife_result(input = datelife_query$cleaned.names, datelife_result = datelife_result.here, summary_format = summary_format, partial = partial, update_cache = FALSE, cache = cache, summary_print = summary_print, add_taxon_distribution = add_taxon_distribution, verbose = verbose))
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
@@ -96,32 +96,33 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 # #' @inheritDotParams make_bold_otol_tree
 #' @return List of patristic matrices
 #' @export
-get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, usetnrs = FALSE, approximatematch = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", sppfromtaxon = FALSE, verbose = FALSE) {
+get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", get_spp_from_taxon = FALSE, verbose = FALSE) {
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
-	input <- CheckInput(input = input, usetnrs = usetnrs, approximatematch = approximatematch, sppfromtaxon = sppfromtaxon, verbose = verbose)
+	input <- input_check(input = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
 	tree <- input$phy
 	cleaned.names <- input$cleaned.names
-	CheckCleanedNames(cleaned.names = cleaned.names, sppfromtaxon = sppfromtaxon, verbose = verbose)
+	datelife_query_length_check(cleaned.names = cleaned.names, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
   results.list <- lapply(cache$trees, GetSubsetArrayDispatch, taxa = cleaned.names, phy = tree, dating_method = dating_method)
-  filtered.results <- ProcessResultsList(results.list, cleaned.names, partial)
-	CheckFilteredResults(filtered.results, usetnrs)
+  datelife_result <- ProcessResultsList(results.list, cleaned.names, partial)
+	datelife_result_check(datelife_result, use_tnrs)
 	# if(bold){
-	# 	 bold.OToLTree <- make_bold_otol_tree(input = input, usetnrs = FALSE, approximatematch = FALSE, marker = marker, verbose = verbose,  ...)
+	# 	 bold.OToLTree <- make_bold_otol_tree(input = input, use_tnrs = FALSE, approximate_match = FALSE, marker = marker, verbose = verbose,  ...)
 	# 	 bold.data <- GetSubsetArrayBothFromPhylo(reference.tree.in = bold.OToLTree, taxa.in = cleaned.names, phy.in = NULL, phy4.in = NULL, dating_method.in = dating_method)
 	# 	 bold.data.processed <- ProcessResultsList(results.list = list(bold.data), taxa = cleaned.names, partial)
 	#  	 names(bold.data.processed) <-  paste("BOLD-OToL tree (using ", marker, " as marker)", sep="")
-	#    filtered.results <- c(filtered.results, bold.data.processed)
+	#    datelife_result <- c(datelife_result, bold.data.processed)
 	# }
 #	cat("\n")
-	return(filtered.results)
+	class(datelife_result) <- c("datelifeResult")
+	return(datelife_result)
 }
 
 #' checks if input has already been processed, otherwise it uses make_datelife_query
 #' @inheritParams datelife_search
 #' @inheritDotParams make_datelife_query
-CheckInput <- function(input, ...){
+input_check <- function(input, ...){
 	badformat <- TRUE
 	if(is.list(input) & "phy" %in% names(input) & "cleaned.names" %in% names(input)) badformat <- FALSE
 	if(badformat){
@@ -132,25 +133,25 @@ CheckInput <- function(input, ...){
 #' checks that we have at least two taxon names to perform a search
 #' @inheritParams datelife_search
 #' @param cleaned.names A character vector; usually an output from make_datelife_query function
-CheckCleanedNames <- function(cleaned.names, sppfromtaxon, verbose = FALSE){
+datelife_query_length_check <- function(cleaned.names, get_spp_from_taxon, verbose = FALSE){
 	if(length(cleaned.names)==1){
 		if(verbose) cat("Cannot perform a search of divergence times with just one taxon.", "\n")
-		if(sppfromtaxon) {
+		if(get_spp_from_taxon) {
 			if(verbose) cat("Clade contains only one lineage.", "\n")
 		} else {
-			if(verbose) cat("Performing a clade search? set sppfromtaxon = TRUE.", "\n")
+			if(verbose) cat("Performing a clade search? set get_spp_from_taxon = TRUE.", "\n")
 		}
-		stop("input is length 1")
+		stop("search is length 1")
 	}
 }
 #' checks if we obtained an empty search with the set of input taxon names
 #' @inheritParams datelife_search
-#' @param filtered.results An object output from get_datelife_result function
-CheckFilteredResults <- function(filtered.results, usetnrs, verbose = FALSE){
-	if(length(filtered.results) < 1) {
+#' @param datelife_result An object output from get_datelife_result function
+datelife_result_check <- function(datelife_result, use_tnrs, verbose = FALSE){
+	if(length(datelife_result) < 1) {
 		warning("Output is empty.", call. = FALSE)
 		if(verbose) cat("Input species were not found in any chronograms available in cache.", "\n")
-		if(!usetnrs & verbose) cat("Setting usetnrs = TRUE might change this, but it is time consuming.", "\n")
+		if(!use_tnrs & verbose) cat("Setting use_tnrs = TRUE might change this, but it is time consuming.", "\n")
 	}
 }
 #' Take input phylo object or character string and figure out if it's correct newick format or a list of species
@@ -158,7 +159,7 @@ CheckFilteredResults <- function(filtered.results, usetnrs, verbose = FALSE){
 #' @inheritParams make_datelife_query
 #' @return A phylo object or NA if no tree
 #' @export
-check_datelife_query <- function(input, verbose = FALSE){
+input_process <- function(input, verbose = FALSE){
   	if(class(input) == "multiPhylo") stop("Only one phylogeny can be processed at a time.")
 	if(class(input) == "phylo") {
 		input <- ape::write.tree(input)
@@ -167,7 +168,7 @@ check_datelife_query <- function(input, verbose = FALSE){
   	input <- stringr::str_trim(input, side = "both")
   	phy.new.in <- NA
    	# if(length(input) == 1) {
-    	# if(showSummary)cat("\t", "Input is length 1.", "\n")
+    	# if(summary_print)cat("\t", "Input is length 1.", "\n")
 	  	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
 	  		if(length(input)>1) stop("Only one phylogeny can be processed at a time.")
 	    	phy.new.in <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input)))
@@ -179,17 +180,17 @@ check_datelife_query <- function(input, verbose = FALSE){
 	return(phy.new.in)
 }
 
-#' Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with check_datelife_query first.
+#' Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with input_process first.
 #' @inheritParams datelife_search
 #' @inheritDotParams rphylotastic::taxon_get_species
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
-make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), usetnrs = FALSE, approximatematch = TRUE, sppfromtaxon = FALSE, verbose = FALSE, ...) {
+make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose = FALSE, ...) {
 	if(verbose) cat("Processing input...", "\n")
-	phy.new <- check_datelife_query(input = input, verbose = verbose)
+	phy.new <- input_process(input = input, verbose = verbose)
 	# cleaned.names <- ""
 	if(!is.na(phy.new[1])) {
-	    # if(usetnrs) {
+	    # if(use_tnrs) {
 	      	# phy.new$tip.label <- gsub("_", " ", cleaned.names)
 	    # }
 	  	# cleaned.names <- gsub("_", " ", phy.new$tip.label)
@@ -197,34 +198,36 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	}
 	if(length(input)==1) {
 		input <- strsplit(input, ',')[[1]]
-		if(!sppfromtaxon[1]) {
+		if(!get_spp_from_taxon[1]) {
 				if(verbose) {
 					cat("Datelife needs at least two input taxon names to perform a search.", "\n")
-					cat("Setting sppfromtaxon = TRUE gets all species from a clade and accepts only one taxon name as input.", "\n")
+					cat("Setting get_spp_from_taxon = TRUE gets all species from a clade and accepts only one taxon name as input.", "\n")
 				}
 				stop("Input is length 1 and not in a good newick format.")
 		}
 	}
 	cleaned.input <- stringr::str_trim(input, side = "both")
-    if (usetnrs) {
-			cleaned.input <- rotl::tnrs_match_names(cleaned.input)$unique_name # process even if it's a "higher" taxon name
-			cleaned.input <- taxize::gnr_resolve(names = cleaned.input, data_source_ids=179, fields="all")$matched_name
+    if (use_tnrs) {
+			# process names even if it's a "higher" taxon name:
+			cleaned.input <- rotl::tnrs_match_names(cleaned.input)$unique_name
+			# after some tests, decided to use above method instead of taxize::gnr_resolve, and just output the original input and the actual query for users to check out.
+			# cleaned.input <- taxize::gnr_resolve(names = cleaned.input, data_source_ids=179, fields="all")$matched_name
     }
 	cleaned.names <- gsub("_", " ", cleaned.input)
-    if(any(sppfromtaxon)){
-    	if(length(sppfromtaxon)==1) sppfromtaxon <- rep(sppfromtaxon,length(cleaned.input))
-    	if(length(cleaned.input)!=length(sppfromtaxon)){
+    if(any(get_spp_from_taxon)){
+    	if(length(get_spp_from_taxon)==1) get_spp_from_taxon <- rep(get_spp_from_taxon,length(cleaned.input))
+    	if(length(cleaned.input)!=length(get_spp_from_taxon)){
     		if(verbose) cat("Specify all taxa in input to get species names from.", "\n")
-    		stop("input and sppfromtaxon arguments must have same length.")
+    		stop("input and get_spp_from_taxon arguments must have same length.")
     	}
     	species.names <- vector()
     	index <- 1
-	    for (i in sppfromtaxon){
+	    for (i in get_spp_from_taxon){
 	    	if (i) {
 	    		spp <- rphylotastic::taxon_get_species(taxon = cleaned.names[index], ...)
 	    		if(length(spp)==0) {
 	    			if(verbose) cat("\t", " No species names found for taxon ", cleaned.names[index], ".", "\n", sep="")
-	    			if (!usetnrs & verbose) cat("\t", "Setting usetnrs = TRUE might change this, but it can be slow.", "\n")
+	    			if (!use_tnrs & verbose) cat("\t", "Setting use_tnrs = TRUE might change this, but it can be slow.", "\n")
 	    			warning(paste("No species names available for input taxon '", cleaned.names[index], "'", sep=""))
 	    		}
 	    		species.names <- c(species.names, spp)
@@ -249,12 +252,12 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 #' @return A phylo object with no negative branch lengths
 #' @export
 phylo_fix_brlen <- function(phy = NULL, fixing_criterion = "negative", fixing_method = 0){
-	phy <- check_datelife_query(input = phy, verbose = FALSE)
+	phy <- input_process(input = phy, verbose = FALSE)
 	if (!inherits(phy, "phylo"))
 		stop("phy must be a newick character string or in phylo format")
 	if(is.null(phy$edge.length))
 		stop("phy must have branch lengths")
-	if(!ape::is.ultrametric(phy))
+	if(!ape::is.ultrametric(phy, option = 2))
 		stop("branch lengths must be relative to time")
 	if(!is.numeric(fixing_method)){
 		fixing_method <- match.arg(fixing_method, c("bladj", "mrbayes"))
@@ -307,8 +310,8 @@ phylo_fix_brlen <- function(phy = NULL, fixing_criterion = "negative", fixing_me
 #' @return A list
 phylo_get_node_data <- function(phy = NULL, node_data = c("node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label")){
 	res <- vector(mode = "list")
-	phy <- check_datelife_query(input = phy)
-	phy <- check_phylo(phy = phy, dated = TRUE)
+	phy <- input_process(input = phy)
+	phy <- phylo_check(phy = phy, dated = TRUE)
 	nn <- phylo_get_node_numbers(phy)
 	if("node_number" %in% node_data){
 		res <- c(res, list(node_number = nn))
@@ -340,8 +343,8 @@ phylo_get_node_data <- function(phy = NULL, node_data = c("node_number", "node_l
 #' @param node_index Character vector choosing one of "consecutive" or "node_number" as node label index. It will use consecutive numbers from 1 to total node number in the first case and node numbers in the second case.
 #' @return A phylo object
 phylo_add_node_labels <- function(phy = NULL, node_prefix="n", node_index="node_number"){
-	phy <- check_datelife_query(input = phy)
-	phy <- check_phylo(phy = phy, dated = FALSE)
+	phy <- input_process(input = phy)
+	phy <- phylo_check(phy = phy, dated = FALSE)
 	node_index <- match.arg(arg = node_index, choices = c("consecutive","node_number"), several.ok = FALSE)
 	if("node_number" %in% node_index){
 		node_number <- phylo_get_node_numbers(phy = phy)
@@ -359,7 +362,7 @@ phylo_add_node_labels <- function(phy = NULL, node_prefix="n", node_index="node_
 }
 
 #' Gets node numbers from any phylogeny
-#' @inheritParams check_phylo
+#' @inheritParams phylo_check
 #' @return A numeric vector with node numbers
 phylo_get_node_numbers <- function(phy){
 	node_numbers <- (length(phy$tip.label)+1):(length(phy$tip.label)+phy$Nnode)
@@ -373,10 +376,10 @@ phylo_get_node_numbers <- function(phy){
 #' @export
 phylo_add_outgroup <- function(phy = NULL, outgroup = "outgroup"){
 		phy <- tryCatch({
-			check_phylo(phy = phy, dated = FALSE)
+			phylo_check(phy = phy, dated = FALSE)
 		}, error = function(e){
-			phy <- check_datelife_query(input = phy, verbose = FALSE)
-			check_phylo(phy = phy, dated = FALSE)
+			phy <- input_process(input = phy, verbose = FALSE)
+			phylo_check(phy = phy, dated = FALSE)
 		})
     outgroup_edge <- c()
     ingroup_edge <- c()
@@ -396,14 +399,14 @@ phylo_add_outgroup <- function(phy = NULL, outgroup = "outgroup"){
 #' @inheritParams phylo_fix_brlen
 #' @param dated Boolean. If TRUE it checks if phylo object has branch lengths and is ultrametric.
 #' @return A phylo object
-check_phylo <- function(phy = phy, dated = FALSE){
+phylo_check <- function(phy = phy, dated = FALSE){
 	if (!inherits(phy, "phylo")){
 		stop("phy is not a phylo object")
 	}
 	if(dated){
 		if(is.null(phy$edge.length))
 			stop("phylo object must have branch lengths")
-		if(!ape::is.ultrametric(phy)){
+		if(!ape::is.ultrametric(phy, option = 2)){
 			warning("branch lengths in phylo object should be proportional to time")
 			stop("phylo object must be ultrametric")  # is this true?  # Think how to incorporate trees with extinct taxa
 		}
@@ -418,10 +421,10 @@ check_phylo <- function(phy = phy, dated = FALSE){
 #' @export
 phylo_tips_from_node <- function(phy = NULL, node = NULL, curr = NULL){
 	phy <- tryCatch({
-		check_phylo(phy = phy, dated = FALSE)
+		phylo_check(phy = phy, dated = FALSE)
 	}, error = function(e){
-		phy <- check_datelife_query(input = phy, verbose = FALSE)
-		check_phylo(phy = phy, dated = FALSE)
+		phy <- input_process(input = phy, verbose = FALSE)
+		phylo_check(phy = phy, dated = FALSE)
 	})
 	des <- phytools::getDescendants(tree = phy, node = node, curr = NULL)
 	tips <- des[which(des <= length(phy$tip.label))]
@@ -437,10 +440,10 @@ phylo_tips_from_node <- function(phy = NULL, node = NULL, curr = NULL){
 #' @export
 make_bladj_tree <- function(nodenames = NULL, nodeages = NULL, phy = NULL, phyformat = "newick"){
 	phy <- tryCatch({
-		check_phylo(phy = phy, dated = FALSE)
+		phylo_check(phy = phy, dated = FALSE)
 	}, error = function(e){
-		phy <- check_datelife_query(input = phy, verbose = FALSE)
-		check_phylo(phy = phy, dated = FALSE)
+		phy <- input_process(input = phy, verbose = FALSE)
+		phylo_check(phy = phy, dated = FALSE)
 	})
 	phyformat <- match.arg(phyformat, choices = c("newick", "phylo"))
 	if(is.null(phy$node.label)) stop("phy must have node labels")
@@ -464,12 +467,12 @@ make_bladj_tree <- function(nodenames = NULL, nodeages = NULL, phy = NULL, phyfo
 #' Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations
 #' @param constraint The constraint tree: a phylo object or a newick character string, with or without branch lengths.
 #' @param ncalibration The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.
-#' @inheritParams CheckMissingTaxa
+#' @inheritParams missing_taxa_check
 #' @param file A character vector specifying the name of mrBayes run file and outputs (can specify directory too).
 #' @return A phylo tree with branch lengths proportional to time. It will save all mrBayes outputs in the working directory.
 #' @export
-make_mrbayes_tree <- function(constraint = NULL, ncalibration = NULL, missingTaxa = NULL, file = "mrbayes_run.nexus"){
-	make_mrbayes_runfile(constraint = constraint, ncalibration = ncalibration, missingTaxa = missingTaxa, file = file)
+make_mrbayes_tree <- function(constraint = NULL, ncalibration = NULL, missing_taxa = NULL, file = "mrbayes_run.nexus"){
+	make_mrbayes_runfile(constraint = constraint, ncalibration = ncalibration, missing_taxa = missing_taxa, file = file)
 	message("Starting MrBayes run. This might take a while...")
 	new.tree <- run_mrbayes(file = file)
 	return(new.tree)
@@ -479,24 +482,24 @@ make_mrbayes_tree <- function(constraint = NULL, ncalibration = NULL, missingTax
 #' @inheritParams make_mrbayes_tree
 #' @return A MrBayes block run file in nexus format.
 #' @export
-make_mrbayes_runfile <- function(constraint = NULL, ncalibration = NULL, missingTaxa = NULL, file = "mrbayes_run.nexus"){
-  constraint <- check_datelife_query(input = constraint, verbose = FALSE) # add outgroup = TRUE argument
+make_mrbayes_runfile <- function(constraint = NULL, ncalibration = NULL, missing_taxa = NULL, file = "mrbayes_run.nexus"){
+  constraint <- input_process(input = constraint, verbose = FALSE) # add outgroup = TRUE argument
 	if (!inherits(constraint, "phylo")) {
 		stop("constraint must be a newick character string or in phylo format")
     }
   constraint <- phylo_tiplabel_space_to_underscore(constraint)
 	taxa <- constraint$tip.label
 	constraints <- paleotree::createMrBayesConstraints(tree = constraint, partial = FALSE) # this works perfectly
-	calibrations <- GetMrBayesNodeCalibrations(phy = constraint, ncalibration = ncalibration, ncalibrationType = "fixed")
+	calibrations <- get_mrbayes_node_calibrations(phy = constraint, ncalibration = ncalibration, ncalibrationType = "fixed")
 	og <- phylo_get_singleton_outgroup(constraint) #if(outgroup)
 	ogroup <- c()
 	if(!is.na(og)) {
 		ogroup <- paste0("outgroup ", og, ";")
 	}
-	missingTaxa <- CheckMissingTaxa(missingTaxa)
-	if(!is.null(missingTaxa)){
-		if(is.vector(missingTaxa)){
-			taxa <- c(taxa, missingTaxa)
+	missing_taxa <- missing_taxa_check(missing_taxa)
+	if(!is.null(missing_taxa)){
+		if(is.vector(missing_taxa)){
+			taxa <- c(taxa, missing_taxa)
 		}
 	}
 	bayes_data <- c(paste("   Begin DATA; \nDimensions ntax=", length(taxa), "nchar = 1;"),
@@ -526,17 +529,17 @@ make_mrbayes_runfile <- function(constraint = NULL, ncalibration = NULL, missing
 }
 
 #' Fabricates dates of missing taxa on an already dated tree.
-#' @param  missingTaxa either a tree (as phylo object or as a newick character string, with or without branch lengths) with all the taxa you want at the end, or a data frame assigning missing taxa to nodes in dated tree.
 #' @param dated_phy a tree (newick or phylo) with branch lengths proportional to absolute time
 #' @inheritParams make_mrbayes_tree
 #' @inheritParams datelife_search
+#' @inheritParams missing_taxa_check
 #' @return A phylo object
-phylo_fabricate_dates <- function(dated_phy = NULL, missingTaxa = NULL, dating_method = "mrbayes", file="mrbayes_phylo_fabricate_dates.nexus"){
+phylo_fabricate_dates <- function(dated_phy = NULL, missing_taxa = NULL, dating_method = "mrbayes", file="mrbayes_phylo_fabricate_dates.nexus"){
 	dated_phy <- tryCatch({
-		check_phylo(phy = dated_phy, dated = TRUE)
+		phylo_check(phy = dated_phy, dated = TRUE)
 	}, error = function(e){
-		dated_phy <- check_datelife_query(input = dated_phy, verbose = FALSE)
-		check_phylo(phy = dated_phy, dated = TRUE)
+		dated_phy <- input_process(input = dated_phy, verbose = FALSE)
+		phylo_check(phy = dated_phy, dated = TRUE)
 	})
 	dating_method <- match.arg(dating_method, c("bladj", "mrbayes"))
 	if(dating_method=="bladj"){
@@ -546,46 +549,47 @@ phylo_fabricate_dates <- function(dated_phy = NULL, missingTaxa = NULL, dating_m
 		mrbayes.file <- file
 		dated_phy <- phylo_add_outgroup(phy = dated_phy, outgroup = "fake_outgroup")
 		ncalibration <- phylo_get_node_data(phy = dated_phy, node_data = c("node_age", "descendant_tips_label"))
-		new.phy <- make_mrbayes_tree(constraint = dated_phy, ncalibration = ncalibration, missingTaxa = missingTaxa, file = mrbayes.file)
+		new.phy <- make_mrbayes_tree(constraint = dated_phy, ncalibration = ncalibration, missing_taxa = missing_taxa, file = mrbayes.file)
 		new.phy <- ape::drop.tip(new.phy, "fake_outgroup")
 	}
 	return(new.phy)
 }
 
-#' Checks that missingTaxa argument is ok to be used by make_mrbayes_runfile function
-#' @param missingTaxa A phylo object, a newick character string or a dataframe with taxonomic assignations
+#' Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile function
+#' @param  missing_taxa either a tree (as phylo object or as a newick character string, with or without branch lengths) with all the taxa you want at the end, or a data frame assigning missing taxa to nodes in dated tree.
+# # ' @param missing_taxa A phylo object, a newick character string or a dataframe with taxonomic assignations
 #' @return A phylo object, a newick character string or a dataframe with taxonomic assignations
-CheckMissingTaxa <- function(missingTaxa){
-	if(is.data.frame(missingTaxa)){ # or is.matrix??
+missing_taxa_check <- function(missing_taxa){
+	if(is.data.frame(missing_taxa)){ # or is.matrix??
 		stop("not implemented yet")
 		# checkPastisData
-		return(missingTaxa)
+		return(missing_taxa)
 	}
-	if(is.vector(missingTaxa)){
-		missingTaxa <- as.character(missingTaxa)
-		return(missingTaxa)
+	if(is.vector(missing_taxa)){
+		missing_taxa <- as.character(missing_taxa)
+		return(missing_taxa)
 	}
-	if(is.null(missingTaxa)) {
+	if(is.null(missing_taxa)) {
 		return(NULL)
 	}
-	missingTaxa <- check_datelife_query(missingTaxa)
-	if(inherits(missingTaxa, "phylo")){
+	missing_taxa <- input_process(missing_taxa)
+	if(inherits(missing_taxa, "phylo")){
 		stop("not implemented yet")
 	}
-	tryCatch(check_phylo(phy = missingTaxa), error = function(e) stop("missing taxa must be one of: NULL; a vector with species names; a dataframe with taxonomic assignations; a newick character string; a phylo object"))
+	tryCatch(phylo_check(phy = missing_taxa), error = function(e) stop("missing taxa must be one of: NULL; a vector with species names; a dataframe with taxonomic assignations; a newick character string; a phylo object"))
 	# IMPORTANT: Add a check that taxa in dated.trees is in reference.tree and viceversa
-	return(missingTaxa)
+	return(missing_taxa)
 	# if (is.null(reference.tree)){
-		# if (is.null(missing.taxa)) {
-			# cat("specify a reference.tree or missing.taxa to be added to the dated.trees")
+		# if (is.null(add_taxon_distribution)) {
+			# cat("specify a reference.tree or add_taxon_distribution to be added to the dated.trees")
 			# stop("")
 		# } else {
 			# # construct a tree with phylotastic or take that from otol?
-			# cat("Constructing a reference.tree with taxa from dated.tree and missing.taxa")
+			# cat("Constructing a reference.tree with taxa from dated.tree and add_taxon_distribution")
 		# }
 	# } else {
-		# if(!is.null(missing.taxa)){
-			# cat("A reference.tree was given, missing.taxa argument is ignored")
+		# if(!is.null(add_taxon_distribution)){
+			# cat("A reference.tree was given, add_taxon_distribution argument is ignored")
 		# }
 }
 
@@ -611,8 +615,8 @@ run_mrbayes <- function(file = NULL){
 #' @return A set of MrBayes calibration commands printed in console as character strings or as a text file with name specified in file.
 #' @export
 # This function is set to match node names with constraints obtained from paleotree::GetMrBayesConstraints
-GetMrBayesNodeCalibrations <- function(phy = NULL, ncalibration = NULL, ncalibrationType = "fixed", file = NULL){
-	phy <- check_datelife_query(input = phy, verbose = FALSE)
+get_mrbayes_node_calibrations <- function(phy = NULL, ncalibration = NULL, ncalibrationType = "fixed", file = NULL){
+	phy <- input_process(input = phy, verbose = FALSE)
     if (!inherits(phy, "phylo")) {
 		stop("phy must be a newick character string or in phylo format")
     }
@@ -624,11 +628,11 @@ GetMrBayesNodeCalibrations <- function(phy = NULL, ncalibration = NULL, ncalibra
 		nages <- ncalibration$node_age
 
 	} else {  # if it is a tree
-			ncalibration <- check_datelife_query(input = ncalibration, verbose = FALSE)
+			ncalibration <- input_process(input = ncalibration, verbose = FALSE)
 			if (!inherits(ncalibration, "phylo")) {
 					stop("ncalibration must be a newick character string, a phylo object or a list with taxon names and dates")
 	    }
-			if(is.null(ncalibration$edge.length) | !ape::is.ultrametric(ncalibration)) {
+			if(is.null(ncalibration$edge.length) | !ape::is.ultrametric(ncalibration, option = 2)) {
 	    	stop("ncalibration tree must have branch lengths and be ultrametric")
 			}
 	    phy <- phylo_tiplabel_space_to_underscore(phy)
@@ -662,7 +666,7 @@ GetMrBayesNodeCalibrations <- function(phy = NULL, ncalibration = NULL, ncalibra
 #' @export
 phylo_get_singleton_outgroup <- function(phy = NULL){
     if (!inherits(phy, "phylo")) {
-        phy <- check_datelife_query(input = phy, verbose = FALSE)
+        phy <- input_process(input = phy, verbose = FALSE)
     }
 	phy <- phylo_tiplabel_space_to_underscore(phy)
     outgroup <- NA
@@ -681,33 +685,33 @@ phylo_get_singleton_outgroup <- function(phy = NULL){
 
 
 #' Summarize a filtered results list from get_datelife_result function in various ways
-#' @param filtered.results A list of patristic matrices; labels correspond to citations
+#' @param datelife_result A list of patristic matrices; labels correspond to citations
 #' @inheritParams datelife_search
 #' @inherit datelife_search return details
 #' @export
-summarize_datelife_result <- function(filtered.results = NULL, output.format = "phylo.all", input = NULL, partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), showSummary = c("citations", "taxa"), missing.taxa = c("none", "summary", "matrix"), verbose = FALSE) {
+summarize_datelife_result <- function(datelife_result = NULL, summary_format = "phylo.all", input = NULL, partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), summary_print = c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"), verbose = FALSE) {
 		# if(!partial) {
-		# 	filtered.results <- filtered.results[which(!sapply(filtered.results, anyNA))]
+		# 	datelife_result <- datelife_result[which(!sapply(datelife_result, anyNA))]
 		# } # not necessary cause already filtered in get_datelife_result
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
-	if(is.null(filtered.results) | !is.list(filtered.results)){
-		stop("filtered.results argument must be a list from get_datelife_result function.")
+	if(is.null(datelife_result) | !is.list(datelife_result)){
+		stop("datelife_result argument must be a list from get_datelife_result function.")
 	}
-	output.format.in <- match.arg(output.format, choices = c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
-	missing.taxa.in <- match.arg(missing.taxa, choices = c("none", "summary", "matrix"))
-	showSummary.in <- match.arg(showSummary, c("citations", "taxa", "none"), several.ok = TRUE)
+	summary_format.in <- match.arg(summary_format, choices = c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
+	add_taxon_distribution.in <- match.arg(add_taxon_distribution, choices = c("none", "summary", "matrix"))
+	summary_print.in <- match.arg(summary_print, c("citations", "taxa", "none"), several.ok = TRUE)
 	if(is.null(input)){
-		input.in <- unique(rapply(filtered.results, rownames))
-		if(missing.taxa.in !="none") warning("showing taxon summary from taxa found in at least one chronogram, this excludes input taxa not found in any chronogram")
+		input.in <- unique(rapply(datelife_result, rownames))
+		if(add_taxon_distribution.in !="none") warning("showing taxon summary from taxa found in at least one chronogram, this excludes input taxa not found in any chronogram")
 	} else {
 		if(!is.character(input)) stop("input must be a character vector")
 		input.in <- input
 	}
-	results.index <- FindMatchingStudyIndex(filtered.results, cache)
+	results.index <- FindMatchingStudyIndex(datelife_result, cache)
 	return.object <- NA
-	input.match <- unique(rapply(filtered.results, rownames))
+	input.match <- unique(rapply(datelife_result, rownames))
 	# if(any(!input.match %in% input)) warning("input does not contain all or any taxa from filteredresults object")
 	absent.input <- input.in[!input.in %in% input.match]
 	if(length(absent.input)<=0) {
@@ -717,93 +721,93 @@ summarize_datelife_result <- function(filtered.results = NULL, output.format = "
 			absent.input <- "None"
 		}
 	}
-	if(missing.taxa.in == "matrix"){
-		missing.taxa.list <- vector(mode = "list")
-		# tax <- unique(rapply(filtered.results, rownames)) #rownames(filtered.results[[1]])
-		for(result.index in sequence(length(filtered.results))){
-			n <- rownames(filtered.results[[result.index]])
+	if(add_taxon_distribution.in == "matrix"){
+		taxon_distribution_list <- vector(mode = "list")
+		# tax <- unique(rapply(datelife_result, rownames)) #rownames(datelife_result[[1]])
+		for(result.index in sequence(length(datelife_result))){
+			n <- rownames(datelife_result[[result.index]])
 			m <- match(input.match,n)
-			missing.taxa.list[[result.index]] <- n[m]
+			taxon_distribution_list[[result.index]] <- n[m]
 		}
-		missing.taxa.matrix <- do.call(rbind, missing.taxa.list) #transforms a list of names into a matrix of names
-		missing.taxa.matrix <- !is.na(missing.taxa.matrix) # makes a boolean matrix
-		colnames(missing.taxa.matrix) <- input.match
-		rownames(missing.taxa.matrix) <- sequence(nrow(missing.taxa.matrix))
+		taxon_distribution_matrix <- do.call(rbind, taxon_distribution_list) #transforms a list of names into a matrix of names
+		taxon_distribution_matrix <- !is.na(taxon_distribution_matrix) # makes a boolean matrix
+		colnames(taxon_distribution_matrix) <- input.match
+		rownames(taxon_distribution_matrix) <- sequence(nrow(taxon_distribution_matrix))
 	}
-	if(missing.taxa.in == "summary" | any(grepl("taxa", showSummary.in))){ # may add here another condition: | makeup_brlen ==TRUE
-		# tax <- unique(rapply(filtered.results, rownames)) #rownames(filtered.results[[1]])
-		x <- rapply(filtered.results, rownames)
+	if(add_taxon_distribution.in == "summary" | any(grepl("taxa", summary_print.in))){ # may add here another condition: | makeup_brlen ==TRUE
+		# tax <- unique(rapply(datelife_result, rownames)) #rownames(datelife_result[[1]])
+		x <- rapply(datelife_result, rownames)
 		prop <- c()
 		for (taxon in input.match){
-			prop <- c(prop, paste(length(which(taxon==x)), "/", length(filtered.results), sep=""))
+			prop <- c(prop, paste(length(which(taxon==x)), "/", length(datelife_result), sep=""))
 		}
-		missing.taxa.summary <- data.frame(Taxon = input.match, Chronograms = prop)
+		taxon_distribution_summary <- data.frame(Taxon = input.match, Chronograms = prop)
 	}
-	if(output.format.in == "citations") {
-		return.object <- names(filtered.results)
+	if(summary_format.in == "citations") {
+		return.object <- names(datelife_result)
 	}
-	if(output.format.in == "mrca") {
-		return.object <- GetAges(filtered.results, partial = partial)
+	if(summary_format.in == "mrca") {
+		return.object <- datelife_result_MRCA(datelife_result, partial = partial)
 	}
-	if(output.format.in == "newick.all") {
-		trees <- sapply(filtered.results, PatristicMatrixToNewick)
+	if(summary_format.in == "newick.all") {
+		trees <- sapply(datelife_result, patristic_matrix_to_newick)
 		return.object <- trees[which(!is.na(trees))]
 	}
-	if(output.format.in == "newick.sdm") {
-		local.results <- RunSDM(filtered.results)
-		filtered.results <- local.results$filtered.results
+	if(summary_format.in == "newick.sdm") {
+		local.results <- datelife_result_sdm(datelife_result)
+		datelife_result <- local.results$datelife_result
 		tree <- local.results$phy
 		return.object <- ape::write.tree(tree)
 	}
-	if(output.format.in == "phylo.sdm") {
-		local.results <- RunSDM(filtered.results)
-		filtered.results <- local.results$filtered.results
+	if(summary_format.in == "phylo.sdm") {
+		local.results <- datelife_result_sdm(datelife_result)
+		datelife_result <- local.results$datelife_result
 		tree <- local.results$phy
 		return.object <- tree
 	}
-	if(output.format.in == "newick.median") {
-		patristic.array <- BindMatrices(filtered.results)
+	if(summary_format.in == "newick.median") {
+		patristic.array <- datelife_result_bind(datelife_result)
 		median.matrix <- SummaryPatristicMatrixArray(patristic.array)
-		tree <- PatristicMatrixToNewick(median.matrix)
+		tree <- patristic_matrix_to_newick(median.matrix)
 		return.object <- tree
 	}
-	if(output.format.in == "phylo.median") {
-		patristic.array <- BindMatrices(filtered.results)
+	if(summary_format.in == "phylo.median") {
+		patristic.array <- datelife_result_bind(datelife_result)
 		median.matrix <- SummaryPatristicMatrixArray(patristic.array)
-		tree <- PatristicMatrixToTree(median.matrix)
+		tree <- patristic_matrix_to_phylo(median.matrix)
 		return.object <- tree
 	}
-	if(output.format.in == "phylo.all") {
-		trees <- lapply(filtered.results, PatristicMatrixToTree)
+	if(summary_format.in == "phylo.all") {
+		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
 		return.object <- trees[which(!is.na(trees))]
 	}
-	if(output.format.in == "html") {
+	if(summary_format.in == "html") {
 		out.vector1 <- "<table border='1'><tr><th>MRCA Age (MY)</th><th>Ntax</th><th>Citation</th><th>Newick"
-		if(missing.taxa.in == "matrix"){
-			out.vector1 <- paste(out.vector1, paste("</th><th>", colnames(missing.taxa.matrix), sep="", collapse=""), sep="")
+		if(add_taxon_distribution.in == "matrix"){
+			out.vector1 <- paste(out.vector1, paste("</th><th>", colnames(taxon_distribution_matrix), sep="", collapse=""), sep="")
 		}
 		out.vector1 <- paste(out.vector1, "</th></tr>", sep="")
-		ages <- GetAges(filtered.results, partial = partial)
-		trees <- sapply(filtered.results, PatristicMatrixToNewick)
+		ages <- datelife_result_MRCA(datelife_result, partial = partial)
+		trees <- sapply(datelife_result, patristic_matrix_to_newick)
 		out.vector2 <- c()
-		for(result.index in sequence(length(filtered.results))) {
-			out.vector2 <- paste(out.vector2, "<tr><td>",ages[result.index],"</td><td>",sum(!is.na(diag(filtered.results[[result.index]]))), "</td><td>", names(filtered.results)[result.index], "</td><td>", trees[result.index],  sep="")
-			if(missing.taxa.in == "matrix"){
-				out.vector2 <- paste(out.vector2, paste("</td><td>", missing.taxa.matrix[result.index,], sep="", collapse=""), sep="")
+		for(result.index in sequence(length(datelife_result))) {
+			out.vector2 <- paste(out.vector2, "<tr><td>",ages[result.index],"</td><td>",sum(!is.na(diag(datelife_result[[result.index]]))), "</td><td>", names(datelife_result)[result.index], "</td><td>", trees[result.index],  sep="")
+			if(add_taxon_distribution.in == "matrix"){
+				out.vector2 <- paste(out.vector2, paste("</td><td>", taxon_distribution_matrix[result.index,], sep="", collapse=""), sep="")
 			}
 			out.vector2 <- paste(out.vector2, "</td></tr>", sep="")
 		}
 		out.vector <- paste(out.vector1, out.vector2, "</table>", sep="")
-		if(missing.taxa.in == "summary"){
-			missing.taxa.summ <- as.matrix(missing.taxa.summary)
+		if(add_taxon_distribution.in == "summary"){
+			taxon_distribution_summary.html <- as.matrix(taxon_distribution_summary)
 			out.vector3 <- "<p></p><table border='1'><tr><th>Taxon</th><th>Chronograms</th><tr>"
-			for (summary.index in sequence(nrow(missing.taxa.summ))){
-				out.vector3 <- paste(out.vector3, paste("</td><td>", missing.taxa.summ[summary.index,], sep="", collapse=""), "</td></tr>", sep="")
+			for (summary.index in sequence(nrow(taxon_distribution_summary.html))){
+				out.vector3 <- paste(out.vector3, paste("</td><td>", taxon_distribution_summary.html[summary.index,], sep="", collapse=""), "</td></tr>", sep="")
 			}
 			out.vector <- paste(out.vector, out.vector3, "</table>", sep="")
 		}
 		# out.vector4 <- c()
-		if(missing.taxa.in != "none") {
+		if(add_taxon_distribution.in != "none") {
 			out.vector4 <- "<p></p><table border='1'><tr><th> </th><th>Absent Taxa</th><tr>"
 			for (i in 1:length(absent.input)){
 				out.vector4 <- paste(out.vector4, "<tr><td>", i, "</td><td>", absent.input[i], "</td><tr>", sep="")
@@ -813,54 +817,54 @@ summarize_datelife_result <- function(filtered.results = NULL, output.format = "
 		}
 		return.object <- out.vector
 	}
-	if(output.format.in == "data.frame") {
+	if(summary_format.in == "data.frame") {
 		out.df <- data.frame()
-		ages <- GetAges(filtered.results, partial = partial)
-		trees <- sapply(filtered.results, PatristicMatrixToNewick)
-		for(result.index in sequence(length(filtered.results))) {
-			out.line<- data.frame(Age = ages[result.index],Ntax = sum(!is.na(diag(filtered.results[[result.index]]))), Citation = names(filtered.results)[result.index], Newick= trees[result.index])
+		ages <- datelife_result_MRCA(datelife_result, partial = partial)
+		trees <- sapply(datelife_result, patristic_matrix_to_newick)
+		for(result.index in sequence(length(datelife_result))) {
+			out.line<- data.frame(Age = ages[result.index],Ntax = sum(!is.na(diag(datelife_result[[result.index]]))), Citation = names(datelife_result)[result.index], Newick= trees[result.index])
 			if(result.index == 1) {
 				out.df <- out.line
 			} else {
 				out.df <- rbind(out.df, out.line)
 			}
 		}
-		if(missing.taxa.in == "matrix"){
-			out.df <- cbind(out.df, missing.taxa.matrix)
+		if(add_taxon_distribution.in == "matrix"){
+			out.df <- cbind(out.df, taxon_distribution_matrix)
 		}
 		rownames(out.df) <- NULL
 		return.object <- out.df
 	}
-	if(missing.taxa.in != "none" & output.format.in !="html"){
+	if(add_taxon_distribution.in != "none" & summary_format.in !="html"){
 		return.object <- list(return.object)
-		if(missing.taxa.in == "matrix") {
-			if(output.format.in !="data.frame") return.object <- c(return.object, list(missing.taxa = missing.taxa.matrix))
+		if(add_taxon_distribution.in == "matrix") {
+			if(summary_format.in !="data.frame") return.object <- c(return.object, list(taxon_distribution = taxon_distribution_matrix))
 		}
-		if(missing.taxa.in == "summary") {
-			return.object <- c(return.object, list(missing.taxa = missing.taxa.summary))
+		if(add_taxon_distribution.in == "summary") {
+			return.object <- c(return.object, list(taxon_distribution = taxon_distribution_summary))
 		}
 		return.object <- c(return.object, list(absent.taxa = data.frame(Taxon = absent.input)))
-		names(return.object)[1] <- output.format.in
-		if(output.format.in =="data.frame"){
+		names(return.object)[1] <- summary_format.in
+		if(summary_format.in =="data.frame"){
 			names(return.object)[1] <- "results"
-			if(missing.taxa.in == "matrix") names(return.object)[1] <- "results.and.missing.taxa"
+			if(add_taxon_distribution.in == "matrix") names(return.object)[1] <- "results_and_missing_taxa"
 		}
 	}
 
-	if(any("citations" %in% showSummary.in) & !any(output.format.in %in% c("citations", "html", "data.frame"))) {
-		if(output.format.in == "citations"){
+	if(any("citations" %in% summary_print.in) & !any(summary_format.in %in% c("citations", "html", "data.frame"))) {
+		if(summary_format.in == "citations"){
 			cat("Target taxa found in trees from:", "\n")
-			print(names(filtered.results), quote = FALSE)
+			print(names(datelife_result), quote = FALSE)
 			cat("\n")
 		} else {
 			cat("Source chronograms from:", "\n")
-			print(names(filtered.results), quote = FALSE)
+			print(names(datelife_result), quote = FALSE)
 			cat("\n")
 		}
 	}
-	if(any(grepl("taxa", showSummary.in)) & missing.taxa.in!="summary") {
+	if(any(grepl("taxa", summary_print.in)) & add_taxon_distribution.in!="summary") {
 		cat("Target taxa presence in source chronograms:", "\n")
-		print(missing.taxa.summary)
+		print(taxon_distribution_summary)
 		cat("\n")
 		cat("Target taxa completely absent from source chronograms:", "\n")
 		print(data.frame(Taxon = absent.input))
@@ -868,290 +872,10 @@ summarize_datelife_result <- function(filtered.results = NULL, output.format = "
 	}
 	return(return.object)
 }
-
-
-
-
-#' Get time of MRCA from patristic matrix. Used in: summarize_datelife_result.
-#' @param patristic.matrix A patristic matrix
-#' @param partial If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries
-#' @return The depth of the MRCA
-#' @export
-GetAge <- function(patristic.matrix, partial = TRUE) {
-  # 0.5 since patristic distance is down to the root and back up
-  return(0.5 * max(patristic.matrix, na.rm = partial))
-}
-
-#' Get vector of MRCA from list of patristic matrices. Used in: summarize_datelife_result.
-#' @param filtered.results List of patristic matrices
-#' @param partial If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries
-#' @return Vector of MRCA ages with names same as in filtered.results
-#' @export
-GetAges <- function(filtered.results, partial = TRUE) {
-	ages <- sapply(filtered.results, GetAge, partial = partial)
-	return(ages)
-}
-
-#' Function to remove missing taxa. Used in: RunSDM.
-#' @param patristic.matrix A patristic matrix with row and column names for taxa
-#' @return Patristic.matrix for all.taxa
-#' @export
-UnpadMatrix <- function(patristic.matrix) {
-	bad.ones <- which(apply(is.na(patristic.matrix),2,all))
-	if(length(bad.ones)>0) {
-		patristic.matrix <- patristic.matrix[-bad.ones, -bad.ones]
-	}
-	return(patristic.matrix)
-}
-
-TestNameOrder <- function(patristic.matrix, standard.rownames, standard.colnames) {
-  if (compare::compare(rownames(patristic.matrix),standard.rownames)$result!= TRUE) {
-    return(FALSE)
-  }
-  if (compare::compare(colnames(patristic.matrix),standard.colnames)$result!= TRUE) {
-    return(FALSE)
-  }
-  return(TRUE)
-}
-
-
-
-
-
-
-
-
-
-#
-# ReadDistance <- function(file) {
-# 	data <- readLines(file, n=-1)[-1] #read in phylip distance, perhaps from SDM
-# 	data <- strsplit(data, " +")
-# 	data[sapply(data, length)>0] #trim trailing
-# 	final.matrix <- matrix(nrow = length(data), ncol = length(data))
-# 	all.names <- rep(NA, length(data))
-# 	for (data.index in sequence(length(data))) {
-# 		local.line <- data[[data.index]]
-# 		all.names[data.index] <- local.line[1]
-# 		local.line <- as.numeric(local.line[-1])
-#
-# 	}
-# }
-
-#
-# SDM <- function(filtered.results, weights = NULL)) {
-#
-# 	patristic.array <- BindMatrices(filtered.results)
-# 	k <- length(filtered.results)
-# 	if(is.null(weights)) {
-# 		weights <- rep(1/k, k)
-# 	} else {
-# 		weights <- weights/sum(weights) #just to make sure total weight is 1
-# 	}
-#
-# 	#Use their appendix and stick it in solve
-# 	#a*x = b
-# 	#The a matrix has a vector of alpha values, then a_i for matrix 1, a_i for matrix 2..., then
-#
-# }
-#
-# #rewrite of code in ape by Andrei Popescu niteloserpopescu@gmail.com to allow for debugging
-# apeSDM <- function(...) {
-# 	st <- list(...)
-# 	k <- length(st)/2
-# 	ONEtoK <- seq_len(k)
-# 	for (i in ONEtoK) st[[i]] <- as.matrix(st[[i]])
-# 	ROWNAMES <- lapply(st[ONEtoK], rownames)
-# 	NROWS <- sapply(ROWNAMES, length)
-# 	tot <- sum(NROWS)
-# 	labels <- unique(unlist(ROWNAMES))
-# 	sp <- unlist(st[k + ONEtoK])
-# 	astart <- numeric(tot)
-# 	astart[1] <- k
-# 	for (i in 2:k) astart[i] <- astart[i - 1] + NROWS[i - 1]
-# 	n <- length(labels)
-# 	miustart <- k + tot
-# 	niustart <- miustart + n
-# 	lambstart <- niustart + k - 1
-# 	X <- matrix(0, n, n, dimnames = list(labels, labels))
-# 	V <- w <- X
-# 	tmp <- 2 * k + tot + n
-# 	col <- numeric(tmp)
-# 	for (i in 1:(n - 1)) {
-# 		for (j in (i + 1):n) {
-# 			for (p in ONEtoK) {
-# 				if (is.element(labels[i], ROWNAMES[[p]]) && is.element(labels[j],
-# 					ROWNAMES[[p]])) {
-# 						w[i, j] <- w[j, i] <- w[i, j] + sp[p]
-# 					}
-# 				}
-# 			}
-# 		}
-# 		ONEtoN <- seq_len(n)
-# 		Q <- matrix(0, tmp, tmp)
-# 		for (p in ONEtoK) {
-# 			d_p <- st[[p]]
-# 			for (l in ONEtoK) {
-# 				d <- st[[l]]
-# 				sum <- 0
-# 				dijp <- -1
-# 				if (l == p) {
-# 					for (i in ONEtoN) {
-# 						for (j in ONEtoN) {
-# 							if (i == j)
-# 							next
-# 							pos <- match(labels[c(i, j)], ROWNAMES[[l]])
-# 							if (all(!is.na(pos))) {
-# 								ipos <- pos[1L]
-# 								jpos <- pos[2L]
-# 								dij <- d[ipos, jpos]
-# 								sum <- sum + dij * dij - sp[l] * dij *
-# 								dij/w[i, j]
-# 								tmp2 <- dij - sp[l] * dij/w[i, j]
-# 								Q[p, astart[l] + ipos] <- Q[p, astart[l] +
-# 								ipos] + tmp2
-# 								Q[p, astart[l] + jpos] <- Q[p, astart[l] +
-# 								jpos] + tmp2
-# 							}
-# 						}
-# 					}
-# 				}
-# 				else {
-# 					for (i in ONEtoN) {
-# 						for (j in ONEtoN) {
-# 							if (i == j)
-# 							next
-# 							pos <- match(labels[c(i, j)], ROWNAMES[[l]])
-# 							posp <- match(labels[c(i, j)], ROWNAMES[[p]])
-# 							if (all(!is.na(pos)) && all(!is.na(posp))) {
-# 								ipos <- pos[1L]
-# 								jpos <- pos[2L]
-# 								dij <- d[ipos, jpos]
-# 								dijp <- d_p[posp[1L], posp[2L]]
-# 								sum <- sum - sp[l] * dij * dijp/w[i, j]
-# 								tmp2 <- sp[l] * dijp/w[i, j]
-# 								Q[p, astart[l] + ipos] <- Q[p, astart[l] +
-# 								ipos] - tmp2
-# 								Q[p, astart[l] + jpos] <- Q[p, astart[l] +
-# 								jpos] - tmp2
-# 							}
-# 						}
-# 					}
-# 				}
-# 				Q[p, l] <- sum
-# 			}
-# 			Q[p, lambstart + 1] <- 1
-# 		}
-# 		r <- k
-# 		for (p in ONEtoK) {
-# 			dp <- st[[p]]
-# 			for (i in ONEtoN) {
-# 				if (is.element(labels[i], ROWNAMES[[p]])) {
-# 					r <- r + 1
-# 					for (l in ONEtoK) {
-# 						d <- st[[l]]
-# 						if (l == p) {
-# 							ipos <- match(labels[i], ROWNAMES[[p]])
-# 							for (j in ONEtoN) {
-# 								if (i == j)
-# 								next
-# 								jpos <- match(labels[j], ROWNAMES[[p]])
-# 								if (!is.na(jpos)) {
-# 									dij <- d[ipos, jpos]
-# 									Q[r, l] <- Q[r, l] + dij - sp[l] * dij/w[i,
-# 									j]
-# 									tmp2 <- 1 - sp[l]/w[i, j]
-# 									Q[r, astart[l] + ipos] <- Q[r, astart[l] +
-# 									ipos] + tmp2
-# 									Q[r, astart[l] + jpos] <- Q[r, astart[l] +
-# 									jpos] + tmp2
-# 								}
-# 							}
-# 						}
-# 						else {
-# 							for (j in ONEtoN) {
-# 								if (i == j)
-# 								next
-# 								if (!is.element(labels[j], rownames(dp)))
-# 								next
-# 								pos <- match(labels[c(i, j)], ROWNAMES[[l]])
-# 								if (all(!is.na(pos))) {
-# 									ipos <- pos[1L]
-# 									jpos <- pos[2L]
-# 									dij <- d[ipos, jpos]
-# 									Q[r, l] <- Q[r, l] - sp[l] * dij/w[i,
-# 									j]
-# 									tmp2 <- sp[l]/w[i, j]
-# 									Q[r, astart[l] + ipos] <- Q[r, astart[l] +
-# 									ipos] - tmp2
-# 									Q[r, astart[l] + jpos] <- Q[r, astart[l] +
-# 									jpos] - tmp2
-# 								}
-# 							}
-# 						}
-# 					}
-# 					if (p < k)
-# 					Q[r, ] <- Q[r, ] * sp[p]
-# 					Q[r, miustart + i] <- 1
-# 					if (p < k)
-# 					Q[r, niustart + p] <- 1
-# 				}
-# 			}
-# 		}
-# 		r <- r + 1
-# 		col[r] <- k
-# 		Q[r, ONEtoK] <- 1
-# 		for (i in ONEtoN) {
-# 			r <- r + 1
-# 			for (p in ONEtoK) {
-# 				ipos <- match(labels[i], ROWNAMES[[p]])
-# 				if (!is.na(ipos))
-# 				Q[r, astart[p] + ipos] <- 1
-# 			}
-# 		}
-# 		for (p in 1:(k - 1)) {
-# 			r <- r + 1
-# 			for (i in ONEtoN) {
-# 				ipos <- match(labels[i], ROWNAMES[[p]])
-# 				if (!is.na(ipos))
-# 				Q[r, astart[p] + ipos] <- 1
-# 			}
-# 		}
-# 		a <- solve(Q, col, 1e-19)
-# 		for (i in ONEtoN) {
-# 			for (j in ONEtoN) {
-# 				if (i == j) {
-# 					X[i, j] <- V[i, j] <- 0
-# 					next
-# 				}
-# 				sum <- 0
-# 				sumv <- 0
-# 				for (p in ONEtoK) {
-# 					d <- st[[p]]
-# 					pos <- match(labels[c(i, j)], ROWNAMES[[p]])
-# 					if (all(!is.na(pos))) {
-# 						ipos <- pos[1L]
-# 						jpos <- pos[2L]
-# 						dij <- d[ipos, jpos]
-# 						sum <- sum + sp[p] * (a[p] * dij + a[astart[p] +
-# 							ipos] + a[astart[p] + jpos])
-# 							sumv <- sumv + sp[p] * (a[p] * dij)^2
-# 						}
-# 					}
-# 					X[i, j] <- sum/w[i, j]
-# 					V[i, j] <- sumv/(w[i, j])^2
-# 				}
-# 	}
-# 	list(X, V)
-# }
-#
-#
-#
-#
-#
-#' Function to compute the SDM supertree Criscuolo et al. 2006
-#' @param filtered.results List of patristic matrices
-#' @param weighting flat, taxa, inverse
-#' @return A list containing phy (a chronogram), and filtered.results that were actually used
+#' Function to compute the SDM supertree (Criscuolo et al. 2006) from a datelifeResult object.
+#' @param datelife_result List of patristic matrices.
+#' @param weighting A character vector. One of "flat", "taxa" or "inverse".
+#' @return A list containing phy, a chronogram from SDM, and the original datelife_result that were actually used.
 #' @export
 #' @details
 #' Weighting is how much weight to give each input tree.
@@ -1159,10 +883,10 @@ TestNameOrder <- function(patristic.matrix, standard.rownames, standard.colnames
 #'    taxa = weight is proportional to number of taxa
 #'    inverse = weight is proportional to 1 / number of taxa
 #' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006;55(5):740–55. doi: 10.1080/10635150600969872.
-RunSDM <- function(filtered.results, weighting="flat") {
+datelife_result_sdm <- function(datelife_result, weighting="flat") {
 	phy <- NA
-	used.studies <- names(filtered.results)
-	unpadded.matrices <- lapply(filtered.results, UnpadMatrix)
+	used.studies <- names(datelife_result)
+	unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
 	good.matrix.indices <- c()
 	for(i in sequence(length(unpadded.matrices))) {
 		test.result <- NA
@@ -1187,5 +911,6 @@ RunSDM <- function(filtered.results, weighting="flat") {
 		#agnes in package cluster has UPGMA with missing data; might make sense here
 		try(phy <- phangorn::upgma(SDM.result))
 	}
-	return(list(phy = phy, filtered.results = unpadded.matrices))
+	class(unpadded.matrices) <- "datelifeResult"
+	return(list(phy = phy, datelife_result = unpadded.matrices))
 }

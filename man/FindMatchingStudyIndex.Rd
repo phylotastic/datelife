@@ -4,10 +4,10 @@
 \alias{FindMatchingStudyIndex}
 \title{Find the index of relevant studies in a opentree_chronograms object. Used inside: summarize_datelife_result.}
 \usage{
-FindMatchingStudyIndex(filtered.results, cache = get("opentree_chronograms"))
+FindMatchingStudyIndex(datelife_result, cache = get("opentree_chronograms"))
 }
 \arguments{
-\item{filtered.results}{The patristic.matrices that will be used}
+\item{datelife_result}{The patristic.matrices that will be used}
 
 \item{cache}{The cache of studies}
 }

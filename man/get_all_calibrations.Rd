@@ -5,8 +5,8 @@
 \title{Get all calibrations from chronograms in a database (specified in cache).}
 \usage{
 get_all_calibrations(input = c("Rhea americana", "Pterocnemia pennata",
-  "Struthio camelus"), partial = TRUE, usetnrs = FALSE,
-  approximatematch = TRUE, update_cache = FALSE,
+  "Struthio camelus"), partial = TRUE, use_tnrs = FALSE,
+  approximate_match = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), verbose = FALSE)
 }
 \arguments{
@@ -14,9 +14,9 @@ get_all_calibrations(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{partial}{Boolean; default TRUE: use source trees even if they only match some of the desired taxa}
 
-\item{usetnrs}{Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer}
+\item{use_tnrs}{Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer}
 
-\item{approximatematch}{Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)}
+\item{approximate_match}{Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)}
 
 \item{update_cache}{default to FALSE}
 
