@@ -1,6 +1,6 @@
 Package: datelife
 Title: Underlying code for DateLife service
-Version: 0.2.13
+Version: 0.2.14
 Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.brian@gmail.com"),
   person("Luna L.", "Sanchez Reyes", role=c("aut")),
   person("Jonathan", "Eastman", role=c("aut")),
@@ -36,7 +36,11 @@ Imports:
     phylobase,
     treebase
 Suggests:
-    testthat
+    testthat,
+    paleotree,
+    phylocomr,
+    rphylotastic,
+    taxize
 SystemRequirements: mafft, PATHd8
 URL: https://github.com/phylotastic/datelife, http://www.datelife.org
 License: GPL (>=2)
