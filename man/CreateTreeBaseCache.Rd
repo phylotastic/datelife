@@ -4,7 +4,7 @@
 \alias{CreateTreeBaseCache}
 \title{Create a cache from TreeBase}
 \usage{
-CreateTreeBaseCache(outputfile = "treebasecache.rda", verbose = TRUE)
+CreateTreeBaseCache(outputfile = "treebasecache.RData", verbose = TRUE)
 }
 \arguments{
 \item{outputfile}{Path including file name}

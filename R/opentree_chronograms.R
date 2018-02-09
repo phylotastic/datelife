@@ -9,6 +9,7 @@
 #' @inheritParams SaveOToLChronograms
 #' @inherit GetOToLChronograms return
 #' @inherit SaveOToLChronograms return
+#' @export
 
 update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RData", verbose = TRUE){
 	if (save) {
