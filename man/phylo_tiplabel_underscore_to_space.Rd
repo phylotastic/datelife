@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_internal.R
 \name{phylo_tiplabel_underscore_to_space}
 \alias{phylo_tiplabel_underscore_to_space}
-\title{Convert underscores to spaces in trees. Used inside: CongruifyTree, CongruifyAndCheck.}
+\title{Convert underscores to spaces in trees. Used inside: patristic_matrix_array_phylo_congruify, congruify_and_check.}
 \usage{
 phylo_tiplabel_underscore_to_space(phy)
 }
@@ -13,5 +13,5 @@ phylo_tiplabel_underscore_to_space(phy)
 A phylo object
 }
 \description{
-Convert underscores to spaces in trees. Used inside: CongruifyTree, CongruifyAndCheck.
+Convert underscores to spaces in trees. Used inside: patristic_matrix_array_phylo_congruify, congruify_and_check.
 }

@@ -1,15 +1,15 @@
-test_that("ProcessResultsList", {
+test_that("results_list_process", {
 utils::data(opentree_chronograms)
 taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-results.list <- lapply(opentree_chronograms$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
-expect_gte(length(ProcessResultsList(results.list, taxa, TRUE)), 1)
+results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
+expect_gte(length(results_list_process(results_list, taxa, TRUE)), 1)
 })
 
 test_that("Summarize as mrca works correctly", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results.list <- lapply(opentree_chronograms$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
-  datelife_result <- ProcessResultsList(results.list, taxa, TRUE)
+  results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
+  datelife_result <- results_list_process(results_list, taxa, TRUE)
   mrca.vector <- summarize_datelife_result(datelife_result, summary_format="mrca", cache=opentree_chronograms)
   expect_equal(class(mrca.vector), "numeric")
   expect_gte(min(mrca.vector),5)
@@ -19,8 +19,8 @@ test_that("Summarize as mrca works correctly", {
 test_that("Summarize as citations works correctly", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results.list <- lapply(opentree_chronograms$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
-  datelife_result <- ProcessResultsList(results.list, taxa, TRUE)
+  results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
+  datelife_result <- results_list_process(results_list, taxa, TRUE)
   citation.results <- summarize_datelife_result(datelife_result, summary_format="cit", cache=opentree_chronograms)
   expect_equal(class(citation.results), "character")
   expect_gte(sum(grepl("Prum", citation.results)),1)
@@ -29,8 +29,8 @@ test_that("Summarize as citations works correctly", {
 test_that("Summarize as newick.all works correctly", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results.list <- lapply(opentree_chronograms$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
-  datelife_result <- ProcessResultsList(results.list, taxa, TRUE)
+  results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
+  datelife_result <- results_list_process(results_list, taxa, TRUE)
   trees <- summarize_datelife_result(datelife_result, summary_format="newick.all", cache=opentree_chronograms)
   expect_equal(class(trees), "character")
   expect_false(anyNA(trees))
@@ -40,8 +40,8 @@ test_that("Summarize as newick.all works correctly", {
 test_that("Summarize as newick.median works correctly", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results.list <- lapply(opentree_chronograms$trees,GetSubsetArrayDispatch, taxa=taxa, phy=NULL)
-  datelife_result <- ProcessResultsList(results.list, taxa, partial=FALSE)
+  results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
+  datelife_result <- results_list_process(results_list, taxa, partial=FALSE)
   tree <- summarize_datelife_result(datelife_result, summary_format="newick.median", cache=opentree_chronograms)
   expect_equal(class(tree), "character")
   expect_false(anyNA(tree))
@@ -111,7 +111,7 @@ test_that("Processing input string", {
 	skip_on_cran()
   utils::data(opentree_chronograms)
   input.processed <- make_datelife_query(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), use_tnrs=FALSE, approximate_match=TRUE)
-  expect_equal(length(input.processed$cleaned.names),3)
+  expect_equal(length(input.processed$cleaned_names),3)
 })
 
 test_that("Making OToL and BOLD tree works", {
@@ -126,7 +126,7 @@ test_that("Making OToL and BOLD tree works", {
   expect_lte(min(phy.ml$edge.length), 1)
 })
 
-test_that("GetSubsetArrayCongruifyWorks", {
+test_that("patristic_matrix_array_congruifyWorks", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
 
@@ -150,8 +150,8 @@ test_that("SDM correctly returns tree", {
   skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results.list <- lapply(opentree_chronograms$trees, GetSubsetArrayDispatch, taxa = taxa, phy = NULL)
-  datelife_result <- ProcessResultsList(results.list, taxa, TRUE)
+  results_list <- lapply(opentree_chronograms$trees, get_subset_array_dispatch, taxa = taxa, phy = NULL)
+  datelife_result <- results_list_process(results_list, taxa, TRUE)
   result.tree <- datelife_result_sdm(datelife_result)$phy
   expect_equal(class(result.tree), "phylo")
 })
@@ -179,7 +179,7 @@ test_that("Processing newick input works", {
   expect_equal(class(processed$phy), "phylo")
   expect_equal(ape::Ntip(processed$phy), 6)
   expect_equal(ape::Nnode(processed$phy), 5)
-  expect_equal(length(processed$cleaned.names), 6)
+  expect_equal(length(processed$cleaned_names), 6)
 })
 
 test_that("Crop plant newick works", {
@@ -204,12 +204,12 @@ test_that("We don't get negative brlen from pathd8", {
 # test_that("TNRS with approximate match works", {
 	 # taxa <- c("Rhea_americana", "Pterocnemia pennato", "Strutho camelus")
  	# input.processed <- make_datelife_query(taxa, use_tnrs=TRUE, approximate_match=TRUE)
- 	# expect_true(all.equal(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), input.processed$cleaned.names))
+ 	# expect_true(all.equal(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), input.processed$cleaned_names))
 # })
 
 
 # test_that("TNRS with unmatchable taxa works", {
 	# taxa <- c("Rhea_americana", "Pterocnemia pennato", "Oscar the grouch", "Strutho camelus")
  	# input.processed <- make_datelife_query(taxa, use_tnrs=TRUE, approximate_match=TRUE)
- 	# expect_true(all.equal(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), input.processed$cleaned.names))
+ 	# expect_true(all.equal(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), input.processed$cleaned_names))
 # })

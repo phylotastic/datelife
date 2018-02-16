@@ -97,7 +97,7 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, get_spp_from_taxon = FALSE, verbose = FALSE) {
 	#otol returns error with missing taxa in v3 of rotl
 	input <- input_check(input = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
-	input <- input$cleaned.names
+	input <- input$cleaned_names
 	if (verbose) cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
 	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
 	if(length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available, if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
@@ -109,7 +109,16 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides)  # preserve good nucleotide data, i.e., only A,T,G,C
 	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
 	if (verbose) cat("\t", "OK.", "\n")
-	rr <- rotl::tnrs_match_names(names = input)  # rr has the same order as input
+		xx <- seq(1, length(input), 250)
+		yy <- xx+249
+		if(length(input)%%250 != 0) {
+			yy[length(xx)] <- length(input)
+		}
+		for (i in seq_len(length(xx))){
+			rr <- rotl::tnrs_match_names(names = input[xx[i]:yy[i]])
+		}
+	# rr <- rotl::tnrs_match_names(names = input)  # rr has the same order as input
+	# when names are not matched it gives a warning: NAs introduced by coercion, so:
 	rr <- rr[!is.na(rr$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
 	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids = rr$ott_id, label_format = "name",  otl_v = otol_version))
 	phy$tip.label <- gsub(".*_ott","", phy$tip.label)  # leaves only the ott_id as tip.label, it's safer than matching by name
@@ -136,7 +145,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 		taxon.index <- which(grepl(i, sequences$species_name))
 		# if there are no sequences from any taxon, taxon.index is empty
 		# but we make sure this is filtered steps before
-		if (length(taxon.index)>0){
+		if (length(taxon.index) > 0){
 			seq.index <- which.max(sequences$nucleotide_ATGC_length[taxon.index])
 			# sequences[taxon.index,][seq.index,]
 			seq <- strsplit(sequences$nucleotides[taxon.index][seq.index], split = "")[[1]]

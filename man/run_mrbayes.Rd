@@ -4,10 +4,10 @@
 \alias{run_mrbayes}
 \title{Runs MrBayes from R.}
 \usage{
-run_mrbayes(file = NULL)
+run_mrbayes(mrbayes_output_file = NULL)
 }
 \arguments{
-\item{file}{A character vector specifying the name of mrBayes run file and outputs (can specify directory too).}
+\item{mrbayes_output_file}{A character vector specifying the name of mrBayes run file and outputs (can specify directory too).}
 }
 \value{
 MrBayes outputs.

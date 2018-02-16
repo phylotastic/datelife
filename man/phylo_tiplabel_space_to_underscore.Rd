@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_internal.R
 \name{phylo_tiplabel_space_to_underscore}
 \alias{phylo_tiplabel_space_to_underscore}
-\title{Convert spaces to underscores in trees. Used in: make_mrbayes_runfile, get_mrbayes_node_calibrations, phylo_get_singleton_outgroup, CongruifyAndCheck, CongruifyTree.}
+\title{Convert spaces to underscores in trees. Used in: make_mrbayes_runfile, get_mrbayes_node_calibrations, phylo_get_singleton_outgroup, congruify_and_check, patristic_matrix_array_phylo_congruify.}
 \usage{
 phylo_tiplabel_space_to_underscore(phy)
 }
@@ -13,5 +13,5 @@ phylo_tiplabel_space_to_underscore(phy)
 A phylo object
 }
 \description{
-Convert spaces to underscores in trees. Used in: make_mrbayes_runfile, get_mrbayes_node_calibrations, phylo_get_singleton_outgroup, CongruifyAndCheck, CongruifyTree.
+Convert spaces to underscores in trees. Used in: make_mrbayes_runfile, get_mrbayes_node_calibrations, phylo_get_singleton_outgroup, congruify_and_check, patristic_matrix_array_phylo_congruify.
 }

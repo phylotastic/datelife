@@ -1,41 +1,41 @@
-GetQuantiles <- function(ages,probs = c(0.5,0,0.025,0.975,1) ) {
+relevant_age_quantiles <- function(ages,probs = c(0.5,0,0.025,0.975,1) ) {
   # just utility wrapper function with different defaults
   return(stats::quantile(ages,probs))
 }
 
-VectorToTableRow <- function(x,digits = 2) {
+numeric_vector_to_html_row <- function(x,digits = 2) {
   return(paste(paste("<td>",round(x,digits),sep = ""),"</td>",sep = "",collapse = ""))
 }
 
-SamplePatristicMatrix <- function(patristic.matrix.array, uncertainty) {
- # if (dim(patristic.matrix.array)[3] == 1) {
- # 	patristic.matrix<-patristic.matrix.array[,,1]
+patristic_matrix_sample <- function(patristic_matrix_array, uncertainty) {
+ # if (dim(patristic_matrix_array)[3] == 1) {
+ # 	patristic_matrix<-patristic_matrix_array[,,1]
  # 	#need order of node depths, from just the upper triangular and diagonal part of the matrix
- # 	element.order<-order(patristic.matrix[upper.tri(patristic.matrix,diag = FALSE)],decreasing = TRUE)
- # 	new.patristic.matrix<-patristic.matrix*0
- # 	cur.val<-patristic.matrix[upper.tri(patristic.matrix,diag = FALSE)][element.order[1]]
- #   new.patristic.matrix[upper.tri(new.patristic.matrix,diag = FALSE)][element.order[1]] <- cur.val + runif(1, -cur.val*uncertainty/100, cur.val*uncertainty/100)
+ # 	element.order<-order(patristic_matrix[upper.tri(patristic_matrix,diag = FALSE)],decreasing = TRUE)
+ # 	new.patristic_matrix<-patristic_matrix*0
+ # 	cur.val<-patristic_matrix[upper.tri(patristic_matrix,diag = FALSE)][element.order[1]]
+ #   new.patristic_matrix[upper.tri(new.patristic_matrix,diag = FALSE)][element.order[1]] <- cur.val + runif(1, -cur.val*uncertainty/100, cur.val*uncertainty/100)
 #	element.order<-element.order[-1]
 #  	for (i in sequence(length(element.order))) {
-#  		cur.val<-patristic.matrix[upper.tri(patristic.matrix,diag = FALSE)][element.order[i]]
-#  		new.patristic.matrix[upper.tri(new.patristic.matrix,diag = FALSE)][element.order[i]] <- cur.val + runif(1, -cur.val*uncertainty/100, min(cur.val*uncertainty/100, min( ))
+#  		cur.val<-patristic_matrix[upper.tri(patristic_matrix,diag = FALSE)][element.order[i]]
+#  		new.patristic_matrix[upper.tri(new.patristic_matrix,diag = FALSE)][element.order[i]] <- cur.val + runif(1, -cur.val*uncertainty/100, min(cur.val*uncertainty/100, min( ))
 #  	}
 #  }
 #  else {
-  	return(patristic.matrix <- patristic.matrix.array[,,sample.int(1, size = dim(patristic.matrix.array)[3] )] )
+  	return(patristic_matrix <- patristic_matrix_array[,,sample.int(1, size = dim(patristic_matrix_array)[3] )] )
  # }
 }
 
-GetSubsetMatrix <- function(patristic.matrix, taxa, phy4 = NULL) {
-  #gets a subset of the patristic.matrix. If you give it a phylo4 object, it can check to see if taxa are a clade
-  patristic.matrix.new <- patristic.matrix[ rownames(patristic.matrix) %in% taxa,colnames(patristic.matrix) %in% taxa ]
+patristic_matrix_subset <- function(patristic_matrix, taxa, phy4 = NULL) {
+  #gets a subset of the patristic_matrix. If you give it a phylo4 object, it can check to see if taxa are a clade
+  patristic_matrix.new <- patristic_matrix[ rownames(patristic_matrix) %in% taxa,colnames(patristic_matrix) %in% taxa ]
   problem.new <- "none"
-  final.size <- sum(rownames(patristic.matrix.new) %in% taxa) # returns number of matches
+  final.size <- sum(rownames(patristic_matrix.new) %in% taxa) # returns number of matches
   if (final.size < length(taxa)) {
     problem.new <- "some of the queried taxa are not on this chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
     if (final.size < 2 ) {
       problem.new <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
-      patristic.matrix.new <- NA # to make sure no one uses the zero by mistake
+      patristic_matrix.new <- NA # to make sure no one uses the zero by mistake
     }
   }
   if(!is.null(phy4)) {
@@ -43,25 +43,25 @@ GetSubsetMatrix <- function(patristic.matrix, taxa, phy4 = NULL) {
        problem <- "set of taxa not a clade, so this is probably an overestimate"
     }
   }
-  return(list(patristic.matrix= patristic.matrix.new,problem= problem.new))
+  return(list(patristic_matrix= patristic_matrix.new,problem= problem.new))
 }
 
 #' Return the relevant authors for a set of studies
-#' @param results.index A vector from FindMatchingStudyIndex() with the indices of the relevant studies
+#' @param results.index A vector from datelife_result_study_index() with the indices of the relevant studies
 #' @param cache The cache
 #' @return A vector with counts of each author, with names equal to author names
 #' @export
-TabulateRelevantAuthors <- function(results.index, cache = get("opentree_chronograms")) {
+datelife_authors_tabulate <- function(results.index, cache = get("opentree_chronograms")) {
 	authors <- cache$authors[results.index]
 	return(table(unlist(authors)))
 }
 
 #' Return the relevant curators for a set of studies
-#' @param results.index A vector from FindMatchingStudyIndex() with the indices of the relevant studies
+#' @param results.index A vector from datelife_result_study_index() with the indices of the relevant studies
 #' @param cache The cache
 #' @return A vector with counts of each curator, with names equal to curator names
 #' @export
-TabulateRelevantCurators <- function(results.index, cache = get("opentree_chronograms")) {
+relevant_curators_tabulate <- function(results.index, cache = get("opentree_chronograms")) {
 	curators <- cache$curators[results.index]
 	return(table(unlist(curators)))
 }
@@ -71,7 +71,7 @@ TabulateRelevantCurators <- function(results.index, cache = get("opentree_chrono
 # 	data <- readLines(file, n=-1)[-1] #read in phylip distance, perhaps from SDM
 # 	data <- strsplit(data, " +")
 # 	data[sapply(data, length)>0] #trim trailing
-# 	final.matrix <- matrix(nrow = length(data), ncol = length(data))
+# 	final_matrix <- matrix(nrow = length(data), ncol = length(data))
 # 	all.names <- rep(NA, length(data))
 # 	for (data.index in sequence(length(data))) {
 # 		local.line <- data[[data.index]]
@@ -84,7 +84,7 @@ TabulateRelevantCurators <- function(results.index, cache = get("opentree_chrono
 #
 # SDM <- function(datelife_result, weights = NULL)) {
 #
-# 	patristic.array <- datelife_result_bind(datelife_result)
+# 	patristic.array <- patristic_matrix_list_to_array(datelife_result)
 # 	k <- length(datelife_result)
 # 	if(is.null(weights)) {
 # 		weights <- rep(1/k, k)

@@ -5,7 +5,7 @@
 \title{Makes a mrBayes run block file with a constraint topology and a set of node calibrations}
 \usage{
 make_mrbayes_runfile(constraint = NULL, ncalibration = NULL,
-  missing_taxa = NULL, file = "mrbayes_run.nexus")
+  missing_taxa = NULL, mrbayes_output_file = "mrbayes_run.nexus")
 }
 \arguments{
 \item{constraint}{The constraint tree: a phylo object or a newick character string, with or without branch lengths.}
@@ -14,7 +14,7 @@ make_mrbayes_runfile(constraint = NULL, ncalibration = NULL,
 
 \item{missing_taxa}{either a tree (as phylo object or as a newick character string, with or without branch lengths) with all the taxa you want at the end, or a data frame assigning missing taxa to nodes in dated tree.}
 
-\item{file}{A character vector specifying the name of mrBayes run file and outputs (can specify directory too).}
+\item{mrbayes_output_file}{A character vector specifying the name of mrBayes run file and outputs (can specify directory too).}
 }
 \value{
 A MrBayes block run file in nexus format.

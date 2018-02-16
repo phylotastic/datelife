@@ -4,17 +4,14 @@
 \alias{make_bladj_tree}
 \title{Takes a tree and uses bladj to estimate node ages and branch lengths given a set of fixed node ages and respective node names}
 \usage{
-make_bladj_tree(nodenames = NULL, nodeages = NULL, phy = NULL,
-  phyformat = "newick")
+make_bladj_tree(phy = NULL, nodenames = NULL, nodeages = NULL)
 }
 \arguments{
+\item{phy}{A tree either as a newick character string or as a phylo object}
+
 \item{nodenames}{A character vector with node names from tree with fixed ages}
 
 \item{nodeages}{A numeric vector with known or fixed node ages from tree}
-
-\item{phy}{A tree either as a newick character string or as a phylo object}
-
-\item{phyformat}{A character vector specifying tree output format, either "newick" (default) or "phylo"}
 }
 \value{
 A newick or phylo tree with non negative branch lengths
