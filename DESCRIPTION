@@ -1,6 +1,6 @@
 Package: datelife
 Title: Underlying code for DateLife service
-Version: 0.2.13
+Version: 0.2.14
 Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.brian@gmail.com"),
   person("Luna L.", "Sanchez Reyes", role=c("aut")),
   person("Jonathan", "Eastman", role=c("aut")),

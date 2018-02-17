@@ -4,7 +4,7 @@
 #' @param verbose If TRUE, give status updates to the user
 #' @return List containing author and curator results
 #' @export
-CreateContributorCache <- function(outputfile="contributorcache.rda", verbose=TRUE) {
+CreateContributorCache <- function(outputfile="contributorcache.RData", verbose=TRUE) {
   all.sources <- rotl::tol_about(include_source_list=TRUE)
   all.studies <- as.list(rep(NA,length(all.sources$source_list)))
   author.results <- data.frame()
@@ -47,7 +47,7 @@ CreateContributorCache <- function(outputfile="contributorcache.rda", verbose=TR
 #' @param verbose If TRUE, give status updates to the user
 #' @return List containing author and curator results
 #' @export
-CreateTreeBaseCache <- function(outputfile="treebasecache.rda", verbose=TRUE) {
+CreateTreeBaseCache <- function(outputfile="treebasecache.RData", verbose=TRUE) {
   InvertNames <- function(author) {
     return(paste(sapply(strsplit(author, ', '), rev), collapse=" "))
   }
