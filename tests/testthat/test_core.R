@@ -254,12 +254,12 @@ test_that("input_process works", {
 
 test_that("phylo_fix_brlen works", {
     # install.packages("phylocomr", repos = "https://cloud.r-project.org")
-    devtools::install_github("ropensci/phylocomr")
+    # devtools::install_github("ropensci/phylocomr")
     utils::data(plant_bold_otol_tree)
     x1 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = 0)
-    x2 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
+    # x2 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
     expect_true(ape::is.ultrametric(x1, option = 2))
-    expect_true(ape::is.ultrametric(x2, option = 2))
+    # expect_true(ape::is.ultrametric(x2, option = 2))
     # # mrbayes fix brlen test, takes a while:
     # wwdd <- getwd()
     # setwd("~/")
