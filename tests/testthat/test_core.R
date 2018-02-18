@@ -252,18 +252,18 @@ test_that("input_process works", {
 	expect_s3_class(x <- input_process(phy, verbose=FALSE), "phylo") # output is phylo
 })
 
-test_that("phylo_fix_brlen works", {
+test_that("tree_fix_brlen works", {
     # install.packages("phylocomr", repos = "https://cloud.r-project.org")
     # devtools::install_github("ropensci/phylocomr")
     utils::data(plant_bold_otol_tree)
-    x1 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = 0)
-    # x2 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
+    x1 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = 0)
+    # x2 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
     expect_true(ape::is.ultrametric(x1, option = 2))
     # expect_true(ape::is.ultrametric(x2, option = 2))
     # # mrbayes fix brlen test, takes a while:
     # wwdd <- getwd()
     # setwd("~/")
-    # x3 <- phylo_fix_brlen(phy = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "mrbayes")
+    # x3 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "mrbayes")
     # setwd(wwdd)
     # expect_true(ape::is.ultrametric(x3, option = 2))  # prefer option = 2, using the variance to test ultrametricity, cf. E, Paradis' comments on this post http://blog.phytools.org/2017/03/forceultrametric-method-for-ultrametric.html
 })

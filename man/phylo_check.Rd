@@ -7,7 +7,7 @@
 phylo_check(phy = NULL, dated = FALSE)
 }
 \arguments{
-\item{phy}{A tree either as a newick character string or as a phylo object}
+\item{phy}{A phylo object}
 
 \item{dated}{Boolean. If TRUE it checks if phylo object has branch lengths and is ultrametric.}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife.R
 \name{make_mrbayes_tree}
 \alias{make_mrbayes_tree}
-\title{Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations}
+\title{Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations without any data.}
 \usage{
 make_mrbayes_tree(constraint = NULL, ncalibration = NULL,
   missing_taxa = NULL, mrbayes_output_file = "mrbayes_run.nexus")
@@ -20,5 +20,5 @@ make_mrbayes_tree(constraint = NULL, ncalibration = NULL,
 A phylo tree with branch lengths proportional to time. It will save all mrBayes outputs in the working directory.
 }
 \description{
-Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations
+Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations without any data.
 }

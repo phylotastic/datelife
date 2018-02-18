@@ -78,9 +78,9 @@ patristic_matrix_to_phylo <- function(patristic_matrix) {
 }
 
 #' Figure out which subset function to use. Used inside: get_datelife_result
-#' @param study_element The thing being passed in: an array or a phylo to serve as reference
+#' @param study_element The thing being passed in: an array or a phylo object to serve as reference for congruification
 #' @param taxa Vector of taxon names to get a subset for
-#' @param phy A user tree to congruify in phylo format (ape)
+#' @param phy A user tree to congruify as phylo object (ape)
 #' @param phy4 A user tree to congruify in phylo4 format (phylobase)
 #' @inheritParams datelife_search
 #' @return A patristic matrix with for the taxa.
@@ -400,8 +400,8 @@ congruify_and_check <- function(reference, target, taxonomy = NULL, tol = 0.01, 
 }
 
 
-#' Convert spaces to underscores in trees. Used in: make_mrbayes_runfile, get_mrbayes_node_calibrations, phylo_get_singleton_outgroup, congruify_and_check, patristic_matrix_array_phylo_congruify.
-#' @param phy A phylo object
+#' Convert spaces to underscores in trees. Used in: make_mrbayes_runfile, get_mrbayes_node_calibrations, tree_get_singleton_outgroup, congruify_and_check, patristic_matrix_array_phylo_congruify.
+#' @inheritParams phylo_check
 #' @return A phylo object
 #' @export
 phylo_tiplabel_space_to_underscore <- function(phy) {
@@ -410,7 +410,7 @@ phylo_tiplabel_space_to_underscore <- function(phy) {
 }
 
 #' Convert underscores to spaces in trees. Used inside: patristic_matrix_array_phylo_congruify, congruify_and_check.
-#' @param phy A phylo object
+#' @inheritParams phylo_check
 #' @return A phylo object
 #' @export
 phylo_tiplabel_underscore_to_space <- function(phy) {

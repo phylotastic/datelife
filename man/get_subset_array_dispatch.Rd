@@ -8,11 +8,11 @@ get_subset_array_dispatch(study_element, taxa, phy = NULL, phy4 = NULL,
   dating_method = "PATHd8")
 }
 \arguments{
-\item{study_element}{The thing being passed in: an array or a phylo to serve as reference}
+\item{study_element}{The thing being passed in: an array or a phylo object to serve as reference for congruification}
 
 \item{taxa}{Vector of taxon names to get a subset for}
 
-\item{phy}{A user tree to congruify in phylo format (ape)}
+\item{phy}{A user tree to congruify as phylo object (ape)}
 
 \item{phy4}{A user tree to congruify in phylo4 format (phylobase)}
 

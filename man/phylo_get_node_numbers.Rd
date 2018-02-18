@@ -7,7 +7,7 @@
 phylo_get_node_numbers(phy)
 }
 \arguments{
-\item{phy}{A tree either as a newick character string or as a phylo object}
+\item{phy}{A phylo object}
 }
 \value{
 A numeric vector with node numbers

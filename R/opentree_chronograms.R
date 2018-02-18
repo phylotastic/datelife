@@ -21,7 +21,7 @@ update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RDat
 }
 
 #' Check for branch lengths in a tree
-#' @param phy A phylo object
+#' @inheritParams phylo_check
 #' @return A TRUE or FALSE
 #' @export
 phylo_has_brlen <- function(phy) {
@@ -132,7 +132,7 @@ save_otol_chronograms <- function(file="opentree_chronograms.RData", verbose=FAL
 }
 
 #' Check to see that a tree is a valid chronogram
-#' @param phy A phylo object
+#' @inheritParams phylo_check
 #' @return Boolean: TRUE if good tree
 #' @export
 is_good_chronogram <- function(phy) {
@@ -170,7 +170,7 @@ is_good_chronogram <- function(phy) {
 }
 
 #' Clean up some issues with OToL chronograms
-#' @param phy Input phylo object
+#' @inheritParams phylo_check
 #' @return A cleaned up phylo object
 #' @export
 clean_chronogram <- function(phy) {
