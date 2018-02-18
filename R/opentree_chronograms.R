@@ -6,27 +6,27 @@
 
 #' update Open Tree of Life cache
 #' @param save Boolean; default TRUE: save all chronograms from Open Tree of Life to an RData file (default to opentree_chronograms.RData)
-#' @inheritParams SaveOToLChronograms
-#' @inherit GetOToLChronograms return
-#' @inherit SaveOToLChronograms return
+#' @inheritParams save_otol_chronograms
+#' @inherit get_otol_chronograms return
+#' @inherit save_otol_chronograms return
 #' @export
 
 update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RData", verbose = TRUE){
 	if (save) {
-		cache.update <- SaveOToLChronograms(file = file, verbose = verbose)
+		cache.update <- save_otol_chronograms(file = file, verbose = verbose)
 	} else {
-		cache.update <- GetOToLChronograms(verbose = verbose)
+		cache.update <- get_otol_chronograms(verbose = verbose)
 	}
 	return(cache.update)
 }
 
 #' Check for branch lengths in a tree
-#' @param x A phylo object
+#' @param phy A phylo object
 #' @return A TRUE or FALSE
 #' @export
-HasBrlen <- function(x) {
+phylo_has_brlen <- function(phy) {
 	brlen=TRUE
-	if(is.null(x$edge.length)) {
+	if(is.null(phy$edge.length)) {
 		brlen=FALSE
 	}
 	return(brlen)
@@ -49,11 +49,11 @@ HasBrlen <- function(x) {
 #' @param verbose If TRUE, give updates to the user
 #' @return A list with elements for the trees, authors, curators, and study ids
 #' @export
-GetOToLChronograms <- function(verbose=FALSE) {
+get_otol_chronograms <- function(verbose = FALSE) {
 	if(verbose) {
-		options(warn=1)
+		options(warn = 1)
 	}
-	chronogram.matches <- rotl::studies_find_trees(property="ot:branchLengthMode", value="ot:time", verbose=TRUE, detailed=TRUE)
+	chronogram.matches <- rotl::studies_find_trees(property = "ot:branchLengthMode", value = "ot:time", verbose = TRUE, detailed = TRUE)
 	trees <- list()
 	authors <- list()
 	curators <- list()
@@ -80,10 +80,10 @@ GetOToLChronograms <- function(verbose=FALSE) {
 				if(verbose) {
 					print(paste("tree_id='", tree.id, "', study_id='", study.id, "'", sep=""))
 				}
-				if(!is.null(new.tree) & HasBrlen(new.tree)) {
-					new.tree <- CleanChronogram(new.tree)
-					if(HasBrlen(new.tree)) {
-						if(IsGoodChronogram(new.tree)) {
+				if(!is.null(new.tree) & phylo_has_brlen(phy = new.tree)) {
+					new.tree <- clean_chronogram(new.tree)
+					if(phylo_has_brlen(phy = new.tree)) {
+						if(is_good_chronogram(new.tree)) {
 							new.tree$tip.label <- gsub('_', ' ', new.tree$tip.label)
 							if(verbose) {
 								print("has tree with branch lengths")
@@ -126,16 +126,16 @@ GetOToLChronograms <- function(verbose=FALSE) {
 #' @param verbose If TRUE, give status updates to the user
 #' @return None
 #' @export
-SaveOToLChronograms <- function(file="opentree_chronograms.RData", verbose=FALSE) {
-	opentree_chronograms <- GetOToLChronograms(verbose=verbose)
+save_otol_chronograms <- function(file="opentree_chronograms.RData", verbose=FALSE) {
+	opentree_chronograms <- get_otol_chronograms(verbose=verbose)
 	save(opentree_chronograms, file=file, compress="xz")
 }
 
-#' Check to see that a chronogram is valid
-#' @param phy Input phylo object
+#' Check to see that a tree is a valid chronogram
+#' @param phy A phylo object
 #' @return Boolean: TRUE if good tree
 #' @export
-IsGoodChronogram <- function(phy) {
+is_good_chronogram <- function(phy) {
 	passing <- TRUE
 	if(class(phy) != "phylo") {
 		passing <- FALSE
@@ -143,15 +143,15 @@ IsGoodChronogram <- function(phy) {
 	}
 	if(ape::Ntip(phy)<=ape::Nnode(phy)) {
 		passing <- FALSE
-		warning("tree failed over not being having more internal nodes than tips")
+		warning("tree failed over not having more internal nodes than tips")
 	}
 	if(length(which(grepl("not mapped", phy$tip.label)))>0) {
-		warning("tree failed over not being not mapped taxa that should have been purged")
+		warning("tree failed over having not mapped taxa that should have been purged")
 		passing <- FALSE #not cleaned properly
 	}
 	if(any(is.na(phy$tip.label))) {
 		passing <- FALSE
-		warning("tree failed over not being having NA for tips")
+		warning("tree failed over having NA for tips")
 	}	else {
 		if(min(nchar(phy$tip.label))<=2) {
 			passing <- FALSE
@@ -173,7 +173,7 @@ IsGoodChronogram <- function(phy) {
 #' @param phy Input phylo object
 #' @return A cleaned up phylo object
 #' @export
-CleanChronogram <- function(phy) {
+clean_chronogram <- function(phy) {
 	original.phy <- phy
 	if(class(phy)=="phylo") {
 		if(ape::Ntip(phy)>ape::Nnode(phy)) {

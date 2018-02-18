@@ -4,7 +4,7 @@
 #' @param verbose If TRUE, give status updates to the user
 #' @return List containing author and curator results
 #' @export
-CreateContributorCache <- function(outputfile="contributorcache.RData", verbose=TRUE) {
+make_contributor_cache <- function(outputfile = "contributorcache.RData", verbose = TRUE) {
   all.sources <- rotl::tol_about(include_source_list=TRUE)
   all.studies <- as.list(rep(NA,length(all.sources$source_list)))
   author.results <- data.frame()
@@ -31,10 +31,10 @@ CreateContributorCache <- function(outputfile="contributorcache.RData", verbose=
       print(paste(i, "of", length(all.studies), "done"))
     }
   }
-  author.pretty <- CalculateOverlapTable(author.results)
+  author.pretty <- make_overlap_table(author.results)
   try(Encoding(author.pretty) <- "latin1")
   try(author.pretty <- iconv(author.pretty, "latin1", "UTF-8"))
-  curator.pretty <- CalculateOverlapTable(curator.results)
+  curator.pretty <- make_overlap_table(curator.results)
   try(Encoding(curator.pretty) <- "latin1")
   try(curator.pretty <- iconv(curator.pretty, "latin1", "UTF-8"))
   save(author.results, curator.results, author.pretty, curator.pretty, file=outputfile)
@@ -47,7 +47,7 @@ CreateContributorCache <- function(outputfile="contributorcache.RData", verbose=
 #' @param verbose If TRUE, give status updates to the user
 #' @return List containing author and curator results
 #' @export
-CreateTreeBaseCache <- function(outputfile="treebasecache.RData", verbose=TRUE) {
+make_treebase_cache <- function(outputfile = "treebasecache.RData", verbose = TRUE) {
   InvertNames <- function(author) {
     return(paste(sapply(strsplit(author, ', '), rev), collapse=" "))
   }
@@ -66,7 +66,7 @@ CreateTreeBaseCache <- function(outputfile="treebasecache.RData", verbose=TRUE) 
       print(paste(i, "of", length(all.studies), "done"))
     }
   }
-  tb.author.pretty <- CalculateOverlapTable(author.results)[,-3]
+  tb.author.pretty <- make_overlap_table(author.results)[,-3]
   tb.author.results <- author.results
   save(tb.author.results, tb.author.pretty, file=outputfile)
   return(list(tb.author.results=tb.author.results, tb.author.pretty=tb.author.pretty))
@@ -76,7 +76,7 @@ CreateTreeBaseCache <- function(outputfile="treebasecache.RData", verbose=TRUE) 
 #' @param results.table An author.results or curator.results data.frame
 #' @return Data.frame with info on people and what clades they've worked on
 #' @export
-CalculateOverlapTable <- function(results.table) {
+make_overlap_table <- function(results.table) {
   unique.person <- unique(results.table$person)
   final.table <- data.frame()
   for (person.index in sequence(length(unique.person))) {

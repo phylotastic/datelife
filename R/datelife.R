@@ -395,7 +395,7 @@ phylo_check <- function(phy = NULL, dated = FALSE){
 		stop("tree is not a phylo object")
 	}
 	if(dated){
-		if(is.null(phy$edge.length)){
+		if(!phylo_has_brlen(phy = phy)){
 			stop("phylo object must have branch lengths")
 		}
 		if(!ape::is.ultrametric(phy, option = 2)){
