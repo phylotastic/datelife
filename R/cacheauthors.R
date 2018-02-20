@@ -14,7 +14,7 @@ make_contributor_cache <- function(outputfile = "contributorcache.RData", verbos
     study.id <- strsplit(all.sources$source_list[[i]], '@')[[1]][[1]]
     all.studies[[i]] <- rotl::get_study_meta(study.id)
     doi <- authors <- clade.name <- curator <- study.year <- NULL
-    try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(all.studies[[i]]), "DOI")))
+    try(doi <- gsub('https?://(dx\\.)?doi.org/', '', attr(rotl::get_publication(all.studies[[i]]), "DOI")))
     try(authors <- as.character(knitcitations::bib_metadata(doi)$author))
 
     try(clade.name <- all.studies[i][[1]]$nexml$`^ot:focalCladeOTTTaxonName`)

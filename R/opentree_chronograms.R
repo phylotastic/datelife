@@ -89,7 +89,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 								print("has tree with branch lengths")
 							}
 							doi <- NULL
-							try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
+							try(doi <- gsub('https?://(dx\\.)?doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
 							authors <- append(authors, NA)
 							try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
 							curators <- append(curators, NA)
