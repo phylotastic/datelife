@@ -34,6 +34,9 @@ Imports:
     rotl,
     knitcitations,
     phylobase,
+    paleotree,
+    rphylotastic,
+    phylocomr,
     treebase
 Suggests:
     testthat
