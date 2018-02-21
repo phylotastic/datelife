@@ -117,6 +117,16 @@ get_otol_chronograms <- function(verbose = FALSE) {
 		print("Problematic combos")
 		print(bad.ones)
 	}
+	for(i in sequence(length(authors))){
+		if(!any(is.na(authors[[i]])) | length(authors[[i]]) > 0){
+			Encoding(authors[[i]]) <- "latin1"
+			authors[[i]] <- iconv(authors[[i]], "latin1", "UTF-8")
+		}
+		if(!any(is.na(curators[[i]])) | length(curators[[i]]) > 0){
+			Encoding(curators[[i]]) <- "latin1"
+			curators[[i]] <- iconv(curators[[i]], "latin1", "UTF-8")
+		}
+	}
 	result <- list(trees=trees, authors=authors, curators=curators, studies=studies, dois=dois)
 	return(result)
 }
