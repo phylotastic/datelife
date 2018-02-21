@@ -14,11 +14,16 @@ make_contributor_cache <- function(outputfile = "contributorcache.RData", verbos
     all.studies[[i]] <- rotl::get_study_meta(study.id)
     doi <- authors <- clade.name <- curator <- study.year <- NULL
     try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(all.studies[[i]]), "DOI")))
-    try(authors <- as.character(knitcitations::bib_metadata(doi)$author))
-    if(length(authors) > 0) {
-        Encoding(authors) <- "latin1"
-	    authors <- iconv(authors, "latin1", "UTF-8")
+    if(length(doi) == 0){
+        warning(paste(study.id, "has no DOI attribute, author names will not be retrieved."))
+    } else {
+        try(authors <- as.character(knitcitations::bib_metadata(doi)$author))
     }
+    # I think the following is not necessary to change encoding:
+    # if(!is.null(authors) & length(authors) > 0) {
+    #     Encoding(authors) <- "latin1"
+	#     authors <- iconv(authors, "latin1", "UTF-8")
+    # }
     try(clade.name <- all.studies[i][[1]]$nexml$`^ot:focalCladeOTTTaxonName`)
     try(curators <- unique(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]][[1]]))
     if(!is.null(authors)) {

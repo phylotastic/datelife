@@ -63,7 +63,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 	bad.ones <- c()
 	for (study.index in sequence(dim(chronogram.matches)[1])) {
 		if(verbose) {
-			print(paste("Downloading tree(s) from study", study.index, "of",dim(chronogram.matches)[1]))
+			cat("Downloading tree(s) from study ", study.index, " of ", dim(chronogram.matches)[1], "\n")
 		}
 		for(chrono.index in sequence((chronogram.matches$n_matched_trees[study.index]))) {
 			study.id <- chronogram.matches$study_ids[study.index]
@@ -78,7 +78,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 				try(new.tree <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name")) #would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
 				#try(new.tree <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name"))
 				if(verbose) {
-					print(paste("tree_id='", tree.id, "', study_id='", study.id, "'", sep=""))
+					cat("tree_id='", tree.id, "', study_id='", study.id, "'", "\n")
 				}
 				if(!is.null(new.tree) & phylo_has_brlen(phy = new.tree)) {
 					new.tree <- clean_chronogram(new.tree)
@@ -86,12 +86,16 @@ get_otol_chronograms <- function(verbose = FALSE) {
 						if(is_good_chronogram(new.tree)) {
 							new.tree$tip.label <- gsub('_', ' ', new.tree$tip.label)
 							if(verbose) {
-								print("has tree with branch lengths")
+								cat("\t", "has tree with branch lengths", "\n")
 							}
 							doi <- NULL
 							try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
 							authors <- append(authors, NA)
-							try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
+							if(length(doi) == 0){
+								warning(paste(study.id, "has no DOI attribute, author names will not be retrieved."))
+							} else {
+								try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
+							}
 							curators <- append(curators, NA)
 							try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
 							try(studies <- append(studies, study.id))
@@ -99,7 +103,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 							try(dois <- append(dois, chronogram.matches$study_doi[study.index]))
 							trees[[tree.count]] <-new.tree
 							names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
-							print("was good tree")
+							cat("\t", "was good tree", "\n")
 							potential.bad <- NULL
 						}
 					}
@@ -118,13 +122,15 @@ get_otol_chronograms <- function(verbose = FALSE) {
 		print(bad.ones)
 	}
 	for(i in sequence(length(authors))){
-		if(!any(is.na(authors[[i]])) | length(authors[[i]]) > 0){
+		if(!any(is.na(authors[[i]])) & length(authors[[i]]) > 0){
 			Encoding(authors[[i]]) <- "latin1"
 			authors[[i]] <- iconv(authors[[i]], "latin1", "UTF-8")
 		}
-		if(!any(is.na(curators[[i]])) | length(curators[[i]]) > 0){
-			Encoding(curators[[i]]) <- "latin1"
-			curators[[i]] <- iconv(curators[[i]], "latin1", "UTF-8")
+		for(j in sequence(length(curators[[i]]))){
+			if(!any(is.na(curators[[i]][[j]])) & length(curators[[i]][[j]]) > 0){
+				Encoding(curators[[i]][[j]]) <- "latin1"
+				curators[[i]][[j]] <- iconv(curators[[i]][[j]], "latin1", "UTF-8")
+			}
 		}
 	}
 	result <- list(trees=trees, authors=authors, curators=curators, studies=studies, dois=dois)
