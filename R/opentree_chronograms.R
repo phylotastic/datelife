@@ -133,7 +133,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 			}
 		}
 	}
-	result <- list(trees=trees, authors=authors, curators=curators, studies=studies, dois=dois)
+	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
 	return(result)
 }
 
@@ -142,9 +142,9 @@ get_otol_chronograms <- function(verbose = FALSE) {
 #' @param verbose If TRUE, give status updates to the user
 #' @return None
 #' @export
-save_otol_chronograms <- function(file="opentree_chronograms.RData", verbose=FALSE) {
-	opentree_chronograms <- get_otol_chronograms(verbose=verbose)
-	save(opentree_chronograms, file=file, compress="xz")
+save_otol_chronograms <- function(file = "opentree_chronograms.RData", verbose = FALSE) {
+	opentree_chronograms <- get_otol_chronograms(verbose = verbose)
+	save(opentree_chronograms, file = file, compress = "xz")
 }
 
 #' Check to see that a tree is a valid chronogram
@@ -157,11 +157,11 @@ is_good_chronogram <- function(phy) {
 		passing <- FALSE
 		warning("tree failed over not being class phylo")
 	}
-	if(ape::Ntip(phy)<=ape::Nnode(phy)) {
+	if(ape::Ntip(phy) <= ape::Nnode(phy)) {
 		passing <- FALSE
 		warning("tree failed over not having more internal nodes than tips")
 	}
-	if(length(which(grepl("not mapped", phy$tip.label)))>0) {
+	if(length(which(grepl("not mapped", phy$tip.label))) > 0) {
 		warning("tree failed over having not mapped taxa that should have been purged")
 		passing <- FALSE #not cleaned properly
 	}
@@ -169,7 +169,7 @@ is_good_chronogram <- function(phy) {
 		passing <- FALSE
 		warning("tree failed over having NA for tips")
 	}	else {
-		if(min(nchar(phy$tip.label))<=2) {
+		if(min(nchar(phy$tip.label)) <= 2) {
 			passing <- FALSE
 			warning("tree failed for having names of two or fewer characters")
 		}
@@ -178,7 +178,7 @@ is_good_chronogram <- function(phy) {
 		passing <- FALSE
 		warning("tree failed over not being rooted")
 	}
-	if(!ape::is.ultrametric(phy, tol=0.01, option = 2)) {
+	if(!ape::is.ultrametric(phy, tol = 0.01, option = 2)) {
 		passing <- FALSE
 		warning("tree failed over not being ultrametric (NOTE: this condition should be removed for paleo trees)")
 	}
@@ -191,12 +191,12 @@ is_good_chronogram <- function(phy) {
 #' @export
 clean_chronogram <- function(phy) {
 	original.phy <- phy
-	if(class(phy)=="phylo") {
-		if(ape::Ntip(phy)>ape::Nnode(phy)) {
-			bad.taxa <- unique(c(which(nchar(phy$tip.label)<=2), which(grepl("not mapped", phy$tip.label))))
-			if(length(bad.taxa)>0 & length(bad.taxa) < (ape::Ntip(phy)-1)) { #will return trees with as few as two unmapped tips
+	if(class(phy) == "phylo") {
+		if(ape::Ntip(phy) > ape::Nnode(phy)) {
+			bad.taxa <- unique(c(which(nchar(phy$tip.label) <= 2), which(grepl("not mapped", phy$tip.label))))
+			if(length(bad.taxa) > 0 & length(bad.taxa) < (ape::Ntip(phy)-1)) { #will return trees with as few as two unmapped tips
 				phy <- try(ape::drop.tip(phy, bad.taxa))
-				if(class(phy) =="try-error") {
+				if(class(phy) == "try-error") {
 					return(original.phy)
 				}
 			}
