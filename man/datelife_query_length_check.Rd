@@ -4,8 +4,8 @@
 \alias{datelife_query_length_check}
 \title{checks that we have at least two taxon names to perform a search}
 \usage{
-datelife_query_length_check(cleaned_names, get_spp_from_taxon,
-  verbose = FALSE)
+datelife_query_length_check(cleaned_names = NULL,
+  get_spp_from_taxon = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{cleaned_names}{A character vector; usually an output from make_datelife_query function}

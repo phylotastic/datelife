@@ -19,8 +19,8 @@ Function to compute the SDM supertree (Criscuolo et al. 2006) from a datelifeRes
 }
 \details{
 Weighting is how much weight to give each input tree.
-   flat = all trees have equal weighting
-   taxa = weight is proportional to number of taxa
-   inverse = weight is proportional to 1 / number of taxa
-Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006;55(5):740–55. doi: 10.1080/10635150600969872.
+flat = all trees have equal weighting
+taxa = weight is proportional to number of taxa
+inverse = weight is proportional to 1 / number of taxa
+Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006. 55(5):740â55. doi: 10.1080/10635150600969872.
 }

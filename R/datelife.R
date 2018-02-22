@@ -119,12 +119,21 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 	return(datelife_result)
 }
 
-#' checks if input has already been processed, otherwise it uses make_datelife_query
+#' checks if input is a datelifeQuery object, otherwise it uses make_datelife_query to process it
 #' @inheritParams datelife_search
 #' @inheritDotParams make_datelife_query
-input_check <- function(input, ...){
+#' @export
+input_check <- function(input = NULL, ...){
+	if(is.null(input)){
+		input <- NA
+	}
+	if(length(input) == 1 & is.na (input)) {
+		stop("input argument is NULL or NA")
+	}
 	badformat <- TRUE
-	if(is.list(input) & "phy" %in% names(input) & "cleaned_names" %in% names(input)) badformat <- FALSE
+	if(is.list(input) & "phy" %in% names(input) & "cleaned_names" %in% names(input)) {
+		badformat <- FALSE
+	}
 	if(badformat){
 		input <- make_datelife_query(input = input, ...)
 	}
@@ -133,7 +142,8 @@ input_check <- function(input, ...){
 #' checks that we have at least two taxon names to perform a search
 #' @inheritParams datelife_search
 #' @param cleaned_names A character vector; usually an output from make_datelife_query function
-datelife_query_length_check <- function(cleaned_names, get_spp_from_taxon, verbose = FALSE){
+#' @export
+datelife_query_length_check <- function(cleaned_names = NULL, get_spp_from_taxon = FALSE, verbose = FALSE){
 	if(length(cleaned_names) == 1){
 		if(verbose) cat("Cannot perform a search of divergence times with just one taxon.", "\n")
 		if(get_spp_from_taxon) {
@@ -147,6 +157,7 @@ datelife_query_length_check <- function(cleaned_names, get_spp_from_taxon, verbo
 #' checks if we obtained an empty search with the set of input taxon names
 #' @inheritParams datelife_search
 #' @param datelife_result An object output from get_datelife_result function
+#' @export
 datelife_result_check <- function(datelife_result, use_tnrs, verbose = FALSE){
 	if(length(datelife_result) < 1) {
 		warning("Output is empty.", call. = FALSE)
@@ -154,7 +165,7 @@ datelife_result_check <- function(datelife_result, use_tnrs, verbose = FALSE){
 		if(!use_tnrs & verbose) cat("Setting use_tnrs = TRUE might change this, but it is time consuming.", "\n")
 	}
 }
-#' Take input phylo object or character string and figure out if it's correct newick format or a list of species
+#' Takes a phylo object or a character string and figure out if it's correct newick format or a list of species
 #' @inheritParams datelife_search
 #' @inheritParams make_datelife_query
 #' @return A phylo object or NA if no tree
@@ -260,7 +271,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 #' @return A phylo object with fixed branch lengths
 #' @export
 tree_fix_brlen <- function(tree = NULL, fixing_criterion = "negative", fixing_method = 0){
-	phy <- tree_process(tree = tree)
+	phy <- tree_check(tree = tree)
 	fixing_criterion <- match.arg(arg = fixing_criterion, choices = c("negative", "zero"), several.ok = FALSE)
 	if(fixing_criterion == "negative"){
 		index <- which(phy$edge.length < 0)  # identifies edge numbers with negative edge lengths value
@@ -306,8 +317,9 @@ tree_fix_brlen <- function(tree = NULL, fixing_criterion = "negative", fixing_me
 #' @inheritParams tree_fix_brlen
 #' @param node_data A character vector containing one or all from: "node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label"
 #' @return A list
+#' @export
 tree_get_node_data <- function(tree = NULL, node_data = c("node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label")){
-	phy <- tree_process(tree = tree)
+	phy <- tree_check(tree = tree)
 	nn <- phylo_get_node_numbers(phy)
 	res <- vector(mode = "list")
 	if("node_number" %in% node_data){
@@ -339,8 +351,9 @@ tree_get_node_data <- function(tree = NULL, node_data = c("node_number", "node_l
 #' @param node_prefix Character vector. If length 1, it will be used to name all nodes with no labels, followed by a number which can be the node_number or consecutive, as specified in node_number
 #' @param node_index Character vector choosing one of "consecutive" or "node_number" as node label index. It will use consecutive numbers from 1 to total node number in the first case and node numbers in the second case.
 #' @return A phylo object
+#' @export
 tree_add_nodelabels <- function(tree = NULL, node_prefix="n", node_index="node_number"){
-	phy <- tree_process(tree = tree)
+	phy <- tree_check(tree = tree)
 	node_index <- match.arg(arg = node_index, choices = c("consecutive","node_number"), several.ok = FALSE)
 	if("node_number" %in% node_index){
 		node_number <- phylo_get_node_numbers(phy = phy)
@@ -360,6 +373,7 @@ tree_add_nodelabels <- function(tree = NULL, node_prefix="n", node_index="node_n
 #' Gets node numbers from any phylogeny
 #' @inheritParams phylo_check
 #' @return A numeric vector with node numbers
+#' @export
 phylo_get_node_numbers <- function(phy){
 	node_numbers <- (length(phy$tip.label) + 1):(length(phy$tip.label) + phy$Nnode)
 	return(node_numbers)
@@ -371,7 +385,7 @@ phylo_get_node_numbers <- function(phy){
 #' @return A phylo object.
 #' @export
 tree_add_outgroup <- function(tree = NULL, outgroup = "outgroup"){
-		phy <- tree_process(tree = tree)
+		phy <- tree_check(tree = tree)
     outgroup_edge <- c()
     ingroup_edge <- c()
     if(!is.null(phy$edge.length)){
@@ -390,6 +404,7 @@ tree_add_outgroup <- function(tree = NULL, outgroup = "outgroup"){
 #' @param phy A phylo object
 #' @param dated Boolean. If TRUE it checks if phylo object has branch lengths and is ultrametric.
 #' @return A phylo object
+#' @export
 phylo_check <- function(phy = NULL, dated = FALSE){
 	if (!inherits(phy, "phylo")){
 		stop("tree is not a phylo object")
@@ -406,11 +421,12 @@ phylo_check <- function(phy = NULL, dated = FALSE){
 	# return(phy)
 }
 
-#' Process a tree with input_process and checks if it is a phylo class object and/or a chronogram with phylo_check
+#' Checks if a tree is a phylo class object otherwise it uses input_process. Additionally it can check if tree is a chronogram with phylo_check
 #' @inheritParams tree_fix_brlen
 #' @inheritDotParams phylo_check
 #' @return If tree is correctly formatted, it returns a phylo object
-tree_process <- function(tree = NULL, ...){
+#' @export
+tree_check <- function(tree = NULL, ...){
 	if (!inherits(tree, "phylo")){
 		tree <- input_process(input = tree, verbose = FALSE)
 	}
@@ -424,7 +440,7 @@ tree_process <- function(tree = NULL, ...){
 #' @return A numeric vector with tip numbers descending from a node
 #' @export
 tree_node_tips <- function(tree = NULL, node = NULL, curr = NULL){
-	phy <- tree_process(tree = tree, dated = FALSE)
+	phy <- tree_check(tree = tree, dated = FALSE)
 	des <- phytools::getDescendants(tree = phy, node = node, curr = NULL)
 	tips <- des[which(des <= length(phy$tip.label))]
 	return(tips)
@@ -437,7 +453,7 @@ tree_node_tips <- function(tree = NULL, node = NULL, curr = NULL){
 #' @return A phylo tree
 #' @export
 make_bladj_tree <- function(tree = NULL, nodenames = NULL, nodeages = NULL){
-	phy <- tree_process(tree = tree, dated = FALSE)
+	phy <- tree_check(tree = tree, dated = FALSE)
 	if(is.null(phy$node.label)) {
 		stop("phy must have node labels")
 	}
@@ -489,7 +505,7 @@ make_mrbayes_tree <- function(constraint = NULL, ncalibration = NULL, missing_ta
 #' @export
 make_mrbayes_runfile <- function(constraint = NULL, ncalibration = NULL, missing_taxa = NULL, mrbayes_output_file = "mrbayes_run.nexus"){
   if(!is.null(constraint)) {
-		constraint <- tree_process(tree = constraint) # add outgroup = TRUE argument
+		constraint <- tree_check(tree = constraint) # add outgroup = TRUE argument
   	constraint <- phylo_tiplabel_space_to_underscore(constraint)
 		taxa <- constraint$tip.label
 		constraints <- paleotree::createMrBayesConstraints(tree = constraint, partial = FALSE) # this works perfectly
@@ -530,6 +546,7 @@ make_mrbayes_runfile <- function(constraint = NULL, ncalibration = NULL, missing
 
 	all <- c(bayes_data, "\n", bayes_set)
 	write(all, mrbayes_output_file)
+	return(all)
 }
 
 #' Fabricates dates of missing taxa (with no data) on an already dated tree.
@@ -538,8 +555,9 @@ make_mrbayes_runfile <- function(constraint = NULL, ncalibration = NULL, missing
 #' @inheritParams datelife_search
 #' @inheritParams missing_taxa_check
 #' @return A phylo object
+#' @export
 tree_add_dates <- function(dated_phy = NULL, missing_taxa = NULL, dating_method = "mrbayes", mrbayes_output_file = "mrbayes_tree_add_dates.nexus"){
-	dated_phy <- tree_process(tree = dated_phy, dated = TRUE)
+	dated_phy <- tree_check(tree = dated_phy, dated = TRUE)
 	dating_method <- match.arg(dating_method, c("bladj", "mrbayes"))
 	if(dating_method == "bladj"){
 		dated_phy <- tree_add_nodelabels(tree = dated_phy)  # all nodes need to be named
@@ -559,6 +577,7 @@ tree_add_dates <- function(dated_phy = NULL, missing_taxa = NULL, dating_method 
 #' @inheritParams tree_add_dates
 # # ' @param missing_taxa A phylo object, a newick character string or a dataframe with taxonomic assignations
 #' @return A phylo object, a newick character string or a dataframe with taxonomic assignations
+#' @export
 missing_taxa_check <- function(missing_taxa = NULL, dated_phy = NULL){
 	if(is.data.frame(missing_taxa)){ # or is.matrix??
 		stop("not implemented yet")
@@ -606,6 +625,7 @@ missing_taxa_check <- function(missing_taxa = NULL, dated_phy = NULL){
 #' Runs MrBayes from R.
 #' @inheritParams make_mrbayes_tree
 #' @return MrBayes outputs.
+#' @export
 run_mrbayes <- function(mrbayes_output_file = NULL){
 	file <- mrbayes_output_file
 	# code borrowed from phyloch::mrbayes()
@@ -631,7 +651,7 @@ run_mrbayes <- function(mrbayes_output_file = NULL){
 # This function is set to match node names with constraints obtained from paleotree::GetMrBayesConstraints
 get_mrbayes_node_calibrations <- function(constraint = NULL, ncalibration = NULL, ncalibration_type = "fixed", 	mrbayes_calibration_file = NULL){
 	if(!is.null(constraint)){
-		phy <- tree_process(tree = constraint)
+		phy <- tree_check(tree = constraint)
 	}
 	if(length(ncalibration) == 2){  # if it is a list of descendant tips labels and node ages, from tree_get_node_data function
 		if(!is.list(ncalibration)) {
@@ -641,7 +661,7 @@ get_mrbayes_node_calibrations <- function(constraint = NULL, ncalibration = NULL
 		nages <- ncalibration$node_age
 
 	} else {  # if it is a tree
-			ncalibration <- tree_process(tree = ncalibration, dated = TRUE)
+			ncalibration <- tree_check(tree = ncalibration, dated = TRUE)
 	    phy <- phylo_tiplabel_space_to_underscore(phy)
 	    ncalibration <- phylo_tiplabel_space_to_underscore(ncalibration)
 	    splits.ncalibration <- ape::prop.part(ncalibration)
@@ -672,7 +692,7 @@ get_mrbayes_node_calibrations <- function(constraint = NULL, ncalibration = NULL
 #' @return A character vector with the name of the single lineage outgroup. Returns NA if there is none.
 #' @export
 tree_get_singleton_outgroup <- function(tree = NULL){
-  phy <- tree_process(tree = tree)
+  phy <- tree_check(tree = tree)
 	phy <- phylo_tiplabel_space_to_underscore(phy)
     outgroup <- NA
     splits <- ape::prop.part(phy)
@@ -884,10 +904,10 @@ summarize_datelife_result <- function(datelife_result = NULL, summary_format = "
 #' @export
 #' @details
 #' Weighting is how much weight to give each input tree.
-#'    flat = all trees have equal weighting
-#'    taxa = weight is proportional to number of taxa
-#'    inverse = weight is proportional to 1 / number of taxa
-#' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006;55(5):740–55. doi: 10.1080/10635150600969872.
+#' flat = all trees have equal weighting
+#' taxa = weight is proportional to number of taxa
+#' inverse = weight is proportional to 1 / number of taxa
+#' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006. 55(5):740–55. doi: 10.1080/10635150600969872.
 datelife_result_sdm <- function(datelife_result, weighting="flat") {
 	phy <- NA
 	used.studies <- names(datelife_result)

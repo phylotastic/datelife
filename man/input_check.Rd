@@ -2,9 +2,9 @@
 % Please edit documentation in R/datelife.R
 \name{input_check}
 \alias{input_check}
-\title{checks if input has already been processed, otherwise it uses make_datelife_query}
+\title{checks if input is a datelifeQuery object, otherwise it uses make_datelife_query to process it}
 \usage{
-input_check(input, ...)
+input_check(input = NULL, ...)
 }
 \arguments{
 \item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
@@ -19,5 +19,5 @@ input_check(input, ...)
 }}
 }
 \description{
-checks if input has already been processed, otherwise it uses make_datelife_query
+checks if input is a datelifeQuery object, otherwise it uses make_datelife_query to process it
 }
