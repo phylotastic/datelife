@@ -54,8 +54,8 @@ make_contributor_cache <- function(outputfile = "contributorcache.RData", verbos
   curator.pretty <- make_overlap_table(curator.results)
   try(Encoding(curator.pretty$person) <- "latin1")
   try(curator.pretty <- iconv(curator.pretty$person, "latin1", "UTF-8"))
-  save(author.results, curator.results, author.pretty, curator.pretty, missed_doi, file=outputfile)
-  return(list(author.results = author.results, curator.results = curator.results, author.pretty = author.pretty, curator.pretty = curator.pretty, , missed_doi = missed_doi))
+  save(author.results, curator.results, author.pretty, curator.pretty, missed_doi, file = outputfile)
+  return(list(author.results = author.results, curator.results = curator.results, author.pretty = author.pretty, curator.pretty = curator.pretty, missed_doi = missed_doi))
 }
 
 
