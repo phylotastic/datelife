@@ -1,3 +1,18 @@
+#' Open Tree of Life chronograms data set
+#'
+#' @name opentree_chronograms
+#' @docType dataset
+#' @author Luna L. Sanchez-Reyes \email{lsanche7@utk.edu} Brian O'Meara \email{bomeara@utk.edu}
+#' @references \url{https://tree.opentreeoflife.org}
+#' @source \url{https://tree.opentreeoflife.org}
+#' @keywords otol open tree chronogram
+#' @format A list containing info on avalable opentree of Life chronograms
+#' \describe{
+#'   \item{price}{price, in US dollars}
+#'   \item{carat}{weight of the diamond, in carats}
+#' }
+NULL
+
 #library(devtools)
 #install_github("ropensci/rotl", dependencies = TRUE, build_vignette=FALSE)
 #library(rotl)
