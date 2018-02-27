@@ -127,7 +127,7 @@ input_check <- function(input = NULL, ...){
 	if(is.null(input)){
 		input <- NA
 	}
-	if(length(input) == 1 & is.na (input)) {
+	if(length(input) == 1 & any(is.na(input))) {
 		stop("input argument is NULL or NA")
 	}
 	badformat <- TRUE
