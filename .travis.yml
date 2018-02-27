@@ -2,7 +2,9 @@ language: r
 sudo: false
 cache: packages
 warnings_are_errors: true
-_R_CHECK_FORCE_SUGGESTS_: false
+R_CHECK_FORCE_SUGGESTS: false
+# r_check-args:
+#   - force_suggests: false
 
 r_packages:
   - covr
