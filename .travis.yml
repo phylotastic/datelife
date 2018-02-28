@@ -2,7 +2,10 @@ language: r
 sudo: false
 cache: packages
 warnings_are_errors: true
-R_CHECK_FORCE_SUGGESTS: false
+r_check_args: --as-cran
+env:
+  global:
+  - R_CHECK_FORCE_SUGGESTS=false
 # r_check-args:
 #   - force_suggests: false
 
