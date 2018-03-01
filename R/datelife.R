@@ -907,7 +907,7 @@ summarize_datelife_result <- function(datelife_result = NULL, summary_format = "
 #' flat = all trees have equal weighting
 #' taxa = weight is proportional to number of taxa
 #' inverse = weight is proportional to 1 / number of taxa
-#' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006. 55(5):740–55. doi: 10.1080/10635150600969872.
+#' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006. 55(5):740. doi: 10.1080/10635150600969872.
 datelife_result_sdm <- function(datelife_result, weighting="flat") {
 	phy <- NA
 	used.studies <- names(datelife_result)

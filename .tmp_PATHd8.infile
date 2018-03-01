@@ -1,0 +1,7 @@
+((Zea_mays:0,Oryza_sativa:0):0,((Arabidopsis_thaliana:0,(Glycine_max:0,Medicago_sativa:0):0):0,Solanum_lycopersicum:0):0);
+
+mrca: Zea_mays, Arabidopsis_thaliana,  fixage=135.666203;
+mrca: Arabidopsis_thaliana, Glycine_max,  fixage=118.801323;
+
+name of mrca:  Zea_mays, Arabidopsis_thaliana,  name=48cfa538890e4a58d93a70152130eddc;
+name of mrca:  Arabidopsis_thaliana, Glycine_max,  name=072ffb22b7264a4e36ece5f29e01b248;
