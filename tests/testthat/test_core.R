@@ -1,4 +1,4 @@
-test_that("results_list_process", {
+test_that("results_list_process works", {
 utils::data(opentree_chronograms)
 taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
 results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
@@ -257,7 +257,7 @@ test_that("tree_fix_brlen works", {
     x1 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = 0)
     expect_true(ape::is.ultrametric(x1, option = 2))
     skip_on_cran()
-    skip_on_travis() #b/c no pathd8
+    skip_on_travis() #bc no mrbayes
     install.packages("phylocomr", repos = "https://cloud.r-project.org")
     devtools::install_github("ropensci/phylocomr")
     x2 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")

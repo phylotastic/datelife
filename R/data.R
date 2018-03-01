@@ -4,7 +4,6 @@
 # #' @docType data OR package OR method OR class OR anything else
 # #' @author Luna L. Sanchez-Reyes \email{lsanche7@utk.edu}
 # #' Brian O'Meara \email{bomeara@utk.edu}
-# #' @references \url{https://data_references.org}
 # #' @source \url{http://data_source.org}
 # #' @format A list
 # #' \describe{
@@ -19,7 +18,7 @@
 
 #' Chronograms in Open Tree of Life and other related data
 #'
-#' Now storing >800 chronograms from OToL
+#' Now storing >200 chronograms from OToL
 #'
 #' @name opentree_chronograms
 #' @docType data
