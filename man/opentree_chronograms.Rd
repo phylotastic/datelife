@@ -18,7 +18,7 @@
 opentree_chronograms
 }
 \description{
-Now storing >800 chronograms from OToL
+Now storing >200 chronograms from OToL
 }
 \details{
 Generated with update_datelife_cache() via get_otol_chronograms()

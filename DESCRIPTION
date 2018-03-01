@@ -1,5 +1,5 @@
 Package: datelife
-Title: Underlying code for DateLife service
+Title: Underlying Code for DateLife Service
 Version: 0.2.14
 Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.brian@gmail.com"),
   person("Luna L.", "Sanchez Reyes", role=c("aut")),
@@ -13,9 +13,6 @@ Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.bria
   person("Joseph", "Brown", role=c("aut")),
   person("Matt", "Pennell", role=c("aut")),
   person("Mike", "Alfaro", role=c("aut")))
-Author: Brian O'Meara <omeara.brian@gmail.com>, Luna L. Sanchez Reyes, Jonathan Eastman, Tracy Heath,
-    April Wright, Klaus Schliep, Scott Chamberlain, Peter Midford, Luke Harmon,
-    Joseph Brown, Matt Pennell, Mike Alfaro.
 Maintainer: Brian O'Meara <omeara.brian@gmail.com>
 Description: This contains the core code for going from a tree or list of taxa
     to a chronogram.
@@ -38,7 +35,8 @@ Imports:
 Suggests:
     testthat,
     paleotree,
-    rphylotastic,
+    rphylotastic
+Enhances:
     phylocomr
 SystemRequirements: mafft, PATHd8
 URL: https://github.com/phylotastic/datelife, http://www.datelife.org
