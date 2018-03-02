@@ -1,4 +1,5 @@
 .travis.yml
+codecov.yml
 ^docs$
 ^.*\.Rproj$         # Automatically added by RStudio,
 ^\.Rproj\.user$     # used for temporary files.
