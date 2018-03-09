@@ -22,7 +22,7 @@ patristic_matrix_to_newick <- function(patristic_matrix) {
 }
 
 #' Find the index of relevant studies in a opentree_chronograms object. Used inside: summarize_datelife_result.
-#' @param datelife_result The patristic.matrices that will be used
+#' @inheritParams datelife_result_check
 #' @param cache The cache of studies
 #' @return A vector with the indices of studies that have relevant info
 #' @export
@@ -41,7 +41,7 @@ patristic_matrix_MRCA <- function(patristic_matrix, partial = TRUE) {
 }
 
 #' Get vector of MRCAs from a datelifeResult object. Used in: summarize_datelife_result.
-#' @param datelife_result An object from get_datelife_result function.
+#' @inheritParams datelife_result_check
 #' @param partial If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries
 #' @return Vector of MRCA ages with names same as in datelife_result
 #' @export
@@ -395,7 +395,7 @@ congruify_and_check <- function(reference, target, taxonomy = NULL, tol = 0.01, 
 			new.tree <- NA
 		}
 	}
-	new.tree$edge.length[which(new.tree$edge.length<0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+	new.tree$edge.length[which(new.tree$edge.length < 0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
 	return(new.tree)
 }
 

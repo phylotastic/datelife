@@ -109,7 +109,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	for (i in seq_len(length(xx))){
 		sequences <- rbind(sequences, bold::bold_seqspec(taxon = input[xx[i]:yy[i]], marker = marker)) # bold::bold_seqspec function only allows searches of up to 335 names, ater that, it gives following Error: Request-URI Too Long (HTTP 414)
 	}
-	if(length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available, if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
+	if(length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available; if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
 		if (verbose) cat("No sequences found in BOLD for input taxa...", "\n")
 		# if (!use_tnrs) cat("Setting use_tnrs = TRUE might change this, but it can be slowish.", "\n")
 		warning("Names in input do not match BOLD specimen records. No tree was constructed.")

@@ -12,7 +12,21 @@ make_mrbayes_runfile(constraint = NULL, ncalibration = NULL,
 
 \item{ncalibration}{The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.}
 
-\item{missing_taxa}{either a tree (as phylo object or as a newick character string, with or without branch lengths) with all the taxa you want at the end, or a data frame assigning missing taxa to nodes in dated tree.}
+\item{missing_taxa}{A tree, a data.frame or a vector enlisting all missing taxa you want to include.
+\describe{
+
+    \item{A tree.}{Either as a phylo object or as a newick character string.
+    It contains all taxa that you want at the end, both missing and non missing.
+    This tree will be used as a hard constraint.
+}
+    \item{A data.frame.}{It contains two columns.
+    missing_taxa. A character vector of missing taxa names.
+    node. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
+}
+    \item{A character vector.}{It contains the names of the missing taxa.
+    They will be added at random to the constraint tree.
+}
+}}
 
 \item{mrbayes_output_file}{A character vector specifying the name of mrBayes run file and outputs (can specify directory too).}
 }

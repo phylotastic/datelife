@@ -11,7 +11,7 @@ summarize_datelife_result(datelife_result = NULL,
   "summary", "matrix"), verbose = FALSE)
 }
 \arguments{
-\item{datelife_result}{A list of patristic matrices; labels correspond to citations}
+\item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
 
 \item{summary_format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
 
