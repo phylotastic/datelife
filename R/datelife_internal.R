@@ -68,11 +68,12 @@ patristic_matrix_to_phylo <- function(patristic_matrix) {
   	tree <- ape::nj(patristic_matrix)
 	}
   if(ape::Ntip(tree) > 2) {
-    tree <- 	phangorn::midpoint(tree)
+    tree <- phangorn::midpoint(tree)
   }
 	if(length(which(tree$edge.length < 0)) > 0) {
 		warning(paste("Converting from patristic distance matrix to a tree resulted in some negative branch lengths; the largest by magnitude was", min(tree$edge.length)))
-		tree$edge.length[which(tree$edge.length < 0)] <- 0 #sometimes NJ returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+        # tree$edge.length[which(tree$edge.length < 0)] <- 0 #sometimes NJ returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+		tree <- tree_fix_brlen(tree = tree, fixing_criterion = "negative", fixing_method = 0)
 	}
   return(tree)
 }

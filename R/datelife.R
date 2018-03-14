@@ -94,7 +94,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 #' @inheritParams make_datelife_query
 # #' @inheritParams make_bold_otol_tree
 # #' @inheritDotParams make_bold_otol_tree
-#' @return List of patristic matrices
+#' @return A dateLifeResult object (named list of patristic matrices).
 #' @export
 get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", get_spp_from_taxon = FALSE, verbose = FALSE) {
 	if(update_cache){
