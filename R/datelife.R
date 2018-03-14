@@ -933,9 +933,9 @@ summarize_datelife_result <- function(datelife_result = NULL, summary_format = "
 #' }
 #' @return A list of two elements:
 #' \describe{
-#'	\item{phy_sdm}{A phylo object with the output chronogram from SDM analysis.
+#'	\item{phy}{A phylo object with the output chronogram from SDM analysis.
 #'	}
-#'	\item{datelife_result_used}{A datelifeResult object with the chronograms that were used to construct the SDM tree.
+#'	\item{data}{A datelifeResult object with the chronograms that were used to construct the SDM tree.
 #'	}
 #' }
 #' @export
@@ -980,11 +980,14 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 		}
 		SDM.result <- do.call(ape::SDM, c(unpadded.matrices, weights))[[1]]
 		#agnes in package cluster has UPGMA with missing data; might make sense here
-		try(phy <- phangorn::upgma(SDM.result))
+		# try(phy <- phangorn::upgma(SDM.result))
+		# no, upgma is not working with missing data, e.g. clade thraupidae SDM.results has a lot of NaN, and upgma choked
+		# trying njs instead, called from patristic_matrix_to_phylo
+		phy <- patristic_matrix_to_phylo(SDM.result)
 	} else {
-		warning("All chronograms in datelife_result throw an error when running SDM. This isn't your fault.")
+		warning("All input chronograms throw an error when running SDM. This is not your fault.")
 		stop("SDM cannot be run with this set of chronograms.")
 	}
 	class(unpadded.matrices) <- "datelifeResult"
-	return(list(phy_sdm = phy, datelife_result_used = unpadded.matrices))
+	return(list(phy = phy, data = unpadded.matrices))
 }

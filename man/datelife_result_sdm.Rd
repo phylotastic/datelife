@@ -25,9 +25,9 @@ datelife_result_sdm(datelife_result, weighting = "flat", verbose = TRUE)
 \value{
 A list of two elements:
 \describe{
-\item{phy_sdm}{A phylo object with the output chronogram from SDM analysis.
+\item{phy}{A phylo object with the output chronogram from SDM analysis.
 }
-\item{datelife_result_used}{A datelifeResult object with the chronograms that were used to construct the SDM tree.
+\item{data}{A datelifeResult object with the chronograms that were used to construct the SDM tree.
 }
 }
 }

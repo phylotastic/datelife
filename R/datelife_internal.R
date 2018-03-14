@@ -55,27 +55,31 @@ datelife_result_MRCA <- function(datelife_result, partial = TRUE) {
 #' @return A rooted phylo object
 #' @export
 patristic_matrix_to_phylo <- function(patristic_matrix) {
-  if(anyNA(patristic_matrix)) {
-  	patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
-  }
-  if(dim(patristic_matrix)[1] < 2) {
-  	return(NA)
-  }
-	tree <- NA
-	if(dim(patristic_matrix)[1] == 2) {
-		tree <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = patristic_matrix[1,2]/2)
-	} else {
-  	tree <- ape::nj(patristic_matrix)
-	}
-  if(ape::Ntip(tree) > 2) {
-    tree <- phangorn::midpoint(tree)
-  }
+    if(anyNA(patristic_matrix)) {
+  	   patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
+    }   # I'm not sure why this is here. It does not get rid of spp with NA or NaNs, then, what does it do?
+    if(dim(patristic_matrix)[1] < 2) {
+  	   return(NA)
+    }
+    tree <- NA
+    if(dim(patristic_matrix)[1] == 2) {
+	     tree <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = patristic_matrix[1,2]/2)
+    } else {
+        if(anyNA(patristic_matrix)){
+            tree <- ape::njs(patristic_matrix)  # when there are missing values, nj does not work
+        } else {
+            tree <- ape::nj(patristic_matrix)
+        }
+	}  # consider giving options to construct tree: nj, upgma, etc.; njs would be the only option for missing data
+    if(ape::Ntip(tree) > 2) {
+        tree <- phangorn::midpoint(tree)  # this roots the tree on the midpoint
+    }
 	if(length(which(tree$edge.length < 0)) > 0) {
 		warning(paste("Converting from patristic distance matrix to a tree resulted in some negative branch lengths; the largest by magnitude was", min(tree$edge.length)))
         # tree$edge.length[which(tree$edge.length < 0)] <- 0 #sometimes NJ returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
 		tree <- tree_fix_brlen(tree = tree, fixing_criterion = "negative", fixing_method = 0)
 	}
-  return(tree)
+    return(tree)
 }
 
 #' Figure out which subset function to use. Used inside: get_datelife_result
