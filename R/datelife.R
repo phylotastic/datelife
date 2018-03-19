@@ -100,7 +100,7 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
-	input <- input_check(input = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
+	input <- datelife_query_check(input = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
 	tree <- input$phy
 	cleaned_names <- input$cleaned_names
 	datelife_query_length_check(cleaned_names = cleaned_names, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
@@ -123,21 +123,29 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 #' @inheritParams datelife_search
 #' @inheritDotParams make_datelife_query
 #' @export
-input_check <- function(input = NULL, ...){
+datelife_query_check <- function(input = NULL, ...){
 	if(is.null(input)){
-		input <- NA
+		stop("input argument is NULL.")
 	}
-	if(length(input) == 1 & any(is.na(input))) {
-		stop("input argument is NULL or NA")
+	if(any(is.na(input))) {
+		stop("input argument has NA values in it.")
 	}
 	badformat <- TRUE
 	if(is.list(input) & "phy" %in% names(input) & "cleaned_names" %in% names(input)) {
 		badformat <- FALSE
+		datelife_query <- input
+		if(!inherits(datelife_query, "datelifeQuery")) {
+			class(datelife_query) <- "datelifeQuery"
+		}
 	}
 	if(badformat){
-		input <- make_datelife_query(input = input, ...)
+		datelife_query <- make_datelife_query(input = input, ...)
+		badformat <- FALSE
 	}
-	return(input)
+	# if(!badformat){
+	# 	# merge datelife_query_length_check function here
+	# }
+	return(datelife_query)
 }
 #' checks that we have at least two taxon names to perform a search
 #' @inheritParams datelife_search
@@ -736,7 +744,7 @@ tree_get_singleton_outgroup <- function(tree = NULL){
 #' @inheritParams datelife_search
 #' @inherit datelife_search return details
 #' @export
-summarize_datelife_result <- function(datelife_result = NULL, summary_format = "phylo.all", input = NULL, partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), summary_print = c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"), verbose = FALSE) {
+summarize_datelife_result <- function(datelife_query = NULL, datelife_result = NULL, summary_format = "phylo.all", partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), summary_print = c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"), verbose = FALSE) {
 		# if(!partial) {
 		# 	datelife_result <- datelife_result[which(!sapply(datelife_result, anyNA))]
 		# } # not necessary cause already filtered in get_datelife_result
