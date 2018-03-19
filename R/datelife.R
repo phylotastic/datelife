@@ -137,6 +137,10 @@ datelife_query_check <- function(datelife_query = NULL, ...){
 			class(datelife_query) <- "datelifeQuery"
 		}
 		badformat <- FALSE
+		datelife_query <- input
+		if(!inherits(datelife_query, "datelifeQuery")) {
+			class(datelife_query) <- "datelifeQuery"
+		}
 	}
 	if(badformat){
 		datelife_query <- make_datelife_query(input = datelife_query, ...)
@@ -744,7 +748,7 @@ tree_get_singleton_outgroup <- function(tree = NULL){
 #' @inheritParams datelife_search
 #' @inherit datelife_search return details
 #' @export
-summarize_datelife_result <- function(datelife_result = NULL, summary_format = "phylo.all", input = NULL, partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), summary_print = c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"), verbose = FALSE) {
+summarize_datelife_result <- function(datelife_query = NULL, datelife_result = NULL, summary_format = "phylo.all", partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), summary_print = c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"), verbose = FALSE) {
 		# if(!partial) {
 		# 	datelife_result <- datelife_result[which(!sapply(datelife_result, anyNA))]
 		# } # not necessary cause already filtered in get_datelife_result
