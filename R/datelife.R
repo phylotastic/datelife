@@ -988,10 +988,10 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 		}
 		SDM.result <- do.call(ape::SDM, c(unpadded.matrices, weights))[[1]]
 		#agnes in package cluster has UPGMA with missing data; might make sense here
-		# try(phy <- phangorn::upgma(SDM.result))
+		try(phy <- phangorn::upgma(SDM.result))
 		# no, upgma is not working with missing data, e.g. clade thraupidae SDM.results has a lot of NaN, and upgma choked
-		# trying njs instead, called from patristic_matrix_to_phylo
-		phy <- patristic_matrix_to_phylo(SDM.result)
+		# trying njs instead, called from patristic_matrix_to_phylo did not work either:
+		# phy <- patristic_matrix_to_phylo(SDM.result)  # nj or njs do not work f patristic matrices output from sdm. Go back to this later
 	} else {
 		warning("All input chronograms throw an error when running SDM. This is not your fault.")
 		stop("SDM cannot be run with this set of chronograms.")

@@ -71,6 +71,7 @@ patristic_matrix_to_phylo <- function(patristic_matrix) {
             tree <- ape::nj(patristic_matrix)
         }
 	}  # consider giving options to construct tree: nj, upgma, etc.; njs would be the only option for missing data
+    # see Criscuolo and Gascuel. 2008. Fast NJ-like algorithms to deal with incomplete distance matrices. BMC Bioinformatics 9:166
     if(ape::Ntip(tree) > 2) {
         tree <- phangorn::midpoint(tree)  # this roots the tree on the midpoint
     }
