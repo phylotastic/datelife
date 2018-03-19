@@ -571,6 +571,8 @@ make_mrbayes_runfile <- function(constraint = NULL, ncalibration = NULL, missing
 }
 
 #' Fabricates dates of missing taxa (with no data) on an already dated tree.
+#'
+#'
 #' @param dated_phy a tree (newick or phylo) with branch lengths proportional to absolute time
 #' @inheritParams make_mrbayes_tree
 #' @inheritParams datelife_search
@@ -583,7 +585,6 @@ tree_add_dates <- function(dated_phy = NULL, missing_taxa = NULL, dating_method 
 	# we need to add a missing_taxa check here. It can only use bladj if missing_taxa is a tree
 	missing_taxa_check(missing_taxa = missing_taxa, dated_phy = dated_phy)
 	if(dating_method == "bladj"){
-
 		dated_phy <- tree_add_nodelabels(tree = dated_phy)  # all nodes need to be named
 		new.phy <- make_bladj_tree(tree = missing_taxa, nodenames = dated_phy$node.label, nodeages = tree_get_node_data(tree = dated_phy, node_data = "node_age")$node_age)
 	}
@@ -617,8 +618,14 @@ tree_add_dates <- function(dated_phy = NULL, missing_taxa = NULL, dating_method 
 #' @return A phylo object, a newick character string or a dataframe with taxonomic assignations
 #' @export
 missing_taxa_check <- function(missing_taxa = NULL, dated_phy = NULL){
+	if(is.null(missing_taxa)) {
+		return(NULL)
+	}
+	if(is.na(missing_taxa)) {
+		return(NULL)
+	}
 	if(is.data.frame(missing_taxa)){ # or is.matrix??
-		stop("not implemented yet")
+		stop("missing_data as data.frame not implemented yet")
 		# checkPastisData
 		return(missing_taxa)
 	}
@@ -626,22 +633,22 @@ missing_taxa_check <- function(missing_taxa = NULL, dated_phy = NULL){
 		missing_taxa <- as.character(missing_taxa)
 		return(missing_taxa)
 	}
-	if(is.null(missing_taxa)) {
-		return(NULL)
-	}
 	missing_taxa <- input_process(missing_taxa)
 	if(inherits(missing_taxa, "phylo")){
 		phylo_check(phy = dated_phy, dated = TRUE)
 		dtINmt <- dated_phy$tip.labels %in% missing_taxa$tip.labels
 		mtINdt <- missing_taxa$tip.labels %in% dated_phy$tip.labels
 		if (!all(dtINmt)) {
-			stop("all taxa in dated_phy must be in missing_taxa tree too")
+			warning("not all taxa from dated_phy are in missing_taxa tree")
 		}
 		missing_taxa_pruned <- ape::drop.tip(missing_taxa, missing_taxa$tip.labels[mtINdt])
 		# phylo_prune_missing_taxa(phy = , taxa = ) # use this one??
-		# dated_phy == missing_taxa_pruned # check that both trees are equal
+		# dated_phy == missing_taxa_pruned # check that both trees are equal?
+		# we don't need to
+		# we can congruify if tree are not equal
+		# we just need to make a tree with all lineages on dated_phy and all lineages in missing taxa vector
 	} else {
-		stop("missing taxa must be NULL, a vector with species names,
+		warning("missing_taxa must be a character vector with species names,
 		a data.frame with taxonomic assignations, a newick character string, or a phylo object")
 	}
 	# IMPORTANT: Add a check that taxa in dated.trees is in reference_tree and viceversa

@@ -19,7 +19,7 @@ get_subset_array_dispatch(study_element, taxa, phy = NULL, phy4 = NULL,
 \item{dating_method}{The method used for tree dating.}
 }
 \value{
-A patristic matrix with for the taxa.
+A patristic matrix with ages for the target taxa.
 }
 \description{
 Figure out which subset function to use. Used inside: get_datelife_result

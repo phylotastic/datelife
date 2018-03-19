@@ -89,7 +89,7 @@ patristic_matrix_to_phylo <- function(patristic_matrix) {
 #' @param phy A user tree to congruify as phylo object (ape)
 #' @param phy4 A user tree to congruify in phylo4 format (phylobase)
 #' @inheritParams datelife_search
-#' @return A patristic matrix with for the taxa.
+#' @return A patristic matrix with ages for the target taxa.
 #' @export
 get_subset_array_dispatch <- function(study_element, taxa, phy = NULL, phy4 = NULL, dating_method = "PATHd8") {
   if(class(study_element) == "array") {
@@ -327,7 +327,7 @@ phylo_get_subset_array <- function(reference_tree, taxa, phy4 = NULL, dating_met
   final.size <- sum(reference_tree$tip.label %in% taxa) # returns number of matches
   if(final.size >= 2) { #it's worth doing the pruning
     reference_tree <- phylo_prune_missing_taxa(reference_tree, taxa)
-    #reference_tree<-phylo_prune_missing_taxas(reference_tree, taxa) #phylo_prune_missing_taxas is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
+    #reference_tree <- phylo_prune_missing_taxa(reference_tree, taxa) #phylo_prune_missing_taxa (PruneTree before) is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
   }
   problem <- "none"
   patristic_matrix_array <- NA

@@ -92,7 +92,7 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 #' @param chronogram Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.
 #' @param doML Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml
 #' @inheritParams make_datelife_query
-#' @return A phylogeny with ML branch lengths
+#' @return A phylogeny with branch lengths proportional to relative substitution rate.
 #' @export
 make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, get_spp_from_taxon = FALSE, verbose = FALSE) {
 	#otol returns error with missing taxa in v3 of rotl
