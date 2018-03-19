@@ -14,10 +14,6 @@ export(get_datelife_result)
 export(get_mrbayes_node_calibrations)
 export(get_otol_chronograms)
 export(get_subset_array_dispatch)
-<<<<<<< HEAD
-=======
-export(datelife_query_check)
->>>>>>> dd0584ab4a346bd92cd5757d57415a90d003c271
 export(input_process)
 export(is_good_chronogram)
 export(make_bladj_tree)

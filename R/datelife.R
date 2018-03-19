@@ -86,7 +86,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 			}
 			datelife_query <- make_datelife_query(input = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
 			datelife_result.here <- get_datelife_result(input = datelife_query, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = FALSE, cache = cache, dating_method = dating_method, verbose = verbose)
-			return(summarize_datelife_result(input = datelife_query$cleaned_names, datelife_result = datelife_result.here, summary_format = summary_format, partial = partial, update_cache = FALSE, cache = cache, summary_print = summary_print, add_taxon_distribution = add_taxon_distribution, verbose = verbose))
+			return(summarize_datelife_result(datelife_query = datelife_query, datelife_result = datelife_result.here, summary_format = summary_format, partial = partial, update_cache = FALSE, cache = cache, summary_print = summary_print, add_taxon_distribution = add_taxon_distribution, verbose = verbose))
 }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
@@ -137,7 +137,6 @@ datelife_query_check <- function(datelife_query = NULL, ...){
 			class(datelife_query) <- "datelifeQuery"
 		}
 		badformat <- FALSE
-		datelife_query <- input
 		if(!inherits(datelife_query, "datelifeQuery")) {
 			class(datelife_query) <- "datelifeQuery"
 		}
@@ -578,11 +577,12 @@ tree_add_dates <- function(dated_phy = NULL, missing_taxa = NULL, dating_method 
 	dated_phy <- tree_check(tree = dated_phy, dated = TRUE)
 	dating_method <- match.arg(dating_method, c("bladj", "mrbayes"))
 	# we need to add a missing_taxa check here. It can only use bladj if missing_taxa is a tree
+	
 	if(dating_method == "bladj"){
 		dated_phy <- tree_add_nodelabels(tree = dated_phy)  # all nodes need to be named
 		new.phy <- make_bladj_tree(tree = missing_taxa, nodenames = dated_phy$node.label, nodeages = tree_get_node_data(tree = dated_phy, node_data = "node_age")$node_age)
 	}
-	if(dating_method=="mrbayes"){
+	if(dating_method == "mrbayes"){
 		dated_phy <- tree_add_outgroup(tree = dated_phy, outgroup = "an_outgroup")  # we need to add a fake outgroup, otherwise mrbayes won't respect the root age
 		ncalibration <- tree_get_node_data(tree = dated_phy, node_data = c("node_age", "descendant_tips_label"))
 		# we need to be more specific in the way it uses missing taxa next. If it is a tree, then missing_taxa goes as the constrint. If it is a vector, then it just goes as missing taxa. If it is a data frame, we should call pastis.
@@ -744,6 +744,7 @@ tree_get_singleton_outgroup <- function(tree = NULL){
 
 
 #' Summarize a filtered results list from get_datelife_result function in various ways
+#' @inheritParams datelife_query_check
 #' @inheritParams datelife_result_check
 #' @inheritParams datelife_search
 #' @inherit datelife_search return details
@@ -761,12 +762,17 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	summary_format.in <- match.arg(summary_format, choices = c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo.all", "html", "data.frame"))
 	add_taxon_distribution.in <- match.arg(add_taxon_distribution, choices = c("none", "summary", "matrix"))
 	summary_print.in <- match.arg(summary_print, c("citations", "taxa", "none"), several.ok = TRUE)
+	input <- datelife_query
 	if(is.null(input)){
 		input.in <- unique(rapply(datelife_result, rownames))
-		if(add_taxon_distribution.in !="none") warning("showing taxon summary from taxa found in at least one chronogram, this excludes input taxa not found in any chronogram")
+		if(add_taxon_distribution.in != "none") {
+			warning("datelife_query argument is empty: showing taxon distribution of taxa found only in at least one chronogram. This excludes input taxa not found in any chronogram.")
+		}
 	} else {
-		if(!is.character(input)) stop("input must be a character vector")
-		input.in <- input
+		# if(!is.character(input)) stop("input must be a character vector")
+		input <- datelife_query_check(datelife_query = input)
+		input.in <- input$cleaned_names
+		# input.in <- input
 	}
 	results.index <- datelife_result_study_index(datelife_result, cache)
 	return.object <- NA
@@ -993,9 +999,9 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 		SDM.result <- do.call(ape::SDM, c(unpadded.matrices, weights))[[1]]
 		#agnes in package cluster has UPGMA with missing data; might make sense here
 		try(phy <- phangorn::upgma(SDM.result))
-		# no, upgma is not working with missing data, e.g. clade thraupidae SDM.results has a lot of NaN, and upgma choked
+		# no, upgma is not working with missing data, e.g. clade thraupidae SDM.results have a lot of NaN, and upgma choked
 		# trying njs instead, called from patristic_matrix_to_phylo did not work either:
-		# phy <- patristic_matrix_to_phylo(SDM.result)  # nj or njs do not work f patristic matrices output from sdm. Go back to this later
+		# phy <- patristic_matrix_to_phylo(SDM.result)  # nj or njs do not work if patristic matrices output from sdm. Go back to this later
 	} else {
 		warning("All input chronograms throw an error when running SDM. This is not your fault.")
 		stop("SDM cannot be run with this set of chronograms.")
