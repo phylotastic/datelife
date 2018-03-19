@@ -225,25 +225,29 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	  	input <- phy.new$tip.label
 	}
 	if(length(input) == 1) {
-		input <- strsplit(input, ',')[[1]]
-		if(!get_spp_from_taxon[1]) {
-				if(verbose) {
-					cat("Datelife needs at least two input taxon names to perform a search.", "\n")
-					cat("Setting get_spp_from_taxon = TRUE gets all species from a clade and accepts only one taxon name as input.", "\n")
-				}
-				stop("Input is length 1 and not in a good newick format.")
+		input <- strsplit(input, ',')[[1]] #  separates a character vector of comma separated names
+		if(length(input) == 1){
+			if(!get_spp_from_taxon[1]) {
+					if(verbose) {
+						cat("Datelife needs at least two input taxon names to perform a search.", "\n")
+						cat("Setting get_spp_from_taxon = TRUE gets all species from a clade and accepts only one taxon name as input.", "\n")
+					}
+					stop("Input is length 1 and not in a good newick format.")
+			}
 		}
 	}
-	cleaned.input <- stringr::str_trim(input, side = "both")
-    if (use_tnrs) {
-			# process names even if it's a "higher" taxon name:
-			cleaned.input <- rotl::tnrs_match_names(cleaned.input)$unique_name
-			# after some tests, decided to use above method instead of taxize::gnr_resolve, and just output the original input and the actual query for users to check out.
-			# cleaned.input <- taxize::gnr_resolve(names = cleaned.input, data_source_ids=179, fields="all")$matched_name
-    }
+	cleaned.input <- stringr::str_trim(input, side = "both")  # cleans the input of lingering unneeded white spaces
+  if (use_tnrs) {
+		# process names even if it's a "higher" taxon name:
+		cleaned.input <- input_tnrs(input = cleaned.input)$unique_name
+		# after some tests, decided to use rotl's method instead of taxize::gnr_resolve, and just output the original input and the actual query for users to check out.
+		# cleaned.input <- taxize::gnr_resolve(names = cleaned.input, data_source_ids=179, fields="all")$matched_name
+  }
 	cleaned_names <- gsub("_", " ", cleaned.input)
     if(any(get_spp_from_taxon)){
-    	if(length(get_spp_from_taxon)==1) get_spp_from_taxon <- rep(get_spp_from_taxon,length(cleaned.input))
+    	if(length(get_spp_from_taxon)==1) {
+				get_spp_from_taxon <- rep(get_spp_from_taxon, length(cleaned.input))
+			}
     	if(length(cleaned.input)!=length(get_spp_from_taxon)){
     		if(verbose) cat("Specify all taxa in input to get species names from.", "\n")
     		stop("input and get_spp_from_taxon arguments must have same length.")
@@ -264,8 +268,8 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	    	}
 	    	index <- index + 1
 	    }
-		cleaned_names <- gsub("_", " ", species.names)
-	}
+			cleaned_names <- gsub("_", " ", species.names)
+		}
 	cleaned_names <- unique(cleaned_names)
   if(verbose) cat("OK.", "\n")
   cleaned_names.print <- paste(cleaned_names, collapse = " | ")
@@ -577,8 +581,9 @@ tree_add_dates <- function(dated_phy = NULL, missing_taxa = NULL, dating_method 
 	dated_phy <- tree_check(tree = dated_phy, dated = TRUE)
 	dating_method <- match.arg(dating_method, c("bladj", "mrbayes"))
 	# we need to add a missing_taxa check here. It can only use bladj if missing_taxa is a tree
-	
+	missing_taxa_check(missing_taxa = missing_taxa, dated_phy = dated_phy)
 	if(dating_method == "bladj"){
+
 		dated_phy <- tree_add_nodelabels(tree = dated_phy)  # all nodes need to be named
 		new.phy <- make_bladj_tree(tree = missing_taxa, nodenames = dated_phy$node.label, nodeages = tree_get_node_data(tree = dated_phy, node_data = "node_age")$node_age)
 	}
@@ -591,8 +596,7 @@ tree_add_dates <- function(dated_phy = NULL, missing_taxa = NULL, dating_method 
 	}
 	return(new.phy)
 }
-
-#' Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile function
+#' Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile and tree_add_dates functions.
 #' @param  missing_taxa A tree, a data.frame or a vector enlisting all missing taxa you want to include.
 #' \describe{
 #'
@@ -634,7 +638,7 @@ missing_taxa_check <- function(missing_taxa = NULL, dated_phy = NULL){
 			stop("all taxa in dated_phy must be in missing_taxa tree too")
 		}
 		missing_taxa_pruned <- ape::drop.tip(missing_taxa, missing_taxa$tip.labels[mtINdt])
-		# phylo_prune_missing_taxa(phy = , taxa = ) # use this one
+		# phylo_prune_missing_taxa(phy = , taxa = ) # use this one??
 		# dated_phy == missing_taxa_pruned # check that both trees are equal
 	} else {
 		stop("missing taxa must be NULL, a vector with species names,

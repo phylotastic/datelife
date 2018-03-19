@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife.R
 \name{missing_taxa_check}
 \alias{missing_taxa_check}
-\title{Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile function}
+\title{Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile and tree_add_dates functions.}
 \usage{
 missing_taxa_check(missing_taxa = NULL, dated_phy = NULL)
 }
@@ -29,5 +29,5 @@ missing_taxa_check(missing_taxa = NULL, dated_phy = NULL)
 A phylo object, a newick character string or a dataframe with taxonomic assignations
 }
 \description{
-Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile function
+Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile and tree_add_dates functions.
 }
