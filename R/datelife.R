@@ -100,7 +100,7 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
-	input <- input_check(input = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
+	input <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
 	tree <- input$phy
 	cleaned_names <- input$cleaned_names
 	datelife_query_length_check(cleaned_names = cleaned_names, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
@@ -120,24 +120,32 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 }
 
 #' checks if input is a datelifeQuery object, otherwise it uses make_datelife_query to process it
+#' @param datelife_query An object output of make_datelife_query function
 #' @inheritParams datelife_search
 #' @inheritDotParams make_datelife_query
 #' @export
-input_check <- function(input = NULL, ...){
-	if(is.null(input)){
-		input <- NA
-	}
-	if(length(input) == 1 & any(is.na(input))) {
-		stop("input argument is NULL or NA")
-	}
+datelife_query_check <- function(datelife_query = NULL, ...){
+	# if(is.null(input)){
+	# 	input <- NA
+	# }
+	# if(length(input) == 1 & any(is.na(input))) {
+	# 	stop("input argument is NULL or NA")
+	# }
 	badformat <- TRUE
-	if(is.list(input) & "phy" %in% names(input) & "cleaned_names" %in% names(input)) {
+	if(is.list(datelife_query) & "phy" %in% names(datelife_query) & "cleaned_names" %in% names(datelife_query)) {
+		if(!inherits(datelife_query, "datelifeQuery")) {
+			class(datelife_query) <- "datelifeQuery"
+		}
 		badformat <- FALSE
 	}
 	if(badformat){
-		input <- make_datelife_query(input = input, ...)
+		datelife_query <- make_datelife_query(input = datelife_query, ...)
+		badformat <- FALSE
 	}
-	return(input)
+	# if(!badformat){
+	# 	# merge datelife_query_length_check function here
+	# }
+	return(datelife_query)
 }
 #' checks that we have at least two taxon names to perform a search
 #' @inheritParams datelife_search

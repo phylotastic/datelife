@@ -96,9 +96,11 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 #' @export
 make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, get_spp_from_taxon = FALSE, verbose = FALSE) {
 	#otol returns error with missing taxa in v3 of rotl
-	input <- input_check(input = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
+	input <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
 	input <- input$cleaned_names
-	if (verbose) cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
+	if (verbose) {
+		cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
+	}
 	xx <- seq(1, length(input), 250)
 	yy <- xx+249
 	yy[length(xx)] <- length(input)
