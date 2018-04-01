@@ -1,4 +1,4 @@
-test_that("results_list_process", {
+test_that("results_list_process works", {
 utils::data(opentree_chronograms)
 taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
 results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
@@ -10,7 +10,7 @@ test_that("Summarize as mrca works correctly", {
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
   datelife_result <- results_list_process(results_list, taxa, TRUE)
-  mrca.vector <- summarize_datelife_result(datelife_result, summary_format="mrca", cache=opentree_chronograms)
+  mrca.vector <- summarize_datelife_result(datelife_result = datelife_result, summary_format="mrca", cache=opentree_chronograms)
   expect_equal(class(mrca.vector), "numeric")
   expect_gte(min(mrca.vector),5)
   expect_lte(max(mrca.vector),150)
@@ -21,7 +21,7 @@ test_that("Summarize as citations works correctly", {
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
   datelife_result <- results_list_process(results_list, taxa, TRUE)
-  citation.results <- summarize_datelife_result(datelife_result, summary_format="cit", cache=opentree_chronograms)
+  citation.results <- summarize_datelife_result(datelife_result = datelife_result, summary_format="cit", cache=opentree_chronograms)
   expect_equal(class(citation.results), "character")
   expect_gte(sum(grepl("Prum", citation.results)),1)
  })
@@ -31,7 +31,7 @@ test_that("Summarize as newick.all works correctly", {
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
   datelife_result <- results_list_process(results_list, taxa, TRUE)
-  trees <- summarize_datelife_result(datelife_result, summary_format="newick.all", cache=opentree_chronograms)
+  trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick.all", cache=opentree_chronograms)
   expect_equal(class(trees), "character")
   expect_false(anyNA(trees))
   expect_equal(class(ape::read.tree(text=trees[1])), "phylo")
@@ -42,12 +42,12 @@ test_that("add_taxon_distribution argument from summarize_datelife_result() work
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
   datelife_result <- results_list_process(results_list, taxa, TRUE)
-  trees <- summarize_datelife_result(datelife_result, summary_format="newick.all", cache=opentree_chronograms, add_taxon_distribution = "summary")
+  trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick.all", cache=opentree_chronograms, add_taxon_distribution = "summary")
   # str(trees)
   # trees$taxon_distribution
   # trees$absent.taxa
   expect_gte(length(trees), 3)
-  trees2 <- summarize_datelife_result(datelife_result, summary_format="newick.all", cache=opentree_chronograms, add_taxon_distribution = "matrix")
+  trees2 <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick.all", cache=opentree_chronograms, add_taxon_distribution = "matrix")
   expect_gte(length(trees2), 3)
   # str(trees2)
   # trees2$taxon_distribution
@@ -59,7 +59,7 @@ test_that("Summarize as newick.median works correctly", {
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
   datelife_result <- results_list_process(results_list, taxa, partial=FALSE)
-  tree <- summarize_datelife_result(datelife_result, summary_format="newick.median", cache=opentree_chronograms)
+  tree <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick.median", cache=opentree_chronograms)
   expect_equal(class(tree), "character")
   expect_false(anyNA(tree))
   expect_equal(class(ape::read.tree(text=tree)), "phylo")
@@ -83,41 +83,41 @@ test_that("Processing input newick", {
 test_that("datelife_search returns phylo.all", {
   skip_on_cran()
   utils::data(opentree_chronograms)
-  phylo.results <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="phylo.all")
-  expect_equal(class(phylo.results[[1]]),"phylo")
+  datelife_phylo <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="phylo.all")
+  expect_equal(class(datelife_phylo[[1]]),"phylo")
 })
 
 test_that("datelife_search returns phylo.sdm", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
-phylo.results <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="phylo.sdm")
-expect_equal(class(phylo.results),"phylo")
-expect_true(!is.null(phylo.results$edge.length))
+datelife_phylo <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="phylo.sdm")
+expect_equal(class(datelife_phylo),"phylo")
+expect_true(!is.null(datelife_phylo$edge.length))
 })
 
 
 test_that("datelife_search returns mrca", {
   skip_on_cran()
   utils::data(opentree_chronograms)
-  phylo.results <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="mrca")
-expect_equal(class(phylo.results),"numeric")
-expect_gte(length(phylo.results), 2)
+  datelife_phylo <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="mrca")
+expect_equal(class(datelife_phylo),"numeric")
+expect_gte(length(datelife_phylo), 2)
 })
 
 test_that("datelife_search returns mrca", {
   skip_on_cran()
   utils::data(opentree_chronograms)
-  phylo.results <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="mrca")
-expect_equal(class(phylo.results),"numeric")
-expect_gte(length(phylo.results), 2)
+  datelife_phylo <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="mrca")
+expect_equal(class(datelife_phylo),"numeric")
+expect_gte(length(datelife_phylo), 2)
 })
 
 test_that("get_datelife_result works", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
-  datelife_result.in <- get_datelife_result(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"))
+  datelife_result.in <- get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"))
   expect_equal(typeof(datelife_result.in), "list")
   expect_s3_class(datelife_result.in, "datelifeResult")
   # expect_gte(length(datelife_result.in), 4) #as of Nov 4, 2016, had length 8
@@ -177,7 +177,7 @@ test_that("SDM correctly returns tree", {
   skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
+  results_list <- lapply(opentree_chronograms$trees, get_subset_array_dispatch, taxa=taxa, phy=NULL)
   datelife_result <- results_list_process(results_list, taxa, TRUE)
   result.tree <- datelife_result_sdm(datelife_result)$phy
   expect_equal(class(result.tree), "phylo")
@@ -253,19 +253,30 @@ test_that("input_process works", {
 })
 
 test_that("tree_fix_brlen works", {
-    # install.packages("phylocomr", repos = "https://cloud.r-project.org")
-    # devtools::install_github("ropensci/phylocomr")
     utils::data(plant_bold_otol_tree)
     x1 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = 0)
-    # x2 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
     expect_true(ape::is.ultrametric(x1, option = 2))
-    # expect_true(ape::is.ultrametric(x2, option = 2))
-    # # mrbayes fix brlen test, takes a while:
-    # wwdd <- getwd()
-    # setwd("~/")
-    # x3 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "mrbayes")
-    # setwd(wwdd)
-    # expect_true(ape::is.ultrametric(x3, option = 2))  # prefer option = 2, using the variance to test ultrametricity, cf. E, Paradis' comments on this post http://blog.phytools.org/2017/03/forceultrametric-method-for-ultrametric.html
+    skip_on_cran()
+    skip_on_travis() #bc no mrbayes
+    install.packages("phylocomr", repos = "https://cloud.r-project.org")
+    devtools::install_github("ropensci/phylocomr")
+    x2 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
+    expect_true(ape::is.ultrametric(x2, option = 2))
+    # mrbayes fix brlen test. It takes a while:
+    wwdd <- getwd()
+    setwd("~/")
+    x3 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "mrbayes")
+    setwd(wwdd)
+    expect_true(ape::is.ultrametric(x3, option = 2))  # prefer option = 2, using the variance to test ultrametricity, cf. E, Paradis' comments on this post http://blog.phytools.org/2017/03/forceultrametric-method-for-ultrametric.html
+})
+
+test_that("get_otol_synthetic_tree works", {
+  otol_tree <- get_otol_synthetic_tree(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))
+  expect_s3_class(otol_tree, "phylo") # output is phylo
+  expect_gte(length(otol_tree), 4)  # it has no branch lengths
+  # should it return all names always?
+  # it should return the same number of names matched by input_tnrs
+  # add such a test:
 })
 
     # test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {

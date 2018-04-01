@@ -71,11 +71,11 @@ use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",  
 #' @return data.frame of calibrations
 #' @export
 get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = FALSE) {
-	phylo.results <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = update_cache, cache = cache, summary_format = "phylo.all", verbose = verbose)
+	datelife_phylo <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = update_cache, cache = cache, summary_format = "phylo.all", verbose = verbose)
 	constraints.df <- data.frame()
-	for (i in sequence(length(phylo.results))) {
-		local.df <- geiger::congruify.phylo(reference = phylo.results[[i]], target = phylo.results[[i]], scale = NA)$calibrations
-		local.df$reference <- names(phylo.results)[i]
+	for (i in sequence(length(datelife_phylo))) {
+		local.df <- geiger::congruify.phylo(reference = datelife_phylo[[i]], target = datelife_phylo[[i]], scale = NA)$calibrations
+		local.df$reference <- names(datelife_phylo)[i]
 		if(i == 1) {
 			constraints.df <- local.df
 		} else {
@@ -92,15 +92,26 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 #' @param chronogram Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.
 #' @param doML Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml
 #' @inheritParams make_datelife_query
-#' @return A phylogeny with ML branch lengths
+#' @return A phylogeny with branch lengths proportional to relative substitution rate.
 #' @export
 make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, get_spp_from_taxon = FALSE, verbose = FALSE) {
 	#otol returns error with missing taxa in v3 of rotl
-	input <- input_check(input = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
+	input <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
 	input <- input$cleaned_names
-	if (verbose) cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
-	sequences <- bold::bold_seqspec(taxon = input, marker = marker)
-	if(length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available, if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
+	if (verbose) {
+		cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
+	}
+	xx <- seq(1, length(input), 250)
+	yy <- xx+249
+	yy[length(xx)] <- length(input)
+	# if(length(input)%%250 != 0) {
+	# 	yy[length(xx)] <- length(input)
+	# }
+	sequences <- c()
+	for (i in seq_len(length(xx))){
+		sequences <- rbind(sequences, bold::bold_seqspec(taxon = input[xx[i]:yy[i]], marker = marker)) # bold::bold_seqspec function only allows searches of up to 335 names, ater that, it gives following Error: Request-URI Too Long (HTTP 414)
+	}
+	if(length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available; if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
 		if (verbose) cat("No sequences found in BOLD for input taxa...", "\n")
 		# if (!use_tnrs) cat("Setting use_tnrs = TRUE might change this, but it can be slowish.", "\n")
 		warning("Names in input do not match BOLD specimen records. No tree was constructed.")
@@ -109,24 +120,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides)  # preserve good nucleotide data, i.e., only A,T,G,C
 	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
 	if (verbose) cat("\t", "OK.", "\n")
-		xx <- seq(1, length(input), 250)
-		yy <- xx+249
-		if(length(input)%%250 != 0) {
-			yy[length(xx)] <- length(input)
-		}
-		for (i in seq_len(length(xx))){
-			rr <- rotl::tnrs_match_names(names = input[xx[i]:yy[i]])
-		}
-	# rr <- rotl::tnrs_match_names(names = input)  # rr has the same order as input
-	# when names are not matched it gives a warning: NAs introduced by coercion, so:
-	rr <- rr[!is.na(rr$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
-	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids = rr$ott_id, label_format = "name",  otl_v = otol_version))
-	phy$tip.label <- gsub(".*_ott","", phy$tip.label)  # leaves only the ott_id as tip.label, it's safer than matching by name
-	# when there are synonyms among the input names, phy will conserve the accepted name (rr$uniqe_name) instead of the original query name from input (rr$search_string)
-	# this produces an error downstream, while using phangorn::pml()
-	# to avoid this error, we replace the unique name by the original query name in phy$tip.label:
-	mm <- match(phy$tip.label, gsub(" ","_", rr$ott_id))  # this gets the order of tip labels in phy
-	phy$tip.label <- gsub(" ","_", input[mm])  # this overlaps the original query over phy$tip.labels in the correct order
+
+	phy <- get_otol_synthetic_tree(input = input, otol_version = otol_version)
+
 	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
 	final.sequences.names <- rep(NA, length(input))
 	# for (i in sequence(dim(sequences)[1])) {
@@ -213,5 +209,43 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	if (verbose) {
 		cat("Done.", "\n")
 	}
+	return(phy)
+}
+
+#' Taxon name resolution service applied to input by batches
+#' @inheritParams datelife_search
+#' @param reference_taxonomy A character vetor specifying the reference taxonomy to use for tnrs.
+#' @return A data.frame from tnrs_match_names function
+#' @export
+input_tnrs <- function(input, reference_taxonomy = "otl"){  # we can add other reference taxonomies in the future
+	if(reference_taxonomy == "otl"){
+		xx <- seq(1, length(input), 250)
+		yy <- xx+249
+		yy[length(xx)] <- length(input)
+		rr <- c()
+		for (i in seq_len(length(xx))){
+			rr <- rbind(rr, suppressWarnings(rotl::tnrs_match_names(names = input[xx[i]:yy[i]])))
+		}
+		# rr <- rotl::tnrs_match_names(names = input)
+		# rr has the same order as input
+		# when names are not matched it gives a warning: NAs introduced by coercion, so:
+		rr <- rr[!is.na(rr$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
+	}
+	return(rr)
+}
+#' Gets Open Tree of Life synthetic tree of a set of lineages.
+#' @inheritParams datelife_search
+#' @inheritParams make_bold_otol_tree
+#' @return A phylo object
+#' @export
+get_otol_synthetic_tree <- function(input, otol_version = "v2"){
+	rr <- input_tnrs(input = input, reference_taxonomy = "otl")  # processes input with rotl::tnrs_match_names function by batches, so it won't choke
+	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids = rr$ott_id, label_format = "name",  otl_v = otol_version))
+	phy$tip.label <- gsub(".*_ott","", phy$tip.label)  # leaves only the ott_id as tip.label, it's safer than matching by name
+	# when there are synonyms among the input names, phy will conserve the accepted name (rr$uniqe_name) instead of the original query name from input (rr$search_string)
+	# this produces an error downstream, while using phangorn::pml()
+	# to avoid this error, we replace the unique name by the original query name in phy$tip.label:
+	mm <- match(phy$tip.label, gsub(" ","_", rr$ott_id))  # this gets the order of tip labels in phy
+	phy$tip.label <- gsub(" ","_", input[mm])  # this overlaps the original query over phy$tip.labels in the correct order
 	return(phy)
 }

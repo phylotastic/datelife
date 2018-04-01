@@ -7,7 +7,7 @@
 datelife_result_check(datelife_result, use_tnrs, verbose = FALSE)
 }
 \arguments{
-\item{datelife_result}{An object output from get_datelife_result function}
+\item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
 
 \item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 

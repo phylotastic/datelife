@@ -29,7 +29,7 @@ make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus",
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
 \value{
-A phylogeny with ML branch lengths
+A phylogeny with branch lengths proportional to relative substitution rate.
 }
 \description{
 Use Barcode of Life data to get branch lengths on the OToL tree of a set of taxa.

@@ -22,7 +22,7 @@ patristic_matrix_to_newick <- function(patristic_matrix) {
 }
 
 #' Find the index of relevant studies in a opentree_chronograms object. Used inside: summarize_datelife_result.
-#' @param datelife_result The patristic.matrices that will be used
+#' @inheritParams datelife_result_check
 #' @param cache The cache of studies
 #' @return A vector with the indices of studies that have relevant info
 #' @export
@@ -41,7 +41,7 @@ patristic_matrix_MRCA <- function(patristic_matrix, partial = TRUE) {
 }
 
 #' Get vector of MRCAs from a datelifeResult object. Used in: summarize_datelife_result.
-#' @param datelife_result An object from get_datelife_result function.
+#' @inheritParams datelife_result_check
 #' @param partial If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries
 #' @return Vector of MRCA ages with names same as in datelife_result
 #' @export
@@ -55,26 +55,32 @@ datelife_result_MRCA <- function(datelife_result, partial = TRUE) {
 #' @return A rooted phylo object
 #' @export
 patristic_matrix_to_phylo <- function(patristic_matrix) {
-  if(anyNA(patristic_matrix)) {
-  	patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
-  }
-  if(dim(patristic_matrix)[1] < 2) {
-  	return(NA)
-  }
-	tree <- NA
-	if(dim(patristic_matrix)[1] == 2) {
-		tree <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = patristic_matrix[1,2]/2)
-	} else {
-  	tree <- ape::nj(patristic_matrix)
-	}
-  if(ape::Ntip(tree) > 2) {
-    tree <- 	phangorn::midpoint(tree)
-  }
+    if(anyNA(patristic_matrix)) {
+  	   patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
+    }   # I'm not sure why this is here. It does not get rid of spp with NA or NaNs, then, what does it do?
+    if(dim(patristic_matrix)[1] < 2) {
+  	   return(NA)
+    }
+    tree <- NA
+    if(dim(patristic_matrix)[1] == 2) {
+	     tree <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = patristic_matrix[1,2]/2)
+    } else {
+        if(anyNA(patristic_matrix)){
+            tree <- ape::njs(patristic_matrix)  # when there are missing values, nj does not work
+        } else {
+            tree <- ape::nj(patristic_matrix)
+        }
+	}  # consider giving options to construct tree: nj, upgma, etc.; njs would be the only option for missing data
+    # see Criscuolo and Gascuel. 2008. Fast NJ-like algorithms to deal with incomplete distance matrices. BMC Bioinformatics 9:166
+    if(ape::Ntip(tree) > 2) {
+        tree <- phangorn::midpoint(tree)  # this roots the tree on the midpoint
+    }
 	if(length(which(tree$edge.length < 0)) > 0) {
 		warning(paste("Converting from patristic distance matrix to a tree resulted in some negative branch lengths; the largest by magnitude was", min(tree$edge.length)))
-		tree$edge.length[which(tree$edge.length < 0)] <- 0 #sometimes NJ returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+        # tree$edge.length[which(tree$edge.length < 0)] <- 0 #sometimes NJ returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+		tree <- tree_fix_brlen(tree = tree, fixing_criterion = "negative", fixing_method = 0)
 	}
-  return(tree)
+    return(tree)
 }
 
 #' Figure out which subset function to use. Used inside: get_datelife_result
@@ -83,7 +89,7 @@ patristic_matrix_to_phylo <- function(patristic_matrix) {
 #' @param phy A user tree to congruify as phylo object (ape)
 #' @param phy4 A user tree to congruify in phylo4 format (phylobase)
 #' @inheritParams datelife_search
-#' @return A patristic matrix with for the taxa.
+#' @return A patristic matrix with ages for the target taxa.
 #' @export
 get_subset_array_dispatch <- function(study_element, taxa, phy = NULL, phy4 = NULL, dating_method = "PATHd8") {
   if(class(study_element) == "array") {
@@ -146,7 +152,7 @@ patristic_matrix_array_subset_both <- function(patristic_matrix_array, taxa, phy
 # Used inside: patristic_matrix_array_subset_both
 patristic_matrix_array_subset <- function(patristic_matrix_array, taxa, phy4 = NULL) {
   #gets a subset of the patristic_matrix_array. If you give it a phylo4 object, it can check to see if taxa are a clade
-  patristic_matrix_array <- patristic_matrix_array[ rownames(patristic_matrix_array) %in% taxa,colnames(patristic_matrix_array) %in% taxa,  ]
+  patristic_matrix_array <- patristic_matrix_array[rownames(patristic_matrix_array) %in% taxa, colnames(patristic_matrix_array) %in% taxa,  ]
   problem <- "none"
   final.size <- sum(rownames(patristic_matrix_array) %in% taxa) # returns number of matches
   if (final.size < length(taxa)) {
@@ -180,7 +186,7 @@ patristic_matrix_array_congruify <- function(patristic_matrix_array, taxa, phy =
     }
   }
   patristic_matrix_list <- patristic_matrix_array_split(patristic_matrix_array)
-  patristic_matrix_array <- patristic_matrix_list_to_array(lapply(patristic_matrix_list, patristic_matrix_array_phylo_congruify, query.tree = phy, scale = dating_method)) #yes, this should be parallel
+  patristic_matrix_array <- patristic_matrix_list_to_array(lapply(patristic_matrix_list, patristic_matrix_array_phylo_congruify, target_tree = phy, scale = dating_method)) #yes, this should be parallel
   return(list(patristic_matrix_array = patristic_matrix_array, problem = problem))
 }
 
@@ -255,13 +261,13 @@ patristic_matrix_name_order_test <- function(patristic_matrix, standard.rownames
 }
 
 # Used inside: patristic_matrix_array_congruify.
-patristic_matrix_array_phylo_congruify <- function(patristic_matrix, query.tree, dating_method = "PATHd8", attempt.fix = TRUE) {
+patristic_matrix_array_phylo_congruify <- function(patristic_matrix, target_tree, dating_method = "PATHd8", attempt.fix = TRUE) {
   	result_matrix <- matrix(nrow = dim(patristic_matrix)[1], ncol = dim(patristic_matrix)[2])
-  	if(is.null(query.tree$edge.length)) {
-    	query.tree$edge.length<-numeric(nrow(query.tree$edge))
+  	if(is.null(target_tree$edge.length)) {
+    	target_tree$edge.length<-numeric(nrow(target_tree$edge))
   	}
-#	try(result_matrix <- phylo_to_patristic_matrix(phylo_tiplabel_underscore_to_space(geiger::congruify.phylo(phylo_tiplabel_space_to_underscore(patristic_matrix_to_phylo(patristic_matrix)), phylo_tiplabel_space_to_underscore(query.tree), NULL, 0, scale = dating_method)$phy)))
-	try(result_matrix <- phylo_to_patristic_matrix(congruify_and_check(reference = patristic_matrix_to_phylo(patristic_matrix), target = query.tree, scale = dating_method, attempt.fix = attempt.fix)))
+#	try(result_matrix <- phylo_to_patristic_matrix(phylo_tiplabel_underscore_to_space(geiger::congruify.phylo(phylo_tiplabel_space_to_underscore(patristic_matrix_to_phylo(patristic_matrix)), phylo_tiplabel_space_to_underscore(target_tree), NULL, 0, scale = dating_method)$phy)))
+	try(result_matrix <- phylo_to_patristic_matrix(congruify_and_check(reference = patristic_matrix_to_phylo(patristic_matrix), target = target_tree, scale = dating_method, attempt.fix = attempt.fix)))
   return(result_matrix)
 }
 
@@ -310,18 +316,18 @@ phylo_subset_both <- function(reference_tree.in, taxa.in, phy.in = NULL, phy4.in
   if (!congruify) {
     return(phylo_get_subset_array(reference_tree = reference_tree.in, taxa = taxa.in, phy4 = phy4.in, dating_method = dating_method.in))
   }
-  else { #congruify
+  else {  # when congruify is TRUE
     return(phylo_get_subset_array_congruify(reference_tree = reference_tree.in, taxa = taxa.in, phy = phy.in, dating_method = dating_method.in))
   }
 
 }
 
-# Used inside: phylo_subset_both.
+# Used inside: phylo_subset_both, when we don't congruify
 phylo_get_subset_array <- function(reference_tree, taxa, phy4 = NULL, dating_method = "PATHd8") {
   final.size <- sum(reference_tree$tip.label %in% taxa) # returns number of matches
   if(final.size >= 2) { #it's worth doing the pruning
     reference_tree <- phylo_prune_missing_taxa(reference_tree, taxa)
-    #reference_tree<-phylo_prune_missing_taxas(reference_tree, taxa) #phylo_prune_missing_taxas is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
+    #reference_tree <- phylo_prune_missing_taxa(reference_tree, taxa) #phylo_prune_missing_taxa (PruneTree before) is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
   }
   problem <- "none"
   patristic_matrix_array <- NA
@@ -346,9 +352,9 @@ phylo_get_subset_array <- function(reference_tree, taxa, phy4 = NULL, dating_met
 # Used inside: phylo_subset_both.
 phylo_get_subset_array_congruify <- function(reference_tree, taxa, phy = NULL, dating_method = "PATHd8") {
   final.size <- sum(reference_tree$tip.label %in% taxa) # returns number of matches
-  if(final.size >= 2) { #it's worth doing the pruning
+  if(final.size >= 2) {  # it's worth doing the pruning
    reference_tree <- phylo_prune_missing_taxa(reference_tree, taxa)
-   #reference_tree<-phylo_prune_missing_taxas(reference_tree, taxa) #phylo_prune_missing_taxas is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
+   #reference_tree <- phylo_prune_missing_taxa(reference_tree, taxa)  # phylo_prune_missing_taxa (used to be names PruneTree) is the new, fast fn from Klaus Schliep. Eventually will be in phangorn, currently in datelife2
   }
   problem.new <- "none"
   patristic_matrix_array.new <- NA
@@ -362,7 +368,7 @@ phylo_get_subset_array_congruify <- function(reference_tree, taxa, phy = NULL, d
     }
   }
   if (final.size >= 3) {
-  	patristic_matrix_array.new <- phylo_congruify(reference_tree, query.tree = phy, dating_method = dating_method)
+  	patristic_matrix_array.new <- phylo_congruify(reference_tree, target_tree = phy, dating_method = dating_method)
   }
   return(list(patristic_matrix_array = patristic_matrix_array.new,problem = problem.new))
 }
@@ -373,12 +379,12 @@ phylo_prune_missing_taxa <- function(phy, taxa) {
 }
 
 # Used inside: phylo_get_subset_array_congruify.
-phylo_congruify <- function(reference_tree, query.tree, dating_method = "PATHd8", attempt.fix = TRUE) {
+phylo_congruify <- function(reference_tree, target_tree, dating_method = "PATHd8", attempt.fix = TRUE) {
   result_matrix <- matrix(nrow = ape::Ntip(reference_tree), ncol = ape::Ntip(reference_tree))
-  if(is.null(query.tree$edge.length)) {
-    query.tree$edge.length <- numeric(nrow(query.tree$edge)) #makes it so that branches that don't match reference tree get zero length
+  if(is.null(target_tree$edge.length)) {
+    target_tree$edge.length <- numeric(nrow(target_tree$edge)) #makes it so that branches that don't match reference tree get zero length
   }
-	try(result_matrix <- phylo_to_patristic_matrix(congruify_and_check(reference = reference_tree, target = query.tree, scale = dating_method, attempt.fix = attempt.fix)))
+	try(result_matrix <- phylo_to_patristic_matrix(congruify_and_check(reference = reference_tree, target = target_tree, scale = dating_method, attempt.fix = attempt.fix)))
   return(result_matrix)
 }
 
@@ -395,7 +401,7 @@ congruify_and_check <- function(reference, target, taxonomy = NULL, tol = 0.01, 
 			new.tree <- NA
 		}
 	}
-	new.tree$edge.length[which(new.tree$edge.length<0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+	new.tree$edge.length[which(new.tree$edge.length < 0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
 	return(new.tree)
 }
 

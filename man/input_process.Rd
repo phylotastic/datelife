@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife.R
 \name{input_process}
 \alias{input_process}
-\title{Take input phylo object or character string and figure out if it's correct newick format or a list of species}
+\title{Takes a phylo object or a character string and figure out if it's correct newick format or a list of species}
 \usage{
 input_process(input, verbose = FALSE)
 }
@@ -15,5 +15,5 @@ input_process(input, verbose = FALSE)
 A phylo object or NA if no tree
 }
 \description{
-Take input phylo object or character string and figure out if it's correct newick format or a list of species
+Takes a phylo object or a character string and figure out if it's correct newick format or a list of species
 }

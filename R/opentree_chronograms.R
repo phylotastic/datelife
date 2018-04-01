@@ -63,7 +63,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 	bad.ones <- c()
 	for (study.index in sequence(dim(chronogram.matches)[1])) {
 		if(verbose) {
-			print(paste("Downloading tree(s) from study", study.index, "of",dim(chronogram.matches)[1]))
+			cat("Downloading tree(s) from study ", study.index, " of ", dim(chronogram.matches)[1], "\n")
 		}
 		for(chrono.index in sequence((chronogram.matches$n_matched_trees[study.index]))) {
 			study.id <- chronogram.matches$study_ids[study.index]
@@ -78,7 +78,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 				try(new.tree <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name")) #would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
 				#try(new.tree <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name"))
 				if(verbose) {
-					print(paste("tree_id='", tree.id, "', study_id='", study.id, "'", sep=""))
+					cat("tree_id='", tree.id, "', study_id='", study.id, "'", "\n")
 				}
 				if(!is.null(new.tree) & phylo_has_brlen(phy = new.tree)) {
 					new.tree <- clean_chronogram(new.tree)
@@ -86,12 +86,16 @@ get_otol_chronograms <- function(verbose = FALSE) {
 						if(is_good_chronogram(new.tree)) {
 							new.tree$tip.label <- gsub('_', ' ', new.tree$tip.label)
 							if(verbose) {
-								print("has tree with branch lengths")
+								cat("\t", "has tree with branch lengths", "\n")
 							}
 							doi <- NULL
 							try(doi <- gsub('https?://(dx\\.)?doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
 							authors <- append(authors, NA)
-							try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
+							if(length(doi) == 0){
+								warning(paste(study.id, "has no DOI attribute, author names will not be retrieved."))
+							} else {
+								try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
+							}
 							curators <- append(curators, NA)
 							try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
 							try(studies <- append(studies, study.id))
@@ -99,7 +103,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 							try(dois <- append(dois, chronogram.matches$study_doi[study.index]))
 							trees[[tree.count]] <-new.tree
 							names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
-							print("was good tree")
+							cat("\t", "was good tree", "\n")
 							potential.bad <- NULL
 						}
 					}
@@ -117,7 +121,19 @@ get_otol_chronograms <- function(verbose = FALSE) {
 		print("Problematic combos")
 		print(bad.ones)
 	}
-	result <- list(trees=trees, authors=authors, curators=curators, studies=studies, dois=dois)
+	for(i in sequence(length(authors))){
+		if(!any(is.na(authors[[i]])) & length(authors[[i]]) > 0){
+			Encoding(authors[[i]]) <- "latin1"
+			authors[[i]] <- iconv(authors[[i]], "latin1", "UTF-8")
+		}
+		for(j in sequence(length(curators[[i]]))){
+			if(!any(is.na(curators[[i]][[j]])) & length(curators[[i]][[j]]) > 0){
+				Encoding(curators[[i]][[j]]) <- "latin1"
+				curators[[i]][[j]] <- iconv(curators[[i]][[j]], "latin1", "UTF-8")
+			}
+		}
+	}
+	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
 	return(result)
 }
 
@@ -126,9 +142,9 @@ get_otol_chronograms <- function(verbose = FALSE) {
 #' @param verbose If TRUE, give status updates to the user
 #' @return None
 #' @export
-save_otol_chronograms <- function(file="opentree_chronograms.RData", verbose=FALSE) {
-	opentree_chronograms <- get_otol_chronograms(verbose=verbose)
-	save(opentree_chronograms, file=file, compress="xz")
+save_otol_chronograms <- function(file = "opentree_chronograms.RData", verbose = FALSE) {
+	opentree_chronograms <- get_otol_chronograms(verbose = verbose)
+	save(opentree_chronograms, file = file, compress = "xz")
 }
 
 #' Check to see that a tree is a valid chronogram
@@ -141,11 +157,11 @@ is_good_chronogram <- function(phy) {
 		passing <- FALSE
 		warning("tree failed over not being class phylo")
 	}
-	if(ape::Ntip(phy)<=ape::Nnode(phy)) {
+	if(ape::Ntip(phy) <= ape::Nnode(phy)) {
 		passing <- FALSE
 		warning("tree failed over not having more internal nodes than tips")
 	}
-	if(length(which(grepl("not mapped", phy$tip.label)))>0) {
+	if(length(which(grepl("not mapped", phy$tip.label))) > 0) {
 		warning("tree failed over having not mapped taxa that should have been purged")
 		passing <- FALSE #not cleaned properly
 	}
@@ -153,7 +169,7 @@ is_good_chronogram <- function(phy) {
 		passing <- FALSE
 		warning("tree failed over having NA for tips")
 	}	else {
-		if(min(nchar(phy$tip.label))<=2) {
+		if(min(nchar(phy$tip.label)) <= 2) {
 			passing <- FALSE
 			warning("tree failed for having names of two or fewer characters")
 		}
@@ -162,7 +178,7 @@ is_good_chronogram <- function(phy) {
 		passing <- FALSE
 		warning("tree failed over not being rooted")
 	}
-	if(!ape::is.ultrametric(phy, tol=0.01, option = 2)) {
+	if(!ape::is.ultrametric(phy, tol = 0.01, option = 2)) {
 		passing <- FALSE
 		warning("tree failed over not being ultrametric (NOTE: this condition should be removed for paleo trees)")
 	}
@@ -175,12 +191,12 @@ is_good_chronogram <- function(phy) {
 #' @export
 clean_chronogram <- function(phy) {
 	original.phy <- phy
-	if(class(phy)=="phylo") {
-		if(ape::Ntip(phy)>ape::Nnode(phy)) {
-			bad.taxa <- unique(c(which(nchar(phy$tip.label)<=2), which(grepl("not mapped", phy$tip.label))))
-			if(length(bad.taxa)>0 & length(bad.taxa) < (ape::Ntip(phy)-1)) { #will return trees with as few as two unmapped tips
+	if(class(phy) == "phylo") {
+		if(ape::Ntip(phy) > ape::Nnode(phy)) {
+			bad.taxa <- unique(c(which(nchar(phy$tip.label) <= 2), which(grepl("not mapped", phy$tip.label))))
+			if(length(bad.taxa) > 0 & length(bad.taxa) < (ape::Ntip(phy)-1)) { #will return trees with as few as two unmapped tips
 				phy <- try(ape::drop.tip(phy, bad.taxa))
-				if(class(phy) =="try-error") {
+				if(class(phy) == "try-error") {
 					return(original.phy)
 				}
 			}

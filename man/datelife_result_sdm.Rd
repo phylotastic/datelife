@@ -4,23 +4,36 @@
 \alias{datelife_result_sdm}
 \title{Function to compute the SDM supertree (Criscuolo et al. 2006) from a datelifeResult object.}
 \usage{
-datelife_result_sdm(datelife_result, weighting = "flat")
+datelife_result_sdm(datelife_result, weighting = "flat", verbose = TRUE)
 }
 \arguments{
-\item{datelife_result}{List of patristic matrices.}
+\item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
 
-\item{weighting}{A character vector. One of "flat", "taxa" or "inverse".}
+\item{weighting}{A character vector indicating how much weight to give to each input tree in the SDM analysis.
+     Choose one of:
+\describe{
+\item{weighting = "flat"}{All trees have equal weighting.
+}
+\item{weighting = "taxa"}{Weight is proportional to number of taxa.
+}
+\item{weighting = "inverse"}{Weight is proportional to 1 / number of taxa.
+}
+}}
+
+\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
 \value{
-A list containing phy, a chronogram from SDM, and the original datelife_result that were actually used.
+A list of two elements:
+\describe{
+\item{phy}{A phylo object with the output chronogram from SDM analysis.
+}
+\item{data}{A datelifeResult object with the chronograms that were used to construct the SDM tree.
+}
+}
 }
 \description{
 Function to compute the SDM supertree (Criscuolo et al. 2006) from a datelifeResult object.
 }
 \details{
-Weighting is how much weight to give each input tree.
-   flat = all trees have equal weighting
-   taxa = weight is proportional to number of taxa
-   inverse = weight is proportional to 1 / number of taxa
-Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006;55(5):740–55. doi: 10.1080/10635150600969872.
+Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006. 55(5):740. doi: 10.1080/10635150600969872.
 }

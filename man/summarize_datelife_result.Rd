@@ -4,18 +4,18 @@
 \alias{summarize_datelife_result}
 \title{Summarize a filtered results list from get_datelife_result function in various ways}
 \usage{
-summarize_datelife_result(datelife_result = NULL,
-  summary_format = "phylo.all", input = NULL, partial = TRUE,
-  update_cache = FALSE, cache = get("opentree_chronograms"),
-  summary_print = c("citations", "taxa"), add_taxon_distribution = c("none",
-  "summary", "matrix"), verbose = FALSE)
+summarize_datelife_result(datelife_query = NULL, datelife_result = NULL,
+  summary_format = "phylo.all", partial = TRUE, update_cache = FALSE,
+  cache = get("opentree_chronograms"), summary_print = c("citations",
+  "taxa"), add_taxon_distribution = c("none", "summary", "matrix"),
+  verbose = FALSE)
 }
 \arguments{
-\item{datelife_result}{A list of patristic matrices; labels correspond to citations}
+\item{datelife_query}{An object output of make_datelife_query function}
+
+\item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
 
 \item{summary_format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
-
-\item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
 
 \item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
 

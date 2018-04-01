@@ -3,13 +3,13 @@
 \docType{data}
 \name{opentree_chronograms}
 \alias{opentree_chronograms}
-\title{Cached chronograms and other data from OpenTree}
-\format{A list with four lists contained within it
+\title{Chronograms in Open Tree of Life and other related data}
+\format{A list of four elements, containing data on OToL chronograms
 \describe{
-\item{authors}{List of lists of authors for the included studies}
-\item{curators}{List of lists of curators for the included studies}
-\item{studies}{List of study identifiers}
-\item{trees}{List storing the chronograms from OpenTree}
+  \item{authors}{List of lists of authors of the included studies}
+  \item{curators}{List of lists of curators of the included studies}
+  \item{studies}{List of study identifiers}
+  \item{trees}{List storing the chronograms from OpenTree}
 }}
 \source{
 \url{http://opentreeoflife.org}
@@ -18,6 +18,11 @@
 opentree_chronograms
 }
 \description{
-A list with four elements for >100 chronograms from OpenTree
+Now storing >200 chronograms from OToL
 }
-\keyword{datasets}
+\details{
+Generated with update_datelife_cache() via get_otol_chronograms()
+}
+\keyword{chronogram}
+\keyword{otol}
+\keyword{tree}

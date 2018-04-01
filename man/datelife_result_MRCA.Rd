@@ -7,7 +7,7 @@
 datelife_result_MRCA(datelife_result, partial = TRUE)
 }
 \arguments{
-\item{datelife_result}{An object from get_datelife_result function.}
+\item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
 
 \item{partial}{If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries}
 }
