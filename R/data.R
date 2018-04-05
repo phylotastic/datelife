@@ -169,3 +169,40 @@
 #' @details
 #' Generated with make_treebase_cache()
 "tb.author.results"
+
+#' datelifeSummary of a dateLifeResult object of all Felidae species.
+#'
+#' @name felid_gdr_phylo_all
+#' @docType data
+#' @format A list of three elements, containing the summary of a datelifeResult object
+#' \describe{
+#'   \item{phylo_all}{List of subset chronograms in phylo format}
+#'   \item{taxon_distribution}{A data frame with taxon presence across subset chronograms}
+#'   \item{absent_taxa}{A dataframe with names of taxon not found in any chronogram}
+#' }
+#' @source \url{http://opentreeoflife.org}
+#' @keywords otol tree subset chronogram felidae
+#' @details
+#' Generated with:
+#' felid_spp <- make_datelife_query(input = "felidae", get_spp_from_taxon = TRUE)
+#' felid_gdr <- get_datelife_result(input = felid_spp, get_spp_from_taxon = TRUE)
+#' felid_gdr_phylo_all <- summarize_datelife_result(felid_gdr, add_taxon_distribution = "summary", summary_format = "phylo_all", datelife_query = felid_spp)
+"felid_gdr_phylo_all"
+
+#' SDM tree of a dateLifeResult object of all Felidae species.
+#'
+#' @name felid_sdm
+#' @docType data
+#' @format A list of two elements, containing the summary of a datelifeResult object
+#' \describe{
+#'   \item{phy}{An ultrametric phylo object with the SDM tree.}
+#'   \item{data}{A dateLifeResult object with data used to construct phy}
+#' }
+#' @source \url{http://opentreeoflife.org}
+#' @keywords otol tree subset chronogram felidae supertree sdm
+#' @details
+#' Generated with:
+#' felid_spp <- make_datelife_query(input = "felidae", get_spp_from_taxon = TRUE)
+#' felid_gdr <- get_datelife_result(input = felid_spp, get_spp_from_taxon = TRUE)
+#' felid_gdr_phylo_all <- summarize_datelife_result(felid_gdr, add_taxon_distribution = "summary", summary_format = "phylo_all", datelife_query = felid_spp)
+"felid_sdm"

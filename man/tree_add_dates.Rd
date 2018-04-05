@@ -4,12 +4,12 @@
 \alias{tree_add_dates}
 \title{Fabricates dates of missing taxa (with no data) on an already dated tree.}
 \usage{
-tree_add_dates(dated_phy = NULL, missing_taxa = NULL,
+tree_add_dates(dated_tree = NULL, missing_taxa = NULL,
   dating_method = "mrbayes",
   mrbayes_output_file = "mrbayes_tree_add_dates.nexus")
 }
 \arguments{
-\item{dated_phy}{a tree (newick or phylo) with branch lengths proportional to absolute time}
+\item{dated_tree}{a tree (newick or phylo) with branch lengths proportional to absolute time}
 
 \item{missing_taxa}{A tree, a data.frame or a vector enlisting all missing taxa you want to include.
 \describe{

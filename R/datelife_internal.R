@@ -370,7 +370,7 @@ phylo_get_subset_array_congruify <- function(reference_tree, taxa, phy = NULL, d
   if (final.size >= 3) {
   	patristic_matrix_array.new <- phylo_congruify(reference_tree, target_tree = phy, dating_method = dating_method)
   }
-  return(list(patristic_matrix_array = patristic_matrix_array.new,problem = problem.new))
+  return(list(patristic_matrix_array = patristic_matrix_array.new, problem = problem.new))
 }
 
 # Used inside: phylo_get_subset_array and phylo_get_subset_array_congruify.

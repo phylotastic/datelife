@@ -45,13 +45,13 @@ test_that("add_taxon_distribution argument from summarize_datelife_result() work
   trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick.all", cache=opentree_chronograms, add_taxon_distribution = "summary")
   # str(trees)
   # trees$taxon_distribution
-  # trees$absent.taxa
+  # trees$absent_taxa
   expect_gte(length(trees), 3)
   trees2 <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick.all", cache=opentree_chronograms, add_taxon_distribution = "matrix")
   expect_gte(length(trees2), 3)
   # str(trees2)
   # trees2$taxon_distribution
-  # trees2$absent.taxa
+  # trees2$absent_taxa
 })
 
 test_that("Summarize as newick.median works correctly", {
@@ -77,13 +77,13 @@ test_that("Processing input newick", {
 # 	skip_on_cran()
 # 	skip_on_travis()
 #   utils::data(opentree_chronograms)
-# 	expect_error(datelife_search("((((((Typha latifolia,(Phragmites australis,(Sporobolus alterniflorus,Sporobolus pumilus)Sporobolus)PACMAD clade)Poales,(((Hydrilla verticillata,Vallisneria americana)Hydrocharitaceae,Potamogeton perfoliatus),Zostera marina,Ruppia maritima)Alismatales),(Lythrum salicaria,Myriophyllum spicatum)),(Ulva,Caulerpa taxifolia))Chloroplastida,((Skeletonema,(Gomphonema,Didymosphenia geminata)Bacillariophyceae)Bacillariophytina,Prorocentrum)SAR),Microcystis)Eukaryota;", summary_format="phylo.all"), NA)
+# 	expect_error(datelife_search("((((((Typha latifolia,(Phragmites australis,(Sporobolus alterniflorus,Sporobolus pumilus)Sporobolus)PACMAD clade)Poales,(((Hydrilla verticillata,Vallisneria americana)Hydrocharitaceae,Potamogeton perfoliatus),Zostera marina,Ruppia maritima)Alismatales),(Lythrum salicaria,Myriophyllum spicatum)),(Ulva,Caulerpa taxifolia))Chloroplastida,((Skeletonema,(Gomphonema,Didymosphenia geminata)Bacillariophyceae)Bacillariophytina,Prorocentrum)SAR),Microcystis)Eukaryota;", summary_format="phylo_all"), NA)
 # })
 
-test_that("datelife_search returns phylo.all", {
+test_that("datelife_search returns phylo_all", {
   skip_on_cran()
   utils::data(opentree_chronograms)
-  datelife_phylo <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="phylo.all")
+  datelife_phylo <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="phylo_all")
   expect_equal(class(datelife_phylo[[1]]),"phylo")
 })
 
@@ -196,7 +196,7 @@ test_that("use_all_calibrations actually works", {
 test_that("Crop plant taxa work", {
   utils::data(opentree_chronograms)
   taxa <- c("Zea mays", "Oryza sativa", "Arabidopsis thaliana", "Glycine max", "Medicago sativa", "Solanum lycopersicum")
-  results <- datelife_search(input=taxa, summary_format="phylo.all")
+  results <- datelife_search(input=taxa, summary_format="phylo_all")
   expect_equal(class(results), "list")
   expect_equal(class(results[[1]]), "phylo")
   expect_gte(length(results), 2)
@@ -213,7 +213,7 @@ test_that("Processing newick input works", {
 test_that("Crop plant newick works", {
   skip_on_cran()
 	skip_on_travis() #b/c no pathd8
-  trees <- datelife_search(input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);", summary_format = "phylo.all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, cache = opentree_chronograms, dating_method = "PATHd8")
+  trees <- datelife_search(input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);", summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, cache = opentree_chronograms, dating_method = "PATHd8")
   expect_s3_class(trees[[1]], "phylo")
 })
 
@@ -279,19 +279,31 @@ test_that("get_otol_synthetic_tree works", {
   # add such a test:
 })
 
+test_that("missing_taxa_check works", {
+  utils::data(felid_gdr_phylo_all)
+  utils::data(felid_sdm)
+  expect_error(missing_taxa_check(missing_taxa = NULL, dated_tree = felid_sdm$phy))  # returns error, cause missing_taxa is an empty character vector
+  mt1 <- missing_taxa_check(missing_taxa = felid_gdr_phylo_all$absent_taxa, dated_tree = felid_sdm$phy)
+  mt2 <- missing_taxa_check(missing_taxa = NA, dated_tree = felid_sdm$phy)  # returns NA
+  mt3 <- missing_taxa_check(missing_taxa = FALSE, dated_tree = felid_sdm$phy)  # returns "FALSE"
+  expect_s3_class(mt1, "data.frame") # output is data.frame
+  expect_s3_class(mt2, "character") # output is a character vector
+  expect_s3_class(mt3, "character") # output is a character vector
+})
+
     # test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {
 # 	tax2 <- c("Homo sapiens", "Macaca mulatta", "Melursus ursinus","Canis lupus pallipes", "Panthera pardus", "Panthera tigris", "Herpestes fuscus", "Elephas maximus", "Haliastur indus")
 # 	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"
 # 	b1 <- make_bold_otol_tree(input = other)
 # 	# nb1 <- length(b1$tiplabel)
-# 	ed1 <- datelife_search(input = other, summary_format = "phylo.all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, method = "PATHd8", bold = TRUE)
+# 	ed1 <- datelife_search(input = other, summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, method = "PATHd8", bold = TRUE)
 # 	# ned1 <- length(ed1[[length(ed1)]]$tip.label)
 # 	# expect_equal(nb1, ned1)
 # 	expect_equal(b1$tiplabel, ed1[[length(ed1)]]$tip.label) # tests both trees have the same taxa, in the same number and order. It's ok, cause it should be the same tree
 # 	# expect_identical(b1$tiplabel, ed1[[length(ed1)]]$tip.label)
 # 	b2 <- make_bold_otol_tree(input = tax2)
 # 	# nb1 <- length(b1$tiplabel)
-# 	ed2 <- datelife_search(input = tax2, summary_format = "phylo.all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, method = "PATHd8", bold = TRUE)
+# 	ed2 <- datelife_search(input = tax2, summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, method = "PATHd8", bold = TRUE)
 # 	# ned1 <- length(ed1[[length(ed1)]]$tip.label)
 # 	# expect_equal(nb1, ned1)
 # 	expect_equal(b2$tip.label, ed2[[length(ed2)]]$tip.label)

@@ -4,7 +4,7 @@
 \alias{missing_taxa_check}
 \title{Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile and tree_add_dates functions.}
 \usage{
-missing_taxa_check(missing_taxa = NULL, dated_phy = NULL)
+missing_taxa_check(missing_taxa = NULL, dated_tree = NULL)
 }
 \arguments{
 \item{missing_taxa}{A tree, a data.frame or a vector enlisting all missing taxa you want to include.
@@ -23,7 +23,7 @@ missing_taxa_check(missing_taxa = NULL, dated_phy = NULL)
 }
 }}
 
-\item{dated_phy}{a tree (newick or phylo) with branch lengths proportional to absolute time}
+\item{dated_tree}{a tree (newick or phylo) with branch lengths proportional to absolute time}
 }
 \value{
 A phylo object, a newick character string or a dataframe with taxonomic assignations
