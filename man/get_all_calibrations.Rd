@@ -25,7 +25,7 @@ get_all_calibrations(input = c("Rhea americana", "Pterocnemia pennata",
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
 \value{
-data.frame of calibrations
+A data.frame of calibrations
 }
 \description{
 Get all calibrations from chronograms in a database (specified in cache).

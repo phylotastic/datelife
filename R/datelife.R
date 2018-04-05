@@ -517,7 +517,7 @@ make_mrbayes_tree <- function(constraint = NULL, ncalibration = NULL, missing_ta
 	return(new.tree)
 }
 
-#' Makes a mrBayes run block file with a constraint topology and a set of node calibrations
+#' Makes a mrBayes run block file with a constraint topology and a set of node calibrations and missing
 #' @inheritParams make_mrbayes_tree
 #' @return A MrBayes block run file in nexus format.
 #' @export
@@ -644,7 +644,7 @@ missing_taxa_check <- function(missing_taxa = NULL, dated_tree = NULL){
 	if(is.data.frame(missing_taxa)){ # or is.matrix??
 		if("taxon" %in% names(missing_taxa)){
 			badformat <- FALSE
-			if(length(missing_taxa)>1 & !"clade" %in% names(missing_taxa)){
+			if(length(missing_taxa) > 1 & !"clade" %in% names(missing_taxa)){
 				badformat <- TRUE
 			}
 		}
@@ -668,17 +668,19 @@ missing_taxa_check <- function(missing_taxa = NULL, dated_tree = NULL){
 			badformat <- FALSE
 		} else {
 			# if missing_taxa is provided as a vector, it must be a character vector:
-			# it does not matter if original vector has no real names, if you want to add numbers or booleans at random, you can
+			# it does not matter if original vector has no real names, if you want to add numbers or NAs or booleans at random, you can
 			missing_taxa <- as.character(missing_taxa)
+			missing_taxa[which(is.na(missing_taxa))] <- "NA"
 			badformat <- FALSE
 		}
 	}
-	if(length(missing_taxa) == 0){
-		badformat <- TRUE
+	if(length(missing_taxa) == 0){ # this is only valid if we don't wanna accept NULL as missing_taxa, but tere are cases in which it is, e.g. tree_fix_brlen
+		missing_taxa <- NULL
+		badformat <- FALSE
 	}
 	if(badformat){
 		stop("missing_taxa must be a character vector with species names,
-		a data.frame with taxonomic assignations, a newick character string, or a phylo object")
+		a data.frame with taxonomic assignations, a newick character string, a phylo object, or NULL")
 	}
 	# IMPORTANT: Add a check that taxa in dated.trees is in reference_tree and viceversa
 	return(missing_taxa)
@@ -1046,9 +1048,9 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 		SDM.result <- 0.5*SDM.result  # SDM.result stores distance between taxa. So double of distance to the root.
 		# Using SDM.result without rescaling results in much older tree than using as.dist()
 		DD <- cluster::daisy(x = SDM.result, metric = "euclidean")  # using daisy() to allow NAs in SDM.result.
-		hc <- hclust(DD, method = "average") # original clustering method from phangorn::upgma. Using agnes() instead hclust() to cluster gives the same result.
+		hc <- stats::hclust(DD, method = "average") # original clustering method from phangorn::upgma. Using agnes() instead hclust() to cluster gives the same result.
 		phy <- ape::as.phylo(hc)
-    phy <- reorder(phy, "postorder")
+    phy <- phylobase::reorder(phy, "postorder")
 
 	} else {
 		warning("All input chronograms throw an error when running SDM. This is not your fault.")

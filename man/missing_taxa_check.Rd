@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife.R
 \name{missing_taxa_check}
 \alias{missing_taxa_check}
-\title{Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile and tree_add_dates functions.}
+\title{Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile inside tree_add_dates functions.}
 \usage{
 missing_taxa_check(missing_taxa = NULL, dated_tree = NULL)
 }
@@ -15,8 +15,8 @@ missing_taxa_check(missing_taxa = NULL, dated_tree = NULL)
     This tree will be used as a hard constraint.
 }
     \item{A data.frame.}{It contains two columns.
-    missing_taxa. A character vector of missing taxa names.
-    node. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
+    taxon. A character vector of missing taxon names.
+    clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
 }
     \item{A character vector.}{It contains the names of the missing taxa.
     They will be added at random to the constraint tree.
@@ -29,5 +29,5 @@ missing_taxa_check(missing_taxa = NULL, dated_tree = NULL)
 A phylo object, a newick character string or a dataframe with taxonomic assignations
 }
 \description{
-Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile and tree_add_dates functions.
+Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile inside tree_add_dates functions.
 }

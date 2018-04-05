@@ -282,13 +282,14 @@ test_that("get_otol_synthetic_tree works", {
 test_that("missing_taxa_check works", {
   utils::data(felid_gdr_phylo_all)
   utils::data(felid_sdm)
-  expect_error(missing_taxa_check(missing_taxa = NULL, dated_tree = felid_sdm$phy))  # returns error, cause missing_taxa is an empty character vector
   mt1 <- missing_taxa_check(missing_taxa = felid_gdr_phylo_all$absent_taxa, dated_tree = felid_sdm$phy)
-  mt2 <- missing_taxa_check(missing_taxa = NA, dated_tree = felid_sdm$phy)  # returns NA
+  mt2 <- missing_taxa_check(missing_taxa = NA, dated_tree = felid_sdm$phy)  # returns "NA"
   mt3 <- missing_taxa_check(missing_taxa = FALSE, dated_tree = felid_sdm$phy)  # returns "FALSE"
+  mt4 <- missing_taxa_check(missing_taxa = NULL, dated_tree = felid_sdm$phy)  # does not return error, bc missing_taxa can be NULL
   expect_s3_class(mt1, "data.frame") # output is data.frame
-  expect_s3_class(mt2, "character") # output is a character vector
-  expect_s3_class(mt3, "character") # output is a character vector
+  expect_equal(mt2, "NA") # output is a character vector
+  expect_equal(mt3, "FALSE") # output is a character vector
+  expect_true(length(mt4) == 0)
 })
 
     # test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {

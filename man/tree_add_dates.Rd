@@ -5,7 +5,7 @@
 \title{Fabricates dates of missing taxa (with no data) on an already dated tree.}
 \usage{
 tree_add_dates(dated_tree = NULL, missing_taxa = NULL,
-  dating_method = "mrbayes",
+  dating_method = "mrbayes", adding_criterion = "random",
   mrbayes_output_file = "mrbayes_tree_add_dates.nexus")
 }
 \arguments{
@@ -19,8 +19,8 @@ tree_add_dates(dated_tree = NULL, missing_taxa = NULL,
     This tree will be used as a hard constraint.
 }
     \item{A data.frame.}{It contains two columns.
-    missing_taxa. A character vector of missing taxa names.
-    node. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
+    taxon. A character vector of missing taxon names.
+    clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
 }
     \item{A character vector.}{It contains the names of the missing taxa.
     They will be added at random to the constraint tree.
@@ -28,6 +28,17 @@ tree_add_dates(dated_tree = NULL, missing_taxa = NULL,
 }}
 
 \item{dating_method}{The method used for tree dating.}
+
+\item{adding_criterion}{Only valid when dating_method = "mrbayes". A character vector to specify how missing_taxa should be added to dated_tree.
+     Choose one of:
+\describe{
+\item{adding_method = "random"}{missing_taxa will be added at random to dated_tree.
+}
+\item{weighting = "taxonomy"}{taxa will be added to dated_tree following a dataframe with taxonomic assignations given in missing_taxa argument. If no dataframe is given, OToLs reference taxonomy will be used.
+}
+\item{weighting = "tree"}{taxa will be added to dated_tree following a tree given in missing_taxa argument. If no tree is given, OToL synthetic tree will be used.
+}
+}}
 
 \item{mrbayes_output_file}{A character vector specifying the name of mrBayes run file and outputs (can specify directory too).}
 }

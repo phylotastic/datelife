@@ -20,8 +20,8 @@ make_mrbayes_tree(constraint = NULL, ncalibration = NULL,
     This tree will be used as a hard constraint.
 }
     \item{A data.frame.}{It contains two columns.
-    missing_taxa. A character vector of missing taxa names.
-    node. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
+    taxon. A character vector of missing taxon names.
+    clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
 }
     \item{A character vector.}{It contains the names of the missing taxa.
     They will be added at random to the constraint tree.

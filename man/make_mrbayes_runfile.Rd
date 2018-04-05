@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife.R
 \name{make_mrbayes_runfile}
 \alias{make_mrbayes_runfile}
-\title{Makes a mrBayes run block file with a constraint topology and a set of node calibrations}
+\title{Makes a mrBayes run block file with a constraint topology and a set of node calibrations and missing}
 \usage{
 make_mrbayes_runfile(constraint = NULL, ncalibration = NULL,
   missing_taxa = NULL, mrbayes_output_file = "mrbayes_run.nexus")
@@ -20,8 +20,8 @@ make_mrbayes_runfile(constraint = NULL, ncalibration = NULL,
     This tree will be used as a hard constraint.
 }
     \item{A data.frame.}{It contains two columns.
-    missing_taxa. A character vector of missing taxa names.
-    node. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
+    taxon. A character vector of missing taxon names.
+    clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
 }
     \item{A character vector.}{It contains the names of the missing taxa.
     They will be added at random to the constraint tree.
@@ -34,5 +34,5 @@ make_mrbayes_runfile(constraint = NULL, ncalibration = NULL,
 A MrBayes block run file in nexus format.
 }
 \description{
-Makes a mrBayes run block file with a constraint topology and a set of node calibrations
+Makes a mrBayes run block file with a constraint topology and a set of node calibrations and missing
 }
