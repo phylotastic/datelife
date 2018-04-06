@@ -434,3 +434,20 @@ patristic_matrix_unpad <- function(patristic_matrix) {
 	}
 	return(patristic_matrix)
 }
+
+#' Function to generate uncertainty in branch lengths using a lognormal
+#' @param phy The input tree
+#' @param sd The standard deviation to use for generating the uncertainty
+#' @param depth_multiplier How to scale sd by the depth of the node. If 0, same sd for all. If not, older nodes have more uncertainty
+#' @return The same topology with different branch lengths
+#' @export
+phy_generate_uncertainty <- function(phy, sd=1, depth_multiplier=1) {
+  phy <- ape::reorder.phylo(phy, "postorder")
+  phy$depths <- max(ape::branching.times(phy)) - phytools::nodeHeights(phy)
+  phy$depths.original <- phy$depths
+  for(node.index in sequence(nrow(phy$depths))) {
+    if(phy$edge[node.index,2]>ape::Ntip(phy)) {
+      phy$depths[node.index,2] <- random_function(1, mean=log(phy$depths[node.index,2]-max(phy$depths[)), sd=sd+sd*depth_multiplier*phy$depths.original[node.index,2])
+    }
+  }
+}
