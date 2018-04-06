@@ -445,9 +445,31 @@ phy_generate_uncertainty <- function(phy, sd=1, depth_multiplier=1) {
   phy <- ape::reorder.phylo(phy, "postorder")
   phy$depths <- max(ape::branching.times(phy)) - phytools::nodeHeights(phy)
   phy$depths.original <- phy$depths
-  for(node.index in sequence(nrow(phy$depths))) {
-    if(phy$edge[node.index,2]>ape::Ntip(phy)) {
-      phy$depths[node.index,2] <- random_function(1, mean=log(phy$depths[node.index,2]-max(phy$depths[)), sd=sd+sd*depth_multiplier*phy$depths.original[node.index,2])
+  for(node.index in sequence(nrow(phy$depths))) { # draw uncertainty at least once for each edge
+    if(phy$edge[node.index,2] > ape::Ntip(phy)) {
+      phy$depths[node.index,2] <- rlnorm(1, mean=log(phy$depths[node.index,2]-max(phy$depths[])), sd=sd+sd*depth_multiplier*phy$depths.original[node.index,2])
     }
   }
+}
+
+# How can we draw at random all branch lengths and make them coincide so the tree is ultrametric?
+# if we choose one, other branch lengths will be necessarily less random, until there's one that's completely determined by the others
+# I guess that's how they're estimated in a way... Infer the one with most information and then estimate the others based on that
+# other ideas:
+# only draw the age of the tree from a Possion or an exponential
+# adjust branch lengths proportionally
+# alternatively, we could just add uncertainty in some trees on younger edges and in other trees in older edges
+phy_generate_uncertainty2 <- function(phy, sd=1, depth_multiplier=1) {
+  phy <- ape::reorder.phylo(phy, "postorder")
+  phy$depths <- max(ape::branching.times(phy)) - phytools::nodeHeights(phy)
+  phy$depths.original <- phy$depths
+  phy$edge.length
+  # draw the whole age of the tree from a distribution
+  # lnorm is fr branch length in subs rate/myr
+  # abs ages should be drawn from an exponential, with rate = speciation rate?
+  # tree_length_new <- rlnorm(1, mean = log(max(ape::branching.times(phy))), sd = sd + sd * depth_multiplier * max(ape::branching.times(phy)))
+  new_length <- rexp(1, rate = ape::Ntip(phy)/max(ape::branching.times(phy)))
+  # adjust branches proportionally
+  phy$edge.length <- phy$edge.length * new_length / max(ape::branching.times(phy))
+  return(phy)
 }
