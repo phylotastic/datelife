@@ -50,6 +50,8 @@
 #'
 #' phylo_all: A named list of phylo objects corresponding to each target chronogram obtained from available source chronograms. Names of phylo_all list correspond to citations.
 #'
+#' phylo.biggest: The chronogram with the most taxa. In the case of a tie, the chronogram with clade age closest to the median age of the equally large trees is returned.
+#'
 #' html: A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
 #'
 #' data.frame A data.frame with data on target taxa: mrca, number of taxa, citations of source chronograms and newick string.
@@ -801,7 +803,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	if(is.null(datelife_result) | !is.list(datelife_result)){
 		stop("datelife_result argument must be a list from get_datelife_result function.")
 	}
-	summary_format.in <- match.arg(summary_format, choices = c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.median", "phylo_all", "html", "data.frame"))
+	summary_format.in <- match.arg(summary_format, choices = c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.biggest", "phylo_all", "html", "data.frame"))
 	add_taxon_distribution.in <- match.arg(add_taxon_distribution, choices = c("none", "summary", "matrix"))
 	summary_print.in <- match.arg(summary_print, c("citations", "taxa", "none"), several.ok = TRUE)
 	input <- datelife_query
@@ -887,6 +889,17 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	if(summary_format.in == "phylo_all") {
 		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
 		return.object <- trees[which(!is.na(trees))]
+	}
+	if(summary_format.in == "phylo.biggest") {
+		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
+		return.object <- trees[which(sapply(trees, ape::Ntip)==max(sapply(trees, ape::Ntip)))]
+		if(length(return.object)>1) { #there are more than one tree with same number of taxa. Rather than take the first by default, take the one with the most intermediate depth (this assumes that the root node is the same for all trees). An example is the Bininda-Emonds et al mammal tree: there are three trees with min, max, and best guess calibrations. So, take the one in the middle.
+			max.branching.time <- function(x) {
+				return(max(ape::branching.times(x)))
+			}
+			tree.depths <- sapply(return.object, max.branching.time)
+			return.object <- return.object[which.min(abs(tree.depths - median(tree.depths)))]
+		}
 	}
 	if(summary_format.in == "html") {
 		out.vector1 <- "<table border='1'><tr><th>MRCA Age (MY)</th><th>Ntax</th><th>Citation</th><th>Newick"
