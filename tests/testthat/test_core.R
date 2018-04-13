@@ -87,6 +87,14 @@ test_that("datelife_search returns phylo_all", {
   expect_equal(class(datelife_phylo[[1]]),"phylo")
 })
 
+test_that("datelife_search returns phylo.biggest", {
+  skip_on_cran()
+  utils::data(opentree_chronograms)
+  datelife_phylo <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="phylo.biggest")
+  expect_equal(class(datelife_phylo),"phylo")
+})
+
+
 test_that("datelife_search returns phylo.sdm", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
