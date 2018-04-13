@@ -462,13 +462,13 @@ phy_generate_uncertainty <- function(phy, n = 100, sd = NULL, sd_depth = 0, alph
   while (length(res) < n){
     print(length(res))
     phy_depths.new <- phy_depths
-    tot_age <- rlnorm(1, meanlog = ape::branching.times(phy)[as.character(nn[1])], sdlog = abs(age_sd[as.character(nn[1])]))
+    tot_age <- stats::rlnorm(1, meanlog = ape::branching.times(phy)[as.character(nn[1])], sdlog = abs(age_sd[as.character(nn[1])]))
     phy_depths.new[phy$edge == nn[1]] <- tot_age
     for (i in nn[-1]){
       max_age <- nn_age <- phy_depths.new[phy$edge[,2] == i, 1]
       tries <- 0
       while(max_age - nn_age <= 0 & tries < 50){
-        nn_age <- rlnorm(1, meanlog = ape::branching.times(phy)[as.character(i)], sdlog = abs(age_sd[as.character(i)]))
+        nn_age <- stats::rlnorm(1, meanlog = ape::branching.times(phy)[as.character(i)], sdlog = abs(age_sd[as.character(i)]))
         tries <- tries + 1
       }
       phy_depths.new[phy$edge == i] <- nn_age
