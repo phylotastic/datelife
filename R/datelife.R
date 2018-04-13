@@ -394,6 +394,7 @@ tree_add_nodelabels <- function(tree = NULL, node_prefix="n", node_index="node_n
 phylo_get_node_numbers <- function(phy){
 	# node_numbers <- (length(phy$tip.label) + 1):(length(phy$tip.label) + phy$Nnode)
 	node_numbers <- unique(phy$edge[,1][which(phy$edge[,1]>length(phy$tip.label))])
+	node_numbers <- node_numbers[order(node_numbers)]
 	return(node_numbers)
 }
 

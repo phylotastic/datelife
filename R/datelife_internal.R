@@ -437,39 +437,52 @@ patristic_matrix_unpad <- function(patristic_matrix) {
 
 #' Function to generate uncertainty in branch lengths using a lognormal
 #' @param phy The input tree
-#' @param sd The standard deviation to use for generating the uncertainty
-#' @param depth_multiplier How to scale sd by the depth of the node. If 0, same sd for all. If not, older nodes have more uncertainty
-#' @return The same topology with different branch lengths
+#' @param n The number of samples to be generated
+#' @param sd The standard deviation to use for generating the uncertainty. If not a numeric value, sd_amount will be used to calculate it.
+#' @param sd_depth How to scale sd by the depth of the node. If 0, same sd for all. If not, older nodes have more uncertainty
+#' @param alpha The significance level on uncertainty to generate. By default 0.025
+#' @param sd_amount Percentage of variation around the mean to be used to estimate sd.
+#' @return A phylo or multiPhylo object with the same topology as phy but different branch lengths
 #' @export
-phy_generate_uncertainty <- function(phy, sd=1, depth_multiplier=1) {
-  phy <- ape::reorder.phylo(phy, "postorder")
-  phy$depths <- max(ape::branching.times(phy)) - phytools::nodeHeights(phy)
-  phy$depths.original <- phy$depths
-  for(node.index in sequence(nrow(phy$depths))) { # draw uncertainty at least once for each edge
-    if(phy$edge[node.index,2] > ape::Ntip(phy)) {
-      phy$depths[node.index,2] <- rlnorm(1, mean=log(phy$depths[node.index,2]-max(phy$depths[])), sd=sd+sd*depth_multiplier*phy$depths.original[node.index,2])
+phy_generate_uncertainty <- function(phy, n = 100, sd = NULL, sd_depth = 0, alpha = 0.025, sd_amount = 0.1) {
+  phylo_check(phy)
+  phy.new <- phy <- ape::reorder.phylo(phy, "postorder")
+  phy_depths <- max(ape::branching.times(phy)) - phytools::nodeHeights(phy)
+  # phy_depths.new <- phy_depths
+  if(is.numeric(sd[1])){
+    age_sd <- sd + sd * sd_depth * ape::branching.times(phy)
+  } else if (is.numeric(alpha[1])){
+    age_sd <- ((log(sd_amount[1] * ape::branching.times(phy))) - ape::branching.times(phy)) / (-2*log(sqrt(2*pi) * alpha[1]))
+    age_sd <- age_sd + age_sd * sd_depth * ape::branching.times(phy)
+  } else {
+    stop("sd or alpha argument must be a numeric vector")
+  }
+  nn <- phylo_get_node_numbers(phy)
+  res <- c()
+  while (length(res) < n){
+    print(length(res))
+    phy_depths.new <- phy_depths
+    tot_age <- rlnorm(1, meanlog = ape::branching.times(phy)[as.character(nn[1])], sdlog = abs(age_sd[as.character(nn[1])]))
+    phy_depths.new[phy$edge == nn[1]] <- tot_age
+    for (i in nn[-1]){
+      max_age <- nn_age <- phy_depths.new[phy$edge[,2] == i, 1]
+      tries <- 0
+      while(max_age - nn_age <= 0 & tries < 50){
+        nn_age <- rlnorm(1, meanlog = ape::branching.times(phy)[as.character(i)], sdlog = abs(age_sd[as.character(i)]))
+        tries <- tries + 1
+      }
+      phy_depths.new[phy$edge == i] <- nn_age
+    }
+    phy.new$edge.length <- phy_depths.new[,1] - phy_depths.new[,2]
+    if (all(phy.new$edge.length > 0)) {
+      res <- c(res, list(phy.new))
     }
   }
-}
-
-# How can we draw at random all branch lengths and make them coincide so the tree is ultrametric?
-# if we choose one, other branch lengths will be necessarily less random, until there's one that's completely determined by the others
-# I guess that's how they're estimated in a way... Infer the one with most information and then estimate the others based on that
-# other ideas:
-# only draw the age of the tree from a Possion or an exponential
-# adjust branch lengths proportionally
-# alternatively, we could just add uncertainty in some trees on younger edges and in other trees in older edges
-phy_generate_uncertainty2 <- function(phy, sd=1, depth_multiplier=1) {
-  phy <- ape::reorder.phylo(phy, "postorder")
-  phy$depths <- max(ape::branching.times(phy)) - phytools::nodeHeights(phy)
-  phy$depths.original <- phy$depths
-  phy$edge.length
-  # draw the whole age of the tree from a distribution
-  # lnorm is fr branch length in subs rate/myr
-  # abs ages should be drawn from an exponential, with rate = speciation rate?
-  # tree_length_new <- rlnorm(1, mean = log(max(ape::branching.times(phy))), sd = sd + sd * depth_multiplier * max(ape::branching.times(phy)))
-  new_length <- rexp(1, rate = ape::Ntip(phy)/max(ape::branching.times(phy)))
-  # adjust branches proportionally
-  phy$edge.length <- phy$edge.length * new_length / max(ape::branching.times(phy))
-  return(phy)
+  if (length(res) == 1){
+    res <- res[[1]]
+    class(res) <- "phylo"
+  } else {
+    class(res) <- "multiPhylo"
+  }
+  return(res)
 }

@@ -292,6 +292,16 @@ test_that("missing_taxa_check works", {
   expect_true(length(mt4) == 0)
 })
 
+test_that("generate_uncertainty gives a tree with different branch lengths"){
+  utils::data(felid_sdm)
+  xx <- phy_generate_uncertainty(felid_sdm$phy, n = 10)
+  expect_equal(class(xx), "multiPhylo")
+  expect_true(all(length(felid_sdm$phy$edge.length) == sapply(xx, function(x) length(x$edge.length))))
+  xx <- phy_generate_uncertainty(felid_sdm$phy, n = 1)
+  expect_equal(class(xx), "phylo")
+  expect_true(length(felid_sdm$phy$edge.length) == length(xx$edge.length))
+  expect_true(any(sort(felid_sdm$phy$edge.length) != sort(xx$edge.length))) # 
+}
     # test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {
 # 	tax2 <- c("Homo sapiens", "Macaca mulatta", "Melursus ursinus","Canis lupus pallipes", "Panthera pardus", "Panthera tigris", "Herpestes fuscus", "Elephas maximus", "Haliastur indus")
 # 	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"
