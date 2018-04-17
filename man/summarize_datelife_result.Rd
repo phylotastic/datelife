@@ -51,6 +51,8 @@ phylo.median: Only if multiple source chronograms are available. A phylo object 
 
 phylo_all: A named list of phylo objects corresponding to each target chronogram obtained from available source chronograms. Names of phylo_all list correspond to citations.
 
+phylo.biggest: The chronogram with the most taxa. In the case of a tie, the chronogram with clade age closest to the median age of the equally large trees is returned.
+
 html: A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
 
 data.frame A data.frame with data on target taxa: mrca, number of taxa, citations of source chronograms and newick string.

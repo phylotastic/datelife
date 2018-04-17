@@ -899,7 +899,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 				return(max(ape::branching.times(x)))
 			}
 			tree.depths <- sapply(return.object, max.branching.time)
-			return.object <- return.object[which.min(abs(tree.depths - median(tree.depths)))]
+			return.object <- return.object[which.min(abs(tree.depths - stats::median(tree.depths)))]
 		}
 		if(class(return.object)!="phylo") {
 			return.object <- return.object[[1]]

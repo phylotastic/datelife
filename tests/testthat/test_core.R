@@ -302,10 +302,10 @@ test_that("missing_taxa_check works", {
 
 test_that("generate_uncertainty gives a tree with different branch lengths", {
   utils::data(felid_sdm)
-  xx <- phy_generate_uncertainty(felid_sdm$phy, n = 10)
+  xx <- phylo_generate_uncertainty(felid_sdm$phy, n = 10)
   expect_equal(class(xx), "multiPhylo")
   expect_true(all(length(felid_sdm$phy$edge.length) == sapply(xx, function(x) length(x$edge.length))))
-  xx <- phy_generate_uncertainty(felid_sdm$phy, n = 1)
+  xx <- phylo_generate_uncertainty(felid_sdm$phy, n = 1)
   expect_equal(class(xx), "phylo")
   expect_true(length(felid_sdm$phy$edge.length) == length(xx$edge.length))
   expect_true(any(sort(felid_sdm$phy$edge.length) != sort(xx$edge.length))) #
