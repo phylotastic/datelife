@@ -63,7 +63,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 	bad.ones <- c()
 	for (study.index in sequence(dim(chronogram.matches)[1])) {
 		if(verbose) {
-			cat("Downloading tree(s) from study ", study.index, " of ", dim(chronogram.matches)[1], "\n")
+			message("Downloading tree(s) from study ", study.index, " of ", dim(chronogram.matches)[1])
 		}
 		for(chrono.index in sequence((chronogram.matches$n_matched_trees[study.index]))) {
 			study.id <- chronogram.matches$study_ids[study.index]
@@ -78,7 +78,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 				try(new.tree <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name")) #would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
 				#try(new.tree <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name"))
 				if(verbose) {
-					cat("tree_id='", tree.id, "', study_id='", study.id, "'", "\n")
+					message("tree_id = '", tree.id, "', study_id = '", study.id, "'")
 				}
 				if(!is.null(new.tree) & phylo_has_brlen(phy = new.tree)) {
 					new.tree <- clean_chronogram(new.tree)
@@ -86,7 +86,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 						if(is_good_chronogram(new.tree)) {
 							new.tree$tip.label <- gsub('_', ' ', new.tree$tip.label)
 							if(verbose) {
-								cat("\t", "has tree with branch lengths", "\n")
+								message("\t", "has tree with branch lengths")
 							}
 							doi <- NULL
 							try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
@@ -103,7 +103,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 							try(dois <- append(dois, chronogram.matches$study_doi[study.index]))
 							trees[[tree.count]] <-new.tree
 							names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
-							cat("\t", "was good tree", "\n")
+							message("\t", "was good tree")
 							potential.bad <- NULL
 						}
 					}
@@ -118,8 +118,8 @@ get_otol_chronograms <- function(verbose = FALSE) {
 		}
 	}
 	if(verbose) {
-		print("Problematic combos")
-		print(bad.ones)
+		message("Problematic combos:")
+		message(paste0(utils::capture.output(bad.ones), collapse = "\n"))
 	}
 	for(i in sequence(length(authors))){
 		if(!any(is.na(authors[[i]])) & length(authors[[i]]) > 0){

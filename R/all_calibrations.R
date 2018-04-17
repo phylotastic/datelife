@@ -54,8 +54,7 @@ use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",  
 			attempts <- attempts+1
 		}
 		if(attempts > 0) {
-			# print("Dates are even more approximate than usual: had to expand constraints to have them agree")
-			cat("Dates are even more approximate than usual: had to expand constraints to have them agree", "\n")
+			message("Dates are even more approximate than usual: had to expand constraints to have them agree.", "\n")
 		}
 	}
 	return(list(phy = chronogram, calibrations.df = calibrations.df, original.calibrations.df = original.calibrations.df))
@@ -99,7 +98,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	input <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
 	input <- input$cleaned_names
 	if (verbose) {
-		cat("Searching", marker, "sequences for these taxa in BOLD...", "\n")
+		message("Searching ", marker, " sequences for these taxa in BOLD...")
 	}
 	xx <- seq(1, length(input), 250)
 	yy <- xx+249
@@ -112,15 +111,18 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 		sequences <- rbind(sequences, bold::bold_seqspec(taxon = input[xx[i]:yy[i]], marker = marker)) # bold::bold_seqspec function only allows searches of up to 335 names, ater that, it gives following Error: Request-URI Too Long (HTTP 414)
 	}
 	if(length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available; if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
-		if (verbose) cat("No sequences found in BOLD for input taxa...", "\n")
+		if (verbose) {
+			message("No sequences found in BOLD for input taxa...")
+		}
 		# if (!use_tnrs) cat("Setting use_tnrs = TRUE might change this, but it can be slowish.", "\n")
 		warning("Names in input do not match BOLD specimen records. No tree was constructed.")
 		return(NA)
 	}
 	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides)  # preserve good nucleotide data, i.e., only A,T,G,C
 	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
-	if (verbose) cat("\t", "OK.", "\n")
-
+	if (verbose) {
+		message("\t", "OK.")
+	}
 	phy <- get_otol_synthetic_tree(input = input, otol_version = otol_version)
 
 	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
@@ -155,7 +157,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	# final.sequences <- final.sequences[!is.na(final.sequences.names),]
 	# taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
 	if(length(input)-length(taxa.to.drop) == 1) {
-		if (verbose) cat("BOLD sequences found only for one input name", input[which(!input %in% taxa.to.drop)], "...","\n","\t", "Cannot construct a tree." )
+		if (verbose) {
+			message("BOLD sequences found only for one input name: ", input[which(!input %in% taxa.to.drop)], ".","\n","\t", "Cannot construct a tree." )
+		}
 		warning("Not enough sequences available in BOLD. No tree was constructed.")
 		# if (use_tnrs == FALSE) cat("Setting use_tnrs = TRUE might change this, but it is time consuming.", "\n")
 		return(NA)
@@ -163,39 +167,41 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	if(length(taxa.to.drop) > 0) {
 		if (verbose) {
 			taxa.to.drop.print <- paste(taxa.to.drop, collapse = " | ")
-			cat("No", marker, "sequences found for", taxa.to.drop.print, "...", "\n", "\t", "Dropping taxa from tree.", "\n")
+			message("No ", marker, " sequences found for ", taxa.to.drop.print, ".", "\n", "\t", "Dropping taxa from tree.")
 		}
 		#warning("No ", marker, " sequences found for ", taxa.to.drop.print, "...", "\n", "\t", "Taxa dropped from tree.")
 		taxa.to.drop <- gsub(" ", "_", taxa.to.drop)
 		phy <- ape::drop.tip(phy, taxa.to.drop)
 	}
 	if (verbose) {
-		cat("Aligning with MAFFT...", "\n")
+		message("Aligning with MAFFT...")
 	}
 	alignment <- ape::as.DNAbin(final.sequences)
 	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
 	if (verbose) {
-		cat( "\t", "OK.", "\n", "Estimating BOLD-OToL tree...", "\n")
+		message( "\t", "OK.", "\n", "Estimating BOLD-OToL tree...")
 	}
 	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data = alignment)
 	phy <- pml.object$tree
 	if(!ape::is.binary.tree(pml.object$tree)){
 		if (verbose) {
-			cat("\t", marker, " sequence data available generates a non-dichotomous tree...", "\n", "\t", "Resolving with multi2di...", "\n")
+			message("\t", marker, " sequence data available generates a non-dichotomous tree.", "\n", "\t", "Resolving with multi2di...")
 		}
 		pml.object$tree <- ape::multi2di(pml.object$tree)
 		phy <- pml.object$tree
 	}
 	if (verbose) {
-		cat("\t", "OK.", "\n")
+		message("\t", "OK.")
 	}
 	if (chronogram) {
 		if (verbose) {
-			cat("Dating BOLD-OToL tree with chronoMPL...", "\n")
+			message("Dating BOLD-OToL tree with chronoMPL...")
 		}
 		pml.object$tree <- ape::chronoMPL(pml.object$tree, se = FALSE, test = FALSE)
 		phy <- pml.object$tree
-		if (verbose) cat("\t", "OK.", "\n")
+		if (verbose) {
+			message("\t", "OK.")
+		}
 	}
 	if(any(pml.object$tree$edge.length < 0)) {
 		warning("\t", "Negative branch lengths in BOLD chronogram.", "\n")
@@ -207,7 +213,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	}
 	phy$tip.label <- gsub('_', ' ', phy$tip.label)
 	if (verbose) {
-		cat("Done.", "\n")
+		message("Done.")
 	}
 	return(phy)
 }

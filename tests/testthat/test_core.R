@@ -248,10 +248,10 @@ test_that("input_process works", {
 	notnew <- "a,b;"
 	expect_error(input_process(c(new, new)), verbose=TRUE) #trying to process two phylogenies will give an error
 	expect_error(input_process(c(phy, phy)), verbose=TRUE) #trying to process two phylogenies will give an error
-	expect_output(x <- input_process(new, verbose=TRUE)) # when verbose=TRUE it will give a printed message
-	expect_output(x <- input_process(phy, verbose=TRUE)) # idem
-	expect_output(x <- input_process(notnew, verbose=TRUE)) # idem
-	expect_output(x <- input_process(new, verbose=FALSE), NA) # when verbose=FALSE there is no printed message
+	expect_message(x <- input_process(new, verbose=TRUE)) # when verbose=TRUE it will give a printed message
+	expect_message(x <- input_process(phy, verbose=TRUE)) # idem
+	expect_message(x <- input_process(notnew, verbose=TRUE)) # idem
+	expect_output(x <- input_process(new, verbose=FALSE), NA) # when verbose=FALSE there is no printed message, but it will work with expect_message too
 	expect_output(x <- input_process(notnew, verbose=FALSE), NA) # idem
 	expect_output(x <- input_process("purrr", verbose=FALSE), NA) # idem
 	expect_type(x <- input_process(notnew, verbose=FALSE), "logical") # output is NA

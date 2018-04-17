@@ -5,7 +5,7 @@
 \title{Function to generate uncertainty in branch lengths using a lognormal}
 \usage{
 phylo_generate_uncertainty(phy, num = 100, age_sd = NULL, age_var = 0.1,
-  age_scale = 0, alpha = 0.025, rescale = TRUE)
+  age_scale = 0, alpha = 0.025, rescale = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{phy}{The input tree}
@@ -21,6 +21,8 @@ phylo_generate_uncertainty(phy, num = 100, age_sd = NULL, age_var = 0.1,
 \item{alpha}{The significance level on uncertainty to generate. By default 0.025}
 
 \item{rescale}{Boolean. If true, observed age will be rescaled each round.}
+
+\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
 \value{
 A phylo or multiPhylo object with the same topology as phy but different branch lengths

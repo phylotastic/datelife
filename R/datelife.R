@@ -155,13 +155,15 @@ datelife_query_check <- function(datelife_query = NULL, ...){
 #' @export
 datelife_query_length_check <- function(cleaned_names = NULL, get_spp_from_taxon = FALSE, verbose = FALSE){
 	if(length(cleaned_names) == 1){
-		if(verbose) cat("Cannot perform a search of divergence times with just one taxon.", "\n")
-		if(get_spp_from_taxon) {
-			if(verbose) cat("Clade contains only one lineage.", "\n")
-		} else {
-			if(verbose) cat("Performing a clade search? set get_spp_from_taxon = TRUE.", "\n")
+		if(verbose) {
+			message("Cannot perform a search of divergence times with just one taxon.")
+			if(get_spp_from_taxon) {
+				message("\t", "Clade contains only one lineage.")
+			} else {
+				message("Performing a clade search?? set get_spp_from_taxon = TRUE")
+			}
 		}
-		stop("search is length 1")
+		stop("Search is length 1.")
 	}
 }
 #' checks if we obtained an empty search with the set of input taxon names
@@ -171,8 +173,12 @@ datelife_query_length_check <- function(cleaned_names = NULL, get_spp_from_taxon
 datelife_result_check <- function(datelife_result, use_tnrs, verbose = FALSE){
 	if(length(datelife_result) < 1) {
 		warning("Output is empty.", call. = FALSE)
-		if(verbose) cat("Input species were not found in any chronograms available in cache.", "\n")
-		if(!use_tnrs & verbose) cat("Setting use_tnrs = TRUE might change this, but it is time consuming.", "\n")
+		if(verbose) {
+			message("Input species were not found in any chronograms available in cache.")
+			if(!use_tnrs) {
+				message("Setting use_tnrs = TRUE might change this, but it is time consuming.")
+			}
+		}
 	}
 }
 #' Takes a phylo object or a character string and figure out if it's correct newick format or a list of species
@@ -196,11 +202,11 @@ input_process <- function(input, verbose = FALSE){
 				}
 	    	phy.new.in <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input)))
 	    	if(verbose) {
-					cat("\t", "Input is a phylogeny and it is correcly formatted.", "\n")
+					message("\t", "Input is a phylogeny and it is correcly formatted.")
 				}
 	  	} else {
 	  		if(verbose) {
-					cat("Input is not a phylogeny.")
+					message("Input is not a phylogeny.")
 				} #not a warning nor stop, 'cause it is not a requirement for input to be a phylogeny at this step
 	  	}
   	# }
@@ -213,7 +219,9 @@ input_process <- function(input, verbose = FALSE){
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose = FALSE, ...) {
-	if(verbose) cat("Processing input...", "\n")
+	if(verbose) {
+		message("Processing input...")
+	}
 	phy.new <- input_process(input = input, verbose = verbose)
 	# cleaned_names <- ""
 	if(!is.na(phy.new[1])) {
@@ -228,8 +236,8 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 		if(length(input) == 1){
 			if(!get_spp_from_taxon[1]) {
 					if(verbose) {
-						cat("Datelife needs at least two input taxon names to perform a search.", "\n")
-						cat("Setting get_spp_from_taxon = TRUE gets all species from a clade and accepts only one taxon name as input.", "\n")
+						message("Datelife needs at least two input taxon names to perform a search.")
+						message("Setting get_spp_from_taxon = TRUE gets all species from a clade and accepts only one taxon name as input.")
 					}
 					stop("Input is length 1 and not in a good newick format.")
 			}
@@ -244,11 +252,13 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
   }
 	cleaned_names <- gsub("_", " ", cleaned.input)
     if(any(get_spp_from_taxon)){
-    	if(length(get_spp_from_taxon)==1) {
+    	if(length(get_spp_from_taxon) == 1) {
 				get_spp_from_taxon <- rep(get_spp_from_taxon, length(cleaned.input))
 			}
-    	if(length(cleaned.input)!=length(get_spp_from_taxon)){
-    		if(verbose) cat("Specify all taxa in input to get species names from.", "\n")
+    	if(length(cleaned.input)!= length(get_spp_from_taxon)){
+    		if(verbose) {
+					message("Specify all taxa in input to get species names from.")
+				}
     		stop("input and get_spp_from_taxon arguments must have same length.")
     	}
     	species.names <- vector()
@@ -257,8 +267,12 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	    	if (i) {
 	    		spp <- rphylotastic::taxon_get_species(taxon = cleaned_names[index], ...)
 	    		if(length(spp)==0) {
-	    			if(verbose) cat("\t", " No species names found for taxon ", cleaned_names[index], ".", "\n", sep="")
-	    			if (!use_tnrs & verbose) cat("\t", "Setting use_tnrs = TRUE might change this, but it can be slow.", "\n")
+	    			if(verbose) {
+							message("\t", " No species names found for taxon ", cleaned_names[index], ".")
+							if (!use_tnrs) {
+								message("\t", "Setting use_tnrs = TRUE might change this, but it can be slow.")
+							}
+						}
 	    			warning(paste("No species names available for input taxon '", cleaned_names[index], "'", sep=""))
 	    		}
 	    		species.names <- c(species.names, spp)
@@ -270,9 +284,13 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 			cleaned_names <- gsub("_", " ", species.names)
 		}
 	cleaned_names <- unique(cleaned_names)
-  if(verbose) cat("OK.", "\n")
+  if(verbose) {
+		message("OK.")
+	}
   cleaned_names.print <- paste(cleaned_names, collapse = " | ")
-  if(verbose) cat("Working with the following taxa:", "\n", "\t", cleaned_names.print, "\n")
+  if(verbose) {
+		message("Working with the following taxa: ", "\n", "\t", cleaned_names.print)
+	}
 	datelife_query.return <- list(cleaned_names = cleaned_names, phy = phy.new)
 	class(datelife_query.return) <- "datelifeQuery"
 	return(datelife_query.return)
@@ -977,22 +995,19 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 
 	if(any("citations" %in% summary_print.in) & !any(summary_format.in %in% c("citations", "html", "data.frame"))) {
 		if(summary_format.in == "citations"){
-			cat("Target taxa found in trees from:", "\n")
-			print(names(datelife_result), quote = FALSE)
-			cat("\n")
+			message("Target taxa found in trees from:")
 		} else {
-			cat("Source chronograms from:", "\n")
-			print(names(datelife_result), quote = FALSE)
-			cat("\n")
+			message("Source chronograms from:", "\n")
+		}
+		for (i in 1:length(datelife_result)){
+			message(i, ": ", names(datelife_result)[i], "\n")
 		}
 	}
 	if(any(grepl("taxa", summary_print.in)) & add_taxon_distribution.in!="summary") {
-		cat("Target taxa presence in source chronograms:", "\n")
-		print(taxon_distribution_summary)
-		cat("\n")
-		cat("Target taxa completely absent from source chronograms:", "\n")
-		print(data.frame(taxon = absent.input))
-		cat("\n")
+		message("Target taxa presence in source chronograms:")
+		message(paste0(utils::capture.output(taxon_distribution_summary), collapse = "\n"), "\n")
+		message("Target taxa completely absent from source chronograms:")
+		message(paste0(utils::capture.output(data.frame(taxon = absent.input)), collapse = "\n"), "\n")
 	}
 	return(return.object)
 }
@@ -1034,11 +1049,11 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 		if(is.finite(test.result)) {
 			good.matrix.indices <- append(good.matrix.indices,i)
 			if (verbose){
-				message(cat(" Ok"))
+				message(cat(" Ok."))
 			}
 		} else {
 			if (verbose){
-				message(cat(" Failed"))
+				message(cat(" Failed."))
 			}
 		}
 	}

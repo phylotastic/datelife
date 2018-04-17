@@ -41,12 +41,14 @@ make_contributor_cache <- function(outputfile = "contributorcache.RData", verbos
       curator.results <- rbind(curator.results, expand.grid(person = curators, study = study.id, clade = clade.name, stringsAsFactors = FALSE))
     }
     if(verbose) {
-      cat(i, "of", length(all.studies), "done", "\n")
+      message(i, " of ", length(all.studies), " done ")
     }
   }
   if(verbose){
-    cat("Authors from studies with the following id's could not be retrieved:", "\n")
-    print(missed_doi)
+    message("Authors from studies with the following id's could not be retrieved:")
+    for (i in 1:length(missed_doi)){
+      message("\t", missed_doi[i])
+    }
   }
   author.pretty <- make_overlap_table(author.results)
   try(Encoding(author.pretty$person) <- "latin1")
@@ -80,7 +82,7 @@ make_treebase_cache <- function(outputfile = "treebasecache.RData", verbose = TR
       author.results <- rbind(author.results, expand.grid(person = authors, study = study.id, stringsAsFactors = FALSE))
     }
     if(verbose) {
-      print(paste(i, "of", length(all.studies), "done"))
+      message(paste(i, "of", length(all.studies), "done."))
     }
   }
   tb.author.pretty <- make_overlap_table(author.results)[,-3]

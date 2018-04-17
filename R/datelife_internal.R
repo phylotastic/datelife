@@ -477,7 +477,7 @@ phylo_generate_uncertainty <- function(phy, num = 100, age_sd = NULL, age_var = 
   nn <- sort(phylo_get_node_numbers(phy))
   res <- c()
   while (length(res) < num){
-    if verbose {
+    if (verbose){
       message("Uncertainty sample number ", length(res) + 1)
     }
     phy_depths.final <- phy_depths.original <- phy_depths
