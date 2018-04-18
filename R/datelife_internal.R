@@ -206,9 +206,9 @@ asub_for_lapply <- function(idx, x, dims = 3) {
 #' @return A 3d array of patristic matrices
 #' @export
 patristic_matrix_list_to_array <- function(patristic_matrix_list, pad = TRUE) {
-  all.taxa <- sort(unique(unname(unlist(lapply(patristic_matrix_list, rownames)))))
+  all_taxa <- sort(unique(unname(unlist(lapply(patristic_matrix_list, rownames)))))
   if(pad) {
-    patristic_matrix_list <- lapply(patristic_matrix_list, patristic_matrix_pad, all.taxa = all.taxa)
+    patristic_matrix_list <- lapply(patristic_matrix_list, patristic_matrix_pad, all_taxa = all_taxa)
   }
   original.size <- length(patristic_matrix_list)
   patristic_matrix_list <- lapply(patristic_matrix_list,patristic_matrix_name_reorder)
@@ -226,17 +226,17 @@ patristic_matrix_list_to_array <- function(patristic_matrix_list, pad = TRUE) {
 
 #' Function to fill in empty cells in a patristic matrix for missing taxa. Used in: patristic_matrix_list_to_array.
 #' @param patristic_matrix A patristic matrix with row and column names for taxa
-#' @param all.taxa A vector of the names of all taxa you want, including ones not in the patristic matrix
-#' @return patristic_matrix for all.taxa, with NA for entries between taxa where at least one was not in the original patristic_matrix
+#' @param all_taxa A vector of the names of all taxa you want, including ones not in the patristic matrix
+#' @return patristic_matrix for all_taxa, with NA for entries between taxa where at least one was not in the original patristic_matrix
 #' @export
-patristic_matrix_pad <- function(patristic_matrix, all.taxa) {
-	number.missing <- length(all.taxa) - dim(patristic_matrix)[1]
+patristic_matrix_pad <- function(patristic_matrix, all_taxa) {
+	number.missing <- length(all_taxa) - dim(patristic_matrix)[1]
 	final_matrix <- patristic_matrix
 	if(number.missing>0) {
 		final_matrix <- rbind(patristic_matrix, matrix(nrow = number.missing, ncol = dim(patristic_matrix)[2]))
 		final_matrix <- cbind(final_matrix, matrix(ncol = number.missing, nrow = dim(final_matrix)[1]))
-		rownames(final_matrix) <- c(rownames(patristic_matrix), all.taxa[-which(all.taxa %in% rownames(patristic_matrix))])
-	 	colnames(final_matrix) <- c(colnames(patristic_matrix), all.taxa[-which(all.taxa %in% colnames(patristic_matrix))])
+		rownames(final_matrix) <- c(rownames(patristic_matrix), all_taxa[-which(all_taxa %in% rownames(patristic_matrix))])
+	 	colnames(final_matrix) <- c(colnames(patristic_matrix), all_taxa[-which(all_taxa %in% colnames(patristic_matrix))])
 	}
  	return(patristic_matrix_name_reorder(final_matrix))
 }
@@ -425,7 +425,7 @@ phylo_tiplabel_underscore_to_space <- function(phy) {
 }
 #' Function to remove missing taxa from a datelifeResult object. Used in: datelife_result_sdm.
 #' @param patristic_matrix A patristic matrix with row and column names for taxa
-#' @return patristic_matrix for all.taxa
+#' @return patristic_matrix for all_taxa
 #' @export
 patristic_matrix_unpad <- function(patristic_matrix) {
 	bad.ones <- which(apply(is.na(patristic_matrix),2,all))

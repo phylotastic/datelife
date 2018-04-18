@@ -12,7 +12,7 @@ input_tnrs(input, reference_taxonomy = "otl")
 \item{reference_taxonomy}{A character vetor specifying the reference taxonomy to use for tnrs.}
 }
 \value{
-A data.frame from tnrs_match_names function
+A data frame from tnrs_match_names function
 }
 \description{
 Taxon name resolution service applied to input by batches

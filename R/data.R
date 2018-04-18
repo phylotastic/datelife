@@ -142,7 +142,7 @@
 #'
 #' @name tb.author.pretty
 #' @docType data
-#' @format A data.frame with two elements
+#' @format A data frame with two elements
 #' \describe{
 #'   \item{person}{Character vector of authors of the included studies}
 #'   \item{study.count}{Numeric vector of studies authored by each person}

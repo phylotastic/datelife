@@ -4,13 +4,13 @@
 \alias{make_overlap_table}
 \title{Create an overlap table}
 \usage{
-make_overlap_table(results.table)
+make_overlap_table(results_table)
 }
 \arguments{
-\item{results.table}{An author.results or curator.results data.frame}
+\item{results_table}{An author.results or curator.results data frame}
 }
 \value{
-Data.frame with info on people and what clades they've worked on
+A data frame with info on people and what clades they've worked on
 }
 \description{
 Create an overlap table

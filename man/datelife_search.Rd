@@ -47,35 +47,35 @@ citations: A character vector of references where chronograms with some or all o
 
 mrca: A named numeric vector of most recent common ancestor (mrca) ages of target taxa defined in input, obtained from the source chronograms. Names of mrca vector are equal to citations.
 
-newick.all: A named character vector of newick strings corresponding to target chronograms derived from source chronograms. Names of newick.all vector are equal to citations.
+newick_all: A named character vector of newick strings corresponding to target chronograms derived from source chronograms. Names of newick_all vector are equal to citations.
 
-newick.sdm: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
+newick_sdm: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
 
-newick.median: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram from the median of all source chronograms.
+newick_median: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram from the median of all source chronograms.
 
-phylo.sdm: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
+phylo_sdm: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
 
-phylo.median: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained from source chronograms with median method.
+phylo_median: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained from source chronograms with median method.
 
 phylo_all: A named list of phylo objects corresponding to each target chronogram obtained from available source chronograms. Names of phylo_all list correspond to citations.
 
-phylo.biggest: The chronogram with the most taxa. In the case of a tie, the chronogram with clade age closest to the median age of the equally large trees is returned.
+phylo_biggest: The chronogram with the most taxa. In the case of a tie, the chronogram with clade age closest to the median age of the equally large trees is returned.
 
 html: A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
 
-data.frame A data.frame with data on target taxa: mrca, number of taxa, citations of source chronograms and newick string.
+data_frame A data frame with data on target taxa: mrca, number of taxa, citations of source chronograms and newick string.
 }
 \examples{
 # obtain median ages from a set of source chronograms in newick format:
 ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-		"Mus musculus"), summary_format="newick.median")
+		"Mus musculus"), summary_format="newick_median")
 # save the tree in newick format
 write(ages, file="some.bird.ages.txt")
 
 # obtain median ages from a set of source chronograms in phylo format
 # will produce same tree as above but in r phylo format:
 ages.again <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-		"Mus musculus"), summary_format="phylo.median")
+		"Mus musculus"), summary_format="phylo_median")
 plot(ages.again)
 library(ape)
 ape::axisPhylo()

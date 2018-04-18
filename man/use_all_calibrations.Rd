@@ -25,7 +25,7 @@ use_all_calibrations(phy = make_bold_otol_tree(c("Rhea americana",
 
 \item{expand}{How much to expand by each step to get consistent calibrations}
 
-\item{giveup}{How many expansion to try before giving up}
+\item{giveup}{How many expansions to try before giving up}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }

@@ -10,7 +10,7 @@ patristic_matrix_unpad(patristic_matrix)
 \item{patristic_matrix}{A patristic matrix with row and column names for taxa}
 }
 \value{
-patristic_matrix for all.taxa
+patristic_matrix for all_taxa
 }
 \description{
 Function to remove missing taxa from a datelifeResult object. Used in: datelife_result_sdm.

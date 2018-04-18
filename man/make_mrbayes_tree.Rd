@@ -12,14 +12,14 @@ make_mrbayes_tree(constraint = NULL, ncalibration = NULL,
 
 \item{ncalibration}{The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.}
 
-\item{missing_taxa}{A tree, a data.frame or a vector enlisting all missing taxa you want to include.
+\item{missing_taxa}{A tree, a data frame or a vector enlisting all missing taxa you want to include.
 \describe{
 
     \item{A tree.}{Either as a phylo object or as a newick character string.
     It contains all taxa that you want at the end, both missing and non missing.
     This tree will be used as a hard constraint.
 }
-    \item{A data.frame.}{It contains two columns.
+    \item{A data frame.}{It contains two columns.
     taxon. A character vector of missing taxon names.
     clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
 }

@@ -4,7 +4,7 @@
 \name{tb.author.pretty}
 \alias{tb.author.pretty}
 \title{Authors from studies with chronograms in TreeBASE}
-\format{A data.frame with two elements
+\format{A data frame with two elements
 \describe{
   \item{person}{Character vector of authors of the included studies}
   \item{study.count}{Numeric vector of studies authored by each person}

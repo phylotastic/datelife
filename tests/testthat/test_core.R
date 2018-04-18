@@ -26,12 +26,12 @@ test_that("Summarize as citations works correctly", {
   expect_gte(sum(grepl("Prum", citation.results)),1)
  })
 
-test_that("Summarize as newick.all works correctly", {
+test_that("Summarize as newick_all works correctly", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
   datelife_result <- results_list_process(results_list, taxa, TRUE)
-  trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick.all", cache=opentree_chronograms)
+  trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_all", cache=opentree_chronograms)
   expect_equal(class(trees), "character")
   expect_false(anyNA(trees))
   expect_equal(class(ape::read.tree(text=trees[1])), "phylo")
@@ -42,24 +42,24 @@ test_that("add_taxon_distribution argument from summarize_datelife_result() work
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
   datelife_result <- results_list_process(results_list, taxa, TRUE)
-  trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick.all", cache=opentree_chronograms, add_taxon_distribution = "summary")
+  trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_all", cache=opentree_chronograms, add_taxon_distribution = "summary")
   # str(trees)
   # trees$taxon_distribution
   # trees$absent_taxa
   expect_gte(length(trees), 3)
-  trees2 <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick.all", cache=opentree_chronograms, add_taxon_distribution = "matrix")
+  trees2 <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_all", cache=opentree_chronograms, add_taxon_distribution = "matrix")
   expect_gte(length(trees2), 3)
   # str(trees2)
   # trees2$taxon_distribution
   # trees2$absent_taxa
 })
 
-test_that("Summarize as newick.median works correctly", {
+test_that("Summarize as newick_median works correctly", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
   datelife_result <- results_list_process(results_list, taxa, partial=FALSE)
-  tree <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick.median", cache=opentree_chronograms)
+  tree <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_median", cache=opentree_chronograms)
   expect_equal(class(tree), "character")
   expect_false(anyNA(tree))
   expect_equal(class(ape::read.tree(text=tree)), "phylo")
@@ -87,19 +87,19 @@ test_that("datelife_search returns phylo_all", {
   expect_equal(class(datelife_phylo[[1]]),"phylo")
 })
 
-test_that("datelife_search returns phylo.biggest", {
+test_that("datelife_search returns phylo_biggest", {
   skip_on_cran()
   utils::data(opentree_chronograms)
-  datelife_phylo <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="phylo.biggest")
+  datelife_phylo <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="phylo_biggest")
   expect_equal(class(datelife_phylo),"phylo")
 })
 
 
-test_that("datelife_search returns phylo.sdm", {
+test_that("datelife_search returns phylo_sdm", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
   utils::data(opentree_chronograms)
-datelife_phylo <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="phylo.sdm")
+datelife_phylo <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="phylo_sdm")
 expect_equal(class(datelife_phylo),"phylo")
 expect_true(!is.null(datelife_phylo$edge.length))
 })
@@ -229,13 +229,13 @@ test_that("Crop plant newick works", {
 test_that("We don't get negative brlen from pathd8", {
   skip_on_cran()
   skip_on_travis()
-  tree <- datelife_search(input = "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);", summary_format = "phylo.median", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, dating_method = "PATHd8")
+  tree <- datelife_search(input = "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);", summary_format = "phylo_median", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, dating_method = "PATHd8")
   expect_true(min(tree$edge.length)>=0)
 })
 
 test_that("We can get trees of two taxa back", {
 skip_on_cran()
-res <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), summary_format="data.frame")
+res <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), summary_format="data_frame")
 two.taxon <- which(res$Ntax==2)[1]
 tree <- ape::read.tree(text=as.character(res$Newick[two.taxon]))
 expect_equal(ape::Ntip(tree), 2)

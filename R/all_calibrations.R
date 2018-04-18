@@ -7,7 +7,7 @@
 #' @param approximate_match If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @param expand How much to expand by each step to get consistent calibrations
-#' @param giveup How many expansion to try before giving up
+#' @param giveup How many expansions to try before giving up
 #' @inheritParams datelife_search
 #' @return list with chronogram, original calibrations, and expanded calibrations
 #' @export
@@ -67,7 +67,7 @@ use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",  
 #' @param approximate_match Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @inheritParams datelife_search
-#' @return A data.frame of calibrations
+#' @return A data_frame of calibrations
 #' @export
 get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = FALSE) {
 	datelife_phylo <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = update_cache, cache = cache, summary_format = "phylo_all", verbose = verbose)
@@ -119,7 +119,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 		return(NA)
 	}
 	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides)  # preserve good nucleotide data, i.e., only A,T,G,C
-	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data.frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
+	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
 	if (verbose) {
 		message("\t", "OK.")
 	}
@@ -221,7 +221,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 #' Taxon name resolution service applied to input by batches
 #' @inheritParams datelife_search
 #' @param reference_taxonomy A character vetor specifying the reference taxonomy to use for tnrs.
-#' @return A data.frame from tnrs_match_names function
+#' @return A data frame from tnrs_match_names function
 #' @export
 input_tnrs <- function(input, reference_taxonomy = "otl"){  # we can add other reference taxonomies in the future
 	if(reference_taxonomy == "otl"){

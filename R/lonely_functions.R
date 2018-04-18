@@ -1,9 +1,9 @@
-relevant_age_quantiles <- function(ages,probs = c(0.5,0,0.025,0.975,1) ) {
+relevant_age_quantiles <- function(ages, probs = c(0.5,0,0.025,0.975,1) ) {
   # just utility wrapper function with different defaults
   return(stats::quantile(ages,probs))
 }
 
-numeric_vector_to_html_row <- function(x,digits = 2) {
+numeric_vector_to_html_row <- function(x, digits = 2) {
   return(paste(paste("<td>",round(x,digits),sep = ""),"</td>",sep = "",collapse = ""))
 }
 

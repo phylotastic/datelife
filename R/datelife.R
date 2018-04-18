@@ -38,34 +38,34 @@
 #'
 #' mrca: A named numeric vector of most recent common ancestor (mrca) ages of target taxa defined in input, obtained from the source chronograms. Names of mrca vector are equal to citations.
 #'
-#' newick.all: A named character vector of newick strings corresponding to target chronograms derived from source chronograms. Names of newick.all vector are equal to citations.
+#' newick_all: A named character vector of newick strings corresponding to target chronograms derived from source chronograms. Names of newick_all vector are equal to citations.
 #'
-#' newick.sdm: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
+#' newick_sdm: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
 #'
-#' newick.median: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram from the median of all source chronograms.
+#' newick_median: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram from the median of all source chronograms.
 #'
-#' phylo.sdm: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
+#' phylo_sdm: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
 #'
-#' phylo.median: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained from source chronograms with median method.
+#' phylo_median: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained from source chronograms with median method.
 #'
 #' phylo_all: A named list of phylo objects corresponding to each target chronogram obtained from available source chronograms. Names of phylo_all list correspond to citations.
 #'
-#' phylo.biggest: The chronogram with the most taxa. In the case of a tie, the chronogram with clade age closest to the median age of the equally large trees is returned.
+#' phylo_biggest: The chronogram with the most taxa. In the case of a tie, the chronogram with clade age closest to the median age of the equally large trees is returned.
 #'
 #' html: A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
 #'
-#' data.frame A data.frame with data on target taxa: mrca, number of taxa, citations of source chronograms and newick string.
+#' data_frame A data frame with data on target taxa: mrca, number of taxa, citations of source chronograms and newick string.
 #' @examples
 #' # obtain median ages from a set of source chronograms in newick format:
 #' ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-#' 		"Mus musculus"), summary_format="newick.median")
+#' 		"Mus musculus"), summary_format="newick_median")
 #' # save the tree in newick format
 #' write(ages, file="some.bird.ages.txt")
 #'
 #' # obtain median ages from a set of source chronograms in phylo format
 #' # will produce same tree as above but in r phylo format:
 #' ages.again <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-#' 		"Mus musculus"), summary_format="phylo.median")
+#' 		"Mus musculus"), summary_format="phylo_median")
 #' plot(ages.again)
 #' library(ape)
 #' ape::axisPhylo()
@@ -348,7 +348,7 @@ tree_fix_brlen <- function(tree = NULL, fixing_criterion = "negative", fixing_me
 #' Gets ages, node numbers, node names and descendant tips number and label of all nodes from a dated tree
 #' @inheritParams tree_fix_brlen
 #' @param node_data A character vector containing one or all from: "node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label"
-#' @param nodes Numeric vector with node number from which you want to obtaib data from. Defaut to NULL: obtain data for all nodes in the tree.
+#' @param nodes Numeric vector with node numbers from which you want to obtain data. Defaut to NULL: obtain data for all nodes in the tree.
 #' @return A list
 #' @export
 tree_get_node_data <- function(tree = NULL, nodes = NULL, node_data = c("node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label")){
@@ -641,14 +641,14 @@ tree_add_dates <- function(dated_tree = NULL, missing_taxa = NULL, dating_method
 	return(new.phy)
 }
 #' Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile inside tree_add_dates functions.
-#' @param  missing_taxa A tree, a data.frame or a vector enlisting all missing taxa you want to include.
+#' @param  missing_taxa A tree, a data frame or a vector enlisting all missing taxa you want to include.
 #' \describe{
 #'
 #' 	\item{A tree.}{Either as a phylo object or as a newick character string.
 #'		It contains all taxa that you want at the end, both missing and non missing.
 #'		This tree will be used as a hard constraint.
 #'	}
-#' 	\item{A data.frame.}{It contains two columns.
+#' 	\item{A data frame.}{It contains two columns.
 #'		taxon. A character vector of missing taxon names.
 #'		clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
 #'	}
@@ -701,7 +701,7 @@ missing_taxa_check <- function(missing_taxa = NULL, dated_tree = NULL){
 	}
 	if(badformat){
 		stop("missing_taxa must be a character vector with species names,
-		a data.frame with taxonomic assignations, a newick character string, a phylo object, or NULL")
+		a data frame with taxonomic assignations, a newick character string, a phylo object, or NULL")
 	}
 	# IMPORTANT: Add a check that taxa in dated.trees is in reference_tree and viceversa
 	return(missing_taxa)
@@ -822,7 +822,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	if(is.null(datelife_result) | !is.list(datelife_result)){
 		stop("datelife_result argument must be a list from get_datelife_result function.")
 	}
-	summary_format.in <- match.arg(summary_format, choices = c("citations", "mrca", "newick.all", "newick.sdm", "newick.median", "phylo.sdm", "phylo.median", "phylo.biggest", "phylo_all", "html", "data.frame"))
+	summary_format.in <- match.arg(summary_format, choices = c("citations", "mrca", "newick_all", "newick_sdm", "newick_median", "phylo_sdm", "phylo_median", "phylo_biggest", "phylo_all", "html", "data_frame"))
 	add_taxon_distribution.in <- match.arg(add_taxon_distribution, choices = c("none", "summary", "matrix"))
 	summary_print.in <- match.arg(summary_print, c("citations", "taxa", "none"), several.ok = TRUE)
 	input <- datelife_query
@@ -877,29 +877,29 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	if(summary_format.in == "mrca") {
 		return.object <- datelife_result_MRCA(datelife_result, partial = partial)
 	}
-	if(summary_format.in == "newick.all") {
+	if(summary_format.in == "newick_all") {
 		trees <- sapply(datelife_result, patristic_matrix_to_newick)
 		return.object <- trees[which(!is.na(trees))]
 	}
-	if(summary_format.in == "newick.sdm") {
+	if(summary_format.in == "newick_sdm") {
 		local.results <- datelife_result_sdm(datelife_result)
 		datelife_result <- local.results$datelife_result
 		tree <- local.results$phy
 		return.object <- ape::write.tree(tree)
 	}
-	if(summary_format.in == "phylo.sdm") {
+	if(summary_format.in == "phylo_sdm") {
 		local.results <- datelife_result_sdm(datelife_result)
 		datelife_result <- local.results$datelife_result
 		tree <- local.results$phy
 		return.object <- tree
 	}
-	if(summary_format.in == "newick.median") {
+	if(summary_format.in == "newick_median") {
 		patristic.array <- patristic_matrix_list_to_array(datelife_result)
 		median.matrix <- summary_patristic_matrix_array(patristic.array)
 		tree <- patristic_matrix_to_newick(median.matrix)
 		return.object <- tree
 	}
-	if(summary_format.in == "phylo.median") {
+	if(summary_format.in == "phylo_median") {
 		patristic.array <- patristic_matrix_list_to_array(datelife_result)
 		median.matrix <- summary_patristic_matrix_array(patristic.array)
 		tree <- patristic_matrix_to_phylo(median.matrix)
@@ -909,7 +909,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
 		return.object <- trees[which(!is.na(trees))]
 	}
-	if(summary_format.in == "phylo.biggest") {
+	if(summary_format.in == "phylo_biggest") {
 		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
 		return.object <- trees[which(sapply(trees, ape::Ntip)==max(sapply(trees, ape::Ntip)))]
 		if(length(return.object)>1) { #there are more than one tree with same number of taxa. Rather than take the first by default, take the one with the most intermediate depth (this assumes that the root node is the same for all trees). An example is the Bininda-Emonds et al mammal tree: there are three trees with min, max, and best guess calibrations. So, take the one in the middle.
@@ -959,7 +959,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		}
 		return.object <- out.vector
 	}
-	if(summary_format.in == "data.frame") {
+	if(summary_format.in == "data_frame") {
 		out.df <- data.frame()
 		ages <- datelife_result_MRCA(datelife_result, partial = partial)
 		trees <- sapply(datelife_result, patristic_matrix_to_newick)
@@ -980,20 +980,20 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	if(add_taxon_distribution.in != "none" & summary_format.in !="html"){
 		return.object <- list(return.object)
 		if(add_taxon_distribution.in == "matrix") {
-			if(summary_format.in !="data.frame") return.object <- c(return.object, list(taxon_distribution = taxon_distribution_matrix))
+			if(summary_format.in !="data_frame") return.object <- c(return.object, list(taxon_distribution = taxon_distribution_matrix))
 		}
 		if(add_taxon_distribution.in == "summary") {
 			return.object <- c(return.object, list(taxon_distribution = taxon_distribution_summary))
 		}
 		return.object <- c(return.object, list(absent_taxa = data.frame(taxon = absent.input)))
 		names(return.object)[1] <- summary_format.in
-		if(summary_format.in =="data.frame"){
+		if(summary_format.in =="data_frame"){
 			names(return.object)[1] <- "results"
 			if(add_taxon_distribution.in == "matrix") names(return.object)[1] <- "results_and_missing_taxa"
 		}
 	}
 
-	if(any("citations" %in% summary_print.in) & !any(summary_format.in %in% c("citations", "html", "data.frame"))) {
+	if(any("citations" %in% summary_print.in) & !any(summary_format.in %in% c("citations", "html", "data_frame"))) {
 		if(summary_format.in == "citations"){
 			message("Target taxa found in trees from:")
 		} else {

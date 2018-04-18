@@ -10,7 +10,7 @@ tree_get_node_data(tree = NULL, nodes = NULL, node_data = c("node_number",
 \arguments{
 \item{tree}{A tree either as a newick character string or as a phylo object}
 
-\item{nodes}{Numeric vector with node number from which you want to obtaib data from. Defaut to NULL: obtain data for all nodes in the tree.}
+\item{nodes}{Numeric vector with node numbers from which you want to obtain data. Defaut to NULL: obtain data for all nodes in the tree.}
 
 \item{node_data}{A character vector containing one or all from: "node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label"}
 }

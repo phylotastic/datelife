@@ -92,14 +92,14 @@ make_treebase_cache <- function(outputfile = "treebasecache.RData", verbose = TR
 }
 
 #' Create an overlap table
-#' @param results.table An author.results or curator.results data.frame
-#' @return Data.frame with info on people and what clades they've worked on
+#' @param results_table An author.results or curator.results data frame
+#' @return A data frame with info on people and what clades they've worked on
 #' @export
-make_overlap_table <- function(results.table) {
-  unique.person <- unique(results.table$person)
+make_overlap_table <- function(results_table) {
+  unique.person <- unique(results_table$person)
   final.table <- data.frame()
   for (person.index in sequence(length(unique.person))) {
-    local.df <- subset(results.table, results.table$person == unique.person[person.index])
+    local.df <- subset(results_table, results_table$person == unique.person[person.index])
     clades <- table(as.character(local.df$clade))
     names(clades)[which(nchar(names(clades)) == 0)] <- "Unknown"
     clade.string <- paste(sort(paste0(names(clades), " (", clades, ")")), collapse=", ")
