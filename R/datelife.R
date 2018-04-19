@@ -427,15 +427,21 @@ tree_add_outgroup <- function(tree = NULL, outgroup = "outgroup"){
 		phy <- tree_check(tree = tree)
     outgroup_edge <- c()
     ingroup_edge <- c()
+		root_edge <- c()
     if(!is.null(phy$edge.length)){
-    	mbt <- max(ape::branching.times(phy))
-    	outgroup_edge <- mbt + mbt*0.10
-    	ingroup_edge <- paste0(":", outgroup_edge-mbt)
-    	outgroup_edge <- paste0(":", outgroup_edge)
+			if(!is.null(phy$root.edge)){
+				root_edge <- paste0(":", phy$root.edge)
+				phy <- phy[-which(names(phy) == "root.edge")]
+				class(phy) <- "phylo"
+			}
+			mbt <- max(ape::branching.times(phy))
+			rr <- mbt*0.10
+    	ingroup_edge <- paste0(":", rr)
+    	outgroup_edge <- paste0(":", mbt + rr)
     }
 	phy <- gsub(";", "", ape::write.tree(phy))
-	phy <- paste("(", phy, ingroup_edge, ",", outgroup[1], outgroup_edge, ");", sep="")
-	phy <-  phytools::read.newick(text = phy)
+	phy <- paste("(", phy, ingroup_edge, ",", outgroup[1], outgroup_edge, ")", root_edge, ";", sep="")
+	phy <-  phytools::read.newick(text = phy)  # tree looses its root length anyways when read by read.tree or read.newick
 	return(phy)
 }
 
@@ -752,7 +758,7 @@ get_mrbayes_node_calibrations <- function(constraint = NULL, ncalibration = NULL
 	}
 	if(length(ncalibration) == 2){  # if it is a list of descendant tips labels and node ages, from tree_get_node_data function
 		if(!is.list(ncalibration)) {
-			stop("ncalibration must be a newick character string, in phylo object or a list with taxon names and dates")
+			stop("ncalibration must be a newick character string, a phylo object or a list with taxon names and dates")
 		}
 		includes.ncalibration <- lapply(ncalibration$descendant_tips_label, function(x) gsub(" ", "_", x))
 		nages <- ncalibration$node_age
