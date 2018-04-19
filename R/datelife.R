@@ -421,27 +421,30 @@ phylo_get_node_numbers <- function(phy){
 #' Function to add an outgroup to any phylogeny, in phylo or newick format
 #' @inheritParams tree_fix_brlen
 #' @param outgroup A character vector with the name of the outgroup. If it has length>1, only first element will be used.
-#' @return A phylo object.
+#' @return A phylo object with no root edge.
 #' @export
 tree_add_outgroup <- function(tree = NULL, outgroup = "outgroup"){
 		phy <- tree_check(tree = tree)
     outgroup_edge <- c()
     ingroup_edge <- c()
-		root_edge <- c()
+		root_edge <- c()  # in case we want to allow users to add a root edge
     if(!is.null(phy$edge.length)){
+			mbt <- max(ape::branching.times(phy))
 			if(!is.null(phy$root.edge)){
-				root_edge <- paste0(":", phy$root.edge)
+				# root_edge <- paste0(":", phy$root.edge)
+				rr <- phy$root.edge
 				phy <- phy[-which(names(phy) == "root.edge")]
 				class(phy) <- "phylo"
+			} else {
+				rr <- mbt * 0.10
 			}
-			mbt <- max(ape::branching.times(phy))
-			rr <- mbt*0.10
     	ingroup_edge <- paste0(":", rr)
     	outgroup_edge <- paste0(":", mbt + rr)
     }
 	phy <- gsub(";", "", ape::write.tree(phy))
 	phy <- paste("(", phy, ingroup_edge, ",", outgroup[1], outgroup_edge, ")", root_edge, ";", sep="")
 	phy <-  phytools::read.newick(text = phy)  # tree looses its root length anyways when read by read.tree or read.newick
+
 	return(phy)
 }
 

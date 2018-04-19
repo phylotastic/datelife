@@ -12,7 +12,7 @@ tree_add_outgroup(tree = NULL, outgroup = "outgroup")
 \item{outgroup}{A character vector with the name of the outgroup. If it has length>1, only first element will be used.}
 }
 \value{
-A phylo object.
+A phylo object with no root edge.
 }
 \description{
 Function to add an outgroup to any phylogeny, in phylo or newick format

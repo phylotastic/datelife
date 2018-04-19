@@ -310,6 +310,52 @@ test_that("generate_uncertainty gives a tree with different branch lengths", {
   expect_true(length(felid_sdm$phy$edge.length) == length(xx$edge.length))
   expect_true(any(sort(felid_sdm$phy$edge.length) != sort(xx$edge.length))) #
 })
+
+test_that("tree_add_outgroup and tree_get_singleton_outgroup work", {
+  utils::data(felid_sdm)
+  xx <- tree_add_outgroup(felid_sdm$phy)
+  expect_true("outgroup" %in% xx$tip.label)
+  expect_true("outgroup" %in% tree_get_singleton_outgroup(tree = xx))
+  expect_true(ape::is.ultrametric(xx))
+  expect_true(length(felid_sdm$phy$tip.label) != length(xx$tip.label))
+
+  xx <- tree_add_outgroup(felid_sdm$phy, outgroup = "fake_outgroup")
+  expect_true("fake_outgroup" %in% xx$tip.label)
+  expect_true("fake_outgroup" %in% tree_get_singleton_outgroup(tree = xx))
+  expect_true(ape::is.ultrametric(xx))
+  expect_true(length(felid_sdm$phy$tip.label) != length(xx$tip.label))
+
+  felid_sdm$phy$root.edge <- 10
+  xx <- tree_add_outgroup(felid_sdm$phy)
+  expect_true("outgroup" %in% xx$tip.label)
+  expect_true("outgroup" %in% tree_get_singleton_outgroup(tree = xx))
+  expect_true(ape::is.ultrametric(xx))
+  expect_true(length(felid_sdm$phy$tip.label) != length(xx$tip.label))
+  expect_true(is.null(xx$root.edge))
+
+  felid_sdm$phy$edge.length <- NULL
+  felid_sdm$phy$root.edge <- NULL
+  xx <- tree_add_outgroup(felid_sdm$phy)
+  expect_true("outgroup" %in% xx$tip.label)
+  expect_true("outgroup" %in% tree_get_singleton_outgroup(tree = xx))
+  # expect_false(ape::is.ultrametric(xx)) # this tree has no branch lengths, but if we leave a root edge, the function will run and give a false result
+  expect_true(is.null(xx$edge.length))
+  expect_true(length(felid_sdm$phy$tip.label) != length(xx$tip.label))
+
+  new_tree <- "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum));"
+  xx <- tree_add_outgroup(new_tree)
+  expect_true("outgroup" %in% xx$tip.label)
+  expect_true("outgroup" %in% tree_get_singleton_outgroup(tree = xx))
+  expect_true(is.null(xx$edge.length))
+  expect_true(length(felid_sdm$phy$tip.label) != length(xx$tip.label))
+
+  new_tree <- "(((t4:19.93154846,t3:19.93154846):1.42784927,t2:21.35939773):4.956403277,(t5:7.102366565,t1:7.102366565):19.21343444):48.85405041;"
+  xx <- tree_add_outgroup(new_tree, outgroup = "fake_outgroup")
+  expect_true("fake_outgroup" %in% xx$tip.label)
+  expect_true("fake_outgroup" %in% tree_get_singleton_outgroup(tree = xx))
+  expect_true(ape::is.ultrametric(xx))
+  expect_true(is.null(xx$root.edge))
+})
     # test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {
 # 	tax2 <- c("Homo sapiens", "Macaca mulatta", "Melursus ursinus","Canis lupus pallipes", "Panthera pardus", "Panthera tigris", "Herpestes fuscus", "Elephas maximus", "Haliastur indus")
 # 	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"
