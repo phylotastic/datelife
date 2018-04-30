@@ -187,7 +187,9 @@ datelife_result_check <- function(datelife_result, use_tnrs, verbose = FALSE){
 #' @return A phylo object or NA if no tree
 #' @export
 input_process <- function(input, verbose = FALSE){
-  if(class(input) == "multiPhylo") stop("Only one phylogeny can be processed at a time.")
+  if(class(input) == "multiPhylo") {
+		stop("input is of class multiPhylo. Only one phylogeny can be processed at a time.")
+	}
 	if(class(input) == "phylo") {
 		input <- ape::write.tree(input)
 	}
@@ -330,7 +332,7 @@ tree_fix_brlen <- function(tree = NULL, fixing_criterion = "negative", fixing_me
 	if(any(fixing_method == c("bladj", "mrbayes"))) { #chunk for bladj and mrbayes
 		phy <- tree_add_nodelabels(tree = phy)  # all nodes need to be named
 		cnode <- phy$edge[index,2]  # we assume that the negative edge length is the one that needs to be changed (but it could be the sister edge that should be shorter)
-		tofix <- cnode-length(phy$tip.label)  # so, we take the crown node number of the negative branch lengths
+		tofix <- cnode-length(phy$tip.label)  # so, we use the node number of the crown node of the negative branch lengths
 		if(fixing_method == "bladj")
 			fixed.phy <- make_bladj_tree(tree = phy, nodenames = phy$node.label[-tofix], nodeages = tree_get_node_data(tree = phy, node_data = "node_age")$node_age[-tofix])
 		if(fixing_method == "mrbayes") {
@@ -345,14 +347,19 @@ tree_fix_brlen <- function(tree = NULL, fixing_criterion = "negative", fixing_me
 	return(fixed.phy)
 }
 
-#' Gets ages, node numbers, node names and descendant tips number and label of all nodes from a dated tree
+#' Gets node numbers, node names, descendant tip numbers and labels of nodes from a any tree and node ages from dated trees
 #' @inheritParams tree_fix_brlen
 #' @param node_data A character vector containing one or all from: "node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label"
 #' @param nodes Numeric vector with node numbers from which you want to obtain data. Defaut to NULL: obtain data for all nodes in the tree.
 #' @return A list
 #' @export
 tree_get_node_data <- function(tree = NULL, nodes = NULL, node_data = c("node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label")){
-	phy <- tree_check(tree = tree)
+	node_data <- match.arg(arg = node_data, choices = c("node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label"), several.ok = TRUE)
+	if("node_age" %in% node_data){
+		phy <- tree_check(tree = tree, dated = TRUE)
+	} else {
+		phy <- tree_check(tree = tree)
+	}
 	if(!is.numeric(nodes)) {
 		nn <- phylo_get_node_numbers(phy)
 	} else {
@@ -491,6 +498,9 @@ tree_node_tips <- function(tree = NULL, node = NULL, curr = NULL){
 	phy <- tree_check(tree = tree, dated = FALSE)
 	des <- phytools::getDescendants(tree = phy, node = node, curr = NULL)
 	tips <- des[which(des <= length(phy$tip.label))]
+	# we could just use ape::prop.part here -replacing last two lines, it might be faster and using less memory
+	# ape::prop.part gets tip numbers in node order
+	# we would just need to exclude data from nodes we don't want
 	return(tips)
 }
 
@@ -534,64 +544,62 @@ make_bladj_tree <- function(tree = NULL, nodenames = NULL, nodeages = NULL){
 
 #' Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations without any data.
 # we can add the option to use data and no constraint tree.
-#' @param constraint The constraint tree: a phylo object or a newick character string, with or without branch lengths.
-#' @param ncalibration The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.
-#' @inheritParams missing_taxa_check
-#' @param mrbayes_output_file A character vector specifying the name of mrBayes run file and outputs (can specify directory too).
+#' @inheritParams make_mrbayes_runfile
 #' @return A phylo tree with branch lengths proportional to time. It will save all mrBayes outputs in the working directory.
 #' @export
-make_mrbayes_tree <- function(constraint = NULL, ncalibration = NULL, missing_taxa = NULL, mrbayes_output_file = "mrbayes_run.nexus"){
-	make_mrbayes_runfile(constraint = constraint, ncalibration = ncalibration, missing_taxa = missing_taxa, mrbayes_output_file = mrbayes_output_file)
-	message("Starting MrBayes run. This might take a while...")
-	new.tree <- run_mrbayes(mrbayes_output_file = mrbayes_output_file)
-	return(new.tree)
+make_mrbayes_tree <- function(constraint = NULL, taxa = NULL, ncalibration = NULL, missing_taxa = NULL, age_distribution = "fixed", root_calibration = FALSE, mrbayes_output_file = "mrbayes_run.nexus"){
+	make_mrbayes_runfile(constraint = constraint, taxa = taxa, ncalibration = ncalibration, age_distribution = age_distribution, root_calibration = root_calibration, missing_taxa = missing_taxa, mrbayes_output_file = mrbayes_output_file)
+	message("Running MrBayes. This might take a while.")
+	run_mrbayes(mrbayes_output_file = mrbayes_output_file)
+	mrbayes_contre <-	tryCatch(ape::read.nexus(paste0(mrbayes_output_file, ".con.tre")), error = function(e) NA)
+	message("Done.")
+	if(length(mrbayes_contre) == 1){
+		if(is.na(mrbayes_contre)){
+			stop("MrBayes output files cannot be found.", "\n", "  Please check the log file for errors.")
+		}
+	}
+	return(mrbayes_contre)
 }
 
-#' Makes a mrBayes run block file with a constraint topology and a set of node calibrations and missing
-#' @inheritParams make_mrbayes_tree
+#' Makes a mrBayes run block file with a constraint topology and a set of node calibrations and missing taxa.
+#' @inheritParams get_mrbayes_node_constraints
+# add #' @param outgroup = NULL argument
+#' @param mrbayes_output_file A character vector specifying the name of mrBayes run file and outputs (can specify directory too).
 #' @return A MrBayes block run file in nexus format.
 #' @export
-make_mrbayes_runfile <- function(constraint = NULL, ncalibration = NULL, missing_taxa = NULL, mrbayes_output_file = "mrbayes_run.nexus"){
+make_mrbayes_runfile <- function(constraint = NULL, taxa = NULL, ncalibration = NULL, missing_taxa = NULL, age_distribution = "fixed", root_calibration = FALSE, mrbayes_output_file = "mrbayes_run.nexus"){
   if(!is.null(constraint)) {
-		constraint <- tree_check(tree = constraint) # add outgroup = TRUE argument
-  	constraint <- phylo_tiplabel_space_to_underscore(constraint)
-		taxa <- constraint$tip.label
-		constraints <- paleotree::createMrBayesConstraints(tree = constraint, partial = FALSE) # this works perfectly
-		calibrations <- get_mrbayes_node_calibrations(constraint = constraint, ncalibration = ncalibration, ncalibration_type = "fixed")
-		og <- tree_get_singleton_outgroup(tree = constraint) #if(outgroup)
+  	# constraint <- phylo_tiplabel_space_to_underscore(constraint)
+		node_constraints <- get_mrbayes_node_constraints(constraint = constraint, taxa = taxa, ncalibration = ncalibration, age_distribution = age_distribution, root_calibration = root_calibration, missing_taxa = missing_taxa)
+		og <- tree_get_singleton_outgroup(tree = constraint) #if(is.null(outgroup))
+	} else {
+		stop("constraint is NULL")
 	}
 	ogroup <- c()
 	if(!is.na(og)) {
 		ogroup <- paste0("outgroup ", og, ";")
 	}
-	missing_taxa <- missing_taxa_check(missing_taxa)
-	if(!is.null(missing_taxa)){
-		if(is.vector(missing_taxa)){
-			taxa <- c(taxa, missing_taxa)
-		}
-	}
-	bayes_data <- c(paste("   Begin DATA; \nDimensions ntax=", length(taxa), "nchar = 1;"),
+	# start mrbayes block:
+	bayes_data <- c(paste("   Begin DATA; \nDimensions ntax=", length(node_constraints$taxa), "nchar = 1;"),
 	"Format datatype = DNA gap=- missing=?;",
 	"Matrix\n",
-	paste(taxa, "?"),
+	paste(node_constraints$taxa, "?"),
 	";")
-
-    bayes_set <- c("   Begin MRBAYES;",
-    	"unlink shape=(all) tratio=(all) statefreq=(all) revmat=(all) pinvar=(all);\n",
-    	constraints[-length(constraints)],
-    	ogroup, "",
-    	constraints[length(constraints)], "",
-    	"prset nodeagepr = calibrated;", "",
-    	calibrations, "\n",
-    	"   set usebeagle = no Beaglesse = no;", "",
-    	paste("prset ", c("brlenspr = clock:birthdeath", "Extinctionpr = Fixed(0)",
-    	"Speciationpr = exponential(1)", "clockvarpr = ibr", "ibrvarpr = exponential(10)"), ";", sep=""),
-    	"mcmcp nruns = 1 nchains = 1 ngen = 50000000 samplefreq = 1000;",
-    	"mcmc;", "",
-    	paste0("sumt filename=", mrbayes_output_file, " burnin = 5000000 contype = halfcompat;\n"),
-    	"end;"
-    	)
-
+  bayes_set <- c("   Begin MRBAYES;",
+  	"unlink shape=(all) tratio=(all) statefreq=(all) revmat=(all) pinvar=(all);\n",
+  	node_constraints$node_constraints[-length(node_constraints$node_constraints)],
+  	ogroup, "",
+  	node_constraints$node_constraints[length(node_constraints$node_constraints)], "",
+  	if(!is.null(ncalibration)) "prset nodeagepr = calibrated;", "",
+  	node_constraints$node_calibrations, "\n",
+  	"   set usebeagle = no Beaglesse = no;", "",
+  	paste("prset ", c("brlenspr = clock:birthdeath", "Extinctionpr = Fixed(0)",
+  	"Speciationpr = exponential(1)", "clockvarpr = ibr", "ibrvarpr = exponential(10)"), ";", sep=""),
+  	"mcmcp nruns = 1 nchains = 1 ngen = 50000000 samplefreq = 1000;",
+  	"mcmc;", "",
+  	paste0("sumt filename=", mrbayes_output_file, " burnin = 5000000 contype = halfcompat;\n"),
+  	"end;"
+  )
 	all <- c(bayes_data, "\n", bayes_set)
 	write(all, mrbayes_output_file)
 	return(all)
@@ -599,19 +607,19 @@ make_mrbayes_runfile <- function(constraint = NULL, ncalibration = NULL, missing
 
 #' Fabricates dates of missing taxa (with no data) on an already dated tree.
 #' @param dated_tree a tree (newick or phylo) with branch lengths proportional to absolute time
+#' @inheritParams  missing_taxa_check
+#' @inheritParams datelife_search
 #' @param adding_criterion Only valid when dating_method = "mrbayes". A character vector to specify how missing_taxa should be added to dated_tree.
 #' 	 Choose one of:
 #' \describe{
 #'	\item{adding_method = "random"}{missing_taxa will be added at random to dated_tree.
 #'	}
-#'	\item{weighting = "taxonomy"}{taxa will be added to dated_tree following a dataframe with taxonomic assignations given in missing_taxa argument. If no dataframe is given, OToLs reference taxonomy will be used.
+#'	\item{adding_method = "taxonomy"}{taxa will be added to dated_tree following a dataframe with taxonomic assignations given in missing_taxa argument. If no dataframe is given, OToLs reference taxonomy will be used.
 #'	}
-#'	\item{weighting = "tree"}{taxa will be added to dated_tree following a tree given in missing_taxa argument. If no tree is given, OToL synthetic tree will be used.
+#'	\item{adding_method = "tree"}{taxa will be added to dated_tree following a tree given in missing_taxa argument. If no tree is given, OToL synthetic tree will be used.
 #'	}
 #' }
-#' @inheritParams make_mrbayes_tree
-#' @inheritParams datelife_search
-#' @inheritParams missing_taxa_check
+#' @inheritParams make_mrbayes_runfile
 #' @return A phylo object
 #' @export
 tree_add_dates <- function(dated_tree = NULL, missing_taxa = NULL, dating_method = "mrbayes", adding_criterion = "random", mrbayes_output_file = "mrbayes_tree_add_dates.nexus"){
@@ -620,7 +628,7 @@ tree_add_dates <- function(dated_tree = NULL, missing_taxa = NULL, dating_method
 	dating_method <- match.arg(dating_method, c("bladj", "mrbayes"))
 	adding_criterion <- tryCatch(match.arg(adding_criterion, c("random", "taxonomy", "tree")), error = function(e) "random")  # if it does not match any it is assigned to NULL
 	if(dating_method == "bladj"){
-		# we need to add a missing_taxa check here. It can only use bladj if missing_taxa is a tree
+		# we need to add a missing_taxa check here. We can only use bladj if missing_taxa is a tree
 		if(inherits(missing_taxa, "phylo")){
 			missing_taxa_phy <- missing_taxa
 		} else {
@@ -730,7 +738,7 @@ missing_taxa_check <- function(missing_taxa = NULL, dated_tree = NULL){
 
 #' Runs MrBayes from R.
 #' @inheritParams make_mrbayes_tree
-#' @return MrBayes outputs.
+#' @return A phylo object with the consensus tree. MrBayes output files are stored in the working directory.
 #' @export
 run_mrbayes <- function(mrbayes_output_file = NULL){
 	file <- mrbayes_output_file
@@ -743,53 +751,231 @@ run_mrbayes <- function(mrbayes_output_file = NULL){
 	} else {
 		system(paste("mrbayes ", file, ".bayes", sep = ""))
 	}
-	tr <- ape::read.nexus(paste(file, ".con.tre", sep = ""))
-	return(tr)
 }
 
-#' Makes a node calibrations block for a MrBayes run file from a list of taxa and ages or from a dated tree. It can follow a constraint tree.
-#' @inheritParams make_mrbayes_tree
-#' @inheritParams tree_fix_brlen
-#' @param mrbayes_calibration_file NULL or a character vector indicating the name of mrbayes calibration block file.
-#' @param ncalibration_type A character string specifying the type of calibration. Only "fixed" is implemented for now.
-#' @return A set of MrBayes calibration commands printed in console as character strings or as a text file with name specified in file.
-#' @export
-# This function is set to match node names with constraints obtained from paleotree::GetMrBayesConstraints
-get_mrbayes_node_calibrations <- function(constraint = NULL, ncalibration = NULL, ncalibration_type = "fixed", 	mrbayes_calibration_file = NULL){
-	if(!is.null(constraint)){
-		phy <- tree_check(tree = constraint)
-	}
-	if(length(ncalibration) == 2){  # if it is a list of descendant tips labels and node ages, from tree_get_node_data function
-		if(!is.list(ncalibration)) {
-			stop("ncalibration must be a newick character string, a phylo object or a list with taxon names and dates")
-		}
-		includes.ncalibration <- lapply(ncalibration$descendant_tips_label, function(x) gsub(" ", "_", x))
-		nages <- ncalibration$node_age
+# #' Makes a node calibrations block for a MrBayes run file from a list of taxa and ages or from a dated tree. It can follow a constraint tree.
+# #' @inheritParams make_mrbayes_tree
+# #' @inheritParams tree_fix_brlen
+# #' @param mrbayes_calibration_file NULL or a character vector indicating the name of mrbayes calibration block file.
+# #' @param age_distribution A character string specifying the type of calibration. Only "fixed" is implemented for now.
+# #' @return A set of MrBayes calibration commands printed in console as character strings or as a text file with name specified in file.
+# #' @export
+# # This function is set to match node names with constraints obtained from paleotree::GetMrBayesConstraints
+# get_mrbayes_node_calibrations <- function(constraint = NULL, ncalibration = NULL, age_distribution = "fixed", 	mrbayes_calibration_file = NULL){
+# 	if(!is.null(constraint)){
+# 		phy <- tree_check(tree = constraint)
+# 	}
+# 	if(length(ncalibration) == 2){  # if it is a list of descendant tips labels and node ages, from tree_get_node_data function
+# 		if(!is.list(ncalibration)) {
+# 			stop("ncalibration must be a newick character string, a phylo object or a list with taxon names and dates")
+# 		}
+# 		includes.ncalibration <- lapply(ncalibration$descendant_tips_label, function(x) gsub(" ", "_", x))
+# 		nages <- ncalibration$node_age
+#
+# 	} else {  # if it is a tree
+# 			ncalibration <- tree_check(tree = ncalibration, dated = TRUE)
+# 	    phy <- phylo_tiplabel_space_to_underscore(phy)
+# 	    ncalibration <- phylo_tiplabel_space_to_underscore(ncalibration)
+# 	    splits.ncalibration <- ape::prop.part(ncalibration)
+# 	    includes.ncalibration <- lapply(splits.ncalibration, function(x) ncalibration$tip.label[x])
+# 			nages <- ape::branching.times(ncalibration)
+# 	}
+# 	nodes <- sapply(includes.ncalibration, function(tax)
+# 				phytools::findMRCA(phy, tax, type="node")) - length(phy$tip.label)
+# 	calibrations <- paste0("calibrate node", nodes, " = ", age_distribution, "(", nages, ");")
+# 	root <- which(nodes == 1)  # tests for the presence of a root calibration, which should be implemented with treeagepr and not with calibrate
+# 	if(length(root) != 0){
+# 		nodes <- nodes[-root]
+# 		nages <- nages[-root]
+# 		calibrations <- c(calibrations, paste0("prset treeagepr = ", age_distribution, "(",
+# 		nages[root], ");"))
+# 	}
+#     if (!is.null(mrbayes_calibration_file)) {
+#         write(calibrations, mrbayes_calibration_file)
+#     }
+#     else {
+#         return(calibrations)
+#     }
+# }
 
-	} else {  # if it is a tree
-			ncalibration <- tree_check(tree = ncalibration, dated = TRUE)
-	    phy <- phylo_tiplabel_space_to_underscore(phy)
-	    ncalibration <- phylo_tiplabel_space_to_underscore(ncalibration)
-	    splits.ncalibration <- ape::prop.part(ncalibration)
-	    includes.ncalibration <- lapply(splits.ncalibration, function(x) ncalibration$tip.label[x])
-			nages <- ape::branching.times(ncalibration)
-	}
-	nodes <- sapply(includes.ncalibration, function(tax)
-				phytools::findMRCA(phy, tax, type="node")) - length(phy$tip.label)
-	calibrations <- paste0("calibrate node", nodes, " = ", ncalibration_type, "(", nages, ");")
-	root <- which(nodes == 1)  # tests for the presence of a root calibration, which should be implemented with treeagepr and not with calibrate
-	if(length(root) != 0){
-		nodes <- nodes[-root]
-		nages <- nages[-root]
-		calibrations <- c(calibrations, paste0("prset treeagepr = ", ncalibration_type, "(",
-		nages[root], ");"))
-	}
-    if (!is.null(mrbayes_calibration_file)) {
-        write(calibrations, mrbayes_calibration_file)
+#' Makes a node constraints and node calibrations block for a MrBayes run file from a list of taxa and ages or from a dated tree
+#' @param constraint The constraint tree: a phylo object or a newick character string, with or without branch lengths.
+#' @param taxa A character vector with taxon names to be included in tree
+#' @inheritParams missing_taxa_check
+#' @param ncalibration The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.
+#' @param age_distribution A character string specifying the type of calibration. Only "fixed" and "uniform" are implemented for now.
+#' \describe{
+#'
+#' 	\item{fixed}{ The age given in ncalibration will be used as fixed age.
+#'	}
+#' 	\item{lognormal}{The age given in ncalibration will be used as mean age.
+#' 		The standard deviation can be provided. # still need to add this option.
+#' 		By default, a 95 CI sd is used.
+#'	}
+#' 	\item{uniform}{The age given in ncalibration will be used as mean age.
+#' 		Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.
+#'	}
+#' }
+#'
+#' @param root_calibration Used to set a calibration at the root or not. Default to FALSE. Only relevant if ncalibration is specified.
+#' @param mrbayes_constraints_file NULL or a character vector indicating the name of mrbayes costraint and/or calibration block file.
+#' @param clockratepr A character vector indicating the clockrateprior to be used.
+#' @return A set of MrBayes constraints and/or calibration commands printed in console as character strings or as a text file specified in mrbayes_constraints_file.
+#' @export
+get_mrbayes_node_constraints <- function(constraint = NULL, taxa = NULL, missing_taxa = NULL, ncalibration = NULL, age_distribution = "fixed", root_calibration = FALSE, mrbayes_constraints_file = NULL, clockratepr = "prset clockratepr = fixed(1);"){
+	stop_flag_cons <- TRUE
+  if(is.list(constraint) & "descendant_tips_label" %in% names(constraint)){
+    stop_flag_cons <- FALSE
+  } else {
+    constraint <- try(tree_check(tree = constraint), silent = TRUE)
+    if(inherits(constraint, "phylo")) {  # if it is a tree and we want all its nodes to be used as calibrations over a constraint tree
+			stop_flag_cons <- FALSE
+      constraint <- tree_get_node_data(tree = constraint, node_data = c("descendant_tips_label"))
+      # constraint <- # if there are problems with setting a constraint at the root node, we should eliminate it. But check it, since it might not affect results
     }
-    else {
-        return(calibrations)
+  }
+  if(stop_flag_cons){
+    stop("constraint must be a newick character string, a phylo object or a list of taxon names. See details.")
+  }
+	# all names with underscores:
+  constraint$descendant_tips_label <- sapply(constraint$descendant_tips_label, gsub, pattern = " ", replacement = "_")
+
+	# make sure that all taxa are included:
+	taxa <- unique(c(taxa, unique(unlist(constraint$descendant_tips_label))))  # if taxa is NULL it will keep names from constraint OK
+	missing_taxa <- missing_taxa_check(missing_taxa)
+	if(!is.null(missing_taxa)){
+		# for now only vector of missing taxa is implemented:
+		if(is.vector(missing_taxa)){
+			taxa <- unique(c(taxa, missing_taxa))
+		}
+	}
+	# remove a constraint including all taxa, which is not allowed by mrbayes
+	# only remove the lines that have all taxa in them or names not included in taxa:
+	taxaINconst <- lapply(constraint$descendant_tips_label, match, taxa) # match names in taxa over constraints
+	# we should think about the following line; maybe we should keep taxon names that are in constraints but not in taxa
+	# I think we already make sure above that we have all taxon names in constraints in taxa vector; it is impossible to obtain the following scenario then:
+	remove <- which(sapply(taxaINconst, anyNA))  # removes constraints with taxon names in constraints but not in taxa
+	remove <- c(remove, which(length(taxa) == sapply(taxaINconst, length)))  # keep constraints that contain less than all taxa
+	if(length(remove) > 0) {
+	  constraint$descendant_tips_label <- constraint$descendant_tips_label[-remove]
+	}
+	# text block:
+  node_constraints <- paste0("constraint node",
+                             names(constraint$descendant_tips_label),
+                             " = ",
+                             sapply(constraint$descendant_tips_label, function(x) paste0(x, collapse = " ")),
+                             ";")
+
+  node_constraints <- c(node_constraints, " ",
+	          				paste0("prset topologypr = constraints(",
+										paste0("node", names(constraint$descendant_tips_label), collapse = ", "),
+										");"))
+  node_constraints <- list(node_constraints = node_constraints)
+
+  if(!is.null(ncalibration)){
+    stop_flag <- TRUE
+    if(is.list(ncalibration) & "node_age" %in% names(ncalibration) &
+       "descendant_tips_label" %in% names(ncalibration)){  # if it is a list of descendant tips labels and node ages, from tree_get_node_data function
+      stop_flag <- FALSE
+    } else {
+      ncalibration <- try(tree_check(tree = ncalibration, dated = TRUE), silent = TRUE)
+      if(inherits(ncalibration, "phylo")) {  # if it is a tree and we want all its nodes to be used as calibrations over a constraint tree
+        ncalibration <- tree_get_node_data(tree = ncalibration, node_data = c("node_age", "descendant_tips_label"))
+        stop_flag <- FALSE
+      }
     }
+    if(stop_flag){
+      stop("ncalibration must be a newick character string or a phylo object with branch lengths, or a list of two elements containing taxon names and ages. See details.")
+    }
+		# all names with underscores too:
+    ncalibration$descendant_tips_label <- sapply(ncalibration$descendant_tips_label, gsub, pattern = " ", replacement = "_")
+    index <- match(constraint$descendant_tips_label, ncalibration$descendant_tips_label)  # this is useful to match ncalibration nodes to constraint nodes, it gets the order of ncalibration nodes
+		index <- index[!is.na(index)]  # removes NA that appear when a constraint has no calibration
+		if(length(index) != length(constraint$descendant_tips_label)){
+      warning("not all calibrations are present as constraints")
+    }
+		age_distribution <- match.arg(arg = age_distribution, choices = c("fixed", "lognormal", "gamma", "uniform"), several.ok = FALSE)
+		if(age_distribution == "fixed"){
+			age_distribution_set <- paste0(age_distribution,
+															"(",
+															ncalibration$node_age[index],  # we make ncalibration nodes match constraint nodes
+															");")
+		}
+		if(age_distribution == "lognormal"){
+			# tried changing to mean_log, but that is not the problem with mrbayes
+			# meanlog <- function(age_mu, age_var){
+			# 	log(age_mu / sqrt(1 + (age_var / age_mu^2)))
+			# }
+			# sdlog <- function(age_mu, age_var){
+			# 	sqrt(log(1 + age_var / age_mu^2))
+			# }
+			# mean_log <- meanlog(ncalibration$node_age[index], age_var = 1)
+			# sd_log <- sdlog(ncalibration$node_age[index], age_var = 1)
+			# exp(mean_log + sd_log^2/2)
+			# sqrt((exp(sd_log^2) - 1) * (exp(2 * mean_log +sd_log^2)))
+			age_distribution_set <- paste0(age_distribution,
+															"(",
+															ncalibration$node_age[index],  # ncalibration nodes match constraint nodes
+															",",
+															ncalibration$node_age[index] * 0.1,  # sd is set to 10% of mean age
+															");")
+		}
+		if(age_distribution == "uniform"){
+			age_distribution_set <- paste0(age_distribution,
+															"(",
+															ncalibration$node_age[index] * 0.9,  # index makes ncalibration nodes match constraint nodes
+															",",
+															ncalibration$node_age[index] * 1.1,
+															");")
+		}
+
+		if(age_distribution == "lognormal_uniform"){
+			my_rlnorm <- function(n, age_mu, age_var){
+        res <- stats::rlnorm(n = n, meanlog = log(age_mu / sqrt(1 + (age_var / age_mu^2))), sdlog = sqrt(log(1 + age_var / age_mu^2)))
+        return(res)
+      }
+			min_max_age <- lapply(ncalibration$node_age[index],
+				function(x) {
+					y <- my_rlnorm(n = 100, age_mu = x, age_var = x * 0.1)
+					return(c(min(y), max(y)))
+				}
+			)
+			age_distribution_set <- paste0(age_distribution,
+															"(",
+															sapply(min_max_age, "[", 1),  # index makes ncalibration nodes match constraint nodes
+															",",
+															sapply(min_max_age, "[", 2),
+															");")
+		}
+
+    node_calibrations <- paste0("calibrate node",
+                                names(constraint$descendant_tips_label),  # we maintain the nodes from constraint
+                                " = ",
+                                age_distribution_set)
+
+		if(is.character(clockratepr)) {
+			node_calibrations <- c(node_calibrations, clockratepr)
+		}
+
+    if(root_calibration){
+      node_calibrations <- c(node_calibrations, paste0("prset treeagepr = ", age_distribution, "(",
+                              max(ncalibration$node_age), ");"))
+    } else if (is.numeric(root_calibration)){
+      node_calibrations <- c(node_calibrations, paste0("prset treeagepr = ", age_distribution, "(",
+                            root_calibration, ");"))
+    }
+    node_constraints <- c(node_constraints, list(node_calibrations = node_calibrations))
+  }
+  # nodes <- sapply(includes.ncalibration, function(tax)
+    # phytools::findMRCA(phy, tax, type="node")) - length(phy$tip.label)
+
+  if (!is.null(mrbayes_constraints_file)) {
+    for (i in 1:length(node_constraints)) {
+      write(node_constraints[[i]], sep = "\n", file = mrbayes_constraints_file, append = TRUE)
+    }
+  }
+	node_constraints$taxa <- taxa
+  return(node_constraints)
 }
 
 #' Identifies the presence of a single lineage outgroup in a phylogeny.

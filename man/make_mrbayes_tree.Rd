@@ -4,11 +4,14 @@
 \alias{make_mrbayes_tree}
 \title{Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations without any data.}
 \usage{
-make_mrbayes_tree(constraint = NULL, ncalibration = NULL,
-  missing_taxa = NULL, mrbayes_output_file = "mrbayes_run.nexus")
+make_mrbayes_tree(constraint = NULL, taxa = NULL, ncalibration = NULL,
+  missing_taxa = NULL, age_distribution = "fixed",
+  root_calibration = FALSE, mrbayes_output_file = "mrbayes_run.nexus")
 }
 \arguments{
 \item{constraint}{The constraint tree: a phylo object or a newick character string, with or without branch lengths.}
+
+\item{taxa}{A character vector with taxon names to be included in tree}
 
 \item{ncalibration}{The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.}
 
@@ -27,6 +30,22 @@ make_mrbayes_tree(constraint = NULL, ncalibration = NULL,
     They will be added at random to the constraint tree.
 }
 }}
+
+\item{age_distribution}{A character string specifying the type of calibration. Only "fixed" and "uniform" are implemented for now.
+\describe{
+
+    \item{fixed}{ The age given in ncalibration will be used as fixed age.
+}
+    \item{lognormal}{The age given in ncalibration will be used as mean age.
+        The standard deviation can be provided. # still need to add this option.
+        By default, a 95 CI sd is used.
+}
+    \item{uniform}{The age given in ncalibration will be used as mean age.
+        Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.
+}
+}}
+
+\item{root_calibration}{Used to set a calibration at the root or not. Default to FALSE. Only relevant if ncalibration is specified.}
 
 \item{mrbayes_output_file}{A character vector specifying the name of mrBayes run file and outputs (can specify directory too).}
 }

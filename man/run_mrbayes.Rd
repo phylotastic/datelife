@@ -10,7 +10,7 @@ run_mrbayes(mrbayes_output_file = NULL)
 \item{mrbayes_output_file}{A character vector specifying the name of mrBayes run file and outputs (can specify directory too).}
 }
 \value{
-MrBayes outputs.
+A phylo object with the consensus tree. MrBayes output files are stored in the working directory.
 }
 \description{
 Runs MrBayes from R.

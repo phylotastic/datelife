@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife.R
 \name{tree_get_node_data}
 \alias{tree_get_node_data}
-\title{Gets ages, node numbers, node names and descendant tips number and label of all nodes from a dated tree}
+\title{Gets node numbers, node names, descendant tip numbers and labels of nodes from a any tree and node ages from dated trees}
 \usage{
 tree_get_node_data(tree = NULL, nodes = NULL, node_data = c("node_number",
   "node_label", "node_age", "descendant_tips_number", "descendant_tips_label"))
@@ -18,5 +18,5 @@ tree_get_node_data(tree = NULL, nodes = NULL, node_data = c("node_number",
 A list
 }
 \description{
-Gets ages, node numbers, node names and descendant tips number and label of all nodes from a dated tree
+Gets node numbers, node names, descendant tip numbers and labels of nodes from a any tree and node ages from dated trees
 }

@@ -4,13 +4,30 @@
 \alias{phylo_generate_uncertainty}
 \title{Function to generate uncertainty in branch lengths using a lognormal}
 \usage{
-phylo_generate_uncertainty(phy, num = 100, age_sd = NULL, age_var = 0.1,
+phylo_generate_uncertainty(phy, size = 100, uncertainty_method = "mrbayes",
+  age_distribution = "uniform", age_sd = NULL, age_var = 0.1,
   age_scale = 0, alpha = 0.025, rescale = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{phy}{The input tree}
 
-\item{num}{A numeric vector indicating the number of samples to be generated.}
+\item{size}{A numeric vector indicating the number of samples to be generated.}
+
+\item{uncertainty_method}{A character vector specifying the method to generate uncertainty. mrbayes is default.}
+
+\item{age_distribution}{A character string specifying the type of calibration. Only "fixed" and "uniform" are implemented for now.
+\describe{
+
+    \item{fixed}{ The age given in ncalibration will be used as fixed age.
+}
+    \item{lognormal}{The age given in ncalibration will be used as mean age.
+        The standard deviation can be provided. # still need to add this option.
+        By default, a 95 CI sd is used.
+}
+    \item{uniform}{The age given in ncalibration will be used as mean age.
+        Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.
+}
+}}
 
 \item{age_sd}{The standard deviation around the age to use for generating the uncertainty. If not a numeric value, var will be used to calculate it.}
 
@@ -29,4 +46,8 @@ A phylo or multiPhylo object with the same topology as phy but different branch 
 }
 \description{
 Function to generate uncertainty in branch lengths using a lognormal
+}
+\details{
+If you want to change the size of sampled trees you do not need to run mrbayes again.
+Just use sample_trees("mrbayes_trees_file_directory", size = new_size) and you will get a multiPhylo object with a new tree sample.
 }
