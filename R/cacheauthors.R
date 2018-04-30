@@ -14,7 +14,7 @@ make_contributor_cache <- function(outputfile = "contributorcache.RData", verbos
     study.id <- strsplit(all.sources$source_list[[i]], '@')[[1]][[1]]
     try(all.studies[[i]] <- rotl::get_study_meta(study.id)) # some studies have no metadata
     doi <- authors <- clade.name <- curator <- study.year <- NULL
-    try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(all.studies[[i]]), "DOI")))
+    try(doi <- gsub('https?://(dx\\.)?doi.org/', '', attr(rotl::get_publication(all.studies[[i]]), "DOI")))
     if(length(doi) == 0){
       missed_doi <- c(missed_doi, study.id)
       warning(paste(study.id, "has no DOI attribute, author names will not be retrieved.")) # where else could we obtain a study's doi???

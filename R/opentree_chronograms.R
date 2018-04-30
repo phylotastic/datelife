@@ -89,7 +89,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 								message("\t", "has tree with branch lengths")
 							}
 							doi <- NULL
-							try(doi <- gsub('http://dx.doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
+							try(doi <- gsub('https?://(dx\\.)?doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
 							authors <- append(authors, NA)
 							if(length(doi) == 0){
 								warning(paste(study.id, "has no DOI attribute, author names will not be retrieved."))
