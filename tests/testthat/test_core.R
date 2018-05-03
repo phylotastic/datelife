@@ -363,6 +363,25 @@ test_that("tree_add_outgroup and tree_get_singleton_outgroup work", {
   expect_true(ape::is.ultrametric(xx))
   expect_true(is.null(xx$root.edge))
 })
+
+test_that("patristic_matrix_to_phylo works", {
+    utils::data(some_ants_datelife_result)
+    xx <- patristic_matrix_to_phylo(patristic_matrix = some_ants_datelife_result[[1]], clustering_method = "upgma")
+    expect_s3_class(xx, "phylo")
+    expect_true(ape::is.ultrametric(xx))
+    xx <- patristic_matrix_to_phylo(patristic_matrix = some_ants_datelife_result[[1]], clustering_method = "nj")
+    expect_true(is.na(xx))
+    #make sure it works with missing data:
+    withNaN <- some_ants_datelife_result[[1]]
+    withNaN[9, 8] <- NaN
+    withNaN[8, 9] <- NaN
+    xx <- patristic_matrix_to_phylo(patristic_matrix = withNaN, clustering_method = "upgma")
+    expect_s3_class(xx, "phylo")
+    expect_true(ape::is.ultrametric(xx))
+    xx <- patristic_matrix_to_phylo(patristic_matrix = withNaN, clustering_method = "nj")  # because NaN, it uses njs, and gives a tree
+    expect_s3_class(xx, "phylo")
+    expect_true(ape::is.ultrametric(xx))
+})
     # test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {
 # 	tax2 <- c("Homo sapiens", "Macaca mulatta", "Melursus ursinus","Canis lupus pallipes", "Panthera pardus", "Panthera tigris", "Herpestes fuscus", "Elephas maximus", "Haliastur indus")
 # 	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"

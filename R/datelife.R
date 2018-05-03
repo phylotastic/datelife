@@ -96,18 +96,18 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 #' @inheritParams make_datelife_query
 # #' @inheritParams make_bold_otol_tree
 # #' @inheritDotParams make_bold_otol_tree
-#' @return A dateLifeResult object (named list of patristic matrices).
+#' @return A datelifeResult object (named list of patristic matrices).
 #' @export
 get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", get_spp_from_taxon = FALSE, verbose = FALSE) {
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
 	input <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
-	tree <- input$phy
-	cleaned_names <- input$cleaned_names
-	datelife_query_length_check(cleaned_names = cleaned_names, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
-  results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = cleaned_names, phy = tree, dating_method = dating_method)
-  datelife_result <- results_list_process(results_list, cleaned_names, partial)
+	# tree <- input$phy
+	# cleaned_names <- input$cleaned_names
+	datelife_query_length_check(cleaned_names = input$cleaned_names, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
+  	results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input$cleaned_names, phy = input$phy, dating_method = dating_method)
+  	datelife_result <- results_list_process(results_list, input$cleaned_names, partial)
 	datelife_result_check(datelife_result, use_tnrs)
 	# if(bold){
 	# 	 bold.OToLTree <- make_bold_otol_tree(input = input, use_tnrs = FALSE, approximate_match = FALSE, marker = marker, verbose = verbose,  ...)
@@ -1266,18 +1266,7 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 			message(cat("\n", "Synthesizing", length(unpadded.matrices), "chronograms with SDM"))
 		}
 		SDM.result <- do.call(ape::SDM, c(unpadded.matrices, weights))[[1]]
-		#agnes in package cluster has UPGMA with missing data; might make sense here
-		# cluster::agnes does the same as hclust and does not accept NAs, we need to change distance method
-		# try(phy <- phangorn::upgma(SDM.result))  # does not work with NAs in SDM.result
-		# e.g. clade thraupidae SDM.results have missing data, and upgma choked
-		# trying njs instead, called from patristic_matrix_to_phylo did not work either:
-		# phy <- patristic_matrix_to_phylo(SDM.result)  # nj or njs do not work if patristic matrices output from sdm. Go back to this later
-		SDM.result <- 0.5*SDM.result  # SDM.result stores distance between taxa. So double of distance to the root.
-		# Using SDM.result without rescaling results in much older tree than using as.dist()
-		DD <- cluster::daisy(x = SDM.result, metric = "euclidean")  # using daisy() to allow NAs in SDM.result.
-		hc <- stats::hclust(DD, method = "average") # original clustering method from phangorn::upgma. Using agnes() instead hclust() to cluster gives the same result.
-		phy <- ape::as.phylo(hc)
-    phy <- phylobase::reorder(phy, "postorder")
+		phy <- patristic_matrix_to_phylo(SDM.result, clustering_method = "upgma")  # nj or njs do not work if patristic matrices output from sdm. Go back to this later
 
 	} else {
 		warning("All input chronograms throw an error when running SDM. This is not your fault.")

@@ -4,10 +4,17 @@
 \alias{patristic_matrix_to_phylo}
 \title{Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruiyTree.}
 \usage{
-patristic_matrix_to_phylo(patristic_matrix)
+patristic_matrix_to_phylo(patristic_matrix, clustering_method = "upgma",
+  fix_negative_brlen = TRUE, fixing_method = 0)
 }
 \arguments{
 \item{patristic_matrix}{A patristic matrix}
+
+\item{clustering_method}{A character vector indicating the method to construct the tree. Options are "nj" for Neighbor-Joining and "upgma" for Unweighted Pair Group Method with Arithmetic Mean.}
+
+\item{fix_negative_brlen}{Boolean indicating weather to fix negative branch lengths in resulting tree or not. Default to TRUE.}
+
+\item{fixing_method}{A character vector specifying the method to fix branch lengths: "bladj", "mrbayes" or a number to be assigned to all branches meeting fixing_criterion}
 }
 \value{
 A rooted phylo object

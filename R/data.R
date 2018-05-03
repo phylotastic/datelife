@@ -170,7 +170,7 @@
 #' Generated with make_treebase_cache()
 "tb.author.results"
 
-#' datelifeSummary of a dateLifeResult object of all Felidae species.
+#' datelifeSummary of a datelifeResult object of all Felidae species.
 #'
 #' @name felid_gdr_phylo_all
 #' @docType data
@@ -189,14 +189,14 @@
 #' felid_gdr_phylo_all <- summarize_datelife_result(felid_gdr, add_taxon_distribution = "summary", summary_format = "phylo_all", datelife_query = felid_spp)
 "felid_gdr_phylo_all"
 
-#' SDM tree of a dateLifeResult object of all Felidae species.
+#' SDM tree of a datelifeResult object of all Felidae species.
 #'
 #' @name felid_sdm
 #' @docType data
 #' @format A list of two elements, containing the summary of a datelifeResult object
 #' \describe{
 #'   \item{phy}{An ultrametric phylo object with the SDM tree.}
-#'   \item{data}{A dateLifeResult object with data used to construct phy}
+#'   \item{data}{A datelifeResult object with data used to construct phy}
 #' }
 #' @source \url{http://opentreeoflife.org}
 #' @keywords otol tree subset chronogram felidae supertree sdm
@@ -204,5 +204,19 @@
 #' Generated with:
 #' felid_spp <- make_datelife_query(input = "felidae", get_spp_from_taxon = TRUE)
 #' felid_gdr <- get_datelife_result(input = felid_spp, get_spp_from_taxon = TRUE)
-#' felid_gdr_phylo_all <- summarize_datelife_result(felid_gdr, add_taxon_distribution = "summary", summary_format = "phylo_all", datelife_query = felid_spp)
+#' felid_sdm <- datelife_result_sdm(felid_gdr)
 "felid_sdm"
+
+#' datelifeResult object of some ants
+#'
+#' @name some_ants_datelife_result
+#' @docType data
+#' @format A list of one element, containing a named patristic matrix
+#' @source \url{http://opentreeoflife.org}
+#' @keywords otol tree subset chronogram ants datelife
+#' @details
+#' Generated with:
+#' some_ants_input <- "(Aulacopone_relicta,(((Myrmecia_gulosa,(Aneuretus_simoni,Dolichoderus_mariae)),((Ectatomma_ruidum,Huberia_brounii),Formica_rufa)),Apomyrma_stygia),Martialis_heureka)Formicidae;"
+#' some_ants_datelife_query <- make_datelife_query(input = some_ants_input)
+#' some_ants_datelife_result <- get_datelife_result(input = some_ants_datelife_query) 
+"some_ants_datelife_result"

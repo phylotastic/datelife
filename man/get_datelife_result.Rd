@@ -30,7 +30,7 @@ get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata",
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
 \value{
-A dateLifeResult object (named list of patristic matrices).
+A datelifeResult object (named list of patristic matrices).
 }
 \description{
 Go from a vector of species, newick string, or phylo object to a list of patristic matrices

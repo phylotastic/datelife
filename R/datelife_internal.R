@@ -52,35 +52,68 @@ datelife_result_MRCA <- function(datelife_result, partial = TRUE) {
 
 #' Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruiyTree.
 #' @param patristic_matrix A patristic matrix
+#' @param clustering_method A character vector indicating the method to construct the tree. Options are "nj" for Neighbor-Joining and "upgma" for Unweighted Pair Group Method with Arithmetic Mean.
+#' @param fix_negative_brlen Boolean indicating weather to fix negative branch lengths in resulting tree or not. Default to TRUE.
+#' @inheritParams tree_fix_brlen
 #' @return A rooted phylo object
 #' @export
-patristic_matrix_to_phylo <- function(patristic_matrix) {
+patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "upgma", fix_negative_brlen = TRUE, fixing_method = 0) {
     if(anyNA(patristic_matrix)) {
   	   patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
     }   # I'm not sure why this is here. It does not get rid of spp with NA or NaNs, then, what does it do?
     if(dim(patristic_matrix)[1] < 2) {
   	   return(NA)
     }
-    tree <- NA
+    phy <- NA
+    clustering_method <- match.arg(arg = clustering_method, choices = c("nj", "upgma"), several.ok = FALSE)
     if(dim(patristic_matrix)[1] == 2) {
-	     tree <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = patristic_matrix[1,2]/2)
+	     phy <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = patristic_matrix[1,2]/2)
     } else {
-        if(anyNA(patristic_matrix)){
-            tree <- ape::njs(patristic_matrix)  # when there are missing values, nj does not work
-        } else {
-            tree <- ape::nj(patristic_matrix)
+        if (clustering_method == "nj"){
+            if(anyNA(patristic_matrix)){
+                phy <- ape::njs(patristic_matrix)  # when there are missing values, nj does not work
+            } else {
+                phy <- ape::nj(patristic_matrix)
+            }
+            # consider giving options to construct tree: nj, upgma, etc.; DONE
+            # njs would be the only option for missing data
+            # see Criscuolo and Gascuel. 2008. Fast NJ-like algorithms to deal with incomplete distance matrices. BMC Bioinformatics 9:166
+            if(ape::Ntip(phy) > 2) {
+                phy <- tryCatch(phangorn::midpoint(phy), error = function(e) NULL)  # this roots the tree on the midpoint
+                # this function above gives an error with patristic matrix from median method on input =
+                # this is when we added upgma option as default upgma implemented with daisy and hclust
+                if (is.null(phy)){
+                    message("unable to root the tree, try another clustering_method, such as upgma")
+                    phy <- NA
+                }
+            }
         }
-	}  # consider giving options to construct tree: nj, upgma, etc.; njs would be the only option for missing data
-    # see Criscuolo and Gascuel. 2008. Fast NJ-like algorithms to deal with incomplete distance matrices. BMC Bioinformatics 9:166
-    if(ape::Ntip(tree) > 2) {
-        tree <- phangorn::midpoint(tree)  # this roots the tree on the midpoint
+    # use upgma implemented with daisy and hclust so we do not have to root with phangorn::midpoint
+        if (clustering_method == "upgma"){
+            phy <- tryCatch(phangorn::upgma(patristic_matrix), error = function (e) NULL)
+            if (is.null(phy)){ # case when we have missing data (NA) on patristic_matrix and regular upgma does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
+                patristic_matrix <- 0.5 * patristic_matrix
+                # We need to convert patristic_matrix in a way, because daisy() is giving younger ages than expected:
+                # why agnes does not work? # cluster::agnes does the same as hclust and does not accept NAs, we need to change find good distance method
+                DD <- cluster::daisy(x = patristic_matrix, metric = "euclidean")
+                hc <- stats::hclust(DD, method = "average") # original clustering method from phangorn::upgma. Using agnes() instead hclust() to cluster gives the same result.
+                phy <- ape::as.phylo(hc)
+                phy <- phylobase::reorder(phy, "postorder")
+            }
+        }
     }
-	if(length(which(tree$edge.length < 0)) > 0) {
-		warning(paste("Converting from patristic distance matrix to a tree resulted in some negative branch lengths; the largest by magnitude was", min(tree$edge.length)))
-        # tree$edge.length[which(tree$edge.length < 0)] <- 0 #sometimes NJ returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
-		tree <- tree_fix_brlen(tree = tree, fixing_criterion = "negative", fixing_method = 0)
-	}
-    return(tree)
+    if(inherits(phy, "phylo")){
+        if(length(which(phy$edge.length < 0)) > 0) {
+            message(paste("Converting from patristic distance matrix to a tree resulted in some negative branch lengths; the largest by magnitude was", min(phy$edge.length)))
+            # phy$edge.length[which(phy$edge.length < 0)] <- 0 #sometimes NJ returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+            if (fix_negative_brlen){
+                phy <- tree_fix_brlen(tree = phy, fixing_criterion = "negative", fixing_method = fixing_method)
+                fixing_method_called <- as.list(environment())$fixing_method
+                message(paste0("  Negative branch lengths were fixed with tree_fix_brlen, fixing_method = ", fixing_method_called))
+            }
+        }
+    }
+    return(phy)
 }
 
 #' Figure out which subset function to use. Used inside: get_datelife_result
@@ -433,135 +466,4 @@ patristic_matrix_unpad <- function(patristic_matrix) {
 		patristic_matrix <- patristic_matrix[-bad.ones, -bad.ones]
 	}
 	return(patristic_matrix)
-}
-
-#' Function to generate uncertainty in branch lengths using a lognormal
-#' @param phy The input tree
-#' @inheritParams sample_trees
-#' @param uncertainty_method A character vector specifying the method to generate uncertainty. mrbayes is default.
-#' @inheritParams make_mrbayes_tree
-#' @param age_sd The standard deviation around the age to use for generating the uncertainty. If not a numeric value, var will be used to calculate it.
-#' @param age_var The variance to calculate age_sd and generate unvcertainty.
-#' @param age_scale How to scale sd by the depth of the node. If 0, same sd for all. If not, older nodes have more uncertainty
-#' @param alpha The significance level on uncertainty to generate. By default 0.025
-#' @param rescale Boolean. If true, observed age will be rescaled each round.
-#' @inheritParams datelife_search
-#' @return A phylo or multiPhylo object with the same topology as phy but different branch lengths
-#' @export
-#' @details If you want to change the size of sampled trees you do not need to run mrbayes again.
-#' Just use sample_trees("mrbayes_trees_file_directory", size = new_size) and you will get a multiPhylo object with a new tree sample.
-phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "mrbayes", age_distribution = "uniform", age_sd = NULL, age_var = 0.1, age_scale = 0, alpha = 0.025, rescale = TRUE, verbose = FALSE) {
-  phylo_check(phy)
-  size <- round(as.numeric(size), digits = 0)
-  uncertainty_method <- match.arg(uncertainty_method, c("mrbayes", "other"))
-
-  if(uncertainty_method == "mrbayes"){
-    phy_name <- gsub("[[:punct:]]", "_", deparse(substitute(phy)))
-    mrbayes_file <- paste0(phy_name, "_mrbayes_uncertainty_", age_distribution, ".nexus")
-    # print(mrbayes_file)
-    phy <- tree_add_outgroup(tree = phy, outgroup = "fake_outgroup")
-    phycontre <- make_mrbayes_tree(constraint = phy, ncalibration = phy, age_distribution = age_distribution, mrbayes_output_file = mrbayes_file)
-    phycontre <- ape::drop.tip(phycontre, "fake_outgroup")
-    phycloud <- sample_trees(trees_file = paste0(mrbayes_file, ".t"), burnin = 0.25, size = size)
-    phycloud <- lapply(phycloud, ape::drop.tip, "fake_outgroup")  # ape::drop.tip does not have a multiPhylo option, so I used lapply
-    if (length(phycloud) == 1){
-      phycloud <- phycloud[[1]]
-      class(phycloud) <- "phylo"
-    } else {
-      class(phycloud) <- "multiPhylo"
-    }
-    return(list(consensus_tree = phycontre, trees = phycloud))
-  }
-  if(uncertainty_method == "other"){
-    phy.new <- phy <- ape::reorder.phylo(phy, "postorder")
-    phy_depths <- max(ape::branching.times(phy)) - phytools::nodeHeights(phy)
-    # phy_depths.new <- phy_depths
-    if(is.numeric(age_sd[1])){ # n is number of random deviates, age_mu is the observed age
-      # my_rlnorm <- function(n, age_mu, variance = age_sd^2){
-      #   res <- stats::rlnorm(n = n, meanlog = log(age_mu / sqrt(1 + (variance / age_mu^2))), sdlog = sqrt(log(1 + variance / age_mu^2)))
-      #   return(res)
-      # }
-      my_rlnorm <- function(n, age_mu){
-        res <- stats::rlnorm(n = n, meanlog = log(age_mu / sqrt(1 + (age_sd^2 / age_mu^2))), sdlog = age_sd)
-        return(res)
-      }
-    } else if(is.numeric(age_var[1])){
-      my_rlnorm <- function(n, age_mu){
-        res <- stats::rlnorm(n = n, meanlog = log(age_mu / sqrt(1 + (age_var / age_mu^2))), sdlog = sqrt(log(1 + age_var / age_mu^2)))
-        return(res)
-      }
-    } else {
-      stop("age_sd or age_var argument must be a numeric vector")
-    }
-    # consider a confidence interval alpha:
-    # if (is.numeric(alpha[1])){
-    #   age_sd <- ((log(sd_amount[1] * ape::branching.times(phy))) - ape::branching.times(phy)) / (-2*log(sqrt(2*pi) * alpha[1]))
-    #   age_sd <- age_sd + age_sd * sd_depth * ape::branching.times(phy)
-    # }
-    nn <- sort(phylo_get_node_numbers(phy))
-    res <- c()
-    while (length(res) < size){
-      if (verbose){
-        message("Uncertainty sample number ", length(res) + 1)
-      }
-      phy_depths.final <- phy_depths.original <- phy_depths
-      tot_age <- my_rlnorm(1, age_mu = ape::branching.times(phy)[as.character(nn[1])]) # variance is determined by the function above, depending on sd or var
-      phy_depths.final[phy$edge == nn[1]] <- tot_age
-      for (i in nn[-1]){
-        max_age <- nn_age <- phy_depths.final[phy$edge[,2] == i, 1]
-        tries <- 0
-        while(max_age - nn_age <= 0 & tries < 50){
-          if(rescale){
-            mu <- ape::branching.times(phy)[as.character(i)] * max_age / phy_depths.original[phy$edge[,2] == i, 1]
-            nn_age <- my_rlnorm(1, age_mu = mu)
-            nn_age <- nn_age * ape::branching.times(phy)[as.character(i)] / mu
-          } else {
-            mu <- ape::branching.times(phy)[as.character(i)]
-            nn_age <- my_rlnorm(1, age_mu = mu)
-          }
-          tries <- tries + 1
-        }
-        phy_depths.final[phy$edge == i] <- nn_age
-      }
-      phy.new$edge.length <- phy_depths.final[,1] - phy_depths.final[,2]
-      if (all(phy.new$edge.length > 0)) {
-        res <- c(res, list(phy.new))
-      }
-    }
-    if (uncertainty_method=="poisson") {
-      # internal.variances <- rep(NA,asd)
-    }
-    if (length(res) == 1){
-      res <- res[[1]]
-      class(res) <- "phylo"
-    } else {
-      class(res) <- "multiPhylo"
-    }
-    return(res)
-  }
-}
-
-#' Function to sample trees from a file containing multiple trees. Usually from a bayesian analysis output trees file.
-#' @param trees_file A character vector indicating the name and directory of file with trees to sample.
-#' @param trees_object An R object containing a list of trees already read intro R from a tree file from a bayesian analysis output.
-#' @param burnin A numeric vector indicating the burnin fraction. It should be a number between 0 and 1. Default to 0.25
-#' @param size A numeric vector indicating the number of samples to be generated.
-#' @return A multiPhylo object with a random sample of trees.
-#' @export
-
-sample_trees <- function(trees_file, trees_object = NULL, burnin = 0.25, size = 100){
-  if(!inherits(trees_object, "list")){
-    phycloud <-	ape::read.nexus(trees_file)
-  } else {
-    phycloud <- trees_object
-  }
-  # use ceiling instead of round to make sure 0 is never among the values to sample:
-  phycloud <- phycloud[sample(ceiling(burnin * length(phycloud)):length(phycloud), size)]  # sample size number of trees from the cloud of trees, after discarding 25% as burnin
-  if (length(phycloud) == 1){
-    phycloud <- phycloud[[1]]
-    class(phycloud) <- "phylo"
-  } else {
-    class(phycloud) <- "multiPhylo"
-  }
-  return(phycloud)
 }

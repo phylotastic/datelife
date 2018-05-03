@@ -3,7 +3,7 @@
 \docType{data}
 \name{felid_gdr_phylo_all}
 \alias{felid_gdr_phylo_all}
-\title{datelifeSummary of a dateLifeResult object of all Felidae species.}
+\title{datelifeSummary of a datelifeResult object of all Felidae species.}
 \format{A list of three elements, containing the summary of a datelifeResult object
 \describe{
   \item{phylo_all}{List of subset chronograms in phylo format}
@@ -17,7 +17,7 @@
 felid_gdr_phylo_all
 }
 \description{
-datelifeSummary of a dateLifeResult object of all Felidae species.
+datelifeSummary of a datelifeResult object of all Felidae species.
 }
 \details{
 Generated with:
