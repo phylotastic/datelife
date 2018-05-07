@@ -12,13 +12,14 @@ r_packages:
   - covr
 after_success:
   - Rscript -e 'library(covr); codecov()'
-before_script:
-  - chmod +x /usr/local/bin/PATHd8.c  # to access this directory
+# before_script:
+#   - sudo chmod +x /usr/local/bin/PATHd8.c  # to access this directory. Does not seem to work.
 before_install:
-  - chmod +x install-dependencies.sh  # to run this .sh
-#   alternatively:
+  # - chmod +x install-dependencies.sh  # to run this .sh
+  brew install pathd8
+#   alternatively, on terminal:
 #       git update-index --add --chmod=+x install-dependencies.sh
 #       git commit -m 'Make install-dependencies.sh executable'
 #       git push
-install:  # to install pathd8
-  ./install-dependencies.sh
+# install:  # to install pathd8
+#   ./install-dependencies.sh
