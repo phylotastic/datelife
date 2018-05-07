@@ -16,11 +16,6 @@
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
 use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1, giveup = 100, verbose = FALSE) {
-	# if(!geiger::is.phylo(phy)){
-	# 	cat("phy argument must be a phylo object.", "\n")
-	# 	stop()
-	# }
-	#	[code above] useful if we decide to allow newick as input, would need to add some newick to phylo code in here... OK! It is now implemented in input_process function:
 	input <- input_process(input = phy, verbose = verbose)
 	calibrations.df <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = update_cache, cache = cache, verbose = verbose)
 	phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.
@@ -36,7 +31,7 @@ use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",  
 	}
 	attempts = 0
 	if(expand != 0) {
-		while(is.null(chronogram) & attempts<giveup) {
+		while(is.null(chronogram) & attempts < giveup) {
 			calibrations.df <- original.calibrations.df
 			calibrations.df$MaxAge <- calibrations.df$MaxAge * ((1+expand)^attempts)
 			calibrations.df$MinAge <- calibrations.df$MinAge * ((1-expand)^attempts)
