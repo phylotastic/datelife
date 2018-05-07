@@ -13,7 +13,7 @@ r_packages:
 after_success:
   - Rscript -e 'library(covr); codecov()'
 before_script:
-  - sudo chmod +x /usr/local/bin/PATHd8.c  # to access this directory
+  - chmod +x /usr/local/bin/PATHd8.c  # to access this directory
 before_install:
   - chmod +x install-dependencies.sh  # to run this .sh
 #   alternatively:
