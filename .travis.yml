@@ -8,17 +8,17 @@ env:
   - R_CHECK_FORCE_SUGGESTS=false
 # r_check-args:
 #   - force_suggests: false
-
 r_packages:
   - covr
-
 after_success:
   - Rscript -e 'library(covr); codecov()'
+before_script:
+  - sudo chmod +x /usr/local/bin/  # to create this directory
 before_install:
-  - chmod +x install-dependencies.sh
+  - chmod +x install-dependencies.sh  # to run this .sh
 #   alternatively:
 #       git update-index --add --chmod=+x install-dependencies.sh
 #       git commit -m 'Make install-dependencies.sh executable'
 #       git push
-install:
+install:  # to install pathd8
   ./install-dependencies.sh
