@@ -16,5 +16,9 @@ after_success:
   - Rscript -e 'library(covr); codecov()'
 before_install:
   - chmod +x install-dependencies.sh
+#   alternatively:
+#       git update-index --add --chmod=+x install-dependencies.sh
+#       git commit -m 'Make install-dependencies.sh executable'
+#       git push
 install:
   ./install-dependencies.sh
