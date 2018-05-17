@@ -89,6 +89,7 @@ test_that("datelife_search returns phylo_all", {
   expect_equal(class(datelife_phylo[[1]]),"phylo")
 })
 
+
 test_that("datelife_search returns phylo_biggest", {
   skip_on_cran()
   utils::data(opentree_chronograms)
