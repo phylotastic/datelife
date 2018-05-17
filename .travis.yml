@@ -20,9 +20,9 @@ after_success:
 before_install:
   # - chmod +x install-dependencies.sh  # to run this .sh
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install bomeara/science/pathd8; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew tap brewsci/bio; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install brewsci/bio/mrbayes; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install bomeara/science/pathd8; fi
 
 #   alternatively, on terminal:
 #       git update-index --add --chmod=+x install-dependencies.sh
