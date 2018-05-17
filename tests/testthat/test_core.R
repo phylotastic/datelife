@@ -176,7 +176,7 @@ test_that("Congruification works", {
 
 test_that("Congruification works with treePL", {
     skip_on_cran()
-    skip_on_os("linux") #b/c no treepl on travis linux
+    skip_on_travis() #b/c no treepl on travis 
     utils::data(opentree_chronograms)
     datelife_result <- get_datelife_result(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE)
     # expect_gte(length(datelife_result), 2)
