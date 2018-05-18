@@ -20,7 +20,7 @@ after_success:
 before_install:
   # - chmod +x install-dependencies.sh  # to run this .sh
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --overwrite gcc          ; fi
+  #  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --overwrite gcc          ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew tap brewsci/bio; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install brewsci/bio/mrbayes; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install bomeara/science/pathd8; fi
