@@ -72,7 +72,9 @@ test_that("Summarize as newick_median works correctly", {
 
 test_that("Processing input newick", {
 	skip_on_cran()
-	skip_on_travis() #b/c no pathd8
+#	skip_on_travis() #b/c no pathd8
+  skip_on_os("linux") #b/c no pathd8 on travis linux
+
   utils::data(opentree_chronograms)
   input.processed <- make_datelife_query(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), use_tnrs=FALSE, approximate_match=TRUE)
   expect_equal(class(input.processed$phy),"phylo")
@@ -92,6 +94,7 @@ test_that("datelife_search returns phylo_all", {
   expect_equal(class(datelife_phylo[[1]]),"phylo")
 })
 
+
 test_that("datelife_search returns phylo_biggest", {
   skip_on_cran()
   utils::data(opentree_chronograms)
@@ -102,7 +105,7 @@ test_that("datelife_search returns phylo_biggest", {
 
 test_that("datelife_search returns phylo_sdm", {
   skip_on_cran()
-  skip_on_travis() #b/c no pathd8
+  skip_on_os("linux") #b/c no pathd8 on travis linux
   utils::data(opentree_chronograms)
 datelife_phylo <- datelife_search(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"), summary_format="phylo_sdm")
 expect_equal(class(datelife_phylo),"phylo")
@@ -128,7 +131,7 @@ expect_gte(length(datelife_phylo), 2)
 
 test_that("get_datelife_result works", {
   skip_on_cran()
-  skip_on_travis() #b/c no pathd8
+  skip_on_os("linux") #b/c no pathd8 on travis linux
   utils::data(opentree_chronograms)
   datelife_result.in <- get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"))
   expect_equal(typeof(datelife_result.in), "list")
@@ -146,7 +149,7 @@ test_that("Processing input string", {
 
 test_that("Making OToL and BOLD tree works", {
   skip_on_cran()
-  skip_on_travis() #b/c no pathd8
+  skip_on_os("linux") #b/c no pathd8 on travis linux
   utils::data(opentree_chronograms)
   phy.pars <- make_bold_otol_tree(input=c("Rhea americana",  "Struthio camelus","Gallus gallus", "Pterocnemia pennata"), marker="COI", otol_version="v2", doML=FALSE)
   phy.ml <- make_bold_otol_tree(input=c("Rhea americana",  "Struthio camelus","Gallus gallus", "Pterocnemia pennata"), marker="COI", otol_version="v2", doML=TRUE)
@@ -158,7 +161,7 @@ test_that("Making OToL and BOLD tree works", {
 
 test_that("patristic_matrix_array_congruifyWorks", {
   skip_on_cran()
-  skip_on_travis() #b/c no pathd8
+  skip_on_os("linux") #b/c no pathd8 on travis linux
 
 
 #TODO add test here
@@ -168,7 +171,7 @@ test_that("patristic_matrix_array_congruifyWorks", {
 
 test_that("Congruification works", {
 	skip_on_cran()
-	skip_on_travis() #b/c no pathd8
+  skip_on_os("linux") #b/c no pathd8 on travis linux
   utils::data(opentree_chronograms)
   datelife_result <- get_datelife_result(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE)
   # expect_gte(length(datelife_result), 2)
@@ -178,7 +181,7 @@ test_that("Congruification works", {
 
 test_that("Congruification works with treePL", {
     skip_on_cran()
-    skip_on_travis() #b/c no treepl
+    skip_on_travis() #b/c no treepl on travis 
     utils::data(opentree_chronograms)
     datelife_result <- get_datelife_result(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE)
     # expect_gte(length(datelife_result), 2)
@@ -187,7 +190,7 @@ test_that("Congruification works with treePL", {
 
 test_that("SDM correctly returns tree", {
   skip_on_cran()
-  skip_on_travis() #b/c no pathd8
+  skip_on_os("linux") #b/c no pathd8 on travis linux
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results_list <- lapply(opentree_chronograms$trees, get_subset_array_dispatch, taxa=taxa, phy=NULL)
@@ -198,7 +201,7 @@ test_that("SDM correctly returns tree", {
 
 test_that("use_all_calibrations actually works", {
   skip_on_cran()
-  skip_on_travis() #b/c no pathd8
+  skip_on_os("linux") #b/c no pathd8 on travis linux
   utils::data(opentree_chronograms)
   results <- use_all_calibrations()
   # expect_true(ape::is.ultrametric(results$phy, tol=0.0000))
@@ -225,7 +228,7 @@ test_that("Processing newick input works", {
 
 test_that("Crop plant newick works", {
   skip_on_cran()
-	skip_on_travis() #b/c no pathd8
+  skip_on_os("linux") #b/c no pathd8 on travis linux
   trees <- datelife_search(input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);", summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, cache = opentree_chronograms, dating_method = "PATHd8")
   expect_s3_class(trees[[1]], "phylo")
 })
@@ -233,7 +236,7 @@ test_that("Crop plant newick works", {
 # to test https://github.com/phylotastic/datelife/issues/11
 test_that("We don't get negative brlen from pathd8", {
   skip_on_cran()
-  skip_on_travis()
+  skip_on_os("linux") #b/c no pathd8 on travis linux
   tree <- datelife_search(input = "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);", summary_format = "phylo_median", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, dating_method = "PATHd8")
   expect_true(min(tree$edge.length)>=0)
 })
@@ -270,7 +273,7 @@ test_that("tree_fix_brlen works", {
     x1 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = 0)
     expect_true(ape::is.ultrametric(x1, option = 2))
     skip_on_cran()
-    skip_on_travis() #bc no mrbayes
+    skip_on_os("linux") #b/c no mrbayes on travis linux
     install.packages("phylocomr", repos = "https://cloud.r-project.org")
     devtools::install_github("ropensci/phylocomr")
     x2 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
@@ -307,7 +310,7 @@ test_that("missing_taxa_check works", {
 
 test_that("generate_uncertainty gives a tree with different branch lengths and sample_trees works", {
   skip_on_cran()
-  skip_on_travis()
+  skip_on_os("linux")
   utils::data(felid_sdm)
   xx <- phylo_generate_uncertainty(felid_sdm$phy, uncertainty_method = "mrbayes", age_distribution = "uniform", size = 10)
   expect_true("consensus_tree" %in% names(xx))

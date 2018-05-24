@@ -1,6 +1,12 @@
 language: r
+os:
+  - linux
+  - osx
 sudo: false
 cache: packages
+script:
+  - R CMD build .
+  - travis_wait 45 R CMD check datelife*tar.gz
 warnings_are_errors: false
 # r_check_args: --as-cran
 env:
@@ -16,8 +22,15 @@ after_success:
 #   - sudo chmod +x /usr/local/bin/PATHd8.c  # to access this directory. Does not seem to work.
 before_install:
   # - chmod +x install-dependencies.sh  # to run this .sh
-  - brew update
-  - brew install pathd8
+
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rm '/usr/local/bin/gfortran' ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew cask uninstall oclint ; fi # based on https://github.com/travis-ci/travis-ci/issues/8826
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
+  #  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --overwrite gcc          ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew tap brewsci/bio; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install brewsci/bio/mrbayes; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install bomeara/science/pathd8; fi
+
 #   alternatively, on terminal:
 #       git update-index --add --chmod=+x install-dependencies.sh
 #       git commit -m 'Make install-dependencies.sh executable'
