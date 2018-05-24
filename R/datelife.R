@@ -334,13 +334,20 @@ tree_fix_brlen <- function(tree = NULL, fixing_criterion = "negative", fixing_me
 		cnode <- phy$edge[index,2]  # we assume that the negative edge length is the one that needs to be changed (but it could be the sister edge that should be shorter)
 		tofix <- cnode-length(phy$tip.label)  # so, we use the node number of the crown node of the negative branch lengths
 		if(fixing_method == "bladj")
-			fixed.phy <- make_bladj_tree(tree = phy, nodenames = phy$node.label[-tofix], nodeages = tree_get_node_data(tree = phy, node_data = "node_age")$node_age[-tofix])
+			fixed.phy <- make_bladj_tree(tree = phy,
+				nodenames = phy$node.label[-tofix],
+				nodeages = tree_get_node_data(tree = phy,
+					node_data = "node_age")$node_age[-tofix])
 		if(fixing_method == "mrbayes") {
-			mrbayes.file <- paste0("phylo", "_brlen_fixed.nexus")  # make "phylo" an argument?
-			ncalibration <- tree_get_node_data(tree = phy, node_data = c("descendant_tips_label", "node_age"))
+			mrbayes.file <- paste0(deparse(substitute(tree)), "_brlen_fixed.nexus")  # make "phylo" an argument?
+			ncalibration <- tree_get_node_data(tree = phy,
+				node_data = c("descendant_tips_label", "node_age"))
 			ncalibration <- lapply(ncalibration, "[", seq(phy$Nnode)[-tofix])
 			phy <- tree_add_outgroup(tree = phy, outgroup = "fake_outgroup")
-			fixed.phy <- make_mrbayes_tree(constraint = phy, ncalibration = ncalibration, mrbayes_output_file = mrbayes.file)
+			fixed.phy <- make_mrbayes_tree(constraint = phy, taxa = phy$tip.label,
+				ncalibration = ncalibration, age_distribution = "fixed",
+				root_calibration = FALSE,
+				missing_taxa = NULL, mrbayes_output_file = mrbayes.file)
 			fixed.phy <- ape::drop.tip(fixed.phy, "fake_outgroup")
 		}
 	}
@@ -891,9 +898,11 @@ get_mrbayes_node_constraints <- function(constraint = NULL, taxa = NULL, missing
     ncalibration$descendant_tips_label <- sapply(ncalibration$descendant_tips_label, gsub, pattern = " ", replacement = "_")
     index <- match(constraint$descendant_tips_label, ncalibration$descendant_tips_label)  # this is useful to match ncalibration nodes to constraint nodes, it gets the order of ncalibration nodes
 		index <- index[!is.na(index)]  # removes NA that appear when a constraint has no calibration
-		if(length(index) != length(constraint$descendant_tips_label)){
-      warning("not all calibrations are present as constraints")
-    }
+		if(length(index) != length(ncalibration$descendant_tips_label)){
+      		warning("not all calibrations are present as constraints")
+    	} else {
+			message("all calibrations are present as constraints")
+		}
 		age_distribution <- match.arg(arg = age_distribution, choices = c("fixed", "lognormal", "gamma", "uniform"), several.ok = FALSE)
 		if(age_distribution == "fixed"){
 			age_distribution_set <- paste0(age_distribution,
@@ -949,7 +958,7 @@ get_mrbayes_node_constraints <- function(constraint = NULL, taxa = NULL, missing
 		}
 
     node_calibrations <- paste0("calibrate node",
-                                names(constraint$descendant_tips_label),  # we maintain the nodes from constraint
+                                names(constraint$descendant_tips_label[index]),  # we maintain the nodes from constraint that have calibrations in index
                                 " = ",
                                 age_distribution_set)
 

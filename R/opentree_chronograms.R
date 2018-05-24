@@ -11,13 +11,13 @@
 #' @inherit save_otol_chronograms return
 #' @export
 
-update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RData", verbose = TRUE){
+update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RData", verbose = TRUE){  #, new_studies_only = TRUE
 	if (save) {
-		cache.update <- save_otol_chronograms(file = file, verbose = verbose)
+		cache_updated <- save_otol_chronograms(file = file, verbose = verbose)
 	} else {
-		cache.update <- get_otol_chronograms(verbose = verbose)
+		cache_updated <- get_otol_chronograms(verbose = verbose)
 	}
-	return(cache.update)
+	return(cache_updated)
 }
 
 #' Check for branch lengths in a tree
@@ -61,12 +61,15 @@ get_otol_chronograms <- function(verbose = FALSE) {
 	dois <- list()
 	tree.count <- 0
 	bad.ones <- c()
+	# utils::opentree_chronograms
+
 	for (study.index in sequence(dim(chronogram.matches)[1])) {
 		if(verbose) {
 			message("Downloading tree(s) from study ", study.index, " of ", dim(chronogram.matches)[1])
 		}
 		for(chrono.index in sequence((chronogram.matches$n_matched_trees[study.index]))) {
 			study.id <- chronogram.matches$study_ids[study.index]
+			# if(study.id %in% opentree_chronograms$studies)  # unlist(opentree_chronograms$studies) if new_studies_only
 	#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
 			new.tree <- NULL
 			tree.id <- strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index]

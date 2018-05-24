@@ -1,3 +1,8 @@
+test_that("update_datelife_cache works", {
+    xx <- update_datelife_cache(save = TRUE, file = "/tmp/opentree_chronograms_tmp.RData", verbose = TRUE)  # this works, opentree_chronograms_tmp is saved in tmp
+    expect_true(all(lapply(opentree_chronograms, length) == length(opentree_chronograms$trees)))  # all elements have the same length
+})  # this test takes around 20 min
+
 test_that("results_list_process works", {
 utils::data(opentree_chronograms)
 taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
