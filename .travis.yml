@@ -6,7 +6,7 @@ sudo: false
 cache: packages
 script:
   - R CMD build .
-  - travis_wait 65 R CMD check datelife*tar.gz
+  - travis_wait 66 R CMD check datelife*tar.gz
 warnings_are_errors: false
 # r_check_args: --as-cran
 env:
