@@ -33,7 +33,8 @@ Imports:
     rotl,
     knitcitations,
     phylobase,
-    treebase
+    treebase,
+    jsonlite
 Suggests:
     testthat,
     paleotree,

@@ -1,4 +1,6 @@
 test_that("update_datelife_cache works", {
+    skip_on_cran()
+	skip_on_travis() #b/c super time consuming
     xx <- update_datelife_cache(save = TRUE, file = "/tmp/opentree_chronograms_tmp.RData", verbose = TRUE)  # this works, opentree_chronograms_tmp is saved in tmp
     expect_true(all(lapply(opentree_chronograms, length) == length(opentree_chronograms$trees)))  # all elements have the same length
 })  # this test takes around 20 min
@@ -181,7 +183,7 @@ test_that("Congruification works", {
 
 test_that("Congruification works with treePL", {
     skip_on_cran()
-    skip_on_travis() #b/c no treepl on travis 
+    skip_on_travis() #b/c no treepl on travis
     utils::data(opentree_chronograms)
     datelife_result <- get_datelife_result(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE)
     # expect_gte(length(datelife_result), 2)

@@ -4,7 +4,7 @@ relevant_age_quantiles <- function(ages, probs = c(0.5,0,0.025,0.975,1) ) {
 }
 
 numeric_vector_to_html_row <- function(x, digits = 2) {
-  return(paste(paste("<td>",round(x,digits),sep = ""),"</td>",sep = "",collapse = ""))
+  return(paste(paste0("<td>", round(x, digits)), "</td>", sep = "", collapse = ""))
 }
 
 patristic_matrix_sample <- function(patristic_matrix_array, uncertainty) {

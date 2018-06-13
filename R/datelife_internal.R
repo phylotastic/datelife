@@ -146,10 +146,10 @@ results_list_process <- function(results_list, taxa = NULL, partial = FALSE) {
 
 	final_matrices <- patristic.matrices[!is.na(patristic.matrices)]
 
-	if(!partial) {
-		final_matrices <- final_matrices[sapply(final_matrices, patristic_matrix_taxa_all_matching, taxa = taxa)]
-	}
 	if(length(final_matrices) > 0) {
+        if(!partial) {
+    		final_matrices <- final_matrices[sapply(final_matrices, patristic_matrix_taxa_all_matching, taxa = taxa)]
+    	}
 		to.delete <- c()
 		for (i in sequence(length(final_matrices))) {
 			if(all(is.na(final_matrices[[i]]))) {
@@ -246,7 +246,7 @@ patristic_matrix_list_to_array <- function(patristic_matrix_list, pad = TRUE) {
   original.size <- length(patristic_matrix_list)
   patristic_matrix_list <- lapply(patristic_matrix_list,patristic_matrix_name_reorder)
   if(length(patristic_matrix_list) < 1) {
-    stop(paste("The patristic matrices you are trying to bind are too few; input was ", original.size, " and current length is ", length(patristic_matrix_list), sep = ""))
+    stop(paste0("The patristic matrices you are trying to bind are too few; input was ", original.size, " and current length is ", length(patristic_matrix_list)))
   }
   standard.rownames <- rownames(patristic_matrix_list[[1]])
   standard.colnames <- colnames(patristic_matrix_list[[1]])
