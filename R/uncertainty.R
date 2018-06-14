@@ -15,28 +15,28 @@
 #' @export
 #' @details If you want to change the size of sampled trees you do not need to run mrbayes again.
 #' Just use sample_trees("mrbayes_trees_file_directory", size = new_size) and you will get a multiPhylo object with a new tree sample.
-phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "mrbayes", age_distribution = "uniform", age_sd = NULL, age_var = 0.1, age_scale = 0, alpha = 0.025, rescale = TRUE, verbose = FALSE) {
+phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "other", age_distribution = "uniform", age_sd = NULL, age_var = 0.1, age_scale = 0, alpha = 0.025, rescale = TRUE, verbose = FALSE) {
   phylo_check(phy)
   size <- round(as.numeric(size), digits = 0)
   uncertainty_method <- match.arg(uncertainty_method, c("mrbayes", "other"))
 
-  if(uncertainty_method == "mrbayes"){
-    phy_name <- gsub("[[:punct:]]", "_", deparse(substitute(phy)))  # gets the name of the phy object to name mrbayes files
-    mrbayes_file <- paste0(phy_name, "_mrbayes_uncertainty_", age_distribution, ".nexus")
-    # print(mrbayes_file)
-    phy <- tree_add_outgroup(tree = phy, outgroup = "fake_outgroup")
-    phycontre <- make_mrbayes_tree(constraint = phy, ncalibration = phy, age_distribution = age_distribution, mrbayes_output_file = mrbayes_file)
-    phycontre <- ape::drop.tip(phycontre, "fake_outgroup")
-    phycloud <- sample_trees(trees_file = paste0(mrbayes_file, ".t"), burnin = 0.25, size = size)
-    phycloud <- lapply(phycloud, ape::drop.tip, "fake_outgroup")  # ape::drop.tip does not have a multiPhylo option, so I used lapply
-    if (length(phycloud) == 1){
-      phycloud <- phycloud[[1]]
-      class(phycloud) <- "phylo"
-    } else {
-      class(phycloud) <- "multiPhylo"
-    }
-    return(list(consensus_tree = phycontre, trees = phycloud))
-  }
+  # if(uncertainty_method == "mrbayes"){
+  #   phy_name <- gsub("[[:punct:]]", "_", deparse(substitute(phy)))  # gets the name of the phy object to name mrbayes files
+  #   mrbayes_file <- paste0(phy_name, "_mrbayes_uncertainty_", age_distribution, ".nexus")
+  #   # print(mrbayes_file)
+  #   phy <- tree_add_outgroup(tree = phy, outgroup = "fake_outgroup")
+  #   phycontre <- make_mrbayes_tree(constraint = phy, ncalibration = phy, age_distribution = age_distribution, mrbayes_output_file = mrbayes_file)
+  #   phycontre <- ape::drop.tip(phycontre, "fake_outgroup")
+  #   phycloud <- sample_trees(trees_file = paste0(mrbayes_file, ".t"), burnin = 0.25, size = size)
+  #   phycloud <- lapply(phycloud, ape::drop.tip, "fake_outgroup")  # ape::drop.tip does not have a multiPhylo option, so I used lapply
+  #   if (length(phycloud) == 1){
+  #     phycloud <- phycloud[[1]]
+  #     class(phycloud) <- "phylo"
+  #   } else {
+  #     class(phycloud) <- "multiPhylo"
+  #   }
+  #   return(list(consensus_tree = phycontre, trees = phycloud))
+  # }
   if(uncertainty_method == "other"){
     phy.new <- phy <- ape::reorder.phylo(phy, "postorder")
     phy_depths <- max(ape::branching.times(phy)) - phytools::nodeHeights(phy)
@@ -93,9 +93,9 @@ phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "mr
         res <- c(res, list(phy.new))
       }
     }
-    if (uncertainty_method=="poisson") {
-      # internal.variances <- rep(NA,asd)
-    }
+    # if (uncertainty_method=="poisson") {
+    #   # internal.variances <- rep(NA,asd)
+    # }
     if (length(res) == 1){
       res <- res[[1]]
       class(res) <- "phylo"
@@ -108,7 +108,7 @@ phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "mr
 
 #' Function to sample trees from a file containing multiple trees. Usually from a bayesian analysis output trees file.
 #' @param trees_file A character vector indicating the name and directory of file with trees to sample.
-#' @param trees_object An R object containing a list of trees already read intro R from a tree file from a bayesian analysis output.
+#' @param trees_object An R object containing a list of trees already read into R from a tree file from a bayesian analysis output.
 #' @param burnin A numeric vector indicating the burnin fraction. It should be a number between 0 and 1. Default to 0.25
 #' @param size A numeric vector indicating the number of samples to be generated.
 #' @return A multiPhylo object with a random sample of trees.
