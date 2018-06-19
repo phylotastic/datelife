@@ -7,7 +7,7 @@
 get_otol_synthetic_tree(input, otol_version = "v2")
 }
 \arguments{
-\item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
+\item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
 
 \item{otol_version}{Version of OToL to use}
 }

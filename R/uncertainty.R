@@ -15,6 +15,21 @@
 #' @export
 #' @details If you want to change the size of sampled trees you do not need to run mrbayes again.
 #' Just use sample_trees("mrbayes_trees_file_directory", size = new_size) and you will get a multiPhylo object with a new tree sample.
+#' @examples
+#' # generate uncertainty over feline species SDM chronogram
+#' # load data
+#' data(felid_sdm)
+#' # by default, generates a sample of 100 trees with var = 0.1
+#' unc <- phylo_generate_uncertainty(felid_sdm$phy)
+#' length(unc)
+#' # ltt plot:
+#' max_age <- max(sapply(unc, ape::branching.times))
+#' ape::ltt.plot(phy = unc[[1]], xlim = c(-max_age, 0), col = "#cce5ff50")
+#' for (i in 2:100){
+#'   ape::ltt.lines(phy = unc[[i]], col = "#cce5ff50")
+#' }
+#' ape::ltt.lines(felid_sdm$phy, col = "red")
+#' title(c("fake uncertainty", "in Felidae SDM chronogram"))
 phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "other", age_distribution = "uniform", age_sd = NULL, age_var = 0.1, age_scale = 0, alpha = 0.025, rescale = TRUE, verbose = FALSE) {
   phylo_check(phy)
   size <- round(as.numeric(size), digits = 0)
@@ -74,7 +89,7 @@ phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "ot
       phy_depths.final[phy$edge == nn[1]] <- tot_age
       for (i in nn[-1]){
         max_age <- nn_age <- phy_depths.final[phy$edge[,2] == i, 1]
-        tries <- 0
+        tries <- 0  # by chance, sampled age can be older than that of parent node; resample 50 times to try to get a younger age.
         while(max_age - nn_age <= 0 & tries < 50){
           if(rescale){
             mu <- ape::branching.times(phy)[as.character(i)] * max_age / phy_depths.original[phy$edge[,2] == i, 1]
@@ -86,7 +101,7 @@ phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "ot
           }
           tries <- tries + 1
         }
-        phy_depths.final[phy$edge == i] <- nn_age
+        phy_depths.final[phy$edge == i] <- nn_age  # if sampled age is younger than parent node age, use it
       }
       phy.new$edge.length <- phy_depths.final[,1] - phy_depths.final[,2]
       if (all(phy.new$edge.length > 0)) {

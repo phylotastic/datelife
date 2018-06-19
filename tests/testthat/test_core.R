@@ -310,7 +310,7 @@ test_that("missing_taxa_check works", {
   expect_true(length(mt4) == 0)
 })
 
-# until we figure out how to mak emrbayes work, this testhat does not work
+# until we figure out how to make mrbayes work, this testhat does not work
 # test_that("generate_uncertainty gives a tree with different branch lengths and sample_trees works", {
 #   skip_on_cran()
 #   skip_on_os("linux")
@@ -393,6 +393,15 @@ test_that("patristic_matrix_to_phylo works", {
     expect_s3_class(xx, "phylo")
     expect_true(ape::is.ultrametric(xx))
 })
+
+test_that("tree_add_dates works", {
+  x <- make_datelife_query("felidae", get_spp_from_taxon = T)
+  y <- tree_add_dates(felid_sdm$phy, missing_taxa = x$cleaned_names)
+})
+
+test_that("get_dated_otol_induced_subtree works"){
+  xx <- get_dated_otol_induced_subtree(input = felid_sdm$phy)
+}
     # test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {
 # 	tax2 <- c("Homo sapiens", "Macaca mulatta", "Melursus ursinus","Canis lupus pallipes", "Panthera pardus", "Panthera tigris", "Herpestes fuscus", "Elephas maximus", "Haliastur indus")
 # 	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"

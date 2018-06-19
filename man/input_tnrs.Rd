@@ -7,7 +7,7 @@
 input_tnrs(input, reference_taxonomy = "otl")
 }
 \arguments{
-\item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
+\item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
 
 \item{reference_taxonomy}{A character vetor specifying the reference taxonomy to use for tnrs.}
 }

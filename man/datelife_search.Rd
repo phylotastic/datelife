@@ -13,7 +13,7 @@ datelife_search(input = c("Rhea americana", "Pterocnemia pennata",
   "summary", "matrix"), get_spp_from_taxon = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
+\item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
 
 \item{summary_format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
 

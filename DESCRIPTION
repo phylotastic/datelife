@@ -34,7 +34,7 @@ Imports:
     knitcitations,
     phylobase,
     treebase,
-    jsonlite
+    httr
 Suggests:
     testthat,
     paleotree,

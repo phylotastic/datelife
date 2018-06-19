@@ -281,11 +281,14 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 #' @details otol dated tree from Stephen Smith's http://141.211.236.35:10999/
 get_dated_otol_induced_subtree <- function(input){
 	input <- datelife_query_check(input)
-	input_ott_match <- rotl::tnrs_match_names(input$cleaned_names)$ott_id
-  	system(paste0('curl -X POST http://141.211.236.35:10999/induced_subtree -H "content-type:application/json" -d \'{"ott_ids":[', paste(input_ott_match, collapse = ", "), "]}'", "> /tmp/otol_induced_subtree.txt"))
-  	otol_induced_subtree <- jsonlite::fromJSON(txt = "/tmp/otol_induced_subtree.txt")
-  	system(paste0('curl -X POST http://141.211.236.35:10999/rename_tree -H "content-type:application/json" -d \'{"newick":"', otol_induced_subtree$newick, "\"}'", "> /tmp/otol_induced_subtree_names.txt"))
-  	otol_induced_subtree_names <- jsonlite::fromJSON(txt = "/tmp/otol_induced_subtree_names.txt")
-  	phy <- ape::read.tree(text = otol_induced_subtree_names$newick)
-  	return(phy)
+	input_ott_match <- as.numeric(rotl::tnrs_match_names(input$cleaned_names)$ott_id)
+  pp <- httr::POST("http://141.211.236.35:10999/induced_subtree",
+						body = list(ott_ids = input_ott_match),
+						encode = "json", timeout(10))
+	pp <- httr::content(pp)
+	rr <- httr::POST("http://141.211.236.35:10999/rename_tree",
+	          body = list(newick = pp$newick),
+	          encode = "json", timeout(10))
+	rr <- httr::content(rr)
+  return(ape::read.tree(text = rr$newick))
 }

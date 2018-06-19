@@ -16,7 +16,7 @@
 
 #' Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.
 #' @aliases datelife
-#' @param input Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.
+#' @param input Target taxa names as a character vector, a newick character string, or a phylo object.
 #' @param summary_format The desired output format for target chronograms (chronograms of target taxa). See details.
 #' @param summary_print A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
 #' @param add_taxon_distribution A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on add_taxon_distribution added to the output.
@@ -79,7 +79,6 @@
 #' 		"Mus musculus"), summary_format="html")
 #' write(ages.html, file="some.bird.trees.html")
 #' system("open some.bird.trees.html")
-
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 		summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", summary_print= c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"),  get_spp_from_taxon = FALSE, verbose = FALSE) {
 			# find a way not to repeat partial and cache arguments, which are used in both get_datelife_result and summarize_datelife_result

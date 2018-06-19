@@ -9,7 +9,7 @@ sample_trees(trees_file, trees_object = NULL, burnin = 0.25, size = 100)
 \arguments{
 \item{trees_file}{A character vector indicating the name and directory of file with trees to sample.}
 
-\item{trees_object}{An R object containing a list of trees already read intro R from a tree file from a bayesian analysis output.}
+\item{trees_object}{An R object containing a list of trees already read into R from a tree file from a bayesian analysis output.}
 
 \item{burnin}{A numeric vector indicating the burnin fraction. It should be a number between 0 and 1. Default to 0.25}
 

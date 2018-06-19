@@ -10,7 +10,7 @@ make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus",
   get_spp_from_taxon = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
+\item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
 
 \item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 

@@ -11,7 +11,7 @@ get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata",
   get_spp_from_taxon = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{input}{Target taxa names in the form of a vector of characters, a newick character string, or a phylo object.}
+\item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
 
 \item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
 
