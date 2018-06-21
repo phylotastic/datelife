@@ -12,7 +12,7 @@ get_mrbayes_node_constraints(constraint = NULL, taxa = NULL,
 \arguments{
 \item{constraint}{The constraint tree: a phylo object or a newick character string, with or without branch lengths.}
 
-\item{taxa}{A character vector with taxon names to be included in tree}
+\item{taxa}{A character vector with taxon names to be mantained in tree}
 
 \item{missing_taxa}{A tree, a data frame or a vector enlisting all missing taxa you want to include.
 \describe{

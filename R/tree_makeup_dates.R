@@ -108,7 +108,7 @@ make_mrbayes_tree <- function(constraint = NULL, taxa = NULL, ncalibration = NUL
 	message("Done.")
 	if(length(mrbayes_contre) == 1){
 		if(is.na(mrbayes_contre)){
-			stop("MrBayes output files cannot be found.", "\n", "  Please check the log file for errors.")
+			stop("MrBayes ran but output files cannot be found.", "\n", "  Please check the log file for errors.")
 		}
 	}
 	return(mrbayes_contre)
@@ -204,7 +204,7 @@ tree_add_dates <- function(dated_tree = NULL, missing_taxa = NULL, dating_method
 	if(dating_method == "mrbayes"){
 		dated_tree <- tree_add_outgroup(tree = dated_tree, outgroup = "an_outgroup")  # we need to add a fake outgroup, otherwise mrbayes won't respect the root age
 		ncalibration <- tree_get_node_data(tree = dated_tree, node_data = c("node_age", "descendant_tips_label"))
-		# we need to be more specific in the way it uses missing taxa next. If it is a tree, then missing_taxa goes as the constrint. If it is a vector, then it just goes as missing taxa. If it is a data frame, we should call pastis.
+		# we need to be more specific in the way it uses missing taxa next. If it is a tree, then missing_taxa goes as the constraint. If it is a vector, then it just goes as missing taxa. If it is a data frame, we should call pastis.
 		new.phy <- make_mrbayes_tree(constraint = dated_tree, ncalibration = ncalibration, missing_taxa = missing_taxa, mrbayes_output_file = mrbayes_output_file)
 		new.phy <- ape::drop.tip(new.phy, "an_outgroup")
 	}
@@ -353,7 +353,7 @@ run_mrbayes <- function(mrbayes_output_file = NULL){
 
 #' Makes a node constraints and node calibrations block for a MrBayes run file from a list of taxa and ages or from a dated tree
 #' @param constraint The constraint tree: a phylo object or a newick character string, with or without branch lengths.
-#' @param taxa A character vector with taxon names to be included in tree
+#' @param taxa A character vector with taxon names to be mantained in tree
 #' @inheritParams missing_taxa_check
 #' @param ncalibration The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.
 #' @param age_distribution A character string specifying the type of calibration. Only "fixed" and "uniform" are implemented for now.
@@ -376,29 +376,32 @@ run_mrbayes <- function(mrbayes_output_file = NULL){
 #' @return A set of MrBayes constraints and/or calibration commands printed in console as character strings or as a text file specified in mrbayes_constraints_file.
 #' @export
 get_mrbayes_node_constraints <- function(constraint = NULL, taxa = NULL, missing_taxa = NULL, ncalibration = NULL, age_distribution = "fixed", root_calibration = FALSE, mrbayes_constraints_file = NULL, clockratepr = "prset clockratepr = fixed(1);"){
-	stop_flag_cons <- TRUE
+	stop_flag <- TRUE
   if(is.list(constraint) & "descendant_tips_label" %in% names(constraint)){
-    stop_flag_cons <- FALSE
+    stop_flag <- FALSE
   } else {
     constraint <- try(tree_check(tree = constraint), silent = TRUE)
     if(inherits(constraint, "phylo")) {  # if it is a tree and we want all its nodes to be used as calibrations over a constraint tree
-			stop_flag_cons <- FALSE
+			stop_flag <- FALSE
       constraint <- tree_get_node_data(tree = constraint, node_data = c("descendant_tips_label"))
       # constraint <- # if there are problems with setting a constraint at the root node, we should eliminate it. But check it, since it might not affect results
     }
   }
-  if(stop_flag_cons){
+  if(stop_flag){
     stop("constraint must be a newick character string, a phylo object or a list of taxon names. See details.")
   }
 	# all names with underscores:
   constraint$descendant_tips_label <- sapply(constraint$descendant_tips_label, gsub, pattern = " ", replacement = "_")
-
+	if(!is.null(taxa)){
+		taxa <- gsub(" ", "_", taxa)
+	}
 	# make sure that all taxa are included:
 	taxa <- unique(c(taxa, unique(unlist(constraint$descendant_tips_label))))  # if taxa is NULL it will keep names from constraint OK
 	missing_taxa <- missing_taxa_check(missing_taxa)
 	if(!is.null(missing_taxa)){
-		# for now only vector of missing taxa is implemented:
+		# for now missing taxa is only accepted as a vector:
 		if(is.vector(missing_taxa)){
+			missing_taxa <- gsub(" ", "_", missing_taxa)
 			taxa <- unique(c(taxa, missing_taxa))
 		}
 	}

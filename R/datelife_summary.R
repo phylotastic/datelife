@@ -278,17 +278,17 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 #' Get an otol induced dated subtree from your set of queried taxa
 #' @inheritParams datelife_search
 #' @export
-#' @details otol dated tree from Stephen Smith's http://141.211.236.35:10999/
+#' @details otol dated tree from Stephen Smith's otol scaling service
 get_dated_otol_induced_subtree <- function(input){
 	input <- datelife_query_check(input)
 	input_ott_match <- as.numeric(rotl::tnrs_match_names(input$cleaned_names)$ott_id)
   pp <- httr::POST("http://141.211.236.35:10999/induced_subtree",
 						body = list(ott_ids = input_ott_match),
-						encode = "json", timeout(10))
+						encode = "json", httr::timeout(10))
 	pp <- httr::content(pp)
 	rr <- httr::POST("http://141.211.236.35:10999/rename_tree",
 	          body = list(newick = pp$newick),
-	          encode = "json", timeout(10))
+	          encode = "json", httr::timeout(10))
 	rr <- httr::content(rr)
   return(ape::read.tree(text = rr$newick))
 }
