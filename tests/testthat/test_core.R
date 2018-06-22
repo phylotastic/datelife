@@ -1,9 +1,9 @@
-test_that("update_datelife_cache works", {
-    skip_on_cran()
-	skip_on_travis() #b/c super time consuming
-    xx <- update_datelife_cache(save = TRUE, file = "/tmp/opentree_chronograms_tmp.RData", verbose = TRUE)  # this works, opentree_chronograms_tmp is saved in tmp
-    expect_true(all(lapply(opentree_chronograms, length) == length(opentree_chronograms$trees)))  # all elements have the same length
-})  # this test takes around 20 min
+# test_that("update_datelife_cache works", {
+#     skip_on_cran()
+# 	  skip_on_travis() #b/c super time consuming
+#     xx <- update_datelife_cache(save = TRUE, file = "/tmp/opentree_chronograms_tmp.RData", verbose = TRUE)  # this works, opentree_chronograms_tmp is saved in tmp
+#     expect_true(all(lapply(opentree_chronograms, length) == length(opentree_chronograms$trees)))  # all elements have the same length
+# })  # this test takes around 20 min
 
 test_that("results_list_process works", {
 utils::data(opentree_chronograms)
@@ -205,7 +205,7 @@ test_that("use_all_calibrations actually works", {
   skip_on_cran()
   skip_on_os("linux") #b/c no pathd8 on travis linux
   utils::data(opentree_chronograms)
-  results <- use_all_calibrations()
+  results <- suppressWarnings(use_all_calibrations())
   # expect_true(ape::is.ultrametric(results$phy, tol=0.0000))
   expect_true(ape::is.ultrametric(results$phy, option = 2))
   expect_s3_class(results$phy, "phylo")
