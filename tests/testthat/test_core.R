@@ -401,18 +401,69 @@ test_that("tree_add_dates works", {
   })
 
 test_that("get_dated_otol_induced_subtree works", {
-    xx <- get_dated_otol_induced_subtree(input = felid_sdm$phy)
-  })
+  xx <- get_dated_otol_induced_subtree(input = felid_sdm$phy)
+})
 
-# getting an error when densitree plotting datelife_result chronograms from the following taxa
-test_that("densitree functionalities work", {
-    taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus gallus")
-    four_birds <- datelife_search(input = taxa)
-    four_birds <- four_birds[sapply(four_birds, function (x) ape::Ntip(x)) > 2]
-    class(four_birds) <- "multiPhylo"  # there are 9 chronograms with more than 2 tips
-    plot_densitree(trees = four_birds)
-  })
-# test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {
+test_that("birds from wikipedia work", {
+  taxa <- c("Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",
+"Amphibia", "Sauropsida", "Bucerotiformes", "Struthioniformes",
+"Forpus passerinus", "Anhimidae", "Deinonychus", "Vorona", "Vegavis",
+"Meleagris gallopavo", "Coenocorypha", "Megapodius", "Podargidae",
+"Melopsittacus undulatus", "Notornis", "Falco sparverius", "Testudines",
+"Animalia", "Acryllium", "Circaetus gallicus", "Leptocardii",
+"Oryx", "Oryx", "Coliiformes", "Caprimulgiformes", "Falconiformes",
+"Parotia", "Carduelis tristis", "Coelurosauria", "Anatalavis",
+"Diomedea exulans", "Burhinus", "Casuariiformes", "Archilochus colubris",
+"Fregata minor", "Bilateria", "Linnaeus", "Steatornithidae",
+"Confuciusornis sanctus", "Cyclostomata", "Cyclostomata", "Sphenisciformes",
+"Chionis", "Dipnoi", "Sophia", "Sophia", "Sophia", "Myxini",
+"Caracara", "Patricia", "Patricia", "Hydrophasianus", "Podicipediformes",
+"Geococcyx californianus", "Anatidae", "Archaeopteryx", "Archaeopteryx",
+"Piciformes", "Accipitriformes", "Spheniscus magellanicus", "Numididae",
+"Sialia sialis", "Jeholornis", "Anseranatidae", "Passeriformes",
+"Jixiangornis", "Aquila chrysaetos", "Hyperoartia", "Microraptor",
+"Apatornis", "Gaviiformes", "Vanellus", "Anseriformes", "Canaria",
+"Diapsida", "Phoenicopteriformes", "Anseranas", "Apterygiformes",
+"Psittacidae", "Ciconiiformes", "Malurus coronatus", "Megapodiidae",
+"Geospiza scandens", "Chauna", "Chauna", "Taeniopygia guttata",
+"Scansoriopterygidae", "Bubulcus ibis", "Talegalla", "Rahonavis",
+"Parus major", "Dinornithiformes", "Dromaeosauridae", "Asio",
+"Myiopsitta monachus", "Synthliboramphus antiquus", "Diomedea immutabilis",
+"Fratercula arctica", "Archelosauria", "Mammalia", "Merganetta",
+"Pteroclidiformes", "Puffinus griseus", "Ascidiacea", "Chondrichthyes",
+"Austinornis lentus", "Coraciiformes", "Pelecaniformes", "Grus grus",
+"Anhima", "Galliformes", "Eulipoa", "Eulipoa", "Coliidae", "Psittaciformes",
+"Agnatha", "Leipoa", "Caprimulgidae", "Aurornis xui", "Xiaotingia",
+"Crax", "Actinopterygii", "Aythya valisineria", "Strigiformes",
+"Cephalochordata", "Trogoniformes", "Passer domesticus", "Paradisaea raggiana",
+"Loriculus", "Turdoides bicolor", "Troodontidae", "Nyctea scandiaca",
+"Reptilia", "Protopteryx", "Accipitridae", "Hongshanornithidae",
+"Charadriiformes", "Alectura", "Alectura", "Crocodilia", "Uria aalge",
+"Alexandra", "Alexandra", "Alexandra", "Archaeopteryx lithographica",
+"Tinamiformes", "Nyctibiidae", "Squamata", "Caprimulgus tristigma",
+"Probosciger aterrimus", "Xiaotingia zhengi", "Apus apus", "Sarcopterygii",
+"Cracidae", "Opisthocomiformes", "Tachyeres", "Chordata", "Anchiornis huxleyi",
+"Aepypodius", "Anapsida", "Rheiformes", "Palaeognathae", "Apodiformes",
+"Theropoda", "Ichthyornis", "Dinosauria", "Actophilornis", "Neognathae",
+"Gruiformes", "Apsaravis", "Pitohui", "Alectura lathami", "Jacana",
+"Deuterostomia", "Macrocephalon", "Gansus", "Pachyptila belcheri",
+"Vertebrata", "Vertebrata", "Vertebrata", "Sapeornis", "Cathartes aura",
+"Gnathostomata", "Gnathostomata", "Maina", "Patagopteryx", "Cuculiformes",
+"Urochordata", "Songlingornithidae", "Plectropterus", "Phalaropus lobatus",
+"Sylvia", "Sylvia", "Irediparra", "Aves", "Phasianidae", "Lepidosauria",
+"Osteichthyes", "Musophagiformes", "Eurypyga helias", "Archosauria",
+"Oxyura vittata", "Columbiformes", "Procellariiformes", "Caprimulgus ruficollis",
+"Galloanserae", "Appendicularia", "Appendicularia", "Appendicularia",
+"Appendicularia", "Appendicularia", "Latina", "Oreortyx", "Odontophoridae",
+"Rhynchortyx", "Phasianinae", "Baso", "Agelastes", "Callipepla",
+"Callipepla", "Callipepla", "Tetraoninae", "Cyrtonyx", "Colinus",
+"Colinus", "Dactylortyx", "Basa", "Perdicinae", "Columbea", "Odontophorus",
+"Odontophorus", "Dendrortyx", "Europaea", "Guttera", "Philortyx",
+"Numida", "Meleagridinae")
+ expect_equal(class(datelife_search(taxa, summary_format="phylo_median")), "phylo")
+})
+
+    # test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {
 # 	tax2 <- c("Homo sapiens", "Macaca mulatta", "Melursus ursinus","Canis lupus pallipes", "Panthera pardus", "Panthera tigris", "Herpestes fuscus", "Elephas maximus", "Haliastur indus")
 # 	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"
 # 	b1 <- make_bold_otol_tree(input = other)
