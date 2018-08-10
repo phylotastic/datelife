@@ -492,10 +492,15 @@ plot_chronogram.phylo <- function (x, type = "phylogram", use.edge.length = TRUE
 #' if densiTree plot function throws an error, it chooses the tree with the most tips as consensus (using get_biggest_phylo)
 #' we found that densiTree errors commonly from failing to do a consensus tree.
 #' @inheritParams get_biggest_phylo
+#' @param include_all Boolean. Default to FALSE, exclude chronograms with only two species. If TRUE, it plots all chronograms.
 #' @export
-plot_densitree <- function(trees){
+plot_densitree <- function(trees, include_all = FALSE){
+  if (!include_all){
+    trees <- trees[sapply(trees, function (x) ape::Ntip(x)) > 2]
+  }
+  class(trees) <- "multiPhylo"
   tryCatch(phangorn::densiTree(x = trees), error = function(e) {
-    most_tips_tree <- get_biggest_phylo(trees = trees)
-    phangorn::densiTree(x = trees, consensus = most_tips_tree)
+    biggest_phylo <- get_biggest_phylo(trees = trees)
+    phangorn::densiTree(x = trees, consensus = biggest_phylo)
   })
 }

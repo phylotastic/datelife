@@ -404,6 +404,14 @@ test_that("get_dated_otol_induced_subtree works", {
   xx <- get_dated_otol_induced_subtree(input = felid_sdm$phy)
 })
 
+# getting an error when phangorn::densitree plotting datelife_result chronograms from the following taxa
+test_that("plot_densitree works", {
+    taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus gallus")
+    four_birds <- datelife_search(input = taxa)
+    plot_densitree(trees = four_birds, include_all = FALSE)
+    plot_densitree(trees = four_birds, include_all = TRUE)
+  })
+
 test_that("birds from wikipedia work", {
   taxa <- c("Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",
 "Amphibia", "Sauropsida", "Bucerotiformes", "Struthioniformes",
