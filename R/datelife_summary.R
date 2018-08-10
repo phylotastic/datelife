@@ -101,20 +101,11 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	if(summary_format.in == "phylo_all") {
 		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
 		return.object <- trees[which(!is.na(trees))]
+		class(return.object) <- "multiPhylo"
 	}
 	if(summary_format.in == "phylo_biggest") {
 		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
-		return.object <- trees[which(sapply(trees, ape::Ntip)==max(sapply(trees, ape::Ntip)))]
-		if(length(return.object)>1) { #there are more than one tree with same number of taxa. Rather than take the first by default, take the one with the most intermediate depth (this assumes that the root node is the same for all trees). An example is the Bininda-Emonds et al mammal tree: there are three trees with min, max, and best guess calibrations. So, take the one in the middle.
-			max.branching.time <- function(x) {
-				return(max(ape::branching.times(x)))
-			}
-			tree.depths <- sapply(return.object, max.branching.time)
-			return.object <- return.object[which.min(abs(tree.depths - stats::median(tree.depths)))]
-		}
-		if(class(return.object)!="phylo") {
-			return.object <- return.object[[1]]
-		}
+		return.object <- get_biggest_phylo(trees)
 	}
 	if(summary_format.in == "html") {
 		out.vector1 <- "<table border='1'><tr><th>MRCA Age (MY)</th><th>Ntax</th><th>Citation</th><th>Newick"
@@ -228,6 +219,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 #' @details
 #' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006. 55(5):740. doi: 10.1080/10635150600969872.
 datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = TRUE) {
+	# add check datelife_result
 	phy <- NA
 	used.studies <- names(datelife_result)
 	unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
@@ -251,7 +243,7 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 			}
 		}
 	}
-	if(length(good.matrix.indices) > 0) {
+	if(length(good.matrix.indices) > 1) {
 		unpadded.matrices <- unpadded.matrices[good.matrix.indices]
 		used.studies <- used.studies[good.matrix.indices]
 		weights = rep(1, length(unpadded.matrices))
@@ -268,8 +260,12 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 		phy <- patristic_matrix_to_phylo(SDM.result, clustering_method = "upgma")  # nj or njs do not work if patristic matrices output from sdm. Go back to this later
 
 	} else {
-		warning("All input chronograms throw an error when running SDM. This is not your fault.")
-		stop("SDM cannot be run with this set of chronograms.")
+		if(length(good.matrix.indices) == length(datelife_result)) {
+			warning("There are not enough input chronograms to run SDM. This is not your fault.")
+		} else {
+			warning("All input chronograms throw an error when running SDM. This is not your fault.")
+		}
+		stop("SDM tree cannot be generated with this set of taxa.")
 	}
 	class(unpadded.matrices) <- "datelifeResult"
 	return(list(phy = phy, data = unpadded.matrices))
@@ -291,4 +287,22 @@ get_dated_otol_induced_subtree <- function(input){
 	          encode = "json", httr::timeout(10))
 	rr <- httr::content(rr)
   return(ape::read.tree(text = rr$newick))
+}
+
+#' Get the tree with the most tips: the biggest tree
+#' @param trees A list of trees as multiPhylo or as a plain list object.
+#' @export
+get_biggest_phylo <- function(trees){
+	return.object <- trees[which(sapply(trees, ape::Ntip) == max(sapply(trees, ape::Ntip)))]
+	if(length(return.object) >1 ) { #there are more than one tree with same number of taxa. Rather than take the first by default, take the one with the most intermediate depth (this assumes that the root node is the same for all trees). An example is the Bininda-Emonds et al mammal tree: there are three trees with min, max, and best guess calibrations. So, take the one in the middle.
+		max.branching.time <- function(x) {
+			return(max(ape::branching.times(x)))
+		}
+		tree.depths <- sapply(return.object, max.branching.time)
+		return.object <- return.object[which.min(abs(tree.depths - stats::median(tree.depths)))]
+	}
+	if(class(return.object) != "phylo") {
+		return.object <- return.object[[1]]
+	}
+	return.object
 }

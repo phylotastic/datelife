@@ -392,19 +392,27 @@ test_that("patristic_matrix_to_phylo works", {
     xx <- patristic_matrix_to_phylo(patristic_matrix = withNaN, clustering_method = "nj")  # because NaN, it uses njs, and gives a tree
     expect_s3_class(xx, "phylo")
     expect_true(ape::is.ultrametric(xx))
-})
+  })
 
 test_that("tree_add_dates works", {
-  skip_on_cran()
-  skip_on_os("linux") #b/c no mrbayes on travis linux
-  y <- tree_add_dates(felid_sdm$phy, missing_taxa = letters[1:5])
-})
+    skip_on_cran()
+    skip_on_os("linux") #b/c no mrbayes on travis linux
+    y <- tree_add_dates(felid_sdm$phy, missing_taxa = letters[1:5])
+  })
 
 test_that("get_dated_otol_induced_subtree works", {
-  xx <- get_dated_otol_induced_subtree(input = felid_sdm$phy)
-})
+    xx <- get_dated_otol_induced_subtree(input = felid_sdm$phy)
+  })
 
-    # test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {
+# getting an error when densitree plotting datelife_result chronograms from the following taxa
+test_that("densitree functionalities work", {
+    taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus gallus")
+    four_birds <- datelife_search(input = taxa)
+    four_birds <- four_birds[sapply(four_birds, function (x) ape::Ntip(x)) > 2]
+    class(four_birds) <- "multiPhylo"  # there are 9 chronograms with more than 2 tips
+    plot_densitree(trees = four_birds)
+  })
+# test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {
 # 	tax2 <- c("Homo sapiens", "Macaca mulatta", "Melursus ursinus","Canis lupus pallipes", "Panthera pardus", "Panthera tigris", "Herpestes fuscus", "Elephas maximus", "Haliastur indus")
 # 	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"
 # 	b1 <- make_bold_otol_tree(input = other)

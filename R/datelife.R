@@ -87,8 +87,19 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 			}
 			datelife_query <- make_datelife_query(input = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
 			datelife_result.here <- get_datelife_result(input = datelife_query, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = FALSE, cache = cache, dating_method = dating_method, verbose = verbose)
+			# print.datelife(datelife_result = datelife_result.here)
+			# datelife <- list(datelife_query = datelife_query, datelife_result = datelife_result.here)
+			# class(datelife) <- "datelife"
+			# return(datelife)
 			return(summarize_datelife_result(datelife_query = datelife_query, datelife_result = datelife_result.here, summary_format = summary_format, partial = partial, update_cache = FALSE, cache = cache, summary_print = summary_print, add_taxon_distribution = add_taxon_distribution, verbose = verbose))
 }
+
+# print.datelife <- function(datelife){
+# 	datelife_result_check(datelife$datelife_result)
+# 	cat("Number and which queried taxa found in chronogram database")
+# 	cat("Number of queried taxa not found")
+# 	cat("Number of chronograms with at least two queried taxa found in database")
+# }
 
 #' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
 #' @inheritParams datelife_search
@@ -105,8 +116,8 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 	# tree <- input$phy
 	# cleaned_names <- input$cleaned_names
 	datelife_query_length_check(cleaned_names = input$cleaned_names, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
-  	results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input$cleaned_names, phy = input$phy, dating_method = dating_method)
-  	datelife_result <- results_list_process(results_list, input$cleaned_names, partial)
+  results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input$cleaned_names, phy = input$phy, dating_method = dating_method)
+  datelife_result <- results_list_process(results_list, input$cleaned_names, partial)
 	datelife_result_check(datelife_result, use_tnrs)
 	# if(bold){
 	# 	 bold.OToLTree <- make_bold_otol_tree(input = input, use_tnrs = FALSE, approximate_match = FALSE, marker = marker, verbose = verbose,  ...)
@@ -240,7 +251,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 						message("Datelife needs at least two input taxon names to perform a search.")
 						message("Setting get_spp_from_taxon = TRUE gets all species from a clade and accepts only one taxon name as input.")
 					}
-					stop("Input is length 1 and not in a good newick format.")
+					stop("Input is length 1. If it is a taxon name, try with higher-taxon search. If it is a newick tree, check its format; it is not readable by DateLife.")
 			}
 		}
 	}
