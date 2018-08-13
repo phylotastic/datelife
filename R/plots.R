@@ -494,13 +494,13 @@ plot_chronogram.phylo <- function (x, type = "phylogram", use.edge.length = TRUE
 #' @inheritParams get_biggest_phylo
 #' @param include_all Boolean. Default to FALSE, exclude chronograms with only two species. If TRUE, it plots all chronograms.
 #' @export
-plot_densitree <- function(trees, include_all = FALSE){
+plot_densitree <- function(trees, include_all = FALSE, ...){
   if (!include_all){
     trees <- trees[sapply(trees, function (x) ape::Ntip(x)) > 2]
   }
   class(trees) <- "multiPhylo"
-  tryCatch(phangorn::densiTree(x = trees), error = function(e) {
+  tryCatch(phangorn::densiTree(x = trees, ...), error = function(e) {
     biggest_phylo <- get_biggest_phylo(trees = trees)
-    phangorn::densiTree(x = trees, consensus = biggest_phylo)
+    phangorn::densiTree(x = trees, consensus = biggest_phylo, ...)
   })
 }

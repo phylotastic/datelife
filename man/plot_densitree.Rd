@@ -6,10 +6,12 @@
 if densiTree plot function throws an error, it chooses the tree with the most tips as consensus (using get_biggest_phylo)
 we found that densiTree errors commonly from failing to do a consensus tree.}
 \usage{
-plot_densitree(trees)
+plot_densitree(trees, include_all = FALSE, ...)
 }
 \arguments{
 \item{trees}{A list of trees as multiPhylo or as a plain list object.}
+
+\item{include_all}{Boolean. Default to FALSE, exclude chronograms with only two species. If TRUE, it plots all chronograms.}
 }
 \description{
 get a densiTree plot from a set of opentree_chronograms
