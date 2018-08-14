@@ -5,8 +5,9 @@
 \title{Makes a node constraints and node calibrations block for a MrBayes run file from a list of taxa and ages or from a dated tree}
 \usage{
 get_mrbayes_node_constraints(constraint = NULL, taxa = NULL,
-  missing_taxa = NULL, ncalibration = NULL, age_distribution = "fixed",
-  root_calibration = FALSE, mrbayes_constraints_file = NULL,
+  missing_taxa = NULL, ncalibration = NULL,
+  age_distribution = "fixed", root_calibration = FALSE,
+  mrbayes_constraints_file = NULL,
   clockratepr = "prset clockratepr = fixed(1);")
 }
 \arguments{

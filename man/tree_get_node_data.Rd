@@ -4,8 +4,9 @@
 \alias{tree_get_node_data}
 \title{Gets node numbers, node names, descendant tip numbers and labels of nodes from a any tree and node ages from dated trees}
 \usage{
-tree_get_node_data(tree = NULL, nodes = NULL, node_data = c("node_number",
-  "node_label", "node_age", "descendant_tips_number", "descendant_tips_label"))
+tree_get_node_data(tree = NULL, nodes = NULL,
+  node_data = c("node_number", "node_label", "node_age",
+  "descendant_tips_number", "descendant_tips_label"))
 }
 \arguments{
 \item{tree}{A tree either as a newick character string or as a phylo object}

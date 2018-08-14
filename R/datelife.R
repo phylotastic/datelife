@@ -26,10 +26,8 @@
 #' @param update_cache default to FALSE
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms).
 #' @param dating_method The method used for tree dating.
-# #' @param bold Logical. If TRUE, use Barcode of Life Data Systems (BOLD)  and Open Tree of Life (OToL) backbone to estimate branch lengths of target taxa using make_bold_otol_tree function.
 #' @param get_spp_from_taxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.
 #' @param verbose Boolean. If TRUE, it gives printed updates to the user.
-# #' @inheritDotParams make_bold_otol_tree otol_version chronogram doML
 #' @export
 #' @details
 #' Available output formats are:
@@ -227,7 +225,7 @@ input_process <- function(input, verbose = FALSE){
 
 #' Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with input_process first.
 #' @inheritParams datelife_search
-#' @inheritDotParams rphylotastic::taxon_get_species
+#' @inheritDotParams rphylotastic::taxon_get_species -taxon
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose = FALSE, ...) {

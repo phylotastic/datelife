@@ -5,10 +5,10 @@
 \title{Use all calibrations from chronograms in a database to date a tree.}
 \usage{
 use_all_calibrations(phy = make_bold_otol_tree(c("Rhea americana",
-  "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE),
-  partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
-  update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1,
-  giveup = 100, verbose = FALSE)
+  "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose =
+  FALSE), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
+  update_cache = FALSE, cache = get("opentree_chronograms"),
+  expand = 0.1, giveup = 100, verbose = FALSE)
 }
 \arguments{
 \item{phy}{A phylo object}

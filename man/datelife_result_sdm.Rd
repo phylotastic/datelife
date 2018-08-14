@@ -4,7 +4,8 @@
 \alias{datelife_result_sdm}
 \title{Function to compute the SDM supertree (Criscuolo et al. 2006) from a datelifeResult object.}
 \usage{
-datelife_result_sdm(datelife_result, weighting = "flat", verbose = TRUE)
+datelife_result_sdm(datelife_result, weighting = "flat",
+  verbose = TRUE)
 }
 \arguments{
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}

@@ -4,9 +4,10 @@
 \alias{phylo_generate_uncertainty}
 \title{Function to generate uncertainty in branch lengths using a lognormal}
 \usage{
-phylo_generate_uncertainty(phy, size = 100, uncertainty_method = "other",
-  age_distribution = "uniform", age_sd = NULL, age_var = 0.1,
-  age_scale = 0, alpha = 0.025, rescale = TRUE, verbose = FALSE)
+phylo_generate_uncertainty(phy, size = 100,
+  uncertainty_method = "other", age_distribution = "uniform",
+  age_sd = NULL, age_var = 0.1, age_scale = 0, alpha = 0.025,
+  rescale = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{phy}{The input tree}

@@ -412,6 +412,10 @@ test_that("plot_densitree works", {
     plot_densitree(trees = four_birds, include_all = TRUE)
   })
 
+test_that("felidae/canidae divergence is accurate", {
+    taxa <- make_datelife_query(input = c("felidae", "canidae"))
+    
+})
 test_that("birds from wikipedia work", {
   taxa <- c("Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",
 "Amphibia", "Sauropsida", "Bucerotiformes", "Struthioniformes",

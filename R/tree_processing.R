@@ -132,7 +132,7 @@ phylo_check <- function(phy = NULL, dated = FALSE){
 
 #' Checks if a tree is a phylo class object otherwise it uses input_process. Additionally it can check if tree is a chronogram with phylo_check
 #' @inheritParams tree_fix_brlen
-#' @inheritDotParams phylo_check
+#' @inheritDotParams phylo_check -phy
 #' @return If tree is correctly formatted, it returns a phylo object
 #' @export
 tree_check <- function(tree = NULL, ...){

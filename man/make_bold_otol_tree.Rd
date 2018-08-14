@@ -6,8 +6,8 @@
 \usage{
 make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus",
   "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE,
-  marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE,
-  get_spp_from_taxon = FALSE, verbose = FALSE)
+  marker = "COI", otol_version = "v2", chronogram = TRUE,
+  doML = FALSE, get_spp_from_taxon = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}

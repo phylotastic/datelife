@@ -21,7 +21,6 @@ make_datelife_query(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{...}{Arguments passed on to \code{rphylotastic::taxon_get_species}
 \describe{
-  \item{taxon}{A taxon to get all species for}
   \item{filters}{A character vector of strings to exclude}
 }}
 }

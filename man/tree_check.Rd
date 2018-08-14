@@ -11,7 +11,6 @@ tree_check(tree = NULL, ...)
 
 \item{...}{Arguments passed on to \code{phylo_check}
 \describe{
-  \item{phy}{A phylo object}
   \item{dated}{Boolean. If TRUE it checks if phylo object has branch lengths and is ultrametric.}
 }}
 }
