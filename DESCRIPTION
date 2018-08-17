@@ -38,7 +38,9 @@ Imports:
 Suggests:
     testthat,
     paleotree,
-    rphylotastic
+    rphylotastic,
+    knitr,
+    rmarkdown
 Enhances:
     phylocomr
 SystemRequirements: mafft, PATHd8
@@ -46,4 +48,6 @@ URL: https://github.com/phylotastic/datelife, http://www.datelife.org
 License: GPL (>=2)
 LazyData: true
 RoxygenNote: 6.1.0
-Encoding: latin1
+# Encoding: latin1
+Encoding: UTF-8
+VignetteBuilder: knitr
