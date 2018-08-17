@@ -9,7 +9,7 @@ summarize_datelife_result(datelife_query = NULL,
   partial = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), summary_print = c("citations",
   "taxa"), add_taxon_distribution = c("none", "summary", "matrix"),
-  verbose = FALSE)
+  verbose = FALSE, criterion = c("trees", "taxa"))
 }
 \arguments{
 \item{datelife_query}{An object output of make_datelife_query function}
@@ -29,6 +29,8 @@ summarize_datelife_result(datelife_query = NULL,
 \item{add_taxon_distribution}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on add_taxon_distribution added to the output.}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+
+\item{criterion}{Whether to get the grove with the most trees or the most taxa}
 }
 \description{
 Summarize a filtered results list from get_datelife_result function in various ways
@@ -57,4 +59,6 @@ phylo_biggest: The chronogram with the most taxa. In the case of a tie, the chro
 html: A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
 
 data_frame A data frame with data on target taxa: mrca, number of taxa, citations of source chronograms and newick string.
+
+For approaches that return a single synthetic tree, it is important that the trees leading to it form a grove (roughly, a sufficiently overlapping set of taxa between trees: see Ané et al. 2005, 10.1007/s00026-009-0017-x). In the rare case of multiple groves, should we take the one with the most trees or the most taxa?
 }

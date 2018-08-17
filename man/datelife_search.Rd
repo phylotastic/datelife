@@ -11,7 +11,7 @@ datelife_search(input = c("Rhea americana", "Pterocnemia pennata",
   cache = get("opentree_chronograms"), dating_method = "PATHd8",
   summary_print = c("citations", "taxa"),
   add_taxon_distribution = c("none", "summary", "matrix"),
-  get_spp_from_taxon = FALSE, verbose = FALSE)
+  get_spp_from_taxon = FALSE, verbose = FALSE, criterion = "taxa")
 }
 \arguments{
 \item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
@@ -37,6 +37,8 @@ datelife_search(input = c("Rhea americana", "Pterocnemia pennata",
 \item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+
+\item{criterion}{Whether to get the grove with the most trees or the most taxa}
 }
 \description{
 Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.
@@ -65,6 +67,8 @@ phylo_biggest: The chronogram with the most taxa. In the case of a tie, the chro
 html: A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
 
 data_frame A data frame with data on target taxa: mrca, number of taxa, citations of source chronograms and newick string.
+
+For approaches that return a single synthetic tree, it is important that the trees leading to it form a grove (roughly, a sufficiently overlapping set of taxa between trees: see Ané et al. 2005, 10.1007/s00026-009-0017-x). In the rare case of multiple groves, should we take the one with the most trees or the most taxa?
 }
 \examples{
 # obtain median ages from a set of source chronograms in newick format:
