@@ -215,7 +215,7 @@ test_that("Crop plant taxa work", {
   utils::data(opentree_chronograms)
   taxa <- c("Zea mays", "Oryza sativa", "Arabidopsis thaliana", "Glycine max", "Medicago sativa", "Solanum lycopersicum")
   results <- datelife_search(input=taxa, summary_format="phylo_all")
-  expect_equal(class(results), "list")
+  expect_equal(class(results), "multiPhylo")
   expect_equal(class(results[[1]]), "phylo")
   expect_gte(length(results), 2)
 })
@@ -414,7 +414,7 @@ test_that("plot_densitree works", {
 
 test_that("felidae/canidae divergence is accurate", {
     taxa <- make_datelife_query(input = c("felidae", "canidae"))
-    
+
 })
 test_that("birds from wikipedia work", {
   taxa <- c("Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",

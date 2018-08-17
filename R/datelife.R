@@ -28,6 +28,7 @@
 #' @param dating_method The method used for tree dating.
 #' @param get_spp_from_taxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.
 #' @param verbose Boolean. If TRUE, it gives printed updates to the user.
+#' @param criterion Whether to get the grove with the most trees or the most taxa
 #' @export
 #' @details
 #' Available output formats are:
@@ -53,6 +54,9 @@
 #' html: A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
 #'
 #' data_frame A data frame with data on target taxa: mrca, number of taxa, citations of source chronograms and newick string.
+#'
+#' For approaches that return a single synthetic tree, it is important that the trees leading to it form a grove (roughly, a sufficiently overlapping set of taxa between trees: see Ané et al. 2005, 10.1007/s00026-009-0017-x). In the rare case of multiple groves, should we take the one with the most trees or the most taxa?
+#'
 #' @examples
 #' # obtain median ages from a set of source chronograms in newick format:
 #' ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
@@ -78,7 +82,7 @@
 #' write(ages.html, file="some.bird.trees.html")
 #' system("open some.bird.trees.html")
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", summary_print= c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"),  get_spp_from_taxon = FALSE, verbose = FALSE) {
+		summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", summary_print= c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"),  get_spp_from_taxon = FALSE, verbose = FALSE, criterion="taxa") {
 			# find a way not to repeat partial and cache arguments, which are used in both get_datelife_result and summarize_datelife_result
 			if(update_cache){
 				cache <- update_datelife_cache(save = TRUE, verbose = verbose)
@@ -89,7 +93,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 			# datelife <- list(datelife_query = datelife_query, datelife_result = datelife_result.here)
 			# class(datelife) <- "datelife"
 			# return(datelife)
-			return(summarize_datelife_result(datelife_query = datelife_query, datelife_result = datelife_result.here, summary_format = summary_format, partial = partial, update_cache = FALSE, cache = cache, summary_print = summary_print, add_taxon_distribution = add_taxon_distribution, verbose = verbose))
+			return(summarize_datelife_result(datelife_query = datelife_query, datelife_result = datelife_result.here, summary_format = summary_format, partial = partial, update_cache = FALSE, cache = cache, summary_print = summary_print, add_taxon_distribution = add_taxon_distribution, verbose = verbose, criterion=criterion))
 }
 
 # print.datelife <- function(datelife){

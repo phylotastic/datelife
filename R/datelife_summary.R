@@ -5,7 +5,7 @@
 #' @inheritParams datelife_search
 #' @inherit datelife_search return details
 #' @export
-summarize_datelife_result <- function(datelife_query = NULL, datelife_result = NULL, summary_format = "phylo_all", partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), summary_print = c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"), verbose = FALSE) {
+summarize_datelife_result <- function(datelife_query = NULL, datelife_result = NULL, summary_format = "phylo_all", partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), summary_print = c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"), verbose = FALSE, criterion=c("trees", "taxa")) {
 		# if(!partial) {
 		# 	datelife_result <- datelife_result[which(!sapply(datelife_result, anyNA))]
 		# } # not necessary cause already filtered in get_datelife_result
@@ -75,13 +75,13 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		return.object <- trees[which(!is.na(trees))]
 	}
 	if(summary_format.in == "newick_sdm") {
-		local.results <- datelife_result_sdm(datelife_result)
+		local.results <- datelife_result_sdm(filter_for_grove(datelife_result, criterion))
 		datelife_result <- local.results$datelife_result
 		tree <- local.results$phy
 		return.object <- ape::write.tree(tree)
 	}
 	if(summary_format.in == "phylo_sdm") {
-		local.results <- datelife_result_sdm(datelife_result)
+		local.results <- datelife_result_sdm(filter_for_grove(datelife_result, criterion))
 		datelife_result <- local.results$datelife_result
 		tree <- local.results$phy
 		return.object <- tree
