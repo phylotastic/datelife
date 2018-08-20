@@ -548,5 +548,5 @@ pick_grove <- function(grove_list, criterion=c("trees", "taxa"), datelife_result
 filter_for_grove <- function(datelife_result, criterion=c("trees", "taxa")) {
   grove_list <- build_grove_list(datelife_result, 2)
   final_trees <- pick_grove(grove_list, criterion, datelife_result)
-  return(datelife_result[final.trees])
+  return(datelife_result[final_trees])
 }
