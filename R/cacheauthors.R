@@ -116,6 +116,7 @@ make_overlap_table <- function(results_table) {
 #' @return data.frame with author last name, author first and other names, and comma delimited URLs for TreeBase studies
 #'
 make_treebase_associations <- function() {
+  verbose=TRUE
   all.studies <- treebase::download_metadata("", by="all")
   unlist(all.studies[[1]])[which(names(unlist(all.studies[[1]])) == "creator")]
   author.results <- data.frame()
@@ -129,7 +130,7 @@ make_treebase_associations <- function() {
     try(year <- unlist(all.studies[[i]])["date"])
 
     if(!is.null(authors)) {
-      author.results <- rbind(author.results, expand.grid(person = authors, url = paste0('<a href="',study.url, '">',year, " ", publisher," TreeBase</a>"), stringsAsFactors = FALSE))
+      author.results <- rbind(author.results, expand.grid(person = authors, url = paste0('<a href="',study.url, '">',year, " ", publisher," (TreeBase)</a>"), stringsAsFactors = FALSE))
     }
     if(verbose) {
       message(paste(i, "of", length(all.studies), "done."))
@@ -181,15 +182,15 @@ make_otol_associations <- function() {
 	for(i in sequence(length(authors))){
 		if(!any(is.na(authors[[i]])) & length(authors[[i]]) > 0){
 			Encoding(authors[[i]]) <- "latin1"
-			authors[[i]] <- iconv(authors[[i]], "latin1", "UTF-8")
+			authors[[i]] <- iconv(gsub("^\\s+|\\s+$", "", authors[[i]]), "latin1", "UTF-8")
 		}
 	}
   studies <- unlist(studies)
-  urls <- paste0("<a href='https://tree.opentreeoflife.org/curator/study/view/", studies, "'>",years[[i]], " ",studyids[[i]], "OToL</a>")
+  urls <- paste0("<a href='https://tree.opentreeoflife.org/curator/study/view/", studies, "'>",years[[i]], " ",studyids[[i]], " (OpenTree)</a>")
   combined.df <- data.frame()
   invert_names <- function(x) {
     x.split <- strsplit(x, " ")[[1]]
-    final.names <- paste0(x.split[length(x.split)], ", ", paste0(x.split[-length(x.split)], collapse=" "))
+    final.names <- paste0(gsub("^\\s+|\\s+$", "", x.split[length(x.split)]), ", ", paste0(x.split[-length(x.split)], collapse=" "))
     return(final.names)
   }
   for (i in sequence(length(authors))) {
