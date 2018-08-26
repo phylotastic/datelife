@@ -24,6 +24,8 @@ after_success:
 # before_script:
 #   - sudo chmod +x /usr/local/bin/PATHd8.c  # to access this directory. Does not seem to work.
 before_install:
+    - cp ../travis-tool.sh ./travis-tool.sh
+    - ./travis-tool.sh install_github phylotastic/rphylotastic
   # - chmod +x install-dependencies.sh  # to run this .sh
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rm '/usr/local/bin/gfortran' ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew cask uninstall oclint ; fi # based on https://github.com/travis-ci/travis-ci/issues/8826
