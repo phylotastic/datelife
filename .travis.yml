@@ -16,13 +16,14 @@ env:
 #   - force_suggests: false
 r_packages:
   - covr
+install:
+  - ./travis-tool.sh install_github phylotastic/rphylotastic
 after_success:
   - Rscript -e 'library(covr); codecov()'
 # before_script:
 #   - sudo chmod +x /usr/local/bin/PATHd8.c  # to access this directory. Does not seem to work.
 before_install:
   # - chmod +x install-dependencies.sh  # to run this .sh
-    - ./travis-tool.sh install_github phylotastic/rphylotastic
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rm '/usr/local/bin/gfortran' ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew cask uninstall oclint ; fi # based on https://github.com/travis-ci/travis-ci/issues/8826
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
