@@ -4,7 +4,10 @@
 \alias{make_all_associations}
 \title{Find all authors and where they have deposited their trees}
 \usage{
-make_all_associations()
+make_all_associations(outputfile = "depositors.rda")
+}
+\arguments{
+\item{outputfile}{Path including file name. NULL to prevent saving}
 }
 \value{
 a data.frame of person and urls

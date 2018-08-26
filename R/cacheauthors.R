@@ -186,7 +186,6 @@ make_otol_associations <- function() {
 		}
 	}
   studies <- unlist(studies)
-  urls <- paste0("<a href='https://tree.opentreeoflife.org/curator/study/view/", studies, "'>",years[[i]], " ",studyids[[i]], " (OpenTree)</a>")
   combined.df <- data.frame()
   invert_names <- function(x) {
     x.split <- strsplit(x, " ")[[1]]
@@ -194,8 +193,9 @@ make_otol_associations <- function() {
     return(final.names)
   }
   for (i in sequence(length(authors))) {
+    urls <- paste0("<a href='https://tree.opentreeoflife.org/curator/study/view/", studyids[[i]], "'>",years[[i]], " ",studyids[[i]], " (OpenTree)</a>")
     for (author.index in sequence(length(authors[[i]]))) {
-      combined.df <- rbind(combined.df, data.frame(person=authors[[i]][author.index], url=urls[i], stringsAsFactors=FALSE))
+      combined.df <- rbind(combined.df, data.frame(person=invert_names(authors[[i]][author.index]), url=urls, stringsAsFactors=FALSE))
     }
   }
   author.lumped <- aggregate(combined.df$url, by=list(author=combined.df$person), FUN=paste, collapse=", ")
@@ -204,14 +204,20 @@ make_otol_associations <- function() {
 }
 
 #' Find all authors and where they have deposited their trees
+#' @param outputfile Path including file name. NULL to prevent saving
 #' @return a data.frame of person and urls
 #' @export
-make_all_associations <- function() {
+make_all_associations <- function(outputfile="depositors.rda") {
   tb <- make_treebase_associations()
   ot <- make_otol_associations()
   combined.df <- rbind(tb, ot)
   author.lumped <- aggregate(combined.df$urls, by=list(author=combined.df$person), FUN=paste, collapse=", ")
   colnames(author.lumped) <- c("person", "urls")
+  author.lumped$person <- gsub("^\\s+|\\s+$", "", author.lumped$person)
   author.lumped <- author.lumped[order(author.lumped$person), ]
-  return(author.lumped)
+  depositors <- author.lumped
+  if (!is.null(outputfile)) {
+    save(depositors, file=outputfile)
+  }
+  return(authors.lumped)
 }
