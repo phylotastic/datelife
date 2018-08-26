@@ -25,7 +25,7 @@ update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RDat
 #' @return nothing
 #' @export
 update_all_cached <- function() {
-	opentree_chronograms <- get_otol_chronograms(verbose = verbose)
+	opentree_chronograms <- get_otol_chronograms()
 	devtools::use_data(opentree_chronograms, overwrite=TRUE)
 	contributor_cache <- make_contributor_cache(outputfile=paste0(tempdir(), '/contributor.rda'))
 	devtools::use_data(contributor_cache, overwrite=TRUE)
