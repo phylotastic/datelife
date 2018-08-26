@@ -17,6 +17,7 @@ env:
 r_packages:
   - covr
 install:
+  - cp ../travis-tool.sh ./travis-tool.sh
   - ./travis-tool.sh install_github phylotastic/rphylotastic
 after_success:
   - Rscript -e 'library(covr); codecov()'
