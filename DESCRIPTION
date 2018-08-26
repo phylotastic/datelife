@@ -34,12 +34,12 @@ Imports:
     knitcitations,
     phylobase,
     treebase,
-    httr
+    httr,
+    devtools
 Suggests:
     testthat,
     paleotree,
     rphylotastic,
-    knitr,
     rmarkdown
 Enhances:
     phylocomr

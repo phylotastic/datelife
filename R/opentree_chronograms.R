@@ -10,7 +10,6 @@
 #' @inherit get_otol_chronograms return
 #' @inherit save_otol_chronograms return
 #' @export
-
 update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RData", verbose = TRUE){  #, new_studies_only = TRUE
 	if (save) {
 		cache_updated <- save_otol_chronograms(file = file, verbose = verbose)
@@ -18,6 +17,22 @@ update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RDat
 		cache_updated <- get_otol_chronograms(verbose = verbose)
 	}
 	return(cache_updated)
+}
+
+#' Update all cached files for the package
+#'
+#' For speed, datelife caches chronograms and other information. Running this (within the checked out version of datelife) will refresh these. Then git commit and git push them back
+#' @return nothing
+#' @export
+update_all_cached <- function() {
+	opentree_chronograms <- get_otol_chronograms(verbose = verbose)
+	devtools::use_data(opentree_chronograms, overwrite=TRUE)
+	contributor_cache <- make_contributor_cache(outputfile=paste0(tempdir(), '/contributor.rda'))
+	devtools::use_data(contributor_cache, overwrite=TRUE)
+	treebase_cache <- make_treebase_cache(outputfile=paste0(tempdir(), '/treebase.rda'))
+	devtools::use_data(treebase_cache, overwrite=TRUE)
+	depositor_cache <- make_all_associations(outputfile=NULL)
+	devtools::use_data(depositor_cache, overwrite=TRUE)
 }
 
 #' Check for branch lengths in a tree

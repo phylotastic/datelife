@@ -11,3 +11,5 @@ For now, requires github version of rotl:
 Then install datelife:
 
 `devtools::install_github("phylotastic/datelife")`
+
+You can update the cached objects with the `update_all_cached()` function

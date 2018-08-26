@@ -4,7 +4,7 @@
 \alias{make_all_associations}
 \title{Find all authors and where they have deposited their trees}
 \usage{
-make_all_associations(outputfile = "depositors.rda")
+make_all_associations(outputfile = "depositorcache.RData")
 }
 \arguments{
 \item{outputfile}{Path including file name. NULL to prevent saving}
