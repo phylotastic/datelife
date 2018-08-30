@@ -407,15 +407,31 @@ test_that("get_dated_otol_induced_subtree works", {
 # getting an error when phangorn::densitree plotting datelife_result chronograms from the following taxa
 test_that("plot_densitree works", {
     taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus gallus")
-    four_birds <- datelife_search(input = taxa)
+    four_birds <- datelife_search(input = taxa, summary_format = "phylo_all")
     plot_densitree(trees = four_birds, include_all = FALSE)
     plot_densitree(trees = four_birds, include_all = TRUE)
+    taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus", "Felis")
+    birds_and_cats <- datelife_search(input = taxa, summary_format = "phylo_all", get_spp_from_taxon = TRUE)
+    plot_densitree(trees = birds_and_cats, include_all = FALSE)
+    plot_densitree(trees = birds_and_cats, include_all = TRUE)
   })
 
 test_that("felidae/canidae divergence is accurate", {
-    taxa <- make_datelife_query(input = c("felidae", "canidae"))
-
+    query <- make_datelife_query(input = c("felidae", "canidae"), get_spp_from_taxon = TRUE)
+    cats_and_dogs_results <- get_datelife_result(input = query)
+    matrix_max_ages <- sapply(cats_and_dogs_results, max)
+    taxa <- c("felidae", "canidae")
+    cats_and_dogs <- datelife_search(input = taxa, get_spp_from_taxon = TRUE,
+      summary_format = "phylo_all")
+    phylo_max_ages <- sapply(cats_and_dogs, function(x) max(ape::branching.times(x)))
+    expect_true(all(names(matrix_max_ages) == names(phylo_max_ages)))
+    # names(matrix_max_ages) <- names(phylo_max_ages)<- NULL
+    ns <- 20
+    format(round(sort(matrix_max_ages/2)), nsmall = ns) == format(round(sort(phylo_max_ages)), nsmall = ns)
+    # ages from our cache range from 54.9 to 70.9, this includes upper limit confidence interval chronograms
+    # timetree study-derived ages range from 39.7 to 67.1. This excludes confidence intervals
 })
+
 test_that("birds from wikipedia work", {
   taxa <- c("Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",
 "Amphibia", "Sauropsida", "Bucerotiformes", "Struthioniformes",
@@ -473,6 +489,24 @@ test_that("birds from wikipedia work", {
 "Odontophorus", "Dendrortyx", "Europaea", "Guttera", "Philortyx",
 "Numida", "Meleagridinae")
  expect_equal(class(datelife_search(taxa, summary_format="phylo_median")), "phylo")
+})
+
+test_that("Mus higher-taxon search is giving species back"){
+  expect_silent(make_datelife_query("Echinus", get_spp_from_taxon = TRUE))
+  expect_silent(make_datelife_query("Mus", get_spp_from_taxon = TRUE))
+  expect_true(length(rphylotastic::taxon_get_species("Mus")) > 0)
+})
+
+test_that("birds and cat sdm is super young"){
+  taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus", "Felis")
+  query <- make_datelife_query(input = taxa, get_spp_from_taxon = TRUE)
+  res <- get_datelife_result(input = query)
+  all_phylo <- summarize_datelife_result(datelife_query= query, datelife_result = res, summary_format = "phylo_all")
+  sdm_phylo <- summarize_datelife_result(datelife_query= query, datelife_result = res, summary_format = "phylo_sdm")
+  mrcas <- summarize_datelife_result(datelife_query= query, datelife_result = res, summary_format = "mrca")
+  names(mrcas) <- NULL
+  max(ape::branching.times(sdm_phylo))
+
 })
 
     # test_that("bold tree from datelife_search is the same as the one from make_bold_otol_tree", {

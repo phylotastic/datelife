@@ -509,20 +509,148 @@
 #       invisible(L)
 # }
 
+#' subset trees for plotting densitree plots and phylo_all plots
+#' @inheritParams get_biggest_phylo
+#' @param include Boolean or numeric vector. Default to TRUE, plot all chronograms
+#' in trees. If FALSE, exclude chronograms with only two tips. If numeric, plot
+#' trees matching the numeric vector.
+subset_trees <- function(trees, include = TRUE){
+  if(is.numeric(include)){  #if it is numeric
+    include <- round(include)
+    include <- sort(unique(include[which(include <= length(trees))]))
+    trees <- trees[include]
+  }
+  if(is.logical(include) & !is.na(include)){
+      if (!include){
+      trees <- trees[sapply(trees, function (x) ape::Ntip(x)) > 2]
+    }
+  }
+  trees
+}
+
 #' get a densiTree plot from a set of opentree_chronograms
 #' if densiTree plot function throws an error, it chooses the tree with the most tips as consensus (using get_biggest_phylo)
 #' we found that densiTree errors commonly from failing to do a consensus tree.
 #' @inheritParams get_biggest_phylo
-#' @param include_all Boolean. Default to FALSE, exclude chronograms with only two species. If TRUE, it plots all chronograms.
+#' @inheritParams subset_trees
 #' @inheritDotParams phangorn::densiTree -x -consensus
 #' @export
-plot_densitree <- function(trees, include_all = FALSE, ...){
-  if (!include_all){
-    trees <- trees[sapply(trees, function (x) ape::Ntip(x)) > 2]
-  }
+plot_densitree <- function(trees, include = TRUE, ...){
+  trees <- subset_trees(trees, include = include)
   class(trees) <- "multiPhylo"
   tryCatch(phangorn::densiTree(x = trees, ...), error = function(e) {
     biggest_phylo <- get_biggest_phylo(trees = trees)
-    phangorn::densiTree(x = trees, consensus = biggest_phylo, ...)
+    try(phangorn::densiTree(x = trees, consensus = biggest_phylo, ...))
   })
+}
+
+#'
+#'
+plot_phylo_height_oma1 <- function(tree){
+  res <- list()
+  tipnum <- ape::Ntip(tree)
+  if(tipnum > 10){
+    hei <- 50 + (30 * tipnum)
+  } else {
+    hei <- 300
+  }
+  res$height <- hei
+  if(tipnum <= 4){
+    oma1 <- 7
+  } else if (tipnum >= 5 & tipnum <= 7){
+    oma1 <- 6
+  } else if (tipnum >= 8 & tipnum <= 10){
+    oma1 <- 5
+  } else {
+    oma1 <- 4
+  }
+  res$oma1 <- oma1
+  return(res)
+
+}
+#' idea to use strwrap from https://stackoverflow.com/questions/7367138/text-wrap-for-plot-titles
+#'
+wrap_title <- function(study_title, max_cex = 1, min_cex = 0.5, title_font = 2
+                           max_height = 0.5*(par("din")[2]-par("pin")[2]),
+                           init_strwrap_width = 50,  min_width = par("pin")[1],
+                           max_width = 0.9*par("din")[1]){
+  wraps <- strwrap(study_title, width = initial_width)
+  sw <- strwidth(s = wraps, units = "inches", cex = max_cex, font = title_font)
+  sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = max_cex, font = title_font)
+  title_cex <- max_cex
+  wi <- initial_width - 1
+  while(sh > max_height) {  #max(sw) < min_width | max(sw) > max_width
+    while(max(sw) < min_width) {
+      wi <- wi + 1
+      wraps <- strwrap(study_title, width = wi)
+      sw <- strwidth(s = wraps, units = "inches", cex = title_cex, font = title_font)
+    }
+    sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = title_cex, font = title_font)
+    if(sh > max_height){ #length(wraps) > n_lines |
+      if(title_cex <= min_cex){
+        break
+      }
+      title_cex <- title_cex - 0.01
+      sw <- strwidth(s = wraps, units = "inches", cex = title_cex, font = title_font)
+      sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = title_cex, font = title_font)
+    } else {
+      break
+    }
+  }
+  return(list(wraps = paste(wraps, collapse = "\n"), title_cex = title_cex, strwrap_width = wi))
+}
+
+#'
+#'
+#' @inheritParams get_biggest_phylo
+#' @inheritParams subset_trees
+#' @export
+plot_phylo_all <- function(trees, include = TRUE, individually = TRUE, ...){
+  utils::data("strat2012", package = "phyloch")
+  trees <- subset_trees(trees, include = include)
+  max.depth <- round(max(sapply(trees, function(x) max(ape::branching.times(x)))) + 5)
+  # max.depth <- round(max(summarize_datelife_result(datelife_result = get.filtered.results(),
+  #             summary_format = "mrca")) + 5)  # in case we used it for a datelife object
+
+  # plot all trees from the same time:
+  trees <- lapply(trees, function(x) {
+   x$root.edge <- max.depth - max(ape::branching.times(x))
+   x
+  })
+  # mai4 <- unique(unlist(sapply(trees, "[", "tip.label")))
+  # ind <- which.max(nchar(mai4))
+  # mai4 <- nchar(mai4[ind]) * 0.1 # use strWidth?
+
+  if(individually){
+    for (i in 1:length(trees)){
+      if (!devAskNewPage() && !names(dev.cur()) %in% c("pdf", "postscript")) {
+          devAskNewPage(TRUE)
+          on.exit(devAskNewPage(FALSE))
+      }
+      # dev.size() is constant; it should only be modified by user
+      # pin size is modified by oma and mai; so, if we modify any of those,
+      # pin will be changed, but since dev.size() is constant, then mai and oma
+      # will be changed to accomodate new pin, weird, I know, but that's how it is.
+      # I could held constant tip label cex below a certain amount of tips, depending on the height of pin
+      # mai4 max value would only depend on the tree with less tips
+      # oma modifies pin size
+      # pini <- par("pin")
+      # h_and_o <- plot_phylo_height_oma1(trees[[i]])
+      # par(xpd = TRUE)
+      # par(oma = c(res$oma1,0,0,0))  #
+      # par(mar = c(2,0,2,mai4))
+      # plot_chronogram.phylo(trees[[i]], cex = 1.5, edge.width = 2, label.offset = 0.5,
+        # x.lim = c(0, max.depth), root.edge = TRUE, root.edge.color = "white")
+
+      ape::plot.phylo(trees[[i]], #cex = 1.5, edge.width = 2,
+        label.offset = 0.5, x.lim = c(0, max.depth), root.edge = TRUE, plot = TRUE)  #, ...
+      # mtext("Time (MYA)", cex = 0.5, side = 1, font = 2, line = h_and_o$oma1 - 1, outer = TRUE)
+
+      }
+      # title(main = study_title, sub = "Time (MYA)", outer = TRUE, cex.main = 1)
+      phyloch::axisGeo(GTS = strat2012, unit = c("period","epoch"),
+        col = c("gray80", "white"), gridcol = c("gray80", "white"), cex = 0.5,
+        gridty = "twodash")
+    }
+  }
 }
