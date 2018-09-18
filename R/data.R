@@ -13,7 +13,7 @@
 # #' }
 # #' @keywords
 # #' @details
-# #' How was this data obtained or generated
+# #' How was the data were obtained or generated
 # "data_object"
 
 #' Chronograms in Open Tree of Life and other related data
@@ -36,82 +36,102 @@
 "opentree_chronograms"
 
 
-#' Authors from studies with chronograms in Open tree of Life
+#' Information on contributors, authors, study ids and clades from studies with chronograms in Open tree of Life
 #'
-#' @name author.pretty
+#' @name contributor_cache
 #' @docType data
-#' @format A character vector with the author names from studies with chronograms that are in OToL
+#' @format A list of five data sets
+#' \describe{
+#'   \item{author.pretty}{A character vector with the author names from studies with chronograms that are in OToL}
+#'   \item{author.results}{A dataframe with three variables: authors, study ids and clades}
+#'   \item{curator.pretty}{A character vector with the names of curators of chronograms that are in OToL}
+#'   \item{curator.results}{A dataframe with three variables: curators, study ids and clades}
+#'   \item{missed_doi}{A character vector with study ids whose doi could not be retrieved}
+#' }
 #' @source \url{http://opentreeoflife.org}
 #' @keywords otol study studies tree chronogram author
 #' @details
+#'
 #' Generated with make_contributor_cache()
-"author.pretty"
+"contributor_cache"
+
+# #' Authors from studies with chronograms in Open tree of Life
+# #'
+# #' @name author.pretty
+# #' @docType data
+# #' @format A character vector with the author names from studies with chronograms that are in OToL
+# #' @source \url{http://opentreeoflife.org}
+# #' @keywords otol study studies tree chronogram author
+# #' @details
+# #'
+# #' Generated with make_contributor_cache()
+# "author.pretty"
 
 
-#' Information on authors, study ids and clades from chronograms in Open Tree of Life
-#'
-#'
-#' @name author.results
-#' @docType data
-#' @format A dataframe with three variables
-#' \describe{
-#'   \item{person}{Character vector of authors of the included studies}
-#'   \item{study}{Character vector of study identifiers}
-#'   \item{clade}{Character vector with names of clades with chronograms from the included studies}
-#' }
-#' @source \url{http://opentreeoflife.org}
-#' @keywords otol study studies tree chronogram id author clade
-#' @details
-#' Generated with make_contributor_cache()
-"author.results"
+# #' Information on authors, study ids and clades from chronograms in Open Tree of Life
+# #'
+# #'
+# #' @name author.results
+# #' @docType data
+# #' @format A dataframe with three variables
+# #' \describe{
+# #'   \item{person}{Character vector of authors of the included studies}
+# #'   \item{study}{Character vector of study identifiers}
+# #'   \item{clade}{Character vector with names of clades with chronograms from the included studies}
+# #' }
+# #' @source \url{http://opentreeoflife.org}
+# #' @keywords otol study studies tree chronogram id author clade
+# #' @details
+# #' Generated with make_contributor_cache()
+# "author.results"
 
 
-#' Curators fof chronograms in Open tree of Life
-#'
-#' Curators are the ones uploading the chronograms to Open Tree of Life
-#'
-#' @name curator.pretty
-#' @docType data
-#' @format A character vector with the names of curators of chronograms that are in OToL
-#' @source \url{http://opentreeoflife.org}
-#' @keywords otol study studies tree chronogram curator
-#' @details
-#' Generated with make_contributor_cache()
-"curator.pretty"
+# #' Curators fof chronograms in Open tree of Life
+# #'
+# #' Curators are the ones uploading the chronograms to Open Tree of Life
+# #'
+# #' @name curator.pretty
+# #' @docType data
+# #' @format A character vector with the names of curators of chronograms that are in OToL
+# #' @source \url{http://opentreeoflife.org}
+# #' @keywords otol study studies tree chronogram curator
+# #' @details
+# #' Generated with make_contributor_cache()
+# "curator.pretty"
 
-#' Information on curators, study ids and clades from chronograms in Open Tree of Life
-#'
-#' Curators are the ones uploading the chronograms to Open Tree of Life
-#'
-#' @name curator.results
-#' @docType data
-#' @format A dataframe with three variables
-#' \describe{
-#'   \item{person}{Character vector of curators of the included studies}
-#'   \item{study}{Character vector of study identifiers}
-#'   \item{clade}{Character vector with names of clades with chronograms from the included studies}
-#' }
-#' @source \url{http://opentreeoflife.org}
-#' @keywords otol study studies tree chronogram curator id clade
-#' @details
-#' Generated with make_contributor_cache()
-"curator.results"
+# #' Information on curators, study ids and clades from chronograms in Open Tree of Life
+# #'
+# #' Curators are the ones uploading the chronograms to Open Tree of Life
+# #'
+# #' @name curator.results
+# #' @docType data
+# #' @format A dataframe with three variables
+# #' \describe{
+# #'   \item{person}{Character vector of curators of the included studies}
+# #'   \item{study}{Character vector of study identifiers}
+# #'   \item{clade}{Character vector with names of clades with chronograms from the included studies}
+# #' }
+# #' @source \url{http://opentreeoflife.org}
+# #' @keywords otol study studies tree chronogram curator id clade
+# #' @details
+# #' Generated with make_contributor_cache()
+# "curator.results"
 
 
-#' Study ids of chronograms in Open Tree of Life not included in authors.
-#'
-#' There are different reasons why a doi cannot be found online, so author data
-#' cannot be retrieved for that particular study.
-#' This vector contains all the studies with chrongrams in OToL whose information
-#' was not included automatically in author.pretty and author.results
-#' @name missed_doi
-#' @docType data
-#' @format A character vector with study ids
-#' @source \url{http://opentreeoflife.org}
-#' @keywords otol study studies tree chronogram id
-#' @details
-#' Generated with make_contributor_cache()
-"missed_doi"
+# #' Study ids of chronograms in Open Tree of Life not included in authors.
+# #'
+# #' There are different reasons why a doi cannot be found online, so author data
+# #' cannot be retrieved for that particular study.
+# #' This vector contains all the studies of chrongrams in OToL whose information
+# #' was not included automatically in author.pretty and author.results
+# #' @name missed_doi
+# #' @docType data
+# #' @format A character vector with study ids
+# #' @source \url{http://opentreeoflife.org}
+# #' @keywords otol study studies tree chronogram id
+# #' @details
+# #' Generated with make_contributor_cache()
+# "missed_doi"
 
 
 #' Some plants chronogram
@@ -137,38 +157,54 @@
 "plant_bold_otol_tree"
 
 
-#' Authors from studies with chronograms in TreeBASE
+#' Information on contributors, authors, study ids and clades from studies with chronograms in Open tree of Life
 #'
-#'
-#' @name tb.author.pretty
+#' @name treebase_cache
 #' @docType data
-#' @format A data frame with two elements
+#' @format A list of five data sets
 #' \describe{
-#'   \item{person}{Character vector of authors of the included studies}
-#'   \item{study.count}{Numeric vector of studies authored by each person}
+#'   \item{tb.author.pretty}{A dataframe with two elements: author names and number of studies in TreeBase authored by each}
+#'   \item{tb.author.results}{A dataframe with two elements: author names and study identifiers}
 #' }
 #' @source \url{http://treebase.org}
-#' @keywords treebase tree chronogram author study count
+#' @keywords treebase tree chronogram author study count id
 #' @details
+#'
 #' Generated with make_treebase_cache()
-"tb.author.pretty"
+"treebase_cache"
+
+# #' Authors from studies with chronograms in TreeBASE
+# #'
+# #'
+# #' @name tb.author.pretty
+# #' @docType data
+# #' @format A data frame with two elements
+# #' \describe{
+# #'   \item{person}{Character vector of authors of the included studies}
+# #'   \item{study.count}{Numeric vector of studies authored by each person}
+# #' }
+# #' @source \url{http://treebase.org}
+# #' @keywords treebase tree chronogram author study count
+# #' @details
+# #' Generated with make_treebase_cache()
+# "tb.author.pretty"
 
 
-#' Information on authors and study ids from chronograms in TreeBASE
-#'
-#'
-#' @name tb.author.results
-#' @docType data
-#' @format A dataframe with three variables
-#' \describe{
-#'   \item{person}{Named character vector of authors of the included studies}
-#'   \item{study}{Named character vector of study identifiers}
-#' }
-#' @source \url{http://treebase.org}
-#' @keywords treebase tree chronogram study studies id
-#' @details
-#' Generated with make_treebase_cache()
-"tb.author.results"
+# #' Information on authors and study ids from chronograms in TreeBASE
+# #'
+# #'
+# #' @name tb.author.results
+# #' @docType data
+# #' @format A dataframe with two variables
+# #' \describe{
+# #'   \item{person}{Named character vector of authors of the included studies}
+# #'   \item{study}{Named character vector of study identifiers}
+# #' }
+# #' @source \url{http://treebase.org}
+# #' @keywords treebase tree chronogram study studies id
+# #' @details
+# #' Generated with make_treebase_cache()
+# "tb.author.results"
 
 #' datelifeSummary of a datelifeResult object of all Felidae species.
 #'
@@ -218,5 +254,17 @@
 #' Generated with:
 #' some_ants_input <- "(Aulacopone_relicta,(((Myrmecia_gulosa,(Aneuretus_simoni,Dolichoderus_mariae)),((Ectatomma_ruidum,Huberia_brounii),Formica_rufa)),Apomyrma_stygia),Martialis_heureka)Formicidae;"
 #' some_ants_datelife_query <- make_datelife_query(input = some_ants_input)
-#' some_ants_datelife_result <- get_datelife_result(input = some_ants_datelife_query) 
+#' some_ants_datelife_result <- get_datelife_result(input = some_ants_datelife_query)
 "some_ants_datelife_result"
+
+#' Long list of >2.7k virus, bacteria, plant and animal taxon names
+#'
+#' @name names_subset2
+#' @docType data
+#' @format A character vector of length 2778
+#' @source \url{https://github.com/phylotastic/rphylotastic/tree/master/tests/testthat}
+#' @keywords taxon names subset virus bacteria plant animal
+#' @details
+#' Generated with:
+#' names_subset2 <- rphylotastic::url_get_scientific_names("https://github.com/phylotastic/rphylotastic/blob/master/tests/testthat/subset2.txt")
+"names_subset2"

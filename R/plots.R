@@ -544,113 +544,126 @@ plot_densitree <- function(trees, include = TRUE, ...){
   })
 }
 
-#'
-#'
-plot_phylo_height_oma1 <- function(tree){
-  res <- list()
+#' get the outer margin of a graphics device from a number of tips
+#' @param tree phylo object to be plotted
+phylo_height_omi <- function(tree){
   tipnum <- ape::Ntip(tree)
   if(tipnum > 10){
     hei <- 50 + (30 * tipnum)
   } else {
     hei <- 300
   }
-  res$height <- hei
-  if(tipnum <= 4){
-    oma1 <- 7
+  if(tipnum == 2){
+    omi1 <- 2
+  } else if(tipnum == 3){
+    omi1 <- 1.5
+  } else if(tipnum == 4){
+    omi1 <- 1.2
   } else if (tipnum >= 5 & tipnum <= 7){
-    oma1 <- 6
+    omi1 <- 3
   } else if (tipnum >= 8 & tipnum <= 10){
-    oma1 <- 5
+    omi1 <- 2.5
   } else {
-    oma1 <- 4
+    omi1 <- 2
   }
-  res$oma1 <- oma1
-  return(res)
+  return(list(height = hei, omi1 = omi1))
 
 }
+
+#' wrap a character string to a plotting area. It gives the optimal cex and width. It works once plot device has been called
 #' idea to use strwrap from https://stackoverflow.com/questions/7367138/text-wrap-for-plot-titles
 #'
-wrap_title <- function(study_title, max_cex = 1, min_cex = 0.5, title_font = 2
-                           max_height = 0.5*(par("din")[2]-par("pin")[2]),
-                           init_strwrap_width = 50,  min_width = par("pin")[1],
-                           max_width = 0.9*par("din")[1]){
-  wraps <- strwrap(study_title, width = initial_width)
-  sw <- strwidth(s = wraps, units = "inches", cex = max_cex, font = title_font)
-  sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = max_cex, font = title_font)
-  title_cex <- max_cex
-  wi <- initial_width - 1
-  while(sh > max_height) {  #max(sw) < min_width | max(sw) > max_width
+#' @param string A character vector with the text to be plotted
+#' @param max_cex A real number, giving the maximum **c**haracter **ex**pansion for the string to be plotted
+#' @param min_cex minimum character expansion to be used on the title
+#' @param string_font font type to be used on the title
+#' @param max_height A real number, giving the maximum height to be occupied by the text
+#' @param init_strwrap_width A real number indicating the minimum number of characters to be plotted by line
+#' @param min_width A real number, giving the minimum width to be occupied by the string
+#' @param max_width A real number, giving the maximum width to be occupied by the string
+#' @param whole Boolean, indicating if the whole string should be plotted even if it surpasses the limits established in previous arguments
+#' @export
+wrap_string_to_plot <- function(string, max_cex = 1, min_cex = 0.5, string_font = 2,
+                           max_height = par("din")[2]-par("pin")[2]- par("omi")[1]-par("mai")[1] - 0.2,
+                           init_strwrap_width = 50,  min_width = 0.9*par("din")[1],
+                           max_width = 0.9*par("din")[1], whole = TRUE){
+  # collapse string to a vetor of one element in case it has more elements
+  wraps <- strwrap(string, width = init_strwrap_width)
+  sw <- strwidth(s = wraps, units = "inches", cex = max_cex, font = string_font)
+  sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = max_cex, font = string_font)
+  string_cex <- max_cex
+  wi <- init_strwrap_width - 1
+  while(sh > max_height | max(sw) > max_width | max(sw) < min_width) {  #max(sw) < min_width | max(sw) > max_width
     while(max(sw) < min_width) {
       wi <- wi + 1
-      wraps <- strwrap(study_title, width = wi)
-      sw <- strwidth(s = wraps, units = "inches", cex = title_cex, font = title_font)
+      wraps <- strwrap(string, width = wi)
+      sw <- strwidth(s = wraps, units = "inches", cex = string_cex, font = string_font)
     }
-    sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = title_cex, font = title_font)
+    sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = string_cex, font = string_font)
     if(sh > max_height){ #length(wraps) > n_lines |
-      if(title_cex <= min_cex){
+      if(string_cex <= min_cex){
         break
       }
-      title_cex <- title_cex - 0.01
-      sw <- strwidth(s = wraps, units = "inches", cex = title_cex, font = title_font)
-      sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = title_cex, font = title_font)
+      string_cex <- string_cex - 0.01
+      sw <- strwidth(s = wraps, units = "inches", cex = string_cex, font = string_font)
+      sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = string_cex, font = string_font)
     } else {
       break
     }
   }
-  return(list(wraps = paste(wraps, collapse = "\n"), title_cex = title_cex, strwrap_width = wi))
+  if(!whole){
+    while(sh > max_height){
+      wraps <- wraps[-length(wraps)]
+      sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = string_cex, font = string_font)
+    }
+  }
+  return(list(wrapped = paste(wraps, collapse = "\n"), wraps = wraps,
+  string_cex = string_cex, strwrap_width = wi, string_font = string_font))
 }
 
-#'
+#' plot all trees with study titles and geochronological axis
 #'
 #' @inheritParams get_biggest_phylo
 #' @inheritParams subset_trees
+#' @param individually Boolean indicating if trees should be plotted one by one or all on the same file
 #' @export
-plot_phylo_all <- function(trees, include = TRUE, individually = TRUE, ...){
+plot_phylo_all <- function(trees, include = TRUE, individually = TRUE){
   utils::data("strat2012", package = "phyloch")
   trees <- subset_trees(trees, include = include)
   max.depth <- round(max(sapply(trees, function(x) max(ape::branching.times(x)))) + 5)
   # max.depth <- round(max(summarize_datelife_result(datelife_result = get.filtered.results(),
   #             summary_format = "mrca")) + 5)  # in case we used it for a datelife object
 
-  # plot all trees from the same time:
+  # plot all trees from the same depth:
   trees <- lapply(trees, function(x) {
    x$root.edge <- max.depth - max(ape::branching.times(x))
    x
   })
-  # mai4 <- unique(unlist(sapply(trees, "[", "tip.label")))
-  # ind <- which.max(nchar(mai4))
-  # mai4 <- nchar(mai4[ind]) * 0.1 # use strWidth?
-
+  mai4 <- unique(unlist(sapply(trees, "[", "tip.label")))
+  ind <- which.max(nchar(mai4))
+  mai4 <- strwidth(s = mai4[ind], units = "inches", cex = 0.5, font = 3)
+  # if(any(lapply(trees, ape::Ntip) > 3))
+  # png("~/tmp/axisgeo.png", units = "in")
   if(individually){
+    if (!devAskNewPage() && !names(dev.cur()) %in% c("pdf", "postscript")) {
+        devAskNewPage(TRUE)
+        on.exit(devAskNewPage(FALSE))
+    }
     for (i in 1:length(trees)){
-      if (!devAskNewPage() && !names(dev.cur()) %in% c("pdf", "postscript")) {
-          devAskNewPage(TRUE)
-          on.exit(devAskNewPage(FALSE))
-      }
-      # dev.size() is constant; it should only be modified by user
-      # pin size is modified by oma and mai; so, if we modify any of those,
-      # pin will be changed, but since dev.size() is constant, then mai and oma
-      # will be changed to accomodate new pin, weird, I know, but that's how it is.
-      # I could held constant tip label cex below a certain amount of tips, depending on the height of pin
-      # mai4 max value would only depend on the tree with less tips
-      # oma modifies pin size
-      # pini <- par("pin")
-      # h_and_o <- plot_phylo_height_oma1(trees[[i]])
-      # par(xpd = TRUE)
-      # par(oma = c(res$oma1,0,0,0))  #
-      # par(mar = c(2,0,2,mai4))
+      ho <- phylo_height_omi(tree = trees[[i]])
+      par(xpd = FALSE, mai = c(0,0,0,mai4), omi = c(ho$omi1, 0, 1, 0))
       # plot_chronogram.phylo(trees[[i]], cex = 1.5, edge.width = 2, label.offset = 0.5,
         # x.lim = c(0, max.depth), root.edge = TRUE, root.edge.color = "white")
-
-      ape::plot.phylo(trees[[i]], #cex = 1.5, edge.width = 2,
+      ape::plot.phylo(trees[[i]], cex = 0.5, #edge.width = 2,
         label.offset = 0.5, x.lim = c(0, max.depth), root.edge = TRUE, plot = TRUE)  #, ...
-      # mtext("Time (MYA)", cex = 0.5, side = 1, font = 2, line = h_and_o$oma1 - 1, outer = TRUE)
-
-      }
-      # title(main = study_title, sub = "Time (MYA)", outer = TRUE, cex.main = 1)
-      phyloch::axisGeo(GTS = strat2012, unit = c("period","epoch"),
-        col = c("gray80", "white"), gridcol = c("gray80", "white"), cex = 0.5,
-        gridty = "twodash")
+        phyloch::axisGeo(GTS = strat2012, unit = c("period","epoch"),
+          col = c("gray80", "white"), gridcol = c("gray80", "white"), cex = 0.5,
+          gridty = "twodash")
+      mtext("Time (MYA)", cex = 0.5, side = 1, font = 2, line = (ho$omi1-0.2)/0.2,
+      outer = TRUE, at = 0.4)
+      titlei <- wrap_string_to_plot(string = names(trees)[i], max_cex = 0.75, whole = FALSE)
+      mtext(text = titlei$wrapped, outer = TRUE,
+        cex = titlei$string_cex, font = titlei$string_font, line = 1)
     }
   }
 }

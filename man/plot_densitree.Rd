@@ -6,12 +6,14 @@
 if densiTree plot function throws an error, it chooses the tree with the most tips as consensus (using get_biggest_phylo)
 we found that densiTree errors commonly from failing to do a consensus tree.}
 \usage{
-plot_densitree(trees, include_all = FALSE, ...)
+plot_densitree(trees, include = TRUE, ...)
 }
 \arguments{
 \item{trees}{A list of trees as multiPhylo or as a plain list object.}
 
-\item{include_all}{Boolean. Default to FALSE, exclude chronograms with only two species. If TRUE, it plots all chronograms.}
+\item{include}{Boolean or numeric vector. Default to TRUE, plot all chronograms
+in trees. If FALSE, exclude chronograms with only two tips. If numeric, plot
+trees matching the numeric vector.}
 
 \item{...}{Arguments passed on to \code{phangorn::densiTree}
 \describe{

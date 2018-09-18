@@ -5,7 +5,10 @@
 #' @inheritParams datelife_search
 #' @inherit datelife_search return details
 #' @export
-summarize_datelife_result <- function(datelife_query = NULL, datelife_result = NULL, summary_format = "phylo_all", partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), summary_print = c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"), verbose = FALSE, criterion=c("trees", "taxa")) {
+summarize_datelife_result <- function(datelife_query = NULL, datelife_result = NULL,
+	summary_format = "phylo_all", partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"),
+	summary_print = c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"),
+	verbose = FALSE, criterion = c("trees", "taxa")) {
 		# if(!partial) {
 		# 	datelife_result <- datelife_result[which(!sapply(datelife_result, anyNA))]
 		# } # not necessary cause already filtered in get_datelife_result
@@ -87,13 +90,13 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		return.object <- tree
 	}
 	if(summary_format.in == "newick_median") {
-		patristic.array <- patristic_matrix_list_to_array(datelife_result)
+		patristic.array <- patristic_matrix_list_to_array(filter_for_grove(datelife_result, criterion))
 		median.matrix <- summary_patristic_matrix_array(patristic.array)
 		tree <- patristic_matrix_to_newick(median.matrix)
 		return.object <- tree
 	}
 	if(summary_format.in == "phylo_median") {
-		patristic.array <- patristic_matrix_list_to_array(datelife_result)
+		patristic.array <- patristic_matrix_list_to_array(filter_for_grove(datelife_result, criterion))
 		median.matrix <- summary_patristic_matrix_array(patristic.array)
 		tree <- patristic_matrix_to_phylo(median.matrix)
 		return.object <- tree
@@ -221,7 +224,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = TRUE) {
 	# add check datelife_result
 	phy <- NA
-	used.studies <- names(datelife_result)
+	# used.studies <- names(datelife_result)
 	unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
 	good.matrix.indices <- c()
 	for(i in sequence(length(unpadded.matrices))) {
@@ -245,7 +248,7 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 	}
 	if(length(good.matrix.indices) > 1) {
 		unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-		used.studies <- used.studies[good.matrix.indices]
+		# used.studies <- used.studies[good.matrix.indices]
 		weights = rep(1, length(unpadded.matrices))
 		if (weighting=="taxa") {
 			weights = unname(sapply(unpadded.matrices, dim)[1,])
