@@ -137,7 +137,7 @@ make_treebase_associations <- function() {
     }
   }
 
-  author.lumped <- aggregate(author.results$url, by=list(author=author.results$person), FUN=paste, collapse=", ")
+  author.lumped <- stats::aggregate(author.results$url, by=list(author=author.results$person), FUN=paste, collapse=", ")
   colnames(author.lumped) <- c("person", "urls")
   return(author.lumped)
 }
@@ -198,7 +198,7 @@ make_otol_associations <- function() {
       combined.df <- rbind(combined.df, data.frame(person=invert_names(authors[[i]][author.index]), url=urls, stringsAsFactors=FALSE))
     }
   }
-  author.lumped <- aggregate(combined.df$url, by=list(author=combined.df$person), FUN=paste, collapse=", ")
+  author.lumped <- stats::aggregate(combined.df$url, by=list(author=combined.df$person), FUN=paste, collapse=", ")
   colnames(author.lumped) <- c("person", "urls")
   return(author.lumped)
 }
@@ -207,11 +207,11 @@ make_otol_associations <- function() {
 #' @param outputfile Path including file name. NULL to prevent saving
 #' @return a data.frame of person and urls
 #' @export
-make_all_associations <- function(outputfile="depositorcache.RData") {
+make_all_associations <- function(outputfile = "depositorcache.RData") {
   tb <- make_treebase_associations()
   ot <- make_otol_associations()
   combined.df <- rbind(tb, ot)
-  author.lumped <- aggregate(combined.df$urls, by=list(author=combined.df$person), FUN=paste, collapse=", ")
+  author.lumped <- stats::aggregate(combined.df$urls, by=list(author=combined.df$person), FUN=paste, collapse=", ")
   colnames(author.lumped) <- c("person", "urls")
   author.lumped$person <- gsub("^\\s+|\\s+$", "", author.lumped$person)
   author.lumped <- author.lumped[order(author.lumped$person), ]
@@ -219,5 +219,5 @@ make_all_associations <- function(outputfile="depositorcache.RData") {
   if (!is.null(outputfile)) {
     save(depositors, file=outputfile)
   }
-  return(authors.lumped)
+  return(author.lumped)
 }

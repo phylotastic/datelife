@@ -538,6 +538,9 @@ subset_trees <- function(trees, include = TRUE){
 plot_densitree <- function(trees, include = TRUE, ...){
   trees <- subset_trees(trees, include = include)
   class(trees) <- "multiPhylo"
+  # if we use biggest phylo as consensus for all, some data set are not plotted correctly
+  # biggest_phylo <- get_biggest_phylo(trees = trees)
+  # try(phangorn::densiTree(x = trees, consensus = biggest_phylo, ...))
   tryCatch(phangorn::densiTree(x = trees, ...), error = function(e) {
     biggest_phylo <- get_biggest_phylo(trees = trees)
     try(phangorn::densiTree(x = trees, consensus = biggest_phylo, ...))
@@ -584,29 +587,29 @@ phylo_height_omi <- function(tree){
 #' @param whole Boolean, indicating if the whole string should be plotted even if it surpasses the limits established in previous arguments
 #' @export
 wrap_string_to_plot <- function(string, max_cex = 1, min_cex = 0.5, string_font = 2,
-                           max_height = par("din")[2]-par("pin")[2]- par("omi")[1]-par("mai")[1] - 0.2,
-                           init_strwrap_width = 50,  min_width = 0.9*par("din")[1],
-                           max_width = 0.9*par("din")[1], whole = TRUE){
+                           max_height = graphics::par("din")[2]-graphics::par("pin")[2]- graphics::par("omi")[1]-graphics::par("mai")[1] - 0.2,
+                           init_strwrap_width = 50,  min_width = 0.9*graphics::par("din")[1],
+                           max_width = 0.9*graphics::par("din")[1], whole = TRUE){
   # collapse string to a vetor of one element in case it has more elements
   wraps <- strwrap(string, width = init_strwrap_width)
-  sw <- strwidth(s = wraps, units = "inches", cex = max_cex, font = string_font)
-  sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = max_cex, font = string_font)
+  sw <- graphics::strwidth(s = wraps, units = "inches", cex = max_cex, font = string_font)
+  sh <- graphics::strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = max_cex, font = string_font)
   string_cex <- max_cex
   wi <- init_strwrap_width - 1
   while(sh > max_height | max(sw) > max_width | max(sw) < min_width) {  #max(sw) < min_width | max(sw) > max_width
     while(max(sw) < min_width) {
       wi <- wi + 1
       wraps <- strwrap(string, width = wi)
-      sw <- strwidth(s = wraps, units = "inches", cex = string_cex, font = string_font)
+      sw <- graphics::strwidth(s = wraps, units = "inches", cex = string_cex, font = string_font)
     }
-    sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = string_cex, font = string_font)
+    sh <- graphics::strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = string_cex, font = string_font)
     if(sh > max_height){ #length(wraps) > n_lines |
       if(string_cex <= min_cex){
         break
       }
       string_cex <- string_cex - 0.01
-      sw <- strwidth(s = wraps, units = "inches", cex = string_cex, font = string_font)
-      sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = string_cex, font = string_font)
+      sw <- graphics::strwidth(s = wraps, units = "inches", cex = string_cex, font = string_font)
+      sh <- graphics::strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = string_cex, font = string_font)
     } else {
       break
     }
@@ -614,7 +617,7 @@ wrap_string_to_plot <- function(string, max_cex = 1, min_cex = 0.5, string_font 
   if(!whole){
     while(sh > max_height){
       wraps <- wraps[-length(wraps)]
-      sh <- strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = string_cex, font = string_font)
+      sh <- graphics::strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = string_cex, font = string_font)
     }
   }
   return(list(wrapped = paste(wraps, collapse = "\n"), wraps = wraps,
@@ -628,6 +631,7 @@ wrap_string_to_plot <- function(string, max_cex = 1, min_cex = 0.5, string_font 
 #' @param individually Boolean indicating if trees should be plotted one by one or all on the same file
 #' @export
 plot_phylo_all <- function(trees, include = TRUE, individually = TRUE){
+  strat2012 <- NULL
   utils::data("strat2012", package = "phyloch")
   trees <- subset_trees(trees, include = include)
   max.depth <- round(max(sapply(trees, function(x) max(ape::branching.times(x)))) + 5)
@@ -641,17 +645,17 @@ plot_phylo_all <- function(trees, include = TRUE, individually = TRUE){
   })
   mai4 <- unique(unlist(sapply(trees, "[", "tip.label")))
   ind <- which.max(nchar(mai4))
-  mai4 <- strwidth(s = mai4[ind], units = "inches", cex = 0.5, font = 3)
+  mai4 <- graphics::strwidth(s = mai4[ind], units = "inches", cex = 0.5, font = 3)
   # if(any(lapply(trees, ape::Ntip) > 3))
   # png("~/tmp/axisgeo.png", units = "in")
   if(individually){
-    if (!devAskNewPage() && !names(dev.cur()) %in% c("pdf", "postscript")) {
-        devAskNewPage(TRUE)
-        on.exit(devAskNewPage(FALSE))
+    if (!grDevices::devAskNewPage() && !names(grDevices::dev.cur()) %in% c("pdf", "postscript")) {
+        grDevices::devAskNewPage(TRUE)
+        on.exit(grDevices::devAskNewPage(FALSE))
     }
     for (i in 1:length(trees)){
       ho <- phylo_height_omi(tree = trees[[i]])
-      par(xpd = FALSE, mai = c(0,0,0,mai4), omi = c(ho$omi1, 0, 1, 0))
+      graphics::par(xpd = FALSE, mai = c(0,0,0,mai4), omi = c(ho$omi1, 0, 1, 0))
       # plot_chronogram.phylo(trees[[i]], cex = 1.5, edge.width = 2, label.offset = 0.5,
         # x.lim = c(0, max.depth), root.edge = TRUE, root.edge.color = "white")
       ape::plot.phylo(trees[[i]], cex = 0.5, #edge.width = 2,
@@ -659,10 +663,10 @@ plot_phylo_all <- function(trees, include = TRUE, individually = TRUE){
         phyloch::axisGeo(GTS = strat2012, unit = c("period","epoch"),
           col = c("gray80", "white"), gridcol = c("gray80", "white"), cex = 0.5,
           gridty = "twodash")
-      mtext("Time (MYA)", cex = 0.5, side = 1, font = 2, line = (ho$omi1-0.2)/0.2,
+      graphics::mtext("Time (MYA)", cex = 0.5, side = 1, font = 2, line = (ho$omi1-0.2)/0.2,
       outer = TRUE, at = 0.4)
       titlei <- wrap_string_to_plot(string = names(trees)[i], max_cex = 0.75, whole = FALSE)
-      mtext(text = titlei$wrapped, outer = TRUE,
+      graphics::mtext(text = titlei$wrapped, outer = TRUE,
         cex = titlei$string_cex, font = titlei$string_font, line = 1)
     }
   }

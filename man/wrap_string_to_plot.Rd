@@ -6,10 +6,11 @@
 idea to use strwrap from https://stackoverflow.com/questions/7367138/text-wrap-for-plot-titles}
 \usage{
 wrap_string_to_plot(string, max_cex = 1, min_cex = 0.5,
-  string_font = 2, max_height = par("din")[2] - par("pin")[2] -
-  par("omi")[1] - par("mai")[1] - 0.2, init_strwrap_width = 50,
-  min_width = 0.9 * par("din")[1], max_width = 0.9 * par("din")[1],
-  whole = TRUE)
+  string_font = 2, max_height = graphics::par("din")[2] -
+  graphics::par("pin")[2] - graphics::par("omi")[1] -
+  graphics::par("mai")[1] - 0.2, init_strwrap_width = 50,
+  min_width = 0.9 * graphics::par("din")[1], max_width = 0.9 *
+  graphics::par("din")[1], whole = TRUE)
 }
 \arguments{
 \item{string}{A character vector with the text to be plotted}

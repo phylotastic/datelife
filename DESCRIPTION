@@ -40,7 +40,8 @@ Suggests:
     testthat,
     paleotree,
     rphylotastic,
-    rmarkdown
+    rmarkdown,
+    knitr
 Enhances:
     phylocomr
 SystemRequirements: mafft, PATHd8

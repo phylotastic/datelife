@@ -1,8 +1,8 @@
-test_that("felidae/canidae divergence is accurate", {
-    query <- make_datelife_query(input = c("felidae", "canidae"), get_spp_from_taxon = TRUE)
+test_that("felis/canidae divergence is accurate", {
+    query <- make_datelife_query(input = c("felis", "canidae"), get_spp_from_taxon = TRUE)
     cats_and_dogs_results <- get_datelife_result(input = query)
     matrix_max_ages <- sapply(cats_and_dogs_results, max)
-    taxa <- c("felidae", "canidae")
+    taxa <- c("felis", "canidae")
     cats_and_dogs <- datelife_search(input = taxa, get_spp_from_taxon = TRUE,
       summary_format = "phylo_all")
     phylo_max_ages <- sapply(cats_and_dogs, function(x) max(ape::branching.times(x)))
@@ -12,6 +12,10 @@ test_that("felidae/canidae divergence is accurate", {
     format(round(sort(matrix_max_ages/2)), nsmall = ns) == format(round(sort(phylo_max_ages)), nsmall = ns)
     # ages from our cache range from 54.9 to 70.9, this includes upper limit confidence interval chronograms
     # timetree study-derived ages range from 39.7 to 67.1. This excludes confidence intervals
+    median_phy <- summarize_datelife_result(datelife_result = cats_and_dogs_results, datelife_query = query,
+      summary_format = "phylo_median")
+    sdm_phy <- summarize_datelife_result(datelife_result = cats_and_dogs_results, datelife_query = query,
+        summary_format = "phylo_sdm")
 })
 
 test_that("Mus higher-taxon search is giving species back"){
@@ -91,17 +95,16 @@ test_that("birds from wikipedia work", {
   expect_equal(class(datelife_search(taxa, summary_format="phylo_sdm")), "phylo")
 })
 
-test_that("median and sdm work ok with a bunch of different data sets"){
-    utils:data(names_subset2)
-    expect_equal(class(datelife_search(names_subset2, summary_format = "phylo_median")), "phylo")
-    expect_equal(class(datelife_search(names_subset2, summary_format = "phylo_sdm")), "phylo")
-    #1:5 works
-    #6:8 works
-    #9:10 works
-    #c(4,11) # 5 and 11 alone do not work
-    #c(4,5,11)
-    # tried changing SDM function tol. This eliminated the error in the function
-    # however, clustering the resultant matrix failed.
-    # also tried finding groves with more overlapping (up to 4), but did not work
-
+test_that("median and sdm work ok with very variable source chronograms"){
+    utils::data(names_subset2)
+    spp_query <- make_datelife_query(names_subset2)
+    spp_dl_result <- get_datelife_result(spp_query)
+    expect_equal(class(summarize_datelife_result(datelife_query = spp_query,
+      datelife_result = spp_dl_result, summary_format = "phylo_median")), "phylo")
+    expect_equal(class(summarize_datelife_result(datelife_query = spp_query,
+      datelife_result = spp_dl_result, summary_format = "phylo_sdm")), "phylo")
+    expect_equal(class(summarize_datelife_result(datelife_query = spp_query,
+      datelife_result = spp_dl_result, summary_format = "newick_median")), "character")
+    expect_equal(class(summarize_datelife_result(datelife_query = spp_query,
+      datelife_result = spp_dl_result, summary_format = "newick_sdm")), "character")
 }

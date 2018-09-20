@@ -92,6 +92,7 @@ pick_grove <- function(grove_list, criterion=c("trees", "taxa"), datelife_result
 #' @param criterion Whether to get the grove with the most trees or the most taxa
 #' @param n Degree of overlap required
 #' @return A datelifResult object filtered to only include one grove of trees
+#' @export
 filter_for_grove <- function(datelife_result, criterion=c("trees", "taxa"), n = 2) {
   grove_list <- build_grove_list(datelife_result, n)
   final_trees <- pick_grove(grove_list, criterion, datelife_result)

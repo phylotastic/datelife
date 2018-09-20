@@ -77,34 +77,41 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		trees <- sapply(datelife_result, patristic_matrix_to_newick)
 		return.object <- trees[which(!is.na(trees))]
 	}
-	if(summary_format.in == "newick_sdm") {
-		local.results <- datelife_result_sdm(filter_for_grove(datelife_result, criterion))
-		datelife_result <- local.results$datelife_result
-		tree <- local.results$phy
-		return.object <- ape::write.tree(tree)
-	}
-	if(summary_format.in == "phylo_sdm") {
-		local.results <- datelife_result_sdm(filter_for_grove(datelife_result, criterion))
-		datelife_result <- local.results$datelife_result
-		tree <- local.results$phy
-		return.object <- tree
-	}
-	if(summary_format.in == "newick_median") {
-		patristic.array <- patristic_matrix_list_to_array(filter_for_grove(datelife_result, criterion))
-		median.matrix <- summary_patristic_matrix_array(patristic.array)
-		tree <- patristic_matrix_to_newick(median.matrix)
-		return.object <- tree
-	}
-	if(summary_format.in == "phylo_median") {
-		patristic.array <- patristic_matrix_list_to_array(filter_for_grove(datelife_result, criterion))
-		median.matrix <- summary_patristic_matrix_array(patristic.array)
-		tree <- patristic_matrix_to_phylo(median.matrix)
-		return.object <- tree
-	}
 	if(summary_format.in == "phylo_all") {
 		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
 		return.object <- trees[which(!is.na(trees))]
 		class(return.object) <- "multiPhylo"
+	}
+	# the following chunck is to test if n_overlap = 2 is enough to summarize results with sdm and median
+	if(summary_format.in %in% c("newick_sdm", "phylo_sdm", "newick_median", "phylo_median")){
+		median.phylo <- NULL
+		overlap <- 2
+		while(is.null(median.phylo)){
+		  best_grove <- datelife::filter_for_grove(datelife_result,
+		                criterion = "taxa", n = overlap)
+		  # result <- tryCatch(datelife_result_sdm(best_grove), error = function(e) NULL)
+			patristic.array <- patristic_matrix_list_to_array(best_grove)
+			median.matrix <- summary_patristic_matrix_array(patristic.array)
+		  median.phylo <- tryCatch(patristic_matrix_to_phylo(median.matrix), error = function(e) NULL)
+		  overlap <- overlap + 1
+		}
+	}
+	if(summary_format.in %in% c("newick_sdm", "phylo_sdm")) {
+		local.results <- datelife_result_sdm(best_grove)
+		# datelife_result <- local.results$data
+		tree <- local.results$phy
+		rm(local.results)
+	}
+	if(summary_format.in %in% c("newick_median", "phylo_median")) {
+		# datelife_result <- best_grove
+		tree <- median.phylo
+		rm(best_grove)
+	}
+	if(summary_format.in %in% c("newick_sdm", "newick_median")) {
+		return.object <- ape::write.tree(tree)
+	}
+	if(summary_format.in %in% c("phylo_sdm", "phylo_median")) {
+		return.object <- tree
 	}
 	if(summary_format.in == "phylo_biggest") {
 		trees <- lapply(datelife_result, patristic_matrix_to_phylo)

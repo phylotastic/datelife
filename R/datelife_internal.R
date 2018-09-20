@@ -52,6 +52,7 @@ datelife_result_MRCA <- function(datelife_result, partial = TRUE) {
 #' @inheritParams tree_fix_brlen
 #' @return A rooted phylo object
 patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "upgma", fix_negative_brlen = TRUE, fixing_method = 0) {
+    patristic_matrix <- 0.5 * patristic_matrix
     if(anyNA(patristic_matrix)) {
   	   patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
     }   # I'm not sure why this is here. It does not get rid of spp with NA or NaNs, then, what does it do?
@@ -61,7 +62,7 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "upg
     phy <- NA
     clustering_method <- match.arg(arg = clustering_method, choices = c("nj", "upgma"), several.ok = FALSE)
     if(dim(patristic_matrix)[1] == 2) {
-	     phy <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = patristic_matrix[1,2]/2)
+	     phy <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = patristic_matrix[1,2])
     } else {
         if (clustering_method == "nj"){
             if(anyNA(patristic_matrix)){
@@ -86,9 +87,9 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "upg
         if (clustering_method == "upgma"){
             phy <- tryCatch(phangorn::upgma(patristic_matrix), error = function (e) NULL)
             if (is.null(phy)){ # case when we have missing data (NA) on patristic_matrix and regular upgma does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
-                patristic_matrix <- 0.5 * patristic_matrix
                 # We need to convert patristic_matrix in a way, because daisy() is giving younger ages than expected:
                 # why agnes does not work? # cluster::agnes does the same as hclust and does not accept NAs, we need to change find good distance method
+                # patristic_matrix <- 0.5 * patristic_matrix # if we divide again here we do not recover the dates from the original trees
                 DD <- cluster::daisy(x = patristic_matrix, metric = "euclidean")
                 hc <- stats::hclust(DD, method = "average") # original clustering method from phangorn::upgma. Using agnes() instead hclust() to cluster gives the same result.
                 phy <- ape::as.phylo(hc)
