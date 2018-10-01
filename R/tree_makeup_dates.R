@@ -18,6 +18,7 @@ tree_fix_brlen <- function(tree = NULL, fixing_criterion = "negative", fixing_me
 	if(!is.numeric(fixing_method)){
 		fixing_method <- match.arg(fixing_method, c("bladj", "mrbayes"))
 	} else { # chunk for neg or zero br len to zero or any number determined by user
+		# stop()
 		for (i in index){
 			# snode <- pos.phy$edge[i,1]
 			# pool  <- pos.phy$edge[seq(nrow(pos.phy$edge))[-i], 1]

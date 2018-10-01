@@ -4,7 +4,7 @@
 \alias{patristic_matrix_to_phylo}
 \title{Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruiyTree.}
 \usage{
-patristic_matrix_to_phylo(patristic_matrix, clustering_method = "upgma",
+patristic_matrix_to_phylo(patristic_matrix, clustering_method = "nj",
   fix_negative_brlen = TRUE, fixing_method = 0)
 }
 \arguments{

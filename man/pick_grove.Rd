@@ -2,20 +2,20 @@
 % Please edit documentation in R/groves.R
 \name{pick_grove}
 \alias{pick_grove}
-\title{Find the grove in the case of multiple groves}
+\title{Pick a grove in the case of multiple groves in a set of trees.}
 \usage{
-pick_grove(grove_list, criterion = c("trees", "taxa"), datelife_result)
+pick_grove(grove_list, criterion = "taxa", datelife_result)
 }
 \arguments{
-\item{grove_list}{A list of vectors of tree indices. Each element is a grove}
+\item{grove_list}{A list of vectors of tree indices. Each element is a grove.}
 
-\item{criterion}{Whether to get the grove with the most trees or the most taxa}
+\item{criterion}{A character vector indicating whether to get the grove with the most "trees" or the most "taxa"}
 
 \item{datelife_result}{datelifeResult object (named list of patristic matrices). Only needed for "taxa" criterion}
 }
 \value{
-a vector of the elements of the chosen grove
+A numeroc vector of the elements of the picked grove.
 }
 \description{
-Find the grove in the case of multiple groves
+Pick a grove in the case of multiple groves in a set of trees.
 }

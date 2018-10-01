@@ -6,7 +6,7 @@
 \usage{
 make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus",
   "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE,
-  marker = "COI", otol_version = "v2", chronogram = TRUE,
+  marker = "COI", otol_version = "v3", chronogram = TRUE,
   doML = FALSE, get_spp_from_taxon = FALSE, verbose = FALSE)
 }
 \arguments{

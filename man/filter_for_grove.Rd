@@ -4,8 +4,7 @@
 \alias{filter_for_grove}
 \title{Filter a datelifeResult to find the largest grove}
 \usage{
-filter_for_grove(datelife_result, criterion = c("trees", "taxa"),
-  n = 2)
+filter_for_grove(datelife_result, criterion = "taxa", n = 2)
 }
 \arguments{
 \item{datelife_result}{datelifeResult object (named list of patristic matrices). Only needed for "taxa" criterion}

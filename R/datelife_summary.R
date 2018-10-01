@@ -16,7 +16,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
 	if(is.null(datelife_result) | !is.list(datelife_result)){
-		stop("datelife_result argument must be a list from get_datelife_result function.")
+		stop("datelife_result argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
 	}
 	summary_format.in <- match.arg(summary_format, choices = c("citations", "mrca", "newick_all", "newick_sdm", "newick_median", "phylo_sdm", "phylo_median", "phylo_biggest", "phylo_all", "html", "data_frame"))
 	add_taxon_distribution.in <- match.arg(add_taxon_distribution, choices = c("none", "summary", "matrix"))
@@ -70,8 +70,9 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	if(summary_format.in == "citations") {
 		return.object <- names(datelife_result)
 	}
+	mrcas <- datelife_result_MRCA(datelife_result, partial = partial)  # this is later used for median and sdm
 	if(summary_format.in == "mrca") {
-		return.object <- datelife_result_MRCA(datelife_result, partial = partial)
+		return.object <- mrcas
 	}
 	if(summary_format.in == "newick_all") {
 		trees <- sapply(datelife_result, patristic_matrix_to_newick)
@@ -82,40 +83,47 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		return.object <- trees[which(!is.na(trees))]
 		class(return.object) <- "multiPhylo"
 	}
+	if(summary_format.in == "phylo_biggest") {
+		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
+		return.object <- get_biggest_phylo(trees)
+	}
 	# the following chunck is to test if n_overlap = 2 is enough to summarize results with sdm and median
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm", "newick_median", "phylo_median")){
-		median.phylo <- NULL
+		median.result <- NULL
 		overlap <- 2
-		while(is.null(median.phylo)){
+		while(is.null(median.result)){
 		  best_grove <- datelife::filter_for_grove(datelife_result,
 		                criterion = "taxa", n = overlap)
-		  # result <- tryCatch(datelife_result_sdm(best_grove), error = function(e) NULL)
-			patristic.array <- patristic_matrix_list_to_array(best_grove)
-			median.matrix <- summary_patristic_matrix_array(patristic.array)
-		  median.phylo <- tryCatch(patristic_matrix_to_phylo(median.matrix), error = function(e) NULL)
+		  median.result <- tryCatch(datelife_result_median(best_grove), error = function(e) NULL)
+			# sometimes max(branching.times) is off (too big or too nsmall), so  we
+			# standardize by real median of original data (max(mrcas)).
+			# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
 		  overlap <- overlap + 1
 		}
+		tree <- median.result
 	}
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm")) {
-		local.results <- datelife_result_sdm(best_grove)
-		# datelife_result <- local.results$data
-		tree <- local.results$phy
-		rm(local.results)
-	}
-	if(summary_format.in %in% c("newick_median", "phylo_median")) {
-		# datelife_result <- best_grove
-		tree <- median.phylo
-		rm(best_grove)
+		#sometimes the best_grove for median does not work for sdm, so we tryCatch te result:
+		# sdm.result <- tryCatch(datelife_result_sdm(best_grove), error = function(e) NULL)
+		# while(is.null(sdm.result)){
+		# 	best_grove <- datelife::filter_for_grove(datelife_result,
+		#                 criterion = "taxa", n = overlap)  # we try the last overlap value tried from median
+		#   sdm.result <- tryCatch(datelife_result_sdm(best_grove), error = function(e) NULL)
+		# 	# sometimes max(branching.times) is off (too big or too nsmall), so  we
+		# 	# standardize by real median of original data (max(mrcas)).
+		# 	# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
+		#   overlap <- overlap + 1
+		# }
+		# datelife_result <- sdm.results$data
+		sdm.result <- datelife_result_sdm(best_grove)
+		tree <- sdm.result$phy
+		# rm(sdm.result, best_grove)
 	}
 	if(summary_format.in %in% c("newick_sdm", "newick_median")) {
 		return.object <- ape::write.tree(tree)
 	}
 	if(summary_format.in %in% c("phylo_sdm", "phylo_median")) {
 		return.object <- tree
-	}
-	if(summary_format.in == "phylo_biggest") {
-		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
-		return.object <- get_biggest_phylo(trees)
 	}
 	if(summary_format.in == "html") {
 		out.vector1 <- "<table border='1'><tr><th>MRCA Age (MY)</th><th>Ntax</th><th>Citation</th><th>Newick"
@@ -206,6 +214,17 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	return(return.object)
 }
 
+#' Function to compute median of a datelifeResult object.
+#' @inheritParams datelife_result_check
+datelife_result_median <- function(datelife_result) {
+	patristic.array <- patristic_matrix_list_to_array(datelife_result)
+	median.matrix <- summary_patristic_matrix_array(patristic.array)
+	# when matrix comes from median, upgma gives much older ages than expected
+	# we use nj to cluster in this case
+	median.phylo <- patristic_matrix_to_phylo(median.matrix, clustering_method = "nj")
+	return(median.phylo)
+}
+
 #' Function to compute the SDM supertree (Criscuolo et al. 2006) from a datelifeResult object.
 #' @inheritParams datelife_result_check
 #' @param weighting A character vector indicating how much weight to give to each input tree in the SDM analysis.
@@ -267,7 +286,8 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 			message(cat("\n", "Synthesizing", length(unpadded.matrices), "chronograms with SDM"))
 		}
 		SDM.result <- do.call(ape::SDM, c(unpadded.matrices, weights))[[1]]
-		phy <- patristic_matrix_to_phylo(SDM.result, clustering_method = "upgma")  # nj or njs do not work if patristic matrices output from sdm. Go back to this later
+		# it is important to use upgma as clustering method; nj produces much younger ages when the matrix comes from sdm
+		phy <- patristic_matrix_to_phylo(SDM.result, clustering_method = "upgma")
 
 	} else {
 		if(length(good.matrix.indices) == length(datelife_result)) {

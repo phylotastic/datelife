@@ -537,11 +537,22 @@ subset_trees <- function(trees, include = TRUE){
 #' @export
 plot_densitree <- function(trees, include = TRUE, ...){
   trees <- subset_trees(trees, include = include)
+  # for densitree plot it does not really matter if trees have the same length
+  # max.depth <- round(max(sapply(trees, function(x) max(ape::branching.times(x)))) + 5, digits = -1)
+  # # max.depth <- round(max(summarize_datelife_result(datelife_result = get.filtered.results(),
+  # #             summary_format = "mrca")) + 5)  # in case we used it for a datelife object
+  #
+  # # plot all trees from the same depth:
+  # trees <- lapply(trees, function(x) {
+  #  x$root.edge <- max.depth - max(ape::branching.times(x))
+  #  x
+  # })
   class(trees) <- "multiPhylo"
   # if we use biggest phylo as consensus for all, some data set are not plotted correctly
   # biggest_phylo <- get_biggest_phylo(trees = trees)
   # try(phangorn::densiTree(x = trees, consensus = biggest_phylo, ...))
-  tryCatch(phangorn::densiTree(x = trees, ...), error = function(e) {
+  tryCatch(phangorn::densiTree(x = trees, ...),
+  error = function(e) {
     biggest_phylo <- get_biggest_phylo(trees = trees)
     try(phangorn::densiTree(x = trees, consensus = biggest_phylo, ...))
   })
@@ -634,7 +645,8 @@ plot_phylo_all <- function(trees, include = TRUE, individually = TRUE){
   strat2012 <- NULL
   utils::data("strat2012", package = "phyloch")
   trees <- subset_trees(trees, include = include)
-  max.depth <- round(max(sapply(trees, function(x) max(ape::branching.times(x)))) + 5)
+  if(isTRUE(all.equal(round(max(sapply(trees, function(x) max(ape::branching.times(x)))), digits = 3))))
+  max.depth <- round(max(sapply(trees, function(x) max(ape::branching.times(x)))) + 5, digits = -1)
   # max.depth <- round(max(summarize_datelife_result(datelife_result = get.filtered.results(),
   #             summary_format = "mrca")) + 5)  # in case we used it for a datelife object
 

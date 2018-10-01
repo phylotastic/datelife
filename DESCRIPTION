@@ -35,7 +35,8 @@ Imports:
     phylobase,
     treebase,
     httr,
-    devtools
+    devtools,
+    phyloch
 Suggests:
     testthat,
     paleotree,

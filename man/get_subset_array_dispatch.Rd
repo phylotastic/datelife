@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_internal.R
 \name{get_subset_array_dispatch}
 \alias{get_subset_array_dispatch}
-\title{Figure out which subset function to use. Used inside: get_datelife_result}
+\title{try two types of NJ}
 \usage{
 get_subset_array_dispatch(study_element, taxa, phy = NULL, phy4 = NULL,
   dating_method = "PATHd8")

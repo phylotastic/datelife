@@ -15,7 +15,7 @@ is_n_overlap <- function(names_1, names_2, n=2) {
 #' @param datelife_result datelifeResult object (named list of patristic matrices)
 #' @param n Degree of overlap required
 #' @return matrix; each cell shows whether n-overlap exists between that pair of inputs
-build_groves_matrix <- function(datelife_result, n=2) {
+build_grove_matrix <- function(datelife_result, n=2) {
   grove_matrix <- matrix(FALSE, nrow=length(datelife_result), ncol=length(datelife_result))
   for (i in sequence(length(datelife_result))) {
     for (j in i:length(datelife_result)) {
@@ -33,7 +33,7 @@ build_groves_matrix <- function(datelife_result, n=2) {
 #' @param n Degree of overlap required
 #' @return list of vectors; each list element is a grove
 build_grove_list <- function(datelife_result, n = 2) {
-  grove_matrix <- build_groves_matrix(datelife_result, n)
+  grove_matrix <- build_grove_matrix(datelife_result, n)
   grove_list <- list()
   for (i in sequence(nrow(grove_matrix))) {
     if (i == 1) {
@@ -57,13 +57,13 @@ build_grove_list <- function(datelife_result, n = 2) {
   return(grove_list)
 }
 
-#' Find the grove in the case of multiple groves
+#' Pick a grove in the case of multiple groves in a set of trees.
 #'
-#' @param grove_list A list of vectors of tree indices. Each element is a grove
-#' @param criterion Whether to get the grove with the most trees or the most taxa
+#' @param grove_list A list of vectors of tree indices. Each element is a grove.
+#' @param criterion A character vector indicating whether to get the grove with the most "trees" or the most "taxa"
 #' @param datelife_result datelifeResult object (named list of patristic matrices). Only needed for "taxa" criterion
-#' @return a vector of the elements of the chosen grove
-pick_grove <- function(grove_list, criterion=c("trees", "taxa"), datelife_result) {
+#' @return A numeroc vector of the elements of the picked grove.
+pick_grove <- function(grove_list, criterion = "taxa", datelife_result) {
   criterion <- match.arg(criterion, c("trees", "taxa"))
   if(length(grove_list)==1) {
     return(grove_list[[1]])
@@ -93,7 +93,8 @@ pick_grove <- function(grove_list, criterion=c("trees", "taxa"), datelife_result
 #' @param n Degree of overlap required
 #' @return A datelifResult object filtered to only include one grove of trees
 #' @export
-filter_for_grove <- function(datelife_result, criterion=c("trees", "taxa"), n = 2) {
+filter_for_grove <- function(datelife_result, criterion= "taxa", n = 2) {
+  criterion <- match.arg(criterion, c("trees", "taxa"))
   grove_list <- build_grove_list(datelife_result, n)
   final_trees <- pick_grove(grove_list, criterion, datelife_result)
   return(datelife_result[final_trees])

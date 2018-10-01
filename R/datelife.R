@@ -279,8 +279,8 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
     	index <- 1
 	    for (i in get_spp_from_taxon){
 	    	if (i) {
-	    		spp <- rphylotastic::taxon_get_species(taxon = cleaned_names[index], ...)
-	    		if(length(spp)==0) {
+	    		spp <- tryCatch(rphylotastic::taxon_get_species(taxon = cleaned_names[index], ...), error = function (e) cleaned_names[index])
+	    		if(length(spp) == 0) {
 	    			if(verbose) {
 							message("\t", " No species names found for taxon ", cleaned_names[index], ".")
 							if (!use_tnrs) {

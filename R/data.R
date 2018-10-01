@@ -268,3 +268,59 @@
 #' Generated with:
 #' names_subset2 <- rphylotastic::url_get_scientific_names("https://github.com/phylotastic/rphylotastic/blob/master/tests/testthat/subset2.txt")
 "names_subset2"
+
+#' A list with datelieQuery and datelifeResult objects from a search of taxon names from names_subset2
+#'
+#' @name dlsearch_subset2
+#' @docType data
+#' @format A list with two named elements. datelifeResult object with 24 patristic matrices
+#' \describe{
+#'   \item{datelife_query}{A datelifeQuery object using names_subset 2 as input.}
+#'   \item{datelife_result}{A datelifeResult object resulting from a search of names in datelifeQuery}
+#' }
+#' @keywords taxon names subset2 datelifeResult
+#' @details
+#' Generated with:
+#' datelife_query <- make_datelife_query(names_subset2)
+#' datelife_result <- get_datelife_result(datelife_query)
+#' dlsearch_subset2 <- list(datelife_result = datelife_result, datelife_query = datelife_query)
+"dlsearch_subset2"
+
+#' A multiPhylo object with trees resulting from a datelife search of some birds and cats species
+#'
+#' @name birds_and_cats
+#' @docType data
+#' @format A multiPhylo object
+#' @keywords datelifeResult
+#' @details
+#' Generated with:
+#' taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus", "Felis")
+#' birds_and_cats <- datelife_search(input = taxa, summary_format = "phylo_all", get_spp_from_taxon = TRUE)
+"birds_and_cats"
+
+
+#' Table of geological ages and time before earth formation
+#' Goldblatt et al. 2010 doi:10.5194/se-1-1-2010
+#'
+#' @name geostellar
+#' @docType data
+#' @format A data frame
+#' @source \url{https://sites.google.com/site/geologicdatascale/timescale}
+#' @keywords geologic time earth universe formation
+#' @details
+#' Generated with:
+#' geostellar <- read.csv(file = "~/Desktop/datelife/inst/extdata/geo_stellar_chrono_scale_2018.9.20.csv",
+#' save(geostellar, file = "~/Desktop/datelife/data/geostellar.RData")
+#' had <- strat2012[rep(116, each=6),]
+#' rownames(had) <- 116:121
+#' had$era <- c("Neohadean", "Mesohadean", "Palaeohadean")
+#' had$period <- c("Prometean", "Acastan", "Procrustean", "Canadian", "Jacobian", "Hephestean")
+#' had$MA <- c(3900, 4000, 4100, 4200, 4300, 4400)
+#' chao <- strat2012[rep(116, each=4),]
+#' rownames(chao) <- 122:125
+#' chao$eon <- rep("Chaotian", 4)
+#' chao$era <- c(rep("Neochaotian", 2), rep("Eochaotian", 2))
+#' chao$period <- c("Titanomachean", "Hyperitian", "Erebrean", "Nephelean")
+#' chao$MA <- c(4500, 4560, 4567, 4730)
+#'
+"geostellar"

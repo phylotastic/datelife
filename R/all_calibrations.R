@@ -89,7 +89,7 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 #' @inheritParams make_datelife_query
 #' @return A phylogeny with branch lengths proportional to relative substitution rate.
 #' @export
-make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE, marker = "COI", otol_version = "v2", chronogram = TRUE, doML = FALSE, get_spp_from_taxon = FALSE, verbose = FALSE) {
+make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE, marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, get_spp_from_taxon = FALSE, verbose = FALSE) {
 	#otol returns error with missing taxa in v3 of rotl
 	input <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
 	input <- input$cleaned_names
@@ -177,7 +177,8 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	if (verbose) {
 		message( "\t", "OK.", "\n", "Estimating BOLD-OToL tree...")
 	}
-	pml.object <- phangorn::pml(phangorn::acctran(phy, alignment), data = alignment)
+	xx <- phangorn::acctran(phy, alignment)
+	pml.object <- phangorn::pml(xx, data = alignment)
 	phy <- pml.object$tree
 	if(!ape::is.binary.tree(pml.object$tree)){
 		if (verbose) {
@@ -243,11 +244,5 @@ input_tnrs <- function(input, reference_taxonomy = "otl"){  # we can add other r
 get_otol_synthetic_tree <- function(input, otol_version = "v2"){
 	rr <- input_tnrs(input = input, reference_taxonomy = "otl")  # processes input with rotl::tnrs_match_names function by batches, so it won't choke
 	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids = rr$ott_id, label_format = "name",  otl_v = otol_version))
-	phy$tip.label <- gsub(".*_ott","", phy$tip.label)  # leaves only the ott_id as tip.label, it's safer than matching by name
-	# when there are synonyms among the input names, phy will conserve the accepted name (rr$uniqe_name) instead of the original query name from input (rr$search_string)
-	# this produces an error downstream, while using phangorn::pml()
-	# to avoid this error, we replace the unique name by the original query name in phy$tip.label:
-	mm <- match(phy$tip.label, gsub(" ","_", rr$ott_id))  # this gets the order of tip labels in phy
-	phy$tip.label <- gsub(" ","_", input[mm])  # this overlaps the original query over phy$tip.labels in the correct order
 	return(phy)
 }
