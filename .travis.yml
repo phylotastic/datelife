@@ -2,7 +2,7 @@ language: r
 os:
   - linux
   - osx
-sudo: false
+sudo: true
 cache: packages
 script:
   - R CMD build .
