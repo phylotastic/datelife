@@ -48,7 +48,9 @@ datelife_result_MRCA <- function(datelife_result, partial = TRUE) {
 #' Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruiyTree.
 #' @param patristic_matrix A patristic matrix
 #' @param clustering_method A character vector indicating the method to construct the tree. Options are "nj" for Neighbor-Joining and "upgma" for Unweighted Pair Group Method with Arithmetic Mean.
-# We might add the option to insert a function as clustering_methods. For now, it is hard coded to try Neighbor-Joining first; if it errors, it will try UPGMA (Unweighted Pair Group Method with Arithmetic Mean).
+# We might add the option to insert a function as clustering_method.
+# Before, we hard coded it to try Neighbor-Joining first; if it errors, it will try UPGMA.\
+# Now, it uses nj for phylo_all summary, 
 #' @param fix_negative_brlen Boolean indicating weather to fix negative branch lengths in resulting tree or not. Default to TRUE.
 #' @inheritParams tree_fix_brlen
 #' @return A rooted phylo object
@@ -94,7 +96,7 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
         }
         # use regular upgma (or implemented with daisy and hclust) when nj or midpoint.root fail
         # sometimes, nj and njs do not work if patristic matrices come from sdm. why? it was probably the midpoint function from phangorn. Using phytools one now.
-        if (is.null(phy) | clustering_method == "upgma"){
+        if (clustering_method == "upgma"){ # is.null(phy) |
             # tried <- c(tried, "upgma")
             clum <- "upgma"
             phy <- tryCatch(phangorn::upgma(patristic_matrix), error = function (e) NULL)
@@ -110,17 +112,17 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
                   phy
                 }, error = function(e) NULL)
             }
-            if(is.null(phy) & !"nj" %in% tried){ # Trying the exact same chunck for nj was not tried already
-              clum <- "nj"
-              phy <- tryCatch(ape::nj(patristic_matrix), error = function (e) NULL)
-              if (is.null(phy)){
-                  clum <- "njs"
-                  phy <- tryCatch(ape::njs(patristic_matrix),
-                  error = function(e) {
-                    return(NULL)
-                  })
-              }
-            }
+            # if(is.null(phy) & !"nj" %in% tried){ # Trying the exact same chunck for nj was not tried already
+            #   clum <- "nj"
+            #   phy <- tryCatch(ape::nj(patristic_matrix), error = function (e) NULL)
+            #   if (is.null(phy)){
+            #       clum <- "njs"
+            #       phy <- tryCatch(ape::njs(patristic_matrix),
+            #       error = function(e) {
+            #         return(NULL)
+            #       })
+            #   }
+            # }
         }
     }
     if(is.null(phy)){

@@ -79,7 +79,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		return.object <- trees[which(!is.na(trees))]
 	}
 	if(summary_format.in == "phylo_all") {
-		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
+		trees <- lapply(datelife_result, patristic_matrix_to_phylo, clustering_method = "nj")
 		return.object <- trees[which(!is.na(trees))]
 		class(return.object) <- "multiPhylo"
 	}
@@ -95,7 +95,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		  best_grove <- datelife::filter_for_grove(datelife_result,
 		                criterion = "taxa", n = overlap)
 		  median.result <- tryCatch(datelife_result_median(best_grove), error = function(e) NULL)
-			# sometimes max(branching.times) is off (too big or too nsmall), so  we
+			# sometimes max(branching.times) is off (too big or too small), so we could
 			# standardize by real median of original data (max(mrcas)).
 			# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
 		  overlap <- overlap + 1
@@ -215,18 +215,20 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 }
 
 #' Function to compute median of a datelifeResult object.
+#' @inheritParams patristic_matrix_to_phylo
 #' @inheritParams datelife_result_check
-datelife_result_median <- function(datelife_result) {
+datelife_result_median <- function(datelife_result, clustering_method = "nj") {
 	patristic.array <- patristic_matrix_list_to_array(datelife_result)
 	median.matrix <- summary_patristic_matrix_array(patristic.array)
 	# when matrix comes from median, upgma gives much older ages than expected
 	# we use nj to cluster in this case
-	median.phylo <- patristic_matrix_to_phylo(median.matrix, clustering_method = "nj")
+	median.phylo <- patristic_matrix_to_phylo(median.matrix, clustering_method = clustering_method, fix_negative_brlen = TRUE)
 	return(median.phylo)
 }
 
 #' Function to compute the SDM supertree (Criscuolo et al. 2006) from a datelifeResult object.
 #' @inheritParams datelife_result_check
+#' @inheritParams patristic_matrix_to_phylo
 #' @param weighting A character vector indicating how much weight to give to each input tree in the SDM analysis.
 #' 	 Choose one of:
 #' \describe{
@@ -247,57 +249,62 @@ datelife_result_median <- function(datelife_result) {
 #' @export
 #' @details
 #' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006. 55(5):740. doi: 10.1080/10635150600969872.
-datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = TRUE) {
+datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = TRUE, clustering_method = "nj") {
 	# add check datelife_result
 	phy <- NA
 	# used.studies <- names(datelife_result)
-	unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
-	good.matrix.indices <- c()
-	for(i in sequence(length(unpadded.matrices))) {
-		test.result <- NA
-		# Rationale here: some chronograms always cause errors with SDM, even when trying to get a consensus of them
-		# with themselves. For now, throw out of synthesis.
-		try(test.result <- mean(do.call(ape::SDM, c(unpadded.matrices[i], unpadded.matrices[i], rep(1, 2)))[[1]]), silent = TRUE)
-		if (verbose){
-			message(cat(i, "out of", length(unpadded.matrices), "chronograms tried: "), appendLF = FALSE)
-		}
-		if(is.finite(test.result)) {
-			good.matrix.indices <- append(good.matrix.indices,i)
-			if (verbose){
-				message(cat(" Ok."))
-			}
-		} else {
-			if (verbose){
-				message(cat(" Failed."))
-			}
-		}
-	}
-	if(length(good.matrix.indices) > 1) {
-		unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-		# used.studies <- used.studies[good.matrix.indices]
-		weights = rep(1, length(unpadded.matrices))
-		if (weighting=="taxa") {
-			weights = unname(sapply(unpadded.matrices, dim)[1,])
-		}
-		if (weighting=="inverse") {
-			weights = 1/unname(sapply(unpadded.matrices, dim)[1,])
-		}
-		if (verbose){
-			message(cat("\n", "Synthesizing", length(unpadded.matrices), "chronograms with SDM"))
-		}
-		SDM.result <- do.call(ape::SDM, c(unpadded.matrices, weights))[[1]]
-		# it is important to use upgma as clustering method; nj produces much younger ages when the matrix comes from sdm
-		phy <- patristic_matrix_to_phylo(SDM.result, clustering_method = "upgma")
-
+	if(length(datelife_result) == 1){
+		phy <- patristic_matrix_to_phylo(datelife_result, clustering_method = clustering_method, fix_negative_brlen = FALSE)
+		unpadded.matrices <- datelife_result
 	} else {
-		if(length(good.matrix.indices) == length(datelife_result)) {
-			warning("There are not enough input chronograms to run SDM. This is not your fault.")
-		} else {
-			warning("All input chronograms throw an error when running SDM. This is not your fault.")
+		unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
+		good.matrix.indices <- c()
+		for(i in sequence(length(unpadded.matrices))) {
+			test.result <- NA
+			# Rationale here: some chronograms always cause errors with SDM, even when trying to get a consensus of them
+			# with themselves. For now, throw out of synthesis.
+			try(test.result <- mean(do.call(ape::SDM, c(unpadded.matrices[i], unpadded.matrices[i], rep(1, 2)))[[1]]), silent = TRUE)
+			if (verbose){
+				message(cat(i, "out of", length(unpadded.matrices), "chronograms tried: "), appendLF = FALSE)
+			}
+			if(is.finite(test.result)) {
+				good.matrix.indices <- append(good.matrix.indices,i)
+				if (verbose){
+					message(cat(" Ok."))
+				}
+			} else {
+				if (verbose){
+					message(cat(" Failed."))
+				}
+			}
 		}
-		stop("SDM tree cannot be generated with this set of taxa.")
+		if(length(good.matrix.indices) > 1) {
+			unpadded.matrices <- unpadded.matrices[good.matrix.indices]
+			# used.studies <- used.studies[good.matrix.indices]
+			weights = rep(1, length(unpadded.matrices))
+			if (weighting=="taxa") {
+				weights = unname(sapply(unpadded.matrices, dim)[1,])
+			}
+			if (weighting=="inverse") {
+				weights = 1/unname(sapply(unpadded.matrices, dim)[1,])
+			}
+			if (verbose){
+				message(cat("\n", "Synthesizing", length(unpadded.matrices), "chronograms with SDM"))
+			}
+			SDM.result <- do.call(ape::SDM, c(unpadded.matrices, weights))[[1]]
+			# it is important to use upgma as clustering method; nj produces much younger ages when the matrix comes from sdm
+			phy <- patristic_matrix_to_phylo(SDM.result, clustering_method = clustering_method, fix_negative_brlen = TRUE)
+
+		} else {
+			if(length(good.matrix.indices) == length(datelife_result)) {
+				warning("There are not enough input chronograms to run SDM. You can help uploading trees to Open Tree of Life tree store.")
+			} else {
+				warning("All input chronograms throw an error when running SDM. This is not your fault.")
+			}
+			stop("SDM tree cannot be generated with this set of taxa.")
+		}
+		class(unpadded.matrices) <- "datelifeResult"
 	}
-	class(unpadded.matrices) <- "datelifeResult"
 	return(list(phy = phy, data = unpadded.matrices))
 }
 

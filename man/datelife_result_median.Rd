@@ -4,10 +4,12 @@
 \alias{datelife_result_median}
 \title{Function to compute median of a datelifeResult object.}
 \usage{
-datelife_result_median(datelife_result)
+datelife_result_median(datelife_result, clustering_method = "nj")
 }
 \arguments{
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
+
+\item{clustering_method}{A character vector indicating the method to construct the tree. Options are "nj" for Neighbor-Joining and "upgma" for Unweighted Pair Group Method with Arithmetic Mean.}
 }
 \description{
 Function to compute median of a datelifeResult object.

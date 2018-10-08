@@ -75,45 +75,15 @@ test_that("patristic_matrix_to_phylo is accurate", {
   utils::data(names_subset2)
   taxa_list <- list(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus", "Felis"))
   taxa_list <- c(taxa_list, lapply(1:50, function(x) sample(names_subset2, size = 20, replace = FALSE)))
-  n <- 0
-  phylocm_med <- c()
-  phylocm_sdm <- c()
-  phylobr_sdm <- c()
-  phylobr_med <- c()
-  maxbr_all <- c()
-  for (taxa in taxa_list){
-    query <- make_datelife_query(input = taxa, get_spp_from_taxon = TRUE)
-    res <- get_datelife_result(input = query)
-    if(length(res) == 0) {
-      phylocm_med <- c(phylocm_med, NA)
-      phylocm_sdm <- c(phylocm_sdm, NA)
-      phylobr_med <- c(phylobr_med, NA)
-      phylobr_sdm <- c(phylobr_sdm, NA)
-      maxbr_all <- c(maxbr_all, NA)
-      n <- n + 1
-      print(n)
-      next()
-    }
-    mrcas <- summarize_datelife_result(datelife_query= query, datelife_result = res, summary_format = "mrca")
-    names(mrcas) <- NULL
-    phyloall <- summarize_datelife_result(datelife_query= query, datelife_result = res, summary_format = "phylo_all")
-    maxbr <- sapply(phyloall, function(x) max(ape::branching.times(x)))
-    names(maxbr) <- NULL
-    #the following tests that both the source patristic matrix and the derived phylo object have the same maximum age.
-    expect_true(all(round(sort(mrcas), digits = 5) == round(sort(maxbr), digits = 5)))
-    phylosdm <- tryCatch(summarize_datelife_result(datelife_query= query, datelife_result = res, summary_format = "phylo_sdm"),
-      error = function(e) NA)
-    # expect_true(max(maxbr)*1.2 > max(ape::branching.times(phylosdm)) & max(ape::branching.times(phylosdm)) > max(maxbr)*0.8)
-    phylomed <- summarize_datelife_result(datelife_query= query, datelife_result = res, summary_format = "phylo_median")
-    # expect_true(max(maxbr)*1.2 > max(ape::branching.times(phylomed)) & max(ape::branching.times(phylomed)) > max(maxbr)*0.8)
-    n <- n + 1
-    phylocm_med <- c(phylocm_med, phylomed$clustering_method)
-    phylocm_sdm <- c(phylocm_sdm, tryCatch(phylosdm$clustering_method,
-      error = function(e) NaN))
-    phylobr_med <- c(phylobr_med, max(ape::branching.times(phylomed)))
-    phylobr_sdm <- c(phylobr_sdm, tryCatch(max(ape::branching.times(phylosdm)),
-      error = function(e) NaN))
-    maxbr_all <- c(maxbr_all, max(maxbr))
-    print(n)
-  }
+  source("~/Desktop/datelife/inst/extdata/test_taxa_batch.R")
+  cbind(med_nj, med_upgma, sdm_nj, sdm_upgma, maxbr_all, true_all, sapply(phylo_all, length))
 })
+
+# names(med_nj) <- med_nj_cm
+# names(med_upgma) <- med_upgma_cm
+# names(sdm_nj) <- sdm_nj_cm
+# names(sdm_upgma) <- sdm_upgma_cm
+# med_nj
+# med_upgma
+# sdm_nj
+# sdm_upgma
