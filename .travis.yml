@@ -40,7 +40,7 @@ before_install:
   #  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --overwrite gcc          ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew tap brewsci/bio; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install brewsci/bio/mrbayes; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install bomeara/science/pathd8; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install brewsci/science/pathd8; fi
 
 #   alternatively, on terminal:
 #       git update-index --add --chmod=+x install-dependencies.sh
