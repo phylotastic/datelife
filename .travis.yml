@@ -6,6 +6,7 @@ sudo: false
 cache: packages
 r_github_packages:
   - phylotastic/rphylotastic
+  - fmichonneau/phyloch
 script:
   - R CMD build .
   - travis_wait 66 R CMD check datelife*tar.gz
