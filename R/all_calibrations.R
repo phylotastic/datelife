@@ -221,20 +221,24 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 #' @return A data frame from tnrs_match_names function
 #' @export
 input_tnrs <- function(input, reference_taxonomy = "otl"){  # we can add other reference taxonomies in the future
+	input <- unique(input)
+	input <- input[!is.na(input)]  # tnrs_match_names does not allow NAs
 	if(reference_taxonomy == "otl"){
+		df <- suppressWarnings(rotl::tnrs_match_names(names = "Apis mellifera"))
+		df <- df[nrow(df)+1, ]
+		df[nrow(df)+length(input)-1, ] <- NA
 		xx <- seq(1, length(input), 250)
 		yy <- xx+249
 		yy[length(xx)] <- length(input)
-		rr <- c()
-		for (i in seq_len(length(xx))){
-			rr <- rbind(rr, suppressWarnings(rotl::tnrs_match_names(names = input[xx[i]:yy[i]])))
+		for (i in seq(length(xx))){
+			df[xx[i]:yy[i],] <- suppressWarnings(rotl::tnrs_match_names(names = input[xx[i]:yy[i]]))
 		}
-		# rr <- rotl::tnrs_match_names(names = input)
-		# rr has the same order as input
-		# when names are not matched it gives a warning: NAs introduced by coercion, so:
-		rr <- rr[!is.na(rr$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
+		# df[is.na(df$unique_name),1] <- input[is.na(df$unique_name)]  # in case the unmatched names are dropped from final df
+		# df <- rotl::tnrs_match_names(names = input)
+		# df has the same order as input
+		# when names are not matched it gives a warning: NAs introduced by coercion
 	}
-	return(rr)
+	return(df) #returns the whole data frame
 }
 #' Gets Open Tree of Life synthetic tree of a set of lineages.
 #' @inheritParams datelife_search
@@ -242,7 +246,8 @@ input_tnrs <- function(input, reference_taxonomy = "otl"){  # we can add other r
 #' @return A phylo object
 #' @export
 get_otol_synthetic_tree <- function(input, otol_version = "v2"){
-	rr <- input_tnrs(input = input, reference_taxonomy = "otl")  # processes input with rotl::tnrs_match_names function by batches, so it won't choke
-	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids = rr$ott_id, label_format = "name",  otl_v = otol_version))
+	df <- input_tnrs(input = input, reference_taxonomy = "otl")  # input_tnrs processes input with rotl::tnrs_match_names function by batches, so it won't choke
+	df <- df[!is.na(df$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
+	phy <- ape::multi2di(rotl::tol_induced_subtree(ott_ids = df$ott_id, label_format = "name",  otl_v = otol_version))
 	return(phy)
 }

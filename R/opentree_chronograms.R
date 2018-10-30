@@ -86,7 +86,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 			study.id <- chronogram.matches$study_ids[study.index]
 			# if(study.id %in% opentree_chronograms$studies)  # unlist(opentree_chronograms$studies) if new_studies_only
 	#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
-			new.tree <- NULL
+			new.tree2 <- new.tree <- NULL
 			tree.id <- strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index]
 			potential.bad <- paste("tree_id='", tree.id, "', study_id='", study.id, "'", sep="")
 
@@ -99,7 +99,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 					message("tree_id = '", tree.id, "', study_id = '", study.id, "'")
 				}
 				if(!is.null(new.tree) & phylo_has_brlen(phy = new.tree)) {
-					new.tree <- clean_chronogram(new.tree)
+					new.tree <- clean_ott_chronogram(new.tree)
 					if(phylo_has_brlen(phy = new.tree)) {
 						if(is_good_chronogram(new.tree)) {
 							new.tree$tip.label <- gsub('_', ' ', new.tree$tip.label)
@@ -117,9 +117,12 @@ get_otol_chronograms <- function(verbose = FALSE) {
 							curators <- append(curators, NA)
 							try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
 							try(studies <- append(studies, study.id))
-							tree.count <- tree.count+1
+							tree.count <- tree.count + 1
 							try(dois <- append(dois, chronogram.matches$study_doi[study.index]))
-							trees[[tree.count]] <-new.tree
+							try(new.tree2 <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_id")) #would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
+							new.tree2 <- clean_ott_chronogram(new.tree2)
+							new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label)
+							trees[[tree.count]] <- new.tree
 							names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
 							message("\t", "was good tree")
 							potential.bad <- NULL
@@ -207,11 +210,16 @@ is_good_chronogram <- function(phy) {
 #' @inheritParams phylo_check
 #' @return A cleaned up phylo object
 #' @export
-clean_chronogram <- function(phy) {
+clean_ott_chronogram <- function(phy) {
 	original.phy <- phy
 	if(class(phy) == "phylo") {
 		if(ape::Ntip(phy) > ape::Nnode(phy)) {
-			bad.taxa <- unique(c(which(nchar(phy$tip.label) <= 2), which(grepl("not mapped", phy$tip.label))))
+			if(any(grepl("_", phy$tip.label))){
+				NOT <- "not_mapped"
+			} else {
+				NOT <- "not mapped"
+			}
+			bad.taxa <- unique(c(which(nchar(phy$tip.label) <= 2), which(grepl(NOT, phy$tip.label))))
 			if(length(bad.taxa) > 0 & length(bad.taxa) < (ape::Ntip(phy)-1)) { #will return trees with as few as two unmapped tips
 				phy <- try(ape::drop.tip(phy, bad.taxa))
 				if(class(phy) == "try-error") {
