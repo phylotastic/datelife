@@ -260,7 +260,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	cleaned.input <- stringr::str_trim(input, side = "both")  # cleans the input of lingering unneeded white spaces
   if (use_tnrs) {
 		# process names even if it's a "higher" taxon name:
-		cleaned.input <- input_tnrs(input = cleaned.input)$unique_name
+		cleaned.input <- batch_tnrs_match_names(names = cleaned.input)$unique_name
 		# after some tests, decided to use rotl's method instead of taxize::gnr_resolve, and just output the original input and the actual query for users to check out.
 		# cleaned.input <- taxize::gnr_resolve(names = cleaned.input, data_source_ids=179, fields="all")$matched_name
   }

@@ -299,7 +299,7 @@ test_that("get_otol_synthetic_tree works", {
   expect_s3_class(otol_tree, "phylo") # output is phylo
   expect_gte(length(otol_tree), 4)  # it has no branch lengths
   # should it return all names always?
-  # it should return the same number of names matched by input_tnrs
+  # it should return the same number of names matched by batch_tnrs_match_names
   # add such a test:
 })
 
@@ -406,7 +406,7 @@ test_that("get_dated_otol_induced_subtree works", {
   xx <- get_dated_otol_induced_subtree(input = felid_sdm$phy)
   xx <- get_dated_otol_induced_subtree(ott_ids = c(563163, 770315)) # cat and human ott_ids
   xx <- get_dated_otol_induced_subtree(ott_ids = c("563163", "770315", "mrcaott99")) # cat and human ott_ids
-  xx <- get_dated_otol_induced_subtree(ott_ids = c("563163", "mrcaott770315", "mrcaott99")) # cat and human ott_ids  
+  xx <- get_dated_otol_induced_subtree(ott_ids = c("563163", "mrcaott770315", "mrcaott99")) # cat and human ott_ids
 })
 
 # getting an error when phangorn::densitree plotting datelife_result chronograms from the following taxa

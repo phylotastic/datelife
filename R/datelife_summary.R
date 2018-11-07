@@ -317,17 +317,21 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 get_dated_otol_induced_subtree <- function(input = c("Felis silvestris", "Homo sapiens"), ott_ids = NULL){
 	if(is.null(ott_ids)){
 		input <- datelife_query_check(input)
-		input_ott_match <- as.numeric(rotl::tnrs_match_names(input$cleaned_names)$ott_id)
+		input_ott_match <- suppressWarnings(as.numeric(rotl::tnrs_match_names(input$cleaned_names)$ott_id))
+		if(any(is.na(input_ott_match))){
+			message(paste0("Input '", paste(input[which(is.na(input_ott_match))], collapse = "', '"), "', not found in Open Tree of Life Taxonomy."))
+			input_ott_match <- input_ott_match[which(!is.na(input_ott_match))]
+		}
 	} else {
 		input_ott_match <- suppressWarnings(as.numeric(ott_ids))
 		if(any(is.na(input_ott_match))){
-			message(paste0("Given ott_id '", paste(ott_ids[which(is.na(input_ott_match))], collapse = "', '"), "', not numeric and will be excluded from the search."))
+			message(paste0("Ott ids '", paste(ott_ids[which(is.na(input_ott_match))], collapse = "', '"), "', not numeric and will be excluded from the search."))
 			input_ott_match <- input_ott_match[which(!is.na(input_ott_match))]
-			if(length(input_ott_match) < 2){
-				message("At least two valid numeric ott_ids are needed to get a tree")
-				return(NA)
-			}
 		}
+	}
+	if(length(input_ott_match) < 2){
+		message("At least two valid names or numeric ott_ids are needed to get a tree")
+		return(NA)
 	}
   pp <- httr::POST("http://141.211.236.35:10999/induced_subtree",
 						body = list(ott_ids = input_ott_match),
@@ -337,7 +341,9 @@ get_dated_otol_induced_subtree <- function(input = c("Felis silvestris", "Homo s
 	          body = list(newick = pp$newick),
 	          encode = "json", httr::timeout(10))
 	rr <- httr::content(rr)
-  return(ape::read.tree(text = rr$newick))
+	rr <- ape::read.tree(text = rr$newick)
+	rr$ott_ids <- ape::read.tree(text = pp$newick)$tip.label
+  return(rr)
 }
 
 #' Get the tree with the most tips: the biggest tree
