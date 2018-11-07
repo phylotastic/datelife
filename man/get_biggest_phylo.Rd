@@ -9,6 +9,9 @@ get_biggest_phylo(trees)
 \arguments{
 \item{trees}{A list of trees as multiPhylo or as a plain list object.}
 }
+\value{
+A phylo object
+}
 \description{
 Get the tree with the most tips: the biggest tree
 }

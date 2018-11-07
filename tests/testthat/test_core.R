@@ -402,7 +402,11 @@ test_that("tree_add_dates works", {
   })
 
 test_that("get_dated_otol_induced_subtree works", {
+  xx <- get_dated_otol_induced_subtree()
   xx <- get_dated_otol_induced_subtree(input = felid_sdm$phy)
+  xx <- get_dated_otol_induced_subtree(ott_ids = c(563163, 770315)) # cat and human ott_ids
+  xx <- get_dated_otol_induced_subtree(ott_ids = c("563163", "770315", "mrcaott99")) # cat and human ott_ids
+  xx <- get_dated_otol_induced_subtree(ott_ids = c("563163", "mrcaott770315", "mrcaott99")) # cat and human ott_ids  
 })
 
 # getting an error when phangorn::densitree plotting datelife_result chronograms from the following taxa

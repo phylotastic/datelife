@@ -310,11 +310,25 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 
 #' Get an otol induced dated subtree from your set of queried taxa
 #' @inheritParams datelife_search
+#' @param ott_ids Numeric vector of Open Tree Taxonomy ids
+#' @return A phylo object with edge length proportional to time in Myrs. NA if 1 or no inputs are valid.
 #' @export
 #' @details otol dated tree from Stephen Smith's otol scaling service
-get_dated_otol_induced_subtree <- function(input){
-	input <- datelife_query_check(input)
-	input_ott_match <- as.numeric(rotl::tnrs_match_names(input$cleaned_names)$ott_id)
+get_dated_otol_induced_subtree <- function(input = c("Felis silvestris", "Homo sapiens"), ott_ids = NULL){
+	if(is.null(ott_ids)){
+		input <- datelife_query_check(input)
+		input_ott_match <- as.numeric(rotl::tnrs_match_names(input$cleaned_names)$ott_id)
+	} else {
+		input_ott_match <- suppressWarnings(as.numeric(ott_ids))
+		if(any(is.na(input_ott_match))){
+			message(paste0("Given ott_id '", paste(ott_ids[which(is.na(input_ott_match))], collapse = "', '"), "', not numeric and will be excluded from the search."))
+			input_ott_match <- input_ott_match[which(!is.na(input_ott_match))]
+			if(length(input_ott_match) < 2){
+				message("At least two valid numeric ott_ids are needed to get a tree")
+				return(NA)
+			}
+		}
+	}
   pp <- httr::POST("http://141.211.236.35:10999/induced_subtree",
 						body = list(ott_ids = input_ott_match),
 						encode = "json", httr::timeout(10))
@@ -328,6 +342,7 @@ get_dated_otol_induced_subtree <- function(input){
 
 #' Get the tree with the most tips: the biggest tree
 #' @param trees A list of trees as multiPhylo or as a plain list object.
+#' @return A phylo object
 #' @export
 get_biggest_phylo <- function(trees){
 	return.object <- trees[which(sapply(trees, ape::Ntip) == max(sapply(trees, ape::Ntip)))]

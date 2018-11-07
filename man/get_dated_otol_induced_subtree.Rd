@@ -4,10 +4,16 @@
 \alias{get_dated_otol_induced_subtree}
 \title{Get an otol induced dated subtree from your set of queried taxa}
 \usage{
-get_dated_otol_induced_subtree(input)
+get_dated_otol_induced_subtree(input = c("Felis silvestris",
+  "Homo sapiens"), ott_ids = NULL)
 }
 \arguments{
 \item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
+
+\item{ott_ids}{Numeric vector of Open Tree Taxonomy ids}
+}
+\value{
+A phylo object with edge length proportional to time in Myrs. NA if 1 or no inputs are valid.
 }
 \description{
 Get an otol induced dated subtree from your set of queried taxa
