@@ -50,7 +50,7 @@ tree_get_node_data <- function(tree = NULL, nodes = NULL, node_data = c("node_nu
 #' @param node_index Character vector choosing one of "consecutive" or "node_number" as node label index. It will use consecutive numbers from 1 to total node number in the first case and node numbers in the second case.
 #' @return A phylo object
 #' @export
-tree_add_nodelabels <- function(tree = NULL, node_prefix="n", node_index="node_number"){
+tree_add_nodelabels <- function(tree = NULL, node_prefix = "n", node_index="node_number"){
 	phy <- tree_check(tree = tree)
 	node_index <- match.arg(arg = node_index, choices = c("consecutive","node_number"), several.ok = FALSE)
 	if("node_number" %in% node_index){
@@ -60,10 +60,10 @@ tree_add_nodelabels <- function(tree = NULL, node_prefix="n", node_index="node_n
 		node_number <- seq(phy$Nnode)
 	}
 	if(is.null(phy$node.label)){
-		phy$node.label <- paste0(node_prefix, node_index)
+		phy$node.label <- paste0(node_prefix, node_number)
 	} else {
 		en <- which(phy$node.label == "")
-		phy$node.label[en] <- paste0(node_prefix, en)
+		phy$node.label[en] <- paste0(node_prefix, nide_number[en])
 	}
 	return(phy)
 }
