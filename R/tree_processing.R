@@ -63,7 +63,7 @@ tree_add_nodelabels <- function(tree = NULL, node_prefix = "n", node_index="node
 		phy$node.label <- paste0(node_prefix, node_number)
 	} else {
 		en <- which(phy$node.label == "")
-		phy$node.label[en] <- paste0(node_prefix, nide_number[en])
+		phy$node.label[en] <- paste0(node_prefix, node_number[en])
 	}
 	return(phy)
 }
