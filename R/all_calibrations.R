@@ -267,7 +267,8 @@ batch_tnrs_match_names <- function(names, reference_taxonomy = "otl", ...){  # w
 #' @param invalid A character string with flags to be removed from final object.
 #' @details Input can be any data frame or named list that relates taxa stored in an element named "unique" to a validity category stored in "flags".
 #' @return A data frame or named list (depending on the input) with valid taxa only.
-clean_tnrs <- function(tnrs, invalid = c("barren", "extinct", "uncultured", "major_rank_conflict", "incertae", "unplaced", "conflict")){
+#' @export
+clean_tnrs <- function(tnrs, invalid = c("barren", "extinct", "uncultured", "major_rank_conflict", "incertae", "unplaced", "conflict", "environmental", "not_otu")){
   if(!"flags" %in% names(tnrs)){
     message("tnrs should be a data.frame from datelife::batch_tnrs_match_names or rotl::tnrs_match_names functions")
 	if(!is.data.frame(tnrs)){
