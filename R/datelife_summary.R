@@ -333,17 +333,21 @@ get_dated_otol_induced_subtree <- function(input = c("Felis silvestris", "Homo s
 		message("At least two valid names or numeric ott_ids are needed to get a tree")
 		return(NA)
 	}
-  pp <- httr::POST("http://141.211.236.35:10999/induced_subtree",
+  pp <- tryCatch(httr::POST("http://141.211.236.35:10999/induced_subtree",
 						body = list(ott_ids = input_ott_match),
-						encode = "json", httr::timeout(10))
-	pp <- httr::content(pp)
-	rr <- httr::POST("http://141.211.236.35:10999/rename_tree",
-	          body = list(newick = pp$newick),
-	          encode = "json", httr::timeout(10))
-	rr <- httr::content(rr)
-	rr <- ape::read.tree(text = rr$newick)
-	rr$ott_ids <- ape::read.tree(text = pp$newick)$tip.label
-  return(rr)
+						encode = "json", httr::timeout(10)), error = function(e) NA)
+	if(length(pp) > 1){
+		pp <- httr::content(pp)
+		rr <- httr::POST("http://141.211.236.35:10999/rename_tree",
+		          body = list(newick = pp$newick),
+		          encode = "json", httr::timeout(10))
+		rr <- httr::content(rr)
+		rr <- ape::read.tree(text = rr$newick)
+		rr$ott_ids <- ape::read.tree(text = pp$newick)$tip.label
+	  return(rr)
+	}	else {
+		return(pp)
+	}
 }
 
 #' Get the tree with the most tips: the biggest tree

@@ -405,8 +405,15 @@ test_that("get_dated_otol_induced_subtree works", {
   xx <- get_dated_otol_induced_subtree()
   xx <- get_dated_otol_induced_subtree(input = felid_sdm$phy)
   xx <- get_dated_otol_induced_subtree(ott_ids = c(563163, 770315)) # cat and human ott_ids
+  # expect an NA result on te two following:
   xx <- get_dated_otol_induced_subtree(ott_ids = c("563163", "770315", "mrcaott99")) # cat and human ott_ids
   xx <- get_dated_otol_induced_subtree(ott_ids = c("563163", "mrcaott770315", "mrcaott99")) # cat and human ott_ids
+  # "Hamamelidaceae", "Altingiaceae", "Zamiaceae", "Rutaceae", "Saxifragaceae", "Asparagaceae", "Cycadaceae", "Smilacaceae", "Boraginaceae"
+  # with respective ott ids 737324, 853767, 614459, 43847, 1035588, 17704, 99242, 978709, 147029
+  # are dropped from tree. I'm sure there are more.
+  xx <- get_dated_otol_induced_subtree(input = c("Felis silvestris", "Homo sapiens", "Hamamelidaceae", "Altingiaceae"))
+  # we should add an element to pylo object that contains input lineages that are excluded from tree:
+  # expect_false(is.null(xx$dropped))
 })
 
 # getting an error when phangorn::densitree plotting datelife_result chronograms from the following taxa
