@@ -2,6 +2,7 @@
 
 export(batch_tnrs_match_names)
 export(clean_ott_chronogram)
+export(clean_tnrs)
 export(datelife_authors_tabulate)
 export(datelife_query_check)
 export(datelife_query_length_check)

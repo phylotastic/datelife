@@ -640,12 +640,17 @@ wrap_string_to_plot <- function(string, max_cex = 1, min_cex = 0.5, string_font 
 #' @inheritParams get_biggest_phylo
 #' @inheritParams subset_trees
 #' @param individually Boolean indicating if trees should be plotted one by one or all on the same file
+#' @param write A character vector of length 1. Use pdf or png to write a file on those formats respectively. Anything else will not write any image file.
+#' @inheritParams ape::plot.phylo
+#' @param file A character string giving the name of the files. It will be the name of the directory too.
 #' @export
-plot_phylo_all <- function(trees, include = TRUE, individually = TRUE){
-  strat2012 <- NULL
+plot_phylo_all <- function(trees, include = TRUE, individually = TRUE, cex = graphics::par("cex"), write = "no", file = "phylo_all"){
   utils::data("strat2012", package = "phyloch")
   trees <- subset_trees(trees, include = include)
-  if(isTRUE(all.equal(round(max(sapply(trees, function(x) max(ape::branching.times(x)))), digits = 3))))
+  if(any(names(trees) %in% "tip.label")){
+    trees <- list(trees)
+  }
+  # if(isTRUE(all.equal(round(sapply(trees, function(x) max(ape::branching.times(x))), digits = 3))))
   max.depth <- round(max(sapply(trees, function(x) max(ape::branching.times(x)))) + 5, digits = -1)
   # max.depth <- round(max(summarize_datelife_result(datelife_result = get.filtered.results(),
   #             summary_format = "mrca")) + 5)  # in case we used it for a datelife object
@@ -657,29 +662,53 @@ plot_phylo_all <- function(trees, include = TRUE, individually = TRUE){
   })
   mai4 <- unique(unlist(sapply(trees, "[", "tip.label")))
   ind <- which.max(nchar(mai4))
-  mai4 <- graphics::strwidth(s = mai4[ind], units = "inches", cex = 0.5, font = 3)
+  mai4 <- graphics::strwidth(s = mai4[ind], units = "inches", cex = cex, font = 3)
   # if(any(lapply(trees, ape::Ntip) > 3))
   # png("~/tmp/axisgeo.png", units = "in")
-  if(individually){
-    if (!grDevices::devAskNewPage() && !names(grDevices::dev.cur()) %in% c("pdf", "postscript")) {
-        grDevices::devAskNewPage(TRUE)
-        on.exit(grDevices::devAskNewPage(FALSE))
+  if(!any(c("png", "pdf") %in% write)){
+  # if (!grDevices::devAskNewPage() && !names(grDevices::dev.cur()) %in% c("pdf", "postscript")) {
+      grDevices::devAskNewPage(TRUE)
+      # dev.size("px")
+      on.exit(grDevices::devAskNewPage(FALSE))
+  } else {
+      reports::folder(folder.name = gsub("\\.png$|\\.pdf$", "", file))
+  }
+  for (i in 1:length(trees)){
+    ho <- phylo_height_omi(tree = trees[[i]])
+    if(any(c("png", "pdf") %in% write)){
+      if("png" %in% write){
+        grDevices::png(file = paste0(gsub("\\.png$|\\.pdf$", "", file), "/", gsub("\\.png$|\\.pdf$", "", file), "_", i, ".", write),
+        height = ho$height)
+      } else {
+        grDevices::pdf(file = paste0(gsub("\\.png$|\\.pdf$", "", file), "/", gsub("\\.png$|\\.pdf$", "", file), "_", i, ".", write),
+        height = ho$height/72)
+      }
     }
-    for (i in 1:length(trees)){
-      ho <- phylo_height_omi(tree = trees[[i]])
-      graphics::par(xpd = FALSE, mai = c(0,0,0,mai4), omi = c(ho$omi1, 0, 1, 0))
-      # plot_chronogram.phylo(trees[[i]], cex = 1.5, edge.width = 2, label.offset = 0.5,
-        # x.lim = c(0, max.depth), root.edge = TRUE, root.edge.color = "white")
-      ape::plot.phylo(trees[[i]], cex = 0.5, #edge.width = 2,
-        label.offset = 0.5, x.lim = c(0, max.depth), root.edge = TRUE, plot = TRUE)  #, ...
-        phyloch::axisGeo(GTS = strat2012, unit = c("period","epoch"),
-          col = c("gray80", "white"), gridcol = c("gray80", "white"), cex = 0.5,
-          gridty = "twodash")
-      graphics::mtext("Time (MYA)", cex = 0.5, side = 1, font = 2, line = (ho$omi1-0.2)/0.2,
-      outer = TRUE, at = 0.4)
-      titlei <- wrap_string_to_plot(string = names(trees)[i], max_cex = 0.75, whole = FALSE)
-      graphics::mtext(text = titlei$wrapped, outer = TRUE,
-        cex = titlei$string_cex, font = titlei$string_font, line = 1)
+    graphics::par(xpd = NA, mai = c(0,0,0,mai4), omi = c(ho$omi1, 0, 1, 0))
+    # plot_chronogram.phylo(trees[[i]], cex = 1.5, edge.width = 2, label.offset = 0.5,
+      # x.lim = c(0, max.depth), root.edge = TRUE, root.edge.color = "white")
+    ape::plot.phylo(trees[[i]], cex = cex, #edge.width = 2,
+      label.offset = 0.5, x.lim = c(0, max.depth), root.edge = TRUE, plot = TRUE)  #, ...
+    graphics::par(xpd = FALSE)
+    phyloch::axisGeo(GTS = strat2012, unit = c("period","epoch"),
+        col = c("gray80", "white"), gridcol = c("gray80", "white"), cex = 0.5,
+        gridty = "twodash")
+    graphics::mtext("Time (MYA)", cex = cex, side = 1, font = 2, line = (ho$omi1-0.2)/0.2,
+    outer = TRUE, at = 0.4)
+    titlei <- wrap_string_to_plot(string = names(trees)[i], max_cex = 0.75, whole = FALSE)
+    graphics::mtext(text = titlei$wrapped, outer = TRUE,
+      cex = titlei$string_cex, font = titlei$string_font, line = 1)
+    if(any(c("png", "pdf") %in% write)){
+      grDevices::dev.off()
     }
   }
+  # getting an "unrecoverable" error with merge PDF:
+  # if(!individually){
+  #   # install_github("trinker/plotflow")
+  #   plotflow:::mergePDF(
+  #       in.file= paste(file.path(gsub("\\.png$|\\.pdf$", "", file), dir(gsub("\\.png$|\\.pdf$", "", file)))),
+  #       file= paste0(gsub("\\.png$|\\.pdf$", "", file), ".", write)
+  #       # file= "merged.pdf"
+  #   )
+  # }
 }

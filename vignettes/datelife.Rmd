@@ -1,0 +1,162 @@
+---
+title: "datelife package"
+author: "Luna L. Sánchez-Reyes and Brian O'Meara"
+date: "`r Sys.Date()`"
+output:
+    rmarkdown::html_vignette
+header-includes: \usepackage{graphicx}
+graphics: yes
+vignette: >
+  %\VignetteIndexEntry{datelife package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE, warnings = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "# >"
+)
+```
+
+`datelife` is an R package for obtaining information on time of divergence of taxa
+from expert sources (i.e., peer-reviewed published research). It is also a service
+for time scaling phylogenetic trees. It leverages on chronograms already available
+on Open Tree of Life Database and on existing dating and analyzing tools to rapidly
+generate de-novo hypothesis of time divergence of taxa.
+
+# Installation
+First, install `datelife` into your computer. You can install the stable version of the package from cran
+```r
+install.packages("datelife")
+```
+or the development version from github
+```r
+devtools::install_github("phylotastic/datelife")
+```
+
+Now load the package into the R workspace.
+```{r, eval = TRUE}
+library("datelife")
+devtools::load_all("~/Desktop/datelife/")
+
+```
+
+# Getting all available chronograms
+
+The main service of `datelife` is getting chronograms from published peer reviewed
+studies (from now on *source chronograms*) for a set of taxa of interest. It is
+accomplished with `datelife_search()` function. Taxa of interest must be provided
+as scientific names, either in a character vector or in a tree in phylo or newick
+format with the scientific names as tip labels. Upper and lower case are ignored.
+
+```{r, eval = TRUE}
+mamms <- datelife_search(input = c("Felis catus", "Delphinus delphus", "Homo sapiens", "Elephas maximus"))
+```
+
+You can plot al source chronograms on screen with the function `plot_phylo_all()`
+or save them into a pdf or png file with the argument `write`:
+```{r, eval = FALSE}
+plot_phylo_all(mamms, write = "pdf", file = "mamms_phyloall")
+```
+```{r pressure, out.width="100%", include=TRUE, fig.align="center", fig.cap=c("   "), echo=FALSE}
+# out.width="0.3\\linewidth"
+ff <- paste(file.path("mamms_phyloall", dir("mamms_phyloall")))
+knitr::include_graphics(ff)
+# ![Image Title](./mamms_phyloall.pdf){width=65%}
+```
+
+
+Source chronograms come from Open Tree of Life tree store, this means that uncertainty from original studies is not yet available.
+
+Explain the datelife object. It is composed by three elements.
+datelifeQuery
+datelifeResults
+datelifeSummary
+
+You can get all trees in newick format.
+Chronogram search is performed at the species level. This means that source chronograms with subspecies are collapsed to present one exemplar per species.
+
+```{r, eval = FALSE}
+# show how chronogram cache is constructed, do not eval, show one message example
+```
+
+For now, taxon names must be provided as scientific names. Common name searches are not yet implemented. Scientific names can be anything from species binomials to higher-taxon names. Subspecies names will not be considered.
+You can use the datelife_query function first to check that your names are accepted. If you are unsure about the spelling or synonyms, you can use arguments bla and bla. These are services of rphylotastic package implemented here.
+
+```{r, eval = TRUE}
+# datelife query function
+make_datelife_query(c("cat", "dog"))
+```
+
+If higher-taxon names are provided, you can use option get_spp_from_taxon = TRUE, which is also a service of rphylotatsic that gets all species within a higher taxon. If you choose this option, all species within the higher-taxon names provided will be included in the search.
+
+```{r, eval = TRUE}
+# datelife query function
+```
+
+# Summarizing source chronograms: getting a single tree
+
+You can summarize all source chronograms found by DateLife with the median method.
+
+You can also summarize source chronograms with a supertree approach. In here we have implemented SDM method.
+
+Within DateLife, we have also wrapped the OToL scaling service available from http://141.211.236.35:10999.
+
+See also the Time Tree of Life web for getting time of divergence of a pair of taxa or a synthetic chronogram of lineages within a single taxon.
+
+# Generating chronograms
+
+Alternatively, new chronograms can be generated using available information as secondary calibrations.
+
+
+```{r, fig.align = 'center', fig.retina = 2, fig.margin = TRUE, comment = FALSE}
+# ```{r, fig.align = 'center', fig.retina = 2, fig.margin = TRUE}
+
+```
+
+```{r}
+
+```
+
+# theme
+## theme
+
+```{r}
+
+```
+
+
+
+## theme
+
+```{r}
+
+```
+
+
+### theme
+```{r}
+
+```
+# theme
+
+```{r}
+```
+
+# theme
+
+```{r}
+```
+smth else:
+```{r}
+```
+
+# theme
+
+```{r, eval = FALSE}
+```
+
+# Citing
+
+The datelife manuscript is still being written.

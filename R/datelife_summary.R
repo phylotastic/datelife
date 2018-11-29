@@ -197,7 +197,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 
 	if(any("citations" %in% summary_print.in) & !any(summary_format.in %in% c("citations", "html", "data_frame"))) {
 		if(summary_format.in == "citations"){
-			message("Target taxa found in trees from:")
+			message("Input taxa found in trees from:")
 		} else {
 			message("Source chronograms from:", "\n")
 		}
@@ -206,9 +206,9 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		}
 	}
 	if(any(grepl("taxa", summary_print.in)) & add_taxon_distribution.in!="summary") {
-		message("Target taxa presence in source chronograms:")
+		message("Input taxa presence across source chronograms:")
 		message(paste0(utils::capture.output(taxon_distribution_summary), collapse = "\n"), "\n")
-		message("Target taxa completely absent from source chronograms:")
+		message("Input taxa completely absent from source chronograms:")
 		message(paste0(utils::capture.output(data.frame(taxon = absent.input)), collapse = "\n"), "\n")
 	}
 	return(return.object)

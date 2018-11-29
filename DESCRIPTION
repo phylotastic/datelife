@@ -36,7 +36,8 @@ Imports:
     treebase,
     httr,
     devtools,
-    phyloch
+    phyloch,
+    reports
 Suggests:
     testthat,
     paleotree,
@@ -44,7 +45,8 @@ Suggests:
     rmarkdown,
     knitr
 Enhances:
-    phylocomr
+    phylocomr,
+    plotflow
 SystemRequirements: mafft, PATHd8
 URL: https://github.com/phylotastic/datelife, http://www.datelife.org
 License: GPL (>=2)
