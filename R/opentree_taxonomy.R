@@ -95,7 +95,13 @@ get_ott_lineage <- function(input, ott_id = NULL){
   ott_names <- sapply(lin, function(x) unlist(sapply(x[[1]], "[", "unique_name")))
   # unlist(sapply(lin[[1]][[1]], "[", "unique_name"))
   # length(ott_names) == length(tax_info)
-  ott_ids <- sapply(seq(length(lin)), function(x) setNames(unlist(sapply(lin[[x]][[1]], "[", "ott_id")), ott_names[[x]]))
+  # ott_ids <- sapply(seq(length(lin)), function(x) setNames(unlist(sapply(lin[[x]][[1]], "[", "ott_id")), ott_names[[x]]))
+  ott_ids <- sapply(seq(length(lin)), function(x) unlist(sapply(lin[[x]][[1]], "[", "ott_id")))
+  ott_ranks <- sapply(seq(length(lin)), function(x) unlist(sapply(lin[[x]][[1]], "[", "rank")))
+  mat <- function(x) {
+      matrix(c(ott_ids[[x]], ott_ranks[[x]]), ncol =2, dimnames = list(ott_names[[x]], c("ott_ids", "ott_ranks")))
+  }
+  res <- sapply(seq(length(lin)), mat)
   setNames(ott_ids, names(input_ott_match))
 }
 #' Gets the lineage of a set of taxa using rotl:taxonomy_taxon_info(include_lineage = TRUE)
