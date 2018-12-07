@@ -154,6 +154,7 @@ get_otol_chronograms <- function(verbose = FALSE) {
 			}
 		}
 	}
+	# add taxonomic nodelabels to trees object here
 	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
 	return(result)
 }
@@ -233,3 +234,8 @@ clean_ott_chronogram <- function(phy) {
 	}
 	return(phy)
 }
+
+#' Get Open Tree of Life Taxonomy Lineage of all species in opentree_chronograms
+#' @inheritParams phylo_check
+#' @return A cleaned up phylo object
+#' @export

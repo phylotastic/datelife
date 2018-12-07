@@ -198,6 +198,7 @@ datelife_result_check <- function(datelife_result, use_tnrs, verbose = FALSE){
 #' @return A phylo object or NA if no tree
 #' @export
 input_process <- function(input, verbose = FALSE){
+	input <- unique(input)
   if(class(input) == "multiPhylo") {
 		stop("input is of class multiPhylo. Only one phylogeny can be processed at a time.")
 	}
@@ -245,7 +246,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	  	input <- phy.new$tip.label
 	}
 	if(length(input) == 1) {
-		input <- strsplit(input, ',')[[1]] #  separates a character vector of comma separated names
+		input <- strsplit(input, ',')[[1]] #  splits a character vector of comma separated names
 		if(length(input) == 1){
 			if(!get_spp_from_taxon[1]) {
 					if(verbose) {
@@ -257,11 +258,17 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 		}
 	}
 	cleaned.input <- stringr::str_trim(input, side = "both")  # cleans the input of lingering unneeded white spaces
-  if (use_tnrs) {
+	ott_ids <- NA
+  if (use_tnrs | any(get_spp_from_taxon)) {
 		# process names even if it's a "higher" taxon name:
-		cleaned.input <- batch_tnrs_match_names(names = cleaned.input)$unique_name
+		cleaned.input_tnrs <- batch_tnrs_match_names(names = cleaned.input)
+		cleaned.input <- cleaned.input_tnrs$unique_name
+		ott_ids <- cleaned.input_tnrs$ott_id
 		# after some tests, decided to use rotl's method instead of taxize::gnr_resolve, and just output the original input and the actual query for users to check out.
 		# cleaned.input <- taxize::gnr_resolve(names = cleaned.input, data_source_ids=179, fields="all")$matched_name
+		if(!is.na(phy.new[1])) {
+			phy.new$ott_ids <- cleaned.input_tnrs$ott_id
+		}
   }
 	cleaned_names <- gsub("_", " ", cleaned.input)
     if(any(get_spp_from_taxon)){
@@ -272,31 +279,58 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
     		if(verbose) {
 					message("Specify all taxa in input to get species names from.")
 				}
-    		stop("input and get_spp_from_taxon arguments must have same length.")
+    		message("input and get_spp_from_taxon arguments must have same length.")
+				return(NA)
     	}
-    	species.names <- vector()
-    	index <- 1
-	    for (i in get_spp_from_taxon){
-	    	if (i) {
-	    		spp <- tryCatch(rphylotastic::taxon_get_species(taxon = cleaned_names[index], ...), error = function (e) cleaned_names[index])
-	    		if(length(spp) == 0) {
-	    			if(verbose) {
-							message("\t", " No species names found for taxon ", cleaned_names[index], ".")
-							if (!use_tnrs) {
-								message("\t", "Setting use_tnrs = TRUE might change this, but it can be slow.")
-							}
-						}
-	    			warning(paste("No species names available for input taxon '", cleaned_names[index], "'", sep=""))
-	    		}
-	    		species.names <- c(species.names, spp)
-	    	} else {
-	    		species.names <- c(species.names, cleaned_names[index])
-	    	}
-	    	index <- index + 1
-	    }
-			cleaned_names <- gsub("_", " ", species.names)
+			# using tol_subtree will give subspecies too \o/
+			# so we might wanna stick to our own function only then...
+			tip_labels <-  lapply(cleaned.input_tnrs$ott_id, function(x)
+				res <- tryCatch(suppressWarnings(rotl::tol_subtree(x))$tip.label,
+				error = function(e) NA))
+			ott_ids <- lapply(tip_labels, function(x) as.numeric(gsub(".*_ott", "", x)))
+			cleaned_names <- lapply(tip_labels, function(x) gsub("_ott.*", "", x))
+
+			failures <- which(sapply(tip_labels, function(x)length(x) ==1))
+			if(length(failures) >0){
+				# cleaned.input_tnrs$unique_name[failures]
+				ff <- get_ott_children(ott_id = cleaned.input_tnrs$ott_id[failures], ott_rank = "species")
+				get_ott_children(ott_id = cleaned.input_tnrs$ott_id[1], ott_rank = "species")
+				cleaned_names[failures] <- lapply(ff, rownames)
+				ott_ids[failures] <- sapply(ff, "[", "ott_id")
+				# data.frame(sapply(sapply(ff, "[", "rank"), length))
+				# ff[11]
+				# cleaned.input_tnrs$ott_id[failures][10]
+				# length(ff) == length(failures)
+			}
+			# rphylotastic service includes trees absent from synthetic tree:
+			# rphylotastic::taxon_get_species(taxon = cleaned.input[1])
+
+    	# species.names <- vector()
+    	# index <- 1
+	    # for (i in get_spp_from_taxon){
+	    # 	if (i) {
+	    # 		# spp <- tryCatch(rphylotastic::taxon_get_species(taxon = cleaned_names[index], ...), error = function (e) NULL)
+			# 		spp <- rotl::tol_subtree(gsub("ott", "", cleaned.input_tnrs$ott_ids)[1])$tip.label
+	    # 		if(length(spp) == 0) {
+	    # 			if(verbose) {
+			# 				# message("\t", " No species names found for taxon ", cleaned_names[index], ".")
+			# 				if (!use_tnrs) {
+			# 					message("\t", "Setting use_tnrs = TRUE might change this, but it can be slow.")
+			# 				}
+			# 			}
+			# 			spp <- cleaned_names[index]
+	    # 			message(paste("No species names available for input taxon '", cleaned_names[index], "'", sep=""))
+	    # 		}
+	    # 		species.names <- c(species.names, spp)
+	    # 	} else {
+	    # 		species.names <- c(species.names, cleaned_names[index])
+	    # 	}
+	    # 	index <- index + 1
+	    # }
+			cleaned_names <- lapply(cleaned_names, function(x) gsub("_", " ", x))
+			cleaned_names <- unlist(cleaned_names)
+			ott_ids <- unlist(ott_ids)
 		}
-	cleaned_names <- unique(cleaned_names)
   if(verbose) {
 		message("OK.")
 	}
@@ -304,7 +338,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
   if(verbose) {
 		message("Working with the following taxa: ", "\n", "\t", cleaned_names.print)
 	}
-	datelife_query.return <- list(cleaned_names = cleaned_names, phy = phy.new)
+	datelife_query.return <- list(cleaned_names = cleaned_names, ott_ids = ott_ids, phy = phy.new)
 	class(datelife_query.return) <- "datelifeQuery"
 	return(datelife_query.return)
 }

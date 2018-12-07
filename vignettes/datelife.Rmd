@@ -46,9 +46,8 @@ devtools::load_all("~/Desktop/datelife/")
 
 The main service of `datelife` is getting chronograms from published peer reviewed
 studies (from now on *source chronograms*) for a set of taxa of interest. It is
-accomplished with `datelife_search()` function. Taxa of interest must be provided
-as scientific names, either in a character vector or in a tree in phylo or newick
-format with the scientific names as tip labels. Upper and lower case are ignored.
+accomplished with `datelife_search()` function. Taxa of interest are provided
+as scientific names, either as a character vector or as tip labels from a tree in phylo or newick format. Upper and lower case are ignored.
 
 ```{r, eval = TRUE}
 mamms <- datelife_search(input = c("Felis catus", "Delphinus delphus", "Homo sapiens", "Elephas maximus"))
@@ -82,11 +81,14 @@ Chronogram search is performed at the species level. This means that source chro
 ```
 
 For now, taxon names must be provided as scientific names. Common name searches are not yet implemented. Scientific names can be anything from species binomials to higher-taxon names. Subspecies names will not be considered.
-You can use the datelife_query function first to check that your names are accepted. If you are unsure about the spelling or synonyms, you can use arguments bla and bla. These are services of rphylotastic package implemented here.
+You can use the datelife_query function first to check that your names are accepted. If you are unsure about the spelling or synonyms, you can use arguments `use_tnrs` and `approximate_match`.
 
 ```{r, eval = TRUE}
 # datelife query function
 make_datelife_query(c("cat", "dog"))
+make_datelife_query(c("Felix", "Caniss"), use_tnrs = TRUE)
+make_datelife_query(c("Felis", "Canis"), get_spp_from_taxon = TRUE)
+
 ```
 
 If higher-taxon names are provided, you can use option get_spp_from_taxon = TRUE, which is also a service of rphylotatsic that gets all species within a higher taxon. If you choose this option, all species within the higher-taxon names provided will be included in the search.

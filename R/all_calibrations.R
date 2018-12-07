@@ -156,7 +156,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 		if (verbose) {
 			message("BOLD sequences found only for one input name: ", input[which(!input %in% taxa.to.drop)], ".","\n","\t", "Cannot construct a tree." )
 		}
-		warning("Not enough sequences available in BOLD. No tree was constructed.")
+		message("Not enough sequences available in BOLD. No tree was constructed.")
 		# if (use_tnrs == FALSE) cat("Setting use_tnrs = TRUE might change this, but it is time consuming.", "\n")
 		return(NA)
 	}
