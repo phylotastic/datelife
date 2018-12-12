@@ -1,0 +1,122 @@
+
+#' Taxon name resolution service (tnrs) applied to input by batches
+#' @param names A character vector of taxon names to be matched to taxonomy. There is no limit to the numer of names that can be queried.
+#' @param reference_taxonomy A character vetor specifying the reference taxonomy to use for tnrs.
+#' @inheritDotParams rotl::tnrs_match_names -names
+#' @return A data frame from tnrs_match_names function
+#' @export
+tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # we can add other reference taxonomies in the future
+	names <- unique(names)
+	names <- names[!is.na(names)]  # tnrs_match_names does not allow NAs
+    # tnrs_infer_context(names = names)
+    # rotl::tnrs_contexts()
+	if(reference_taxonomy == "otl"){
+		df <- suppressWarnings(rotl::tnrs_match_names(names = "Apis mellifera")) # this just generates the dummy for the table, it will be removed at the end
+		df <- df[nrow(df)+1, ]
+		df[nrow(df)+length(names)-1, ] <- NA
+		# Doing it in batches of 250
+		# xx <- seq(1, length(names), 250)
+		# yy <- xx+249
+		# yy[length(xx)] <- length(names)
+		# # not very useful to add progression here, we would need it from tnrs_match_names, or do it one by one, hmmm....
+		# for (i in seq(length(xx))){
+		# 	df[xx[i]:yy[i],] <- suppressWarnings(rotl::tnrs_match_names(names = names[xx[i]:yy[i]], ...))
+		# 	# utils::setTxtProgressBar(progression, i)
+		# }
+
+		# Doing it one by one now:
+		progression <- utils::txtProgressBar(min = 0, max = length(names), style = 3)
+		for (i in seq(length(names))){
+			df[i,] <- tryCatch(suppressWarnings(rotl::tnrs_match_names(names = names[i], ...)),
+								error = function(e) {
+									no_match <- rep(NA, length(df[1,]))
+									no_match[1] <- names[i]
+									no_match
+								}
+								)
+			utils::setTxtProgressBar(progression, i)
+		}
+        rownames(df)[1] <- "1"
+		# df[is.na(df$unique_name),1] <- names[is.na(df$unique_name)]  # in case the unmatched names are dropped from final df
+		# df <- rotl::tnrs_match_names(names = names)
+		# df has the same order as names
+		# when some names are not matched it gives a warning: NAs introduced by coercion
+		# but if all names are not macthed, it gives an error that needs to be caught
+	}
+	return(df) #returns the whole data frame
+}
+#' Taxon name resolution service (tnrs) applied to input by batches
+#' @param phy A phylo object
+#' @param reference_taxonomy A character vetor specifying the reference taxonomy to use for tnrs.
+#' @return A phylo object with tips mapped to tnrs and a vector of successfully mapped taxa
+#' @export
+tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we can add other reference taxonomies in the future
+    if(missing(tip)){
+        tomaptip <- 1:ape::Ntip(phy)
+    }
+    if(is.character(tip)){
+        tomaptip <- match(tip, phy$tip.labels)
+        # we could add a more general grepl instead of match. We'll need to test it.
+    }
+    if(is.numeric(tip)){
+        tomaptip <- tip
+    }
+    if(any(tomaptip>ape::Ntip(phy)) | any(is.na(tomaptip))){
+        fails <- unique(c(which(is.na(tomaptip)), which(tomaptip>ape::Ntip(phy))))
+        message(paste0("Values in tip not corresponding to phy$tip.labels: '", paste(tip[fails], collapse = "', '"), "'"))
+        tomaptip <- tomaptip[-fails]
+    }
+    if(is.null(phy$mapped)){
+        phy$mapped <- rep("original", length(phy$tip.label))
+    }
+    new.names <- tnrs_match(unique(phy$tip.label[tomaptip])) # a data.frame
+    # new.names <- tnrs_match(c(unique(phy$tip.label[tomaptip]), "random")) # a data.frame
+    # in case we have NAs in approximate match:
+    new.names$approximate_match[is.na(new.names$approximate_match)] <- TRUE
+    new.names$approximate_match <- as.logical(new.names$approximate_match)
+    # otherwise next conditional would not work
+    # get the rows that have positive matches, not approximate:
+    matched <- !is.na(new.names$unique_name) & !new.names$approximate_match
+    # get the corresponding index of those matches onthe original tip labels:
+    # but we do not really need this
+    # matchedi <- match(tolower(phy$tip.label[tomaptip]), new.names$search_string[matched])
+    # mark the unmatched and the succesfully matched
+    phy$mapped[tomaptip[is.na(new.names$unique_name)]] <- "unmatched"
+    phy$mapped[tomaptip[new.names$approximate_match]] <- "approximated"
+    phy$mapped[tomaptip[matched]] <- "tnrs"
+    # change phy$tip.labels to tnrs matched names
+    phy$tip.label[tomaptip[matched]] <- new.names$unique_name[matched]
+    # add a class to phylo object
+    class(phy) <- append(class(phy), "match_names")
+    return(phy)
+}
+#' Eliminate unmatched (NAs) and invalid taxa from a tnrs_match_names object
+#' Because using include_suppressed = FALSE in tnrs_match_names does not drop all invalid taxa (that will give an error while trying to retrieve an otol induced subtree).
+#'
+#' @param tnrs A data frame, usually an output from datelife::tnrs_match or rotl::tnrs_match_names functions, but see details.
+#' @param invalid A character string with flags to be removed from final object.
+#' @details Input can be any data frame or named list that relates taxa stored in an element named "unique" to a validity category stored in "flags".
+#' @return A data frame or named list (depending on the input) with valid taxa only.
+#' @export
+clean_tnrs <- function(tnrs, invalid = c("barren", "extinct", "uncultured", "major_rank_conflict", "incertae", "unplaced", "conflict", "environmental", "not_otu")){
+  if(!"flags" %in% names(tnrs)){
+    message("tnrs should be a data.frame from datelife::tnrs_match or rotl::tnrs_match_names functions")
+	if(!is.data.frame(tnrs)){
+		message("Or at least contain a flags element.")
+	}
+	return(tnrs)
+  }
+  if(length(unique(sapply(tnrs, length))) != 1){
+	  message("elements in tnrs are of different length, check that out")
+	  return(tnrs)
+  }
+  tt <- as.data.frame(tnrs)
+  x <- sapply(tolower(invalid), grepl, tolower(tt$flags))
+  if(nrow(tt)==1){
+    x <- matrix(x, ncol = 6, dimnames = list(NULL, names(x)))
+  }
+  x <- sapply(1:nrow(x), function(z) sum(x[z,]))
+  tt <- tt[x==0, ]
+  tt <- tt[!is.na(tt$unique),]
+  return(tt)
+}
