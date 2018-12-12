@@ -38,13 +38,13 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
 #' checks input for get_ott_clade and get_ott_children functions
 #' returns a numeric vector of ott ids
 #' @param input A character vector of names
-#' @param ott_id A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::batch_tnrs_match_names
+#' @param ott_id A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match
 #' @export
 check_ott_input <- function(input, ott_id){
     if(is.null(ott_id)){
       if(!any(c("ott_id", "ott_ids") %in% names(input))){
         # input <- datelife::datelife_query_check(input)$cleaned_names
-        input_tnrs <- datelife::batch_tnrs_match_names(names = input)
+        input_tnrs <- datelife::tnrs_match(names = input)
         # should we clean tnrs from invalid? what about NA's?
         # if we decide to clean, the two following lines should be uncommented:
         # df <- clean_tnrs(tnrs = df)

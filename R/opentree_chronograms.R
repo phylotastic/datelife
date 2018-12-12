@@ -216,30 +216,51 @@ is_good_chronogram <- function(phy) {
 }
 
 #' Clean up some issues with OToL chronograms
-#' For now it 1) drops tip labels with the tag "not mapped", 2) roots the chronogram if unrooted
+#' For now it 1) checks unmapped taxa and maps them with map_tiplabels_ott, 2) roots the chronogram if unrooted
 #'
 #' @inheritParams phylo_check
 #' @return A cleaned up phylo object
 #' @export
 clean_ott_chronogram <- function(phy) {
-	bad.taxa <- unique(c(which(nchar(phy$tip.label) <= 2), which(grepl("not.mapped", phy$tip.label))))
+	# phy <- problems[[5]]
+	# homogenize everything to blanks, it speeds up tnrs_match_names bc no approximate matching needed
+	phy.ori <- phy
+	phy <- phylo_tiplabel_underscore_to_space(phy)
+	# tip.label <- phy$tip.label
+	bad.taxa <- unique(c(which(nchar(phy$tip.label) <= 2), which(grepl("not.mapped", phy$tip.label)))) # numeric of indices
+	phy$tip.label[bad.taxa] <- sub(".*-.", "", phy$tip.label[bad.taxa])  # this gets the original label and gets rid of the not.mapped tag
+	phy$tip.label[bad.taxa] <- gsub("aff ", "", phy$tip.label[bad.taxa])  # removes aff tag
+    phy$tip.label[bad.taxa][stringr::str_count(phy$tip.label[bad.taxa], " ")>=2] <- gsub("^([^ ]* [^ ]*) .*$", "\\1", phy$tip.label[bad.taxa][stringr::str_count(phy$tip.label[bad.taxa], " ")>=2])
+    # grepl("^([^_]*_[^_]*)_.*$", tip.labels[stringr::str_count(tip.labels, "_")>=2])  # this works with underscores
+	# drop duplicated tips now:
+	tipstodrop <- c()
+	# identify not mapped taxa that have mapped duplicates first
+	# in this case, drop the not mapped tips and keep the mapped ones.
+	# first identify the not mapped tips that have mapped duplicates:
+	cond <- match(unique(phy$tip.label[bad.taxa]), phy$tip.label[-bad.taxa])
+	if(any(!is.na(cond))){
+		# the following only gets the first match:
+		# mm <- match(unique(phy$tip.label[bad.taxa])[!is.na(cond)], phy$tip.label[bad.taxa])
+		# this gets all bad.taxa that match:
+		mm <- match(phy$tip.label[bad.taxa], unique(phy$tip.label[bad.taxa])[!is.na(cond)])
+		tipstodrop <- c(tipstodrop, bad.taxa[!is.na(mm)])
+		bad.taxa <- bad.taxa[is.na(mm)]
+	}
+	# now identify all remaining duplicated and not mapped
+	dd <- duplicated(phy$tip.label[bad.taxa])
+	tipstodrop <- c(tipstodrop, bad.taxa[dd])
+	phy <- ape::drop.tip(phy, tip = unique(tipstodrop))
+	bad.taxa <- bad.taxa[!dd]
 	phy$mapped <- rep("ott", length(phy$tip.label))
-	if(length(bad.taxa)>0) {
-		new.names <- batch_tnrs_match_names(bad.taxa)
-		new.names <- new.names[!is.na(new.names$unique) & !new.names$approximate_match]
-		phy$mapped[match(phy$tip.label, new.names$search)] <- "tnrs"
-		phy$tip.label[match(phy$tip.label, new.names$search)] <- new.names$unique_name
+	if(length(bad.taxa) > 0) {
+		phy <- tnrs_match.phylo(phy, tip = bad.taxa)
 	}
 	if(!ape::is.rooted(phy) & ape::is.ultrametric(phy, option = 2)) {
 		phy$root.edge <- 0
 	}
 	return(phy)
 }
-# #' Check for unmapped tip labels in opentree_chronograms cache
-# #' @param opentree_chronograms
-# #' @return A phylo object with
-# #' @export
-# map_ott_chronogram <-
+
 
 #' Get taxonomy for all species within opentree_chronograms object
 #' @inheritParams phylo_check
@@ -269,7 +290,7 @@ get_them_all <- function(trees){
 	tips2[grepl("[.*[:blank:].*]{2,}", tips2)]
 	# I'm useless with grep, so Brian suggested stringr
 	tips2[stringr::str_count(tips2, " ")>=2]
-	tips_tnrs <- batch_tnrs_match_names(tips2)
+	tips_tnrs <- tnrs_match(tips2)
 	tips_tnrs$unique_name
 	sum(is.na(tips_tnrs$unique_name))
 	names(tips_tnrs)

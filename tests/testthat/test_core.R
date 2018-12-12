@@ -299,7 +299,7 @@ test_that("get_otol_synthetic_tree works", {
   expect_s3_class(otol_tree, "phylo") # output is phylo
   expect_gte(length(otol_tree), 4)  # it has no branch lengths
   # should it return all names always?
-  # it should return the same number of names matched by batch_tnrs_match_names
+  # it should return the same number of names matched by tnrs_match
   # add such a test:
 })
 

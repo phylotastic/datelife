@@ -261,7 +261,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	ott_ids <- NA
   if (use_tnrs | any(get_spp_from_taxon)) {
 		# process names even if it's a "higher" taxon name:
-		cleaned.input_tnrs <- batch_tnrs_match_names(names = cleaned.input)
+		cleaned.input_tnrs <- tnrs_match(names = cleaned.input)
 		cleaned.input <- cleaned.input_tnrs$unique_name
 		ott_ids <- cleaned.input_tnrs$ott_id
 		# after some tests, decided to use rotl's method instead of taxize::gnr_resolve, and just output the original input and the actual query for users to check out.

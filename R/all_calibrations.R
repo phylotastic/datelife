@@ -215,82 +215,6 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	return(phy)
 }
 
-#' Taxon name resolution service (tnrs) applied to input by batches
-#' @param names A character vector of taxon names to be matched to taxonomy. There is no limit to the numer of names that can be queried.
-#' @param reference_taxonomy A character vetor specifying the reference taxonomy to use for tnrs.
-#' @inheritDotParams rotl::tnrs_match_names -names
-#' @return A data frame from tnrs_match_names function
-#' @export
-batch_tnrs_match_names <- function(names, reference_taxonomy = "otl", ...){  # we can add other reference taxonomies in the future
-	names <- unique(names)
-	names <- names[!is.na(names)]  # tnrs_match_names does not allow NAs
-	if(reference_taxonomy == "otl"){
-		df <- suppressWarnings(rotl::tnrs_match_names(names = "Apis mellifera")) # this just generates the dummy for the table, it will be removed at the end
-		df <- df[nrow(df)+1, ]
-		df[nrow(df)+length(names)-1, ] <- NA
-		# Doing it in batches of 250
-		# xx <- seq(1, length(names), 250)
-		# yy <- xx+249
-		# yy[length(xx)] <- length(names)
-		# # not very useful to add progression here, we would need it from tnrs_match_names, or do it one by one, hmmm....
-		# for (i in seq(length(xx))){
-		# 	df[xx[i]:yy[i],] <- suppressWarnings(rotl::tnrs_match_names(names = names[xx[i]:yy[i]], ...))
-		# 	# utils::setTxtProgressBar(progression, i)
-		# }
-
-		# Doing it one by one now:
-		progression <- utils::txtProgressBar(min = 0, max = length(names), style = 3)
-		for (i in seq(length(names))){
-			df[i,] <- tryCatch(suppressWarnings(rotl::tnrs_match_names(names = names[i], ...)),
-								error = function(e) {
-									no_match <- rep(NA, length(df[1,]))
-									no_match[1] <- names[i]
-									no_match
-								}
-								)
-			utils::setTxtProgressBar(progression, i)
-		}
-
-		# df[is.na(df$unique_name),1] <- names[is.na(df$unique_name)]  # in case the unmatched names are dropped from final df
-		# df <- rotl::tnrs_match_names(names = names)
-		# df has the same order as names
-		# when some names are not matched it gives a warning: NAs introduced by coercion
-		# but if all names are not macthed, it gives an error that needs to be caught
-	}
-	return(df) #returns the whole data frame
-}
-
-#' Eliminate unmatched (NAs) and invalid taxa from a tnrs_match_names object
-#' Because using include_suppressed = FALSE in tnrs_match_names does not drop all invalid taxa (that will give an error while trying to retrieve an otol induced subtree).
-#'
-#' @param tnrs A data frame, usually an output from datelife::batch_tnrs_match_names or rotl::tnrs_match_names functions, but see details.
-#' @param invalid A character string with flags to be removed from final object.
-#' @details Input can be any data frame or named list that relates taxa stored in an element named "unique" to a validity category stored in "flags".
-#' @return A data frame or named list (depending on the input) with valid taxa only.
-#' @export
-clean_tnrs <- function(tnrs, invalid = c("barren", "extinct", "uncultured", "major_rank_conflict", "incertae", "unplaced", "conflict", "environmental", "not_otu")){
-  if(!"flags" %in% names(tnrs)){
-    message("tnrs should be a data.frame from datelife::batch_tnrs_match_names or rotl::tnrs_match_names functions")
-	if(!is.data.frame(tnrs)){
-		message("Or at least contain a flags element.")
-	}
-	return(tnrs)
-  }
-  if(length(unique(sapply(tnrs, length))) != 1){
-	  message("elements in tnrs are of different length, check that out")
-	  return(tnrs)
-  }
-  tt <- as.data.frame(tnrs)
-  x <- sapply(tolower(invalid), grepl, tolower(tt$flags))
-  if(nrow(tt)==1){
-    x <- matrix(x, ncol = 6, dimnames = list(NULL, names(x)))
-  }
-  x <- sapply(1:nrow(x), function(z) sum(x[z,]))
-  tt <- tt[x==0, ]
-  tt <- tt[!is.na(tt$unique),]
-  return(tt)
-}
-
 #' Gets Open Tree of Life synthetic tree of a set of lineages.
 #' @inheritParams datelife_search
 #' @inheritParams make_bold_otol_tree
@@ -298,7 +222,7 @@ clean_tnrs <- function(tnrs, invalid = c("barren", "extinct", "uncultured", "maj
 #' @return A phylo object
 #' @export
 get_otol_synthetic_tree <- function(input, otol_version = "v2", ...){
-	df <- batch_tnrs_match_names(names = input, reference_taxonomy = "otl", ...)  # batch_tnrs_match_names processes input with rotl::tnrs_match_names function by batches, so it won't choke
+	df <- tnrs_match(names = input, reference_taxonomy = "otl", ...)  # tnrs_match processes input with rotl::tnrs_match_names function by batches, so it won't choke
 	df <- clean_tnrs(tnrs = df)
 	df <- df[!is.na(df$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
 	phy <- ape::multi2di(suppressWarnings(rotl::tol_induced_subtree(ott_ids = df$ott_id, label_format = "name",  otl_v = otol_version)))

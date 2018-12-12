@@ -50,7 +50,7 @@ datelife_result_MRCA <- function(datelife_result, partial = TRUE) {
 #' @param clustering_method A character vector indicating the method to construct the tree. Options are "nj" for Neighbor-Joining and "upgma" for Unweighted Pair Group Method with Arithmetic Mean.
 # We might add the option to insert a function as clustering_method.
 # Before, we hard coded it to try Neighbor-Joining first; if it errors, it will try UPGMA.\
-# Now, it uses nj for phylo_all summary, 
+# Now, it uses nj for phylo_all summary,
 #' @param fix_negative_brlen Boolean indicating weather to fix negative branch lengths in resulting tree or not. Default to TRUE.
 #' @inheritParams tree_fix_brlen
 #' @return A rooted phylo object
@@ -480,7 +480,11 @@ phylo_tiplabel_space_to_underscore <- function(phy) {
 #' @inheritParams phylo_check
 #' @return A phylo object
 phylo_tiplabel_underscore_to_space <- function(phy) {
+    # a better name for this function would be underscore2blank
+    # add method .phylo
+    # change tip and node labels
 	phy$tip.label <- gsub("_", " ", phy$tip.label)
+    # make sure there is only one consecutive blank at a time
 	return(phy)
 }
 #' Function to remove missing taxa from a datelifeResult object. Used in: datelife_result_sdm.

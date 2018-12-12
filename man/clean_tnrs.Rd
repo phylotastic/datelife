@@ -10,7 +10,7 @@ clean_tnrs(tnrs, invalid = c("barren", "extinct", "uncultured",
   "environmental", "not_otu"))
 }
 \arguments{
-\item{tnrs}{A data frame, usually an output from datelife::batch_tnrs_match_names or rotl::tnrs_match_names functions, but see details.}
+\item{tnrs}{A data frame, usually an output from datelife::tnrs_match or rotl::tnrs_match_names functions, but see details.}
 
 \item{invalid}{A character string with flags to be removed from final object.}
 }

@@ -10,7 +10,7 @@ get_ott_children(input = c("Felis", "Homo", "Malvaceae"),
 \arguments{
 \item{input}{A character vector of names}
 
-\item{ott_id}{A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::batch_tnrs_match_names}
+\item{ott_id}{A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 
 \item{ott_rank}{A character vector with the ranks you wanna get lineage children from.}
 }

@@ -10,7 +10,7 @@ check_ott_input(input, ott_id)
 \arguments{
 \item{input}{A character vector of names}
 
-\item{ott_id}{A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::batch_tnrs_match_names}
+\item{ott_id}{A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 }
 \description{
 checks input for get_ott_clade and get_ott_children functions

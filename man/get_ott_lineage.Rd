@@ -9,7 +9,7 @@ get_ott_lineage(input, ott_id = NULL)
 \arguments{
 \item{input}{A character vector of names}
 
-\item{ott_id}{A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::batch_tnrs_match_names}
+\item{ott_id}{A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 }
 \value{
 a list of named numeric vectors of ott ids from input and all the clades it belongs to.
