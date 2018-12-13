@@ -222,9 +222,20 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 #' @return A phylo object
 #' @export
 get_otol_synthetic_tree <- function(input, otol_version = "v2", ...){
-	df <- tnrs_match(names = input, reference_taxonomy = "otl", ...)  # tnrs_match processes input with rotl::tnrs_match_names function by batches, so it won't choke
-	df <- clean_tnrs(tnrs = df)
-	df <- df[!is.na(df$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
-	phy <- ape::multi2di(suppressWarnings(rotl::tol_induced_subtree(ott_ids = df$ott_id, label_format = "name",  otl_v = otol_version)))
+	if(!any(c("ott_id", "ott_ids") %in% names(input))){
+		df <- tnrs_match(names = input, reference_taxonomy = "otl", ...)  # tnrs_match processes input with rotl::tnrs_match_names function by batches, so it won't choke
+		df <- clean_tnrs(tnrs = df)
+		df <- df[!is.na(df$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
+	} else {
+		df <- input
+		# we might need a check here for ott_id elements
+		# are they numeric, and no NAs,
+	}
+	# also, another check here, are all ott_ids in otol synthetic tree, etc.
+	phy <- tryCatch(ape::multi2di(suppressWarnings(rotl::tol_induced_subtree(ott_ids = df$ott_id,
+					label_format = "name",  otl_v = otol_version))), error = function(e){
+						message("input taxa are not in OToL synthetic tree")
+						NA
+					})
 	return(phy)
 }

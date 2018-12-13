@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{check_ott_input}
 \alias{check_ott_input}
-\title{checks input for get_ott_clade and get_ott_children functions
+\title{checks input for get_ott_clade,  get_ott_children functions
 returns a numeric vector of ott ids}
 \usage{
 check_ott_input(input, ott_id)
@@ -13,6 +13,6 @@ check_ott_input(input, ott_id)
 \item{ott_id}{A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 }
 \description{
-checks input for get_ott_clade and get_ott_children functions
+checks input for get_ott_clade,  get_ott_children functions
 returns a numeric vector of ott ids
 }

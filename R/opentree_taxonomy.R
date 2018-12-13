@@ -35,7 +35,7 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
     return(taxon_info)
 }
 
-#' checks input for get_ott_clade and get_ott_children functions
+#' checks input for get_ott_clade,  get_ott_children functions
 #' returns a numeric vector of ott ids
 #' @param input A character vector of names
 #' @param ott_id A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match
@@ -60,12 +60,11 @@ check_ott_input <- function(input, ott_id){
         #     names(input_ott_match) <- names(input$ott_id)
         # }
       }
-
       if(any(is.na(input_ott_match))){
           message(paste0("\nInput '", paste(input[which(is.na(input_ott_match))], collapse = "', '"), "' not found in Open Tree of Life Taxonomy."))
           input_ott_match <- input_ott_match[which(!is.na(input_ott_match))]
       }
-    } else {
+    } else { # if using ott_id argument
           input_ott_match <- suppressWarnings(as.numeric(ott_id))
           # add a check for existing/valid ott ids??
       if(any(is.na(input_ott_match))){
@@ -95,14 +94,14 @@ get_ott_lineage <- function(input, ott_id = NULL){
   ott_names <- sapply(lin, function(x) unlist(sapply(x[[1]], "[", "unique_name")))
   # unlist(sapply(lin[[1]][[1]], "[", "unique_name"))
   # length(ott_names) == length(tax_info)
-  # ott_ids <- sapply(seq(length(lin)), function(x) setNames(unlist(sapply(lin[[x]][[1]], "[", "ott_id")), ott_names[[x]]))
+  # ott_ids <- sapply(seq(length(lin)), function(x) stats::setNames(unlist(sapply(lin[[x]][[1]], "[", "ott_id")), ott_names[[x]]))
   ott_ids <- sapply(seq(length(lin)), function(x) unlist(sapply(lin[[x]][[1]], "[", "ott_id")))
   ott_ranks <- sapply(seq(length(lin)), function(x) unlist(sapply(lin[[x]][[1]], "[", "rank")))
   mat <- function(x) {
       matrix(c(ott_ids[[x]], ott_ranks[[x]]), ncol =2, dimnames = list(ott_names[[x]], c("ott_ids", "ott_ranks")))
   }
   res <- sapply(seq(length(lin)), mat)
-  setNames(ott_ids, names(input_ott_match))
+  stats::setNames(ott_ids, names(input_ott_match))
 }
 #' Gets the lineage of a set of taxa using rotl:taxonomy_taxon_info(include_lineage = TRUE)
 #' @param input_ott_match An Output of check_ott_input function.
@@ -246,19 +245,20 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_id =
 #' @inheritParams check_ott_input
 #' @param ott_rank A character vector with the ranks you wanna get lineage children from.
 #' @examples
-#' tnrs <- rotl::tnrs_match_names("Gleicheniales")) # Polypodiales are missing too
+#' tnrs <- rotl::tnrs_match_names("Canis")
+#' # Mus, Gleicheniales, Polypodiales, etc., are missing in synth tree too
 #' \dontrun{
 #'   rotl::tol_subtree(tnrs$ott_id[1])
 #'   Error: HTTP failure: 400
 #'   [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
 #' }
-#' goc1 <- get_ott_children(ott_id = tnrs$ott_id[1])
-#' rownames(goc1[[1]])
-#' tree_goc1 <- datelife::get_otol_synthetic_tree(goc1[[1]])
-#' plot(tree_goc1, cex = 0.3)
+#' children1 <- get_ott_children(ott_id = tnrs$ott_id[1])
+#' rownames(children1[[1]])
+#' tree_children1 <- datelife::get_otol_synthetic_tree(children1[[1]])
+#' plot(tree_children1, cex = 0.3)
 #' # Other examples:
 #' oo <- get_ott_children(input= "magnoliophyta", ott_rank = "order")
-#' sum(oo$Magnoliophyta$rank == "order") # to know how many orders we got
+#' sum(oo$Magnoliophyta$rank == "order") # to know how many orders of flowering plants we have
 #' @export
 get_ott_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_id = NULL, ott_rank = "species"){
     input_ott_match <- check_ott_input(input, ott_id)

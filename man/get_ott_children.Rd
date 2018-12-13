@@ -18,17 +18,18 @@ get_ott_children(input = c("Felis", "Homo", "Malvaceae"),
 use this instead of rotl::tol_subtree when taxa are not in synthesis tree and you still need to get all species or an induced otol subtree
 }
 \examples{
-tnrs <- rotl::tnrs_match_names("Gleicheniales")) # Polypodiales are missing too
+tnrs <- rotl::tnrs_match_names("Canis")
+# Mus, Gleicheniales, Polypodiales, etc., are missing in synth tree too
 \dontrun{
   rotl::tol_subtree(tnrs$ott_id[1])
   Error: HTTP failure: 400
   [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
 }
-goc1 <- get_ott_children(ott_id = tnrs$ott_id[1])
-rownames(goc1[[1]])
-tree_goc1 <- datelife::get_otol_synthetic_tree(goc1[[1]])
-plot(tree_goc1, cex = 0.3)
+children1 <- get_ott_children(ott_id = tnrs$ott_id[1])
+rownames(children1[[1]])
+tree_children1 <- datelife::get_otol_synthetic_tree(children1[[1]])
+plot(tree_children1, cex = 0.3)
 # Other examples:
 oo <- get_ott_children(input= "magnoliophyta", ott_rank = "order")
-sum(oo$Magnoliophyta$rank == "order") # to know how many orders we got
+sum(oo$Magnoliophyta$rank == "order") # to know how many orders of flowering plants we have
 }

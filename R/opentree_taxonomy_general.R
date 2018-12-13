@@ -45,13 +45,26 @@ tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # we can add ot
 	}
 	return(df) #returns the whole data frame
 }
-#' Taxon name resolution service (tnrs) applied to input by batches
+#' Taxon name resolution service (tnrs) applied to tips of a phylogeny
 #' @param phy A phylo object
-#' @param reference_taxonomy A character vetor specifying the reference taxonomy to use for tnrs.
-#' @return A phylo object with tips mapped to tnrs and a vector of successfully mapped taxa
+#' @param tip A vector of mode numeric or character specifying the tips to match. If left empty all tips will be matched.
+#' @param reference_taxonomy A character vector specifying the reference taxonomy to use for tnrs.
+#' @inheritDotParams rotl::tnrs_match_names -names
+#' @return An object of class phylo and match_names. See details.
+#' @details
+#' The output will preserve all elements from input phy unchanges except for
+#' phy$tip.label that will have names sccesfully matched with tnrs. Unsuccesful matches will be left the same.
+#' and an extra element called phy$mapped indicating state of mapping for all labels:
+#' \describe{
+#'     \item{original}{Tnrs matching was not attempted. Original labeling is preserved.}
+#'     \item{ott}{Matching was manually made by a curator in Open Tree of Life.}
+#'     \item{tnrs}{Tnrs matching was attempted and succesful with no approximate matching.}
+#'     \item{approximated}{Tnrs matching was attempted but succesful with approximate matching. Original labeling is preserved.}
+#'     \item{unmatched}{Tnrs matching was attempted and unsuccesful. Original labeling is preserved.}
+#' }
 #' @export
 tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we can add other reference taxonomies in the future
-    if(missing(tip)){
+    if(missing(tip) | is.null(tip)){
         tomaptip <- 1:ape::Ntip(phy)
     }
     if(is.character(tip)){
@@ -69,7 +82,8 @@ tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we c
     if(is.null(phy$mapped)){
         phy$mapped <- rep("original", length(phy$tip.label))
     }
-    new.names <- tnrs_match(unique(phy$tip.label[tomaptip])) # a data.frame
+    new.names <- tnrs_match(names = unique(phy$tip.label[tomaptip]), reference_taxonomy = reference_taxonomy, ...) # a data.frame
+    # not needed to clean new.names with clean_tnrs, bc we are leaving taxa matched with flags
     # new.names <- tnrs_match(c(unique(phy$tip.label[tomaptip]), "random")) # a data.frame
     # in case we have NAs in approximate match:
     new.names$approximate_match[is.na(new.names$approximate_match)] <- TRUE
@@ -90,8 +104,9 @@ tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we c
     class(phy) <- append(class(phy), "match_names")
     return(phy)
 }
-#' Eliminate unmatched (NAs) and invalid taxa from a tnrs_match_names object
-#' Because using include_suppressed = FALSE in tnrs_match_names does not drop all invalid taxa (that will give an error while trying to retrieve an otol induced subtree).
+#' Eliminates unmatched (NAs) and invalid taxa from a rotl::tnrs_match_names or datelife::tnrs_match output
+#' Useful to get ott ids to retrieve an otol induced subtree from.
+#' Needed because using include_suppressed = FALSE in tnrs_match_names does not drop all invalid taxa
 #'
 #' @param tnrs A data frame, usually an output from datelife::tnrs_match or rotl::tnrs_match_names functions, but see details.
 #' @param invalid A character string with flags to be removed from final object.
