@@ -144,6 +144,9 @@ datelife_query_check <- function(datelife_query = NULL, ...){
 	# if(length(input) == 1 & any(is.na(input))) {
 	# 	stop("input argument is NULL or NA")
 	# }
+	if(missing(datelife_query) | is.null(datelife_query)){
+		stop("datelife_query argument is missing, we have nothing to check")
+	}
 	badformat <- TRUE
 	if(is.list(datelife_query) & "phy" %in% names(datelife_query) & "cleaned_names" %in% names(datelife_query)) {
 		if(!inherits(datelife_query, "datelifeQuery")) {
@@ -198,12 +201,16 @@ datelife_result_check <- function(datelife_result, use_tnrs, verbose = FALSE){
 #' @return A phylo object or NA if no tree
 #' @export
 input_process <- function(input, verbose = FALSE){
-	input <- unique(input)
-  if(class(input) == "multiPhylo") {
-		stop("input is of class multiPhylo. Only one phylogeny can be processed at a time.")
-	}
-	if(class(input) == "phylo") {
+	if(inherits(input, "phylo")) {
 		input <- ape::write.tree(input)
+	}
+  	if(length(input)>1) {
+		message("There are multiple elements in input. Only the first one will be processed.")
+		if(inherits(input, "multiPhylo")) {
+			input <- ape::write.tree(input[[1]])
+		} else {
+			input <- input[1]
+		}
 	}
  	input <- gsub("\\+"," ",input)
   	input <- stringr::str_trim(input, side = "both")
@@ -211,12 +218,9 @@ input_process <- function(input, verbose = FALSE){
    	# if(length(input) == 1) {
     	# if(summary_print)cat("\t", "Input is length 1.", "\n")
 	  	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
-	  		if(length(input)>1) {
-					stop("Only one phylogeny can be processed at a time.")
-				}
 	    	phy.new.in <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input)))
 	    	if(verbose) {
-					message("\t", "Input is a phylogeny and it is correcly formatted.")
+					message("Input is a phylogeny and it is correcly formatted.")
 				}
 	  	} else {
 	  		if(verbose) {

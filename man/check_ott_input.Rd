@@ -5,7 +5,7 @@
 \title{checks input for get_ott_clade,  get_ott_children functions
 returns a numeric vector of ott ids}
 \usage{
-check_ott_input(input, ott_id)
+check_ott_input(input, ott_id = NULL)
 }
 \arguments{
 \item{input}{A character vector of names}

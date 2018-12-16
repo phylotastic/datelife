@@ -40,7 +40,7 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
 #' @param input A character vector of names
 #' @param ott_id A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match
 #' @export
-check_ott_input <- function(input, ott_id){
+check_ott_input <- function(input, ott_id = NULL){
     if(is.null(ott_id)){
       if(!any(c("ott_id", "ott_ids") %in% names(input))){
         # input <- datelife::datelife_query_check(input)$cleaned_names

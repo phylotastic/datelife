@@ -6,8 +6,10 @@
 #' @return A data frame from tnrs_match_names function
 #' @export
 tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # we can add other reference taxonomies in the future
-	names <- unique(names)
-	names <- names[!is.na(names)]  # tnrs_match_names does not allow NAs
+	# names <- unique(names) # it is best to allow processing everything, i.e., without modifying the original input vector
+	# names <- names[!is.na(names)]  # tnrs_match_names does not allow NAs, but they're caught after with tryCatch
+
+	# enhance: infer taxonomic contexts:
     # tnrs_infer_context(names = names)
     # rotl::tnrs_contexts()
 	if(reference_taxonomy == "otl"){
@@ -27,14 +29,13 @@ tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # we can add ot
 		# Doing it one by one now:
 		progression <- utils::txtProgressBar(min = 0, max = length(names), style = 3)
 		for (i in seq(length(names))){
-			df[i,] <- tryCatch(suppressWarnings(rotl::tnrs_match_names(names = names[i], ...)),
-								error = function(e) {
-									no_match <- rep(NA, length(df[1,]))
-									no_match[1] <- names[i]
-									no_match
-								}
-								)
-			utils::setTxtProgressBar(progression, i)
+				df[i,] <- tryCatch(suppressWarnings(rotl::tnrs_match_names(names = names[i], ...)),
+									error = function(e) {
+											no_match <- rep(NA, length(df[1,]))
+											no_match[1] <- names[i]
+											no_match
+									})
+				utils::setTxtProgressBar(progression, i)
 		}
         rownames(df)[1] <- "1"
 		# df[is.na(df$unique_name),1] <- names[is.na(df$unique_name)]  # in case the unmatched names are dropped from final df
@@ -52,16 +53,16 @@ tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # we can add ot
 #' @inheritDotParams rotl::tnrs_match_names -names
 #' @return An object of class phylo and match_names. See details.
 #' @details
-#' The output will preserve all elements from input phy unchanges except for
-#' phy$tip.label that will have names sccesfully matched with tnrs. Unsuccesful matches will be left the same.
-#' and an extra element called phy$mapped indicating state of mapping for all labels:
+#' The output will preserve all elements from original input phy plus
+#' an extra element called phy$mapped indicating the state of mapping of phy$tip.labels:
 #' \describe{
 #'     \item{original}{Tnrs matching was not attempted. Original labeling is preserved.}
 #'     \item{ott}{Matching was manually made by a curator in Open Tree of Life.}
-#'     \item{tnrs}{Tnrs matching was attempted and succesful with no approximate matching.}
-#'     \item{approximated}{Tnrs matching was attempted but succesful with approximate matching. Original labeling is preserved.}
+#'     \item{tnrs}{Tnrs matching was attempted and succesful with no approximate matching. Original label is replaced by the matched name.}
+#'     \item{approximated}{Tnrs matching was attempted and succesful but with approximate matching. Original labeling is preserved.}
 #'     \item{unmatched}{Tnrs matching was attempted and unsuccesful. Original labeling is preserved.}
 #' }
+# enhance: add a vector of matched ott_ids to the output
 #' @export
 tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we can add other reference taxonomies in the future
     if(missing(tip) | is.null(tip)){
@@ -69,7 +70,7 @@ tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we c
     }
     if(is.character(tip)){
         tomaptip <- match(tip, phy$tip.labels)
-        # we could add a more general grepl instead of match. We'll need to test it.
+        # enhance: add a more general grep instead of match(). Test which one is faster and more accurate.
     }
     if(is.numeric(tip)){
         tomaptip <- tip

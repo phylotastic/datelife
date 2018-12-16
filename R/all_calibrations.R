@@ -229,7 +229,7 @@ get_otol_synthetic_tree <- function(input, otol_version = "v2", ...){
 	} else {
 		df <- input
 		# we might need a check here for ott_id elements
-		# are they numeric, and no NAs,
+		# are they numeric,no NAs 
 	}
 	# also, another check here, are all ott_ids in otol synthetic tree, etc.
 	phy <- tryCatch(ape::multi2di(suppressWarnings(rotl::tol_induced_subtree(ott_ids = df$ott_id,

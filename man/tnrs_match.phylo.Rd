@@ -38,14 +38,13 @@ An object of class phylo and match_names. See details.
 Taxon name resolution service (tnrs) applied to tips of a phylogeny
 }
 \details{
-The output will preserve all elements from input phy unchanges except for
-phy$tip.label that will have names sccesfully matched with tnrs. Unsuccesful matches will be left the same.
-and an extra element called phy$mapped indicating state of mapping for all labels:
+The output will preserve all elements from original input phy plus
+an extra element called phy$mapped indicating the state of mapping of phy$tip.labels:
 \describe{
     \item{original}{Tnrs matching was not attempted. Original labeling is preserved.}
     \item{ott}{Matching was manually made by a curator in Open Tree of Life.}
-    \item{tnrs}{Tnrs matching was attempted and succesful with no approximate matching.}
-    \item{approximated}{Tnrs matching was attempted but succesful with approximate matching. Original labeling is preserved.}
+    \item{tnrs}{Tnrs matching was attempted and succesful with no approximate matching. Original label is replaced by the matched name.}
+    \item{approximated}{Tnrs matching was attempted and succesful but with approximate matching. Original labeling is preserved.}
     \item{unmatched}{Tnrs matching was attempted and unsuccesful. Original labeling is preserved.}
 }
 }

@@ -61,34 +61,6 @@ test_that("add_taxon_distribution argument from summarize_datelife_result() work
   # trees2$absent_taxa
 })
 
-test_that("Summarize as newick_median works correctly", {
-  utils::data(opentree_chronograms)
-  taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
-  datelife_result <- results_list_process(results_list, taxa, partial=FALSE)
-  tree <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_median", cache=opentree_chronograms)
-  expect_equal(class(tree), "character")
-  expect_false(anyNA(tree))
-  expect_equal(class(ape::read.tree(text=tree)), "phylo")
-})
-
-test_that("Processing input newick", {
-	skip_on_cran()
-#	skip_on_travis() #b/c no pathd8
-  skip_on_os("linux") #b/c no pathd8 on travis linux
-
-  utils::data(opentree_chronograms)
-  input.processed <- make_datelife_query(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), use_tnrs=FALSE, approximate_match=TRUE)
-  expect_equal(class(input.processed$phy),"phylo")
-})
-
-# test_that("Processing complex newick works", {
-# 	skip_on_cran()
-# 	skip_on_travis()
-#   utils::data(opentree_chronograms)
-# 	expect_error(datelife_search("((((((Typha latifolia,(Phragmites australis,(Sporobolus alterniflorus,Sporobolus pumilus)Sporobolus)PACMAD clade)Poales,(((Hydrilla verticillata,Vallisneria americana)Hydrocharitaceae,Potamogeton perfoliatus),Zostera marina,Ruppia maritima)Alismatales),(Lythrum salicaria,Myriophyllum spicatum)),(Ulva,Caulerpa taxifolia))Chloroplastida,((Skeletonema,(Gomphonema,Didymosphenia geminata)Bacillariophyceae)Bacillariophytina,Prorocentrum)SAR),Microcystis)Eukaryota;", summary_format="phylo_all"), NA)
-# })
-
 test_that("datelife_search returns phylo_all", {
   skip_on_cran()
   utils::data(opentree_chronograms)
@@ -142,13 +114,6 @@ test_that("get_datelife_result works", {
   expect_equal(class(datelife_result.in[[1]]), "matrix")
 })
 
-test_that("Processing input string", {
-	skip_on_cran()
-  utils::data(opentree_chronograms)
-  input.processed <- make_datelife_query(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), use_tnrs=FALSE, approximate_match=TRUE)
-  expect_equal(length(input.processed$cleaned_names),3)
-})
-
 test_that("Making OToL and BOLD tree works", {
   skip_on_cran()
   skip_on_os("linux") #b/c no pathd8 on travis linux
@@ -190,17 +155,6 @@ test_that("Congruification works with treePL", {
     #TODO add a different test here, testing length is not efficient
 })
 
-test_that("SDM correctly returns tree", {
-  skip_on_cran()
-  skip_on_os("linux") #b/c no pathd8 on travis linux
-  utils::data(opentree_chronograms)
-  taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results_list <- lapply(opentree_chronograms$trees, get_subset_array_dispatch, taxa=taxa, phy=NULL)
-  datelife_result <- results_list_process(results_list, taxa, TRUE)
-  result.tree <- datelife_result_sdm(datelife_result)$phy
-  expect_true(inherits(result.tree, "phylo"))
-})
-
 test_that("use_all_calibrations actually works", {
   skip_on_cran()
   skip_on_os("linux") #b/c no pathd8 on travis linux
@@ -220,13 +174,7 @@ test_that("Crop plant taxa work", {
   expect_gte(length(results), 2)
 })
 
-test_that("Processing newick input works", {
-  processed <- make_datelife_query("((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum));")
-  expect_equal(class(processed$phy), "phylo")
-  expect_equal(ape::Ntip(processed$phy), 6)
-  expect_equal(ape::Nnode(processed$phy), 5)
-  expect_equal(length(processed$cleaned_names), 6)
-})
+
 
 test_that("Crop plant newick works", {
   skip_on_cran()
@@ -252,23 +200,6 @@ expect_equal(ape::Ntip(tree), 2)
 expect_gte(tree$edge.length[1], 10)
 })
 
-test_that("input_process works", {
-	new <- "(((((Pterois miles,Pterois volitans)Pteroinae)Teleostei)Chordata,Lymnaea))Metazoa;"
-	phy <- ape::read.tree(text="((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);")
-	notnew <- "a,b;"
-	expect_error(input_process(c(new, new)), verbose=TRUE) #trying to process two phylogenies will give an error
-	expect_error(input_process(c(phy, phy)), verbose=TRUE) #trying to process two phylogenies will give an error
-	expect_message(x <- input_process(new, verbose=TRUE)) # when verbose=TRUE it will give a printed message
-	expect_message(x <- input_process(phy, verbose=TRUE)) # idem
-	expect_message(x <- input_process(notnew, verbose=TRUE)) # idem
-	expect_output(x <- input_process(new, verbose=FALSE), NA) # when verbose=FALSE there is no printed message, but it will work with expect_message too
-	expect_output(x <- input_process(notnew, verbose=FALSE), NA) # idem
-	expect_output(x <- input_process("purrr", verbose=FALSE), NA) # idem
-	expect_type(x <- input_process(notnew, verbose=FALSE), "logical") # output is NA
-	expect_type(x <- input_process("purrr", verbose=FALSE), "logical") # output is NA
-	expect_s3_class(x <- input_process(new, verbose=FALSE), "phylo") # output is phylo
-	expect_s3_class(x <- input_process(phy, verbose=FALSE), "phylo") # output is phylo
-})
 
 test_that("tree_fix_brlen works", {
     utils::data(plant_bold_otol_tree, dlsearch_subset2)
@@ -399,38 +330,8 @@ test_that("patristic_matrix_to_phylo runs", {
 test_that("tree_add_dates works", {
     skip_on_cran()
     skip_on_os("linux") #b/c no mrbayes on travis linux
+    utils::data(felid_sdm)
     y <- tree_add_dates(felid_sdm$phy, missing_taxa = letters[1:5])
-  })
-
-test_that("get_dated_otol_induced_subtree works", {
-  xx <- get_dated_otol_induced_subtree()
-  xx <- get_dated_otol_induced_subtree(input = felid_sdm$phy)
-  xx <- get_dated_otol_induced_subtree(ott_ids = c(563163, 770315)) # cat and human ott_ids
-  # expect an NA result on the two following:
-  xx <- get_dated_otol_induced_subtree(ott_ids = c("563163", "770315", "mrcaott99")) # cat and human ott_ids
-  xx <- get_dated_otol_induced_subtree(ott_ids = c("563163", "mrcaott770315", "mrcaott99")) # cat and human ott_ids
-  # "Hamamelidaceae", "Altingiaceae", "Zamiaceae", "Rutaceae", "Saxifragaceae", "Asparagaceae", "Cycadaceae", "Smilacaceae", "Boraginaceae"
-  # with respective ott ids 737324, 853767, 614459, 43847, 1035588, 17704, 99242, 978709, 147029
-  # are dropped from tree. I'm sure there are more.
-  # next one returns NA:
-  xx <- get_dated_otol_induced_subtree(input = c("Felis", "Canis", "Hamamelidaceae", "Altingiaceae"))
-  # next one returns a tree of cats and wolves, no plants
-  xx <- get_dated_otol_induced_subtree(input = c("Felis silvestris", "Homo sapiens", "Hamamelidaceae", "Altingiaceae"))
-  # we should add an element to pylo object that contains input lineages that are excluded from tree:
-  # expect_false(is.null(xx$dropped))
-})
-
-# getting an error when phangorn::densitree plotting datelife_result chronograms from the following taxa
-test_that("plot_densitree works", {
-    taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus gallus")
-    four_birds <- datelife_search(input = taxa, summary_format = "phylo_all")
-    plot_densitree(trees = four_birds, include_all = FALSE)
-    plot_densitree(trees = four_birds, include_all = TRUE)
-    skip("example generating an error from package phangorn")
-    taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus", "Felis")
-    birds_and_cats <- datelife_search(input = taxa, summary_format = "phylo_all", get_spp_from_taxon = TRUE)
-    plot_densitree(trees = birds_and_cats, include_all = FALSE)
-    plot_densitree(trees = birds_and_cats, include_all = TRUE)
   })
 
 

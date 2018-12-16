@@ -340,13 +340,14 @@ get_dated_otol_induced_subtree <- function(input = c("Felis silvestris", "Homo s
 	# 		input <- input$cleaned_names
 	# 	}
 	# }
-	# all previous code except	`input <- datelife_query_check(input)` is replaced by the next line of code:
+	# all previous code is replaced by the two following lines:
+	input <- datelife_query_check(datelife_query = input)
 	input_ott_match <- suppressMessages(check_ott_input(input, ott_id))
 	if(length(input_ott_match) < 2){
 		message("At least two valid names or numeric ott_ids are needed to get a tree")
 		return(NA)
 	}
-  pp <- tryCatch(httr::POST("http://141.211.236.35:10999/induced_subtree",
+  	pp <- tryCatch(httr::POST("http://141.211.236.35:10999/induced_subtree",
 						body = list(ott_ids = input_ott_match),
 						encode = "json", httr::timeout(10)), error = function(e) NA)
 	if(length(pp) > 1){

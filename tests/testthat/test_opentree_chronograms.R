@@ -3,8 +3,8 @@ test_that("get_otol_chronograms works", {
   #	skip_on_travis() #b/c no pathd8
   # skip_on_os("linux") #b/c no pathd8 on travis linux
 
-  # utils::data(opentree_chronograms)
-  xx <- get_otol_chronograms(verbose=TRUE, max_tree_count = 10)
+  utils::data(opentree_chronograms)
+  # xx <- get_otol_chronograms(verbose=TRUE, max_tree_count = 10)
 
 })
 
@@ -24,9 +24,11 @@ test_that("clean_ott_chronogram works as expected", {
 })
 
 test_that("opentree_chronograms object is ok", {
-  data::utils(opentree_chronograms)
+  utils::data(opentree_chronograms)
   # write(paste(names(opentree_chronograms), collapse = '", "'), file = "data-raw/names.txt")
-  is_true(all(c("trees", "authors", "curators", "studies", "dois") %in% names(opentree_chronograms)))
-  equal(sapply(opentree_chronograms, length))
-  opentree_chronograms$trees
+  # test that all expected elements are in opentree_chronograms:
+  expect_true(all(c("trees", "authors", "curators", "studies", "dois") %in% names(opentree_chronograms)))
+  # test that all opentree_chronograms elements have the same length:
+  expect_true(all(sapply(opentree_chronograms, length) == length(opentree_chronograms$trees)))
+  # opentree_chronograms$trees
 })
