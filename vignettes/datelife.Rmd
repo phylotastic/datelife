@@ -38,7 +38,7 @@ devtools::install_github("phylotastic/datelife")
 Now load the package into the R workspace.
 ```{r, eval = TRUE}
 library("datelife")
-devtools::load_all("~/Desktop/datelife/")
+# devtools::load_all("~/Desktop/datelife/")
 
 ```
 
