@@ -8,15 +8,20 @@ test_that("get_otol_chronograms works", {
 
 })
 
-test_that("is_good_chronogram works", {
+test_that("is_good_chronogram works as expected", {
   utils::data(felid_gdr_phylo_all)
   t1 <- felid_gdr_phylo_all$phylo_all[[1]]
+  expect_true(is_good_chronogram(t1))
+  # test that there are al types of not.mapped are detected:
   t1$tip.label[1] <-  "*tip_#1_not_mapped_to_OTT._Original_label_-_Hagensia_havilandi"
   t1$tip.label[2] <-  "*tip_#1_not_mapped_to_OTT._Original_label_-_Felis_silvestris"
-  is_good_chronogram(t1)
-  t1$tip.label[3] <-  gsub("_", " ", t1$tip.label[1])
-  is_good_chronogram(t1)
+  expect_false(is_good_chronogram(t1))
+  t2 <- t1
+  t2$tip.label <- gsub("_", " ", t1$tip.label)
+  expect_false(is_good_chronogram(t2))
+  # enhance: test that there are no duplicated labels:
   t1$tip.label[4] <-  "*tip_#1_not_mapped_to_OTT._Original_label_-_Hagensia_havilandi"
+  # is_good_chronogram(t1)
 })
 
 test_that("clean_ott_chronogram works as expected", {
