@@ -162,7 +162,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 					}
 			}
 	}
-	# add taxonomic nodelabels to trees object here
+	# enhance: add taxonomic nodelabels to trees object here
 	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
 	return(result)
 }
@@ -191,8 +191,8 @@ is_good_chronogram <- function(phy) {
 		passing <- FALSE
 		warning("tree failed over not having more internal nodes than tips")
 	}
-	if(length(which(grepl("not mapped", phy$tip.label))) > 0) {
-		warning("tree failed over having not mapped taxa that should have been purged")
+	if(length(which(grepl("not.mapped", phy$tip.label))) > 0) {
+		warning("tree failed over having not mapped taxa that should have been checked")
 		passing <- FALSE #not cleaned properly
 	}
 	if(any(is.na(phy$tip.label))) {
