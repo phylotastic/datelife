@@ -37,8 +37,10 @@ before_install:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rm '/usr/local/bin/gfortran' ; fi
   #  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew cask uninstall oclint ; fi # based on https://github.com/travis-ci/travis-ci/issues/8826
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
+
   #  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --overwrite gcc          ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew tap brewsci/bio; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install imagemagick; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install brewsci/bio/mrbayes; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install brewsci/science/pathd8; fi
 
