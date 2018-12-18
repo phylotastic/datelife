@@ -78,74 +78,79 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 	tree.count <- 0
 	bad.ones <- c()
 	# utils::opentree_chronograms
-	while(tree.count < max_tree_count){ # the only purpose for this conditional is to run the testhat for this function.
-			for (study.index in sequence(dim(chronogram.matches)[1])) {
-					if(verbose) {
-							message("Downloading tree(s) from study ", study.index, " of ", dim(chronogram.matches)[1])
-					}
-					for(chrono.index in sequence((chronogram.matches$n_matched_trees[study.index]))) {
-							study.id <- chronogram.matches$study_ids[study.index]
-							# if(study.id %in% opentree_chronograms$studies)  # unlist(opentree_chronograms$studies) if new_studies_only
-					#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
-							new.tree2 <- new.tree <- NULL
-							tree.id <- strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index]
-							potential.bad <- paste("tree_id='", tree.id, "', study_id='", study.id, "'", sep="")
+	for (study.index in sequence(dim(chronogram.matches)[1])) {
+			# the only purpose for this conditional is to run the testhat for this function.
+			if(tree.count > max_tree_count){
+				break
+			}
+			if(verbose) {
+					message("Downloading tree(s) from study ", study.index, " of ", dim(chronogram.matches)[1])
+			}
+			for(chrono.index in sequence((chronogram.matches$n_matched_trees[study.index]))) {
+					study.id <- chronogram.matches$study_ids[study.index]
+					# if(study.id %in% opentree_chronograms$studies)  # unlist(opentree_chronograms$studies) if new_studies_only
+			#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
+					new.tree2 <- new.tree <- NULL
+					tree.id <- strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index]
+					potential.bad <- paste("tree_id='", tree.id, "', study_id='", study.id, "'", sep="")
 
-							if(!grepl("\\.\\.\\.", tree.id) & !is.na(tree.id)) { #to deal with ellipsis bug
-									#try(new.tree <- datelife:::get_study_tree_with_dups(study_id=study.id,tree_id=tree.id ))
-									#try(new.tree <- rotl::get_study_subtree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name", subtree_id="ingroup")) #only want ingroup, as it's the one that's been lovingly curated.
-									try(new.tree <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name")) #would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
-									#try(new.tree <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name"))
-									data.frame(new.tree$tip.label)
-									data.frame(try.tree$tip.label)
-									if(verbose) {
-										message("tree_id = '", tree.id, "', study_id = '", study.id, "'")
-									}
-									if(!is.null(new.tree) & phylo_has_brlen(phy = new.tree)) {
-											try.tree <- clean_ott_chronogram(new.tree) # will give NA if just one or none tip labels are mapped to ott
-											if(phylo_has_brlen(phy = try.tree)) {
-													new.tree <- try.tree
-													if(is_good_chronogram(new.tree)) {
-														new.tree$tip.label <- gsub('_', ' ', new.tree$tip.label)
-														if(verbose) {
-															message("\t", "has tree with branch lengths")
-														}
-														doi <- NULL
-														try(doi <- gsub('https?://(dx\\.)?doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
-														authors <- append(authors, NA)
-														if(length(doi) == 0){
-															warning(paste(study.id, "has no DOI attribute, author names will not be retrieved."))
-														} else {
-															try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
-														}
-														curators <- append(curators, NA)
-														try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
-														try(studies <- append(studies, study.id))
-														tree.count <- tree.count + 1
-														try(dois <- append(dois, chronogram.matches$study_doi[study.index]))
-														try(new.tree2 <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_id")) #would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
-														new.tree2 <- clean_ott_chronogram(new.tree2)
-														new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label)
-														trees[[tree.count]] <- new.tree
-														names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
-														message("\t", "was good tree")
-														potential.bad <- NULL
-													}
-											} # else {
-											# 		# here goes the case with none or just one mapped taxa
-											# 		new.tree <- map_ott_chronogram(new.tree)
-											# }
-									}
-							} else {
-									warning("Not all trees could be loaded from this study due to ellipsis bug, https://github.com/ropensci/rotl/issues/85")
+					if(!grepl("\\.\\.\\.", tree.id) & !is.na(tree.id)) { #to deal with ellipsis bug
+							if(verbose) {
+									message("tree_id = '", tree.id, "', study_id = '", study.id, "'")
 							}
-							if(!is.null(potential.bad)) {
-									bad.ones <- append(bad.ones, potential.bad)
+							try(new.tree <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name")) #would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
+							#try(new.tree <- datelife:::get_study_tree_with_dups(study_id=study.id,tree_id=tree.id ))
+							#try(new.tree <- rotl::get_study_subtree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name", subtree_id="ingroup")) #only want ingroup, as it's the one that's been lovingly curated.
+							if(!is.null(new.tree) & phylo_has_brlen(phy = new.tree)) {
+									# add ott_ids
+									try(new.tree2 <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_id")) #would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
+									new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label)
+									try.tree <- clean_ott_chronogram(new.tree)
+									# previous line will give NA if just one or no tip labels are mapped to ott???
+									# enhance: add ott ids to unmapped in clean_ott_chronogram
+									if(phylo_has_brlen(phy = try.tree)) {
+											new.tree <- try.tree
+											if(is_good_chronogram(new.tree)) {
+												new.tree$tip.label <- gsub('_', ' ', new.tree$tip.label)
+												if(verbose) {
+													message("\t", "has tree with branch lengths")
+												}
+												doi <- NULL
+												try(doi <- gsub('https?://(dx\\.)?doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
+												authors <- append(authors, NA)
+												if(length(doi) == 0){
+													warning(paste(study.id, "has no DOI attribute, author names will not be retrieved."))
+												} else {
+													try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
+												}
+												curators <- append(curators, NA)
+												try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
+												try(studies <- append(studies, study.id))
+												tree.count <- tree.count + 1
+												# print(tree.count)
+												try(dois <- append(dois, chronogram.matches$study_doi[study.index]))
+												trees[[tree.count]] <- new.tree
+												names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
+												message("\t", "was good tree")
+												potential.bad <- NULL
+
+											}
+									} # else {
+									# 		# here should go the case with none or just one mapped taxa??
+									# 		new.tree <- map_ott_chronogram(new.tree)
+									# }
 							}
-							#save(list=ls(), file="opentree_chronograms.RData")
+					} else {
+							warning("Not all trees could be loaded from this study due to ellipsis bug, https://github.com/ropensci/rotl/issues/85")
+					}
+					if(!is.null(potential.bad)) {
+							bad.ones <- append(bad.ones, potential.bad)
 					}
 			}
-	} # end of while(tree.count < max_tree_count) conditional
+	}
+	# enhance: add taxonomic nodelabels to trees object here
+
+
 	if(verbose) {
 			message("Problematic combos:")
 			message(paste0(utils::capture.output(bad.ones), collapse = "\n"))
@@ -162,7 +167,6 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 					}
 			}
 	}
-	# enhance: add taxonomic nodelabels to trees object here
 	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
 	return(result)
 }
@@ -183,7 +187,7 @@ save_otol_chronograms <- function(file = "opentree_chronograms.RData", verbose =
 #' @export
 is_good_chronogram <- function(phy) {
 	passing <- TRUE
-	if(class(phy) != "phylo") {
+	if(!inherits(phy, "phylo")) {
 		passing <- FALSE
 		warning("tree failed over not being class phylo")
 	}
