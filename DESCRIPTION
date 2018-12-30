@@ -33,6 +33,7 @@ Imports:
     rotl,
     knitcitations,
     phylobase,
+    taxize,
     treebase,
     httr,
     devtools,
