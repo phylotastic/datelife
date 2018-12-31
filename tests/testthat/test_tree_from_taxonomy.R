@@ -8,5 +8,5 @@ test_that("classification_paths_from_taxonomy works", {
 test_that("tree_from_taxonomy works", {
     taxa <- c("Homo sapiens", "twilight sparkle", "Equus quagga", "Archaeopteryx")
     results <- tree_from_taxonomy(taxa)
-    expect_equal(inherits(tree_from_taxonomy$phy, "phylo"))
+    expect_equal(inherits(results$phy, "phylo"))
 })
