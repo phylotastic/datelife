@@ -78,20 +78,28 @@ tree_from_taxonomy <- function(taxa, sources="Catalogue of Life") {
 #'
 #' This uses the Paleobiology Database's API to gather information on the ages for all specimens of a taxon. It will also look for all descendants of the taxon. It fixes name misspellings if possible.
 #' @param taxon The scientific name of the taxon you want the range of occurrences of
-#' @param recent If TRUE, assumes the minimum age is zero
+#' @param recent If TRUE, forces the minimum age to be zero
+#' @param assume_recent_if_missing If TRUE, any taxon missing from pbdb is assumed to be recent
 #' @return a data.frame of max_ma and min_ma for the specimens
 #' @export
-get_fossil_range <- function(taxon, recent=FALSE) {
+get_fossil_range <- function(taxon, recent=FALSE, assume_recent_if_missing=TRUE) {
   all_sources <- taxize::gnr_datasources()
   source_id <- all_sources$id[grepl("The Paleobiology Database", all_sources$title, ignore.case=TRUE)]
   taxon_gnred_df <- taxize::gnr_resolve(taxon, best_match_only=TRUE, fields="all", preferred_data_sources=source_id)
   if(nrow(taxon_gnred_path)==0) {
-    return(NA)
+    if(assume_recent_if_missing) {
+      dates <- data.frame(max_ma=0, min_ma=0)
+      rownames(dates) <- taxon
+      return(dates)
+    } else {
+      return(NA)
+    }
   }
   taxon_gnred <- tail(strsplit( taxon_gnred_df$classification_path, "\\|")[[1]],1)
   taxon_string <- utils::URLencode(taxon_gnred)
-  dates <- read.csv(url(paste0("https://paleobiodb.org/data1.2/occs/list.txt?base_name=", taxon_string)))
-  dates <- dates[,c("max_ma", "min_ma")]
+  dates <- data.frame()
+  try(dates <- read.csv(url(paste0("https://paleobiodb.org/data1.2/occs/list.txt?base_name=", taxon_string))))
+  try(dates <- dates[,c("max_ma", "min_ma")])
   if(recent) { #we know it still exists
     dates <- rbind(dates, c(min(c(0, dates$min_ma), na.rm=TRUE),0))
   }
@@ -102,12 +110,24 @@ get_fossil_range <- function(taxon, recent=FALSE) {
 #'
 #' This uses the Paleobiology Database's API to gather information on the ages for all specimens of a taxon. It will also look for all descendants of the taxon. It fixes name misspellings if possible. It is basically a wrapper for get_fossil_range.
 #' @param taxon The scientific name of the taxon you want the range of occurrences of
-#' @param recent If TRUE, assumes the minimum age is zero
+#' @param recent If TRUE, forces the minimum age to be zero
+#' @param assume_recent_if_missing If TRUE, any taxon missing from pbdb is assumed to be recent
 #' @return a single row data.frame of max_ma and min_ma for the specimens, with rowname equal to taxon input
 #' @export
-summarize_fossil_range <- function(taxon, recent=FALSE) {
-  dates <- get_fossil_range(taxon, recent)
+summarize_fossil_range <- function(taxon, recent=FALSE, assume_recent_if_missing=TRUE) {
+  dates <- get_fossil_range(taxon, recent, assume_recent_if_missing)
   result <- data.frame(max_ma=max(dates$max_ma), min_ma=min(dates$min_ma), stringsAsFactors=FALSE)
   rownames(result) <- taxon
   return(result)
+}
+
+#' Date with Paleobiology Database and paleotree
+#'
+#' @param phy Phylogeny of taxa
+#' @param recent If TRUE, forces the minimum age to be zero for any taxon
+#' @param assume_recent_if_missing If TRUE, any taxon missing from pbdb is assumed to be recent
+#' @return A dated tree
+#' @export
+date_with_pbdb <- function(phy, recent=FALSE, assume_recent_if_missing=TRUE) {
+  all_dates <- sapply(phy$tip.label, summarize_fossil_range, recent=recent, assume_recent_if_missing=assume_recent_if_missing)
 }

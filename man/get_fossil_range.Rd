@@ -4,16 +4,19 @@
 \alias{get_fossil_range}
 \title{Get the ages for a taxon from PBDB}
 \usage{
-get_fossil_range(taxon, recent = FALSE)
+get_fossil_range(taxon, recent = FALSE,
+  assume_recent_if_missing = TRUE)
 }
 \arguments{
 \item{taxon}{The scientific name of the taxon you want the range of occurrences of}
 
-\item{recent}{If TRUE, assumes the minimum age is zero}
+\item{recent}{If TRUE, forces the minimum age to be zero}
+
+\item{assume_recent_if_missing}{If TRUE, any taxon missing from pbdb is assumed to be recent}
 }
 \value{
 a data.frame of max_ma and min_ma for the specimens
 }
 \description{
-This uses the Paleobiology Database's API to gather information on the ages for all specimens of a taxon. It will also look for all descendants of the taxon.
+This uses the Paleobiology Database's API to gather information on the ages for all specimens of a taxon. It will also look for all descendants of the taxon. It fixes name misspellings if possible.
 }
