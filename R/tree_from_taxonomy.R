@@ -76,7 +76,7 @@ tree_from_taxonomy <- function(taxa, sources="Catalogue of Life") {
 
 #' Get the ages for a taxon from PBDB
 #'
-#' This uses the Paleobiology Database's API to gather information on the ages for all specimens of a taxon. It will also look for all descendants of the taxon.
+#' This uses the Paleobiology Database's API to gather information on the ages for all specimens of a taxon. It will also look for all descendants of the taxon. It fixes name misspellings if possible.
 #' @param taxon The scientific name of the taxon you want the range of occurrences of
 #' @param recent If TRUE, assumes the minimum age is zero
 #' @return a data.frame of max_ma and min_ma for the specimens
@@ -96,4 +96,18 @@ get_fossil_range <- function(taxon, recent=FALSE) {
     dates <- rbind(dates, c(min(c(0, dates$min_ma), na.rm=TRUE),0))
   }
   return(dates)
+}
+
+#' Summarize taxon age from PBDB to just a single min and max age
+#'
+#' This uses the Paleobiology Database's API to gather information on the ages for all specimens of a taxon. It will also look for all descendants of the taxon. It fixes name misspellings if possible. It is basically a wrapper for get_fossil_range.
+#' @param taxon The scientific name of the taxon you want the range of occurrences of
+#' @param recent If TRUE, assumes the minimum age is zero
+#' @return a single row data.frame of max_ma and min_ma for the specimens, with rowname equal to taxon input
+#' @export
+summarize_fossil_range <- function(taxon, recent=FALSE) {
+  dates <- get_fossil_range(taxon, recent)
+  result <- data.frame(max_ma=max(dates$max_ma), min_ma=min(dates$min_ma), stringsAsFactors=FALSE)
+  rownames(result) <- taxon
+  return(result)
 }
