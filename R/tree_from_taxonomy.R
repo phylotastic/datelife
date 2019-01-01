@@ -15,7 +15,9 @@ classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life"
   }
   source_ids <- source_ids[!is.na(source_ids)]
   resolved_taxa <- taxize::gnr_resolve(taxa, best_match_only=TRUE, fields="all", preferred_data_sources=source_ids, with_context=TRUE)
+  resolved_taxa <- resolved_taxa[grepl("\\|", resolved_taxa$classification_path),] # sometimes PBDB resolves taxa but doesn't have a taxonomy for them. This isn't what we want.
   missing_taxa <- taxa[!taxa %in% resolved_taxa$user_supplied_name]
+
   return(list(resolved=resolved_taxa, unresolved=missing_taxa))
 }
 
@@ -65,6 +67,7 @@ tree_from_taxonomy <- function(taxa, sources="Catalogue of Life") {
     }
   }
   edge <- unique(edge) #get rid of edges added multiple times
+  #edge <- edge[edge[,1]!=edge[,2],] # sometimes have the same edge be its own parent. This is bad.
   phy <- list(edge=edge, tip.label=tip.label, node.label=node.label, Nnode=nrow(edge))
   class(phy) <- "phylo"
   phy <- ape::reorder.phylo(phy)
