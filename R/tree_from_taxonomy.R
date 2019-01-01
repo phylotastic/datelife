@@ -73,3 +73,27 @@ tree_from_taxonomy <- function(taxa, sources="Catalogue of Life") {
   phy <- ape::reorder.phylo(phy)
   return(list(phy=phy, unresolved=classification_results$unresolved))
 }
+
+#' Get the ages for a taxon from PBDB
+#'
+#' This uses the Paleobiology Database's API to gather information on the ages for all specimens of a taxon. It will also look for all descendants of the taxon.
+#' @param taxon The scientific name of the taxon you want the range of occurrences of
+#' @param recent If TRUE, assumes the minimum age is zero
+#' @return a data.frame of max_ma and min_ma for the specimens
+#' @export
+get_fossil_range <- function(taxon, recent=FALSE) {
+  all_sources <- taxize::gnr_datasources()
+  source_id <- all_sources$id[grepl("The Paleobiology Database", all_sources$title, ignore.case=TRUE)]
+  taxon_gnred_df <- taxize::gnr_resolve(taxon, best_match_only=TRUE, fields="all", preferred_data_sources=source_id)
+  if(nrow(taxon_gnred_path)==0) {
+    return(NA)
+  }
+  taxon_gnred <- tail(strsplit( taxon_gnred_df$classification_path, "\\|")[[1]],1)
+  taxon_string <- utils::URLencode(taxon_gnred)
+  dates <- read.csv(url(paste0("https://paleobiodb.org/data1.2/occs/list.txt?base_name=", taxon_string)))
+  dates <- dates[,c("max_ma", "min_ma")]
+  if(recent) { #we know it still exists
+    dates <- rbind(dates, c(min(c(0, dates$min_ma), na.rm=TRUE),0))
+  }
+  return(dates)
+}

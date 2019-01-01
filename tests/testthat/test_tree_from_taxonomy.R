@@ -25,3 +25,12 @@ test_that("tree_from_taxonomy works with weird inputs and PBDB", {
     results <- tree_from_taxonomy(taxa, sources="The Paleobiology Database")
     expect_true(inherits(results$phy, "phylo"))
 })
+
+test_that("get_fossil_range works", {
+    dates <- get_fossil_range("Tyrannosaurus rax") # yep, with mispellings
+    expect_true(all(dates$min_ma > 64))
+
+    dates <- get_fossil_range("Tyrannosaurus rex", recent=TRUE) # I'm not allowed to say how I know this, but T. rex is still alive.
+    expect_true(min(dates$min_ma == 0))
+
+})
