@@ -4,18 +4,21 @@
 \alias{tree_from_taxonomy}
 \title{Gets a taxonomic tree from a vector of taxa}
 \usage{
-tree_from_taxonomy(taxa, sources = "Catalogue of Life")
+tree_from_taxonomy(taxa, sources = "Catalogue of Life",
+  collapse_singles = TRUE)
 }
 \arguments{
 \item{taxa}{Vector of taxon names}
 
 \item{sources}{Vector of names of preferred sources; see taxize::gnr_datasources()}
+
+\item{collapse_singles}{If true, collapses singleton nodes}
 }
 \value{
 A list containing a phylo object with resolved names and a vector with unresolved names
 }
 \description{
-This uses the taxize package's wrapper of the Global Names Resolver to get taxonomic paths for the vector of taxa you pass in. Sources is a vector of source labels in order (though it works best if everything uses the same taxonomy, so we recommend doing just one source). You can see options by doing taxize::gnr_datasources(). Our default is Catalogue of Life. The output is a phylo object (typically with many singleton nodes: nodes with only one descendant (like "Homo" having "Homo sapiens" as its only descendant) but these singletons typically have node.labels
+This uses the taxize package's wrapper of the Global Names Resolver to get taxonomic paths for the vector of taxa you pass in. Sources is a vector of source labels in order (though it works best if everything uses the same taxonomy, so we recommend doing just one source). You can see options by doing taxize::gnr_datasources(). Our default is Catalogue of Life. The output is a phylo object (typically with many singleton nodes if collapse_singles is FALSE: nodes with only one descendant (like "Homo" having "Homo sapiens" as its only descendant) but these singletons typically have node.labels
 }
 \examples{
 taxa <- c("Homo sapiens", "Ursus arctos", "Pan paniscus", "Tyrannosaurus rex", "Ginkgo biloba", "Vulcan", "Klingon")

@@ -24,9 +24,10 @@ classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life"
 
 #' Gets a taxonomic tree from a vector of taxa
 #'
-#' This uses the taxize package's wrapper of the Global Names Resolver to get taxonomic paths for the vector of taxa you pass in. Sources is a vector of source labels in order (though it works best if everything uses the same taxonomy, so we recommend doing just one source). You can see options by doing taxize::gnr_datasources(). Our default is Catalogue of Life. The output is a phylo object (typically with many singleton nodes: nodes with only one descendant (like "Homo" having "Homo sapiens" as its only descendant) but these singletons typically have node.labels
+#' This uses the taxize package's wrapper of the Global Names Resolver to get taxonomic paths for the vector of taxa you pass in. Sources is a vector of source labels in order (though it works best if everything uses the same taxonomy, so we recommend doing just one source). You can see options by doing taxize::gnr_datasources(). Our default is Catalogue of Life. The output is a phylo object (typically with many singleton nodes if collapse_singles is FALSE: nodes with only one descendant (like "Homo" having "Homo sapiens" as its only descendant) but these singletons typically have node.labels
 #' @param taxa Vector of taxon names
 #' @param sources Vector of names of preferred sources; see taxize::gnr_datasources()
+#' @param collapse_singles If true, collapses singleton nodes
 #' @return A list containing a phylo object with resolved names and a vector with unresolved names
 #' @export
 #' @examples
@@ -35,7 +36,7 @@ classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life"
 #' print(results$unresolved) # The taxa that do not match
 #' ape::plot.phylo(results$phy) # may generate warnings due to problems with singletons
 #' ape::plot.phylo(ape::collapse.singles(results$phy), show.node.label=TRUE) # got rid of singles, but this also removes a lot of the node.labels
-tree_from_taxonomy <- function(taxa, sources="Catalogue of Life") {
+tree_from_taxonomy <- function(taxa, sources="Catalogue of Life", collapse_singles=TRUE) {
   classification_results <- classification_paths_from_taxonomy(taxa=taxa, sources=sources)
   paths <- classification_results$resolved$classification_path
   if(length(paths)<2) { #not enough for a tree
@@ -71,6 +72,9 @@ tree_from_taxonomy <- function(taxa, sources="Catalogue of Life") {
   phy <- list(edge=edge, tip.label=tip.label, node.label=node.label, Nnode=nrow(edge))
   class(phy) <- "phylo"
   phy <- ape::reorder.phylo(phy)
+  if(collapse_singles) {
+    phy <- ape::collapse.singles(phy)
+  }
   return(list(phy=phy, unresolved=classification_results$unresolved))
 }
 
@@ -142,7 +146,7 @@ summarize_fossil_range <- function(taxon, recent=FALSE, assume_recent_if_missing
 #' @export
 #' @examples
 #' taxa <- c("Archaeopteryx", "Pinus", "Quetzalcoatlus", "Homo sapiens", "Tyrannosaurus rex", "Megatheriidae", "Metasequoia", "Aedes", "Panthera")
-#' phy <- tree_from_taxonomy(phy, sources="The Paleobiology Database")$phy
+#' phy <- tree_from_taxonomy(taxa, sources="The Paleobiology Database")$phy
 #' chronogram <- date_with_pbdb(phy)
 #' ape::plot.phylo(chronogram)
 #' ape::axisPhylo()
@@ -151,5 +155,5 @@ date_with_pbdb <- function(phy, recent=FALSE, assume_recent_if_missing=TRUE) {
   all_dates$max_ma <- as.numeric(all_dates$max_ma)
   all_dates$min_ma <- as.numeric(all_dates$min_ma)
   chronogram <- paleotree::timePaleoPhy(phy, all_dates, add.term=TRUE)
-
+  return(chronogram)
 }

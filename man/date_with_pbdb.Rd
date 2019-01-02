@@ -21,7 +21,7 @@ This will take a topology, look up information about fossils for taxa on the tre
 }
 \examples{
 taxa <- c("Archaeopteryx", "Pinus", "Quetzalcoatlus", "Homo sapiens", "Tyrannosaurus rex", "Megatheriidae", "Metasequoia", "Aedes", "Panthera")
-phy <- tree_from_taxonomy(phy, sources="The Paleobiology Database")$phy
+phy <- tree_from_taxonomy(taxa, sources="The Paleobiology Database")$phy
 chronogram <- date_with_pbdb(phy)
 ape::plot.phylo(chronogram)
 ape::axisPhylo()
