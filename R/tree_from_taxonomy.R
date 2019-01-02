@@ -86,7 +86,7 @@ get_fossil_range <- function(taxon, recent=FALSE, assume_recent_if_missing=TRUE)
   all_sources <- taxize::gnr_datasources()
   source_id <- all_sources$id[grepl("The Paleobiology Database", all_sources$title, ignore.case=TRUE)]
   taxon_gnred_df <- taxize::gnr_resolve(taxon, best_match_only=TRUE, fields="all", preferred_data_sources=source_id)
-  if(nrow(taxon_gnred_path)==0) {
+  if(nrow(taxon_gnred_df)==0) {
     if(assume_recent_if_missing) {
       dates <- data.frame(max_ma=0, min_ma=0)
       rownames(dates) <- taxon
@@ -102,6 +102,17 @@ get_fossil_range <- function(taxon, recent=FALSE, assume_recent_if_missing=TRUE)
   try(dates <- dates[,c("max_ma", "min_ma")])
   if(recent) { #we know it still exists
     dates <- rbind(dates, c(min(c(0, dates$min_ma), na.rm=TRUE),0))
+  } else { #check to see if exists
+    taxon_info <- NULL
+    try(taxon_info <- read.csv(url(paste0("https://paleobiodb.org/data1.2/taxa/single.txt?name=", taxon_string))))
+    if(!is.null(taxon_info)) {
+      if(taxon_info$is_extant=="extant") {
+        dates <- rbind(dates, c(min(c(0, dates$min_ma), na.rm=TRUE),0)) #so that even if it has no fossils, record it exists
+      }
+    }
+  }
+  if(any(is.na(dates)) & assume_recent_if_missing) {
+    dates[1,] <- c(0,0)
   }
   return(dates)
 }
@@ -123,11 +134,22 @@ summarize_fossil_range <- function(taxon, recent=FALSE, assume_recent_if_missing
 
 #' Date with Paleobiology Database and paleotree
 #'
+#' This will take a topology, look up information about fossils for taxa on the tree, and use paleotree's timePaleoPhy() function to compute branch lengths.
 #' @param phy Phylogeny of taxa
 #' @param recent If TRUE, forces the minimum age to be zero for any taxon
 #' @param assume_recent_if_missing If TRUE, any taxon missing from pbdb is assumed to be recent
 #' @return A dated tree
 #' @export
+#' @examples
+#' taxa <- c("Archaeopteryx", "Pinus", "Quetzalcoatlus", "Homo sapiens", "Tyrannosaurus rex", "Megatheriidae", "Metasequoia", "Aedes", "Panthera")
+#' phy <- tree_from_taxonomy(phy, sources="The Paleobiology Database")$phy
+#' chronogram <- date_with_pbdb(phy)
+#' ape::plot.phylo(chronogram)
+#' ape::axisPhylo()
 date_with_pbdb <- function(phy, recent=FALSE, assume_recent_if_missing=TRUE) {
-  all_dates <- sapply(phy$tip.label, summarize_fossil_range, recent=recent, assume_recent_if_missing=assume_recent_if_missing)
+  all_dates <- as.data.frame(t(sapply(phy$tip.label, summarize_fossil_range, recent=recent, assume_recent_if_missing=assume_recent_if_missing)))
+  all_dates$max_ma <- as.numeric(all_dates$max_ma)
+  all_dates$min_ma <- as.numeric(all_dates$min_ma)
+  chronogram <- paleotree::timePaleoPhy(phy, all_dates, add.term=TRUE)
+
 }
