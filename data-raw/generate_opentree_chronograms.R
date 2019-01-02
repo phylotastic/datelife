@@ -1,10 +1,3 @@
-# modified get_otol_chronograms code to retain taxa ott_ids too
-opentree_chronograms <- get_otol_chronograms()
-length(opentree_chronograms[[1]])
-devtools::use_data_raw()
-devtools::use_data(opentree_chronograms, overwrite = T)
-
-
 #' Get taxonomy for all species within opentree_chronograms object
 #' @inheritParams phylo_check
 #' @return A cleaned up phylo object
@@ -13,7 +6,8 @@ devtools::use_data(opentree_chronograms, overwrite = T)
 #' data(opentree_chronograms)
 #' names(opentree_chronograms)
 #' get_them_all(opentree_chronograms$trees)
-get_them_all <- function(trees){
+get_them_all <- function(trees = opentree_chronograms$trees){
+
 	all <- unique(unlist(sapply(trees, "[", "ott_ids")))
 	all[which(is.na(as.numeric(all)))]
 	# problems <- opentree_chronograms$trees[sapply(sapply(trees, "[", "ott_ids"), function(x) any(grepl("tip", x)))]

@@ -35,7 +35,8 @@ classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life"
 #' results <- tree_from_taxonomy(taxa)
 #' print(results$unresolved) # The taxa that do not match
 #' ape::plot.phylo(results$phy) # may generate warnings due to problems with singletons
-#' ape::plot.phylo(ape::collapse.singles(results$phy), show.node.label=TRUE) # got rid of singles, but this also removes a lot of the node.labels
+#' ape::plot.phylo(ape::collapse.singles(results$phy), show.node.label=TRUE)
+#' # got rid of singles, but this also removes a lot of the node.labels
 tree_from_taxonomy <- function(taxa, sources="Catalogue of Life", collapse_singles=TRUE) {
   classification_results <- classification_paths_from_taxonomy(taxa=taxa, sources=sources)
   paths <- classification_results$resolved$classification_path
@@ -145,15 +146,18 @@ summarize_fossil_range <- function(taxon, recent=FALSE, assume_recent_if_missing
 #' @return A dated tree
 #' @export
 #' @examples
-#' taxa <- c("Archaeopteryx", "Pinus", "Quetzalcoatlus", "Homo sapiens", "Tyrannosaurus rex", "Megatheriidae", "Metasequoia", "Aedes", "Panthera")
+#' taxa <- c("Archaeopteryx", "Pinus", "Quetzalcoatlus", "Homo sapiens",
+#'        "Tyrannosaurus rex", "Megatheriidae", "Metasequoia", "Aedes", "Panthera")
 #' phy <- tree_from_taxonomy(taxa, sources="The Paleobiology Database")$phy
-#' chronogram <- date_with_pbdb(phy)
-#' ape::plot.phylo(chronogram)
-#' ape::axisPhylo()
+# uncomment the following part when we paleotree can be imported
+# #' chronogram <- date_with_pbdb(phy)
+# #' ape::plot.phylo(chronogram)
+# #' ape::axisPhylo()
 date_with_pbdb <- function(phy, recent=FALSE, assume_recent_if_missing=TRUE) {
   all_dates <- as.data.frame(t(sapply(phy$tip.label, summarize_fossil_range, recent=recent, assume_recent_if_missing=assume_recent_if_missing)))
   all_dates$max_ma <- as.numeric(all_dates$max_ma)
   all_dates$min_ma <- as.numeric(all_dates$min_ma)
+  # enhance: paleotree cannot be included as an import, but it needs to be if we wanna use them inside our functions
   chronogram <- paleotree::timePaleoPhy(phy, all_dates, add.term=TRUE)
   return(chronogram)
 }

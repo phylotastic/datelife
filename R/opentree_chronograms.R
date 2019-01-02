@@ -1,3 +1,28 @@
+#' Chronograms in Open Tree of Life and other related data
+#'
+#' Now storing >200 chronograms from OToL
+#'
+#' @name opentree_chronograms
+#' @docType data
+#' @format A list of four elements, containing data on OToL chronograms
+#' \describe{
+#'   \item{authors}{List of lists of authors of the included studies}
+#'   \item{curators}{List of lists of curators of the included studies}
+#'   \item{studies}{List of study identifiers}
+#'   \item{trees}{List storing the chronograms from OpenTree}
+#' }
+#' @source \url{http://opentreeoflife.org}
+#' @keywords otol tree chronogram
+#' @details
+#' Generated with
+#' opentree_chronograms <- get_otol_chronograms()
+#' usethis::use_data(opentree_chronograms, overwrite = T)
+#' and updtated with update_datelife_cache()
+"opentree_chronograms"
+# modified get_otol_chronograms code to retain taxa ott_ids too
+# usethis::use_data_raw() # this function only setups a data-raw folder
+
+
 #library(devtools)
 #install_github("ropensci/rotl", dependencies = TRUE, build_vignette=FALSE)
 #library(rotl)
@@ -62,7 +87,7 @@ phylo_has_brlen <- function(phy) {
 
 #' Get all chronograms from Open Tree of Life
 #' @param verbose If TRUE, give updates to the user
-#' @param max_tree_count Numeric indicating the mas number of trees to be cached. For testing purposes only.
+#' @param max_tree_count Numeric indicating the max number of trees to be cached. For testing purposes only.
 #' @return A list with elements for the trees, authors, curators, and study ids
 #' @export
 get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
@@ -77,6 +102,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 	dois <- list()
 	tree.count <- 0
 	bad.ones <- c()
+	ott_id_problems <- data.frame(study.id = character(), tree.id = character())
 	# utils::opentree_chronograms
 	for (study.index in sequence(dim(chronogram.matches)[1])) {
 			# the only purpose for this conditional is to run the testhat for this function.
@@ -103,8 +129,13 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 							#try(new.tree <- rotl::get_study_subtree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name", subtree_id="ingroup")) #only want ingroup, as it's the one that's been lovingly curated.
 							if(!is.null(new.tree) & phylo_has_brlen(phy = new.tree)) {
 									# add ott_ids
-									try(new.tree2 <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_id")) #would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
-									new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label)
+									# right now the function is having trouble to retrieve trees with ott ids as tip labels from certain studies
+									new.tree2 <- tryCatch(rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_id"),
+													error = function (e) NULL)
+									if(is.null(new.tree2)){
+										ott_id_problems <- rbind(ott_id_problems, data.frame(study.id, tree.id))
+									}
+									new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label) # if the tree is null it will generate an empty vector
 									try.tree <- clean_ott_chronogram(new.tree)
 									# previous line will give NA if just one or no tip labels are mapped to ott???
 									# enhance: add ott ids to unmapped in clean_ott_chronogram
@@ -167,6 +198,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 					}
 			}
 	}
+	write.csv(ott_id_problems, "data-raw/ott_id_problems.csv")
 	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
 	return(result)
 }
@@ -199,13 +231,15 @@ is_good_chronogram <- function(phy) {
 		warning("tree failed over having not mapped taxa that should have been checked")
 		passing <- FALSE #not cleaned properly
 	}
+	# enhance: test that there are no duplicated labels in chronogram:
 	if(any(is.na(phy$tip.label))) {
 		passing <- FALSE
 		warning("tree failed over having NA for tips")
 	}	else {
+		# remove this if we want to preserve all original labels:
 		if(min(nchar(phy$tip.label)) <= 2) {
 			passing <- FALSE
-			warning("tree failed for having names of two or fewer characters")
+			warning("tree failed for having names of two or fewer characters") # why is this important?
 		}
 	}
 	if(!ape::is.rooted(phy)) {
@@ -219,6 +253,23 @@ is_good_chronogram <- function(phy) {
 	return(passing)
 }
 
+
+#' Problematic chronograms from Open Tree of Life
+#'
+#' @name problems
+#' @docType data
+#' @format A list of trees with unmapped taxa
+#' @source \url{http://opentreeoflife.org}
+#' @keywords otol tree chronogram unmapped tnrs
+#' @details
+#' Before we developped tools to clean and map tip labels for our cached trees
+#' we found some trees that were stored with unmapped tip labels
+#' we extracted them and saved them to be used for testing functions.
+#' Generated with
+#' problems <- opentree_chronograms$trees[sapply(sapply(opentree_chronograms$trees, "[", "tip.label"), function(x) any(grepl("not.mapped", x)))]
+#' usethis::use_data(problems)
+"problems"
+
 #' Clean up some issues with OToL chronograms
 #' For now it 1) checks unmapped taxa and maps them with map_tiplabels_ott, 2) roots the chronogram if unrooted
 #'
@@ -226,11 +277,10 @@ is_good_chronogram <- function(phy) {
 #' @return A cleaned up phylo object
 #' @export
 clean_ott_chronogram <- function(phy) {
-	# phy <- problems[[5]]
-	# homogenize everything to blanks, it speeds up tnrs_match_names bc no approximate matching needed
 	phy.ori <- phy
+	# homogenize tip labels to blanks (no underscores)
+	# it speeds up tnrs_match_names bc no approximate matching needed
 	phy <- phylo_tiplabel_underscore_to_space(phy)
-	# tip.label <- phy$tip.label
 	bad.taxa <- unique(c(which(nchar(phy$tip.label) <= 2), which(grepl("not.mapped", phy$tip.label)))) # numeric of indices
 	phy$tip.label[bad.taxa] <- sub(".*-.", "", phy$tip.label[bad.taxa])  # this gets the original label and gets rid of the not.mapped tag
 	phy$tip.label[bad.taxa] <- gsub("aff ", "", phy$tip.label[bad.taxa])  # removes aff tag
@@ -264,7 +314,6 @@ clean_ott_chronogram <- function(phy) {
 	}
 	return(phy)
 }
-
 
 
 #' Map opentree_chronograms tip_label's Open Tree of Life Taxonomy to nodes.

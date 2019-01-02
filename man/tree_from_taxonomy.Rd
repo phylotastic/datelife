@@ -25,5 +25,6 @@ taxa <- c("Homo sapiens", "Ursus arctos", "Pan paniscus", "Tyrannosaurus rex", "
 results <- tree_from_taxonomy(taxa)
 print(results$unresolved) # The taxa that do not match
 ape::plot.phylo(results$phy) # may generate warnings due to problems with singletons
-ape::plot.phylo(ape::collapse.singles(results$phy), show.node.label=TRUE) # got rid of singles, but this also removes a lot of the node.labels
+ape::plot.phylo(ape::collapse.singles(results$phy), show.node.label=TRUE)
+# got rid of singles, but this also removes a lot of the node.labels
 }

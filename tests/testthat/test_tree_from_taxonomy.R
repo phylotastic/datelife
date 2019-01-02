@@ -31,7 +31,7 @@ test_that("get_fossil_range works", {
     expect_true(all(dates$min_ma > 64))
 
     dates <- get_fossil_range("Tyrannosaurus rex", recent=TRUE) # I'm not allowed to say how I know this, but T. rex is still alive.
-    expect_true(min(dates$min_ma == 0))
+    expect_true(min(dates$min_ma) == 0)
 
 })
 

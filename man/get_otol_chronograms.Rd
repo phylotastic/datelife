@@ -9,7 +9,7 @@ get_otol_chronograms(verbose = FALSE, max_tree_count = 500)
 \arguments{
 \item{verbose}{If TRUE, give updates to the user}
 
-\item{max_tree_count}{Numeric indicating the mas number of trees to be cached. For testing purposes only.}
+\item{max_tree_count}{Numeric indicating the max number of trees to be cached. For testing purposes only.}
 }
 \value{
 A list with elements for the trees, authors, curators, and study ids

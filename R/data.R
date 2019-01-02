@@ -16,26 +16,6 @@
 # #' How was the data were obtained or generated
 # "data_object"
 
-#' Chronograms in Open Tree of Life and other related data
-#'
-#' Now storing >200 chronograms from OToL
-#'
-#' @name opentree_chronograms
-#' @docType data
-#' @format A list of four elements, containing data on OToL chronograms
-#' \describe{
-#'   \item{authors}{List of lists of authors of the included studies}
-#'   \item{curators}{List of lists of curators of the included studies}
-#'   \item{studies}{List of study identifiers}
-#'   \item{trees}{List storing the chronograms from OpenTree}
-#' }
-#' @source \url{http://opentreeoflife.org}
-#' @keywords otol tree chronogram
-#' @details
-#' Generated with update_datelife_cache() via get_otol_chronograms()
-"opentree_chronograms"
-
-
 #' Information on contributors, authors, study ids and clades from studies with chronograms in Open tree of Life
 #'
 #' @name contributor_cache

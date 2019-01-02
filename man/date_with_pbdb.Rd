@@ -20,9 +20,7 @@ A dated tree
 This will take a topology, look up information about fossils for taxa on the tree, and use paleotree's timePaleoPhy() function to compute branch lengths.
 }
 \examples{
-taxa <- c("Archaeopteryx", "Pinus", "Quetzalcoatlus", "Homo sapiens", "Tyrannosaurus rex", "Megatheriidae", "Metasequoia", "Aedes", "Panthera")
+taxa <- c("Archaeopteryx", "Pinus", "Quetzalcoatlus", "Homo sapiens",
+       "Tyrannosaurus rex", "Megatheriidae", "Metasequoia", "Aedes", "Panthera")
 phy <- tree_from_taxonomy(taxa, sources="The Paleobiology Database")$phy
-chronogram <- date_with_pbdb(phy)
-ape::plot.phylo(chronogram)
-ape::axisPhylo()
 }
