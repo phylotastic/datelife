@@ -31,6 +31,7 @@ Imports:
     stats,
     stringr,
     rotl,
+    paleotree,
     knitcitations,
     phylobase,
     taxize,
@@ -41,7 +42,6 @@ Imports:
     reports
 Suggests:
     testthat,
-    paleotree,
     rphylotastic,
     rmarkdown,
     knitr
