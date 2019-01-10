@@ -224,17 +224,26 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 get_otol_synthetic_tree <- function(input, otol_version = "v2", ...){
 	if(!any(c("ott_id", "ott_ids") %in% names(input))){
 		df <- tnrs_match(names = input, reference_taxonomy = "otl", ...)  # tnrs_match processes input with rotl::tnrs_match_names function by batches, so it won't choke
-		df <- clean_tnrs(tnrs = df)
+		df <- clean_tnrs(tnrs = df) #gets rid of invalid names
 		df <- df[!is.na(df$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
+		rownames(df) <- df$unique_name
 	} else {
 		df <- input
-		# we might need a check here for ott_id elements
-		# are they numeric,no NAs 
+		if(is.null(rownames(df))){
+			rownames(df) <- paste0("tax", seq(nrow(df)))
+			# enhance: search for otl taxon name with a rotl function
+		}
+		# enhance: we might need a check of ott_id elements, are they all numeric, there are no NAs, etc.
+		# also, another check here, are all ott_ids from valid taxa? this is checked with get_ott_children, but from other functions we shoudl check This
 	}
-	# also, another check here, are all ott_ids in otol synthetic tree, etc.
+	# enhance: add a class to get_ott_children outputs so its easier to check here if all ott ids are valid taxa, indicate if it has been cleaned, maybe within an atrribute
+	message(paste("Getting tree for", paste0(rownames(df), collapse = ", ")))
+	# system.time({sapply(rotl::taxonomy_taxon_info(df$ott_id), "[", "flags")})
+	# system.time({tnrs_match(rownames(df))}) # this one is faster
 	phy <- tryCatch(ape::multi2di(suppressWarnings(rotl::tol_induced_subtree(ott_ids = df$ott_id,
 					label_format = "name",  otl_v = otol_version))), error = function(e){
-						message("input taxa are not in OToL synthetic tree")
+						message("Some or all input taxa are absent from OToL synthetic tree, look for invalid taxa and eliminate them for input")
+						# this will happen id there are some extinct taxa, barren or any invalid taxa in otol
 						NA
 					})
 	return(phy)

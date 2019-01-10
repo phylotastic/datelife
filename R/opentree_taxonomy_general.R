@@ -1,11 +1,11 @@
 
-#' Taxon name resolution service (tnrs) applied to input by batches
+#' Taxon name resolution service (tnrs) applied to query by batches
 #' @param names A character vector of taxon names to be matched to taxonomy. There is no limit to the numer of names that can be queried.
 #' @param reference_taxonomy A character vetor specifying the reference taxonomy to use for tnrs.
 #' @inheritDotParams rotl::tnrs_match_names -names
 #' @return A data frame from tnrs_match_names function
 #' @export
-tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # we can add other reference taxonomies in the future
+tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # enhance: add other reference taxonomies in the future
 	# names <- unique(names) # it is best to allow processing everything, i.e., without modifying the original input vector
 	# names <- names[!is.na(names)]  # tnrs_match_names does not allow NAs, but they're caught after with tryCatch
 

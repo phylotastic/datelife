@@ -24,6 +24,6 @@ eliminates all taxa that will give problems when trying to retrieve an induced s
 }
 \examples{
 # some suppressed taxa within "Gleicheniales" family of ferns:
-rotl::taxonomy_taxon_info(3866048)
+tt <- rotl::taxonomy_taxon_info(3866048)
 rotl::taxonomy_taxon_info(5262766)
 }

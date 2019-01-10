@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_taxonomy_general.R
 \name{tnrs_match}
 \alias{tnrs_match}
-\title{Taxon name resolution service (tnrs) applied to input by batches}
+\title{Taxon name resolution service (tnrs) applied to query by batches}
 \usage{
 tnrs_match(names, reference_taxonomy = "otl", ...)
 }
@@ -33,5 +33,5 @@ allowed as possible TNRS results.}
 A data frame from tnrs_match_names function
 }
 \description{
-Taxon name resolution service (tnrs) applied to input by batches
+Taxon name resolution service (tnrs) applied to query by batches
 }

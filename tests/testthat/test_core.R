@@ -225,15 +225,6 @@ test_that("tree_fix_brlen works", {
     expect_true(ape::is.ultrametric(x4, option = 2))
 })
 
-test_that("get_otol_synthetic_tree works", {
-  otol_tree <- get_otol_synthetic_tree(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))
-  expect_s3_class(otol_tree, "phylo") # output is phylo
-  expect_gte(length(otol_tree), 4)  # it has no branch lengths
-  # otol_tree <- get_otol_synthetic_tree(input = c("Struthio camelus"))
-  # should it return all names always?
-  # it should return the same number of names matched by tnrs_match
-  # add such a test:
-})
 
 test_that("missing_taxa_check works", {
   utils::data(felid_gdr_phylo_all)

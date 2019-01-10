@@ -53,7 +53,7 @@ as scientific names, either as a character vector or as tip labels from a tree i
 mamms <- datelife_search(input = c("Felis catus", "Delphinus delphus", "Homo sapiens", "Elephas maximus"))
 ```
 
-You can plot al source chronograms on screen with the function `plot_phylo_all()`
+You can plot all source chronograms on screen with the function `plot_phylo_all()`
 or save them into a pdf or png file with the argument `write`:
 ```{r, eval = FALSE}
 plot_phylo_all(mamms, write = "pdf", file = "mamms_phyloall")

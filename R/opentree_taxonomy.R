@@ -8,7 +8,7 @@
 #' @details eliminates all taxa that will give problems when trying to retrieve an induced subtree from otol.
 #' @examples
 #' # some suppressed taxa within "Gleicheniales" family of ferns:
-#' rotl::taxonomy_taxon_info(3866048)
+#' tt <- rotl::taxonomy_taxon_info(3866048)
 #' rotl::taxonomy_taxon_info(5262766)
 #' @export
 clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct", "uncultured", "major_rank_conflict", "incertae_sedis", "unplaced", "conflict", "environmental", "not_otu", "hidden", "hybrid")){
@@ -19,7 +19,7 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
       # sapply(tax_info[[i]][[1]]$children, length)
       # length(sapply(sapply(tax_info[[i]][[1]]$children, "[", "flags"), function(y) unlist(tolower(y))))
       # sapply(sapply(tax_info[[i]][[1]]$children, "[", "flags"), function(y) unlist(tolower(y)))[1]
-      ii <- lapply(sapply(sapply(taxon_info[[i]]$children, "[", "flags"), unlist), function(y) any(toupper(invalid) %in% y))
+      ii <- lapply(sapply(sapply(taxon_info[[i]]$children, "[", "flags"), unlist), function(y) any(invalid %in% y))
       # ii <- lapply(sapply(sapply(taxon_info[[i]][[1]]$children, "[", "flags"), unlist), function(y) any(toupper(invalid) %in% y))
       if(length(ii)>0){
         taxon_info[[i]]$children <- taxon_info[[i]]$children[!unlist(ii)]
@@ -245,17 +245,20 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_id =
 #' @inheritParams check_ott_input
 #' @param ott_rank A character vector with the ranks you wanna get lineage children from.
 #' @examples
-#' tnrs <- rotl::tnrs_match_names("Canis")
+#' # try getting an otol tree of a taxon missing from the synthetic tree
+#' # tnrs <- rotl::tnrs_match_names("Mus")
+#' tnrs <- tnrs_match("Canis")
 #' # Mus, Gleicheniales, Polypodiales, etc., are missing in synth tree too
 #' \dontrun{
 #'   rotl::tol_subtree(tnrs$ott_id[1])
 #'   Error: HTTP failure: 400
 #'   [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
 #' }
-#' children1 <- get_ott_children(ott_id = tnrs$ott_id[1])
-#' rownames(children1[[1]])
-#' tree_children1 <- datelife::get_otol_synthetic_tree(children1[[1]])
-#' plot(tree_children1, cex = 0.3)
+#' children <- get_ott_children(ott_id = tnrs$ott_id[1]) # or
+#' children <- get_ott_children("Canis")
+#' rownames(children[[1]])
+#' tree_children <- datelife::get_otol_synthetic_tree(children$Canis)
+#' plot(tree_children, cex = 0.3)
 #' # Other examples:
 #' oo <- get_ott_children(input= "magnoliophyta", ott_rank = "order")
 #' sum(oo$Magnoliophyta$rank == "order") # to know how many orders of flowering plants we have
