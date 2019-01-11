@@ -102,7 +102,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 	dois <- list()
 	tree.count <- 0
 	bad.ones <- c()
-	ott_id_problems <- data.frame(study.id = character(), tree.id = character())
+	ott_id_problems <- data.frame(study.id = character(), tree.id = character()) # nrow(ott_id_problems) is 0
 	# utils::opentree_chronograms
 	for (study.index in sequence(dim(chronogram.matches)[1])) {
 			# the only purpose for this conditional is to run the testhat for this function.
@@ -198,7 +198,11 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 					}
 			}
 	}
-	utils::write.csv(ott_id_problems, "data-raw/ott_id_problems.csv")
+	if(nrow(ott_id_problems) > 0){
+		utils::write.csv(ott_id_problems, "data-raw/ott_id_problems.csv")
+	} else {
+		write("There were no problematic chronograms", "data-raw/ott_id_problems.csv" )
+	}
 	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
 	return(result)
 }
