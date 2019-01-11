@@ -198,7 +198,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 					}
 			}
 	}
-	write.csv(ott_id_problems, "data-raw/ott_id_problems.csv")
+	utils::write.csv(ott_id_problems, "data-raw/ott_id_problems.csv")
 	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
 	return(result)
 }

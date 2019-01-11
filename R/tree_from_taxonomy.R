@@ -45,7 +45,7 @@ tree_from_taxonomy <- function(taxa, sources="Catalogue of Life", collapse_singl
   }
   paths <- gsub('Not assigned\\|', "", paths) # CoL gives Not assigned for some taxa. We don't want these. Then we split
   paths <- strsplit( paths, "\\|")
-  leaves <- sapply(paths, tail, n=1)
+  leaves <- sapply(paths, utils::tail, n=1)
   tip.label <- leaves
   node.label <- rev(unique(unlist(paths)))
   node.label <- node.label[!node.label %in% leaves]
@@ -100,16 +100,16 @@ get_fossil_range <- function(taxon, recent=FALSE, assume_recent_if_missing=TRUE)
       return(NA)
     }
   }
-  taxon_gnred <- tail(strsplit( taxon_gnred_df$classification_path, "\\|")[[1]],1)
+  taxon_gnred <- utils::tail(strsplit( taxon_gnred_df$classification_path, "\\|")[[1]],1)
   taxon_string <- utils::URLencode(taxon_gnred)
   dates <- data.frame()
-  try(dates <- read.csv(url(paste0("https://paleobiodb.org/data1.2/occs/list.txt?base_name=", taxon_string))))
+  try(dates <- utils::read.csv(url(paste0("https://paleobiodb.org/data1.2/occs/list.txt?base_name=", taxon_string))))
   try(dates <- dates[,c("max_ma", "min_ma")])
   if(recent) { #we know it still exists
     dates <- rbind(dates, c(min(c(0, dates$min_ma), na.rm=TRUE),0))
   } else { #check to see if exists
     taxon_info <- NULL
-    try(taxon_info <- read.csv(url(paste0("https://paleobiodb.org/data1.2/taxa/single.txt?name=", taxon_string))))
+    try(taxon_info <- utils::read.csv(url(paste0("https://paleobiodb.org/data1.2/taxa/single.txt?name=", taxon_string))))
     if(!is.null(taxon_info)) {
       if(taxon_info$is_extant=="extant") {
         dates <- rbind(dates, c(min(c(0, dates$min_ma), na.rm=TRUE),0)) #so that even if it has no fossils, record it exists
