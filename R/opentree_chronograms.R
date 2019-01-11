@@ -201,7 +201,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 	if(nrow(ott_id_problems) > 0){
 		utils::write.csv(ott_id_problems, "data-raw/ott_id_problems.csv")
 	} else {
-		write("There were no problematic chronograms", "data-raw/ott_id_problems.csv" )
+		write("There were no problematic chronograms.", "data-raw/ott_id_problems.csv" )
 	}
 	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
 	return(result)

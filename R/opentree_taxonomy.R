@@ -86,6 +86,7 @@ check_ott_input <- function(input, ott_id = NULL){
 #' @examples
 #' taxa <- c("Homo", "Bacillus anthracis", "Apis", "Salvia")
 #' lin <- get_ott_lineage(taxa)
+#' lin
 #' @export
 get_ott_lineage <- function(input, ott_id = NULL){
   input_ott_match <- check_ott_input(input, ott_id)
@@ -101,6 +102,7 @@ get_ott_lineage <- function(input, ott_id = NULL){
       matrix(c(ott_ids[[x]], ott_ranks[[x]]), ncol =2, dimnames = list(ott_names[[x]], c("ott_ids", "ott_ranks")))
   }
   res <- sapply(seq(length(lin)), mat)
+  # enhance: ott_id names should be the name of the rank, look at the example to see why
   stats::setNames(ott_ids, names(input_ott_match))
 }
 #' Gets the lineage of a set of taxa using rotl:taxonomy_taxon_info(include_lineage = TRUE)
@@ -299,3 +301,11 @@ get_ott_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_id = N
     names(all_children) <- names(input_ott_match)
     return(all_children)
 }
+
+# enhance: all these functions could be wrapped up into two or three single ones
+# one to get one or all the lineages above a taxon
+# another one to get some or all lineages below a taxon
+# one to get everything: all_upper, all_lower, all (both upper and lower), or th eones specified by the users
+# for example:
+# get_ott_lineage(input = c("Felis", "Homo"), ott_id = NULL, ott_rank = c("all", "all_upper", "all_lower"))
+# get a list of all ranks available in ott

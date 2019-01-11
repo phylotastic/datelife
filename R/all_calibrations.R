@@ -242,7 +242,7 @@ get_otol_synthetic_tree <- function(input, otol_version = "v2", ...){
 	# system.time({tnrs_match(rownames(df))}) # this one is faster
 	phy <- tryCatch(ape::multi2di(suppressWarnings(rotl::tol_induced_subtree(ott_ids = df$ott_id,
 					label_format = "name",  otl_v = otol_version))), error = function(e){
-						message("Some or all input taxa are absent from OToL synthetic tree, look for invalid taxa and eliminate them for input")
+						message("Some or all input taxa are absent from OToL synthetic tree, look for invalid taxa and eliminate them from input")
 						# this will happen id there are some extinct taxa, barren or any invalid taxa in otol
 						NA
 					})
