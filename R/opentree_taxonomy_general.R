@@ -65,7 +65,9 @@ tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # enhance: add 
 # enhance: add a vector of matched ott_ids to the output
 #' @export
 tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we can add other reference taxonomies in the future
-    if(missing(tip) | is.null(tip)){
+	# enhance_aproximates: add an argument in case we want to give the choice to users of changing only direct matches or also approximated matches
+	phy.ori <- phy
+	if(missing(tip) | is.null(tip)){
         tomaptip <- 1:ape::Ntip(phy)
     }
     if(is.character(tip)){
@@ -77,7 +79,7 @@ tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we c
     }
     if(any(tomaptip>ape::Ntip(phy)) | any(is.na(tomaptip))){
         fails <- unique(c(which(is.na(tomaptip)), which(tomaptip>ape::Ntip(phy))))
-        message(paste0("Values in tip not corresponding to phy$tip.labels: '", paste(tip[fails], collapse = "', '"), "'"))
+        message(paste0("Values in tip argument not corresponding to any phy$tip.labels: '", paste(tip[fails], collapse = "', '"), "'"))
         tomaptip <- tomaptip[-fails]
     }
     if(is.null(phy$mapped)){
@@ -85,22 +87,25 @@ tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we c
     }
     new.names <- tnrs_match(names = unique(phy$tip.label[tomaptip]), reference_taxonomy = reference_taxonomy, ...) # a data.frame
     # not needed to clean new.names with clean_tnrs, bc we are leaving taxa matched with flags
-    # new.names <- tnrs_match(c(unique(phy$tip.label[tomaptip]), "random")) # a data.frame
-    # in case we have NAs in approximate match:
+    # new.names <- tnrs_match(c(unique(phy$tip.label[tomaptip]), "NotAtaxon")) # see what happens when we have something that does not match
+    # in case we have NAs in approximate match (otherwise following conditionals would not work):
     new.names$approximate_match[is.na(new.names$approximate_match)] <- TRUE
     new.names$approximate_match <- as.logical(new.names$approximate_match)
-    # otherwise next conditional would not work
-    # get the rows that have positive matches, not approximate:
-    matched <- !is.na(new.names$unique_name) & !new.names$approximate_match
-    # get the corresponding index of those matches onthe original tip labels:
-    # but we do not really need this
-    # matchedi <- match(tolower(phy$tip.label[tomaptip]), new.names$search_string[matched])
-    # mark the unmatched and the succesfully matched
+    # update the tnrs_match data.frame in case there were duplicated taxa in tips:
+	new.names <- new.names[match(tolower(phy$tip.label[tomaptip]), new.names$search_string),]
+    # update the mapped element:
     phy$mapped[tomaptip[is.na(new.names$unique_name)]] <- "unmatched"
     phy$mapped[tomaptip[new.names$approximate_match]] <- "approximated"
+		# get the rows that have good matches and that are not approximate:
+	matched <- !is.na(new.names$unique_name) & !new.names$approximate_match
     phy$mapped[tomaptip[matched]] <- "tnrs"
     # change phy$tip.labels to tnrs matched names
-    phy$tip.label[tomaptip[matched]] <- new.names$unique_name[matched]
+		# enchance_aproximates: following two lines of code are useful in case we want to give the choice to users of changing only direct matches or also approximated matches
+    # phy$tip.label[tomaptip[matched]] <- new.names$unique_name[matched]
+	# phy$tip.label[tomaptip[new.names$approximate_match]] <- new.names$unique_name[new.names$approximate_match]
+	phy$tip.label[tomaptip[!is.na(new.names$unique_name)]] <- new.names$unique_name[!is.na(new.names$unique_name)]
+	# add element of original tip labels
+	phy$original.tip.label <- phy.ori$tip.label
     # add a class to phylo object
     class(phy) <- append(class(phy), "match_names")
     return(phy)

@@ -3,9 +3,6 @@ test_that("get_otol_chronograms works", {
   #	skip_on_travis()
   # utils::data(opentree_chronograms)
   xx <- get_otol_chronograms(verbose=TRUE, max_tree_count = 10)
-  attr(xx)
-
-  # xx <- get_otol_chronograms(verbose=TRUE)
   # sapply(xx$trees, "[", "ott_ids")
   # test that the following makes sense:
   # new.tree <- rotl::get_study_tree(study_id='ot_1000',tree_id='tree1', tip_label="ott_taxon_name")
@@ -56,6 +53,19 @@ test_that("clean_ott_chronogram works as expected", {
   tree1 <- rotl::get_study_tree(study_id = "ot_1250", tree_id = "tree2", tip_label = "ott_taxon_name")
   length(tree1$tip.label) # 31749
   xx <- clean_ott_chronogram(tree1)
+  # test for duplicated
+  tt <- ape::rcoal(10, tip.label = c("*tip_#1_not_mapped_to_OTT._Original_label_-_Elephas_maximus",
+                                     "Homo sapiens",
+                                     "Felis silvestris",
+                                     "*tip_#4_not_mapped_to_OTT._Original_label_-_Elephas_maximus",
+                                     "Unicorn",
+                                     "*tip #6 not mapped to OTT. Original label - Homo sapiens",
+                                     "*tip #7 not mapped to OTT. Original label - Homi sappiens",
+                                     "*tip #8 not mapped to OTT. Original label - Felix sylvestris",
+                                     "*tip #9 not mapped to OTT. Original label - Ave",
+                                     "*tip #10 not mapped to OTT. Original label - Eukarya"))
+  tt1 <- clean_ott_chronogram(tt)
+  phy <- tt
 })
 
 test_that("opentree_chronograms object is ok", {
@@ -67,4 +77,13 @@ test_that("opentree_chronograms object is ok", {
   # length(opentree_chronograms[[1]])
   expect_true(all(sapply(opentree_chronograms, length) == length(opentree_chronograms$trees)))
   opentree_chronograms$studies[1]
+  # check mapping of labels
+  names(xx$trees[[1]])
+  class(xx$trees[[1]])
+  yy <- sapply(xx$trees, function(x) x$tip.label)
+  length(yy)
+  yy[[1]]
+  expect_false(any(grepl("not.mapped", unlist(yy))))
+  yy <- sapply(xx$trees, function(x) x$mapped)
+  xx$trees[[1]]$tip.label[which(!grepl("ott", yy[[1]]))]
 })

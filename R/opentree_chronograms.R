@@ -212,9 +212,9 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 			}
 	}
 	if(nrow(ott_id_problems) > 0){
-		utils::write.csv(ott_id_problems, "data-raw/ott_id_problems.csv")
+		utils::write.csv(ott_id_problems, paste0("data-raw/ott_id_problems_", max_tree_count, ".csv"))
 	} else {
-		write("There were no problematic chronograms.", "data-raw/ott_id_problems.csv" )
+		write("There were no problematic chronograms.", paste0("data-raw/ott_id_problems_", max_tree_count, ".csv"))
 	}
 	end_time <- Sys.time() # end of registering function running time
 	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
@@ -289,39 +289,42 @@ is_good_chronogram <- function(phy) {
 clean_ott_chronogram <- function(phy) {
 	phy.ori <- phy
 	# homogenize tip labels to blanks (no underscores)
-	# it speeds up tnrs_match_names bc no approximate matching needed
+	# it will speed up tnrs_match_names considerably bc no approximate matching needed
 	phy <- phylo_tiplabel_underscore_to_space(phy)
-	bad.taxa <- unique(c(which(nchar(phy$tip.label) <= 2), which(grepl("not.mapped", phy$tip.label)))) # numeric of indices
-	phy$tip.label[bad.taxa] <- sub(".*-.", "", phy$tip.label[bad.taxa])  # this gets the original label and gets rid of the not.mapped tag
-	phy$tip.label[bad.taxa] <- gsub("aff ", "", phy$tip.label[bad.taxa])  # removes aff tag
-    phy$tip.label[bad.taxa][stringr::str_count(phy$tip.label[bad.taxa], " ")>=2] <- gsub("^([^ ]* [^ ]*) .*$", "\\1", phy$tip.label[bad.taxa][stringr::str_count(phy$tip.label[bad.taxa], " ")>=2])
+	unmapped.taxa <- unique(c(which(nchar(phy$tip.label) <= 2), which(grepl("not.mapped", phy$tip.label)))) # numeric of indices
+	phy$tip.label[unmapped.taxa] <- sub(".*-.", "", phy$tip.label[unmapped.taxa])  # this gets the original label and gets rid of the not.mapped tag
+	phy$tip.label[unmapped.taxa] <- gsub("aff ", "", phy$tip.label[unmapped.taxa])  # removes aff tag
+    phy$tip.label[unmapped.taxa][stringr::str_count(phy$tip.label[unmapped.taxa], " ")>=2] <- gsub("^([^ ]* [^ ]*) .*$", "\\1", phy$tip.label[unmapped.taxa][stringr::str_count(phy$tip.label[unmapped.taxa], " ")>=2])
     # grepl("^([^_]*_[^_]*)_.*$", tip.labels[stringr::str_count(tip.labels, "_")>=2])  # this works with underscores
 	# drop duplicated tips now:
 	tipstodrop <- c()
 	# identify not mapped taxa that have mapped duplicates first
-	# in this case, drop the not mapped tips and keep the mapped ones.
-	# first identify the not mapped tips that have mapped duplicates:
-	cond <- match(unique(phy$tip.label[bad.taxa]), phy$tip.label[-bad.taxa])
+	# in this case, drop the unmapped tips and keep the mapped ones.
+	# identify unmapped tips with duplicates among mapped tips:
+	cond <- match(unique(phy$tip.label[unmapped.taxa]), phy$tip.label[-unmapped.taxa])
 	if(any(!is.na(cond))){
 		# the following only gets the first match:
-		# mm <- match(unique(phy$tip.label[bad.taxa])[!is.na(cond)], phy$tip.label[bad.taxa])
-		# this gets all bad.taxa that match:
-		mm <- match(phy$tip.label[bad.taxa], unique(phy$tip.label[bad.taxa])[!is.na(cond)])
-		tipstodrop <- c(tipstodrop, bad.taxa[!is.na(mm)])
-		bad.taxa <- bad.taxa[is.na(mm)]
+		# mm <- match(unique(phy$tip.label[unmapped.taxa])[!is.na(cond)], phy$tip.label[unmapped.taxa])
+		# this gets all unmapped.taxa that match:
+		mm <- match(phy$tip.label[unmapped.taxa], unique(phy$tip.label[unmapped.taxa])[!is.na(cond)])
+		tipstodrop <- c(tipstodrop, unmapped.taxa[!is.na(mm)])
+		unmapped.taxa <- unmapped.taxa[is.na(mm)] # update unmapped.taxa object (removing taxa in mapped tips that are duplicated in unmapped.taxa, preventing unnecesary calls for tnrs_match_names)
 	}
-	# now identify all remaining duplicated and not mapped
-	dd <- duplicated(phy$tip.label[bad.taxa])
-	tipstodrop <- c(tipstodrop, bad.taxa[dd])
-	phy <- ape::drop.tip(phy, tip = unique(tipstodrop))
-	bad.taxa <- bad.taxa[!dd]
-	phy$mapped <- rep("ott", length(phy$tip.label))
-	if(length(bad.taxa) > 0) {
-		phy <- tnrs_match.phylo(phy, tip = bad.taxa)
+	# now identify duplicated in unmapped tips
+	dd <- duplicated(phy$tip.label[unmapped.taxa])
+	tipstodrop <- c(tipstodrop, unmapped.taxa[dd])
+	unmapped.taxa <- unmapped.taxa[!dd] # update unmapped.taxa object (by removing duplicated labels within unmapped.taxa)
+	# phy$mapped <- rep("ott", length(phy$tip.label))
+	if(length(unmapped.taxa) > 0) {
+		phy <- tnrs_match.phylo(phy, tip = unmapped.taxa)
 	}
 	if(!ape::is.rooted(phy) & ape::is.ultrametric(phy, option = 2)) {
 		phy$root.edge <- 0
 	}
+	# finally add an element with original labels
+	# phy$original.tip.label <- rep("", length(phy$tip.label))
+	# phy$original.tip.label <- phy.ori$tip.label[-tipstodrop]
+	phy <- ape::drop.tip(phy, tip = unique(tipstodrop))
 	return(phy)
 }
 
