@@ -53,14 +53,17 @@ tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # enhance: add 
 #' @inheritDotParams rotl::tnrs_match_names -names
 #' @return An object of class phylo and match_names. See details.
 #' @details
-#' The output will preserve all elements from original input phy plus
-#' an extra element called phy$mapped indicating the state of mapping of phy$tip.labels:
+#' The output will preserve all elements from original input phy and will add
 #' \describe{
-#'     \item{original}{Tnrs matching was not attempted. Original labeling is preserved.}
-#'     \item{ott}{Matching was manually made by a curator in Open Tree of Life.}
-#'     \item{tnrs}{Tnrs matching was attempted and succesful with no approximate matching. Original label is replaced by the matched name.}
-#'     \item{approximated}{Tnrs matching was attempted and succesful but with approximate matching. Original labeling is preserved.}
-#'     \item{unmatched}{Tnrs matching was attempted and unsuccesful. Original labeling is preserved.}
+#'     \item{phy$mapped} A character vector indicating the state of mapping of phy$tip.labels:
+#' 		\describe{
+#' 		    \item{original}{Tnrs matching was not attempted. Original labeling is preserved.}
+#' 		    \item{ott}{Matching was manually made by a curator in Open Tree of Life.}
+#' 		    \item{tnrs}{Tnrs matching was attempted and succesful with no approximate matching. Original label is replaced by the matched name.}
+#' 		    \item{approximated}{Tnrs matching was attempted and succesful but with approximate matching. Original labeling is preserved.}
+#' 		    \item{unmatched}{Tnrs matching was attempted and unsuccesful. Original labeling is preserved.}
+#' 		}
+#'     \item{phy$original.tip.label} A character vector preserving all original labels
 #' }
 # enhance: add a vector of matched ott_ids to the output
 #' @export

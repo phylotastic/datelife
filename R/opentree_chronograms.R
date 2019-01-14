@@ -328,25 +328,25 @@ clean_ott_chronogram <- function(phy) {
 	return(phy)
 }
 
-#' Sample of raw open tree chronograms for testing
-#'
-#' @name raw_opentree_chronograms
-#' @docType data
-#' @format A multiPhylo object
-#' @source \url{http://opentreeoflife.org}
-#' @keywords otol chronogram test
-#' @details
-#'
-#' Generated with
-#' opentree_chronograms_ntip <- unname(sapply(opentree_chronograms$trees, ape::Ntip))
-#' study.ids <- unique(unlist(opentree_chronograms$studies[which(opentree_chronograms_ntip < 100 & opentree_chronograms_ntip > 50)]))
-#'
-#' study.ids <- c("ot_122")
-#' tree.ids <- c("tree1")
-#' raw_opentree_chronograms <- lapply(seq(length(study.ids)), function(x){
-#' 	rotl::get_study_tree(study_id=study.ids[x],tree_id=tree.ids[x], tip_label="ott_taxon_name")
-#' })
-"raw_opentree_chronograms"
+# #' Sample of raw open tree chronograms for testing
+# #'
+# #' @name raw_opentree_chronograms
+# #' @docType data
+# #' @format A multiPhylo object
+# #' @source \url{http://opentreeoflife.org}
+# #' @keywords otol chronogram test
+# #' @details
+# #'
+# #' Generated with
+# #' opentree_chronograms_ntip <- unname(sapply(opentree_chronograms$trees, ape::Ntip))
+# #' study.ids <- unique(unlist(opentree_chronograms$studies[which(opentree_chronograms_ntip < 100 & opentree_chronograms_ntip > 50)]))
+# #'
+# #' study.ids <- c("ot_122")
+# #' tree.ids <- c("tree1")
+# #' raw_opentree_chronograms <- lapply(seq(length(study.ids)), function(x){
+# #' 	rotl::get_study_tree(study_id=study.ids[x],tree_id=tree.ids[x], tip_label="ott_taxon_name")
+# #' })
+# "raw_opentree_chronograms"
 
 
 #' Map opentree_chronograms tip_label's Open Tree of Life Taxonomy to nodes.

@@ -20,4 +20,5 @@ gets the ott id and name of all lineages from one or more input taxa
 \examples{
 taxa <- c("Homo", "Bacillus anthracis", "Apis", "Salvia")
 lin <- get_ott_lineage(taxa)
+lin
 }
