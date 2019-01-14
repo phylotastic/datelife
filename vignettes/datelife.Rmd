@@ -17,6 +17,14 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "# >"
 )
+library("datelife")
+data("opentree_chronograms")
+runtime <- attr(opentree_chronograms, "running_time")
+# for provisional testing:
+# start_time <- Sys.time()
+# Sys.sleep(10)
+# end_time <- Sys.time()
+# runtime <- end_time - start_time
 ```
 
 `datelife` is an R package for obtaining information on time of divergence of taxa
@@ -27,16 +35,16 @@ generate de-novo hypothesis of time divergence of taxa.
 
 # Installation
 First, install `datelife` into your computer. You can install the stable version of the package from cran
-```r
+```{r, eval = FALSE}
 install.packages("datelife")
 ```
 or the development version from github
-```r
+```{r, eval = FALSE}
 devtools::install_github("phylotastic/datelife")
 ```
 
 Now load the package into the R workspace.
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 library("datelife")
 # devtools::load_all("~/Desktop/datelife/")
 
@@ -44,10 +52,9 @@ library("datelife")
 
 # Getting all available chronograms
 
-The main service of `datelife` is getting chronograms from published peer reviewed
-studies (from now on *source chronograms*) for a set of taxa of interest. It is
-accomplished with `datelife_search()` function. Taxa of interest are provided
-as scientific names, either as a character vector or as tip labels from a tree in phylo or newick format. Upper and lower case are ignored.
+The main goal of `datelife` is to search chronograms from published peer reviewed
+studies (from now on *source chronograms*) available for a set of taxa of interest. This task is performed with the `datelife_search()` function. Taxa of interest are accepted
+as scientific names, either as a single character vector or within a tree as a `phylo` object or as a character string in newick format. In any case, upper and lower case are ignored.
 
 ```{r, eval = TRUE}
 mamms <- datelife_search(input = c("Felis catus", "Delphinus delphus", "Homo sapiens", "Elephas maximus"))
@@ -79,6 +86,12 @@ Chronogram search is performed at the species level. This means that source chro
 ```{r, eval = FALSE}
 # show how chronogram cache is constructed, do not eval, show one message example
 ```
+Source chronograms are cached in the package as a data object called `opentree_chronograms`. This object is updated every two months approximately. If you want to manually update the object or save it as an object in your computer, you can do:
+```{r, eval = FALSE}
+update_datelife_cache <- function(file = "opentree_chronograms.RData")
+```
+The update will take approximately `r paste(as.character(round(runtime, digits = 2)), attr(runtime, "units"))`.
+
 
 For now, taxon names must be provided as scientific names. Common name searches are not yet implemented. Scientific names can be anything from species binomials to higher-taxon names. Subspecies names will not be considered.
 You can use the datelife_query function first to check that your names are accepted. If you are unsure about the spelling or synonyms, you can use arguments `use_tnrs` and `approximate_match`.
@@ -117,9 +130,6 @@ Alternatively, new chronograms can be generated using available information as s
 
 ```
 
-```{r}
-
-```
 
 # theme
 ## theme
@@ -128,36 +138,6 @@ Alternatively, new chronograms can be generated using available information as s
 
 ```
 
-
-
-## theme
-
-```{r}
-
-```
-
-
-### theme
-```{r}
-
-```
-# theme
-
-```{r}
-```
-
-# theme
-
-```{r}
-```
-smth else:
-```{r}
-```
-
-# theme
-
-```{r, eval = FALSE}
-```
 
 # Citing
 

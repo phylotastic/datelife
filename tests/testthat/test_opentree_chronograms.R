@@ -3,6 +3,8 @@ test_that("get_otol_chronograms works", {
   #	skip_on_travis()
   # utils::data(opentree_chronograms)
   xx <- get_otol_chronograms(verbose=TRUE, max_tree_count = 10)
+  attr(xx)
+
   # xx <- get_otol_chronograms(verbose=TRUE)
   # sapply(xx$trees, "[", "ott_ids")
   # test that the following makes sense:
@@ -50,9 +52,10 @@ test_that("clean_ott_chronogram works as expected", {
   # t2 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_id", deduplicate = TRUE)
   # t3 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_taxon_name")
 
-  xx <- rotl::get_study_tree(study_id = "ot_311", tree_id = "tree1", tip_label = "ott_taxon_name")
-  xx$tip.label
-  # clean_ott_chronogram(xx)
+  # tree1 <- rotl::get_study_tree(study_id = "ot_311", tree_id = "tree1", tip_label = "ott_taxon_name")
+  tree1 <- rotl::get_study_tree(study_id = "ot_1250", tree_id = "tree2", tip_label = "ott_taxon_name")
+  length(tree1$tip.label) # 31749
+  xx <- clean_ott_chronogram(tree1)
 })
 
 test_that("opentree_chronograms object is ok", {
@@ -63,5 +66,5 @@ test_that("opentree_chronograms object is ok", {
   # test that all opentree_chronograms elements have the same length:
   # length(opentree_chronograms[[1]])
   expect_true(all(sapply(opentree_chronograms, length) == length(opentree_chronograms$trees)))
-  # opentree_chronograms$trees
+  opentree_chronograms$studies[1]
 })

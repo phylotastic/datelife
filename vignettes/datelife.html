@@ -12,7 +12,7 @@
 
 <meta name="author" content="Luna L. Sánchez-Reyes and Brian O’Meara" />
 
-<meta name="date" content="2018-12-05" />
+<meta name="date" content="2019-01-13" />
 
 <title>datelife package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">datelife package</h1>
 <h4 class="author"><em>Luna L. Sánchez-Reyes and Brian O’Meara</em></h4>
-<h4 class="date"><em>2018-12-05</em></h4>
+<h4 class="date"><em>2019-01-13</em></h4>
 
 
 
@@ -83,12 +83,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;phylotastic/datelife&quot;</span>)</code></pre></div>
 <p>Now load the package into the R workspace.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;datelife&quot;</span>)
-devtools<span class="op">::</span><span class="kw">load_all</span>(<span class="st">&quot;~/Desktop/datelife/&quot;</span>)
-<span class="co"># &gt; Loading datelife</span></code></pre></div>
+<span class="co"># devtools::load_all(&quot;~/Desktop/datelife/&quot;)</span></code></pre></div>
 </div>
 <div id="getting-all-available-chronograms" class="section level1">
 <h1>Getting all available chronograms</h1>
-<p>The main service of <code>datelife</code> is getting chronograms from published peer reviewed studies (from now on <em>source chronograms</em>) for a set of taxa of interest. It is accomplished with <code>datelife_search()</code> function. Taxa of interest must be provided as scientific names, either in a character vector or in a tree in phylo or newick format with the scientific names as tip labels. Upper and lower case are ignored.</p>
+<p>The main goal of <code>datelife</code> is to search chronograms from published peer reviewed studies (from now on <em>source chronograms</em>) available for a set of taxa of interest. This task is performed with the <code>datelife_search()</code> function. Taxa of interest are accepted as scientific names, either as a single character vector or within a tree as a <code>phylo</code> object or as a character string in newick format. In any case, upper and lower case are ignored.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mamms &lt;-<span class="st"> </span><span class="kw">datelife_search</span>(<span class="dt">input =</span> <span class="kw">c</span>(<span class="st">&quot;Felis catus&quot;</span>, <span class="st">&quot;Delphinus delphus&quot;</span>, <span class="st">&quot;Homo sapiens&quot;</span>, <span class="st">&quot;Elephas maximus&quot;</span>))
 <span class="co"># &gt; Source chronograms from:</span>
 <span class="co"># &gt; 1: Bininda-Emonds, Olaf R. P., Marcel Cardillo, Kate E. Jones, Ross D. E. MacPhee, Robin M. D. Beck, Richard Grenyer, Samantha A. Price, Rutger A. Vos, John L. Gittleman, Andy Purvis. 2007. The delayed rise of present-day mammals. Nature 446 (7135): 507-512</span>
@@ -106,7 +105,7 @@ devtools<span class="op">::</span><span class="kw">load_all</span>(<span class="
 <span class="co"># &gt; Input taxa completely absent from source chronograms:</span>
 <span class="co"># &gt;               taxon</span>
 <span class="co"># &gt; 1 Delphinus delphus</span></code></pre></div>
-<p>You can plot al source chronograms on screen with the function <code>plot_phylo_all()</code> or save them into a pdf or png file with the argument <code>write</code>:</p>
+<p>You can plot all source chronograms on screen with the function <code>plot_phylo_all()</code> or save them into a pdf or png file with the argument <code>write</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_phylo_all</span>(mamms, <span class="dt">write =</span> <span class="st">&quot;pdf&quot;</span>, <span class="dt">file =</span> <span class="st">&quot;mamms_phyloall&quot;</span>)</code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="data:application/pdf;base64,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dW5nYXJ1bWxhdXQgL29nb25layAvY2Fyb24gL3NwYWNlXQo+PgplbmRvYmoKMTAgMCBvYmoKPDwgL1R5cGUgL0ZvbnQgL1N1YnR5cGUgL1R5cGUxIC9OYW1lIC9GMiAvQmFzZUZvbnQgL0hlbHZldGljYQovRW5jb2RpbmcgOSAwIFIgPj4KZW5kb2JqCjExIDAgb2JqCjw8IC9UeXBlIC9Gb250IC9TdWJ0eXBlIC9UeXBlMSAvTmFtZSAvRjMgL0Jhc2VGb250IC9IZWx2ZXRpY2EtQm9sZAovRW5jb2RpbmcgOSAwIFIgPj4KZW5kb2JqCjEyIDAgb2JqCjw8IC9UeXBlIC9Gb250IC9TdWJ0eXBlIC9UeXBlMSAvTmFtZSAvRjQgL0Jhc2VGb250IC9IZWx2ZXRpY2EtT2JsaXF1ZQovRW5jb2RpbmcgOSAwIFIgPj4KZW5kb2JqCnhyZWYKMCAxMwowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMjEgMDAwMDAgbiAKMDAwMDAwMDE2MyAwMDAwMCBuIAowMDAwMDAxMzQzIDAwMDAwIG4gCjAwMDAwMDE0MjYgMDAwMDAgbiAKMDAwMDAwMTU2MCAwMDAwMCBuIAowMDAwMDAxNTkzIDAwMDAwIG4gCjAwMDAwMDAyMTIgMDAwMDAgbiAKMDAwMDAwMDI5MiAwMDAwMCBuIAowMDAwMDA0Mjg4IDAwMDAwIG4gCjAwMDAwMDQ1NDUgMDAwMDAgbiAKMDAwMDAwNDY0MiAwMDAwMCBuIAowMDAwMDA0NzQ0IDAwMDAwIG4gCnRyYWlsZXIKPDwgL1NpemUgMTMgL0luZm8gMSAwIFIgL1Jvb3QgMiAwIFIgPj4Kc3RhcnR4cmVmCjQ4NDkKJSVFT0YK" alt="   " width="100%" />
@@ -147,17 +146,14 @@ devtools<span class="op">::</span><span class="kw">load_all</span>(<span class="
 <p>Explain the datelife object. It is composed by three elements. datelifeQuery datelifeResults datelifeSummary</p>
 <p>You can get all trees in newick format. Chronogram search is performed at the species level. This means that source chronograms with subspecies are collapsed to present one exemplar per species.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># show how chronogram cache is constructed, do not eval, show one message example</span></code></pre></div>
-<p>For now, taxon names must be provided as scientific names. Common name searches are not yet implemented. Scientific names can be anything from species binomials to higher-taxon names. Subspecies names will not be considered. You can use the datelife_query function first to check that your names are accepted. If you are unsure about the spelling or synonyms, you can use arguments bla and bla. These are services of rphylotastic package implemented here.</p>
+<p>Source chronograms are cached in the package as a data object called <code>opentree_chronograms</code>. This object is updated every two months approximately. If you want to manually update the object or save it as an object in your computer, you can do:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">update_datelife_cache &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">file =</span> <span class="st">&quot;opentree_chronograms.RData&quot;</span>)</code></pre></div>
+<p>The update will take approximately 10 secs.</p>
+<p>For now, taxon names must be provided as scientific names. Common name searches are not yet implemented. Scientific names can be anything from species binomials to higher-taxon names. Subspecies names will not be considered. You can use the datelife_query function first to check that your names are accepted. If you are unsure about the spelling or synonyms, you can use arguments <code>use_tnrs</code> and <code>approximate_match</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># datelife query function</span>
-<span class="kw">make_datelife_query</span>(<span class="kw">c</span>(<span class="st">&quot;cat&quot;</span>, <span class="st">&quot;dog&quot;</span>))
-<span class="co"># &gt; $cleaned_names</span>
-<span class="co"># &gt; [1] &quot;cat&quot; &quot;dog&quot;</span>
-<span class="co"># &gt; </span>
-<span class="co"># &gt; $phy</span>
-<span class="co"># &gt; [1] NA</span>
-<span class="co"># &gt; </span>
-<span class="co"># &gt; attr(,&quot;class&quot;)</span>
-<span class="co"># &gt; [1] &quot;datelifeQuery&quot;</span></code></pre></div>
+<span class="co"># make_datelife_query(c(&quot;cat&quot;, &quot;dog&quot;))</span>
+<span class="co"># make_datelife_query(c(&quot;Felix&quot;, &quot;Caniss&quot;), use_tnrs = TRUE)</span>
+<span class="co"># make_datelife_query(c(&quot;Felis&quot;, &quot;Canis&quot;), get_spp_from_taxon = TRUE)</span></code></pre></div>
 <p>If higher-taxon names are provided, you can use option get_spp_from_taxon = TRUE, which is also a service of rphylotatsic that gets all species within a higher taxon. If you choose this option, all species within the higher-taxon names provided will be included in the search.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># datelife query function</span></code></pre></div>
 </div>
@@ -178,22 +174,6 @@ devtools<span class="op">::</span><span class="kw">load_all</span>(<span class="
 <div id="theme-1" class="section level2">
 <h2>theme</h2>
 </div>
-<div id="theme-2" class="section level2">
-<h2>theme</h2>
-<div id="theme-3" class="section level3">
-<h3>theme</h3>
-</div>
-</div>
-</div>
-<div id="theme-4" class="section level1">
-<h1>theme</h1>
-</div>
-<div id="theme-5" class="section level1">
-<h1>theme</h1>
-<p>smth else:</p>
-</div>
-<div id="theme-6" class="section level1">
-<h1>theme</h1>
 </div>
 <div id="citing" class="section level1">
 <h1>Citing</h1>

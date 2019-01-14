@@ -36,12 +36,24 @@
 #' @inherit save_otol_chronograms return
 #' @export
 update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RData", verbose = TRUE){  #, new_studies_only = TRUE
+	# enhance: I think we can change the name to update_chronograms_cache
 	if (save) {
 		cache_updated <- save_otol_chronograms(file = file, verbose = verbose)
 	} else {
 		cache_updated <- get_otol_chronograms(verbose = verbose)
 	}
 	return(cache_updated)
+}
+
+# enhance: I think we can remove this function and just add one line into save of update_datelife_cache
+#' Save all chronograms from Open Tree of Life
+#' @param file Path including file name
+#' @param verbose If TRUE, give status updates to the user
+#' @return None
+#' @export
+save_otol_chronograms <- function(file = "opentree_chronograms.RData", verbose = FALSE) {
+	opentree_chronograms <- get_otol_chronograms(verbose = verbose)
+	save(opentree_chronograms, file = file, compress = "xz")
 }
 
 #' Update all cached files for the package
@@ -94,6 +106,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 	if(verbose) {
 		options(warn = 1)
 	}
+	start_time <- Sys.time() # to register run time
 	chronogram.matches <- rotl::studies_find_trees(property = "ot:branchLengthMode", value = "ot:time", verbose = TRUE, detailed = TRUE)
 	trees <- list()
 	authors <- list()
@@ -115,7 +128,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 			for(chrono.index in sequence((chronogram.matches$n_matched_trees[study.index]))) {
 					study.id <- chronogram.matches$study_ids[study.index]
 					# if(study.id %in% opentree_chronograms$studies)  # unlist(opentree_chronograms$studies) if new_studies_only
-			#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
+					#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
 					new.tree2 <- new.tree <- NULL
 					tree.id <- strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index]
 					potential.bad <- paste("tree_id='", tree.id, "', study_id='", study.id, "'", sep="")
@@ -135,7 +148,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 									if(is.null(new.tree2)){
 										ott_id_problems <- rbind(ott_id_problems, data.frame(study.id, tree.id))
 									}
-									new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label) # if the tree is null it will generate an empty vector
+									new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label) # if new.tree2 is null it will generate an empty vector
 									try.tree <- clean_ott_chronogram(new.tree)
 									# previous line will give NA if just one or no tip labels are mapped to ott???
 									# enhance: add ott ids to unmapped in clean_ott_chronogram
@@ -203,19 +216,12 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 	} else {
 		write("There were no problematic chronograms.", "data-raw/ott_id_problems.csv" )
 	}
+	end_time <- Sys.time() # end of registering function running time
 	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
+	attr(result, "running_time") <- end_time - start_time
 	return(result)
 }
 
-#' Save all chronograms from Open Tree of Life
-#' @param file Path including file name
-#' @param verbose If TRUE, give status updates to the user
-#' @return None
-#' @export
-save_otol_chronograms <- function(file = "opentree_chronograms.RData", verbose = FALSE) {
-	opentree_chronograms <- get_otol_chronograms(verbose = verbose)
-	save(opentree_chronograms, file = file, compress = "xz")
-}
 
 #' Check to see that a tree is a valid chronogram
 #' @inheritParams phylo_check
@@ -318,6 +324,26 @@ clean_ott_chronogram <- function(phy) {
 	}
 	return(phy)
 }
+
+#' Sample of raw open tree chronograms for testing
+#'
+#' @name raw_opentree_chronograms
+#' @docType data
+#' @format A multiPhylo object
+#' @source \url{http://opentreeoflife.org}
+#' @keywords otol chronogram test
+#' @details
+#'
+#' Generated with
+#' opentree_chronograms_ntip <- unname(sapply(opentree_chronograms$trees, ape::Ntip))
+#' study.ids <- unique(unlist(opentree_chronograms$studies[which(opentree_chronograms_ntip < 100 & opentree_chronograms_ntip > 50)]))
+#'
+#' study.ids <- c("ot_122")
+#' tree.ids <- c("tree1")
+#' raw_opentree_chronograms <- lapply(seq(length(study.ids)), function(x){
+#' 	rotl::get_study_tree(study_id=study.ids[x],tree_id=tree.ids[x], tip_label="ott_taxon_name")
+#' })
+"raw_opentree_chronograms"
 
 
 #' Map opentree_chronograms tip_label's Open Tree of Life Taxonomy to nodes.
