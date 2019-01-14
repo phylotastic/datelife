@@ -38,7 +38,7 @@ An object of class phylo and match_names. See details.
 Taxon name resolution service (tnrs) applied to tips of a phylogeny
 }
 \details{
-The output will preserve all elements from original input phy and will add
+The output will preserve all elements from original input phylo object and will add
 \describe{
     \item{phy$mapped} A character vector indicating the state of mapping of phy$tip.labels:
 		\describe{
@@ -50,4 +50,5 @@ The output will preserve all elements from original input phy and will add
 		}
     \item{phy$original.tip.label} A character vector preserving all original labels
 }
+if tips are duplicated, tnrs will only be run once (avoiding increases in function running time) but the result will be applied to all duplicated tip labels
 }

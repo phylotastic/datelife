@@ -53,7 +53,7 @@ tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # enhance: add 
 #' @inheritDotParams rotl::tnrs_match_names -names
 #' @return An object of class phylo and match_names. See details.
 #' @details
-#' The output will preserve all elements from original input phy and will add
+#' The output will preserve all elements from original input phylo object and will add
 #' \describe{
 #'     \item{phy$mapped} A character vector indicating the state of mapping of phy$tip.labels:
 #' 		\describe{
@@ -65,6 +65,7 @@ tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # enhance: add 
 #' 		}
 #'     \item{phy$original.tip.label} A character vector preserving all original labels
 #' }
+#' if tips are duplicated, tnrs will only be run once (avoiding increases in function running time) but the result will be applied to all duplicated tip labels
 # enhance: add a vector of matched ott_ids to the output
 #' @export
 tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we can add other reference taxonomies in the future
