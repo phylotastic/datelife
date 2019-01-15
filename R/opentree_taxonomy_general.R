@@ -47,7 +47,7 @@ tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # enhance: add 
 	return(df) #returns the whole data frame
 }
 #' Taxon name resolution service (tnrs) applied to tips of a phylogeny
-#' @param phy A phylo object
+#' @inheritParams phylo_check
 #' @param tip A vector of mode numeric or character specifying the tips to match. If left empty all tips will be matched.
 #' @param reference_taxonomy A character vector specifying the reference taxonomy to use for tnrs.
 #' @inheritDotParams rotl::tnrs_match_names -names
@@ -70,6 +70,7 @@ tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # enhance: add 
 #' @export
 tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we can add other reference taxonomies in the future
 	# enhance_aproximates: add an argument in case we want to give the choice to users of changing only direct matches or also approximated matches
+	phylo_check(phy, dated = FALSE)
 	phy.ori <- phy
 	if(missing(tip) | is.null(tip)){
         tomaptip <- 1:ape::Ntip(phy)

@@ -112,7 +112,7 @@ tree_add_outgroup <- function(tree = NULL, outgroup = "outgroup"){
 #' Checks if phy is a phylo class object and/or a chronogram
 #' @param phy A phylo object
 #' @param dated Boolean. If TRUE it checks if phylo object has branch lengths and is ultrametric.
-#' @return A phylo object
+#' @return Nothing
 #' @export
 phylo_check <- function(phy = NULL, dated = FALSE){
 	if (!inherits(phy, "phylo")){

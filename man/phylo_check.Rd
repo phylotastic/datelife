@@ -12,7 +12,7 @@ phylo_check(phy = NULL, dated = FALSE)
 \item{dated}{Boolean. If TRUE it checks if phylo object has branch lengths and is ultrametric.}
 }
 \value{
-A phylo object
+Nothing
 }
 \description{
 Checks if phy is a phylo class object and/or a chronogram

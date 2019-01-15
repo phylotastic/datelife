@@ -54,18 +54,21 @@ test_that("clean_ott_chronogram works as expected", {
   length(tree1$tip.label) # 31749
   xx <- clean_ott_chronogram(tree1)
   # test for duplicated
-  tt <- ape::rcoal(10, tip.label = c("*tip_#1_not_mapped_to_OTT._Original_label_-_Elephas_maximus",
-                                     "Homo sapiens",
-                                     "Felis silvestris",
-                                     "*tip_#4_not_mapped_to_OTT._Original_label_-_Elephas_maximus",
-                                     "Unicorn",
-                                     "*tip #6 not mapped to OTT. Original label - Homo sapiens",
-                                     "*tip #7 not mapped to OTT. Original label - Homi sappiens",
-                                     "*tip #8 not mapped to OTT. Original label - Felix sylvestris",
-                                     "*tip #9 not mapped to OTT. Original label - Ave",
-                                     "*tip #10 not mapped to OTT. Original label - Eukarya"))
+  tt <- ape::rcoal(10)
+  tt$tip.label <- c("*tip_#1_not_mapped_to_OTT._Original_label_-_Elephas_maximus",
+                    "Homo sapiens",
+                    "Felis silvestris",
+                    "*tip_#4_not_mapped_to_OTT._Original_label_-_Elephas_maximus",
+                    "Unicorn",
+                    "*tip #6 not mapped to OTT. Original label - Homo sapiens",
+                    "*tip #7 not mapped to OTT. Original label - Homi sappiens",
+                    "*tip #8 not mapped to OTT. Original label - Felix sylvestris",
+                    "*tip #9 not mapped to OTT. Original label - Ave",
+                    "*tip #10 not mapped to OTT. Original label - Eukarya")
   tt1 <- clean_ott_chronogram(tt)
-  phy <- tt
+  correct <- c("Elephas maximus", "Homo sapiens", "Felis silvestris", "Elephas maximus", 
+  "Unicorn", "Homo sapiens", "Homo sapiens", "Felis silvestris", "Are", "Eukaryota")
+  expect_true(all(sapply(1:10, function(x) grepl(correct[x], tt1$tip.label[x])))  # for one on one comparisons)
 })
 
 test_that("opentree_chronograms object is ok", {

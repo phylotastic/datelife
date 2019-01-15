@@ -281,12 +281,14 @@ is_good_chronogram <- function(phy) {
 "problems"
 
 #' Clean up some issues with OToL chronograms
-#' For now it 1) checks unmapped taxa and maps them with map_tiplabels_ott, 2) roots the chronogram if unrooted
+#' For now it 1) checks unmapped taxa and maps them with tnrs_match.phylo, 2) roots the chronogram if unrooted
 #'
 #' @inheritParams phylo_check
-#' @return A cleaned up phylo object
+# # ' @return A cleaned up phylo object
+#' @inherit tnrs_match.phylo return details
 #' @export
 clean_ott_chronogram <- function(phy) {
+	phylo_check(phy, dated = FALSE)
 	phy.ori <- phy
 	# homogenize tip labels to blanks (no underscores)
 	# it will speed up tnrs_match_names considerably bc no approximate matching needed
@@ -300,31 +302,34 @@ clean_ott_chronogram <- function(phy) {
 	tipstodrop <- c()
 	# identify not mapped taxa that have mapped duplicates first
 	# in this case, drop the unmapped tips and keep the mapped ones.
-	# identify unmapped tips with duplicates among mapped tips:
+	# identify unmapped tips with duplicates among mapped tips (meaning that it does not have to be remapped):
 	cond <- match(unique(phy$tip.label[unmapped.taxa]), phy$tip.label[-unmapped.taxa])
 	if(any(!is.na(cond))){
 		# the following only gets the first match:
 		# mm <- match(unique(phy$tip.label[unmapped.taxa])[!is.na(cond)], phy$tip.label[unmapped.taxa])
 		# this gets all unmapped.taxa that match:
 		mm <- match(phy$tip.label[unmapped.taxa], unique(phy$tip.label[unmapped.taxa])[!is.na(cond)])
-		tipstodrop <- c(tipstodrop, unmapped.taxa[!is.na(mm)])
+		# tipstodrop <- c(tipstodrop, unmapped.taxa[!is.na(mm)]) # no need for this now
 		unmapped.taxa <- unmapped.taxa[is.na(mm)] # update unmapped.taxa object (removing taxa in mapped tips that are duplicated in unmapped.taxa, preventing unnecesary calls for tnrs_match_names)
 	}
-	# now identify duplicated in unmapped tips
-	dd <- duplicated(phy$tip.label[unmapped.taxa])
-	tipstodrop <- c(tipstodrop, unmapped.taxa[dd])
-	unmapped.taxa <- unmapped.taxa[!dd] # update unmapped.taxa object (by removing duplicated labels within unmapped.taxa)
-	# phy$mapped <- rep("ott", length(phy$tip.label))
+	# identify duplicated taxa within unmapped tips (necessary to drop or modify tips afterwards)
+	# dd <- duplicated(phy$tip.label[unmapped.taxa])
+	# tipstodrop <- c(tipstodrop, unmapped.taxa[dd])
+	# this ones should be mapped anyways (tnrs_match.phylo won't spend more time if we leave duplicates to be mapped)
+	# and we actually need to check the duplicates after running tnrs_match.phylo
+	phy$mapped <- rep("ott", length(phy$tip.label))
 	if(length(unmapped.taxa) > 0) {
-		phy <- tnrs_match.phylo(phy, tip = unmapped.taxa)
+		phy <- tnrs_match.phylo(phy, tip = unmapped.taxa)  # this also creates an original tip labels element
+	}
+	dd <- duplicated(phy$tip.label)
+	while (any(dd)){
+		# phy <- ape::drop.tip(phy, tip = unique(tipstodrop)) # do not drop duplicated tips, just modify them
+		phy$tip.label[dd] <- paste0(phy$tip.label[dd], "_dup")  # enhance: do we actually need to modify dups???
+		dd <- duplicated(phy$tip.label)  # checks if there are still any dups
 	}
 	if(!ape::is.rooted(phy) & ape::is.ultrametric(phy, option = 2)) {
 		phy$root.edge <- 0
 	}
-	# finally add an element with original labels
-	# phy$original.tip.label <- rep("", length(phy$tip.label))
-	# phy$original.tip.label <- phy.ori$tip.label[-tipstodrop]
-	phy <- ape::drop.tip(phy, tip = unique(tipstodrop))
 	return(phy)
 }
 

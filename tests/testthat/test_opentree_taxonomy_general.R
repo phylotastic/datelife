@@ -1,4 +1,5 @@
 test_that("tnrs_match.phylo works", {
+  # phy <- tt
     phy <- ape::rcoal(10, tip.label = c("*tip_#1_not_mapped_to_OTT._Original_label_-_Elephas_maximus",
                                        "Homo sapiens",
                                        "Felis silvestris",
@@ -16,7 +17,7 @@ test_that("tnrs_match.phylo works", {
    	phy$tip.label[unmapped.taxa] <- sub(".*-.", "", phy$tip.label[unmapped.taxa])  # this gets the original label and gets rid of the not.mapped tag
    	phy$tip.label[unmapped.taxa] <- gsub("aff ", "", phy$tip.label[unmapped.taxa])  # removes aff tag
        phy$tip.label[unmapped.taxa][stringr::str_count(phy$tip.label[unmapped.taxa], " ")>=2] <- gsub("^([^ ]* [^ ]*) .*$", "\\1", phy$tip.label[unmapped.taxa][stringr::str_count(phy$tip.label[unmapped.taxa], " ")>=2])
-  	tipstodrop <- c()
+    tipstodrop <- c()
   	cond <- match(unique(phy$tip.label[unmapped.taxa]), phy$tip.label[-unmapped.taxa])
    	if(any(!is.na(cond))){
    		mm <- match(phy$tip.label[unmapped.taxa], unique(phy$tip.label[unmapped.taxa])[!is.na(cond)])

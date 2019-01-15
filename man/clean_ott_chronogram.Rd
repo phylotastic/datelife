@@ -3,7 +3,7 @@
 \name{clean_ott_chronogram}
 \alias{clean_ott_chronogram}
 \title{Clean up some issues with OToL chronograms
-For now it 1) checks unmapped taxa and maps them with map_tiplabels_ott, 2) roots the chronogram if unrooted}
+For now it 1) checks unmapped taxa and maps them with tnrs_match.phylo, 2) roots the chronogram if unrooted}
 \usage{
 clean_ott_chronogram(phy)
 }
@@ -11,9 +11,24 @@ clean_ott_chronogram(phy)
 \item{phy}{A phylo object}
 }
 \value{
-A cleaned up phylo object
+An object of class phylo and match_names. See details.
 }
 \description{
 Clean up some issues with OToL chronograms
-For now it 1) checks unmapped taxa and maps them with map_tiplabels_ott, 2) roots the chronogram if unrooted
+For now it 1) checks unmapped taxa and maps them with tnrs_match.phylo, 2) roots the chronogram if unrooted
+}
+\details{
+The output will preserve all elements from original input phylo object and will add
+\describe{
+    \item{phy$mapped} A character vector indicating the state of mapping of phy$tip.labels:
+		\describe{
+		    \item{original}{Tnrs matching was not attempted. Original labeling is preserved.}
+		    \item{ott}{Matching was manually made by a curator in Open Tree of Life.}
+		    \item{tnrs}{Tnrs matching was attempted and succesful with no approximate matching. Original label is replaced by the matched name.}
+		    \item{approximated}{Tnrs matching was attempted and succesful but with approximate matching. Original labeling is preserved.}
+		    \item{unmatched}{Tnrs matching was attempted and unsuccesful. Original labeling is preserved.}
+		}
+    \item{phy$original.tip.label} A character vector preserving all original labels
+}
+if tips are duplicated, tnrs will only be run once (avoiding increases in function running time) but the result will be applied to all duplicated tip labels
 }
