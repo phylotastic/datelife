@@ -49,6 +49,7 @@ The output will preserve all elements from original input phylo object and will 
 		    \item{unmatched}{Tnrs matching was attempted and unsuccesful. Original labeling is preserved.}
 		}
     \item{phy$original.tip.label} A character vector preserving all original labels
+    \item{phy$ott_ids} A numeric vector with ott id numbers of matched tips. Unmatched and original tips will be NaN
 }
 if tips are duplicated, tnrs will only be run once (avoiding increases in function running time) but the result will be applied to all duplicated tip labels
 }

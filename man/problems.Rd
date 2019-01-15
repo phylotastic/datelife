@@ -21,6 +21,7 @@ we extracted them and saved them to be used for testing functions.
 Generated with
 problems <- opentree_chronograms$trees[sapply(sapply(opentree_chronograms$trees, "[", "tip.label"), function(x) any(grepl("not.mapped", x)))]
 usethis::use_data(problems)
+opentree_chronograms object from commit https://github.com/phylotastic/datelife/tree/be894448f6fc437241cd0916fab45e84ac3e09c6
 }
 \keyword{chronogram}
 \keyword{otol}

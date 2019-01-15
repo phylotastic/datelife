@@ -151,7 +151,6 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 									new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label) # if new.tree2 is null it will generate an empty vector
 									try.tree <- clean_ott_chronogram(new.tree)
 									# previous line will give NA if just one or no tip labels are mapped to ott???
-									# enhance: add ott ids to unmapped in clean_ott_chronogram
 									if(phylo_has_brlen(phy = try.tree)) {
 											new.tree <- try.tree
 											if(is_good_chronogram(new.tree)) {
@@ -212,7 +211,8 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 			}
 	}
 	if(nrow(ott_id_problems) > 0){
-		utils::write.csv(ott_id_problems, paste0("data-raw/ott_id_problems_", max_tree_count, ".csv"))
+		utils::write.csv(ott_id_problems, paste0("data-raw/ott_id_problems_", max_tree_count, ".csv"),
+											quote = FALSE, row.names = FALSE)
 	} else {
 		write("There were no problematic chronograms.", paste0("data-raw/ott_id_problems_", max_tree_count, ".csv"))
 	}
@@ -278,6 +278,7 @@ is_good_chronogram <- function(phy) {
 #' Generated with
 #' problems <- opentree_chronograms$trees[sapply(sapply(opentree_chronograms$trees, "[", "tip.label"), function(x) any(grepl("not.mapped", x)))]
 #' usethis::use_data(problems)
+#' opentree_chronograms object from commit https://github.com/phylotastic/datelife/tree/be894448f6fc437241cd0916fab45e84ac3e09c6
 "problems"
 
 #' Clean up some issues with OToL chronograms

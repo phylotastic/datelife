@@ -21,10 +21,10 @@ library("datelife")
 data("opentree_chronograms")
 runtime <- attr(opentree_chronograms, "running_time")
 # for provisional testing:
-# start_time <- Sys.time()
-# Sys.sleep(10)
-# end_time <- Sys.time()
-# runtime <- end_time - start_time
+start_time <- Sys.time()
+Sys.sleep(10)
+end_time <- Sys.time()
+runtime <- end_time - start_time
 ```
 
 `datelife` is an R package for obtaining information on time of divergence of taxa

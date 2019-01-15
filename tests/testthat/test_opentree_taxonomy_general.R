@@ -29,6 +29,12 @@ test_that("tnrs_match.phylo works", {
    	unmapped.taxa <- unmapped.taxa[!dd] # update unmapped.taxa object (by removing duplicated labels within unmapped.taxa)
     # end of clean_ott_chronogram function
     phy2 <- tnrs_match.phylo(phy, tip = unmapped.taxa)
-    expect_true(all(c("edge", "edge.length", "tip.label", "Nnode", "mapped", "original.tip.label") %in% names(phy2)))
-    expect_true(all(phy2$original == phy$tip.label))
+    expect_true(all(c("edge", "edge.length", "tip.label", "Nnode", "mapped", "original.tip.label", "ott_ids") %in% names(phy2)))
+    expect_true(all(phy2$original.tip.label == phy$tip.label))
+    expect_true(all(grep("original", phy2$mapped) == which(is.na(phy2$ott_ids))))
+    # test that ott_ids element generation is ok:
+    rr <- read.csv(file = "data-raw/ott_id_problems_500.csv", row.names = 1)
+    tt <- xx$trees[[grep(rr$study.id[1], unlist(xx$studies))]] # get the first tree with ott_ids download problem
+    length(tt$ott_ids)
+    is.null(tt$ott_ids)
 })

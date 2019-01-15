@@ -3,20 +3,15 @@ test_that("get_otol_chronograms works", {
   #	skip_on_travis()
   # utils::data(opentree_chronograms)
   xx <- get_otol_chronograms(verbose=TRUE, max_tree_count = 10)
-  # sapply(xx$trees, "[", "ott_ids")
-  # test that the following makes sense:
-  # new.tree <- rotl::get_study_tree(study_id='ot_1000',tree_id='tree1', tip_label="ott_taxon_name")
-  # try.tree <- clean_ott_chronogram(new.tree)
-  # data.frame(new.tree$tip.label, try.tree$tip.label)
-  # is_good_chronogram(try.tree)
-  # class(try.tree)
-  # inherits(try.tree, "phylo")
-  # test that rotl function is generating appropriate trees with ott_taxon_names and ott_ids:
-  # t1 <- rotl::get_study_tree(study_id = "ot_1000", tree_id = "tree1", tip_label = "ott_taxon_name")
-  # t2 <- rotl::get_study_tree(study_id = "ot_1000", tree_id = "tree1", tip_label = "ott_id")
-  # data.frame(t1$tip.label[260:291], t2$tip.label[260:291])
-  # match(t1$tip.label, t2$tip.label) # exactly the same as match(t2$tip.label, t1$tip.label)
-
+  expect_true(all(c("trees", "authors", "curators", "studies", "dois") %in% names(xx)))
+  xx <- get_otol_chronograms(verbose=TRUE)
+  # check the state of trees with ott_id problems:
+  rr <- read.csv(file = "data-raw/ott_id_problems_500.csv", row.names = 1)
+  tt <- xx$trees[[grep(rr$study.id[1], unlist(xx$studies))]] # get the first tree with ott_ids download problem
+  is_good_chronogram(tt) # add a test for ott_ids
+  length(tt$ott_ids) > 0
+  sapply(tt[c("tip.label", "mapped", "ott_ids", "original.tip.label")], length) == length(tt$tip.label)
+  
 })
 
 test_that("is_good_chronogram works as expected", {
@@ -39,20 +34,19 @@ test_that("is_good_chronogram works as expected", {
   # enhance: test that there are no duplicated labels in chronogram:
   t1$tip.label[4] <-  "*tip_#1_not_mapped_to_OTT._Original_label_-_Hagensia_havilandi"
   # is_good_chronogram(t1)
+  # enhance: test that ott_ids element is ok
+  rr <- read.csv(file = "data-raw/ott_id_problems_500.csv", row.names = 1)
+  tt <- xx$trees[[grep(rr$study.id[1], unlist(xx$studies))]] # get the first tree with ott_ids download problem
+  # is_good_chronogram(tt)
+
 })
 
 test_that("clean_ott_chronogram works as expected", {
-  # enhance: there's something wrong when trying to clean the following tree:
-  # new.tree2 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_id")
-  # it is a problem of rotl function, make an issue
-  # t1 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "original_label")
-  # t2 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_id", deduplicate = TRUE)
-  # t3 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_taxon_name")
-
-  # tree1 <- rotl::get_study_tree(study_id = "ot_311", tree_id = "tree1", tip_label = "ott_taxon_name")
+  # test class of output:
   tree1 <- rotl::get_study_tree(study_id = "ot_1250", tree_id = "tree2", tip_label = "ott_taxon_name")
-  length(tree1$tip.label) # 31749
+  # length(tree1$tip.label) # 31749
   xx <- clean_ott_chronogram(tree1)
+  inherits(xx, "phylo")
   # test for duplicated
   tt <- ape::rcoal(10)
   tt$tip.label <- c("*tip_#1_not_mapped_to_OTT._Original_label_-_Elephas_maximus",
@@ -66,9 +60,22 @@ test_that("clean_ott_chronogram works as expected", {
                     "*tip #9 not mapped to OTT. Original label - Ave",
                     "*tip #10 not mapped to OTT. Original label - Eukarya")
   tt1 <- clean_ott_chronogram(tt)
-  correct <- c("Elephas maximus", "Homo sapiens", "Felis silvestris", "Elephas maximus", 
+  correct <- c("Elephas maximus", "Homo sapiens", "Felis silvestris", "Elephas maximus",
   "Unicorn", "Homo sapiens", "Homo sapiens", "Felis silvestris", "Are", "Eukaryota")
   expect_true(all(sapply(1:10, function(x) grepl(correct[x], tt1$tip.label[x])))  # for one on one comparisons)
+  # test that tip.labels after clean_ott_chronogram make sense with a real tree?
+  # new.tree <- rotl::get_study_tree(study_id='ot_1000',tree_id='tree1', tip_label="ott_taxon_name")
+  # try.tree <- clean_ott_chronogram(new.tree)
+  # data.frame(new.tree$tip.label, try.tree$tip.label)
+
+  # enhance: there's something wrong when trying to clean the following tree:
+  # new.tree2 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_id")
+  # it is a problem of rotl function, make an issue!
+  # t1 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "original_label")
+  # t2 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_id", deduplicate = TRUE)
+  # t3 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_taxon_name")
+  # the following line takes too long for some reason:
+  # tree1 <- rotl::get_study_tree(study_id = "ot_311", tree_id = "tree1", tip_label = "ott_taxon_name")
 })
 
 test_that("opentree_chronograms object is ok", {

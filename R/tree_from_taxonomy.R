@@ -157,7 +157,6 @@ date_with_pbdb <- function(phy, recent=FALSE, assume_recent_if_missing=TRUE) {
   all_dates <- as.data.frame(t(sapply(phy$tip.label, summarize_fossil_range, recent=recent, assume_recent_if_missing=assume_recent_if_missing)))
   all_dates$max_ma <- as.numeric(all_dates$max_ma)
   all_dates$min_ma <- as.numeric(all_dates$min_ma)
-  # enhance: paleotree cannot be included as an import, but it needs to be if we wanna use them inside our functions
   chronogram <- paleotree::timePaleoPhy(phy, all_dates, add.term=TRUE)
   return(chronogram)
 }
