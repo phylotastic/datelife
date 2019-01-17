@@ -39,7 +39,8 @@ Imports:
     httr,
     devtools,
     phyloch,
-    reports
+    reports,
+    plyr
 Suggests:
     testthat,
     rphylotastic,

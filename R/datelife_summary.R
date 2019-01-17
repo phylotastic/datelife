@@ -310,10 +310,10 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 
 #' Get an otol induced dated subtree from your set of queried taxa
 #' @inheritParams datelife_search
-#' @param ott_id Numeric vector of Open Tree Taxonomy ids
+#' @param ott_id Numeric vector of Open Tree Taxonomy ids. Input argumentt will be ignored.
 #' @return A phylo object with edge length proportional to time in Myrs. NA if 1 or no inputs are valid.
 #' @export
-#' @details otol dated tree from Stephen Smith's otol scaling service. If you choose to give ott ids, input will be completely ignored.
+#' @details otol dated tree from Stephen Smith's otol scaling service.
 get_dated_otol_induced_subtree <- function(input = c("Felis silvestris", "Homo sapiens"), ott_id = NULL){
 	# if(is.null(ott_ids)){
 	# 	input <- datelife_query_check(input)

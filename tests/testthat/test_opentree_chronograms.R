@@ -11,7 +11,7 @@ test_that("get_otol_chronograms works", {
   is_good_chronogram(tt) # add a test for ott_ids
   length(tt$ott_ids) > 0
   sapply(tt[c("tip.label", "mapped", "ott_ids", "original.tip.label")], length) == length(tt$tip.label)
-  
+
 })
 
 test_that("is_good_chronogram works as expected", {
@@ -62,7 +62,7 @@ test_that("clean_ott_chronogram works as expected", {
   tt1 <- clean_ott_chronogram(tt)
   correct <- c("Elephas maximus", "Homo sapiens", "Felis silvestris", "Elephas maximus",
   "Unicorn", "Homo sapiens", "Homo sapiens", "Felis silvestris", "Are", "Eukaryota")
-  expect_true(all(sapply(1:10, function(x) grepl(correct[x], tt1$tip.label[x])))  # for one on one comparisons)
+  expect_true(all(sapply(1:10, function(x) grepl(correct[x], tt1$tip.label[x]))))  # for one on one comparisons)
   # test that tip.labels after clean_ott_chronogram make sense with a real tree?
   # new.tree <- rotl::get_study_tree(study_id='ot_1000',tree_id='tree1', tip_label="ott_taxon_name")
   # try.tree <- clean_ott_chronogram(new.tree)
@@ -96,4 +96,15 @@ test_that("opentree_chronograms object is ok", {
   expect_false(any(grepl("not.mapped", unlist(yy))))
   yy <- sapply(xx$trees, function(x) x$mapped)
   xx$trees[[1]]$tip.label[which(!grepl("ott", yy[[1]]))]
+})
+
+test_that("map_nodes_ott works", {
+	utils::data(opentree_chronograms)
+	ss <- opentree_chronograms$trees[unlist(sapply(opentree_chronograms$trees, ape::Ntip)) < 10]
+	for (i in seq(length(ss))){
+		tree <- ss[[i]]
+		plot(tree)
+		tree <- map_nodes_ott(tree)
+		nodelabels(tree$node.label)
+	}
 })

@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_chronograms.R
 \name{map_nodes_ott}
 \alias{map_nodes_ott}
-\title{Map opentree_chronograms tip_label's Open Tree of Life Taxonomy to nodes.}
+\title{Add Open Tree of Life Taxonomy to tree nodes.}
 \usage{
 map_nodes_ott(tree)
 }
@@ -10,8 +10,21 @@ map_nodes_ott(tree)
 \item{tree}{A tree either as a newick character string or as a phylo object}
 }
 \value{
-A cleaned up phylo object
+A phylo object with nodelabels
 }
 \description{
-Map opentree_chronograms tip_label's Open Tree of Life Taxonomy to nodes.
+Add Open Tree of Life Taxonomy to tree nodes.
+}
+\examples{
+# load the Open Tree chronograms cached in datelife:
+utils::data(opentree_chronograms)
+# get the small chronograms (those with less that ten tips) to generate a pretty plot :
+small <- opentree_chronograms$trees[unlist(sapply(opentree_chronograms$trees, ape::Ntip)) < 10]
+# now map the Open Tree taxonomy to the nodes of the first tree
+phy <- map_nodes_ott(tree = small[[1]])
+# and plot it
+# plot_phylo_all(phy)
+library(ape)
+plot(phy)
+nodelabels(phy$node.label)
 }

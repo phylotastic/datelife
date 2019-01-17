@@ -355,12 +355,48 @@ clean_ott_chronogram <- function(phy) {
 # "raw_opentree_chronograms"
 
 
-#' Map opentree_chronograms tip_label's Open Tree of Life Taxonomy to nodes.
+#' Add Open Tree of Life Taxonomy to tree nodes.
 #' @inheritParams tree_fix_brlen
-#' @return A cleaned up phylo object
+#' @return A phylo object with nodelabels
+#' @examples
+#' # load the Open Tree chronograms cached in datelife:
+#' utils::data(opentree_chronograms)
+#' # get the small chronograms (those with less that ten tips) to generate a pretty plot :
+#' small <- opentree_chronograms$trees[unlist(sapply(opentree_chronograms$trees, ape::Ntip)) < 10]
+#' # now map the Open Tree taxonomy to the nodes of the first tree
+#' phy <- map_nodes_ott(tree = small[[1]])
+#' # and plot it
+#' # plot_phylo_all(phy)
+#' library(ape)
+#' plot(phy)
+#' nodelabels(phy$node.label)
 #' @export
 map_nodes_ott <- function(tree){
-	phy <- tree_check(tree = tree)
-	got <- get_ott_lineage(tree)
-	return(got)
+	# utils::data(opentree_chronograms)
+	# ss <- opentree_chronograms$trees[unlist(sapply(opentree_chronograms$trees, ape::Ntip)) < 10]
+	# tree <- ss[[1]]
+	phy <- tree_check(tree = tree, dated = FALSE)
+	cc <- classification_paths_from_taxonomy(phy$tip.label, sources = "Open Tree of Life Reference Taxonomy")
+	# aa <- as.data.frame(aa)
+	paths <- cc$resolved$classification_path
+	ranks <- cc$resolved$classification_path_ranks
+	# paths <- gsub('Not assigned', "NA", paths) # CoL gives Not assigned for some taxa. We need these in here. Then we split
+  	paths <- strsplit(paths, "\\|")
+	ranks <- strsplit(ranks, "\\|")
+	# sapply(strsplit(aa$classification_path, "\\|"), matrix, nrow = 1, byrow = T)
+	bb <- lapply(paths, matrix, nrow = 1, byrow = T)
+	bb <- lapply(seq(length(paths)), function(x){
+		colnames(bb[[x]]) <- ranks[[x]]
+		bb[[x]]
+		# as.data.frame(bb[[x]])
+		# bb[[x]]
+	})
+	# dt <- as.matrix(data.table::rbindlist(as.data.frame(bb), fill = TRUE))
+	dt <- plyr::rbind.fill.matrix(bb)  # works better than previous line
+	rownames(dt) <- cc$resolved$user_supplied_name
+	# dt <- dt[,-grep("species", colnames(dt))]  # not needed
+	# mm <- matrix(unlist(strsplit(aa$classification_path, "\\|")), nrow = length(aa$classification_path), byrow=T)
+	gg <- suppressWarnings(geiger::nodelabel.phylo(phy = phy, taxonomy = dt))
+	# got <- get_ott_lineage(phy)
+	return(gg)
 }
