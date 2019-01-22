@@ -3,6 +3,10 @@ test_that("classification_paths_from_taxonomy works", {
     results <- classification_paths_from_taxonomy(taxa)
     expect_true(inherits(results$resolved, "data.frame"))
     expect_true(length(results$unresolved)>0)
+    # the following happens when using cached opentree_chronograms from load(data-raw/opentree_chronograms_oct2018.rda)
+    # classification_paths_from_taxonomy(opentree_chronograms$trees[[50]], sources = "Open Tree of Life Reference Taxonomy")
+    # gives: Error: Request-URI Too Long (HTTP 414)
+    # not sure yet why it happens
 })
 
 test_that("tree_from_taxonomy works", {

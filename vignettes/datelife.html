@@ -12,14 +12,14 @@
 
 <meta name="author" content="Luna L. Sánchez-Reyes and Brian O’Meara" />
 
-<meta name="date" content="2019-01-13" />
+<meta name="date" content="2019-01-19" />
 
 <title>datelife package</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
@@ -55,7 +55,29 @@ code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
 code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -70,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">datelife package</h1>
 <h4 class="author"><em>Luna L. Sánchez-Reyes and Brian O’Meara</em></h4>
-<h4 class="date"><em>2019-01-13</em></h4>
+<h4 class="date"><em>2019-01-19</em></h4>
 
 
 
@@ -87,7 +109,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="getting-all-available-chronograms" class="section level1">
 <h1>Getting all available chronograms</h1>
-<p>The main goal of <code>datelife</code> is to search chronograms from published peer reviewed studies (from now on <em>source chronograms</em>) available for a set of taxa of interest. This task is performed with the <code>datelife_search()</code> function. Taxa of interest are accepted as scientific names, either as a single character vector or within a tree as a <code>phylo</code> object or as a character string in newick format. In any case, upper and lower case are ignored.</p>
+<p>The main goal of <code>datelife</code> is to search chronograms from published peer reviewed studies (from now on <em>source chronograms</em>) available for a set of taxa of interest. This task is performed with the <code>datelife_search()</code> function. Taxa of interest are accepted as scientific names, either as a single character vector, as tip labels in a <code>phylo</code> object or as a character string in newick format. In any case, upper and lower case are ignored.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mamms &lt;-<span class="st"> </span><span class="kw">datelife_search</span>(<span class="dt">input =</span> <span class="kw">c</span>(<span class="st">&quot;Felis catus&quot;</span>, <span class="st">&quot;Delphinus delphus&quot;</span>, <span class="st">&quot;Homo sapiens&quot;</span>, <span class="st">&quot;Elephas maximus&quot;</span>))
 <span class="co"># &gt; Source chronograms from:</span>
 <span class="co"># &gt; 1: Bininda-Emonds, Olaf R. P., Marcel Cardillo, Kate E. Jones, Ross D. E. MacPhee, Robin M. D. Beck, Richard Grenyer, Samantha A. Price, Rutger A. Vos, John L. Gittleman, Andy Purvis. 2007. The delayed rise of present-day mammals. Nature 446 (7135): 507-512</span>
@@ -97,12 +119,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co"># &gt; 5: Nyakatura, Katrin, Olaf RP Bininda-Emonds. 2012. Updating the evolutionary history of Carnivora (Mammalia): a new species-level supertree complete with divergence time estimates. BMC Biology 10 (1): 12</span>
 <span class="co"># &gt; 6: Nyakatura, Katrin, Olaf RP Bininda-Emonds. 2012. Updating the evolutionary history of Carnivora (Mammalia): a new species-level supertree complete with divergence time estimates. BMC Biology 10 (1): 12</span>
 <span class="co"># &gt; 7: Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845</span>
-<span class="co"># &gt; Input taxa presence across source chronograms:</span>
+<span class="co"># &gt; Target taxa presence in source chronograms:</span>
 <span class="co"># &gt;             taxon chronograms</span>
 <span class="co"># &gt; 1 Elephas maximus         4/7</span>
 <span class="co"># &gt; 2    Homo sapiens         7/7</span>
 <span class="co"># &gt; 3     Felis catus         3/7</span>
-<span class="co"># &gt; Input taxa completely absent from source chronograms:</span>
+<span class="co"># &gt; Target taxa completely absent from source chronograms:</span>
 <span class="co"># &gt;               taxon</span>
 <span class="co"># &gt; 1 Delphinus delphus</span></code></pre></div>
 <p>You can plot all source chronograms on screen with the function <code>plot_phylo_all()</code> or save them into a pdf or png file with the argument <code>write</code>:</p>
@@ -146,14 +168,71 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Explain the datelife object. It is composed by three elements. datelifeQuery datelifeResults datelifeSummary</p>
 <p>You can get all trees in newick format. Chronogram search is performed at the species level. This means that source chronograms with subspecies are collapsed to present one exemplar per species.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># show how chronogram cache is constructed, do not eval, show one message example</span></code></pre></div>
-<p>Source chronograms are cached in the package as a data object called <code>opentree_chronograms</code>. This object is updated every two months approximately. If you want to manually update the object or save it as an object in your computer, you can do:</p>
+<p>Source chronograms are cached in the package as a data object called <code>opentree_chronograms</code>. This object is updated every two months approximately. If you want to manually update the object or save it as an object in your own computer, you can do:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">update_datelife_cache &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">file =</span> <span class="st">&quot;opentree_chronograms.RData&quot;</span>)</code></pre></div>
-<p>The update will take approximately 10 secs.</p>
+<p>The update will take approximately 10.02 secs.</p>
+<p>Chronograms are downloaded from OToL and processed in various ways to be suitable for <code>datelife</code> use. Tip labels are standardized to Opentree of Life Taxonomy. Tips that cannot be automatically standardised are left alone as original. As of now, the percentage of standardised names is as follows:</p>
 <p>For now, taxon names must be provided as scientific names. Common name searches are not yet implemented. Scientific names can be anything from species binomials to higher-taxon names. Subspecies names will not be considered. You can use the datelife_query function first to check that your names are accepted. If you are unsure about the spelling or synonyms, you can use arguments <code>use_tnrs</code> and <code>approximate_match</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># datelife query function</span>
-<span class="co"># make_datelife_query(c(&quot;cat&quot;, &quot;dog&quot;))</span>
-<span class="co"># make_datelife_query(c(&quot;Felix&quot;, &quot;Caniss&quot;), use_tnrs = TRUE)</span>
-<span class="co"># make_datelife_query(c(&quot;Felis&quot;, &quot;Canis&quot;), get_spp_from_taxon = TRUE)</span></code></pre></div>
+<span class="kw">make_datelife_query</span>(<span class="kw">c</span>(<span class="st">&quot;cat&quot;</span>, <span class="st">&quot;dog&quot;</span>))
+<span class="co"># &gt; $cleaned_names</span>
+<span class="co"># &gt; [1] &quot;cat&quot; &quot;dog&quot;</span>
+<span class="co"># &gt; </span>
+<span class="co"># &gt; $phy</span>
+<span class="co"># &gt; [1] NA</span>
+<span class="co"># &gt; </span>
+<span class="co"># &gt; attr(,&quot;class&quot;)</span>
+<span class="co"># &gt; [1] &quot;datelifeQuery&quot;</span>
+<span class="kw">make_datelife_query</span>(<span class="kw">c</span>(<span class="st">&quot;Felix&quot;</span>, <span class="st">&quot;Caniss&quot;</span>), <span class="dt">use_tnrs =</span> <span class="ot">TRUE</span>)
+<span class="co"># &gt; </span>
+  <span class="op">|</span><span class="st">                                                                       </span>
+<span class="st">  </span><span class="er">|</span><span class="st">                                                                 </span><span class="er">|</span><span class="st">   </span><span class="dv">0</span>%
+  <span class="op">|</span><span class="st">                                                                       </span>
+<span class="st">  </span><span class="er">|================================</span><span class="st">                                 </span><span class="er">|</span><span class="st">  </span><span class="dv">50</span>%
+  <span class="op">|</span><span class="st">                                                                       </span>
+<span class="st">  </span><span class="er">|=================================================================|</span><span class="st"> </span><span class="dv">100</span>%
+<span class="co"># &gt; $cleaned_names</span>
+<span class="co"># &gt; [1] &quot;Felis&quot; &quot;Canis&quot;</span>
+<span class="co"># &gt; </span>
+<span class="co"># &gt; $phy</span>
+<span class="co"># &gt; [1] NA</span>
+<span class="co"># &gt; </span>
+<span class="co"># &gt; attr(,&quot;class&quot;)</span>
+<span class="co"># &gt; [1] &quot;datelifeQuery&quot;</span>
+<span class="kw">make_datelife_query</span>(<span class="kw">c</span>(<span class="st">&quot;Felis&quot;</span>, <span class="st">&quot;Canis&quot;</span>), <span class="dt">get_spp_from_taxon =</span> <span class="ot">TRUE</span>)
+<span class="co"># &gt; $cleaned_names</span>
+<span class="co"># &gt;  [1] &quot;Felis proplatensis&quot;    &quot;Felis propuma&quot;        </span>
+<span class="co"># &gt;  [3] &quot;Felis ocreata&quot;         &quot;Felis platensis&quot;      </span>
+<span class="co"># &gt;  [5] &quot;Felis venatica&quot;        &quot;Felis maxima&quot;         </span>
+<span class="co"># &gt;  [7] &quot;Felis obscura&quot;         &quot;Felis borealis&quot;       </span>
+<span class="co"># &gt;  [9] &quot;Felis lacustris&quot;       &quot;Felis propampina&quot;     </span>
+<span class="co"># &gt; [11] &quot;Felis youngi&quot;          &quot;Felis pumoides&quot;       </span>
+<span class="co"># &gt; [13] &quot;Felis rexroadensis&quot;    &quot;Felis margarita&quot;      </span>
+<span class="co"># &gt; [15] &quot;Felis nigripes&quot;        &quot;Felis chaus&quot;          </span>
+<span class="co"># &gt; [17] &quot;Felis catus&quot;           &quot;Felis silvestris&quot;     </span>
+<span class="co"># &gt; [19] &quot;Canis antarticus&quot;      &quot;Canis dingo&quot;          </span>
+<span class="co"># &gt; [21] &quot;Canis antarcticus&quot;     &quot;Canis lupaster&quot;       </span>
+<span class="co"># &gt; [23] &quot;Canis morenis&quot;         &quot;Canis feneus&quot;         </span>
+<span class="co"># &gt; [25] &quot;Canis geismarianus&quot;    &quot;Canis palaeoplatensis&quot;</span>
+<span class="co"># &gt; [27] &quot;Canis proplatensis&quot;    &quot;Canis niger&quot;          </span>
+<span class="co"># &gt; [29] &quot;Canis osorum&quot;          &quot;Canis thooides&quot;       </span>
+<span class="co"># &gt; [31] &quot;Canis anthus&quot;          &quot;Canis spelaeus&quot;       </span>
+<span class="co"># &gt; [33] &quot;Canis hyaena&quot;          &quot;Canis primigenius&quot;    </span>
+<span class="co"># &gt; [35] &quot;Canis cedazoensis&quot;     &quot;Canis apolloniensis&quot;  </span>
+<span class="co"># &gt; [37] &quot;Canis edwardii&quot;        &quot;Canis dirus&quot;          </span>
+<span class="co"># &gt; [39] &quot;Canis ferox&quot;           &quot;Canis armbrusteri&quot;    </span>
+<span class="co"># &gt; [41] &quot;Canis lepophagus&quot;      &quot;Canis lycaon&quot;         </span>
+<span class="co"># &gt; [43] &quot;Canis simensis&quot;        &quot;Canis mesomelas&quot;      </span>
+<span class="co"># &gt; [45] &quot;Canis aureus&quot;          &quot;Canis adustus&quot;        </span>
+<span class="co"># &gt; [47] &quot;Canis indica&quot;          &quot;Canis himalayensis&quot;   </span>
+<span class="co"># &gt; [49] &quot;Canis lupus&quot;           &quot;Canis latrans&quot;        </span>
+<span class="co"># &gt; [51] &quot;Canis rufus&quot;          </span>
+<span class="co"># &gt; </span>
+<span class="co"># &gt; $phy</span>
+<span class="co"># &gt; [1] NA</span>
+<span class="co"># &gt; </span>
+<span class="co"># &gt; attr(,&quot;class&quot;)</span>
+<span class="co"># &gt; [1] &quot;datelifeQuery&quot;</span></code></pre></div>
 <p>If higher-taxon names are provided, you can use option get_spp_from_taxon = TRUE, which is also a service of rphylotatsic that gets all species within a higher taxon. If you choose this option, all species within the higher-taxon names provided will be included in the search.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># datelife query function</span></code></pre></div>
 </div>

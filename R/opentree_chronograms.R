@@ -141,48 +141,47 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 							#try(new.tree <- datelife:::get_study_tree_with_dups(study_id=study.id,tree_id=tree.id ))
 							#try(new.tree <- rotl::get_study_subtree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name", subtree_id="ingroup")) #only want ingroup, as it's the one that's been lovingly curated.
 							if(!is.null(new.tree) & phylo_has_brlen(phy = new.tree)) {
-									# add ott_ids
-									# right now the function is having trouble to retrieve trees with ott ids as tip labels from certain studies
-									new.tree2 <- tryCatch(rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_id"),
-													error = function (e) NULL)
-									if(is.null(new.tree2)){
-										ott_id_problems <- rbind(ott_id_problems, data.frame(study.id, tree.id))
-									}
-									new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label) # if new.tree2 is null it will generate an empty vector
-									try.tree <- clean_ott_chronogram(new.tree)
-									# previous line will give NA if just one or no tip labels are mapped to ott???
-									if(phylo_has_brlen(phy = try.tree)) {
-											new.tree <- try.tree
-											if(is_good_chronogram(new.tree)) {
-												new.tree$tip.label <- gsub('_', ' ', new.tree$tip.label)
-												if(verbose) {
-													message("\t", "has tree with branch lengths")
-												}
-												doi <- NULL
-												try(doi <- gsub('https?://(dx\\.)?doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
-												authors <- append(authors, NA)
-												if(length(doi) == 0){
-													warning(paste(study.id, "has no DOI attribute, author names will not be retrieved."))
-												} else {
-													try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
-												}
-												curators <- append(curators, NA)
-												try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
-												try(studies <- append(studies, study.id))
-												tree.count <- tree.count + 1
-												# print(tree.count)
-												try(dois <- append(dois, chronogram.matches$study_doi[study.index]))
-												trees[[tree.count]] <- new.tree
-												names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
-												message("\t", "was good tree")
-												potential.bad <- NULL
+								# add ott_ids
+								# right now the function is having trouble to retrieve trees with ott ids as tip labels from certain studies
+								new.tree2 <- tryCatch(rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_id"),
+												error = function (e) NULL)
+								if(is.null(new.tree2)){
+									ott_id_problems <- rbind(ott_id_problems, data.frame(study.id, tree.id))
+								}
+								new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label) # if new.tree2 is null it will generate an empty vector
+								try.tree <- clean_ott_chronogram(new.tree)
+								# previous line will give NA if just one or no tip labels are mapped to ott???
+								if(phylo_has_brlen(phy = try.tree)) {
+									new.tree <- try.tree
+									if(is_good_chronogram(new.tree)) {
+										new.tree$tip.label <- gsub('_', ' ', new.tree$tip.label)
+										if(verbose) {
+											message("\t", "has tree with branch lengths")
+										}
+										doi <- NULL
+										try(doi <- gsub('https?://(dx\\.)?doi.org/', '', attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
+										authors <- append(authors, NA)
+										if(length(doi) == 0){
+											warning(paste(study.id, "has no DOI attribute, author names will not be retrieved."))
+										} else {
+											try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
+										}
+										curators <- append(curators, NA)
+										try(curators[length(curators)] <- list(rotl::get_study_meta(study.id)[["nexml"]][["^ot:curatorName"]]))
+										try(studies <- append(studies, study.id))
+										tree.count <- tree.count + 1
+										# print(tree.count)
+										try(dois <- append(dois, chronogram.matches$study_doi[study.index]))
+										trees[[tree.count]] <- new.tree
+										names(trees)[tree.count] <- rotl::get_publication(rotl::get_study_meta(study.id))[1]
+										message("\t", "was good tree")
+										potential.bad <- NULL
 
-											}
-									} # else {
-									# 		# here should go the case with none or just one mapped taxa??
-									# 		new.tree <- map_ott_chronogram(new.tree)
-									# }
+									}
+								}
 							}
+							# add taxonomic nodelabels to trees object here
+							new.tree <- map_nodes_ott(tree = new.tree)
 					} else {
 							warning("Not all trees could be loaded from this study due to ellipsis bug, https://github.com/ropensci/rotl/issues/85")
 					}
@@ -191,9 +190,6 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 					}
 			}
 	}
-	# enhance: add taxonomic nodelabels to trees object here
-
-
 	if(verbose) {
 			message("Problematic combos:")
 			message(paste0(utils::capture.output(bad.ones), collapse = "\n"))
@@ -216,9 +212,9 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 	} else {
 		write("There were no problematic chronograms.", paste0("data-raw/ott_id_problems_", max_tree_count, ".csv"))
 	}
-	end_time <- Sys.time() # end of registering function running time
+	tot_time <- Sys.time() - start_time # end of registering function running time
 	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
-	attr(result, "running_time") <- end_time - start_time
+	attr(result, "running_time") <- tot_time
 	return(result)
 }
 
@@ -375,9 +371,14 @@ map_nodes_ott <- function(tree){
 	# utils::data(opentree_chronograms)
 	# ss <- opentree_chronograms$trees[unlist(sapply(opentree_chronograms$trees, ape::Ntip)) < 10]
 	# tree <- ss[[1]]
+	# phy <- opentree_chronograms$trees[[i]]
 	phy <- tree_check(tree = tree, dated = FALSE)
-	cc <- classification_paths_from_taxonomy(phy$tip.label, sources = "Open Tree of Life Reference Taxonomy")
-	# aa <- as.data.frame(aa)
+	cc <- tryCatch(classification_paths_from_taxonomy(phy$tip.label, sources = "Open Tree of Life Reference Taxonomy"),
+			error = function(e) list(resolved = c()))  # this traps the error when phy = opentree_chronograms$trees[[50]] from load(data-raw/opentree_chronograms_oct2018.rda)
+	if(length(cc$resolved) == 0){ # when no tip label could be mapped to Opentree Taxonomy
+		message("Tip labels could not be mapped to Open Tree of Life Taxonomy")
+		return(phy)
+	}
 	paths <- cc$resolved$classification_path
 	ranks <- cc$resolved$classification_path_ranks
 	# paths <- gsub('Not assigned', "NA", paths) # CoL gives Not assigned for some taxa. We need these in here. Then we split
@@ -396,7 +397,9 @@ map_nodes_ott <- function(tree){
 	rownames(dt) <- cc$resolved$user_supplied_name
 	# dt <- dt[,-grep("species", colnames(dt))]  # not needed
 	# mm <- matrix(unlist(strsplit(aa$classification_path, "\\|")), nrow = length(aa$classification_path), byrow=T)
-	gg <- suppressWarnings(geiger::nodelabel.phylo(phy = phy, taxonomy = dt))
+	# enhance: nodelabel.phylo only keeps one taxon name per node, and more than often there are several names per nodes
+	# find a way to keep them all
+	gg <- suppressWarnings(geiger::nodelabel.phylo(phy = phy, taxonomy = dt, ncores = 1))
 	# got <- get_ott_lineage(phy)
 	return(gg)
 }

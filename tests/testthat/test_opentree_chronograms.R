@@ -5,11 +5,11 @@ test_that("get_otol_chronograms works", {
   xx <- get_otol_chronograms(verbose=TRUE, max_tree_count = 10)
   expect_true(all(c("trees", "authors", "curators", "studies", "dois") %in% names(xx)))
   xx <- get_otol_chronograms(verbose=TRUE)
+  table(unlist((sapply(xx$trees, "[", "mapped"))))
   # check the state of trees with ott_id problems:
   rr <- read.csv(file = "data-raw/ott_id_problems_500.csv", row.names = 1)
   tt <- xx$trees[[grep(rr$study.id[1], unlist(xx$studies))]] # get the first tree with ott_ids download problem
-  is_good_chronogram(tt) # add a test for ott_ids
-  length(tt$ott_ids) > 0
+  tt$tip.label
   sapply(tt[c("tip.label", "mapped", "ott_ids", "original.tip.label")], length) == length(tt$tip.label)
 
 })
@@ -71,9 +71,11 @@ test_that("clean_ott_chronogram works as expected", {
   # enhance: there's something wrong when trying to clean the following tree:
   # new.tree2 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_id")
   # it is a problem of rotl function, make an issue!
-  # t1 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "original_label")
-  # t2 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_id", deduplicate = TRUE)
-  # t3 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_taxon_name")
+  t1 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "original_label")
+  t2 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_id", deduplicate = TRUE)
+  t3 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_taxon_name")
+  rotl::taxonomy_taxon_info(1662)
+  grep("Rhinechis", t1$tip.label)
   # the following line takes too long for some reason:
   # tree1 <- rotl::get_study_tree(study_id = "ot_311", tree_id = "tree1", tip_label = "ott_taxon_name")
 })
@@ -96,15 +98,4 @@ test_that("opentree_chronograms object is ok", {
   expect_false(any(grepl("not.mapped", unlist(yy))))
   yy <- sapply(xx$trees, function(x) x$mapped)
   xx$trees[[1]]$tip.label[which(!grepl("ott", yy[[1]]))]
-})
-
-test_that("map_nodes_ott works", {
-	utils::data(opentree_chronograms)
-	ss <- opentree_chronograms$trees[unlist(sapply(opentree_chronograms$trees, ape::Ntip)) < 10]
-	for (i in seq(length(ss))){
-		tree <- ss[[i]]
-		plot(tree)
-		tree <- map_nodes_ott(tree)
-		nodelabels(tree$node.label)
-	}
 })
