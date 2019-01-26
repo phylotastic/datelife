@@ -204,13 +204,9 @@ input_process <- function(input, verbose = FALSE){
 	if(inherits(input, "phylo")) {
 		input <- ape::write.tree(input)
 	}
-  	if(length(input)>1) {
-		message("There are multiple elements in input. Only the first one will be processed.")
-		if(inherits(input, "multiPhylo")) {
-			input <- ape::write.tree(input[[1]])
-		} else {
-			input <- input[1]
-		}
+	if(inherits(input, "multiPhylo")) {
+		input <- ape::write.tree(input[[1]])
+		message("Input is a multiPhylo object. Only the first one will be processed.")
 	}
  	input <- gsub("\\+"," ",input)
   	input <- stringr::str_trim(input, side = "both")

@@ -1,3 +1,0 @@
-load("/Users/luna/Google Drive/datelife/runtime_tests/2_tests/0_all_names/aves.gfr_2017.12.28.RData")
-ls()
-str(aves.gfr_2017.12.28)

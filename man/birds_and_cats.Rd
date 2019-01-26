@@ -15,5 +15,6 @@ A multiPhylo object with trees resulting from a datelife search of some birds an
 Generated with:
 taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus", "Felis")
 birds_and_cats <- datelife_search(input = taxa, summary_format = "phylo_all", get_spp_from_taxon = TRUE)
+usethis::use_data(birds_and_cats)
 }
 \keyword{datelifeResult}
