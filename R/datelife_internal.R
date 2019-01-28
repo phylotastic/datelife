@@ -238,7 +238,7 @@ patristic_matrix_array_subset <- function(patristic_matrix_array, taxa, phy4 = N
 # Used inside: patristic_matrix_array_subset_both. patristic_matrix_array_congruify
 patristic_matrix_array_congruify <- function(patristic_matrix_array, taxa, phy = NULL, dating_method = "PATHd8") {
   #gets a subset of the patristic_matrix_array.
-  patristic_matrix_array <- patristic_matrix_array[ rownames(patristic_matrix_array) %in% taxa, colnames(patristic_matrix_array) %in% taxa,  ]
+  patristic_matrix_array <- patristic_matrix_array[rownames(patristic_matrix_array) %in% taxa, colnames(patristic_matrix_array) %in% taxa,  ]
   problem <- "none"
   final.size <- sum(rownames(patristic_matrix_array) %in% taxa) # returns number of matches
   if (final.size < length(taxa)) {

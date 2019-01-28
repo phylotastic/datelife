@@ -253,7 +253,8 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 						message("Datelife needs at least two input taxon names to perform a search.")
 						message("Setting get_spp_from_taxon = TRUE gets all species from a clade and accepts only one taxon name as input.")
 					}
-					stop("Input is length 1. If it is a taxon name, try with higher-taxon search. If it is a newick tree, check its format; it is not readable by DateLife.")
+					return(NA)
+					message("Input is length 1. If it is a taxon name, try with higher-taxon search. If it is a newick tree, check its format; it is not readable by DateLife.")
 			}
 		}
 	}
@@ -283,7 +284,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 				return(NA)
     	}
 			# using tol_subtree will give subspecies too \o/
-			# so we might wanna stick to our own function only then...
+			# so we might wanna stick to our own function only then
 			tip_labels <-  lapply(cleaned.input_tnrs$ott_id, function(x)
 				res <- tryCatch(suppressWarnings(rotl::tol_subtree(x))$tip.label,
 				error = function(e) NA))
