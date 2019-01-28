@@ -1,0 +1,5 @@
+r_github_packages:
+  - bomeara/datelife
+
+after_success:
+  - Rscript -e 'covr::codecov()'

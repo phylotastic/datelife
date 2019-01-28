@@ -1,0 +1,59 @@
+Package: datelife
+Title: Underlying Code for DateLife Web Service
+Version: 0.2.15
+Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.brian@gmail.com"),
+  person("Luna L.", "Sanchez Reyes", role=c("aut")),
+  person("Jonathan", "Eastman", role=c("aut")),
+  person("Tracy", "Heath", role=c("aut")),
+  person("April", "Wright", role=c("aut")),
+  person("Klaus", "Schliep", role=c("aut")),
+  person("Scott", "Chamberlain", role=c("aut")),
+  person("Peter", "Midford", role=c("aut")),
+  person("Luke", "Harmon", role=c("aut")),
+  person("Joseph", "Brown", role=c("aut")),
+  person("Matt", "Pennell", role=c("aut")),
+  person("Mike", "Alfaro", role=c("aut")))
+Maintainer: Brian O'Meara <omeara.brian@gmail.com>
+Description: This contains the core code for going from a tree or list of taxa
+    to a chronogram.
+Depends:
+    R (>= 3.2.3)
+Imports:
+    ape,
+    abind,
+    bold,
+    phangorn,
+    phytools,
+    ips,
+    cluster,
+    compare,
+    geiger,
+    stats,
+    stringr,
+    rotl,
+    paleotree,
+    knitcitations,
+    phylobase,
+    taxize,
+    treebase,
+    httr,
+    devtools,
+    phyloch,
+    reports,
+    plyr
+Suggests:
+    testthat,
+    rphylotastic,
+    rmarkdown,
+    knitr
+Enhances:
+    phylocomr,
+    plotflow
+SystemRequirements: mafft, PATHd8
+URL: https://github.com/phylotastic/datelife, http://www.datelife.org
+License: GPL (>=2)
+LazyData: true
+RoxygenNote: 6.1.1
+# Encoding: latin1
+Encoding: UTF-8
+VignetteBuilder: knitr
