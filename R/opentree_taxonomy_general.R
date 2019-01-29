@@ -132,22 +132,17 @@ tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we c
 clean_tnrs <- function(tnrs, invalid = c("barren", "extinct", "uncultured", "major_rank_conflict", "incertae", "unplaced", "conflict", "environmental", "not_otu")){
   if(!"flags" %in% names(tnrs)){
     message("tnrs should be a data.frame from datelife::tnrs_match or rotl::tnrs_match_names functions")
-	if(!is.data.frame(tnrs)){
-		message("Or at least contain a flags element.")
-	}
-	return(tnrs)
+		if(!is.data.frame(tnrs)){
+			message("Or at least contain a flags element.")
+		}
+		return(tnrs)
   }
   if(length(unique(sapply(tnrs, length))) != 1){
 	  message("elements in tnrs are of different length, check that out")
 	  return(tnrs)
   }
   tt <- as.data.frame(tnrs)
-  x <- sapply(tolower(invalid), grepl, tolower(tt$flags))
-  if(nrow(tt)==1){
-    x <- matrix(x, ncol = 6, dimnames = list(NULL, names(x)))
-  }
-  x <- sapply(1:nrow(x), function(z) sum(x[z,]))
-  tt <- tt[x==0, ]
-  tt <- tt[!is.na(tt$unique),]
+	inv <- sapply(1:nrow(tt), function(x) any(tolower(invalid) %in% tolower(tt[x]$flags)))
+  tt <- tt[!inv,]
   return(tt)
 }

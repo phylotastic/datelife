@@ -2,6 +2,7 @@
 
 #' Use all calibrations from chronograms in a database to date a tree.
 #' @param phy A phylo object
+#' @param all_calibrations A data frame of calibrations from get_all_calibrations function
 #' @param partial If TRUE, use source trees even if they only match some of the desired taxa
 #' @param use_tnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
 #' @param approximate_match If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
@@ -15,45 +16,58 @@
 #' This will try to use the calibrations as fixed ages.
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
-use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1, giveup = 100, verbose = FALSE) {
-	input <- input_process(input = phy, verbose = verbose)
-	# input must be a tree, check this
-	calibrations.df <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = update_cache, cache = cache, verbose = verbose)
-	phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.
-	calibrations.df$taxonA <- gsub(' ', '_', calibrations.df$taxonA)
-	calibrations.df$taxonB <- gsub(' ', '_', calibrations.df$taxonB)
-	calibrations.df <- calibrations.df[which(calibrations.df$taxonA %in% phy$tip.label),]
-	calibrations.df <- calibrations.df[which(calibrations.df$taxonB %in% phy$tip.label),]
-	original.calibrations.df <- calibrations.df
-	chronogram <- NULL
-	try(chronogram <- geiger::PATHd8.phylo(phy, calibrations.df), silent = TRUE)
-	if(!is.null(chronogram)) {
-		chronogram$edge.length[which(chronogram$edge.length<0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
-	}
-	attempts = 0
-	if(expand != 0) {
-		while(is.null(chronogram) & attempts < giveup) {
-			calibrations.df <- original.calibrations.df
-			calibrations.df$MaxAge <- calibrations.df$MaxAge * ((1+expand)^attempts)
-			calibrations.df$MinAge <- calibrations.df$MinAge * ((1-expand)^attempts)
+use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",
+	"Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE), 
+	all_calibrations = NULL, partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
+	update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1,
+	giveup = 100, verbose = FALSE) {
 
-			# We will have no fixed ages. Pathd8 just quietly gives up. So instead, we add a tiny branch with a zero calibration
-			# between it and its sister.
-			made.up.edgelength <- min(1e-9, .001*min(phy$edge.length))
-			phy2 <- phytools::bind.tip(ape::reorder.phylo(phy), "tinytip", edge.length = made.up.edgelength, where = 1, position = made.up.edgelength) #bind tip has weird behavior for non-reordered trees
-			calibrations.df[dim(calibrations.df)[1]+1,]<- c("fixed", 0, 0, phy$tip.label[1], "tinytip", "none")
-			try(chronogram <- geiger::PATHd8.phylo(phy2, calibrations.df))
-			if(!is.null(chronogram)) {
-				chronogram$edge.length[which(chronogram$edge.length < 0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
-				chronogram <- ape::drop.tip(chronogram, "tinytip")
+		input <- input_process(input = phy, verbose = verbose)
+		# input must be a tree, check this
+		if(is.null(all_calibrations)){
+			calibrations.df <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label),
+			partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match,
+			update_cache = update_cache, cache = cache, verbose = verbose)
+		} else {
+			# enhance: add a check for object structure
+			# enhance: check that input names are in calibrations.df
+			calibrations.df <- all_calibrations
+		}
+		phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.
+		calibrations.df$taxonA <- gsub(' ', '_', calibrations.df$taxonA)
+		calibrations.df$taxonB <- gsub(' ', '_', calibrations.df$taxonB)
+		calibrations.df <- calibrations.df[which(calibrations.df$taxonA %in% phy$tip.label),]
+		calibrations.df <- calibrations.df[which(calibrations.df$taxonB %in% phy$tip.label),]
+		original.calibrations.df <- calibrations.df
+		chronogram <- NULL
+		try(chronogram <- geiger::PATHd8.phylo(phy, calibrations.df), silent = TRUE)
+		if(!is.null(chronogram)) {
+			chronogram$edge.length[which(chronogram$edge.length<0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+		}
+		attempts = 0
+		if(expand != 0) {
+			while(is.null(chronogram) & attempts < giveup) {
+				calibrations.df <- original.calibrations.df
+				calibrations.df$MaxAge <- calibrations.df$MaxAge * ((1+expand)^attempts)
+				calibrations.df$MinAge <- calibrations.df$MinAge * ((1-expand)^attempts)
+
+				# We will have no fixed ages. Pathd8 just quietly gives up. So instead, we add a tiny branch with a zero calibration
+				# between it and its sister.
+				made.up.edgelength <- min(1e-9, .001*min(phy$edge.length))
+				phy2 <- phytools::bind.tip(ape::reorder.phylo(phy), "tinytip", edge.length = made.up.edgelength, where = 1, position = made.up.edgelength) #bind tip has weird behavior for non-reordered trees
+				calibrations.df[dim(calibrations.df)[1]+1,]<- c("fixed", 0, 0, phy$tip.label[1], "tinytip", "none")
+				try(chronogram <- geiger::PATHd8.phylo(phy2, calibrations.df))
+				if(!is.null(chronogram)) {
+					chronogram$edge.length[which(chronogram$edge.length < 0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+					chronogram <- ape::drop.tip(chronogram, "tinytip")
+				}
+				attempts <- attempts+1
 			}
-			attempts <- attempts+1
+			if(attempts > 0) {
+				message("Dates are even more approximate than usual: had to expand constraints to have them agree.", "\n")
+			}
 		}
-		if(attempts > 0) {
-			message("Dates are even more approximate than usual: had to expand constraints to have them agree.", "\n")
-		}
-	}
-	return(list(phy = chronogram, calibrations.df = calibrations.df, original.calibrations.df = original.calibrations.df))
+		return(list(phy = chronogram, calibrations.df = calibrations.df, original.calibrations.df = original.calibrations.df))
 }
 
 #' Get all calibrations from chronograms in a database (specified in cache).
@@ -66,10 +80,26 @@ use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",  
 #' @return A data_frame of calibrations
 #' @export
 get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = FALSE) {
-	datelife_phylo <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = update_cache, cache = cache, summary_format = "phylo_all", verbose = verbose)
-	constraints.df <- data.frame()
-	for (i in sequence(length(datelife_phylo))) {
-		local.df <- geiger::congruify.phylo(reference = datelife_phylo[[i]], target = datelife_phylo[[i]], scale = NA)$calibrations
+	if(!inherits(input, "datelifeResult") | !inherits(input, "phylo") | !inherits(input, "multiPhylo")){
+		datelife_phylo <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = update_cache, cache = cache, summary_format = "phylo_all", verbose = verbose)
+	}
+	# inherits(datelife_phylo, "datelifeResult")
+	if(inherits(input, "datelifeResult")){
+		datelife_phylo <- suppressMessages(summarize_datelife_result(datelife_result = input, summary_format = "phylo_all"))
+	}
+	if(inherits(input, "phylo")){
+		datelife_phylo <- list(input)
+	}
+	if(inherits(input, "multiPhylo")){
+		datelife_phylo <- input
+	}
+	constraints.df <- data.frame() # we cannot set an empty data frame because nrow depends on the number of nodes available on each tree
+	for (i in seq(length(datelife_phylo))) {
+		local.df <- suppressWarnings(geiger::congruify.phylo(reference = datelife_phylo[[i]], target = datelife_phylo[[i]], scale = NA))$calibrations
+		# suppressedWarnings bc of meesage when running geiger::congruify.phylo(reference = datelife_phylo[[i]], target = datelife_phylo[[i]], scale = NA)
+		# 		Warning message:
+		# In if (class(stock) == "phylo") { :
+		# the condition has length > 1 and only the first element will be used
 		local.df$reference <- names(datelife_phylo)[i]
 		if(i == 1) {
 			constraints.df <- local.df

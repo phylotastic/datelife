@@ -155,15 +155,6 @@ test_that("Congruification works with treePL", {
     #TODO add a different test here, testing length is not efficient
 })
 
-test_that("use_all_calibrations actually works", {
-  skip_on_cran()
-  skip_on_os("linux") #b/c no pathd8 on travis linux
-  utils::data(opentree_chronograms)
-  # results <- suppressWarnings(use_all_calibrations())
-  # # expect_true(ape::is.ultrametric(results$phy, tol=0.0000))
-  # expect_true(ape::is.ultrametric(results$phy, option = 2))
-  # expect_s3_class(results$phy, "phylo")
-})
 
 test_that("Crop plant taxa work", {
   utils::data(opentree_chronograms)

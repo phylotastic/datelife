@@ -3,10 +3,11 @@ title: "DateLife Workflow"
 author: "Luna L. Sanchez Reyes"
 date: "`r Sys.Date()`"
 output:
-    rmarkdown::html_vignette
-    pdf_document
+      rmarkdown::html_vignette
+header-includes: \usepackage{graphicx}
+graphics: yes
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{DateLife Workflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

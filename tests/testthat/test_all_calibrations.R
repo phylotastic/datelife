@@ -1,3 +1,23 @@
+
+test_that("use_all_calibrations actually works", {
+  skip_on_cran()
+  skip_on_os("linux") #b/c no pathd8 on travis linux
+  utils::data(opentree_chronograms)
+  # results <- suppressWarnings(use_all_calibrations())
+  # # expect_true(ape::is.ultrametric(results$phy, tol=0.0000))
+  # expect_true(ape::is.ultrametric(results$phy, option = 2))
+  # expect_s3_class(results$phy, "phylo")
+  # enhance:
+  # the following loads a file from an url:
+  load(ulr("https://github.com/LunaSare/datelife_benchmark/tree/master/data/0_global/
+  aves_targets/aves_tree_7000.rda"))
+  load(ulr("https://github.com/LunaSare/datelife_benchmark/tree/master/data/0_global/
+  aves_mat_samples/samp25_mat17_47.rda"))
+  # the following gave a tree with NaN as edge.length, why?
+  use_all_calibrations(phy = aves_tree_7000, all_calibrations = samp25_mat17_47)
+
+})
+
 test_that("get_otol_synthetic_tree works", {
   otol_tree <- get_otol_synthetic_tree(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))
   expect_s3_class(otol_tree, "phylo") # output is phylo
@@ -10,5 +30,18 @@ test_that("get_otol_synthetic_tree works", {
   input <- child$Felis
   names(input)
   get_otol_synthetic_tree(input = child$Felis)
+})
 
+
+test_that("get_all_calibrations works", {
+  skip_on_cran()
+  skip_on_os("linux") #b/c no pathd8 on travis linux
+  utils::data(opentree_chronograms)
+  input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
+    datelife_phylo <- datelife_search(input = input)
+    class(datelife_phylo)
+    datelife_phylo <- get_datelife_result(input = input)
+    input <- datelife_phylo
+    xx <- get_all_calibrations()
+    class(xx) # should be a data.frame
 })

@@ -6,12 +6,15 @@
 \usage{
 use_all_calibrations(phy = make_bold_otol_tree(c("Rhea americana",
   "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose =
-  FALSE), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
-  update_cache = FALSE, cache = get("opentree_chronograms"),
-  expand = 0.1, giveup = 100, verbose = FALSE)
+  FALSE), all_calibrations = NULL, partial = TRUE, use_tnrs = FALSE,
+  approximate_match = TRUE, update_cache = FALSE,
+  cache = get("opentree_chronograms"), expand = 0.1, giveup = 100,
+  verbose = FALSE)
 }
 \arguments{
 \item{phy}{A phylo object}
+
+\item{all_calibrations}{A data frame of calibrations from get_all_calibrations function}
 
 \item{partial}{If TRUE, use source trees even if they only match some of the desired taxa}
 

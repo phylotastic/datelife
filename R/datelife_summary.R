@@ -16,7 +16,8 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
 	if(is.null(datelife_result) | !is.list(datelife_result)){
-		stop("datelife_result argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
+		return(NA)
+		message("datelife_result argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
 	}
 	summary_format.in <- match.arg(summary_format, choices = c("citations", "mrca", "newick_all", "newick_sdm", "newick_median", "phylo_sdm", "phylo_median", "phylo_biggest", "phylo_all", "html", "data_frame"))
 	add_taxon_distribution.in <- match.arg(add_taxon_distribution, choices = c("none", "summary", "matrix"))
@@ -25,7 +26,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	if(is.null(input)){
 		input.in <- unique(rapply(datelife_result, rownames))
 		# if(add_taxon_distribution.in != "none") {
-			warning("datelife_query argument is empty: showing taxon distribution of taxa found only in at least one chronogram. This excludes input taxa not found in any chronogram.")
+			message("datelife_query argument is empty: showing taxon distribution of taxa found only in at least one chronogram. This excludes input taxa not found in any chronogram.")
 		# }
 	} else {
 		# if(!is.character(input)) stop("input must be a character vector")
