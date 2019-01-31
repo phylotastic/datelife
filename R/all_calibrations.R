@@ -17,7 +17,7 @@
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
 use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",
-	"Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE), 
+	"Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE),
 	all_calibrations = NULL, partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
 	update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1,
 	giveup = 100, verbose = FALSE) {
@@ -71,7 +71,7 @@ use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",
 }
 
 #' Get all calibrations from chronograms in a database (specified in cache).
-#' @param input vector of names, a newick string, or a phylo object
+#' @param input vector of names, a newick string, a phylo or multiPhylo object, a datelifeResult object
 #' @param partial Boolean; default TRUE: use source trees even if they only match some of the desired taxa
 #' @param use_tnrs Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
 #' @param approximate_match Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
@@ -80,7 +80,7 @@ use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",
 #' @return A data_frame of calibrations
 #' @export
 get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = FALSE) {
-	if(!inherits(input, "datelifeResult") | !inherits(input, "phylo") | !inherits(input, "multiPhylo")){
+	if(!inherits(input, "datelifeResult") & !inherits(input, "phylo") & !inherits(input, "multiPhylo")){
 		datelife_phylo <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = update_cache, cache = cache, summary_format = "phylo_all", verbose = verbose)
 	}
 	# inherits(datelife_phylo, "datelifeResult")
@@ -118,11 +118,18 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 #' @param doML Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml
 #' @inheritParams make_datelife_query
 #' @return A phylogeny with branch lengths proportional to relative substitution rate.
+#' @details If input is a phylo object, it is used as backbone. If it is a character vector of taxon names, an induced OToL tree is used as backbone.
 #' @export
 make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE, marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, get_spp_from_taxon = FALSE, verbose = FALSE) {
-	#otol returns error with missing taxa in v3 of rotl
-	input <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
-	input <- input$cleaned_names
+	# enhance: add an input check here to accept newick strings too
+	if(inherits(input, "phylo")){
+		phy <- input
+		input <- phy$tip.label
+	} else {
+		phy <- get_otol_synthetic_tree(input = input, otol_version = otol_version)
+		#otol returns error with missing taxa in v3 of rotl
+		input <- phy$tip.label
+	}
 	if (verbose) {
 		message("Searching ", marker, " sequences for these taxa in BOLD...")
 	}
@@ -149,7 +156,6 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	if (verbose) {
 		message("\t", "OK.")
 	}
-	phy <- get_otol_synthetic_tree(input = input, otol_version = otol_version)
 
 	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
 	final.sequences.names <- rep(NA, length(input))
@@ -253,28 +259,49 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 #' @export
 get_otol_synthetic_tree <- function(input, otol_version = "v2", ...){
 	if(!any(c("ott_id", "ott_ids") %in% names(input))){
-		df <- tnrs_match(names = input, reference_taxonomy = "otl", ...)  # tnrs_match processes input with rotl::tnrs_match_names function by batches, so it won't choke
-		df <- clean_tnrs(tnrs = df) #gets rid of invalid names
-		df <- df[!is.na(df$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
-		rownames(df) <- df$unique_name
-	} else {
-		df <- input
-		if(is.null(rownames(df))){
-			rownames(df) <- paste0("tax", seq(nrow(df)))
-			# enhance: search for otl taxon name with a rotl function
-		}
-		# enhance: we might need a check of ott_id elements, are they all numeric, there are no NAs, etc.
-		# also, another check here, are all ott_ids from valid taxa? this is checked with get_ott_children, but from other functions we shoudl check This
+		# make_datelife_query(input = "cetaceae", use_tnrs = TRUE, verbose = TRUE)
+		input <- make_datelife_query(input = input, use_tnrs = TRUE)
+		# enhance: keep valid names only since here
 	}
+	# the following chunk is just to give the message of the taxa that are being pulled from otol
+	# else {
+	# 	# enhance: search for otl taxon name with a rotl function
+	# 	if(all(!c("cleaned_names", "unique_name") %in% names(input))){
+	# 		input$cleaned_names <- paste0("tax", seq(length(input$ott_id)))
+	# 	}
+	# 	if(is.data.frame(input)){
+	# 		if(is.null(rownames(input))){
+	# 			input$cleaned_names <- paste0("tax", seq(length(input$ott_id)))
+	# 		} else {
+	# 			input$cleaned_names <- rownames(input)
+	# 		}
+	# 	}
+	# }
+	# enhance: we might need a check of ott_id elements, are they all numeric, are there no NAs, etc.
+	# also, another check here, are all ott_ids from valid taxa? this is checked with get_ott_children, but from other functions we shoudl check This
 	# enhance: add a class to get_ott_children outputs so its easier to check here if all ott ids are valid taxa, indicate if it has been cleaned, maybe within an atrribute
-	message(paste("Getting tree for", paste0(rownames(df), collapse = ", ")))
+	# message(paste("Getting tree for", paste0(input$cleaned_names, collapse = ", ")))
+	# message(paste("Getting tree for", paste0(input$unique_name, collapse = ", ")))
 	# system.time({sapply(rotl::taxonomy_taxon_info(df$ott_id), "[", "flags")})
 	# system.time({tnrs_match(rownames(df))}) # this one is faster
-	phy <- tryCatch(ape::multi2di(suppressWarnings(rotl::tol_induced_subtree(ott_ids = df$ott_id,
-					label_format = "name",  otl_v = otol_version))), error = function(e){
-						message("Some or all input taxa are absent from OToL synthetic tree, look for invalid taxa and eliminate them from input")
-						# this will happen id there are some extinct taxa, barren or any invalid taxa in otol
-						NA
-					})
+	phy <- tryCatch(suppressWarnings(rotl::tol_induced_subtree(ott_ids = input$ott_id, label_format = "name",  otl_v = otol_version)),
+					error = function(e){
+						message("Some or all input taxa are absent from OToL synthetic tree, look for invalid taxa and clean them from input")
+						# this will happen if there are some extinct taxa, barren or any invalid taxa in taxonomy
+						# enhance: to avoid it, clean invalid taxa at the beginning
+						NA })
+	if(length(phy) == 1){
+		return(phy)
+	}
+	phy <- ape::multi2di(phy)
+	# enhance: include ott_ids in phy.
+	# the following chunk is from opentree_chronograms:
+	# new.tree2 <- tryCatch(rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_id"),
+	# 				error = function (e) NULL)
+	# if(is.null(new.tree2)){
+	# 	ott_id_problems <- rbind(ott_id_problems, data.frame(study.id, tree.id))
+	# }
+	# new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label) # if new.tree2 is null it will generate an empty vector
+
 	return(phy)
 }

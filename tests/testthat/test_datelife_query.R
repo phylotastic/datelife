@@ -36,8 +36,9 @@ test_that("input_process works", {
 	new <- "(((((Pterois miles,Pterois volitans)Pteroinae)Teleostei)Chordata,Lymnaea))Metazoa;"
 	phy <- ape::read.tree(text="((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);")
 	notnew <- "a,b;"
-	expect_s3_class(input_process(c(new, new), verbose=TRUE), "phylo") #trying to process two phylogenies will give an error
-	expect_s3_class(input_process(c(phy, phy), verbose=TRUE), "phylo") #trying to process two phylogenies will give an error
+	expect_s3_class(input_process(c(new, new), verbose=TRUE), "phylo") #trying to process two phylogenies will give a message
+	input <- c(new, new)
+	expect_s3_class(input_process(c(phy, phy), verbose=TRUE), "phylo") #trying to process two phylogenies will give a message
 	expect_message(x <- input_process(new, verbose=TRUE)) # when verbose=TRUE it will give a printed message
 	expect_message(x <- input_process(phy, verbose=TRUE)) # idem
 	expect_message(x <- input_process(notnew, verbose=TRUE)) # idem

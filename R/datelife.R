@@ -206,7 +206,7 @@ input_process <- function(input, verbose = FALSE){
 	}
 	if(inherits(input, "multiPhylo")) {
 		input <- ape::write.tree(input[[1]])
-		message("Input is a multiPhylo object. Only the first one will be processed.")
+		message("Input is a multiPhylo object. Only the first one will be used.")
 	}
  	input <- gsub("\\+"," ",input)
   	input <- stringr::str_trim(input, side = "both")
@@ -214,7 +214,11 @@ input_process <- function(input, verbose = FALSE){
    	# if(length(input) == 1) {
     	# if(summary_print)cat("\t", "Input is length 1.", "\n")
 	  	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
-	    	phy.new.in <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input)))
+				input <- input[grepl("\\(.*\\).*;", input)] # leave only the elements that are newick strings
+				if(length(input)>1){
+					message("Input has several newick strings. Only the first one will be used.")				
+				}
+	    	phy.new.in <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input[1])))
 	    	if(verbose) {
 					message("Input is a phylogeny and it is correcly formatted.")
 				}
@@ -231,6 +235,7 @@ input_process <- function(input, verbose = FALSE){
 #' @inheritParams datelife_search
 #' @inheritDotParams rphylotastic::taxon_get_species -taxon
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
+#' @details If input has length 1, get_spp_from_taxon is always set to TRUE
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose = FALSE, ...) {
 	if(verbose) {
@@ -248,14 +253,8 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	if(length(input) == 1) {
 		input <- strsplit(input, ',')[[1]] #  splits a character vector of comma separated names
 		if(length(input) == 1){
-			if(!get_spp_from_taxon[1]) {
-					if(verbose) {
-						message("Datelife needs at least two input taxon names to perform a search.")
-						message("Setting get_spp_from_taxon = TRUE gets all species from a clade and accepts only one taxon name as input.")
-					}
-					return(NA)
-					message("Input is length 1. If it is a taxon name, try with higher-taxon search. If it is a newick tree, check its format; it is not readable by DateLife.")
-			}
+			# to increase probabilities that there's at least two things to search, see details
+				get_spp_from_taxon <- TRUE
 		}
 	}
 	cleaned.input <- stringr::str_trim(input, side = "both")  # cleans the input of lingering unneeded white spaces
@@ -265,6 +264,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 		cleaned.input_tnrs <- tnrs_match(names = cleaned.input)
 		cleaned.input <- cleaned.input_tnrs$unique_name
 		ott_ids <- cleaned.input_tnrs$ott_id
+		# we keep invalid taxa too, so no need to call clean_tnrs()
 		# after some tests, decided to use rotl's method instead of taxize::gnr_resolve, and just output the original input and the actual query for users to check out.
 		# cleaned.input <- taxize::gnr_resolve(names = cleaned.input, data_source_ids=179, fields="all")$matched_name
 		if(!is.na(phy.new[1])) {
@@ -283,35 +283,25 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
     		message("input and get_spp_from_taxon arguments must have same length.")
 				return(NA)
     	}
-			# using tol_subtree will give subspecies too \o/
-			# so we might wanna stick to our own function only then
-			tip_labels <-  lapply(cleaned.input_tnrs$ott_id, function(x)
-				res <- tryCatch(suppressWarnings(rotl::tol_subtree(x))$tip.label,
-				error = function(e) NA))
-			ott_ids <- lapply(tip_labels, function(x) as.numeric(gsub(".*_ott", "", x)))
-			cleaned_names <- lapply(tip_labels, function(x) gsub("_ott.*", "", x))
+			# rotl::tol_subtree is very fast but returns subspecies too \o/
+			# it has no argument to restrict it to species only
+			# so we are using our own function that wraps up theire servoces nicely
+			# example: df <- get_ott_children(ott_id = 698424, ott_rank = "species")
+			df <- get_ott_children(ott_id = cleaned.input_tnrs$ott_id, ott_rank = "species")
+			# head(rownames(df[[1]])[grepl("species", df[[1]]$rank)])
+			cleaned_names <- lapply(df, function (x) rownames(x)[grepl("species", x$rank)])
+			ott_ids <- lapply(df, function (x) x$ott_id[grepl("species", x$rank)])
 
-			failures <- which(sapply(tip_labels, function(x)length(x) ==1))
-			if(length(failures) >0){
-				# cleaned.input_tnrs$unique_name[failures]
-				ff <- get_ott_children(ott_id = cleaned.input_tnrs$ott_id[failures], ott_rank = "species")
-				get_ott_children(ott_id = cleaned.input_tnrs$ott_id[1], ott_rank = "species")
-				cleaned_names[failures] <- lapply(ff, rownames)
-				ott_ids[failures] <- sapply(ff, "[", "ott_id")
-				# data.frame(sapply(sapply(ff, "[", "rank"), length))
-				# ff[11]
-				# cleaned.input_tnrs$ott_id[failures][10]
-				# length(ff) == length(failures)
-			}
-			# rphylotastic service includes trees absent from synthetic tree:
-			# rphylotastic::taxon_get_species(taxon = cleaned.input[1])
-
+			# rphylotastic service includes taxa absent from synthetic tree:
+			# it also shows this error for some texa
+			# rphylotastic::taxon_get_species(taxon = "cetacea")
+			# Error in open.connection(con, "rb") : HTTP error 400.
+			# the following chunk is for rphylotastic service:
     	# species.names <- vector()
     	# index <- 1
 	    # for (i in get_spp_from_taxon){
 	    # 	if (i) {
-	    # 		# spp <- tryCatch(rphylotastic::taxon_get_species(taxon = cleaned_names[index], ...), error = function (e) NULL)
-			# 		spp <- rotl::tol_subtree(gsub("ott", "", cleaned.input_tnrs$ott_ids)[1])$tip.label
+	    # 		#spp <- tryCatch(rphylotastic::taxon_get_species(taxon = cleaned_names[index], ...), error = function (e) NULL)
 	    # 		if(length(spp) == 0) {
 	    # 			if(verbose) {
 			# 				# message("\t", " No species names found for taxon ", cleaned_names[index], ".")

@@ -1,0 +1,63 @@
+---
+title: "DateLife Examples"
+author: "Luna L. Sanchez Reyes"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DateLife Example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r eval = FALSE}
+frin_ds <- datelife_search(input = "Fringilidae", get_spp_from_taxon = TRUE)
+frin_dq <- make_datelife_query(input = "Fringilidae", get_spp_from_taxon = TRUE)
+frin_dr <- get_datelife_result(input = frin_dq)
+frin_phyloall <- summarize_datelife_result(datelife_result = frin_ds, summary_format = "phylo_all")
+plot(frin_ds)
+
+
+cet_ds <- datelife_search(input = "Cetacea", get_spp_from_taxon = TRUE)
+cet_dq <- make_datelife_query(input = "Cetacea", get_spp_from_taxon = TRUE)
+cet_dr <- get_datelife_result(input = cet_dq)
+cet_phyloall <- summarize_datelife_result(datelife_result = cet_dr, summary_format = "phylo_all")
+sapply(cet_phyloall, ape::is.binary)
+plot_phylo_all(cet_phyloall)
+cet_syntree <- get_otol_synthetic_tree(input = cet_dq)
+ape::is.binary(cet_syntree)
+ape::Ntip(cet_syntree)
+names(cet_syntree)
+head(cet_syntree$tip.label)
+plot(cet_syntree)
+# tree_from_taxonomy not working sometimes
+# getting Error in open.connection(con, "rb") : HTTP error 503.
+cet_taxtree <- tree_from_taxonomy(taxa = cet_dq$cleaned_names, sources = "NCBI")
+
+cet_boldtree <- make_bold_otol_tree(input = cet_syntree)
+# there are no sequences to construct a bold tree for cetacea
+cet_allcal <- get_all_calibrations(input = cet_phyloall)
+head(cet_allcal)
+cet_cal <- use_all_calibrations(phy = cet_syntree, all_calibrations = cet_allcal)
+cet_cal$phy
+# will try using each phylo object to calibrate:
+cet_allcallist <- lapply(cet_phyloall, get_all_calibrations)
+length(cet_allcallist)
+cet_allcallist[[1]]
+cet_chronos <- lapply(cet_allcallist, function(x) use_all_calibrations(phy = cet_syntree, all_calibrations = x))
+names(cet_chronos)
+cet_chronos[1]
+lapply(cet_chronos, "[", "phy") # they are all null
+cet_chronos2 <- lapply(seq(cet_allcallist), function(i) use_all_calibrations(phy = cet_phyloall[[i]], all_calibrations = cet_allcallist[[i]]))
+sapply(cet_chronos2, "[", "phy") # the bininda emmonds and hedges are NULL
+
+
+plot(cet_phyloall[[1]])
+
+```

@@ -112,6 +112,7 @@
 #' @export
 classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life") {
   all_sources <- taxize::gnr_datasources()
+  # write(paste0(all_sources$title, collapse = "\n#'\t\t\\item "), file = "data-raw/all_sources.txt")
   match.arg(arg = sources, choices = all_sources$title, several.ok = FALSE)
   source_ids <- rep(NA, length(sources))
   for (i in seq_along(sources)) {
@@ -124,7 +125,6 @@ classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life"
 
   return(list(resolved=resolved_taxa, unresolved=missing_taxa))
 }
-# write(paste0(all_sources$title, collapse = "\n#'\t\t\\item "), file = "data-raw/all_sources.txt")
 
 #' Gets a taxonomic tree from a vector of taxa
 #'

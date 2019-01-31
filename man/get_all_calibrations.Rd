@@ -10,7 +10,7 @@ get_all_calibrations(input = c("Rhea americana", "Pterocnemia pennata",
   cache = get("opentree_chronograms"), verbose = FALSE)
 }
 \arguments{
-\item{input}{vector of names, a newick string, or a phylo object}
+\item{input}{vector of names, a newick string, a phylo or multiPhylo object, a datelifeResult object}
 
 \item{partial}{Boolean; default TRUE: use source trees even if they only match some of the desired taxa}
 

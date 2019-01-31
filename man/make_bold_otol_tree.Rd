@@ -34,3 +34,6 @@ A phylogeny with branch lengths proportional to relative substitution rate.
 \description{
 Use Barcode of Life data to get branch lengths on the OToL tree of a set of taxa.
 }
+\details{
+If input is a phylo object, it is used as backbone. If it is a character vector of taxon names, an induced OToL tree is used as backbone.
+}
