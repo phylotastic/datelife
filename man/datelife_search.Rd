@@ -10,7 +10,7 @@ datelife_search(input = c("Rhea americana", "Pterocnemia pennata",
   use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
   cache = get("opentree_chronograms"), dating_method = "PATHd8",
   summary_print = c("citations", "taxa"),
-  add_taxon_distribution = c("none", "summary", "matrix"),
+  taxon_summary = c("none", "summary", "matrix"),
   get_spp_from_taxon = FALSE, verbose = FALSE, criterion = "taxa")
 }
 \arguments{
@@ -32,7 +32,7 @@ datelife_search(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{summary_print}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
 
-\item{add_taxon_distribution}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on add_taxon_distribution added to the output.}
+\item{taxon_summary}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on taxon_summary added to the output.}
 
 \item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
 

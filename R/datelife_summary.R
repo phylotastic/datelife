@@ -1,40 +1,24 @@
-
-#' Summarize a filtered results list from get_datelife_result function in various ways
+#' Get taxon summary of a datelifeResult object
 #' @inheritParams datelife_query_check
 #' @inheritParams datelife_result_check
-#' @inheritParams datelife_search
-#' @inherit datelife_search return details
 #' @export
-summarize_datelife_result <- function(datelife_query = NULL, datelife_result = NULL,
-	summary_format = "phylo_all", partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"),
-	summary_print = c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"),
-	verbose = FALSE, criterion = c("trees", "taxa")) {
-		# if(!partial) {
-		# 	datelife_result <- datelife_result[which(!sapply(datelife_result, anyNA))]
-		# } # not necessary cause already filtered in get_datelife_result
-	if(update_cache){
-		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
-	}
+get_taxon_summary <- function(datelife_query = NULL, datelife_result){
 	if(is.null(datelife_result) | !is.list(datelife_result)){
 		return(NA)
 		message("datelife_result argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
 	}
-	summary_format.in <- match.arg(summary_format, choices = c("citations", "mrca", "newick_all", "newick_sdm", "newick_median", "phylo_sdm", "phylo_median", "phylo_biggest", "phylo_all", "html", "data_frame"))
-	add_taxon_distribution.in <- match.arg(add_taxon_distribution, choices = c("none", "summary", "matrix"))
-	summary_print.in <- match.arg(summary_print, c("citations", "taxa", "none"), several.ok = TRUE)
-	input <- datelife_query
-	if(is.null(input)){
+	if(is.null(datelife_query)){
 		input.in <- unique(rapply(datelife_result, rownames))
-		# if(add_taxon_distribution.in != "none") {
+		# if(taxon_summary.in != "none") {
 			message("datelife_query argument is empty: showing taxon distribution of taxa found only in at least one chronogram. This excludes input taxa not found in any chronogram.")
 		# }
 	} else {
 		# if(!is.character(input)) stop("input must be a character vector")
-		input <- datelife_query_check(datelife_query = input)
+		input <- datelife_query_check(datelife_query = datelife_query)
 		input.in <- input$cleaned_names
 		# input.in <- input
 	}
-	results.index <- datelife_result_study_index(datelife_result, cache)
+	# results.index <- datelife_result_study_index(datelife_result, cache)
 	return.object <- NA
 	input.match <- unique(rapply(datelife_result, rownames))
 	# if(any(!input.match %in% input)) warning("input does not contain all or any taxa from filteredresults object")
@@ -46,28 +30,50 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 			absent.input <- "None"
 		}
 	}
-	if(add_taxon_distribution.in == "matrix"){
-		taxon_distribution_list <- vector(mode = "list")
-		# tax <- unique(rapply(datelife_result, rownames)) #rownames(datelife_result[[1]])
-		for(result.index in sequence(length(datelife_result))){
-			n <- rownames(datelife_result[[result.index]])
-			m <- match(input.match,n)
-			taxon_distribution_list[[result.index]] <- n[m]
-		}
-		taxon_distribution_matrix <- do.call(rbind, taxon_distribution_list) #transforms a list of names into a matrix of names
-		taxon_distribution_matrix <- !is.na(taxon_distribution_matrix) # makes a boolean matrix
-		colnames(taxon_distribution_matrix) <- input.match
-		rownames(taxon_distribution_matrix) <- sequence(nrow(taxon_distribution_matrix))
+	taxon_list <- vector(mode = "list")
+	# tax <- unique(rapply(datelife_result, rownames)) #rownames(datelife_result[[1]])
+	for(result.index in sequence(length(datelife_result))){
+		n <- rownames(datelife_result[[result.index]])
+		m <- match(input.match,n)
+		taxon_list[[result.index]] <- n[m]
 	}
-	if(add_taxon_distribution.in == "summary" | any(grepl("taxa", summary_print.in))){ # may add here another condition: | makeup_brlen ==TRUE
-		# tax <- unique(rapply(datelife_result, rownames)) #rownames(datelife_result[[1]])
-		x <- rapply(datelife_result, rownames)
-		prop <- c()
-		for (taxon in input.match){
-			prop <- c(prop, paste(length(which(taxon == x)), "/", length(datelife_result), sep=""))
-		}
-		taxon_distribution_summary <- data.frame(taxon = input.match, chronograms = prop)
+	taxon_matrix <- do.call(rbind, taxon_list) #transforms a list of names into a matrix of names
+	taxon_matrix <- !is.na(taxon_matrix) # makes a boolean matrix
+	colnames(taxon_matrix) <- input.match
+	rownames(taxon_matrix) <- sequence(nrow(taxon_matrix))
+	# tax <- unique(rapply(datelife_result, rownames)) #rownames(datelife_result[[1]])
+	x <- rapply(datelife_result, rownames)
+	prop <- c()
+	for (taxon in input.match){
+		prop <- c(prop, paste(length(which(taxon == x)), "/", length(datelife_result), sep=""))
 	}
+	taxon_summary <- data.frame(taxon = input.match, chronograms = prop)
+	return(list(matrix = taxon_matrix, summary = taxon_summary, absent_taxa = absent.input))
+}
+
+#' Summarize a filtered results list from get_datelife_result function in various ways
+#' @inheritParams datelife_query_check
+#' @inheritParams datelife_result_check
+#' @inheritParams datelife_search
+#' @inherit datelife_search return details
+#' @export
+summarize_datelife_result <- function(datelife_query = NULL, datelife_result = NULL,
+	summary_format = "phylo_all", partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"),
+	summary_print = c("citations", "taxa"), taxon_summary = c("none", "summary", "matrix"),
+	verbose = FALSE, criterion = c("trees", "taxa")) {
+		# if(!partial) {
+		# 	datelife_result <- datelife_result[which(!sapply(datelife_result, anyNA))]
+		# } # not necessary cause already filtered in get_datelife_result
+	if(update_cache){
+		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
+	}
+	taxon_summ <- get_taxon_summary(datelife_query, datelife_result)
+	if(length(taxon_summ) == 1){
+		return(NA)
+	}
+	summary_format.in <- match.arg(summary_format, choices = c("citations", "mrca", "newick_all", "newick_sdm", "newick_median", "phylo_sdm", "phylo_median", "phylo_biggest", "phylo_all", "html", "data_frame"))
+	taxon_summary.in <- match.arg(taxon_summary, choices = c("none", "summary", "matrix"))
+	summary_print.in <- match.arg(summary_print, c("citations", "taxa", "none"), several.ok = TRUE)
 	if(summary_format.in == "citations") {
 		return.object <- names(datelife_result)
 	}
@@ -104,21 +110,8 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		tree <- median.result
 	}
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm")) {
-		#sometimes the best_grove for median does not work for sdm, so we tryCatch te result:
-		# sdm.result <- tryCatch(datelife_result_sdm(best_grove), error = function(e) NULL)
-		# while(is.null(sdm.result)){
-		# 	best_grove <- datelife::filter_for_grove(datelife_result,
-		#                 criterion = "taxa", n = overlap)  # we try the last overlap value tried from median
-		#   sdm.result <- tryCatch(datelife_result_sdm(best_grove), error = function(e) NULL)
-		# 	# sometimes max(branching.times) is off (too big or too nsmall), so  we
-		# 	# standardize by real median of original data (max(mrcas)).
-		# 	# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
-		#   overlap <- overlap + 1
-		# }
-		# datelife_result <- sdm.results$data
 		sdm.result <- datelife_result_sdm(best_grove)
 		tree <- sdm.result$phy
-		# rm(sdm.result, best_grove)
 	}
 	if(summary_format.in %in% c("newick_sdm", "newick_median")) {
 		return.object <- ape::write.tree(tree)
@@ -128,8 +121,8 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	}
 	if(summary_format.in == "html") {
 		out.vector1 <- "<table border='1'><tr><th>MRCA Age (MY)</th><th>Ntax</th><th>Citation</th><th>Newick"
-		if(add_taxon_distribution.in == "matrix"){
-			out.vector1 <- paste(out.vector1, paste("</th><th>", colnames(taxon_distribution_matrix), sep="", collapse=""), sep="")
+		if(taxon_summary.in == "matrix"){
+			out.vector1 <- paste(out.vector1, paste("</th><th>", colnames(taxon_summ$matrix), sep="", collapse=""), sep="")
 		}
 		out.vector1 <- paste(out.vector1, "</th></tr>", sep="")
 		ages <- datelife_result_MRCA(datelife_result, partial = partial)
@@ -137,25 +130,24 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		out.vector2 <- c()
 		for(result.index in sequence(length(datelife_result))) {
 			out.vector2 <- paste(out.vector2, "<tr><td>",ages[result.index],"</td><td>",sum(!is.na(diag(datelife_result[[result.index]]))), "</td><td>", names(datelife_result)[result.index], "</td><td>", trees[result.index],  sep="")
-			if(add_taxon_distribution.in == "matrix"){
-				out.vector2 <- paste(out.vector2, paste("</td><td>", taxon_distribution_matrix[result.index,], sep="", collapse=""), sep="")
+			if(taxon_summary.in == "matrix"){
+				out.vector2 <- paste(out.vector2, paste("</td><td>", taxon_summ$matrix[result.index,], sep="", collapse=""), sep="")
 			}
 			out.vector2 <- paste(out.vector2, "</td></tr>", sep="")
 		}
 		out.vector <- paste(out.vector1, out.vector2, "</table>", sep="")
-		if(add_taxon_distribution.in == "summary"){
-			taxon_distribution_summary.html <- as.matrix(taxon_distribution_summary)
+		if(taxon_summary.in == "summary"){
+			taxon_summ$summary.html <- as.matrix(taxon_summ$summary)
 			out.vector3 <- "<p></p><table border='1'><tr><th>taxon</th><th>chronograms</th><tr>"
-			for (summary.index in sequence(nrow(taxon_distribution_summary.html))){
-				out.vector3 <- paste(out.vector3, paste("</td><td>", taxon_distribution_summary.html[summary.index,], sep="", collapse=""), "</td></tr>", sep="")
+			for (summary.index in sequence(nrow(taxon_summ$summary.html))){
+				out.vector3 <- paste(out.vector3, paste("</td><td>", taxon_summ$summary.html[summary.index,], sep="", collapse=""), "</td></tr>", sep="")
 			}
 			out.vector <- paste(out.vector, out.vector3, "</table>", sep="")
 		}
-		# out.vector4 <- c()
-		if(add_taxon_distribution.in != "none") {
+		if(taxon_summary.in != "none") {
 			out.vector4 <- "<p></p><table border='1'><tr><th> </th><th>Absent Taxa</th><tr>"
-			for (i in 1:length(absent.input)){
-				out.vector4 <- paste(out.vector4, "<tr><td>", i, "</td><td>", absent.input[i], "</td><tr>", sep="")
+			for (i in 1:length(taxon_summ$absent_taxa)){
+				out.vector4 <- paste(out.vector4, "<tr><td>", i, "</td><td>", taxon_summ$absent_taxa[i], "</td><tr>", sep="")
 			}
 			out.vector4 <- paste(out.vector4, "</table>", sep="")
 			out.vector <- paste(out.vector, out.vector4, sep="")
@@ -174,28 +166,27 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 				out.df <- rbind(out.df, out.line)
 			}
 		}
-		if(add_taxon_distribution.in == "matrix"){
-			out.df <- cbind(out.df, taxon_distribution_matrix)
+		if(taxon_summary.in == "matrix"){
+			out.df <- cbind(out.df, taxon_summ$matrix)
 		}
 		rownames(out.df) <- NULL
 		return.object <- out.df
 	}
-	if(add_taxon_distribution.in != "none" & summary_format.in !="html"){
+	if(taxon_summary.in != "none" & summary_format.in !="html"){
 		return.object <- list(return.object)
-		if(add_taxon_distribution.in == "matrix") {
-			if(summary_format.in !="data_frame") return.object <- c(return.object, list(taxon_distribution = taxon_distribution_matrix))
+		if(taxon_summary.in == "matrix") {
+			if(summary_format.in !="data_frame") return.object <- c(return.object, list(taxon_distribution = taxon_summ$matrix))
 		}
-		if(add_taxon_distribution.in == "summary") {
-			return.object <- c(return.object, list(taxon_distribution = taxon_distribution_summary))
+		if(taxon_summary.in == "summary") {
+			return.object <- c(return.object, list(taxon_distribution = taxon_summ$summary))
 		}
-		return.object <- c(return.object, list(absent_taxa = data.frame(taxon = absent.input)))
+		return.object <- c(return.object, list(absent_taxa = data.frame(taxon = taxon_summ$absent_taxa)))
 		names(return.object)[1] <- summary_format.in
 		if(summary_format.in =="data_frame"){
 			names(return.object)[1] <- "results"
-			if(add_taxon_distribution.in == "matrix") names(return.object)[1] <- "results_and_missing_taxa"
+			if(taxon_summary.in == "matrix") names(return.object)[1] <- "results_and_missing_taxa"
 		}
 	}
-
 	if(any("citations" %in% summary_print.in) & !any(summary_format.in %in% c("citations", "html", "data_frame"))) {
 		if(summary_format.in == "citations"){
 			message("Input taxa found in trees from:")
@@ -206,11 +197,11 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 			message(i, ": ", names(datelife_result)[i], "\n")
 		}
 	}
-	if(any(grepl("taxa", summary_print.in)) & add_taxon_distribution.in!="summary") {
+	if(any(grepl("taxa", summary_print.in)) & taxon_summary.in!="summary") {
 		message("Input taxa presence across source chronograms:")
-		message(paste0(utils::capture.output(taxon_distribution_summary), collapse = "\n"), "\n")
+		message(paste0(utils::capture.output(taxon_summ$summary), collapse = "\n"), "\n")
 		message("Input taxa completely absent from source chronograms:")
-		message(paste0(utils::capture.output(data.frame(taxon = absent.input)), collapse = "\n"), "\n")
+		message(paste0(utils::capture.output(data.frame(taxon = taxon_summ$absent_taxa)), collapse = "\n"), "\n")
 	}
 	return(return.object)
 }

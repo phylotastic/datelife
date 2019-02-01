@@ -18,7 +18,7 @@
 #' @param input Target taxa names as a character vector, a newick character string, or a phylo object.
 #' @param summary_format The desired output format for target chronograms (chronograms of target taxa). See details.
 #' @param summary_print A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
-#' @param add_taxon_distribution A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on add_taxon_distribution added to the output.
+#' @param taxon_summary A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on taxon_summary added to the output.
 #' @param partial If TRUE, use source chronograms even if they only match some of the desired taxa
 #' @param use_tnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.
 #' @param approximate_match If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).
@@ -81,7 +81,7 @@
 #' write(ages.html, file="some.bird.trees.html")
 #' system("open some.bird.trees.html")
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", summary_print= c("citations", "taxa"), add_taxon_distribution = c("none", "summary", "matrix"),  get_spp_from_taxon = FALSE, verbose = FALSE, criterion="taxa") {
+		summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", summary_print= c("citations", "taxa"), taxon_summary = c("none", "summary", "matrix"),  get_spp_from_taxon = FALSE, verbose = FALSE, criterion="taxa") {
 			# find a way not to repeat partial and cache arguments, which are used in both get_datelife_result and summarize_datelife_result
 			if(update_cache){
 				cache <- update_datelife_cache(save = TRUE, verbose = verbose)
@@ -92,7 +92,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 			# datelife <- list(datelife_query = datelife_query, datelife_result = datelife_result.here)
 			# class(datelife) <- "datelife"
 			# return(datelife)
-			return(summarize_datelife_result(datelife_query = datelife_query, datelife_result = datelife_result.here, summary_format = summary_format, partial = partial, update_cache = FALSE, cache = cache, summary_print = summary_print, add_taxon_distribution = add_taxon_distribution, verbose = verbose, criterion=criterion))
+			return(summarize_datelife_result(datelife_query = datelife_query, datelife_result = datelife_result.here, summary_format = summary_format, partial = partial, update_cache = FALSE, cache = cache, summary_print = summary_print, taxon_summary = taxon_summary, verbose = verbose, criterion=criterion))
 }
 
 # print.datelife <- function(datelife){
@@ -216,7 +216,7 @@ input_process <- function(input, verbose = FALSE){
 	  	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
 				input <- input[grepl("\\(.*\\).*;", input)] # leave only the elements that are newick strings
 				if(length(input)>1){
-					message("Input has several newick strings. Only the first one will be used.")				
+					message("Input has several newick strings. Only the first one will be used.")
 				}
 	    	phy.new.in <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input[1])))
 	    	if(verbose) {

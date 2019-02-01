@@ -277,16 +277,16 @@ missing_taxa_check <- function(missing_taxa = NULL, dated_tree = NULL){
 	# IMPORTANT: Add a check that taxa in dated.trees is in reference_tree and viceversa
 	return(missing_taxa)
 	# if (is.null(reference_tree)){
-		# if (is.null(add_taxon_distribution)) {
-			# cat("specify a reference_tree or add_taxon_distribution to be added to the dated.trees")
+		# if (is.null(taxon_summary)) {
+			# cat("specify a reference_tree or taxon_summary to be added to the dated.trees")
 			# stop("")
 		# } else {
 			# # construct a tree with phylotastic or take that from otol?
-			# cat("Constructing a reference_tree with taxa from dated.tree and add_taxon_distribution")
+			# cat("Constructing a reference_tree with taxa from dated.tree and taxon_summary")
 		# }
 	# } else {
-		# if(!is.null(add_taxon_distribution)){
-			# cat("A reference_tree was given, add_taxon_distribution argument is ignored")
+		# if(!is.null(taxon_summary)){
+			# cat("A reference_tree was given, taxon_summary argument is ignored")
 		# }
 }
 

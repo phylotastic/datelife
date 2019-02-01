@@ -18,9 +18,10 @@ knitr::opts_chunk$set(
 
 ```{r eval = FALSE}
 frin_ds <- datelife_search(input = "Fringilidae", get_spp_from_taxon = TRUE)
-frin_dq <- make_datelife_query(input = "Fringilidae", get_spp_from_taxon = TRUE)
+frin_dq <- make_datelife_query(input = "Pan", get_spp_from_taxon = TRUE)
 frin_dr <- get_datelife_result(input = frin_dq)
-frin_phyloall <- summarize_datelife_result(datelife_result = frin_ds, summary_format = "phylo_all")
+datelife_result <- frin_dr
+frin_phyloall <- summarize_datelife_result(datelife_query = frin_dq, datelife_result = frin_ds, summary_format = "phylo_all", taxon_summary = "summary")
 plot(frin_ds)
 
 

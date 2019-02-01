@@ -23,7 +23,7 @@ datelifeSummary of a datelifeResult object of all Felidae species.
 Generated with:
 felid_spp <- make_datelife_query(input = "felidae", get_spp_from_taxon = TRUE)
 felid_gdr <- get_datelife_result(input = felid_spp, get_spp_from_taxon = TRUE)
-felid_gdr_phylo_all <- summarize_datelife_result(felid_gdr, add_taxon_distribution = "summary", summary_format = "phylo_all", datelife_query = felid_spp)
+felid_gdr_phylo_all <- summarize_datelife_result(felid_gdr, taxon_summary = "summary", summary_format = "phylo_all", datelife_query = felid_spp)
 }
 \keyword{chronogram}
 \keyword{felidae}

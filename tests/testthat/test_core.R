@@ -44,17 +44,17 @@ test_that("Summarize as newick_all works correctly", {
   expect_equal(class(ape::read.tree(text=trees[1])), "phylo")
 })
 
-test_that("add_taxon_distribution argument from summarize_datelife_result() works", {
+test_that("taxon_summary argument from summarize_datelife_result() works", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
   results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
   datelife_result <- results_list_process(results_list, taxa, TRUE)
-  trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_all", cache=opentree_chronograms, add_taxon_distribution = "summary")
+  trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_all", cache=opentree_chronograms, taxon_summary = "summary")
   # str(trees)
   # trees$taxon_distribution
   # trees$absent_taxa
   expect_gte(length(trees), 3)
-  trees2 <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_all", cache=opentree_chronograms, add_taxon_distribution = "matrix")
+  trees2 <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_all", cache=opentree_chronograms, taxon_summary = "matrix")
   expect_gte(length(trees2), 3)
   # str(trees2)
   # trees2$taxon_distribution
