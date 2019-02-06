@@ -15,13 +15,13 @@ wrap_string_to_plot(string, max_cex = 1, min_cex = 0.5,
 \arguments{
 \item{string}{A character vector with the text to be plotted}
 
-\item{max_cex}{A real number, giving the maximum **c**haracter **ex**pansion for the string to be plotted}
+\item{max_cex}{A real number, giving the maximum *cex* (**c**haracter **ex**pansion) for the string to be plotted}
 
 \item{min_cex}{minimum character expansion to be used on the title}
 
 \item{string_font}{font type to be used on the title}
 
-\item{max_height}{A real number, giving the maximum height to be occupied by the text}
+\item{max_height}{A real number, giving the maximum height to be covered by the text}
 
 \item{init_strwrap_width}{A real number indicating the minimum number of characters to be plotted by line}
 

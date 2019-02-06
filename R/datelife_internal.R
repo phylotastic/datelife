@@ -60,97 +60,132 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
     if(anyNA(patristic_matrix)) {
   	   patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
     }   # I'm not sure why this is here. It does not get rid of spp with NA or NaNs, then, what does it do?
-    if(dim(patristic_matrix)[1] < 2) {
-  	   return(NA)
-    }
-    phy <- clum <- NULL
-    if(dim(patristic_matrix)[1] == 2) {
-        clum <- "ape::rtree"
-	      phy <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = 0.5 * patristic_matrix[1,2])
-    } else {
-        if (clustering_method == "nj"){
-          tried <- c(tried, "nj")
-          clum <- "nj"
-          phy <- tryCatch(ape::nj(patristic_matrix), error = function (e) NULL)
-          if (is.null(phy)){ # case when we have missing data (NA) on patristic_matrix and regular nj does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
-              tried <- c(tried, "njs")
-              clum <- "njs"
-              # njs appears to be the only option for missing data with NJ
-              # but see Criscuolo and Gascuel. 2008. Fast NJ-like algorithms to deal with incomplete distance matrices. BMC Bioinformatics 9:166
-              phy <- tryCatch(ape::njs(patristic_matrix),
-              error = function(e) {
-                # message("unable to cluster patristic matrix with NJ, trying clustering_method = 'upgma'")
-                return(NULL)
-              })
-          }
-          if(ape::Ntip(phy) > 2) {
-              # root the tree on the midpoint:
-              # phy <- tryCatch(phangorn::midpoint(phy), error = function(e) NULL)
-              # using phytools::midpoint.root instead of phangorn::midpoint bc it's less error prone.
-              phy <- tryCatch(phytools::midpoint.root(phy),
-              error = function(e) {
-                # message("unable to root the tree after NJ, trying clustering_method = 'upgma'")
-                return(NULL)
-              })
-          }
-        }
-        # use regular upgma (or implemented with daisy and hclust) when nj or midpoint.root fail
-        # sometimes, nj and njs do not work if patristic matrices come from sdm. why? it was probably the midpoint function from phangorn. Using phytools one now.
-        if (clustering_method == "upgma"){ # is.null(phy) |
-            # tried <- c(tried, "upgma")
-            clum <- "upgma"
-            phy <- tryCatch(phangorn::upgma(patristic_matrix), error = function (e) NULL)
-            if (is.null(phy)){ # case when we have missing data (NA) on patristic_matrix and regular upgma does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
-                phy <- tryCatch({
-                  # tried <- c(tried, "upgma_daisy")
-                  clum <- "upgma_daisy"
-                  # using daisy to calculate dissimilarity matrix instead of as.dist (which is used in phangorn::upgma) when there are NAs in the matrix; agnes does not work with NAs either.
-                  DD <- cluster::daisy(x = patristic_matrix, metric = "euclidean")
-                  hc <- stats::hclust(DD, method = "average") # original clustering method from phangorn::upgma. Using agnes() instead hclust() to cluster gives the same result.
-                  phy <- ape::as.phylo(hc)
-                  phy <- phylobase::reorder(phy, "postorder")
-                  phy
-                }, error = function(e) NULL)
-            }
-            # if(is.null(phy) & !"nj" %in% tried){ # Trying the exact same chunck for nj was not tried already
-            #   clum <- "nj"
-            #   phy <- tryCatch(ape::nj(patristic_matrix), error = function (e) NULL)
-            #   if (is.null(phy)){
-            #       clum <- "njs"
-            #       phy <- tryCatch(ape::njs(patristic_matrix),
-            #       error = function(e) {
-            #         return(NULL)
-            #       })
-            #   }
-            # }
-        }
-    }
-    if(is.null(phy)){
-        message("The patristic matrix could not be transformed into a tree with any of the default methods (NJ, UPGMA)")
-        phy <- NA
-    } else {
+    phys <- cluster_patristicmatrix(patristic_matrix)
+    phy <- choose_cluster(phys, clustering_method)
     # if(inherits(phy, "phylo")){
-        phy$clustering_method <- clum
-        phy$negative_brlen <- NA
-        if(any(phy$edge.length < 0)) {
-            phy$negative_brlen <- list(edge_number = which(phy$edge.length < 0))
-            message(paste("Converting from patristic distance matrix to a tree resulted in some negative branch lengths; the largest by magnitude is", min(phy$edge.length)))
-            # phy$edge.length[which(phy$edge.length < 0)] <- 0 #sometimes NJ returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
-            if (fix_negative_brlen){
-                phy <- tree_fix_brlen(tree = phy, fixing_criterion = "negative", fixing_method = fixing_method)
-                fixing_method_called <- as.list(environment())$fixing_method
-                phy$negative_brlen <- c(phy$negative_brlen, list(fixing_method = fixing_method_called))
-                message(paste0("  Negative branch lengths were fixed with tree_fix_brlen, fixing_method = ", fixing_method_called))
-            }
+    phy$negative_brlen <- NA
+    if(any(phy$edge.length < 0)) {
+        phy$negative_brlen <- list(edge_number = which(phy$edge.length < 0))
+        message(paste("Converting from patristic distance matrix to a tree resulted in some negative branch lengths; the largest by magnitude is", min(phy$edge.length)))
+        # phy$edge.length[which(phy$edge.length < 0)] <- 0 #sometimes NJ returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+        if (fix_negative_brlen){
+            phy <- tree_fix_brlen(tree = phy, fixing_criterion = "negative", fixing_method = fixing_method)
+            fixing_method_called <- as.list(environment())$fixing_method
+            phy$negative_brlen <- c(phy$negative_brlen, list(fixing_method = fixing_method_called))
+            message(paste0("  Negative branch lengths were fixed with tree_fix_brlen, fixing_method = ", fixing_method_called))
         }
-        class(phy) <- c(class(phy), "datelifeTree")
     }
+    class(phy) <- c(class(phy), "datelifeTree")
     return(phy)
 }
 
-#' try two types of NJ
+#' Cluster a patristic matrix with several methods
 #'
-
+#' @inheritParams patristic_matrix_to_phylo
+#' @return A phylo object or NA
+cluster_patristicmatrix <- function(patristic_matrix){
+  if(dim(patristic_matrix)[1] < 2) {
+     return(NA)
+  }
+  if(dim(patristic_matrix)[1] == 2) {
+      phy <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = 0.5 * patristic_matrix[1,2])
+      phy$clustering_method <- "ape::rtree"
+      return(phy)
+  } else {
+        phyclust <- vector(mode = "list", length = 4)
+        names(phyclust) <- c("nj", "njs", "upgma", "upgma_daisy")
+        phyclust$nj <- tryCatch(ape::nj(patristic_matrix), error = function (e) NULL)
+        if (is.null(phyclust$nj)){ # case when we have missing data (NA) on patristic_matrix and regular nj does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
+            # njs appears to be the only option for missing data with NJ
+            # but see Criscuolo and Gascuel. 2008. Fast NJ-like algorithms to deal with incomplete distance matrices. BMC Bioinformatics 9:166
+            phyclust$njs <- tryCatch(ape::njs(patristic_matrix), error = function(e) NULL)
+            if(!is.null(phyclust$njs)){
+              phyclust$njs <- tryCatch(phytools::midpoint.root(phyclust$njs),
+                          error = function(e) NULL)
+            }
+        } else {
+          phyclust$nj <- tryCatch(phytools::midpoint.root(phyclust$njs),
+                      error = function(e) NULL)
+        }
+        # root the tree on the midpoint (only for trees with ape::Ntip(phy) > 2):
+        # phy <- tryCatch(phangorn::midpoint(phy), error = function(e) NULL)
+        # using phytools::midpoint.root instead of phangorn::midpoint bc it's less error prone.
+      # sometimes, nj and njs do not work if patristic matrices come from sdm. why? it was probably the midpoint function from phangorn. Using phytools one now.
+      # use regular upgma (or implemented with daisy and hclust) when nj or midpoint.root fail
+        phyclust$upgma <- tryCatch(phangorn::upgma(patristic_matrix), error = function (e) NULL)
+        if (is.null(phyclust$upgma)){ # case when we have missing data (NA) on patristic_matrix and regular upgma does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
+            phyclust$upgma_daisy <- tryCatch({
+              # using daisy to calculate dissimilarity matrix instead of as.dist (which is used in phangorn::upgma) when there are NAs in the matrix; agnes does not work with NAs either.
+              DD <- cluster::daisy(x = patristic_matrix, metric = "euclidean")
+              hc <- stats::hclust(DD, method = "average") # original clustering method from phangorn::upgma. Using agnes() instead hclust() to cluster gives the same result.
+              phy <- ape::as.phylo(hc)
+              phy <- phylobase::reorder(phy, "postorder")
+              phy
+            }, error = function(e) NULL)
+        }
+  }
+  return(phyclust)
+}
+#' Choose a phylo object from cluster_patristicmatrix
+#'
+#' @inheritParams patristic_matrix_to_phylo
+#' @param phys An output from cluster_patristicmatrix
+#' @return A phylo object or NA
+choose_cluster <- function(phys, clustering_method){
+  phy <- NA
+  if(inherits(phys, "phylo")){ # it is a tree of two tips
+    return(phy)
+  } else { # it is a list of results from cluster_patristicmatrix
+    fail <- sapply(phys, is.null)
+    if(all(fail)){
+        message("The patristic matrix could not be transformed into a tree with any of the default methods (NJ, UPGMA)")
+        return(NA)
+    }
+    phys <- phys[!fail] # take out the fails or unattempted from cluster_patristicmatrix
+    if(length(phys) == 1){
+      phy <- phys[[1]]
+      phy$clutering_method <- names(phys)
+      return(phy)
+    } else {
+      ultram <- sapply(phys, ape::is.ultrametric)
+      ultram2 <- sapply(phys, ape::is.ultrametric, 2)
+      if(length(ultram) == 0 & length(ultram2) == 0){
+        message("The patristic matrix could not be transformed into an ultrametric tree with any of the default methods (NJ, UPGMA)")
+        return(NA)
+      }
+      choice <- grepl(clustering_method, names(phys)) # choice can only be one
+      ff <- which(choice & ultram) # if the chosen methis gives an ultrametric tree
+      if(length(ff) == 1){
+        phy <- phys[[ff]]
+        phy$clustering_method <- names(phys)[ff]
+        return(phy)
+      }
+      ff <- which(!choice & ultram) # if not take the not chosen but ultrametric
+      if(length(ff) == 1){
+        phy <- phys[[ff]]
+        phy$clustering_method <- names(phys)[ff]
+        return(phy)
+      }
+      ff <- which(choice & ultram2) # if not take the chosen  one but less ultrametric
+      if(length(ff) == 1){
+        phy <- phys[[ff]]
+        phy <- force.ultrametric(tree = phy, method = "extend")
+        phy$clustering_method <- names(phys)[ff]
+        phy$force.ultrametric <- "extend"
+        return(phy)
+      }
+      ff <- which(!choice & ultram2) # if not take the not chosen one but less ultrametric
+      if(length(ff) == 1){
+        phy <- phys[[ff]]
+        phy <- force.ultrametric(tree = phy, method = "extend")
+        phy$clustering_method <- names(phys)[ff]
+        phy$force.ultrametric <- "extend"
+        return(phy)
+      }
+    }
+  }
+  return(phy)
+}
 #' Figure out which subset function to use. Used inside: get_datelife_result
 #' @param study_element The thing being passed in: an array or a phylo object to serve as reference for congruification
 #' @param taxa Vector of taxon names to get a subset for

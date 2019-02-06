@@ -8,12 +8,14 @@ Needed because using include_suppressed = FALSE in tnrs_match_names does not dro
 \usage{
 clean_tnrs(tnrs, invalid = c("barren", "extinct", "uncultured",
   "major_rank_conflict", "incertae", "unplaced", "conflict",
-  "environmental", "not_otu"))
+  "environmental", "not_otu"), remove_nonmatches = FALSE)
 }
 \arguments{
 \item{tnrs}{A data frame, usually an output from datelife::tnrs_match or rotl::tnrs_match_names functions, but see details.}
 
 \item{invalid}{A character string with flags to be removed from final object.}
+
+\item{remove_nonmatches}{Boolean, whether to remove unssuccesfully matched names or not.}
 }
 \value{
 A data frame or named list (depending on the input) with valid taxa only.

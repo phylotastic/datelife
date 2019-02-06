@@ -38,3 +38,14 @@ test_that("tnrs_match.phylo works", {
     length(tt$ott_ids)
     is.null(tt$ott_ids)
 })
+
+testthat("tnrs_match and clean_tnrs works",{
+  tnrs <- tnrs_match(names = c("cetaceae", "felis"), reference_taxonomy = "otl")
+  # tnrs_match processes input with rotl::tnrs_match_names function by batches, so it won't choke
+  df <- clean_tnrs(tnrs)
+  tnrs <- tnrs_match(names = c("cetaceae"), reference_taxonomy = "otl")
+  df <- clean_tnrs(tnrs)
+  tnrs <- tnrs_match(names = c("cetaceae", "felis", "lukeskywalker"), reference_taxonomy = "otl", remove_nonmatches = TRUE)
+  # tnrs_match processes input with rotl::tnrs_match_names function by batches, so it won't choke
+  df <- clean_tnrs(tnrs)
+})

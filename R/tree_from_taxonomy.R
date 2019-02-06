@@ -141,7 +141,9 @@ classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life"
 #' ape::plot.phylo(results$phy) # may generate warnings due to problems with singletons
 #' ape::plot.phylo(ape::collapse.singles(results$phy), show.node.label=TRUE)
 #' # got rid of singles, but this also removes a lot of the node.labels
-tree_from_taxonomy <- function(taxa, sources="Catalogue of Life", collapse_singles=TRUE) {
+# tree_from_taxonomy(taxa = c("Felis", "pan", "ursus"), sources = "Open Tree of Life Reference Taxonomy") # this is not working for some reason
+# tree_from_taxonomy(taxa = c("Felis", "pan", "ursus"), sources = "NCBI")
+tree_from_taxonomy <- function(taxa, sources = "Catalogue of Life", collapse_singles=TRUE) {
   classification_results <- classification_paths_from_taxonomy(taxa=taxa, sources=sources)
   paths <- classification_results$resolved$classification_path
   if(length(paths)<2) { #not enough for a tree

@@ -126,10 +126,12 @@ tnrs_match.phylo <- function(phy, tip, reference_taxonomy = "otl", ...){  # we c
 #'
 #' @param tnrs A data frame, usually an output from datelife::tnrs_match or rotl::tnrs_match_names functions, but see details.
 #' @param invalid A character string with flags to be removed from final object.
+#' @param remove_nonmatches Boolean, whether to remove unssuccesfully matched names or not.
 #' @details Input can be any data frame or named list that relates taxa stored in an element named "unique" to a validity category stored in "flags".
 #' @return A data frame or named list (depending on the input) with valid taxa only.
 #' @export
-clean_tnrs <- function(tnrs, invalid = c("barren", "extinct", "uncultured", "major_rank_conflict", "incertae", "unplaced", "conflict", "environmental", "not_otu")){
+clean_tnrs <- function(tnrs, invalid = c("barren", "extinct", "uncultured", "major_rank_conflict", "incertae", "unplaced", "conflict", "environmental", "not_otu"),
+												remove_nonmatches = FALSE){
   if(!"flags" %in% names(tnrs)){
     message("tnrs should be a data.frame from datelife::tnrs_match or rotl::tnrs_match_names functions")
 		if(!is.data.frame(tnrs)){
@@ -142,7 +144,10 @@ clean_tnrs <- function(tnrs, invalid = c("barren", "extinct", "uncultured", "maj
 	  return(tnrs)
   }
   tt <- as.data.frame(tnrs)
-	inv <- sapply(1:nrow(tt), function(x) any(tolower(invalid) %in% tolower(tt[x]$flags)))
+	inv <- sapply(1:nrow(tt), function(i) any(tolower(invalid) %in% tolower(tt$flags[i])))
   tt <- tt[!inv,]
+	if(remove_nonmatches){
+		tt <- tnrs[!is.na(tt$unique_name), ]
+	}
   return(tt)
 }

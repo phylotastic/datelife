@@ -1,7 +1,7 @@
-test_that("summary works for a set of different taxa", {
-    skip("test taxa batch")
-    skip_on_cran()
-    skip_on_travis()
+# test_that("summary works for a set of different taxa", {
+#     skip("test taxa batch")
+#     skip_on_cran()
+#     skip_on_travis()
     # utils::data(names_subset2)
     # taxa_list <- list(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus", "Felis"))
     # taxa_list <- c(taxa_list, lapply(1:50, function(x) sample(names_subset2, size = 20, replace = FALSE)))
@@ -189,4 +189,25 @@ test_that("summary works for a set of different taxa", {
         n <- n + 1
     }
 #end of test that
-})
+# })
+# utils::data(names_subset2)
+# taxa_list <- list(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus", "Felis"))
+# taxa_list <- c(taxa_list, lapply(1:50, function(x) sample(names_subset2, size = 20, replace = FALSE)))
+# source("~/Desktop/datelife/data-raw/test_taxa_batch.R")
+x <- cbind(med_nj, med_upgma, sdm_nj, sdm_upgma, maxbr_all, true_all, sapply(phylo_all, length))
+final_test <- taxa_list[good_names]
+# final_data <- x[good_names,]
+final_data <- x[c(1,2,10:13,22,34,37,41,52),]
+final_trees <- phylo_all[good_names]
+save(final_test, final_data, final_trees, file = "test_taxa.RData")
+lapply(final_trees[c(4,5,8,9,10)], names)
+final_test[c(4,5,8,9,10)]
+
+# names(med_nj) <- med_nj_cm
+# names(med_upgma) <- med_upgma_cm
+# names(sdm_nj) <- sdm_nj_cm
+# names(sdm_upgma) <- sdm_upgma_cm
+# med_nj
+# med_upgma
+# sdm_nj
+# sdm_upgma

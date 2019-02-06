@@ -1,6 +1,6 @@
 # in this file we:
  # debug by running the main functions over and over but with different set of taxa
- # register inexpected results from tnrs services to be hopefully corrected in the future
+ # and register unexpected results from tnrs services to be hopefully corrected in the future
 
 test_that("birds from wikipedia work", {
   taxa <- c("Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",
@@ -69,28 +69,19 @@ test_that("Mus higher-taxon search is giving species back", {
   expect_true(length(rphylotastic::taxon_get_species("Mus")) > 0)
 })
 
-test_that("patristic_matrix_to_phylo is accurate", {
-  skip_on_travis()
-  skip("skipping taxa test")
-  utils::data(names_subset2)
-  taxa_list <- list(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus", "Felis"))
-  taxa_list <- c(taxa_list, lapply(1:50, function(x) sample(names_subset2, size = 20, replace = FALSE)))
-  source("~/Desktop/datelife/R/test_taxa_batch.R")
-  x <- cbind(med_nj, med_upgma, sdm_nj, sdm_upgma, maxbr_all, true_all, sapply(phylo_all, length))
-  final_test <- taxa_list[good_names]
-  # final_data <- x[good_names,]
-  final_data <- x[c(1,2,10:13,22,34,37,41,52),]
-  final_trees <- phylo_all[good_names]
-  save(final_test, final_data, final_trees, file = "test_taxa.RData")
-  lapply(final_trees[c(4,5,8,9,10)], names)
-  final_test[c(4,5,8,9,10)]
+test_that("patristic_matrix_to_phylo gives ultrametric trees", {
+  dq <- make_datelife_query(input = "cetacea", get_spp_from_taxon = TRUE)
+  dr <- get_datelife_result(dq)
+  t0 <- summarize_datelife_result(dq, dr, summary_format = "phylo_sdm")
+  t1 <- datelife_result_sdm(dr, clustering_method = "nj")
+  t2 <- datelife_result_sdm(dr, clustering_method = "upgma")
+  tt <- list(t0, t1$phy, t2$phy)
+  phys <- cluster_patristicmatrix(SDM.result)
+  t1 <- patristic_matrix_to_phylo(patristic_matrix = SDM.result, clustering_method = "nj")
+  # xx <- cluster_patristicmatrix(patristic_matrix = SDM.result)
+  t2 <- patristic_matrix_to_phylo(patristic_matrix = SDM.result, clustering_method = "upgma")
+  tt <- list(t1, t2)
+  class(tt) <- "multiPhylo"
+  # ape::is.ultrametric(tt, 2)
+  # plot(tt, cex = 0.5)
 })
-
-# names(med_nj) <- med_nj_cm
-# names(med_upgma) <- med_upgma_cm
-# names(sdm_nj) <- sdm_nj_cm
-# names(sdm_upgma) <- sdm_upgma_cm
-# med_nj
-# med_upgma
-# sdm_nj
-# sdm_upgma

@@ -1,3 +1,11 @@
+testthat("wrap_string_to_plot works", {
+    wrap_string_to_plot(string = "Tree", max_cex = 0.75, whole = FALSE)
+    string <- "Cetaceae Species Presence across chronograms in DateLife Data Base"
+    # when calling plotSimmap from RStudio the nest line
+    # graphics::par("din")[2]-graphics::par("pin")[2]- graphics::par("omi")[1]-graphics::par("mai")[1] - 0.2
+    # it gives a negative number! so check this before plotting
+})
+
 test_that("plot_phylo_all works", {
     utils::data(felid_gdr_phylo_all)
     plot_phylo_all(felid_gdr_phylo_all$phylo_all)

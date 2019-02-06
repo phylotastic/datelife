@@ -10,7 +10,7 @@ get_dated_otol_induced_subtree(input = c("Felis silvestris",
 \arguments{
 \item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
 
-\item{ott_id}{Numeric vector of Open Tree Taxonomy ids. Input argumentt will be ignored.}
+\item{ott_id}{Numeric vector of Open Tree Taxonomy ids. Input argument will be ignored.}
 }
 \value{
 A phylo object with edge length proportional to time in Myrs. NA if 1 or no inputs are valid.

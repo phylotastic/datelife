@@ -511,13 +511,14 @@
 
 #' subset trees for plotting densitree plots and phylo_all plots
 #' @inheritParams get_biggest_phylo
-#' @param include Boolean or numeric vector. Default to TRUE, plot all chronograms
-#' in trees. If FALSE, exclude chronograms with only two tips. If numeric, plot
-#' trees matching the numeric vector.
+#' @param include Boolean or numeric vector. Default to TRUE, keep all chronograms
+#' in trees. If FALSE, exclude chronograms with only two tips. If numeric, it is used
+#' as indices to subset trees object.
 subset_trees <- function(trees, include = TRUE){
   if(is.numeric(include)){  #if it is numeric
     include <- round(include)
-    include <- sort(unique(include[which(include <= length(trees))]))
+    include <- include[which(include <= length(trees))]
+    include <- sort(unique(include))
     trees <- trees[include]
   }
   if(is.logical(include) & !is.na(include)){
@@ -574,7 +575,8 @@ phylo_height_omi <- function(tree){
   } else if(tipnum == 4){
     omi1 <- 1.2
   } else if (tipnum >= 5 & tipnum <= 7){
-    omi1 <- 3
+    # omi1 <- 3
+    omi1 <- 1 # this works good for pdf images
   } else if (tipnum >= 8 & tipnum <= 10){
     omi1 <- 2.5
   } else {
@@ -588,10 +590,10 @@ phylo_height_omi <- function(tree){
 #' idea to use strwrap from https://stackoverflow.com/questions/7367138/text-wrap-for-plot-titles
 #'
 #' @param string A character vector with the text to be plotted
-#' @param max_cex A real number, giving the maximum **c**haracter **ex**pansion for the string to be plotted
+#' @param max_cex A real number, giving the maximum *cex* (**c**haracter **ex**pansion) for the string to be plotted
 #' @param min_cex minimum character expansion to be used on the title
 #' @param string_font font type to be used on the title
-#' @param max_height A real number, giving the maximum height to be occupied by the text
+#' @param max_height A real number, giving the maximum height to be covered by the text
 #' @param init_strwrap_width A real number indicating the minimum number of characters to be plotted by line
 #' @param min_width A real number, giving the minimum width to be occupied by the string
 #' @param max_width A real number, giving the maximum width to be occupied by the string
@@ -602,11 +604,21 @@ wrap_string_to_plot <- function(string, max_cex = 1, min_cex = 0.5, string_font 
                            init_strwrap_width = 50,  min_width = 0.9*graphics::par("din")[1],
                            max_width = 0.9*graphics::par("din")[1], whole = TRUE){
   # collapse string to a vetor of one element in case it has more elements
+  if(max_height <= 0){
+    message("string cannot be adjusted because there is not enough space on upper margin of plotting device")
+    return(NA)
+  }
   wraps <- strwrap(string, width = init_strwrap_width)
   sw <- graphics::strwidth(s = wraps, units = "inches", cex = max_cex, font = string_font)
   sh <- graphics::strheight(s = paste(wraps, collapse = "\n"), units = "inches", cex = max_cex, font = string_font)
-  string_cex <- max_cex
   wi <- init_strwrap_width - 1
+  string_cex <- max_cex
+  # next if when title is too short and fits in one line with regular cex:
+  if(sh < max_height & max(sw) < max_width){ #if(length(wraps) ==1)
+      return(list(wrapped = paste(wraps, collapse = "\n"), wraps = wraps,
+      string_cex = string_cex, strwrap_width = wi, string_font = string_font))
+  }
+  # next while to find the appropriate cex to fit a long title with a max and min width:
   while(sh > max_height | max(sw) > max_width | max(sw) < min_width) {  #max(sw) < min_width | max(sw) > max_width
     while(max(sw) < min_width) {
       wi <- wi + 1
@@ -639,15 +651,14 @@ wrap_string_to_plot <- function(string, max_cex = 1, min_cex = 0.5, string_font 
 #'
 #' @inheritParams get_biggest_phylo
 #' @inheritParams subset_trees
+#' @inheritParams plot_phylo
 #' @param individually Boolean indicating if trees should be plotted one by one or all on the same file
-#' @param write A character vector of length 1. Use pdf or png to write a file on those formats respectively. Anything else will not write any image file.
 #' @inheritParams ape::plot.phylo
-#' @param file A character string giving the name of the files. It will be the name of the directory too.
+#' @param file A character string giving the name and path to write the files to.
 #' @export
-plot_phylo_all <- function(trees, include = TRUE, individually = TRUE, cex = graphics::par("cex"), write = "no", file = "phylo_all"){
-  utils::data("strat2012", package = "phyloch")
+plot_phylo_all <- function(trees, cex = graphics::par("cex"), include = TRUE, individually = TRUE, write = "no", file = "phylo_all"){
   trees <- subset_trees(trees, include = include)
-  if(any(names(trees) %in% "tip.label")){
+  if(any("tip.label" %in% names(trees))){ # in case there is just one tree in trees
     trees <- list(trees)
   }
   # if(isTRUE(all.equal(round(sapply(trees, function(x) max(ape::branching.times(x))), digits = 3))))
@@ -673,34 +684,10 @@ plot_phylo_all <- function(trees, include = TRUE, individually = TRUE, cex = gra
   } else {
       reports::folder(folder.name = gsub("\\.png$|\\.pdf$", "", file))
   }
+  utils::data("strat2012", package = "phyloch")
   for (i in 1:length(trees)){
-    ho <- phylo_height_omi(tree = trees[[i]])
-    if(any(c("png", "pdf") %in% write)){
-      if("png" %in% write){
-        grDevices::png(file = paste0(gsub("\\.png$|\\.pdf$", "", file), "/", gsub("\\.png$|\\.pdf$", "", file), "_", i, ".", write),
-        height = ho$height)
-      } else {
-        grDevices::pdf(file = paste0(gsub("\\.png$|\\.pdf$", "", file), "/", gsub("\\.png$|\\.pdf$", "", file), "_", i, ".", write),
-        height = ho$height/72)
-      }
-    }
-    graphics::par(xpd = NA, mai = c(0,0,0,mai4), omi = c(ho$omi1, 0, 1, 0))
-    # plot_chronogram.phylo(trees[[i]], cex = 1.5, edge.width = 2, label.offset = 0.5,
-      # x.lim = c(0, max.depth), root.edge = TRUE, root.edge.color = "white")
-    ape::plot.phylo(trees[[i]], cex = cex, #edge.width = 2,
-      label.offset = 0.5, x.lim = c(0, max.depth), root.edge = TRUE, plot = TRUE)  #, ...
-    graphics::par(xpd = FALSE)
-    phyloch::axisGeo(GTS = strat2012, unit = c("period","epoch"),
-        col = c("gray80", "white"), gridcol = c("gray80", "white"), cex = 0.5,
-        gridty = "twodash")
-    graphics::mtext("Time (MYA)", cex = cex, side = 1, font = 2, line = (ho$omi1-0.2)/0.2,
-    outer = TRUE, at = 0.4)
-    titlei <- wrap_string_to_plot(string = names(trees)[i], max_cex = 0.75, whole = FALSE)
-    graphics::mtext(text = titlei$wrapped, outer = TRUE,
-      cex = titlei$string_cex, font = titlei$string_font, line = 1)
-    if(any(c("png", "pdf") %in% write)){
-      grDevices::dev.off()
-    }
+    file_name <- paste0(gsub("\\.png$|\\.pdf$", "", file), "/", gsub("\\.png$|\\.pdf$", "", file), "_", i, ".", write)
+    plot_phylo(trees[[i]], names(trees)[i], time_depth = max.depth, axis_type = 1, cex, mai4, write, file_name, GTS = strat2012)
   }
   # getting an "unrecoverable" error with merge PDF:
   # if(!individually){
@@ -711,4 +698,73 @@ plot_phylo_all <- function(trees, include = TRUE, individually = TRUE, cex = gra
   #       # file= "merged.pdf"
   #   )
   # }
+}
+#' plot one tree with study title and geochronological axis
+#'
+#' @inheritParams get_biggest_phylo
+#' @param title A character string giving the name and path to write the files to.
+#' @param time_depth A numeric vector indicating the upper limit on the time x axis scale.
+#' @param axis_type A numeric vector indicating the type of geochronological axis to plot. See examples.
+#' @param mai4 A numeric vector of length one indicating the space needed for plotting whole tip labels (right margin of the plot).
+#' @param write A character vector of length 1. Use pdf or png to write a file on those formats respectively. Anything else will not write any image file.
+#' @inheritParams ape::plot.phylo
+#' @param file_name A character string giving the name and path to write the files to.
+#' @param GTS A dataframe of geochronological limits.
+#' @export
+# enhance: examples of axis_types!
+plot_phylo <- function(tree, title = "Tree", time_depth = NULL, axis_type = 1, cex = graphics::par("cex"), mai4 = NULL, write = "nothing", file_name = NULL, GTS = strat2012){
+  if(is.null(time_depth) & !is.null(tree$edge.length)){
+    if(is.null(tree$root.edge)){
+      time_depth <- round(max(ape::branching.times(tree)) + 5, digits = -1)
+    } else {
+      time_depth <- max(ape::branching.times(tree)) + tree$root.edge
+    }
+  }
+  if(is.null(mai4)){
+    ind <- which.max(nchar(tree$tip.label))
+    mai4 <- graphics::strwidth(s = tree$tip.label[ind], units = "inches", cex = cex, font = 3)
+  }
+  ho <- phylo_height_omi(tree = tree)
+  if(any(c("png", "pdf") %in% write)){
+    if("png" %in% write){
+      grDevices::png(file = file_name, height = ho$height)
+    } else {
+      grDevices::pdf(file = file_name, height = ho$height/72)
+    }
+  }
+  graphics::par(xpd = NA, mai = c(0,0,0,mai4), omi = c(ho$omi1, 0, 1, 0))
+  # plot_chronogram.phylo(trees[[i]], cex = 1.5, edge.width = 2, label.offset = 0.5,
+    # x.lim = c(0, max.depth), root.edge = TRUE, root.edge.color = "white")
+  if(is.null(tree$edge.length)){
+      ape::plot.phylo(tree, cex = cex, #edge.width = 2,
+        label.offset = 0.5, plot = TRUE)  #, ...
+  } else {
+      ape::plot.phylo(tree, cex = cex, #edge.width = 2,
+        label.offset = 0.5, x.lim = c(0, time_depth), root.edge = TRUE, plot = TRUE)  #, ...
+  }
+  graphics::par(xpd = FALSE)
+  if(!is.null(tree$edge.length)){
+      if(axis_type == 1){
+        phyloch::axisGeo(GTS = GTS, unit = c("period"),
+            col = c("gray80", "white"), gridcol = c("gray80", "white"), cex = 0.5,
+            gridty = "twodash")
+      }
+      if(axis_type == 2){
+        phyloch::axisGeo(GTS = GTS, unit = c("period","epoch"),
+            col = c("gray80", "white"), gridcol = c("gray80", "white"), cex = 0.5,
+            gridty = "twodash")
+      }
+      graphics::mtext("Time (MYA)", cex = cex, side = 1, font = 2, line = (ho$omi1-0.2)/0.2,
+      outer = TRUE, at = 0.4)
+  } else (
+      message("tree has no edge.length, so time axis will not be plotted")
+  )
+  if(!is.null(title)){
+    titlei <- wrap_string_to_plot(string = title, max_cex = 1, whole = FALSE)
+    graphics::mtext(text = titlei$wrapped, outer = TRUE,
+      cex = titlei$string_cex, font = titlei$string_font, line = 1)
+  }
+  if(any(c("png", "pdf") %in% write)){
+    grDevices::dev.off()
+  }
 }

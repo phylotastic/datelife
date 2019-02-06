@@ -5,7 +5,7 @@
 # foodweb plot:
 # install.packages("mvbutils")
 library(mvbutils)
-pdf(file="~/Google Drive/datelife/workflow_diagrams/use_all_calibrations_foodweb1.pdf", height=10, width=25)
+pdf(file="data-raw/workflow_diagrams/use_all_calibrations_foodweb1.pdf", height=10, width=25)
 foodweb(where = "package:datelife", prune = "use_all_calibrations",
         border = TRUE,
         boxcolor = "aliceblue",
@@ -24,7 +24,7 @@ pos <- coordinates(c(1, 1, 1, 1, 1, 1, 1,1 ), mx = -0.2)
 textdiamond(mid = pos[1,], radx = rx, rady = ry, lab = LETTERS[1], cex = 2, shadow.col = "lightblue")
 
 # actual diagrams:
-pdf(file = "congruify_workflow_use_all_calibrations.pdf", height = 14)
+pdf(file = "data-raw/congruify_workflow_use_all_calibrations.pdf", height = 14)
 elpos <- coordinates (c(1, rep(2, 11)))
 elpos2 <- coordinates (c(1, 2, 2, rep(1, 9)))
 from <- c(1, 1, 2:5, 14:19)
@@ -62,7 +62,7 @@ textrect (elpos2[13,], 0.3, 0.025,lab = c("output is ONE chronogram scaled", "wi
           shadow.col = "black", shadow.size = 0.005, cex = 0.9)
 dev.off()
 
-pdf(file = "congruify_workflow_datelife_search.pdf")
+pdf(file = "data-raw/congruify_workflow_datelife_search.pdf")
 elpos <- coordinates (c(1, rep(2, 6)))
 elpos2 <- coordinates (c(1, 2, 1, 1, 2, 2, 1))
 from <- c(2, 2, 3:12) - 1
@@ -104,7 +104,7 @@ textrect (elpos2[10,], 0.3, 0.05,lab = c("summarize_datelife_result function:", 
 dev.off()
 
 
-pdf(file = "congruify_workflow_tree_add_dates.pdf")
+pdf(file = "data-raw/congruify_workflow_tree_add_dates.pdf")
 elpos <- coordinates (c(1, rep(3, 6)))
 elpos2 <- coordinates (c(1, 3, 3, 3, rep(1, 3)))
 from <- c(1, 1, 1, 2:10)

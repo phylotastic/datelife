@@ -24,10 +24,3 @@ test_that("get_ott_clade works", {
     xx <- get_ott_clade(input = c("Lamiaceae", "Campanulaceae", "Salvia"), ott_rank = "family")
     expect_false(all(is.na(xx$family))) # this should return the same lineages since they are all family level already
 })
-test_that("clean_tnrs works", {
-    tnrs <- tnrs_match(names = c("cetaceae", "felis"), reference_taxonomy = "otl")
-    # tnrs_match processes input with rotl::tnrs_match_names function by batches, so it won't choke
-    df <- clean_tnrs(tnrs)
-    tnrs <- tnrs_match(names = c("cetaceae"), reference_taxonomy = "otl")
-    df <- clean_tnrs(tnrs)
-})
