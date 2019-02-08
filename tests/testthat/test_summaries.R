@@ -1,5 +1,5 @@
 # testing datelife functions to summarize source trees
-testthat("get_taxon_summary works", {
+test_that("get_taxon_summary works", {
   taxa <- c("Rhea americana", "Struthio camelus", "Gallus gallus")
   taxa <- "Pan"
 	datelife_query <- make_datelife_query(taxa, get_spp_from_taxon = TRUE)
@@ -8,7 +8,7 @@ testthat("get_taxon_summary works", {
   # enhance: it should test if it's giving both matrix and summary
 })
 
-testthat("summarize_datelife_result works", {
+test_that("summarize_datelife_result works", {
   taxa <- "Pan"
   taxa <- c("Rhea americana", "Struthio camelus", "Gallus gallus")
 	datelife_query <- make_datelife_query(taxa, get_spp_from_taxon = TRUE)

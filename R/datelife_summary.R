@@ -8,6 +8,7 @@ get_taxon_summary <- function(datelife_query = NULL, datelife_result){
 		message("datelife_result argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
 	}
 	if(is.null(datelife_query)){
+		input <- NULL
 		input.in <- unique(rapply(datelife_result, rownames))
 		# if(taxon_summary.in != "none") {
 			message("datelife_query argument is empty: showing taxon distribution of taxa found only in at least one chronogram. This excludes input taxa not found in any chronogram.")
@@ -25,9 +26,9 @@ get_taxon_summary <- function(datelife_query = NULL, datelife_result){
 	absent.input <- input.in[!input.in %in% input.match]
 	if(length(absent.input) <= 0) {
 		if(is.null(input)){
-			absent.input <- "NULL"
+			absent.input <- NULL # we cannot know if there are complete absent taxa because original query was not provided
 		} else {
-			absent.input <- "None"
+			absent.input <- "None" # we know there are no absent taxa
 		}
 	}
 	taxon_list <- vector(mode = "list")
@@ -98,10 +99,10 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm", "newick_median", "phylo_median")){
 		median.result <- NULL
 		overlap <- 2
-		while(is.null(median.result)){
+		while(!inherits(median.result, "phylo")){
 		  best_grove <- datelife::filter_for_grove(datelife_result,
 		                criterion = "taxa", n = overlap)
-		  median.result <- tryCatch(datelife_result_median(best_grove), error = function(e) NULL)
+		  median.result <- tryCatch(suppressMessages(datelife_result_median(best_grove)), error = function(e) NULL)
 			# sometimes max(branching.times) is off (too big or too small), so we could
 			# standardize by real median of original data (max(mrcas)).
 			# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
@@ -249,6 +250,7 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 		phy <- patristic_matrix_to_phylo(datelife_result, clustering_method = clustering_method, fix_negative_brlen = FALSE)
 		unpadded.matrices <- datelife_result
 	} else {
+		# datelife_result <- best_grove
 		unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
 		good.matrix.indices <- c()
 		for(i in sequence(length(unpadded.matrices))) {

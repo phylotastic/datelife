@@ -207,10 +207,10 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 			}
 	}
 	if(nrow(ott_id_problems) > 0){
-		utils::write.csv(ott_id_problems, paste0("data-raw/ott_id_problems_", max_tree_count, ".csv"),
+		utils::write.csv(ott_id_problems, paste0("ott_id_problems_", max_tree_count, ".csv"),
 											quote = FALSE, row.names = FALSE)
 	} else {
-		write("There were no problematic chronograms.", paste0("data-raw/ott_id_problems_", max_tree_count, ".csv"))
+		write("There were no problematic chronograms.", paste0("ott_id_problems_", max_tree_count, ".csv"))
 	}
 	tot_time <- Sys.time() - start_time # end of registering function running time
 	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)

@@ -33,13 +33,14 @@ test_that("tnrs_match.phylo works", {
     expect_true(all(phy2$original.tip.label == phy$tip.label))
     expect_true(all(grep("original", phy2$mapped) == which(is.na(phy2$ott_ids))))
     # test that ott_ids element generation is ok:
+    skip("check ott_id problems_500")  # read.csv always gives an error with check()
     rr <- read.csv(file = "data-raw/ott_id_problems_500.csv", row.names = 1)
     tt <- xx$trees[[grep(rr$study.id[1], unlist(xx$studies))]] # get the first tree with ott_ids download problem
     length(tt$ott_ids)
     is.null(tt$ott_ids)
 })
 
-testthat("tnrs_match and clean_tnrs works",{
+test_that("tnrs_match and clean_tnrs works",{
   tnrs <- tnrs_match(names = c("cetaceae", "felis"), reference_taxonomy = "otl")
   # tnrs_match processes input with rotl::tnrs_match_names function by batches, so it won't choke
   df <- clean_tnrs(tnrs)

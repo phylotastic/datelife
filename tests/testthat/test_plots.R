@@ -1,4 +1,4 @@
-testthat("wrap_string_to_plot works", {
+test_that("wrap_string_to_plot works", {
     wrap_string_to_plot(string = "Tree", max_cex = 0.75, whole = FALSE)
     string <- "Cetaceae Species Presence across chronograms in DateLife Data Base"
     # when calling plotSimmap from RStudio the nest line

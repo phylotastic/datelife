@@ -5,7 +5,7 @@
 \title{Takes a tree and fixes negative or zero length branches in several ways}
 \usage{
 tree_fix_brlen(tree = NULL, fixing_criterion = "negative",
-  fixing_method = 0)
+  fixing_method = 0, ultrametric = TRUE)
 }
 \arguments{
 \item{tree}{A tree either as a newick character string or as a phylo object}
@@ -13,6 +13,8 @@ tree_fix_brlen(tree = NULL, fixing_criterion = "negative",
 \item{fixing_criterion}{A character vector specifying the type of branch length to be fixed: "negative" or "zero"}
 
 \item{fixing_method}{A character vector specifying the method to fix branch lengths: "bladj", "mrbayes" or a number to be assigned to all branches meeting fixing_criterion}
+
+\item{ultrametric}{Boolean indicating whether to force ultrametric or not.}
 }
 \value{
 A phylo object with fixed branch lengths

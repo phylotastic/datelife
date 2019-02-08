@@ -2,11 +2,12 @@ test_that("get_otol_chronograms works", {
 	# skip_on_cran()
   #	skip_on_travis()
   # utils::data(opentree_chronograms)
-  xx <- get_otol_chronograms(verbose=TRUE, max_tree_count = 10)
+  xx <- get_otol_chronograms(verbose=TRUE, max_tree_count = 5)
   expect_true(all(c("trees", "authors", "curators", "studies", "dois") %in% names(xx)))
-  xx <- get_otol_chronograms(verbose=TRUE)
-  table(unlist((sapply(xx$trees, "[", "mapped"))))
+  # xx <- get_otol_chronograms(verbose=TRUE)
+  # table(unlist((sapply(xx$trees, "[", "mapped"))))
   # check the state of trees with ott_id problems:
+  skip("check ott_id problems_500")  # read.csv always gives an error with check(), so just run this tests locally
   rr <- read.csv(file = "data-raw/ott_id_problems_500.csv", row.names = 1)
   tt <- xx$trees[[grep(rr$study.id[1], unlist(xx$studies))]] # get the first tree with ott_ids download problem
   tt$tip.label
@@ -35,9 +36,10 @@ test_that("is_good_chronogram works as expected", {
   t1$tip.label[4] <-  "*tip_#1_not_mapped_to_OTT._Original_label_-_Hagensia_havilandi"
   # is_good_chronogram(t1)
   # enhance: test that ott_ids element is ok
+  skip("check ott_id problems_500")  # read.csv always gives an error with check()
   rr <- read.csv(file = "data-raw/ott_id_problems_500.csv", row.names = 1)
   tt <- xx$trees[[grep(rr$study.id[1], unlist(xx$studies))]] # get the first tree with ott_ids download problem
-  # is_good_chronogram(tt)
+  is_good_chronogram(tt)
 
 })
 
@@ -67,12 +69,15 @@ test_that("clean_ott_chronogram works as expected", {
   # new.tree <- rotl::get_study_tree(study_id='ot_1000',tree_id='tree1', tip_label="ott_taxon_name")
   # try.tree <- clean_ott_chronogram(new.tree)
   # data.frame(new.tree$tip.label, try.tree$tip.label)
-
+  skip("clean_ott_chronogram works as expected local test")
   # enhance: there's something wrong when trying to clean the following tree:
   # new.tree2 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_id")
   # it is a problem of rotl function, make an issue!
   t1 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "original_label")
+  # following gives an error:
   t2 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_id", deduplicate = TRUE)
+  # Error in rncl(file = file, ...) :
+  # Taxon number 1662 (coded by the token 1662) has already been encountered in this tree. Duplication of taxa in a tree is prohibited.
   t3 <- rotl::get_study_tree(study_id = "ot_1041", tree_id = "tree1", tip_label = "ott_taxon_name")
   rotl::taxonomy_taxon_info(1662)
   grep("Rhinechis", t1$tip.label)
@@ -90,6 +95,8 @@ test_that("opentree_chronograms object is ok", {
   expect_true(all(sapply(opentree_chronograms, length) == length(opentree_chronograms$trees)))
   opentree_chronograms$studies[1]
   # check mapping of labels
+  skip("opentree_chronograms object is ok local tests")
+  # xx object is a tmp opentree_chronograms object
   names(xx$trees[[1]])
   class(xx$trees[[1]])
   yy <- sapply(xx$trees, function(x) x$tip.label)

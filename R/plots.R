@@ -509,6 +509,30 @@
 #       invisible(L)
 # }
 
+#' A data frame containing the stratigraphic chart by issued in 2012 by the International Commission on Stratigraphy.
+#'
+#' @name strat2012
+#' @docType data
+#' @format A data frame
+#' \describe{
+#'   \item{eon}{Eon name.}
+#'   \item{era}{Era name.}
+#'   \item{period}{Period name.}
+#'   \item{epoch}{Epoch name.}
+#'   \item{stage}{Stage name.}
+#'   \item{MA}{Estimated boundary age for the associated interval.}
+#'   \item{error}{Estimated errors associated with each age estimate.}
+#'   \item{GSSP}{Binary response denoting whether the age estimate is defined by a basal Global Standard Section and Point}
+#' }
+#' @source \url{https://github.com/fmichonneau/phyloch}
+#' @keywords plot gradstein geochronology
+#' @details
+#' See phyloch package data description.
+#' Enhance: There are a couple errors in the original strat2012 object that are not too meaningful but could be improved.
+#' Generated with utils::data("strat2012", package = "phyloch")
+#' use_data(strat2012)
+"strat2012"
+
 #' subset trees for plotting densitree plots and phylo_all plots
 #' @inheritParams get_biggest_phylo
 #' @param include Boolean or numeric vector. Default to TRUE, keep all chronograms
@@ -684,10 +708,9 @@ plot_phylo_all <- function(trees, cex = graphics::par("cex"), include = TRUE, in
   } else {
       reports::folder(folder.name = gsub("\\.png$|\\.pdf$", "", file))
   }
-  utils::data("strat2012", package = "phyloch")
   for (i in 1:length(trees)){
     file_name <- paste0(gsub("\\.png$|\\.pdf$", "", file), "/", gsub("\\.png$|\\.pdf$", "", file), "_", i, ".", write)
-    plot_phylo(trees[[i]], names(trees)[i], time_depth = max.depth, axis_type = 1, cex, mai4, write, file_name, GTS = strat2012)
+    plot_phylo(trees[[i]], names(trees)[i], time_depth = max.depth, axis_type = 1, cex, mai4, write, file_name, GTS = utils::data(strat2012))
   }
   # getting an "unrecoverable" error with merge PDF:
   # if(!individually){
@@ -702,6 +725,7 @@ plot_phylo_all <- function(trees, cex = graphics::par("cex"), include = TRUE, in
 #' plot one tree with study title and geochronological axis
 #'
 #' @inheritParams get_biggest_phylo
+#' @inheritParams tree_fix_brlen
 #' @param title A character string giving the name and path to write the files to.
 #' @param time_depth A numeric vector indicating the upper limit on the time x axis scale.
 #' @param axis_type A numeric vector indicating the type of geochronological axis to plot. See examples.
@@ -712,7 +736,10 @@ plot_phylo_all <- function(trees, cex = graphics::par("cex"), include = TRUE, in
 #' @param GTS A dataframe of geochronological limits.
 #' @export
 # enhance: examples of axis_types!
-plot_phylo <- function(tree, title = "Tree", time_depth = NULL, axis_type = 1, cex = graphics::par("cex"), mai4 = NULL, write = "nothing", file_name = NULL, GTS = strat2012){
+plot_phylo <- function(tree, title = "Tree", time_depth = NULL, axis_type = 1, cex = graphics::par("cex"), mai4 = NULL, write = "nothing", file_name = NULL, GTS = NULL){
+  if(is.null(GTS)){
+    GTS <- utils::data(strat2012)
+  }
   if(is.null(time_depth) & !is.null(tree$edge.length)){
     if(is.null(tree$root.edge)){
       time_depth <- round(max(ape::branching.times(tree)) + 5, digits = -1)

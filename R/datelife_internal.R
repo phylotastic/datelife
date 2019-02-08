@@ -51,34 +51,68 @@ datelife_result_MRCA <- function(datelife_result, partial = TRUE) {
 # We might add the option to insert a function as clustering_method.
 # Before, we hard coded it to try Neighbor-Joining first; if it errors, it will try UPGMA.\
 # Now, it uses nj for phylo_all summary,
-#' @param fix_negative_brlen Boolean indicating weather to fix negative branch lengths in resulting tree or not. Default to TRUE.
+#' @param fix_negative_brlen Boolean indicating whether to fix negative branch lengths in resulting tree or not. Default to TRUE.
 #' @inheritParams tree_fix_brlen
 #' @return A rooted phylo object
-patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj", fix_negative_brlen = TRUE, fixing_method = 0) {
+patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj", fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE) {
     clustering_method <- match.arg(arg = clustering_method, choices = c("nj", "upgma"), several.ok = FALSE)
     tried <-  c()
     if(anyNA(patristic_matrix)) {
   	   patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
     }   # I'm not sure why this is here. It does not get rid of spp with NA or NaNs, then, what does it do?
-    phys <- cluster_patristicmatrix(patristic_matrix)
-    phy <- choose_cluster(phys, clustering_method)
-    # if(inherits(phy, "phylo")){
+    phycluster <- cluster_patristicmatrix(patristic_matrix)
+    phy <- choose_cluster(phycluster, clustering_method)
+    if(!inherits(phy, "phylo")){
+      message("Clustering patristic matrix to phylo failed.")
+      return(phy)
+    }
     phy$negative_brlen <- NA
-    if(any(phy$edge.length < 0)) {
+    mess1 <- "Converting from patristic distance matrix to a tree resulted in some negative branch lengths;"
+    mess2 <- "the largest by magnitude is"
+    # when orignal tree was ultrametric and there are neg edges:
+    if(is.null(phy$edge.length.original) & any(phy$edge.length < 0)){
+      warning(paste(mess1, mess2, min(phy$edge.length)))
+    }
+    # when original tree was not ultrametric and it had neg edges
+    if(!is.null(phy$edge.length.original) & any(phy$edge.length.original < 0)){
+      warning(paste(mess1, mess2, min(phy$edge.length.original)))
+      # and when tree was forced ultrametric and there still are neg edges:
+      if(any(phy$edge.length < 0)){
+        warning(paste("After phytools::forcing.ultrametric there still are negative branch lengths;", mess2, min(phy$edge.length)))
+      }
+    }
+    if(any(phy$edge.length < 0)){
         phy$negative_brlen <- list(edge_number = which(phy$edge.length < 0))
-        message(paste("Converting from patristic distance matrix to a tree resulted in some negative branch lengths; the largest by magnitude is", min(phy$edge.length)))
         # phy$edge.length[which(phy$edge.length < 0)] <- 0 #sometimes NJ returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
-        if (fix_negative_brlen){
+        if(fix_negative_brlen){
+            phy$negative_brlen <- list(edge_number = which(phy$edge.length < 0))
             phy <- tree_fix_brlen(tree = phy, fixing_criterion = "negative", fixing_method = fixing_method)
             fixing_method_called <- as.list(environment())$fixing_method
             phy$negative_brlen <- c(phy$negative_brlen, list(fixing_method = fixing_method_called))
-            message(paste0("  Negative branch lengths were fixed with tree_fix_brlen, fixing_method = ", fixing_method_called))
+            warning(paste0("Negative branch lengths were fixed with tree_fix_brlen, fixing_method = ", fixing_method_called))
         }
+    }
+    # for cases when there are no neg branch lengths to fix (or we don't want them fixed)
+    # and we still want the final tree to be ultrametric:
+    if(ultrametric){
+      if(is.null(phy$edge.length.original) | !ape::is.ultrametric(phy)){
+          phy <- force_ultrametric(phy)
+      }
     }
     class(phy) <- c(class(phy), "datelifeTree")
     return(phy)
 }
-
+#' Force a phylo object ultrametric
+#' @inheritParams phylo_check
+#' @return A phylo object
+force_ultrametric <- function(phy){
+      # enhance: check if there is an edge.length.original already There
+      # something like how many grepl("edge.length.original") in names(phy) and add an integer after it.
+      phy$edge.length.original <- phy$edge.length
+      phy <- phytools::force.ultrametric(tree = phy, method = "extend")
+      phy$force.ultrametric <- "extend"
+      phy
+}
 #' Cluster a patristic matrix with several methods
 #'
 #' @inheritParams patristic_matrix_to_phylo
@@ -104,7 +138,7 @@ cluster_patristicmatrix <- function(patristic_matrix){
                           error = function(e) NULL)
             }
         } else {
-          phyclust$nj <- tryCatch(phytools::midpoint.root(phyclust$njs),
+            phyclust$nj <- tryCatch(phytools::midpoint.root(phyclust$njs),
                       error = function(e) NULL)
         }
         # root the tree on the midpoint (only for trees with ape::Ntip(phy) > 2):
@@ -126,60 +160,70 @@ cluster_patristicmatrix <- function(patristic_matrix){
   }
   return(phyclust)
 }
-#' Choose a phylo object from cluster_patristicmatrix
+#' Choose a phylo object from cluster_patristicmatrix. If not ultrametric, it does not force it.
 #'
 #' @inheritParams patristic_matrix_to_phylo
-#' @param phys An output from cluster_patristicmatrix
+#' @param phycluster An output from cluster_patristicmatrix
 #' @return A phylo object or NA
-choose_cluster <- function(phys, clustering_method){
+choose_cluster <- function(phycluster, clustering_method){
   phy <- NA
-  if(inherits(phys, "phylo")){ # it is a tree of two tips
+  if(length(phycluster) == 0){
+    return(phy)
+  }
+  if(inherits(phycluster, "phylo")){ # it is a tree of two tips
     return(phy)
   } else { # it is a list of results from cluster_patristicmatrix
-    fail <- sapply(phys, is.null)
+    fail <- sapply(phycluster, is.null)
     if(all(fail)){
         message("The patristic matrix could not be transformed into a tree with any of the default methods (NJ, UPGMA)")
         return(NA)
     }
-    phys <- phys[!fail] # take out the fails or unattempted from cluster_patristicmatrix
-    if(length(phys) == 1){
-      phy <- phys[[1]]
-      phy$clutering_method <- names(phys)
+    phycluster <- phycluster[!fail] # take out the fails or unattempted from cluster_patristicmatrix
+    if(length(phycluster) == 1){
+      phy <- phycluster[[1]]
+      phy$clustering_method <- names(phycluster)
+      # if(!ape::is.ultrametric(phy)){
+      #   phy$edge.length.original <- phy$edge.length
+      #   phy <- phytools::force.ultrametric(tree = phy, method = "extend")
+      #   phy$force.ultrametric <- "extend"
+      # }
       return(phy)
     } else {
-      ultram <- sapply(phys, ape::is.ultrametric)
-      ultram2 <- sapply(phys, ape::is.ultrametric, 2)
+      ultram <- sapply(phycluster, ape::is.ultrametric)
+      ultram2 <- sapply(phycluster, ape::is.ultrametric, 2)
       if(length(ultram) == 0 & length(ultram2) == 0){
         message("The patristic matrix could not be transformed into an ultrametric tree with any of the default methods (NJ, UPGMA)")
         return(NA)
       }
-      choice <- grepl(clustering_method, names(phys)) # choice can only be one
-      ff <- which(choice & ultram) # if the chosen methis gives an ultrametric tree
+      choice <- grepl(clustering_method, names(phycluster)) # choice can only be one
+      ff <- which(choice & ultram) # if the chosen method gives an ultrametric tree
       if(length(ff) == 1){
-        phy <- phys[[ff]]
-        phy$clustering_method <- names(phys)[ff]
+        phy <- phycluster[[ff]]
+        phy$clustering_method <- names(phycluster)[ff]
         return(phy)
       }
-      ff <- which(!choice & ultram) # if not take the not chosen but ultrametric
+      ff <- which(!choice & ultram) # if not, take the not chosen but ultrametric
       if(length(ff) == 1){
-        phy <- phys[[ff]]
-        phy$clustering_method <- names(phys)[ff]
+        phy <- phycluster[[ff]]
+        phy$clustering_method <- names(phycluster)[ff]
         return(phy)
       }
-      ff <- which(choice & ultram2) # if not take the chosen  one but less ultrametric
+      ff <- which(choice & ultram2) # if not, take the chosen one but less ultrametric
       if(length(ff) == 1){
-        phy <- phys[[ff]]
-        phy <- force.ultrametric(tree = phy, method = "extend")
-        phy$clustering_method <- names(phys)[ff]
-        phy$force.ultrametric <- "extend"
+        phy <- phycluster[[ff]]
+        # phy$edge.length.original <- phy$edge.length
+        # phy <- phytools::force.ultrametric(tree = phy, method = "extend")
+        # phy$force.ultrametric <- "extend"
+        phy$clustering_method <- names(phycluster)[ff]
         return(phy)
       }
-      ff <- which(!choice & ultram2) # if not take the not chosen one but less ultrametric
+      ff <- which(!choice & ultram2) # if not, take the not chosen one but less ultrametric
       if(length(ff) == 1){
-        phy <- phys[[ff]]
-        phy <- force.ultrametric(tree = phy, method = "extend")
-        phy$clustering_method <- names(phys)[ff]
-        phy$force.ultrametric <- "extend"
+        phy <- phycluster[[ff]]
+        # phy$edge.length.original <- phy$edge.length
+        # phy <- phytools::force.ultrametric(tree = phy, method = "extend")
+        # phy$force.ultrametric <- "extend"
+        phy$clustering_method <- names(phycluster)[ff]
         return(phy)
       }
     }

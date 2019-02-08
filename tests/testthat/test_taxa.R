@@ -76,12 +76,7 @@ test_that("patristic_matrix_to_phylo gives ultrametric trees", {
   t1 <- datelife_result_sdm(dr, clustering_method = "nj")
   t2 <- datelife_result_sdm(dr, clustering_method = "upgma")
   tt <- list(t0, t1$phy, t2$phy)
-  phys <- cluster_patristicmatrix(SDM.result)
-  t1 <- patristic_matrix_to_phylo(patristic_matrix = SDM.result, clustering_method = "nj")
-  # xx <- cluster_patristicmatrix(patristic_matrix = SDM.result)
-  t2 <- patristic_matrix_to_phylo(patristic_matrix = SDM.result, clustering_method = "upgma")
-  tt <- list(t1, t2)
   class(tt) <- "multiPhylo"
-  # ape::is.ultrametric(tt, 2)
+  ape::is.ultrametric(tt, 2)
   # plot(tt, cex = 0.5)
 })
