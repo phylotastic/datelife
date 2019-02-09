@@ -29,7 +29,7 @@ tnrs <- tnrs_match("Canis")
 ids <- tnrs$ott_id[1]
 names(ids) <- tnrs$unique_name
 children <- get_ott_children(ott_ids = ids) # or
-children <- get_ott_children("Canis")
+children <- get_ott_children(input = "Canis")
 rownames(children[[1]])
 tree_children <- datelife::get_otol_synthetic_tree(children$Canis)
 plot(tree_children, cex = 0.3)

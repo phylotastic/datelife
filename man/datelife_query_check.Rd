@@ -7,7 +7,7 @@
 datelife_query_check(datelife_query = NULL, ...)
 }
 \arguments{
-\item{datelife_query}{An object output of make_datelife_query function}
+\item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
 
 \item{...}{Arguments passed on to \code{make_datelife_query}
 \describe{

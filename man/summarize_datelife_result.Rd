@@ -12,7 +12,7 @@ summarize_datelife_result(datelife_query = NULL,
   verbose = FALSE, criterion = c("trees", "taxa"))
 }
 \arguments{
-\item{datelife_query}{An object output of make_datelife_query function}
+\item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
 
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
 

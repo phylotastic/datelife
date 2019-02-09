@@ -43,7 +43,7 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
 #' @export
 check_ott_input <- function(input, ott_ids = NULL){
     if(is.null(ott_ids)){
-      input <- datelife_query_check(input)
+      input <- datelife_query_check(input, get_spp_from_taxon = FALSE)
       input_tnrs <- datelife::tnrs_match(names = input$cleaned_names)
       ott_ids <- input_tnrs$ott_id
       names(ott_ids) <- input_tnrs$unique_name
@@ -258,7 +258,7 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_ids 
 #' ids <- tnrs$ott_id[1]
 #' names(ids) <- tnrs$unique_name
 #' children <- get_ott_children(ott_ids = ids) # or
-#' children <- get_ott_children("Canis")
+#' children <- get_ott_children(input = "Canis")
 #' rownames(children[[1]])
 #' tree_children <- datelife::get_otol_synthetic_tree(children$Canis)
 #' plot(tree_children, cex = 0.3)

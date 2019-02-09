@@ -113,37 +113,25 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
-	input <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
-	# tree <- input$phy
-	# cleaned_names <- input$cleaned_names
-	datelife_query_length_check(cleaned_names = input$cleaned_names, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
-  results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input$cleaned_names, phy = input$phy, dating_method = dating_method)
-  datelife_result <- results_list_process(results_list, input$cleaned_names, partial)
+	input_dq <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
+	if(length(input_dq$cleaned_names) == 1){
+		message("Input has length one (even after searching spp within clades).")
+		message("Cannot perform a search of divergence times with just one taxon.")
+		return(NA)
+	}
+	results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input_dq$cleaned_names, phy = input_dq$phy, dating_method = dating_method)
+  datelife_result <- results_list_process(results_list, input_dq$cleaned_names, partial)
 	datelife_result_check(datelife_result, use_tnrs)
-	# if(bold){
-	# 	 bold.OToLTree <- make_bold_otol_tree(input = input, use_tnrs = FALSE, approximate_match = FALSE, marker = marker, verbose = verbose,  ...)
-	# 	 bold.data <- phylo_subset_both(reference_tree.in = bold.OToLTree, taxa.in = cleaned_names, phy.in = NULL, phy4.in = NULL, dating_method.in = dating_method)
-	# 	 bold.data.processed <- results_list_process(results_list = list(bold.data), taxa = cleaned_names, partial)
-	#  	 names(bold.data.processed) <-  paste("BOLD-OToL tree (using ", marker, " as marker)", sep="")
-	#    datelife_result <- c(datelife_result, bold.data.processed)
-	# }
-#	cat("\n")
 	class(datelife_result) <- c("datelifeResult")
 	return(datelife_result)
 }
 
 #' checks if input is a datelifeQuery object, otherwise it uses make_datelife_query to process it
-#' @param datelife_query An object output of make_datelife_query function
+#' @param datelife_query A datelifeQuery object, output of make_datelife_query function
 #' @inheritParams datelife_search
 #' @inheritDotParams make_datelife_query
 #' @export
 datelife_query_check <- function(datelife_query = NULL, ...){
-	# if(is.null(input)){
-	# 	input <- NA
-	# }
-	# if(length(input) == 1 & any(is.na(input))) {
-	# 	stop("input argument is NULL or NA")
-	# }
 	if(missing(datelife_query) | is.null(datelife_query)){
 		stop("datelife_query argument is missing, we have nothing to check")
 	}
@@ -158,27 +146,21 @@ datelife_query_check <- function(datelife_query = NULL, ...){
 		datelife_query <- make_datelife_query(input = datelife_query, ...)
 		badformat <- FALSE  # useful for next block
 	}
-	# if(!badformat){
-	# 	# merge datelife_query_length_check function here
-	# }
-	return(datelife_query)
-}
-#' checks that we have at least two taxon names to perform a search
-#' @inheritParams datelife_search
-#' @param cleaned_names A character vector; usually an output from make_datelife_query function
-#' @export
-datelife_query_length_check <- function(cleaned_names = NULL, get_spp_from_taxon = FALSE, verbose = FALSE){
-	if(length(cleaned_names) == 1){
-		if(verbose) {
+	if(length(datelife_query$cleaned_names) == 1){
 			message("Cannot perform a search of divergence times with just one taxon.")
 			if(get_spp_from_taxon) {
-				message("\t", "Clade contains only one lineage.")
+				warning("\t", "Clade contains only one lineage.")
 			} else {
-				message("Performing a clade search?? set get_spp_from_taxon = TRUE")
+				# message("Performing a clade search?? set get_spp_from_taxon = TRUE")
+				message("Setting up get_spp_from_taxon = TRUE")
+				datelife_query <- make_datelife_query(input = datelife_query$cleaned_names,
+													get_spp_from_taxon = TRUE, ...)
+				if(length(datelife_query$cleaned_names) == 1){
+					warning("\t", "Clade contains only one lineage.")
+				}
 			}
-		}
-		stop("Search is length 1.")
 	}
+	return(datelife_query)
 }
 #' checks if we obtained an empty search with the set of input taxon names
 #' @inheritParams datelife_search
@@ -239,9 +221,10 @@ input_process <- function(input, verbose = FALSE){
 #' @inheritParams datelife_search
 #' @inheritDotParams rphylotastic::taxon_get_species -taxon
 #' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
-#' @details If input has length 1, get_spp_from_taxon is always set to TRUE
+#' @details If input has length 1, get_spp_from_taxon is always set to TRUE from datelife_search, not in here bc other things depend on this function.
 #' @export
-make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose = FALSE, ...) {
+make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
+use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose = FALSE, ...) {
 	if(verbose) {
 		message("Processing input...")
 	}
@@ -256,10 +239,6 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	}
 	if(length(input) == 1) {
 		input <- strsplit(input, ',')[[1]] #  splits a character vector of comma separated names
-		if(length(input) == 1){
-			# to increase probabilities that there's at least two things to search, see details
-				get_spp_from_taxon <- TRUE
-		}
 	}
 	cleaned.input <- stringr::str_trim(input, side = "both")  # cleans the input of lingering unneeded white spaces
 	ott_ids <- NA
@@ -289,7 +268,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
     	}
 			# rotl::tol_subtree is very fast but returns subspecies too \o/
 			# it has no argument to restrict it to species only
-			# so we are using our own function that wraps up theire servoces nicely
+			# so we are using our own function that wraps up theire services nicely
 			# example: df <- get_ott_children(ott_ids = 698424, ott_rank = "species")
 			df <- get_ott_children(ott_ids = cleaned.input_tnrs$ott_id, ott_rank = "species")
 			# head(rownames(df[[1]])[grepl("species", df[[1]]$rank)])

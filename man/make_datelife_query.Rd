@@ -31,5 +31,5 @@ A list with the phy (or NA, if no tree) and cleaned vector of taxa
 Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with input_process first.
 }
 \details{
-If input has length 1, get_spp_from_taxon is always set to TRUE
+If input has length 1, get_spp_from_taxon is always set to TRUE from datelife_search, not in here bc other things depend on this function.
 }
