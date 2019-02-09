@@ -39,13 +39,18 @@ tree_add_dates <- function(dated_tree = NULL, missing_taxa = NULL, dating_method
 		}
 		constraint_tree <- geiger::congruify.phylo(reference = phylo_tiplabel_space_to_underscore(dated_tree), target = missing_taxa_phy, scale = NA)
 		# add congruified nodes as node labels to missing_taxa_phy
-		dated_tree_nodes <- sapply(seq(nrow(constraint_tree$calibrations)), function(i) phytools::findMRCA(tree = constraint_tree$target, tips = as.character(constraint_tree$calibrations[i,c("taxonA", "taxonB")]), type = "node"))
+		dated_tree_nodes <- sapply(seq(nrow(constraint_tree$calibrations)), function(i)
+				phytools::findMRCA(tree = constraint_tree$target,
+								   tips = as.character(constraint_tree$calibrations[i,c("taxonA", "taxonB")]),
+								   type = "node"))
 		dated_tree_nodes <- dated_tree_nodes - ape::Ntip(constraint_tree$target)
-		missing_taxa_phy$node.label[dated_tree_nodes] <- constraint_tree$calibrations$MRCA
-		missing_taxa_phy <- tree_add_nodelabels(tree = dated_tree)  # all nodes need to be named so make_bladj_tree runs properly
+		# missing_taxa_phy$node.label[dated_tree_nodes] <- constraint_tree$calibrations$MRCA
+		# cannot use hash number to name nodes, bladj collapses. So using "congNumber"
+		missing_taxa_phy$node.label[dated_tree_nodes] <- paste0("cong", seq(nrow(constraint_tree$calibrations)))
+		missing_taxa_phy <- tree_add_nodelabels(tree = missing_taxa_phy)  # all nodes need to be named so make_bladj_tree runs properly
 		# this adds random names to unnamed nodes, but they have to coincide between target and reference
 		# new.phy <- make_bladj_tree(tree = missing_taxa, nodenames = dated_tree$node.label, nodeages = tree_get_node_data(tree = dated_tree, node_data = "node_age")$node_age)
-		new.phy <- make_bladj_tree(tree = missing_taxa_phy, nodenames = constraint_tree$calibrations$MRCA, nodeages = sapply(seq(nrow(constraint_tree$calibrations)), function(i) sum(constraint_tree$calibrations[i,c("MinAge", "MaxAge")])/2))
+		new.phy <- make_bladj_tree(tree = missing_taxa_phy, nodenames = missing_taxa_phy$node.label[dated_tree_nodes], nodeages = sapply(seq(nrow(constraint_tree$calibrations)), function(i) sum(constraint_tree$calibrations[i,c("MinAge", "MaxAge")])/2))
 	}
 	if(dating_method == "mrbayes"){
 		dated_tree <- tree_add_outgroup(tree = dated_tree, outgroup = "an_outgroup")  # we need to add a fake outgroup, otherwise mrbayes won't respect the root age

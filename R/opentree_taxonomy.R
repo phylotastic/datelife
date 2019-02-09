@@ -43,7 +43,7 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
 #' @export
 check_ott_input <- function(input, ott_ids = NULL){
     if(is.null(ott_ids)){
-      input <- datelife_query_check(input, get_spp_from_taxon = FALSE)
+      input <- datelife_query_check(input)
       input_tnrs <- datelife::tnrs_match(names = input$cleaned_names)
       ott_ids <- input_tnrs$ott_id
       names(ott_ids) <- input_tnrs$unique_name
@@ -269,6 +269,7 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_ids 
 get_ott_children <- function(input = NULL, ott_ids = NULL, ott_rank = "species"){
     # iput <- c("Felis", "Homo", "Malvaceae")
     input_ott_match <- check_ott_input(input, ott_ids)
+
     all_children <- vector(mode = "list", length = length(input_ott_match))
     # progression <- utils::txtProgressBar(min = 0, max = length(all_children), style = 3)
     for (i in seq(length(input_ott_match))){

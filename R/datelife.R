@@ -115,8 +115,17 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 	}
 	input_dq <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
 	if(length(input_dq$cleaned_names) == 1){
+			message("Cannot perform a search of divergence times with just one taxon.")
+			if(!get_spp_from_taxon) {
+				# message("Performing a clade search?? set get_spp_from_taxon = TRUE")
+				message("Setting up get_spp_from_taxon = TRUE")
+				input_dq <- make_datelife_query(input = input_dq$cleaned_names,
+													get_spp_from_taxon = TRUE, ...)
+			}
+	}
+	if(length(input_dq$cleaned_names) == 1){
 		message("Input has length one (even after searching spp within clades).")
-		message("Cannot perform a search of divergence times with just one taxon.")
+		warning("\t", "Clade contains only one lineage.")
 		return(NA)
 	}
 	results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input_dq$cleaned_names, phy = input_dq$phy, dating_method = dating_method)
@@ -144,21 +153,7 @@ datelife_query_check <- function(datelife_query = NULL, ...){
 	}
 	if(badformat){
 		datelife_query <- make_datelife_query(input = datelife_query, ...)
-		badformat <- FALSE  # useful for next block
-	}
-	if(length(datelife_query$cleaned_names) == 1){
-			message("Cannot perform a search of divergence times with just one taxon.")
-			if(get_spp_from_taxon) {
-				warning("\t", "Clade contains only one lineage.")
-			} else {
-				# message("Performing a clade search?? set get_spp_from_taxon = TRUE")
-				message("Setting up get_spp_from_taxon = TRUE")
-				datelife_query <- make_datelife_query(input = datelife_query$cleaned_names,
-													get_spp_from_taxon = TRUE, ...)
-				if(length(datelife_query$cleaned_names) == 1){
-					warning("\t", "Clade contains only one lineage.")
-				}
-			}
+		# badformat <- FALSE  # useful for next block
 	}
 	return(datelife_query)
 }
