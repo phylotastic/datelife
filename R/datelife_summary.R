@@ -302,61 +302,6 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 	return(list(phy = phy, data = unpadded.matrices))
 }
 
-#' Get an otol induced dated subtree from your set of queried taxa
-#' @inheritParams datelife_search
-#' @param ott_id Numeric vector of Open Tree Taxonomy ids. Input argument will be ignored.
-#' @return A phylo object with edge length proportional to time in Myrs. NA if 1 or no inputs are valid.
-#' @export
-#' @details otol dated tree from Stephen Smith's otol scaling service.
-get_dated_otol_induced_subtree <- function(input = c("Felis silvestris", "Homo sapiens"), ott_id = NULL){
-	# if(is.null(ott_ids)){
-	# 	input <- datelife_query_check(input)
-	# 	input_ott_match <- suppressWarnings(as.numeric(rotl::tnrs_match_names(input$cleaned_names)$ott_id))
-	# 	if(any(is.na(input_ott_match))){
-	# 		message(paste0("Input '", paste(input[which(is.na(input_ott_match))], collapse = "', '"), "', not found in Open Tree of Life Taxonomy."))
-	# 		input_ott_match <- input_ott_match[which(!is.na(input_ott_match))]
-	# 	}
-	# } else {
-	# 	input_ott_match <- suppressWarnings(as.numeric(ott_ids))
-	# 	if(any(is.na(input_ott_match))){
-	# 		message(paste0("Ott ids '", paste(ott_ids[which(is.na(input_ott_match))], collapse = "', '"), "', not numeric and will be excluded from the search."))
-	# 		input_ott_match <- input_ott_match[which(!is.na(input_ott_match))]
-	# 	}
-	# }
-
-
-	# if ott_ids are mantained in the tree after using `datelife_query_check` then we can add the line again here as:
-	# if(!is.null(ott_id){
-	# 	input <- datelife_query_check(input)
-	# 	if(any(c("ott_id", "ott_ids") %in% names(input$phy))){
-	# 		ott_id <- input$phy$ott_id
-	# 	} else {
-	# 		input <- input$cleaned_names
-	# 	}
-	# }
-	# all previous code is replaced by the two following lines:
-	input <- datelife_query_check(datelife_query = input)
-	input_ott_match <- suppressMessages(check_ott_input(input, ott_id))
-	if(length(input_ott_match) < 2){
-		message("At least two valid names or numeric ott_ids are needed to get a tree")
-		return(NA)
-	}
-  	pp <- tryCatch(httr::POST("http://141.211.236.35:10999/induced_subtree",
-						body = list(ott_ids = input_ott_match),
-						encode = "json", httr::timeout(10)), error = function(e) NA)
-	if(length(pp) > 1){
-		pp <- httr::content(pp)
-		rr <- httr::POST("http://141.211.236.35:10999/rename_tree",
-		          body = list(newick = pp$newick),
-		          encode = "json", httr::timeout(10))
-		rr <- httr::content(rr)
-		rr <- ape::read.tree(text = rr$newick)
-		rr$ott_ids <- ape::read.tree(text = pp$newick)$tip.label
-	  return(rr)
-	}	else {
-		return(pp)
-	}
-}
 
 #' Get the tree with the most tips: the biggest tree
 #' @param trees A list of trees as multiPhylo or as a plain list object.

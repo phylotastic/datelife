@@ -206,27 +206,31 @@ input_process <- function(input, verbose = FALSE){
 	}
 	if(inherits(input, "multiPhylo")) {
 		input <- ape::write.tree(input[[1]])
-		message("Input is a multiPhylo object. Only the first one will be used.")
+		message("Input is a multiPhylo object. Only the first tree will be used.")
+	}
+	if(!is.character(input)){
+		message("input must be a character vector of names, a ")
+		return(NA)
 	}
  	input <- gsub("\\+"," ",input)
-  	input <- stringr::str_trim(input, side = "both")
-  	phy.new.in <- NA
-   	# if(length(input) == 1) {
-    	# if(summary_print)cat("\t", "Input is length 1.", "\n")
-	  	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
-				input <- input[grepl("\\(.*\\).*;", input)] # leave only the elements that are newick strings
-				if(length(input)>1){
-					message("Input has several newick strings. Only the first one will be used.")
-				}
-	    	phy.new.in <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input[1])))
-	    	if(verbose) {
-					message("Input is a phylogeny and it is correcly formatted.")
-				}
-	  	} else {
-	  		if(verbose) {
-					message("Input is not a phylogeny.")
-				} #not a warning nor stop, 'cause it is not a requirement for input to be a phylogeny at this step
-	  	}
+  input <- stringr::str_trim(input, side = "both")
+  phy.new.in <- NA
+	# if(length(input) == 1) {
+	# if(summary_print)cat("\t", "Input is length 1.", "\n")
+	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
+		input <- input[grepl("\\(.*\\).*;", input)] # leave only the elements that are newick strings
+		if(length(input)>1){
+			message("Input has several newick strings. Only the first one will be used.")
+		}
+  	phy.new.in <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input[1])))
+  	if(verbose) {
+			message("Input is a phylogeny and it is correcly formatted.")
+		}
+	} else {
+		if(verbose) {
+			message("Input is not a phylogeny.")
+		} #not a warning nor stop, 'cause it is not a requirement for input to be a phylogeny at this step
+	}
   	# }
 	return(phy.new.in)
 }

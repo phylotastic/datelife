@@ -16,14 +16,26 @@
 #' This will try to use the calibrations as fixed ages.
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
-use_all_calibrations <- function(phy = make_bold_otol_tree(c("Rhea americana",
-	"Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE),
+use_all_calibrations <- function(phy = NULL,
 	all_calibrations = NULL, partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
 	update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1,
 	giveup = 100, verbose = FALSE) {
-
-		input <- input_process(input = phy, verbose = verbose)
-		# input must be a tree, check this
+		if(is.null(phy)){
+			phy <- make_bold_otol_tree(c("Rhea americana", "Struthio camelus", "Gallus gallus"), chronogram = TRUE, verbose = FALSE)
+			if(!inherits(phy, "phylo")){
+				phy <- get_dated_otol_induced_subtree(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
+			}
+		} else {
+			input <- input_process(input = phy, verbose = verbose)
+			phy <- input$phy
+		}
+		# phy must be a tree, check this
+		if(!inherits(phy, "phylo")){
+			message("phy is not a phylo object")
+			return(NA)
+		}
+		# remove singleton nodes in phy:
+		phy <- ape::collapse.singles(phy)
 		if(is.null(all_calibrations)){
 			calibrations.df <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label),
 			partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match,
@@ -304,4 +316,60 @@ get_otol_synthetic_tree <- function(input, otol_version = "v2", ...){
 	# new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label) # if new.tree2 is null it will generate an empty vector
 
 	return(phy)
+}
+
+#' Get an otol induced dated subtree from your set of queried taxa
+#' @inheritParams datelife_search
+#' @param ott_id Numeric vector of Open Tree Taxonomy ids. Input argument will be ignored.
+#' @return A phylo object with edge length proportional to time in Myrs. NA if 1 or no inputs are valid.
+#' @export
+#' @details otol dated tree from Stephen Smith's otol scaling service.
+get_dated_otol_induced_subtree <- function(input = c("Felis silvestris", "Homo sapiens"), ott_id = NULL){
+	# if(is.null(ott_ids)){
+	# 	input <- datelife_query_check(input)
+	# 	input_ott_match <- suppressWarnings(as.numeric(rotl::tnrs_match_names(input$cleaned_names)$ott_id))
+	# 	if(any(is.na(input_ott_match))){
+	# 		message(paste0("Input '", paste(input[which(is.na(input_ott_match))], collapse = "', '"), "', not found in Open Tree of Life Taxonomy."))
+	# 		input_ott_match <- input_ott_match[which(!is.na(input_ott_match))]
+	# 	}
+	# } else {
+	# 	input_ott_match <- suppressWarnings(as.numeric(ott_ids))
+	# 	if(any(is.na(input_ott_match))){
+	# 		message(paste0("Ott ids '", paste(ott_ids[which(is.na(input_ott_match))], collapse = "', '"), "', not numeric and will be excluded from the search."))
+	# 		input_ott_match <- input_ott_match[which(!is.na(input_ott_match))]
+	# 	}
+	# }
+
+
+	# if ott_ids are mantained in the tree after using `datelife_query_check` then we can add the line again here as:
+	# if(!is.null(ott_id){
+	# 	input <- datelife_query_check(input)
+	# 	if(any(c("ott_id", "ott_ids") %in% names(input$phy))){
+	# 		ott_id <- input$phy$ott_id
+	# 	} else {
+	# 		input <- input$cleaned_names
+	# 	}
+	# }
+	# all previous code is replaced by the two following lines:
+	input <- datelife_query_check(datelife_query = input)
+	input_ott_match <- suppressMessages(check_ott_input(input, ott_id))
+	if(length(input_ott_match) < 2){
+		message("At least two valid names or numeric ott_ids are needed to get a tree")
+		return(NA)
+	}
+  	pp <- tryCatch(httr::POST("http://141.211.236.35:10999/induced_subtree",
+						body = list(ott_ids = input_ott_match),
+						encode = "json", httr::timeout(10)), error = function(e) NA)
+	if(length(pp) > 1){
+		pp <- httr::content(pp)
+		rr <- httr::POST("http://141.211.236.35:10999/rename_tree",
+		          body = list(newick = pp$newick),
+		          encode = "json", httr::timeout(10))
+		rr <- httr::content(rr)
+		rr <- ape::read.tree(text = rr$newick)
+		rr$ott_ids <- ape::read.tree(text = pp$newick)$tip.label
+	  return(rr)
+	}	else {
+		return(pp)
+	}
 }

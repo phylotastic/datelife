@@ -37,48 +37,47 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
 
 #' checks input for get_ott_clade,  get_ott_children functions
 #' returns a numeric vector of ott ids
-#' @param input A character vector of names
-#' @param ott_id A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match
+#' @param input Optional. A character vector of names or a datelifeQuery object
+#' @param ott_ids Optional. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match
+#' @return A named numeric vector of valid ott IDs
 #' @export
-check_ott_input <- function(input, ott_id = NULL){
-    if(is.null(ott_id)){
-      if(!any(c("ott_id", "ott_ids") %in% names(input))){
-        # input <- datelife::datelife_query_check(input)$cleaned_names
-        input_tnrs <- datelife::tnrs_match(names = input)
-        # should we clean tnrs from invalid? what about NA's?
-        # if we decide to clean, the two following lines should be uncommented:
-        # df <- clean_tnrs(tnrs = df)
-        # df <- df[!is.na(df$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
-        input_ott_match <- suppressWarnings(as.numeric(input_tnrs$ott_id))
-        names(input_ott_match) <- input_tnrs$unique_name
-      } else {
-        input_ott_match <- suppressWarnings(as.numeric(input$ott_id))
-        if(is.data.frame(input)){
-          names(input_ott_match) <- rownames(input)
-        }
-        # else {
-        #     names(input_ott_match) <- names(input$ott_id)
-        # }
+check_ott_input <- function(input, ott_ids = NULL){
+    if(is.null(ott_ids)){
+      input <- datelife_query_check(input)
+      input_tnrs <- datelife::tnrs_match(names = input$cleaned_names)
+      ott_ids <- input_tnrs$ott_id
+      names(ott_ids) <- input_tnrs$unique_name
+      # should we clean tnrs from invalid? what about NA's?
+      # if we decide to clean, the two following lines should be uncommented:
+      # df <- clean_tnrs(tnrs = df)
+      # df <- df[!is.na(df$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
+      if(any(is.na(ott_ids))){
+          message(paste0("\nInput '", paste(input[which(is.na(ott_ids))], collapse = "', '"), "' not found in Open Tree of Life Taxonomy."))
+          ott_ids <- ott_ids[which(!is.na(ott_ids))]
       }
-      if(any(is.na(input_ott_match))){
-          message(paste0("\nInput '", paste(input[which(is.na(input_ott_match))], collapse = "', '"), "' not found in Open Tree of Life Taxonomy."))
-          input_ott_match <- input_ott_match[which(!is.na(input_ott_match))]
-      }
-    } else { # if using ott_id argument
-          input_ott_match <- suppressWarnings(as.numeric(ott_id))
-          # add a check for existing/valid ott ids??
-      if(any(is.na(input_ott_match))){
-          message(paste0("\nOtt id '", paste(ott_id[which(is.na(input_ott_match))], collapse = "', '"), "' not numeric and will be excluded from the search."))
-          input_ott_match <- input_ott_match[which(!is.na(input_ott_match))]
-      }
-      # is the following enough check for valid ott ids? may be we should move it above the previous chunk
-      names(input_ott_match) <- rotl::tax_name(rotl::taxonomy_taxon_info(ott_ids = input_ott_match))
     }
-    if(length(input_ott_match) < 1){
+    # ott_ids <- suppressWarnings(as.numeric(ott_ids))
+    if(!is.numeric(ott_ids)){
+      message("ott_ids is not a numeric vector.")
+      return(NA)
+    }
+    if(is.null(names(ott_ids))){
+      # ott_ids <- c(1, ott_ids) # if ott_ids does not exist it will give an error
+      # so we're catching it in an sapply, and giving "error" when it errors.
+      names(ott_ids) <- unlist(sapply(seq(ott_ids), function(i) tryCatch(rotl::tax_name(rotl::taxonomy_taxon_info(ott_ids = ott_ids[i])),
+                        error = function(e) "error")))
+      # then we subset it:
+      if(any(grepl("error", names(ott_ids)))){
+          message(paste0("\nott_id '", paste(ott_ids[grepl("error", names(ott_ids))], collapse = "', '"), "' not found in Open Tree of Life Taxonomy."))
+          ott_ids <- ott_ids[!grepl("error", names(ott_ids))]
+      }
+    }
+
+    if(length(ott_ids) < 1){
       message("At least one valid input name or numeric ott_id are needed to get any information")
       return(NA)
     }
-    return(input_ott_match)
+    return(ott_ids)
 }
 #' gets the ott id and name of all lineages from one or more input taxa
 #' @inheritParams check_ott_input

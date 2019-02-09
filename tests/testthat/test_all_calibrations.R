@@ -3,15 +3,16 @@ test_that("use_all_calibrations actually works", {
   skip_on_cran()
   skip_on_os("linux") #b/c no pathd8 on travis linux
   utils::data(opentree_chronograms)
-  # results <- suppressWarnings(use_all_calibrations())
-  # # expect_true(ape::is.ultrametric(results$phy, tol=0.0000))
-  # expect_true(ape::is.ultrametric(results$phy, option = 2))
-  # expect_s3_class(results$phy, "phylo")
+  results <- suppressWarnings(use_all_calibrations())
+  # expect_true(ape::is.ultrametric(results$phy, tol=0.0000))
+  expect_true(ape::is.ultrametric(results$phy, option = 2))
+  expect_s3_class(results$phy, "phylo")
+  skip("data un url is not yet available")
   # enhance:
   # the following loads a file from an url:
-  load(ulr("https://github.com/LunaSare/datelife_benchmark/tree/master/data/0_global/
+  load(url("https://github.com/LunaSare/datelife_benchmark/tree/master/data/0_global/
   aves_targets/aves_tree_7000.rda"))
-  load(ulr("https://github.com/LunaSare/datelife_benchmark/tree/master/data/0_global/
+  load(url("https://github.com/LunaSare/datelife_benchmark/tree/master/data/0_global/
   aves_mat_samples/samp25_mat17_47.rda"))
   # the following gave a tree with NaN as edge.length, why?
   use_all_calibrations(phy = aves_tree_7000, all_calibrations = samp25_mat17_47)
