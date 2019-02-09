@@ -710,7 +710,7 @@ plot_phylo_all <- function(trees, cex = graphics::par("cex"), include = TRUE, in
   }
   for (i in 1:length(trees)){
     file_name <- paste0(gsub("\\.png$|\\.pdf$", "", file), "/", gsub("\\.png$|\\.pdf$", "", file), "_", i, ".", write)
-    plot_phylo(trees[[i]], names(trees)[i], time_depth = max.depth, axis_type = 1, cex, mai4, write, file_name, GTS = utils::data(strat2012))
+    plot_phylo(trees[[i]], names(trees)[i], time_depth = max.depth, axis_type = 1, cex, mai4, write, file_name, GTS = NULL)
   }
   # getting an "unrecoverable" error with merge PDF:
   # if(!individually){
@@ -736,10 +736,12 @@ plot_phylo_all <- function(trees, cex = graphics::par("cex"), include = TRUE, in
 #' @param GTS A dataframe of geochronological limits.
 #' @export
 # enhance: examples of axis_types!
-plot_phylo <- function(tree, title = "Tree", time_depth = NULL, axis_type = 1, cex = graphics::par("cex"), mai4 = NULL, write = "nothing", file_name = NULL, GTS = NULL){
-  if(is.null(GTS)){
-    GTS <- utils::data(strat2012)
-  }
+plot_phylo <- function(tree, title = "Tree", time_depth = NULL, axis_type = 1,
+cex = graphics::par("cex"), mai4 = NULL, write = "nothing", file_name = NULL, GTS = get("strat2012")){
+  # if(is.null(GTS)){
+  #   utils::data(strat2012)
+  #   GTS <- get("strat2012")
+  # }
   if(is.null(time_depth) & !is.null(tree$edge.length)){
     if(is.null(tree$root.edge)){
       time_depth <- round(max(ape::branching.times(tree)) + 5, digits = -1)

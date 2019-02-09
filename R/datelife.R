@@ -290,8 +290,8 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 			# rotl::tol_subtree is very fast but returns subspecies too \o/
 			# it has no argument to restrict it to species only
 			# so we are using our own function that wraps up theire servoces nicely
-			# example: df <- get_ott_children(ott_id = 698424, ott_rank = "species")
-			df <- get_ott_children(ott_id = cleaned.input_tnrs$ott_id, ott_rank = "species")
+			# example: df <- get_ott_children(ott_ids = 698424, ott_rank = "species")
+			df <- get_ott_children(ott_ids = cleaned.input_tnrs$ott_id, ott_rank = "species")
 			# head(rownames(df[[1]])[grepl("species", df[[1]]$rank)])
 			cleaned_names <- lapply(df, function (x) rownames(x)[grepl("species", x$rank)])
 			ott_ids <- lapply(df, function (x) x$ott_id[grepl("species", x$rank)])

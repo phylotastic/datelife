@@ -64,7 +64,7 @@ check_ott_input <- function(input, ott_ids = NULL){
     if(is.null(names(ott_ids))){
       # ott_ids <- c(1, ott_ids) # if ott_ids does not exist it will give an error
       # so we're catching it in an sapply, and giving "error" when it errors.
-      names(ott_ids) <- unlist(sapply(seq(ott_ids), function(i) tryCatch(rotl::tax_name(rotl::taxonomy_taxon_info(ott_ids = ott_ids[i])),
+      names(ott_ids) <- unlist(sapply(seq(length(ott_ids)), function(i) tryCatch(rotl::tax_name(rotl::taxonomy_taxon_info(ott_ids = ott_ids[i])),
                         error = function(e) "error")))
       # then we subset it:
       if(any(grepl("error", names(ott_ids)))){
@@ -74,7 +74,7 @@ check_ott_input <- function(input, ott_ids = NULL){
     }
 
     if(length(ott_ids) < 1){
-      message("At least one valid input name or numeric ott_id are needed to get any information")
+      message("At least one valid input name or numeric ott IDs are needed to get any information")
       return(NA)
     }
     return(ott_ids)
@@ -87,8 +87,8 @@ check_ott_input <- function(input, ott_ids = NULL){
 #' lin <- get_ott_lineage(taxa)
 #' lin
 #' @export
-get_ott_lineage <- function(input, ott_id = NULL){
-  input_ott_match <- check_ott_input(input, ott_id)
+get_ott_lineage <- function(input, ott_ids = NULL){
+  input_ott_match <- check_ott_input(input, ott_ids)
   tax_info <- .get_ott_lineage(input_ott_match)
   lin <- lapply(tax_info, "[", "lineage")
   ott_names <- sapply(lin, function(x) unlist(sapply(x[[1]], "[", "unique_name")))
@@ -124,11 +124,11 @@ get_ott_lineage <- function(input, ott_id = NULL){
 #' @inheritParams get_ott_children
 #' @return a list of named numeric vectors with ott ids from input and all requested ranks
 #' @export
-get_ott_clade <- function(input = c("Felis", "Homo"), ott_id = NULL, ott_rank = "family"){
-    # ott_id= c('649007', '782239', '782231', '1053057', '372826', '766272', '36015', '914245', '873016', '684051')
-    # ott_id = c('431493', '431493', '431493', '431493', '431493', '431493', '431493', '429482', '429482', '429482')
+get_ott_clade <- function(input = c("Felis", "Homo"), ott_ids = NULL, ott_rank = "family"){
+    # ott_ids= c('649007', '782239', '782231', '1053057', '372826', '766272', '36015', '914245', '873016', '684051')
+    # ott_ids = c('431493', '431493', '431493', '431493', '431493', '431493', '431493', '429482', '429482', '429482')
   rank <- ott_rank
-  input_ott_match <- check_ott_input(input, ott_id)
+  input_ott_match <- check_ott_input(input, ott_ids)
   tax_info <- .get_ott_lineage(input_ott_match)
   # names(tax_info[[10]])
   # sapply(tax_info[[10]]$lineage, "[", "rank")
@@ -203,12 +203,12 @@ get_ott_clade <- function(input = c("Felis", "Homo"), ott_id = NULL, ott_rank = 
 #' # genus Dictyophyllidites with ott id = 6003921 has only extinct children
 #' # in cases like this the same name will be returned
 #' tti <- rotl::taxonomy_taxon_info(6003921, include_children = TRUE)
-#' gvc <- get_valid_children(ott_id = 6003921)
+#' gvc <- get_valid_children(ott_ids = 6003921)
 #' # More examples:
-#' get_valid_children(ott_id = 769681) # Psilotopsida
-#' get_valid_children(ott_id = 56601)  # Marchantiophyta
-get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_id = NULL){
-    input_ott_match <- check_ott_input(input, ott_id)
+#' get_valid_children(ott_ids = 769681) # Psilotopsida
+#' get_valid_children(ott_ids = 56601)  # Marchantiophyta
+get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_ids = NULL){
+    input_ott_match <- check_ott_input(input, ott_ids)
     all_children <- vector(mode = "list", length = length(input_ott_match))
     # monotypic <- vector(mode = "logical", length = length(input_ott_match))
     progression <- utils::txtProgressBar(min = 0, max = length(all_children), style = 3)
@@ -255,7 +255,9 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_id =
 #'   Error: HTTP failure: 400
 #'   [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
 #' }
-#' children <- get_ott_children(ott_id = tnrs$ott_id[1]) # or
+#' ids <- tnrs$ott_id[1]
+#' names(ids) <- tnrs$unique_name
+#' children <- get_ott_children(ott_ids = ids) # or
 #' children <- get_ott_children("Canis")
 #' rownames(children[[1]])
 #' tree_children <- datelife::get_otol_synthetic_tree(children$Canis)
@@ -264,19 +266,20 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_id =
 #' oo <- get_ott_children(input= "magnoliophyta", ott_rank = "order")
 #' sum(oo$Magnoliophyta$rank == "order") # to know how many orders of flowering plants we have
 #' @export
-get_ott_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_id = NULL, ott_rank = "species"){
-    input_ott_match <- check_ott_input(input, ott_id)
+get_ott_children <- function(input = NULL, ott_ids = NULL, ott_rank = "species"){
+    # iput <- c("Felis", "Homo", "Malvaceae")
+    input_ott_match <- check_ott_input(input, ott_ids)
     all_children <- vector(mode = "list", length = length(input_ott_match))
     # progression <- utils::txtProgressBar(min = 0, max = length(all_children), style = 3)
     for (i in seq(length(input_ott_match))){
-        mm <- data.frame(ott_id = vector(mode = "numeric", length = 0), rank = vector(mode = "logical", length = 0))
-        vv <- get_valid_children(ott_id = input_ott_match[i])
+        mm <- data.frame(ott_ids = vector(mode = "numeric", length = 0), rank = vector(mode = "logical", length = 0))
+        vv <- get_valid_children(ott_ids = input_ott_match[i])
         success <- vv[[1]]$children$rank == ott_rank | vv[[1]]$is_monotypic
         if(any(success)){
           mm <- rbind(mm, vv[[1]]$children[success,])
         }
         while(!all(success)){
-          vv <- get_valid_children(ott_id = unlist(sapply(sapply(vv, "[", "children"), "[", "ott_id"))[!success])
+          vv <- get_valid_children(ott_ids = unlist(sapply(sapply(vv, "[", "children"), "[", "ott_id"))[!success])
           if(any(unlist(sapply(vv, "[", "is_monotypic")))){
             dd <- do.call("rbind", sapply(vv[unlist(sapply(vv, "[", "is_monotypic"))], "[", "children"))
             rownames(dd) <- unname(unlist(sapply(sapply(vv[unlist(sapply(vv, "[", "is_monotypic"))], "[", "children"), rownames)))
@@ -294,7 +297,7 @@ get_ott_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_id = N
         }
         # utils::setTxtProgressBar(progression, i)
         # its easier to do the row naming in the previous steps, bc the following is much time consuming:
-        # rownames(mm) <- unname(unlist(sapply(rotl::taxonomy_taxon_info(mm$ott_id), "[", "unique_name")))
+        # rownames(mm) <- unname(unlist(sapply(rotl::taxonomy_taxon_info(mm$ott_ids), "[", "unique_name")))
         all_children[[i]] <- mm
     }
     names(all_children) <- names(input_ott_match)
@@ -306,5 +309,5 @@ get_ott_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_id = N
 # another one to get some or all lineages below a taxon
 # one to get everything: all_upper, all_lower, all (both upper and lower), or th eones specified by the users
 # for example:
-# get_ott_lineage(input = c("Felis", "Homo"), ott_id = NULL, ott_rank = c("all", "all_upper", "all_lower"))
+# get_ott_lineage(input = c("Felis", "Homo"), ott_ids = NULL, ott_rank = c("all", "all_upper", "all_lower"))
 # get a list of all ranks available in ott

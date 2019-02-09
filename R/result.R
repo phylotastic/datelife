@@ -12,7 +12,8 @@
 run <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), format="citations", partial="yes", plot.width=600, plot.height=600, use_tnrs="no", approximate_match="yes", opentree_chronograms=NULL) {
 	if(is.null(opentree_chronograms)) {
 	  utils::data(opentree_chronograms)
-	  }
+		opentree_chronograms <- get("opentree_chronograms")
+	}
   #convert from HTML input to Boolean
   partial <- ifelse(partial=="yes", TRUE, FALSE)
   use_tnrs <- ifelse(use_tnrs=="yes", TRUE, FALSE)

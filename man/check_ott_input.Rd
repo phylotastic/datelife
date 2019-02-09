@@ -5,12 +5,15 @@
 \title{checks input for get_ott_clade,  get_ott_children functions
 returns a numeric vector of ott ids}
 \usage{
-check_ott_input(input, ott_id = NULL)
+check_ott_input(input, ott_ids = NULL)
 }
 \arguments{
-\item{input}{A character vector of names}
+\item{input}{Optional. A character vector of names or a datelifeQuery object}
 
-\item{ott_id}{A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+\item{ott_ids}{Optional. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+}
+\value{
+A named numeric vector of valid ott IDs
 }
 \description{
 checks input for get_ott_clade,  get_ott_children functions

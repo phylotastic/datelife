@@ -4,13 +4,12 @@
 \alias{get_ott_children}
 \title{use this instead of rotl::tol_subtree when taxa are not in synthesis tree and you still need to get all species or an induced otol subtree}
 \usage{
-get_ott_children(input = c("Felis", "Homo", "Malvaceae"),
-  ott_id = NULL, ott_rank = "species")
+get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species")
 }
 \arguments{
-\item{input}{A character vector of names}
+\item{input}{Optional. A character vector of names or a datelifeQuery object}
 
-\item{ott_id}{A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+\item{ott_ids}{Optional. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 
 \item{ott_rank}{A character vector with the ranks you wanna get lineage children from.}
 }
@@ -27,7 +26,9 @@ tnrs <- tnrs_match("Canis")
   Error: HTTP failure: 400
   [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
 }
-children <- get_ott_children(ott_id = tnrs$ott_id[1]) # or
+ids <- tnrs$ott_id[1]
+names(ids) <- tnrs$unique_name
+children <- get_ott_children(ott_ids = ids) # or
 children <- get_ott_children("Canis")
 rownames(children[[1]])
 tree_children <- datelife::get_otol_synthetic_tree(children$Canis)

@@ -34,5 +34,5 @@ get_them_all <- function(trees = opentree_chronograms$trees){
 	tips_tnrs$search_string[is.na(tips_tnrs$unique)]
 	length(tips_tnrs$unique_name)
 	datelife_search(input = gsub(".* - ", "", sample(tips, 50)))
-	all_got <- get_ott_lineage(ott_id = all)
+	all_got <- get_ott_lineage(ott_idss = all)
 }

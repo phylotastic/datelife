@@ -4,13 +4,13 @@
 \alias{get_ott_clade}
 \title{gets the ott id and name of one or several given taxonomic rank from one or more input taxa}
 \usage{
-get_ott_clade(input = c("Felis", "Homo"), ott_id = NULL,
+get_ott_clade(input = c("Felis", "Homo"), ott_ids = NULL,
   ott_rank = "family")
 }
 \arguments{
-\item{input}{A character vector of names}
+\item{input}{Optional. A character vector of names or a datelifeQuery object}
 
-\item{ott_id}{A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+\item{ott_ids}{Optional. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 
 \item{ott_rank}{A character vector with the ranks you wanna get lineage children from.}
 }

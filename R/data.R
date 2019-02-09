@@ -291,7 +291,7 @@
 #' @details
 #' Generated with:
 #' geostellar <- read.csv(file = "~/Desktop/datelife/inst/extdata/geo_stellar_chrono_scale_2018.9.20.csv",
-#' save(geostellar, file = "~/Desktop/datelife/data/geostellar.RData")
+#' utils::data(strat2012)
 #' had <- strat2012[rep(116, each=6),]
 #' rownames(had) <- 116:121
 #' had$era <- c("Neohadean", "Mesohadean", "Palaeohadean")
@@ -303,5 +303,6 @@
 #' chao$era <- c(rep("Neochaotian", 2), rep("Eochaotian", 2))
 #' chao$period <- c("Titanomachean", "Hyperitian", "Erebrean", "Nephelean")
 #' chao$MA <- c(4500, 4560, 4567, 4730)
+#' use_data(geostellar)
 #'
 "geostellar"
