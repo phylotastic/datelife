@@ -323,3 +323,5 @@ use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose 
 #' @details
 #' Generated with:
 #' threebirds_dr <- get_datelife_result(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"))
+#' use_data(threebirds_dr)
+"threebirds_dr"

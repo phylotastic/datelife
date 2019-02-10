@@ -22,7 +22,7 @@ test_that("datelife_search returns phylo_all", {
 
 test_that("datelife_search returns one phylo_biggest", {
   skip_on_cran()
-  utils::data(opentree_chronograms)
+  utils::data(threebirds_dr)
   datelife_phylo <- summarize_datelife_result(datelife_query = NULL, datelife_result = threebirds_dr, summary_format="phylo_biggest")
   expect_true(inherits(datelife_phylo,"phylo"))
 })
