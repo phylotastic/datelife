@@ -36,6 +36,8 @@ make_bladj_tree <- function(tree = NULL, nodenames = NULL, nodeages = NULL){
 	new.phy <- phylocomr::ph_bladj(ages = ages_df, phylo = phy)
 	attributes(new.phy) <- NULL
 	new.phy <- phytools::read.newick(text = new.phy)
-	# plot(new.phy)
+	# to keep the same names as original phy (bladj modifies all names to lowercase):
+	index <- match(tolower(phy$tip.label), new.phy$tip.label)
+	new.phy$tip.label[index] <- phy$tip.label
 	return(new.phy)
 }

@@ -4,13 +4,10 @@
 \alias{datelife_query_check}
 \title{checks if input is a datelifeQuery object, otherwise it uses make_datelife_query to process it}
 \usage{
-datelife_query_check(datelife_query = NULL, get_spp_from_taxon = FALSE,
-  ...)
+datelife_query_check(datelife_query = NULL, ...)
 }
 \arguments{
 \item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
-
-\item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
 
 \item{...}{Arguments passed on to \code{make_datelife_query}
 \describe{

@@ -120,7 +120,8 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 				# message("Performing a clade search?? set get_spp_from_taxon = TRUE")
 				message("Setting up get_spp_from_taxon = TRUE")
 				input_dq <- make_datelife_query(input = input_dq$cleaned_names,
-													get_spp_from_taxon = TRUE, ...)
+													get_spp_from_taxon = TRUE, use_tnrs = use_tnrs,
+													approximate_match = approximate_match, verbose = verbose)
 			}
 	}
 	if(length(input_dq$cleaned_names) == 1){
@@ -311,3 +312,14 @@ use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose 
 	class(datelife_query.return) <- "datelifeQuery"
 	return(datelife_query.return)
 }
+
+#' datelifeResult object of three birds "Rhea americana", "Pterocnemia pennata", and "Struthio camelus"
+#'
+#' @name threebirds_dr
+#' @docType data
+#' @format A list of 9 named patristic matrix
+#' @source \url{http://opentreeoflife.org}
+#' @keywords otol tree subset chronogram ants datelife
+#' @details
+#' Generated with:
+#' threebirds_dr <- get_datelife_result(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"))
