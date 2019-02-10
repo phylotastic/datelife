@@ -55,8 +55,8 @@ datelife_result_MRCA <- function(datelife_result, partial = TRUE) {
 #' @inheritParams tree_fix_brlen
 #' @return A rooted phylo object
 patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj", fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE) {
+    # patristic_matrix <-  threebirds_dr[[5]]
     clustering_method <- match.arg(arg = clustering_method, choices = c("nj", "upgma"), several.ok = FALSE)
-    tried <-  c()
     if(anyNA(patristic_matrix)) {
   	   patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
     }   # I'm not sure why this is here. It does not get rid of spp with NA or NaNs, then, what does it do?
@@ -144,8 +144,8 @@ cluster_patristicmatrix <- function(patristic_matrix){
         # root the tree on the midpoint (only for trees with ape::Ntip(phy) > 2):
         # phy <- tryCatch(phangorn::midpoint(phy), error = function(e) NULL)
         # using phytools::midpoint.root instead of phangorn::midpoint bc it's less error prone.
-      # sometimes, nj and njs do not work if patristic matrices come from sdm. why? it was probably the midpoint function from phangorn. Using phytools one now.
-      # use regular upgma (or implemented with daisy and hclust) when nj or midpoint.root fail
+        # sometimes, nj and njs do not work if patristic matrices come from sdm. why? it was probably the midpoint function from phangorn. Using phytools one now.
+        # use regular upgma (or implemented with daisy and hclust) when nj or midpoint.root fail
         phyclust$upgma <- tryCatch(phangorn::upgma(patristic_matrix), error = function (e) NULL)
         if (is.null(phyclust$upgma)){ # case when we have missing data (NA) on patristic_matrix and regular upgma does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
             phyclust$upgma_daisy <- tryCatch({
@@ -157,8 +157,8 @@ cluster_patristicmatrix <- function(patristic_matrix){
               phy
             }, error = function(e) NULL)
         }
+        return(phyclust)
   }
-  return(phyclust)
 }
 #' Choose a phylo object from cluster_patristicmatrix. If not ultrametric, it does not force it.
 #'

@@ -26,7 +26,7 @@ get_taxon_summary <- function(datelife_query = NULL, datelife_result){
 	absent.input <- input.in[!input.in %in% input.match]
 	if(length(absent.input) <= 0) {
 		if(is.null(input)){
-			absent.input <- NULL # we cannot know if there are complete absent taxa because original query was not provided
+			absent.input <- NA # we cannot know if there are complete absent taxa because original query was not provided
 		} else {
 			absent.input <- "None" # we know there are no absent taxa
 		}
