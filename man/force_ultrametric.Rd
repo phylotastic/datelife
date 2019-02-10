@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_internal.R
 \name{force_ultrametric}
 \alias{force_ultrametric}
-\title{Force a phylo object ultrametric}
+\title{Force a non ultrametric phylo object to be ultrametric}
 \usage{
 force_ultrametric(phy)
 }
@@ -13,5 +13,5 @@ force_ultrametric(phy)
 A phylo object
 }
 \description{
-Force a phylo object ultrametric
+Force a non ultrametric phylo object to be ultrametric
 }

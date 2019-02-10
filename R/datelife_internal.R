@@ -56,6 +56,7 @@ datelife_result_MRCA <- function(datelife_result, partial = TRUE) {
 #' @return A rooted phylo object
 patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj", fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE) {
     # patristic_matrix <-  threebirds_dr[[5]]
+    # patristic_matrix_to_phylo(threebirds_dr[[5]])
     clustering_method <- match.arg(arg = clustering_method, choices = c("nj", "upgma"), several.ok = FALSE)
     if(anyNA(patristic_matrix)) {
   	   patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
@@ -95,23 +96,25 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
     # for cases when there are no neg branch lengths to fix (or we don't want them fixed)
     # and we still want the final tree to be ultrametric:
     if(ultrametric){
-      if(is.null(phy$edge.length.original) | !ape::is.ultrametric(phy)){
+      if(is.null(phy$edge.length.original)){
           phy <- force_ultrametric(phy)
       }
     }
     class(phy) <- c(class(phy), "datelifeTree")
     return(phy)
 }
-#' Force a phylo object ultrametric
+#' Force a non ultrametric phylo object to be ultrametric
 #' @inheritParams phylo_check
 #' @return A phylo object
 force_ultrametric <- function(phy){
       # enhance: check if there is an edge.length.original already There
       # something like how many grepl("edge.length.original") in names(phy) and add an integer after it.
-      phy$edge.length.original <- phy$edge.length
-      phy <- phytools::force.ultrametric(tree = phy, method = "extend")
-      phy$force.ultrametric <- "extend"
-      phy
+      if(!ape::is.ultrametric(phy)){
+        phy$edge.length.original <- phy$edge.length
+        phy <- phytools::force.ultrametric(tree = phy, method = "extend")
+        phy$force.ultrametric <- "extend"
+      }
+      return(phy)
 }
 #' Cluster a patristic matrix with several methods
 #'
@@ -166,12 +169,13 @@ cluster_patristicmatrix <- function(patristic_matrix){
 #' @param phycluster An output from cluster_patristicmatrix
 #' @return A phylo object or NA
 choose_cluster <- function(phycluster, clustering_method){
-  phy <- NA
+  phy_return <- NA
   if(length(phycluster) == 0){
-    return(phy)
+    message("phycluster argument is length 0")
+    return(NA)
   }
   if(inherits(phycluster, "phylo")){ # it is a tree of two tips
-    return(phy)
+    return(phycluster)
   } else { # it is a list of results from cluster_patristicmatrix
     fail <- sapply(phycluster, is.null)
     if(all(fail)){
@@ -228,7 +232,6 @@ choose_cluster <- function(phycluster, clustering_method){
       }
     }
   }
-  return(phy)
 }
 #' Figure out which subset function to use. Used inside: get_datelife_result
 #' @param study_element The thing being passed in: an array or a phylo object to serve as reference for congruification
