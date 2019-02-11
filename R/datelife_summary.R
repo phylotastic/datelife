@@ -253,43 +253,12 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 	} else {
 		# datelife_result <- best_grove
 		unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
-		good.matrix.indices <- c()
-		for(i in sequence(length(unpadded.matrices))) {
-			test.result <- NA
-			# Rationale here: some chronograms always cause errors with SDM, even when trying to get a consensus of them
-			# with themselves. For now, throw out of synthesis.
-			try(test.result <- mean(do.call(ape::SDM, c(unpadded.matrices[i], unpadded.matrices[i], rep(1, 2)))[[1]]), silent = TRUE)
-			if (verbose){
-				message(cat(i, "out of", length(unpadded.matrices), "chronograms tried: "), appendLF = FALSE)
-			}
-			if(is.finite(test.result)) {
-				good.matrix.indices <- append(good.matrix.indices,i)
-				if (verbose){
-					message(cat(" Ok."))
-				}
-			} else {
-				if (verbose){
-					message(cat(" Failed."))
-				}
-			}
-		}
+		good.matrix.indices <- get_goodmatrices(unpadded.matrices, verbose)
 		if(length(good.matrix.indices) > 1) {
 			unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-			# used.studies <- used.studies[good.matrix.indices]
-			weights = rep(1, length(unpadded.matrices))
-			if (weighting=="taxa") {
-				weights = unname(sapply(unpadded.matrices, dim)[1,])
-			}
-			if (weighting=="inverse") {
-				weights = 1/unname(sapply(unpadded.matrices, dim)[1,])
-			}
-			if (verbose){
-				message(cat("\n", "Synthesizing", length(unpadded.matrices), "chronograms with SDM"))
-			}
-			SDM.result <- do.call(ape::SDM, c(unpadded.matrices, weights))[[1]]
+			SDM.result <- get_sdm(unpadded.matrices, weighting, verbose)
 			# it is important to use upgma as clustering method; nj produces much younger ages when the matrix comes from sdm
 			phy <- patristic_matrix_to_phylo(SDM.result, clustering_method = clustering_method, fix_negative_brlen = TRUE)
-
 		} else {
 			if(length(good.matrix.indices) == length(datelife_result)) {
 				warning("There are not enough input chronograms to run SDM. You can help uploading trees to Open Tree of Life tree store.")
@@ -302,8 +271,44 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 	}
 	return(list(phy = phy, data = unpadded.matrices))
 }
-
-
+get_sdm <- function(unpadded.matrices, weighting, verbose){
+	# used.studies <- used.studies[good.matrix.indices]
+	weights = rep(1, length(unpadded.matrices))
+	if (weighting=="taxa") {
+		weights = unname(sapply(unpadded.matrices, dim)[1,])
+	}
+	if (weighting=="inverse") {
+		weights = 1/unname(sapply(unpadded.matrices, dim)[1,])
+	}
+	if (verbose){
+		message(cat("\n", "Synthesizing", length(unpadded.matrices), "chronograms with SDM"))
+	}
+	SDM.result <- do.call(ape::SDM, c(unpadded.matrices, weights))[[1]]
+	return(SDM.result)
+}
+get_goodmatrices <- function(unpadded.matrices, verbose){
+	good.matrix.indices <- c()
+	for(i in sequence(length(unpadded.matrices))) {
+		test.result <- NA
+		# Rationale here: some chronograms always cause errors with SDM, even when trying to get a consensus of them
+		# with themselves. For now, throw out of synthesis.
+		try(test.result <- mean(do.call(ape::SDM, c(unpadded.matrices[i], unpadded.matrices[i], rep(1, 2)))[[1]]), silent = TRUE)
+		if (verbose){
+			message(cat(i, "out of", length(unpadded.matrices), "chronograms tried: "), appendLF = FALSE)
+		}
+		if(is.finite(test.result)) {
+			good.matrix.indices <- append(good.matrix.indices,i)
+			if (verbose){
+				message(cat(" Ok."))
+			}
+		} else {
+			if (verbose){
+				message(cat(" Failed."))
+			}
+		}
+	}
+	return(good.matrix.indices)
+}
 #' Get the tree with the most tips: the biggest tree
 #' @param trees A list of trees as multiPhylo or as a plain list object.
 #' @return A phylo object

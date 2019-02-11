@@ -153,6 +153,7 @@ cluster_patristicmatrix <- function(patristic_matrix){
         if (is.null(phyclust$upgma)){ # case when we have missing data (NA) on patristic_matrix and regular upgma does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
             phyclust$upgma_daisy <- tryCatch({
               # using daisy to calculate dissimilarity matrix instead of as.dist (which is used in phangorn::upgma) when there are NAs in the matrix; agnes does not work with NAs either.
+              patristic_matrix <- patristic_matrix*0.25
               DD <- cluster::daisy(x = patristic_matrix, metric = "euclidean")
               hc <- stats::hclust(DD, method = "average") # original clustering method from phangorn::upgma. Using agnes() instead hclust() to cluster gives the same result.
               phy <- ape::as.phylo(hc)
@@ -197,7 +198,7 @@ choose_cluster <- function(phycluster, clustering_method){
       ultram2 <- sapply(phycluster, ape::is.ultrametric, 2)
       if(length(ultram) == 0 & length(ultram2) == 0){
         message("The patristic matrix could not be transformed into an ultrametric tree with any of the default methods (NJ, UPGMA)")
-        return(NA)
+        # return(NA)
       }
       choice <- grepl(clustering_method, names(phycluster)) # choice can only be one
       ff <- which(choice & ultram) # if the chosen method gives an ultrametric tree

@@ -245,6 +245,7 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_ids 
 #' use this instead of rotl::tol_subtree when taxa are not in synthesis tree and you still need to get all species or an induced otol subtree
 #' @inheritParams check_ott_input
 #' @param ott_rank A character vector with the ranks you wanna get lineage children from.
+#' @return A data frame
 #' @examples
 #' # try getting an otol tree of a taxon missing from the synthetic tree
 #' # tnrs <- rotl::tnrs_match_names("Mus")
@@ -269,37 +270,47 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_ids 
 get_ott_children <- function(input = NULL, ott_ids = NULL, ott_rank = "species"){
     # iput <- c("Felis", "Homo", "Malvaceae")
     input_ott_match <- check_ott_input(input, ott_ids)
-
+    # names(input_ott_match)
     all_children <- vector(mode = "list", length = length(input_ott_match))
+    input_ott_match_ranks <- unlist(sapply(rotl::taxonomy_taxon_info(input_ott_match), "[", "rank"))
+    # grepl(paste0("\\b", ott_rank, "\\b"), c("species", "subspecies"))
+    ott_ranki <- grepl(paste0("\\b", ott_rank, "\\b"), input_ott_match_ranks)
+    df <- data.frame(ott_id = input_ott_match[ott_ranki], rank = rep(ott_rank, sum(ott_ranki)))
+    all_children[ott_ranki] <- lapply(seq(nrow(df)), function(i) df[i,])
+    # all_children[c(T,F,T)] <- input[c(T,F,T)]
+    # sum(c(T,F,T))
     # progression <- utils::txtProgressBar(min = 0, max = length(all_children), style = 3)
-    for (i in seq(length(input_ott_match))){
-        mm <- data.frame(ott_ids = vector(mode = "numeric", length = 0), rank = vector(mode = "logical", length = 0))
-        vv <- get_valid_children(ott_ids = input_ott_match[i])
-        success <- vv[[1]]$children$rank == ott_rank | vv[[1]]$is_monotypic
-        if(any(success)){
-          mm <- rbind(mm, vv[[1]]$children[success,])
-        }
-        while(!all(success)){
-          vv <- get_valid_children(ott_ids = unlist(sapply(sapply(vv, "[", "children"), "[", "ott_id"))[!success])
-          if(any(unlist(sapply(vv, "[", "is_monotypic")))){
-            dd <- do.call("rbind", sapply(vv[unlist(sapply(vv, "[", "is_monotypic"))], "[", "children"))
-            rownames(dd) <- unname(unlist(sapply(sapply(vv[unlist(sapply(vv, "[", "is_monotypic"))], "[", "children"), rownames)))
-            # rownames(dd) <- gsub("\\..*", "", rownames(dd))
-            mm <- rbind(mm, dd)
-            vv <- vv[!unlist(sapply(vv, "[", "is_monotypic"))]
-          }
-          success <- unlist(sapply(sapply(vv, "[", "children"), "[", "rank")) == ott_rank
+    if(any(sapply(all_children, is.null))){
+      input_ott_match <- input_ott_match[sapply(all_children, is.null)]
+      for (i in seq(length(input_ott_match))){
+          mm <- data.frame(ott_ids = vector(mode = "numeric", length = 0), rank = vector(mode = "logical", length = 0))
+          vv <- get_valid_children(ott_ids = input_ott_match[i])
+          success <- vv[[1]]$children$rank == ott_rank | vv[[1]]$is_monotypic
           if(any(success)){
-            dd <- do.call("rbind", sapply(vv, "[", "children"))[success,]
-            rownames(dd) <- unname(unlist(sapply(sapply(vv, "[", "children"), rownames)))[success]
-            # rownames(dd) <- gsub("\\..*", "", rownames(dd))
-            mm <- rbind(mm, dd)
+            mm <- rbind(mm, vv[[1]]$children[success,])
           }
-        }
-        # utils::setTxtProgressBar(progression, i)
-        # its easier to do the row naming in the previous steps, bc the following is much time consuming:
-        # rownames(mm) <- unname(unlist(sapply(rotl::taxonomy_taxon_info(mm$ott_ids), "[", "unique_name")))
-        all_children[[i]] <- mm
+          while(!all(success)){
+            vv <- get_valid_children(ott_ids = unlist(sapply(sapply(vv, "[", "children"), "[", "ott_id"))[!success])
+            if(any(unlist(sapply(vv, "[", "is_monotypic")))){
+              dd <- do.call("rbind", sapply(vv[unlist(sapply(vv, "[", "is_monotypic"))], "[", "children"))
+              rownames(dd) <- unname(unlist(sapply(sapply(vv[unlist(sapply(vv, "[", "is_monotypic"))], "[", "children"), rownames)))
+              # rownames(dd) <- gsub("\\..*", "", rownames(dd))
+              mm <- rbind(mm, dd)
+              vv <- vv[!unlist(sapply(vv, "[", "is_monotypic"))]
+            }
+            success <- unlist(sapply(sapply(vv, "[", "children"), "[", "rank")) == ott_rank
+            if(any(success)){
+              dd <- do.call("rbind", sapply(vv, "[", "children"))[success,]
+              rownames(dd) <- unname(unlist(sapply(sapply(vv, "[", "children"), rownames)))[success]
+              # rownames(dd) <- gsub("\\..*", "", rownames(dd))
+              mm <- rbind(mm, dd)
+            }
+          }
+          # utils::setTxtProgressBar(progression, i)
+          # its easier to do the row naming in the previous steps, bc the following is much time consuming:
+          # rownames(mm) <- unname(unlist(sapply(rotl::taxonomy_taxon_info(mm$ott_ids), "[", "unique_name")))
+          all_children[[i]] <- mm
+      }
     }
     names(all_children) <- names(input_ott_match)
     return(all_children)
