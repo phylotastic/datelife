@@ -25,6 +25,7 @@ Some plants chronogram
 }
 \details{
 Generated with make_bold_otol_tree(input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);")
+usethis::use_data(plant_bold_otol_tree)
 }
 \author{
 Luna L. Sanchez-Reyes \email{lsanche7@utk.edu}

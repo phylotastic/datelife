@@ -52,10 +52,16 @@ test_that("Summarize as citations works correctly", {
 
 test_that("Summarize as newick_all works correctly", {
   utils::data(opentree_chronograms)
-  taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
-  datelife_result <- results_list_process(results_list, taxa, TRUE)
+  utils::data(threebirds_dr)
+  # taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
+  # results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
+  # datelife_result <- results_list_process(results_list, taxa, TRUE)
+  datelife_result <- threebirds_dr
   trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_all", cache=opentree_chronograms)
+  trees <- sapply(datelife_result, patristic_matrix_to_newick)
+  patristic_matrix_to_newick(threebirds_dr[[1]])
+  tree <- patristic_matrix_to_phylo(threebirds_dr[[1]])
+  class(tree) == "phylo"
   expect_equal(class(trees), "character")
   expect_false(anyNA(trees))
   expect_equal(class(ape::read.tree(text=trees[1])), "phylo")

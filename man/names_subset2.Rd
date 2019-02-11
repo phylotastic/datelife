@@ -17,6 +17,7 @@ Long list of >2.7k virus, bacteria, plant and animal taxon names
 \details{
 Generated with:
 names_subset2 <- rphylotastic::url_get_scientific_names("https://github.com/phylotastic/rphylotastic/blob/master/tests/testthat/subset2.txt")
+usethis::use_data(names_subset2)
 }
 \keyword{animal}
 \keyword{bacteria}

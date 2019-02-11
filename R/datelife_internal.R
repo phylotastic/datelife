@@ -13,7 +13,7 @@ summary_patristic_matrix_array <- function(patristic_matrix_array, fn = stats::m
 #' @return A newick string
 patristic_matrix_to_newick <- function(patristic_matrix) {
   tree <- patristic_matrix_to_phylo(patristic_matrix)
-  if(class(tree) == "phylo") {
+  if(inherits(tree, "phylo")){
   	return(ape::write.tree(tree))
   }
   return(NA)

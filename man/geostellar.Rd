@@ -31,7 +31,7 @@ chao$eon <- rep("Chaotian", 4)
 chao$era <- c(rep("Neochaotian", 2), rep("Eochaotian", 2))
 chao$period <- c("Titanomachean", "Hyperitian", "Erebrean", "Nephelean")
 chao$MA <- c(4500, 4560, 4567, 4730)
-use_data(geostellar)
+usethis::use_data(geostellar)
 }
 \keyword{earth}
 \keyword{formation}

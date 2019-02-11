@@ -19,6 +19,7 @@ Generated with:
 some_ants_input <- "(Aulacopone_relicta,(((Myrmecia_gulosa,(Aneuretus_simoni,Dolichoderus_mariae)),((Ectatomma_ruidum,Huberia_brounii),Formica_rufa)),Apomyrma_stygia),Martialis_heureka)Formicidae;"
 some_ants_datelife_query <- make_datelife_query(input = some_ants_input)
 some_ants_datelife_result <- get_datelife_result(input = some_ants_datelife_query)
+usethis::use_data(some_ants_datelife_result)
 }
 \keyword{ants}
 \keyword{chronogram}

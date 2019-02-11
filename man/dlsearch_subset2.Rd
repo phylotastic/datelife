@@ -20,6 +20,7 @@ Generated with:
 datelife_query <- make_datelife_query(names_subset2)
 datelife_result <- get_datelife_result(datelife_query)
 dlsearch_subset2 <- list(datelife_result = datelife_result, datelife_query = datelife_query)
+usethis::use_data(dlsearch_subset2)
 }
 \keyword{datelifeResult}
 \keyword{names}
