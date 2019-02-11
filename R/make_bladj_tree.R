@@ -8,7 +8,10 @@
 #' only ages from nodeages will be fixed according to nodenames.
 #' @export
 make_bladj_tree <- function(tree = NULL, nodenames = NULL, nodeages = NULL){
+	# tree <- missing_taxa_phy
 	phy <- tree_check(tree = tree, dated = FALSE)
+	# needs to be fully resolved tp work with bladj?
+	# ape::is.binary(phy)
 	if(is.null(phy$node.label)) {
 		stop("phy must have node labels")
 	}

@@ -13,6 +13,9 @@ get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species")
 
 \item{ott_rank}{A character vector with the ranks you wanna get lineage children from.}
 }
+\value{
+A data frame
+}
 \description{
 use this instead of rotl::tol_subtree when taxa are not in synthesis tree and you still need to get all species or an induced otol subtree
 }
