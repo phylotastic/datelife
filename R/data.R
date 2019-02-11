@@ -238,8 +238,7 @@
 #' some_ants_input <- "(Aulacopone_relicta,(((Myrmecia_gulosa,(Aneuretus_simoni,Dolichoderus_mariae)),((Ectatomma_ruidum,Huberia_brounii),Formica_rufa)),Apomyrma_stygia),Martialis_heureka)Formicidae;"
 #' some_ants_datelife_query <- make_datelife_query(input = some_ants_input)
 #' some_ants_datelife_result <- get_datelife_result(input = some_ants_datelife_query)
-utils::data()
-#' usethis::use_data()
+#' usethis::use_data(some_ants_datelife_result)
 "some_ants_datelife_result"
 
 #' Long list of >2.7k virus, bacteria, plant and animal taxon names
@@ -252,8 +251,7 @@ utils::data()
 #' @details
 #' Generated with:
 #' names_subset2 <- rphylotastic::url_get_scientific_names("https://github.com/phylotastic/rphylotastic/blob/master/tests/testthat/subset2.txt")
-utils::data()
-#' usethis::use_data()
+#' usethis::use_data(names_subset2)
 "names_subset2"
 
 #' A list with datelieQuery and datelifeResult objects from a search of taxon names from names_subset2
@@ -271,8 +269,7 @@ utils::data()
 #' datelife_query <- make_datelife_query(names_subset2)
 #' datelife_result <- get_datelife_result(datelife_query)
 #' dlsearch_subset2 <- list(datelife_result = datelife_result, datelife_query = datelife_query)
-utils::data()
-#' usethis::use_data()
+#' usethis::use_data(dlsearch_subset2)
 "dlsearch_subset2"
 
 #' A multiPhylo object with trees resulting from a datelife search of some birds and cats species
