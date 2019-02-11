@@ -134,6 +134,7 @@
 #' @keywords otol plant tree chronogram bold
 #' @details
 #' Generated with make_bold_otol_tree(input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);")
+#' usethis::use_data(plant_bold_otol_tree)
 "plant_bold_otol_tree"
 
 
@@ -203,6 +204,7 @@
 #' felid_spp <- make_datelife_query(input = "felidae", get_spp_from_taxon = TRUE)
 #' felid_gdr <- get_datelife_result(input = felid_spp, get_spp_from_taxon = TRUE)
 #' felid_gdr_phylo_all <- summarize_datelife_result(felid_gdr, taxon_summary = "summary", summary_format = "phylo_all", datelife_query = felid_spp)
+#' usethis::use_data(felid_gdr_phylo_all)
 "felid_gdr_phylo_all"
 
 #' SDM tree of a datelifeResult object of all Felidae species.
@@ -221,6 +223,7 @@
 #' felid_spp <- make_datelife_query(input = "felidae", get_spp_from_taxon = TRUE)
 #' felid_gdr <- get_datelife_result(input = felid_spp, get_spp_from_taxon = TRUE)
 #' felid_sdm <- datelife_result_sdm(felid_gdr)
+#' usethis::use_data(felid_sdm)
 "felid_sdm"
 
 #' datelifeResult object of some ants
@@ -235,6 +238,8 @@
 #' some_ants_input <- "(Aulacopone_relicta,(((Myrmecia_gulosa,(Aneuretus_simoni,Dolichoderus_mariae)),((Ectatomma_ruidum,Huberia_brounii),Formica_rufa)),Apomyrma_stygia),Martialis_heureka)Formicidae;"
 #' some_ants_datelife_query <- make_datelife_query(input = some_ants_input)
 #' some_ants_datelife_result <- get_datelife_result(input = some_ants_datelife_query)
+utils::data()
+#' usethis::use_data()
 "some_ants_datelife_result"
 
 #' Long list of >2.7k virus, bacteria, plant and animal taxon names
@@ -247,6 +252,8 @@
 #' @details
 #' Generated with:
 #' names_subset2 <- rphylotastic::url_get_scientific_names("https://github.com/phylotastic/rphylotastic/blob/master/tests/testthat/subset2.txt")
+utils::data()
+#' usethis::use_data()
 "names_subset2"
 
 #' A list with datelieQuery and datelifeResult objects from a search of taxon names from names_subset2
@@ -264,6 +271,8 @@
 #' datelife_query <- make_datelife_query(names_subset2)
 #' datelife_result <- get_datelife_result(datelife_query)
 #' dlsearch_subset2 <- list(datelife_result = datelife_result, datelife_query = datelife_query)
+utils::data()
+#' usethis::use_data()
 "dlsearch_subset2"
 
 #' A multiPhylo object with trees resulting from a datelife search of some birds and cats species
@@ -303,6 +312,6 @@
 #' chao$era <- c(rep("Neochaotian", 2), rep("Eochaotian", 2))
 #' chao$period <- c("Titanomachean", "Hyperitian", "Erebrean", "Nephelean")
 #' chao$MA <- c(4500, 4560, 4567, 4730)
-#' use_data(geostellar)
+#' usethis::use_data(geostellar)
 #'
 "geostellar"
