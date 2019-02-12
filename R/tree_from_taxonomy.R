@@ -144,6 +144,9 @@ classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life"
 # tree_from_taxonomy(taxa = c("Felis", "pan", "ursus"), sources = "Open Tree of Life Reference Taxonomy") # this is not working for some reason
 # tree_from_taxonomy(taxa = c("Felis", "pan", "ursus"), sources = "NCBI")
 tree_from_taxonomy <- function(taxa, sources = "Catalogue of Life", collapse_singles=TRUE) {
+  # taxa <- tax_dqall[[7]]$cleaned_names
+  # classification_results <- classification_paths_from_taxonomy(taxa=taxa, sources="NCBI")
+
   classification_results <- classification_paths_from_taxonomy(taxa=taxa, sources=sources)
   paths <- classification_results$resolved$classification_path
   if(length(paths)<2) { #not enough for a tree
@@ -151,22 +154,26 @@ tree_from_taxonomy <- function(taxa, sources = "Catalogue of Life", collapse_sin
   }
   paths <- gsub('Not assigned\\|', "", paths) # CoL gives Not assigned for some taxa. We don't want these. Then we split
   paths <- strsplit( paths, "\\|")
+  paths <- unique(paths)
   leaves <- sapply(paths, utils::tail, n=1)
   tip.label <- leaves
   node.label <- rev(unique(unlist(paths)))
   node.label <- node.label[!node.label %in% leaves]
   node.label <- c("Life", node.label)
   edge <- matrix(nrow=0, ncol=2)
+  edges.names <- matrix(nrow=0, ncol=2)
   for(path_index in seq_along(paths)) {
     local_path <- rev(paths[[path_index]])
     tip.id <- which(local_path[1] == tip.label)
     ancestor.id <- 1+length(tip.label) + which(local_path[2] == node.label)
     edge <- rbind(edge, c(ancestor.id, tip.id))
+    edges.names <- rbind(edges.names, local_path[2:1])
     for(step_index in seq_along(local_path)) {
       if(step_index>1 & step_index<length(local_path)) { # since we've done the first step already, and the last node requires special treatment (since it connects to root)
         tipward.id <- 1 + length(tip.label) + which(local_path[step_index] == node.label)
         rootward.id <- 1 + length(tip.label) + which(local_path[step_index+1] == node.label)
         edge <- rbind(edge, c(rootward.id, tipward.id))
+        edges.names <- rbind(edges.names, local_path[(step_index+1):(step_index)])
       }
       if(step_index==length(local_path)) {
         tipward.id <- 1+length(tip.label) + which(local_path[step_index] == node.label)
@@ -175,13 +182,17 @@ tree_from_taxonomy <- function(taxa, sources = "Catalogue of Life", collapse_sin
     }
   }
   edge <- unique(edge) #get rid of edges added multiple times
-  #edge <- edge[edge[,1]!=edge[,2],] # sometimes have the same edge be its own parent. This is bad.
+  edge <- edge[edge[,1]!=edge[,2],] # sometimes have the same edge be its own parent. This is bad.
   phy <- list(edge=edge, tip.label=tip.label, node.label=node.label, Nnode=nrow(edge))
   class(phy) <- "phylo"
+  message("has class")
+  # save(phy, paths, classification_results, collapse_singles, file="~/Desktop/badtree.rda")
   phy <- ape::reorder.phylo(phy)
+  message("reordered")
   if(collapse_singles) {
     phy <- ape::collapse.singles(phy)
   }
+  message("collapsed")
   return(list(phy=phy, unresolved=classification_results$unresolved))
 }
 
