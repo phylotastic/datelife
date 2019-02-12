@@ -68,15 +68,3 @@ test_that("Mus higher-taxon search is giving species back", {
   expect_silent(make_datelife_query("Mus", get_spp_from_taxon = TRUE))
   expect_true(length(rphylotastic::taxon_get_species("Mus")) > 0)
 })
-
-test_that("patristic_matrix_to_phylo gives ultrametric trees", {
-  dq <- make_datelife_query(input = "cetacea", get_spp_from_taxon = TRUE)
-  dr <- get_datelife_result(dq)
-  t0 <- summarize_datelife_result(dq, dr, summary_format = "phylo_sdm")
-  t1 <- datelife_result_sdm(dr, clustering_method = "nj")
-  t2 <- datelife_result_sdm(dr, clustering_method = "upgma")
-  tt <- list(t0, t1$phy, t2$phy)
-  class(tt) <- "multiPhylo"
-  ape::is.ultrametric(tt, 2)
-  # plot(tt, cex = 0.5)
-})

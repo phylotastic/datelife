@@ -27,7 +27,7 @@ use_all_calibrations <- function(phy = NULL,
 			}
 		} else {
 			input <- input_process(input = phy, verbose = verbose)
-			phy <- input$phy
+			phy <- input
 		}
 		# phy must be a tree, check this
 		if(!inherits(phy, "phylo")){
