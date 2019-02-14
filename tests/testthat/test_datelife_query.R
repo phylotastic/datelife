@@ -1,5 +1,5 @@
 #testing functions that process or check datelife inputs
-test_that("datelife_query works"), {
+test_that("datelife_query works", {
 	cleaned.input_tnrs <- tnrs_match(names = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))
 	input <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
 	df <- get_ott_children(ott_ids = cleaned.input_tnrs$ott_id, ott_rank = "species")
