@@ -324,6 +324,9 @@ get_otol_synthetic_tree <- function(input, otol_version = "v2", ...){
 #' @return A phylo object with edge length proportional to time in Myrs. NA if 1 or no inputs are valid.
 #' @export
 #' @details otol dated tree from Stephen Smith's otol scaling service.
+# # ' @examples
+#' # if you want to make an ltt plot of a dated OToL tree you'll need to get rid of singleton nodes with ape::collapse.singles
+#' # and also probably phytools::force.ultrametric
 get_dated_otol_induced_subtree <- function(input = c("Felis silvestris", "Homo sapiens"), ott_id = NULL){
 	# if(is.null(ott_ids)){
 	# 	input <- datelife_query_check(input)

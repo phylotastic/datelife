@@ -120,6 +120,9 @@ classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life"
   }
   source_ids <- source_ids[!is.na(source_ids)]
   resolved_taxa <- taxize::gnr_resolve(taxa, best_match_only=TRUE, fields="all", preferred_data_sources=source_ids, with_context=TRUE)
+  # head(resolved_taxa)
+  # names(resolved_taxa)
+  # data.frame(resolved_taxa$submitted_name, resolved_taxa$matched_name)
   resolved_taxa <- resolved_taxa[grepl("\\|", resolved_taxa$classification_path),] # sometimes PBDB resolves taxa but doesn't have a taxonomy for them. This isn't what we want.
   missing_taxa <- taxa[!taxa %in% resolved_taxa$user_supplied_name]
 
@@ -144,10 +147,12 @@ classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life"
 # tree_from_taxonomy(taxa = c("Felis", "pan", "ursus"), sources = "Open Tree of Life Reference Taxonomy") # this is not working for some reason
 # tree_from_taxonomy(taxa = c("Felis", "pan", "ursus"), sources = "NCBI")
 tree_from_taxonomy <- function(taxa, sources = "Catalogue of Life", collapse_singles=TRUE) {
-  # taxa <- tax_dqall[[7]]$cleaned_names
+  # taxa <- tax_dqall[[7]]$cleaned_names # Primates spp
   # classification_results <- classification_paths_from_taxonomy(taxa=taxa, sources="NCBI")
-
+  taxa <- taxon_names
   classification_results <- classification_paths_from_taxonomy(taxa=taxa, sources=sources)
+  names(classification_results$resolved)
+  classification_results$resolved$matched_names
   paths <- classification_results$resolved$classification_path
   if(length(paths)<2) { #not enough for a tree
     return(NULL)
@@ -155,6 +160,10 @@ tree_from_taxonomy <- function(taxa, sources = "Catalogue of Life", collapse_sin
   paths <- gsub('Not assigned\\|', "", paths) # CoL gives Not assigned for some taxa. We don't want these. Then we split
   paths <- strsplit( paths, "\\|")
   paths <- unique(paths)
+  # check that last name in classification path is from a species not a subspecies:
+  # sapply(sapply(paths, length), function(i) paths)
+  # paths.df <- do.call(rbind, paths)
+  # paths.df
   leaves <- sapply(paths, utils::tail, n=1)
   tip.label <- leaves
   node.label <- rev(unique(unlist(paths)))

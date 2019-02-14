@@ -1,3 +1,15 @@
+test_that("tree_from_taxonomy works with Phyllostomidae (reticulations)", {
+    taxa_dq <- make_datelife_query("Phyllostomidae", get_spp_from_taxon = TRUE)
+    taxa <- unname(taxa_dq$cleaned_names)
+    taxtree <- tree_from_taxonomy(taxa, source = "NCBI")
+    taxtree$phy$tip.label[is.na(match(taxtree$phy$tip.label, taxon_names))]
+    taxtree <- tree_from_taxonomy(taxon_names, source = "Catalogue of Life")
+
+    classification_results <- classification_paths_from_taxonomy(taxa=c("Dermanura azteca", "Artibeus aztecus"), sources="Catalogue of Life")
+    paths <- classification_results$resolved$classification_path
+
+
+})
 test_that("classification_paths_from_taxonomy works", {
     taxa <- c("Homo sapiens", "twilight sparkle", "Equus quagga", "Archaeopteryx")
     results <- classification_paths_from_taxonomy(taxa)
