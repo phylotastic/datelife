@@ -17,6 +17,7 @@
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
 use_all_calibrations <- function(phy = NULL,
+	# enhance: use congruification to exapnd calibrations.
 	all_calibrations = NULL, partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
 	update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1,
 	giveup = 100, verbose = FALSE) {
