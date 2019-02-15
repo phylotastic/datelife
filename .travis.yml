@@ -1,7 +1,4 @@
 language: r
-
-# using info from https://raw.githubusercontent.com/ropensci/magick/master/.travis.yml to debug magick++ install on travis
-
 cache: packages
 latex: false
 r_github_packages:
