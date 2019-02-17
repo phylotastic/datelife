@@ -12,25 +12,9 @@ fortran: false
 env:
   - _R_CHECK_FORCE_SUGGESTS_=false
 warnings_are_errors: false
-matrix:
-  include:
-    - os: osx
-      brew_packages:
-        - imagemagick
-        - fortran
-    - dist: xenial
-    - addons:
-        apt:
-          update: true
-          packages:
-            - fortran
-            - libmagick++-dev
-            - librsvg2-dev
-            - libwebp-dev
-            - libpoppler-cpp-dev
-            - libtesseract-dev
-            - libleptonica-dev
-            - tesseract-ocr-eng
-            - r-cran-rgdal
-            - libfftw3-dev
-            - cargo
+os: osx
+
+before_install:
+- brew install git-lfs
+- brew install imagemagick
+- brew install gfortran
