@@ -19,6 +19,7 @@ matrix:
         - imagemagick
         - fortran
     - dist: xenial
+    - addons:
         apt:
           update: true
           packages:
