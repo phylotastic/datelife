@@ -17,4 +17,3 @@ os: osx
 before_install:
 - brew install git-lfs
 - brew install imagemagick
-- brew install gfortran
