@@ -12,7 +12,6 @@ fortran: false
 env:
   - _R_CHECK_FORCE_SUGGESTS_=false
 warnings_are_errors: false
-
 matrix:
   include:
     - os: osx
@@ -34,9 +33,3 @@ matrix:
             - r-cran-rgdal
             - libfftw3-dev
             - cargo
-
-
-
-# Prevents Travis timeout for building magick
-before_install:
-  - (while true; do echo 'Ping? Pong!'; sleep 500; done) &
