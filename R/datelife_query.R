@@ -19,12 +19,18 @@ use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose 
 	  	# cleaned_names <- gsub("_", " ", phy.new$tip.label)
 	  	input <- phy.new$tip.label
 	}
+	if(is.na(phy.new)){
+		if(!is.character(input)){
+			message("Input must be a character vector, a newick character string, or a phylo object")
+			return(NA)
+		}
+	}
 	if(length(input) == 1) {
 		input <- strsplit(input, ',')[[1]] #  splits a character vector of comma separated names
 	}
 	cleaned.input <- stringr::str_trim(input, side = "both")  # cleans the input of lingering unneeded white spaces
 	ott_ids <- NA
-  if (use_tnrs | any(get_spp_from_taxon)) {
+  	if (use_tnrs | any(get_spp_from_taxon)) {
 		# process names even if it's a "higher" taxon name:
 		cleaned.input_tnrs <- tnrs_match(names = cleaned.input)
 		cleaned.input <- cleaned.input_tnrs$unique_name
@@ -35,7 +41,7 @@ use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose 
 		if(!is.na(phy.new[1])) {
 			phy.new$ott_ids <- cleaned.input_tnrs$ott_id
 		}
-  }
+  	}
 	cleaned_names <- gsub("_", " ", cleaned.input)
     if(any(get_spp_from_taxon)){
     	if(length(get_spp_from_taxon) == 1) {
@@ -114,12 +120,12 @@ input_process <- function(input, verbose = FALSE){
 		message("Input is a multiPhylo object. Only the first tree will be used.")
 	}
 	if(!is.character(input)){
-		message("input must be a character vector of names, a ")
+		message("Input must be a character vector of names.")
 		return(NA)
 	}
  	input <- gsub("\\+"," ",input)
-  input <- stringr::str_trim(input, side = "both")
-  phy.new.in <- NA
+  	input <- stringr::str_trim(input, side = "both")
+  	phy.new.in <- NA
 	# if(length(input) == 1) {
 	# if(summary_print)cat("\t", "Input is length 1.", "\n")
 	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick

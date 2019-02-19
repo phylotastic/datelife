@@ -41,7 +41,7 @@ tree_add_dates <- function(dated_tree = NULL, missing_taxa = NULL, dating_method
 		# enhance: check the following warning in congruify.phylo
 		# In if (class(stock) == "phylo") { :
 		#   the condition has length > 1 and only the first element will be used)
-		constraint_tree <- suppressWarnings(geiger::congruify.phylo(reference = phylo_tiplabel_space_to_underscore(dated_tree), target = missing_taxa_phy, scale = NA))
+		constraint_tree <- suppressWarnings(geiger::congruify.phylo(reference = phylo_tiplabel_space_to_underscore(dated_tree), target = phylo_tiplabel_space_to_underscore(missing_taxa_phy), scale = NA))
 		# add congruified nodes as node labels to missing_taxa_phy
 		dated_tree_nodes <- sapply(seq(nrow(constraint_tree$calibrations)), function(i)
 				phytools::findMRCA(tree = constraint_tree$target,

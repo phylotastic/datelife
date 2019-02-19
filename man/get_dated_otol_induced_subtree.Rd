@@ -4,20 +4,27 @@
 \alias{get_dated_otol_induced_subtree}
 \title{Get an otol induced dated subtree from your set of queried taxa}
 \usage{
-get_dated_otol_induced_subtree(input = c("Felis silvestris",
-  "Homo sapiens"), ott_id = NULL)
+get_dated_otol_induced_subtree(input = NULL, ott_ids = NULL, ...)
 }
 \arguments{
-\item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
+\item{input}{Optional. A character vector of names or a datelifeQuery object}
 
-\item{ott_id}{Numeric vector of Open Tree Taxonomy ids. Input argument will be ignored.}
+\item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+
+\item{...}{Arguments passed on to \code{check_ott_input}
+\describe{
+  \item{input}{Optional. A character vector of names or a datelifeQuery object}
+  \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+}}
 }
 \value{
-A phylo object with edge length proportional to time in Myrs. NA if 1 or no inputs are valid.
+A phylo object with edge length proportional to time in Myrs. It will return NA if any ott_id is invalid.
 }
 \description{
 Get an otol induced dated subtree from your set of queried taxa
 }
 \details{
 otol dated tree from Stephen Smith's otol scaling service.
+# if you want to make an ltt plot of a dated OToL tree you'll need to get rid of singleton nodes with ape::collapse.singles
+# and also probably do phytools::force.ultrametric
 }

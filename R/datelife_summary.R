@@ -271,6 +271,70 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 	}
 	return(list(phy = phy, data = unpadded.matrices))
 }
+sdm_matrix_to_phylo <- function(sdm_matrix){
+	# for testing:
+	# datelife_result <- get_datelife_result(input = "cetacea")
+    # unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
+    # good.matrix.indices <- get_goodmatrices(unpadded.matrices, verbose = TRUE)
+    # if(length(good.matrix.indices) > 1) {
+    #   unpadded.matrices <- unpadded.matrices[good.matrix.indices]
+    #   sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat", verbose = TRUE)
+    # }
+	# which(sdm_matrix < 0)
+	# sdm_matrix[ceiling(7301/ncol(sdm_matrix)),] # Eubalaena japonica,
+	# sdm_matrix[,ceiling(261/nrow(sdm_matrix))]  # Eubalaena glacialis
+	# xx <- sdm_matrix #[1:5, 1:5]
+	sdm_matrix[which(sdm_matrix < 0)] <- 0.01
+	test <- patristic_matrix_to_phylo(sdm_matrix)
+
+	ages <- tA <- tB <- c() # compute the final length of the data frame: it's ncol(xx)^2 - sum(1:(ncol(xx)-1))
+	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
+	# start <- ?
+	for(i in seq(ncol(sdm_matrix))){
+		# calibrations[start:start+i,1] <- xx[1:i,i]
+		# calibrations[start:start+i,2] <- rownames(xx)[1:i]
+		# calibrations[start:start+i,3] <- rep(colnames(xx)[i], i)
+		# start <- sum(!is.na(calibrations[,1])) +1
+		ages <- c(ages, sdm_matrix[1:i,i])
+		tA <- c(tA, rownames(sdm_matrix)[1:i])
+		tB <- c(tB, rep(colnames(sdm_matrix)[i], i))
+	}
+	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB)
+	calibrations$taxonA <- as.character(calibrations$taxonA)
+	calibrations$taxonB <- as.character(calibrations$taxonB)
+	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN
+	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
+	# chronogram <- geiger::PATHd8.phylo(phy_target, calibrations)
+	# try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
+	target_tree <- patristic_matrix_to_phylo(sdm_matrix)
+	target_tree$edge.length <- NULL
+	target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
+			phytools::findMRCA(tree = target_tree,
+								 tips = as.character(calibrations[i,c("taxonA", "taxonB")]),
+								 type = "node"))
+	target_tree_nodes <- target_tree_nodes - ape::Ntip(target_tree)
+	all_nodes <- sort(unique(target_tree_nodes))
+	all_ages <- lapply(seq(length(all_nodes)), function(i) calibrations[target_tree_nodes == i, "Age"])
+	# any(sapply(all_ages, is.null)) # all nodes have at least one calibration.
+	data.frame(MRCA = paste0("node", all_nodes), MinAge = sapply(all_ages, min), MaxAge= sapply(all_ages, max), node = all_nodes)
+}
+tree_add_dates2 <- function(calibrations, target_tree, method = "bladj"){
+	if("bladj" %in% method){
+		dated_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
+				phytools::findMRCA(tree = target_tree,
+									 tips = as.character(calibrations[i,c("taxonA", "taxonB")]),
+									 type = "node"))
+		dated_tree_nodes <- dated_tree_nodes - ape::Ntip(target_tree)
+		# missing_taxa_phy$node.label[dated_tree_nodes] <- constraint_tree$calibrations$MRCA
+		# cannot use hash number to name nodes, bladj collapses. So using "congNumber"
+		target_tree$node.label[dated_tree_nodes] <- paste0("cong", seq(nrow(calibrations)))
+		target_tree <- tree_add_nodelabels(tree = target_tree)  # all nodes need to be named so make_bladj_tree runs properly
+		# this adds random names to unnamed nodes, but they have to coincide between target and reference
+		# new.phy <- make_bladj_tree(tree = missing_taxa, nodenames = dated_tree$node.label, nodeages = tree_get_node_data(tree = dated_tree, node_data = "node_age")$node_age)
+		new.phy <- make_bladj_tree(tree = target_tree, nodenames = target_tree$node.label[dated_tree_nodes], nodeages = sapply(seq(nrow(calibrations)), function(i) sum(calibrations[i,c("MinAge", "MaxAge")])/2))
+
+	}
+}
 get_sdm <- function(unpadded.matrices, weighting, verbose){
 	# used.studies <- used.studies[good.matrix.indices]
 	weights = rep(1, length(unpadded.matrices))

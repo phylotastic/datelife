@@ -9,7 +9,7 @@ get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species")
 \arguments{
 \item{input}{Optional. A character vector of names or a datelifeQuery object}
 
-\item{ott_ids}{Optional. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+\item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 
 \item{ott_rank}{A character vector with the ranks you wanna get lineage children from.}
 }
@@ -34,7 +34,11 @@ names(ids) <- tnrs$unique_name
 children <- get_ott_children(ott_ids = ids) # or
 children <- get_ott_children(input = "Canis")
 rownames(children[[1]])
-tree_children <- datelife::get_otol_synthetic_tree(children$Canis)
+class(children$Canis)
+check_ott_input(input, ott_id = NULL)
+ids <- children$Canis$ott_id
+names(ids) <- rownames(children$Canis)
+tree_children <- datelife::get_otol_synthetic_tree(ott_ids = ids)
 plot(tree_children, cex = 0.3)
 # Other examples:
 oo <- get_ott_children(input= "magnoliophyta", ott_rank = "order")

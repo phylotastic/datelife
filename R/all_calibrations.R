@@ -125,8 +125,8 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 
 #' Use Barcode of Life data to get branch lengths on the OToL tree of a set of taxa.
 #' @inheritParams datelife_search
+#' @inheritParams get_otol_synthetic_tree
 #' @param marker A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.
-#' @param otol_version Version of OToL to use
 #' @param chronogram Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.
 #' @param doML Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml
 #' @inheritParams make_datelife_query
@@ -139,7 +139,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 		phy <- input
 		input <- phy$tip.label
 	} else {
-		phy <- get_otol_synthetic_tree(input = input, otol_version = otol_version)
+		phy <- get_otol_synthetic_tree(input = input, otol_version = otol_version, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon)
 		#otol returns error with missing taxa in v3 of rotl
 		input <- phy$tip.label
 	}
@@ -265,16 +265,16 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 }
 
 #' Gets Open Tree of Life synthetic tree of a set of lineages.
-#' @inheritParams datelife_search
-#' @inheritParams make_bold_otol_tree
-#' @inheritDotParams rotl::tnrs_match_names -names
+#' @inheritParams check_ott_input
+#' @param otol_version Version of OToL to use
+#' @inheritDotParams check_ott_input
 #' @return A phylo object
 #' @export
-get_otol_synthetic_tree <- function(input, otol_version = "v2", ...){
-	if(!any(c("ott_id", "ott_ids") %in% names(input))){
-		# make_datelife_query(input = "cetaceae", use_tnrs = TRUE, verbose = TRUE)
-		input <- make_datelife_query(input = input, use_tnrs = TRUE)
-		# enhance: keep valid names only since here
+get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version = "v2", ...){
+	input_ott_match <- suppressMessages(check_ott_input(input, ott_ids, ...))
+	if(length(input_ott_match) < 2){
+		message("At least two valid names or numeric ott_ids are needed to get a tree")
+		return(NA)
 	}
 	# the following chunk is just to give the message of the taxa that are being pulled from otol
 	# else {
@@ -297,7 +297,7 @@ get_otol_synthetic_tree <- function(input, otol_version = "v2", ...){
 	# message(paste("Getting tree for", paste0(input$unique_name, collapse = ", ")))
 	# system.time({sapply(rotl::taxonomy_taxon_info(df$ott_id), "[", "flags")})
 	# system.time({tnrs_match(rownames(df))}) # this one is faster
-	phy <- tryCatch(suppressWarnings(rotl::tol_induced_subtree(ott_ids = input$ott_id, label_format = "name",  otl_v = otol_version)),
+	phy <- tryCatch(suppressWarnings(rotl::tol_induced_subtree(ott_ids = input_ott_match, label_format = "name",  otl_v = otol_version)),
 					error = function(e){
 						message("Some or all input taxa are absent from OToL synthetic tree, look for invalid taxa and clean them from input")
 						# this will happen if there are some extinct taxa, barren or any invalid taxa in taxonomy
@@ -320,15 +320,15 @@ get_otol_synthetic_tree <- function(input, otol_version = "v2", ...){
 }
 
 #' Get an otol induced dated subtree from your set of queried taxa
-#' @inheritParams datelife_search
-#' @param ott_id Numeric vector of Open Tree Taxonomy ids. Input argument will be ignored.
-#' @return A phylo object with edge length proportional to time in Myrs. NA if 1 or no inputs are valid.
+#' @inheritParams check_ott_input
+#' @inheritDotParams check_ott_input
+#' @return A phylo object with edge length proportional to time in Myrs. It will return NA if any ott_id is invalid.
 #' @export
 #' @details otol dated tree from Stephen Smith's otol scaling service.
 # # ' @examples
 #' # if you want to make an ltt plot of a dated OToL tree you'll need to get rid of singleton nodes with ape::collapse.singles
-#' # and also probably phytools::force.ultrametric
-get_dated_otol_induced_subtree <- function(input = c("Felis silvestris", "Homo sapiens"), ott_id = NULL){
+#' # and also probably do phytools::force.ultrametric
+get_dated_otol_induced_subtree <- function(input = NULL, ott_ids = NULL, ...){
 	# if(is.null(ott_ids)){
 	# 	input <- datelife_query_check(input)
 	# 	input_ott_match <- suppressWarnings(as.numeric(rotl::tnrs_match_names(input$cleaned_names)$ott_id))
@@ -354,9 +354,8 @@ get_dated_otol_induced_subtree <- function(input = c("Felis silvestris", "Homo s
 	# 		input <- input$cleaned_names
 	# 	}
 	# }
-	# all previous code is replaced by the two following lines:
-	input <- datelife_query_check(datelife_query = input)
-	input_ott_match <- suppressMessages(check_ott_input(input, ott_id))
+	# all previous code is replaced by the following line:
+	input_ott_match <- suppressMessages(check_ott_input(input, ott_ids, ...))
 	if(length(input_ott_match) < 2){
 		message("At least two valid names or numeric ott_ids are needed to get a tree")
 		return(NA)

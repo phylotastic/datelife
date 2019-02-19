@@ -38,22 +38,33 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
 #' checks input for get_ott_clade,  get_ott_children functions
 #' returns a numeric vector of ott ids
 #' @param input Optional. A character vector of names or a datelifeQuery object
-#' @param ott_ids Optional. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match
+#' @param ott_ids If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match
+#' @inheritDotParams datelife_query_check
 #' @return A named numeric vector of valid ott IDs
 #' @export
-check_ott_input <- function(input, ott_ids = NULL){
+#' @details By default it uses ott_id argument if it is not NULL.
+check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
+    if(is.null(input) & is.null(ott_ids)){
+        message("Both input arguments are empty; please specify one.")
+        return(NA)
+    }
     if(is.null(ott_ids)){
-      input <- datelife_query_check(input)
-      input_tnrs <- datelife::tnrs_match(names = input$cleaned_names)
-      ott_ids <- input_tnrs$ott_id
-      names(ott_ids) <- input_tnrs$unique_name
-      # should we clean tnrs from invalid? what about NA's?
-      # if we decide to clean, the two following lines should be uncommented:
-      # df <- clean_tnrs(tnrs = df)
-      # df <- df[!is.na(df$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
-      if(any(is.na(ott_ids))){
-          message(paste0("\nInput '", paste(input[which(is.na(ott_ids))], collapse = "', '"), "' not found in Open Tree of Life Taxonomy."))
-          ott_ids <- ott_ids[which(!is.na(ott_ids))]
+      input <- datelife_query_check(input, ...)
+      if(!inherits(input, "datelifeQuery")){
+          (message("Input must be a character rvector or a datelifeQuery object"))
+          return(NA)
+      }
+      if(is.numeric(input$ott_id)){
+          ott_ids <- input$ott_ids
+          names(ott_ids) <- input$cleaned_names
+      } else {
+          input_tnrs <- datelife::tnrs_match(names = input$cleaned_names)
+          # should we clean tnrs from invalid? what about NA's? Maybe only NA's at the end, so we can tell users what was unsuccesful
+          # if we decide to clean, the two following lines should be uncommented:
+          # input_tnrs <- clean_tnrs(tnrs = input_tnrs)
+          # input_tnrs <- input_tnrs[!is.na(input_tnrs$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
+          ott_ids <- input_tnrs$ott_id
+          names(ott_ids) <- input_tnrs$unique_name
       }
     }
     # ott_ids <- suppressWarnings(as.numeric(ott_ids))
@@ -72,7 +83,11 @@ check_ott_input <- function(input, ott_ids = NULL){
           ott_ids <- ott_ids[!grepl("error", names(ott_ids))]
       }
     }
-
+    # now check for NAs:
+    if(any(is.na(ott_ids))){
+        message(paste0("\nInput '", paste(names(input)[which(is.na(ott_ids))], collapse = "', '"), "' not found in Open Tree of Life Taxonomy."))
+        ott_ids <- ott_ids[which(!is.na(ott_ids))]
+    }
     if(length(ott_ids) < 1){
       message("At least one valid input name or numeric ott IDs are needed to get any information")
       return(NA)
@@ -88,6 +103,7 @@ check_ott_input <- function(input, ott_ids = NULL){
 #' lin
 #' @export
 get_ott_lineage <- function(input, ott_ids = NULL){
+    ott_ids <- c(335590, 555178, 748370, 1070795, 3942422, 907458, 472526, 820645, 31926, 756728, 605194, 490099)
   input_ott_match <- check_ott_input(input, ott_ids)
   tax_info <- .get_ott_lineage(input_ott_match)
   lin <- lapply(tax_info, "[", "lineage")
@@ -102,7 +118,9 @@ get_ott_lineage <- function(input, ott_ids = NULL){
   }
   res <- sapply(seq(length(lin)), mat)
   # enhance: ott_id names should be the name of the rank, look at the example to see why
-  stats::setNames(ott_ids, names(input_ott_match))
+  stats::setNames(res, names(input_ott_match))
+  # stats::setNames(ott_ids, names(input_ott_match))
+  return(res)
 }
 #' Gets the lineage of a set of taxa using rotl:taxonomy_taxon_info(include_lineage = TRUE)
 #' @param input_ott_match An Output of check_ott_input function.
@@ -260,8 +278,10 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_ids 
 #' names(ids) <- tnrs$unique_name
 #' children <- get_ott_children(ott_ids = ids) # or
 #' children <- get_ott_children(input = "Canis")
-#' rownames(children[[1]])
-#' tree_children <- datelife::get_otol_synthetic_tree(children$Canis)
+#' str(children)
+#' ids <- children$Canis$ott_id
+#' names(ids) <- rownames(children$Canis)
+#' tree_children <- datelife::get_otol_synthetic_tree(ott_ids = ids)
 #' plot(tree_children, cex = 0.3)
 #' # Other examples:
 #' oo <- get_ott_children(input= "magnoliophyta", ott_rank = "order")

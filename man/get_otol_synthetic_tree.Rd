@@ -4,29 +4,20 @@
 \alias{get_otol_synthetic_tree}
 \title{Gets Open Tree of Life synthetic tree of a set of lineages.}
 \usage{
-get_otol_synthetic_tree(input, otol_version = "v2", ...)
+get_otol_synthetic_tree(input = NULL, ott_ids = NULL,
+  otol_version = "v2", ...)
 }
 \arguments{
-\item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
+\item{input}{Optional. A character vector of names or a datelifeQuery object}
+
+\item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 
 \item{otol_version}{Version of OToL to use}
 
-\item{...}{Arguments passed on to \code{rotl::tnrs_match_names}
+\item{...}{Arguments passed on to \code{check_ott_input}
 \describe{
-  \item{context_name}{name of the taxonomic context to be searched
-(length-one character vector). Must match (case sensitive) one
-of the values returned by \code{\link{tnrs_contexts}}.}
-  \item{do_approximate_matching}{A logical indicating whether or not
-to perform approximate string (a.k.a. \dQuote{fuzzy})
-matching. Using \code{FALSE} will greatly improve
-speed. Default, however, is \code{TRUE}.}
-  \item{ids}{A vector of ids to use for identifying names. These
-will be assigned to each name in the names array. If ids is
-provided, then ids and names must be identical in length.}
-  \item{include_suppressed}{Ordinarily, some quasi-taxa, such as
-incertae sedis buckets and other non-OTUs, are suppressed from
-TNRS results. If this parameter is true, these quasi-taxa are
-allowed as possible TNRS results.}
+  \item{input}{Optional. A character vector of names or a datelifeQuery object}
+  \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 }}
 }
 \value{

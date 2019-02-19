@@ -149,7 +149,6 @@ classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life"
 tree_from_taxonomy <- function(taxa, sources = "Catalogue of Life", collapse_singles=TRUE) {
   # taxa <- tax_dqall[[7]]$cleaned_names # Primates spp
   # classification_results <- classification_paths_from_taxonomy(taxa=taxa, sources="NCBI")
-  taxa <- taxon_names
   classification_results <- classification_paths_from_taxonomy(taxa=taxa, sources=sources)
   names(classification_results$resolved)
   classification_results$resolved$matched_names

@@ -107,5 +107,10 @@ test_that("tree_add_dates works", {
     skip_on_cran()
     skip_on_os("linux") #b/c no mrbayes on travis linux
     utils::data(felid_sdm)
-    y <- tree_add_dates(felid_sdm$phy, missing_taxa = letters[1:5])
-  })
+    y <- tree_add_dates(dated_tree = felid_sdm$phy, missing_taxa = letters[1:5])
+    missing_taxa <- felid_sdm$phy
+    dated_tree <- ape::drop.tip(felid_sdm$phy, c(1,5,9,10,20))
+    missing_taxa$edge.length <- NULL
+    constraint_tree <- suppressWarnings(geiger::congruify.phylo(reference = phylo_tiplabel_space_to_underscore(dated_tree), target = phylo_tiplabel_space_to_underscore(missing_taxa), scale = NA))
+    names(constraint_tree$calibrations)
+})
