@@ -10,7 +10,7 @@
 make_bladj_tree <- function(tree = NULL, nodenames = NULL, nodeages = NULL){
 	# tree <- missing_taxa_phy
 	phy <- tree_check(tree = tree, dated = FALSE)
-	# needs to be fully resolved tp work with bladj?
+	# needs to be fully resolved to work with bladj?
 	# ape::is.binary(phy)
 	if(is.null(phy$node.label)) {
 		stop("phy must have node labels")
@@ -36,10 +36,12 @@ make_bladj_tree <- function(tree = NULL, nodenames = NULL, nodeages = NULL){
 		a = nodenames,
 		b = nodeages
 	)
+	class(phy) <- "phylo" # cannot have more classes to be used by ph_bladj next:
 	new.phy <- phylocomr::ph_bladj(ages = ages_df, phylo = phy)
 	attributes(new.phy) <- NULL
 	new.phy <- phytools::read.newick(text = new.phy)
 	# to keep the same names as original phy (bladj modifies all names to lowercase):
+	phy <- phylo_tiplabel_space_to_underscore(phy)
 	index <- match(tolower(phy$tip.label), new.phy$tip.label)
 	new.phy$tip.label[index] <- phy$tip.label
 	return(new.phy)

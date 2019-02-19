@@ -308,10 +308,12 @@ sdm_matrix_to_phylo <- function(sdm_matrix){
 	calibrations$taxonB <- as.character(calibrations$taxonB)
 	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN
 	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
+	calibrations[calibrations[, "Age"] < 0, "Age"] <- 0.01 # replace negative values for a tiny number
 	# chronogram <- geiger::PATHd8.phylo(phy_target, calibrations)
 	# try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
 	target_tree <- patristic_matrix_to_phylo(sdm_matrix)
 	target_tree$edge.length <- NULL
+	target_tree <- tree_add_nodelabels(tree = target_tree, node_index = "consecutive")  # all nodes need to be named so make_bladj_tree runs properly
 	target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
 			phytools::findMRCA(tree = target_tree,
 								 tips = as.character(calibrations[i,c("taxonA", "taxonB")]),
@@ -320,7 +322,8 @@ sdm_matrix_to_phylo <- function(sdm_matrix){
 	all_nodes <- sort(unique(target_tree_nodes))
 	all_ages <- lapply(seq(length(all_nodes)), function(i) calibrations[target_tree_nodes == i, "Age"])
 	# any(sapply(all_ages, is.null)) # all nodes have at least one calibration.
-	data.frame(MRCA = paste0("node", all_nodes), MinAge = sapply(all_ages, min), MaxAge= sapply(all_ages, max), node = all_nodes)
+	calibrations2 <- data.frame(MRCA = paste0("n", all_nodes), MinAge = sapply(all_ages, min), MaxAge= sapply(all_ages, max), node = all_nodes)
+	new.phy <- make_bladj_tree(tree = target_tree, nodenames = as.character(calibrations2$MRCA), nodeages = sapply(seq(nrow(calibrations2)), function(i) sum(calibrations2[i,c("MinAge", "MaxAge")])/2))
 }
 tree_add_dates2 <- function(calibrations, target_tree, method = "bladj"){
 	if("bladj" %in% method){
