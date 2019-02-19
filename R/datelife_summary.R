@@ -284,8 +284,12 @@ sdm_matrix_to_phylo <- function(sdm_matrix){
 	# sdm_matrix[ceiling(7301/ncol(sdm_matrix)),] # Eubalaena japonica,
 	# sdm_matrix[,ceiling(261/nrow(sdm_matrix))]  # Eubalaena glacialis
 	# xx <- sdm_matrix #[1:5, 1:5]
-	sdm_matrix[which(sdm_matrix < 0)] <- 0.01
-	test <- patristic_matrix_to_phylo(sdm_matrix)
+	#even removing negative values for small positive values gives back non ultrametric trees with njs
+	# sdm_matrix[which(sdm_matrix < 0)] <- 0.01
+	# test <- cluster_patristicmatrix(sdm_matrix)
+	# class(test) <- "multiPhylo"
+	# ape::is.ultrametric(test)
+	# plot(test$njs)
 
 	ages <- tA <- tB <- c() # compute the final length of the data frame: it's ncol(xx)^2 - sum(1:(ncol(xx)-1))
 	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
