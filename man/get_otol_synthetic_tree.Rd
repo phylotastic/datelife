@@ -14,10 +14,12 @@ get_otol_synthetic_tree(input = NULL, ott_ids = NULL,
 
 \item{otol_version}{Version of OToL to use}
 
-\item{...}{Arguments passed on to \code{check_ott_input}
+\item{...}{Arguments passed on to \code{make_datelife_query}
 \describe{
-  \item{input}{Optional. A character vector of names or a datelifeQuery object}
-  \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+  \item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
+  \item{approximate_match}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
+  \item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
+  \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }}
 }
 \value{

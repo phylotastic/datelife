@@ -39,7 +39,7 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
 #' returns a numeric vector of ott ids
 #' @param input Optional. A character vector of names or a datelifeQuery object
 #' @param ott_ids If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match
-#' @inheritDotParams datelife_query_check
+#' @inheritDotParams make_datelife_query -input
 #' @return A named numeric vector of valid ott IDs
 #' @export
 #' @details By default it uses ott_id argument if it is not NULL.

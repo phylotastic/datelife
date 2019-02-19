@@ -149,7 +149,7 @@ input_process <- function(input, verbose = FALSE){
 #' checks if input is a datelifeQuery object, otherwise it uses make_datelife_query to process it
 #' @param datelife_query A datelifeQuery object, output of make_datelife_query function
 #' @inheritParams datelife_search
-#' @inheritDotParams make_datelife_query
+#' @inheritDotParams make_datelife_query -input
 #' @export
 datelife_query_check <- function(datelife_query = NULL, ...){
 	if(missing(datelife_query) | is.null(datelife_query)){

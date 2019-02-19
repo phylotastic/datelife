@@ -33,9 +33,7 @@ ids <- tnrs$ott_id[1]
 names(ids) <- tnrs$unique_name
 children <- get_ott_children(ott_ids = ids) # or
 children <- get_ott_children(input = "Canis")
-rownames(children[[1]])
-class(children$Canis)
-check_ott_input(input, ott_id = NULL)
+str(children)
 ids <- children$Canis$ott_id
 names(ids) <- rownames(children$Canis)
 tree_children <- datelife::get_otol_synthetic_tree(ott_ids = ids)

@@ -267,7 +267,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 #' Gets Open Tree of Life synthetic tree of a set of lineages.
 #' @inheritParams check_ott_input
 #' @param otol_version Version of OToL to use
-#' @inheritDotParams check_ott_input
+#' @inheritDotParams make_datelife_query -input
 #' @return A phylo object
 #' @export
 get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version = "v2", ...){
@@ -321,7 +321,7 @@ get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version =
 
 #' Get an otol induced dated subtree from your set of queried taxa
 #' @inheritParams check_ott_input
-#' @inheritDotParams check_ott_input
+#' @inheritDotParams make_datelife_query -input
 #' @return A phylo object with edge length proportional to time in Myrs. It will return NA if any ott_id is invalid.
 #' @export
 #' @details otol dated tree from Stephen Smith's otol scaling service.
