@@ -98,10 +98,10 @@ get_goodmatrices <- function(unpadded.matrices, verbose){
 	return(good.matrix.indices)
 }
 #' Go from an SDM matrix to anultrametric phylo object.
-#' @inheritParams sdm_matrix A matrix from get_sdm
+#' @param sdm_matrix A matrix from get_sdm
 #' @return An ultrametric phylo object.
 #' @export
-sdm_matrix_to_phylo <- function(sdm_matrix){ # enhance: allow othe rmethods, not only bladj.
+sdm_matrix_to_phylo <- function(sdm_matrix){ # enhance: allow other methods, not only bladj.
 	# for testing:
 	# datelife_result <- get_datelife_result(input = "cetacea")
     # unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
@@ -120,7 +120,7 @@ sdm_matrix_to_phylo <- function(sdm_matrix){ # enhance: allow othe rmethods, not
 	# class(test) <- "multiPhylo"
 	# ape::is.ultrametric(test)
 	# plot(test$njs)
-
+	sdm_matrix <- sdm_matrix*0.5  # it's total distance tip to tip
 	ages <- tA <- tB <- c() # compute the final length of the data frame: it's ncol(xx)^2 - sum(1:(ncol(xx)-1))
 	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
 	# start <- ?
@@ -158,7 +158,7 @@ sdm_matrix_to_phylo <- function(sdm_matrix){ # enhance: allow othe rmethods, not
 	target_tree_nodes <- target_tree_nodes - ape::Ntip(target_tree)
 	all_nodes <- sort(unique(target_tree_nodes))
 	# get the node age distribution:
-	all_ages <- lapply(seq(length(all_nodes)), function(i) calibrations[target_tree_nodes == i, "Age"])
+	all_ages <- lapply(all_nodes, function(i) calibrations[target_tree_nodes == i, "Age"])
 	# any(sapply(all_ages, is.null)) # if FALSE, all nodes have at least one calibration.
 	calibrations2 <- data.frame(MRCA = paste0("n", all_nodes), MinAge = sapply(all_ages, min), MaxAge= sapply(all_ages, max), node = all_nodes)
 	# calibrations2$MRCA is a factor so have to be made as.character to work with bladj

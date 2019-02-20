@@ -6,6 +6,9 @@
 \usage{
 sdm_matrix_to_phylo(sdm_matrix)
 }
+\arguments{
+\item{sdm_matrix}{A matrix from get_sdm}
+}
 \value{
 An ultrametric phylo object.
 }
