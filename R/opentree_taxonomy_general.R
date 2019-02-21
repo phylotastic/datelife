@@ -37,6 +37,7 @@ tnrs_match <- function(names, reference_taxonomy = "otl", ...){  # enhance: add 
 									})
 				utils::setTxtProgressBar(progression, i)
 		}
+		cat("\n") # just to make the progress bar look better
         rownames(df)[1] <- "1"
 		# df[is.na(df$unique_name),1] <- names[is.na(df$unique_name)]  # in case the unmatched names are dropped from final df
 		# df <- rotl::tnrs_match_names(names = names)

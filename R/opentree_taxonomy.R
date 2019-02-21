@@ -133,6 +133,7 @@ get_ott_lineage <- function(input, ott_ids = NULL){
         error = function(e) NA)
       utils::setTxtProgressBar(progression, i)
   }
+  cat("\n") # just to make the progress bar look better
   tax_info
 }
 
@@ -256,6 +257,7 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_ids 
         all_children[[i]] <- list(children = data.frame(ott_id = child, rank = rr), is_monotypic = monotypic)
         utils::setTxtProgressBar(progression, i)
     }
+    cat("\n") # just to make the progress bar look better
     names(all_children) <- names(input_ott_match)
     return(all_children)
 }
