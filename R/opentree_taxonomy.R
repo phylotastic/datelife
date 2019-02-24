@@ -101,9 +101,10 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
 #' taxa <- c("Homo", "Bacillus anthracis", "Apis", "Salvia")
 #' lin <- get_ott_lineage(taxa)
 #' lin
+ott_ids = 454749
 #' @export
-get_ott_lineage <- function(input, ott_ids = NULL){
-    ott_ids <- c(335590, 555178, 748370, 1070795, 3942422, 907458, 472526, 820645, 31926, 756728, 605194, 490099)
+get_ott_lineage <- function(input = NULL, ott_ids = NULL){
+    # ott_ids <- c(335590, 555178, 748370, 1070795, 3942422, 907458, 472526, 820645, 31926, 756728, 605194, 490099)
   input_ott_match <- check_ott_input(input, ott_ids)
   tax_info <- .get_ott_lineage(input_ott_match)
   lin <- lapply(tax_info, "[", "lineage")
@@ -113,10 +114,14 @@ get_ott_lineage <- function(input, ott_ids = NULL){
   # ott_ids <- sapply(seq(length(lin)), function(x) stats::setNames(unlist(sapply(lin[[x]][[1]], "[", "ott_id")), ott_names[[x]]))
   ott_ids <- sapply(seq(length(lin)), function(x) unlist(sapply(lin[[x]][[1]], "[", "ott_id")))
   ott_ranks <- sapply(seq(length(lin)), function(x) unlist(sapply(lin[[x]][[1]], "[", "rank")))
-  mat <- function(x) {
-      matrix(c(ott_ids[[x]], ott_ranks[[x]]), ncol =2, dimnames = list(ott_names[[x]], c("ott_ids", "ott_ranks")))
+  if(length(ott_ids) == 1){
+      res <- list(matrix(c(ott_ids, ott_ranks), ncol =2, dimnames = list(ott_names, c("ott_ids", "ott_ranks"))))
+  } else {
+      mat <- function(x) {
+          matrix(c(ott_ids[[x]], ott_ranks[[x]]), ncol =2, dimnames = list(ott_names[[x]], c("ott_ids", "ott_ranks")))
+      }
+      res <- sapply(seq(length(lin)), mat)
   }
-  res <- sapply(seq(length(lin)), mat)
   # enhance: ott_id names should be the name of the rank, look at the example to see why
   stats::setNames(res, names(input_ott_match))
   # stats::setNames(ott_ids, names(input_ott_match))
@@ -143,7 +148,7 @@ get_ott_lineage <- function(input, ott_ids = NULL){
 #' @inheritParams get_ott_children
 #' @return a list of named numeric vectors with ott ids from input and all requested ranks
 #' @export
-get_ott_clade <- function(input = c("Felis", "Homo"), ott_ids = NULL, ott_rank = "family"){
+get_ott_clade <- function(input = NULL, ott_ids = NULL, ott_rank = "family"){
     # ott_ids= c('649007', '782239', '782231', '1053057', '372826', '766272', '36015', '914245', '873016', '684051')
     # ott_ids = c('431493', '431493', '431493', '431493', '431493', '431493', '431493', '429482', '429482', '429482')
   rank <- ott_rank
