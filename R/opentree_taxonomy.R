@@ -107,7 +107,7 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
 #' lin
 #'  # look up an unknown ott id:
 #'  get_ott_lineage(ott_id = 454749)
-ott_ids <- mrca_ottids
+# ott_ids <- mrca_ottids
 #' @export
 get_ott_lineage <- function(input = NULL, ott_ids = NULL){
     # ott_ids <- c(335590, 555178, 748370, 1070795, 3942422, 907458, 472526, 820645, 31926, 756728, 605194, 490099)
