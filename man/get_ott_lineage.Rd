@@ -4,7 +4,7 @@
 \alias{get_ott_lineage}
 \title{gets the ott id and name of all lineages from one or more input taxa}
 \usage{
-get_ott_lineage(input, ott_ids = NULL)
+get_ott_lineage(input = NULL, ott_ids = NULL)
 }
 \arguments{
 \item{input}{Optional. A character vector of names or a datelifeQuery object}
@@ -21,4 +21,6 @@ gets the ott id and name of all lineages from one or more input taxa
 taxa <- c("Homo", "Bacillus anthracis", "Apis", "Salvia")
 lin <- get_ott_lineage(taxa)
 lin
+ # look up an unknown ott id:
+ get_ott_lineage(ott_id = 454749)
 }

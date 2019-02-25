@@ -120,11 +120,11 @@ sdm_matrix_to_phylo <- function(sdm_matrix){ # enhance: allow other methods, not
 	# class(test) <- "multiPhylo"
 	# ape::is.ultrametric(test)
 	# plot(test$njs)
-	sdm_matrix <- sdm_matrix*0.5  # it's total distance tip to tip
+	sdm_matrix <- sdm_matrix*0.5  # bc it's total distance tip to tip
 	ages <- tA <- tB <- c() # compute the final length of the data frame: it's ncol(xx)^2 - sum(1:(ncol(xx)-1))
 	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
 	# start <- ?
-	# to identify if SDM matrix has some negative values, extract taxon names:
+	# identify if SDM matrix has some negative values; extract taxon names:
 	negs <- which(sdm_matrix < 0)
 	neg_names <- rownames(sdm_matrix)[ceiling(negs/nrow(sdm_matrix))]
 	# extract unique ages from sdm_matrix:

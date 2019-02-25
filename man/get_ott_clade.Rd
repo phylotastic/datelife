@@ -4,8 +4,7 @@
 \alias{get_ott_clade}
 \title{gets the ott id and name of one or several given taxonomic rank from one or more input taxa}
 \usage{
-get_ott_clade(input = c("Felis", "Homo"), ott_ids = NULL,
-  ott_rank = "family")
+get_ott_clade(input = NULL, ott_ids = NULL, ott_rank = "family")
 }
 \arguments{
 \item{input}{Optional. A character vector of names or a datelifeQuery object}

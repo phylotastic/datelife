@@ -101,6 +101,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		median.result <- NULL
 		overlap <- 2
 		while(!inherits(median.result, "phylo")){
+			message(paste0("Trying with overlap = ", overlap, "\n"))
 		  best_grove <- datelife::filter_for_grove(datelife_result,
 		                criterion = "taxa", n = overlap)
 		  median.result <- tryCatch(suppressMessages(datelife_result_median(best_grove)), error = function(e) NULL)

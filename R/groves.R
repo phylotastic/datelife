@@ -87,7 +87,7 @@ pick_grove <- function(grove_list, criterion = "taxa", datelife_result) {
   }
 }
 
-#' Filter a datelifeResult to find the largest grove
+#' Filter a datelifeResult object to find the largest grove
 #' @param datelife_result datelifeResult object (named list of patristic matrices). Only needed for "taxa" criterion
 #' @param criterion Whether to get the grove with the most trees or the most taxa
 #' @param n Degree of overlap required
@@ -98,4 +98,27 @@ filter_for_grove <- function(datelife_result, criterion= "taxa", n = 2) {
   grove_list <- build_grove_list(datelife_result, n)
   final_trees <- pick_grove(grove_list, criterion, datelife_result)
   return(datelife_result[final_trees])
+}
+
+#' Get the best grove from a datelifeResult object that can be summmarized with median or sdm.
+#' @inheritParams filter_for_grove
+#' @return A datelifResult object filtered to only include one grove of trees that can be summarized with median or sdm.
+#' @export
+get_best_grove <- function(datelife_result, criterion = "taxa", overlap = 2){
+    # for testing:
+    # utils::data(names_subset2)
+    # spp_query <- make_datelife_query(names_subset2)
+    # datelife_result <- get_datelife_result(spp_query)
+	median.result <- NULL
+	while(!inherits(median.result, "phylo")){
+        message(paste0("Trying with overlap = ", overlap, "\n"))
+	  best_grove <- datelife::filter_for_grove(datelife_result,
+					criterion = criterion, n = overlap)
+ 	  median.result <- tryCatch(suppressMessages(datelife_result_median(best_grove)), error = function(e) NULL)
+        # sometimes max(branching.times) is off (too big or too small), so we could
+		# standardize by real median of original data (max(mrcas)).
+		# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
+	  overlap <- overlap + 1
+	}
+	return(list(best_grove = best_grove, overlap = overlap-1))
 }
