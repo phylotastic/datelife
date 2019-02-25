@@ -13,7 +13,7 @@
 # #' }
 # #' @keywords
 # #' @details
-# #' How was the data were obtained or generated
+# #' How were the data obtained or generated
 # "data_object"
 
 #' Information on contributors, authors, study ids and clades from studies with chronograms in Open tree of Life

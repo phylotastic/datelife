@@ -49,28 +49,32 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
         return(NA)
     }
     if(is.null(ott_ids)){
-      input <- datelife_query_check(input, ...)
-      if(!inherits(input, "datelifeQuery")){
-          (message("Input must be a character rvector or a datelifeQuery object"))
-          return(NA)
-      }
-      if(is.numeric(input$ott_id)){
-          ott_ids <- input$ott_ids
-          names(ott_ids) <- input$cleaned_names
-      } else {
-          input_tnrs <- datelife::tnrs_match(names = input$cleaned_names)
-          # should we clean tnrs from invalid? what about NA's? Maybe only NA's at the end, so we can tell users what was unsuccesful
-          # if we decide to clean, the two following lines should be uncommented:
-          # input_tnrs <- clean_tnrs(tnrs = input_tnrs)
-          # input_tnrs <- input_tnrs[!is.na(input_tnrs$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
-          ott_ids <- input_tnrs$ott_id
-          names(ott_ids) <- input_tnrs$unique_name
-      }
+          input <- datelife_query_check(input, ...)
+          if(!inherits(input, "datelifeQuery")){
+              (message("Input must be a character rvector or a datelifeQuery object"))
+              return(NA)
+          }
+          if(is.numeric(input$ott_id)){
+              ott_ids <- input$ott_ids
+              names(ott_ids) <- input$cleaned_names
+          } else {
+              input_tnrs <- datelife::tnrs_match(names = input$cleaned_names)
+              # should we clean tnrs from invalid? what about NA's? Maybe only NA's at the end, so we can tell users what was unsuccesful
+              # if we decide to clean, the two following lines should be uncommented:
+              # input_tnrs <- clean_tnrs(tnrs = input_tnrs)
+              # input_tnrs <- input_tnrs[!is.na(input_tnrs$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run
+              ott_ids <- input_tnrs$ott_id
+              names(ott_ids) <- input_tnrs$unique_name
+          }
     }
     # ott_ids <- suppressWarnings(as.numeric(ott_ids))
     if(!is.numeric(ott_ids)){
-      message("ott_ids is not a numeric vector.")
-      return(NA)
+        ott_ids2 <- ott_ids
+        message("ott_ids is not a numeric vector; coercing to numeric.")
+        ott_ids <- as.numeric(ott_ids)
+        if(any(is.na(is.numeric(ott_ids2)))){
+            message(paste0("\nInput '", paste(names(input)[which(is.na(ott_ids2))], collapse = "', '"), "' not numeric."))
+        }
     }
     if(is.null(names(ott_ids))){
       # ott_ids <- c(1, ott_ids) # if ott_ids does not exist it will give an error
@@ -101,7 +105,9 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
 #' taxa <- c("Homo", "Bacillus anthracis", "Apis", "Salvia")
 #' lin <- get_ott_lineage(taxa)
 #' lin
-ott_ids = 454749
+#'  # look up an unknown ott id:
+#'  get_ott_lineage(ott_id = 454749)
+ott_ids <- mrca_ottids
 #' @export
 get_ott_lineage <- function(input = NULL, ott_ids = NULL){
     # ott_ids <- c(335590, 555178, 748370, 1070795, 3942422, 907458, 472526, 820645, 31926, 756728, 605194, 490099)
@@ -123,7 +129,7 @@ get_ott_lineage <- function(input = NULL, ott_ids = NULL){
       res <- sapply(seq(length(lin)), mat)
   }
   # enhance: ott_id names should be the name of the rank, look at the example to see why
-  stats::setNames(res, names(input_ott_match))
+  names(res) <- names(input_ott_match)
   # stats::setNames(ott_ids, names(input_ott_match))
   return(res)
 }
