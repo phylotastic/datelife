@@ -98,19 +98,27 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	}
 	# the following chunck is to test if n_overlap = 2 is enough to summarize results with sdm and median
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm", "newick_median", "phylo_median")){
-		median.result <- NULL
-		overlap <- 2
-		while(!inherits(median.result, "phylo")){
-			message(paste0("Trying with overlap = ", overlap, "\n"))
-		  best_grove <- datelife::filter_for_grove(datelife_result,
-		                criterion = "taxa", n = overlap)
-		  median.result <- tryCatch(suppressMessages(datelife_result_median(best_grove)), error = function(e) NULL)
-			# sometimes max(branching.times) is off (too big or too small), so we could
-			# standardize by real median of original data (max(mrcas)).
-			# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
-		  overlap <- overlap + 1
-		}
-		tree <- median.result
+		# start of replace with
+		best_grove <- get_best_grove(datelife_result, criterion = "taxa", overlap = 2)$best_grove
+		# median.result <- NULL
+		# overlap <- 2
+		# while(!inherits(median.result, "phylo")){
+		# 	message(paste0("Trying with overlap = ", overlap, "\n"))
+		#   best_grove <- datelife::filter_for_grove(datelife_result,
+		#                 criterion = "taxa", n = overlap)
+		#   median.result <- tryCatch(suppressMessages(datelife_result_median(best_grove)), error = function(e) NULL)
+		#   overlap <- overlap + 1
+		# }
+		# end of replace with get_best_grove(datelife_result, criterion = "taxa", overlap = 2)
+	}
+	if(grepl("median", summary_format.in)){
+		median.matrix <- datelife_result_median_matrix(best_grove)
+		tree <- patristic_matrix_to_phylo(median.matrix,
+                  clustering_method = clustering_method, fix_negative_brlen = TRUE)
+		# sometimes max(branching.times) is off (too big or too small), so we could
+		# standardize by real median of original data (max(mrcas)).
+		# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
+		# tree <- sdm_matrix_to_phylo(median.matrix)
 	}
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm")) {
 		sdm.result <- datelife_result_sdm(best_grove)
@@ -212,13 +220,13 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 #' Function to compute median of a datelifeResult object.
 #' @inheritParams patristic_matrix_to_phylo
 #' @inheritParams datelife_result_check
-datelife_result_median <- function(datelife_result, clustering_method = "nj") {
+datelife_result_median_matrix <- function(datelife_result) {
 	patristic.array <- patristic_matrix_list_to_array(datelife_result)
 	median.matrix <- summary_patristic_matrix_array(patristic.array)
 	# when matrix comes from median, upgma gives much older ages than expected
-	# we use nj to cluster in this case
-	median.phylo <- patristic_matrix_to_phylo(median.matrix, clustering_method = clustering_method, fix_negative_brlen = TRUE)
-	return(median.phylo)
+	# we used nj to cluster in this case
+	# now we prefer our algorithm
+	return(median.matrix)
 }
 
 #' Get the tree with the most tips: the biggest tree

@@ -114,7 +114,10 @@ get_best_grove <- function(datelife_result, criterion = "taxa", overlap = 2){
         message(paste0("Trying with overlap = ", overlap, "\n"))
 	  best_grove <- datelife::filter_for_grove(datelife_result,
 					criterion = criterion, n = overlap)
- 	  median.result <- tryCatch(suppressMessages(datelife_result_median(best_grove)), error = function(e) NULL)
+      median.matrix <- datelife_result_median_matrix(best_grove)
+ 	  median.result <- tryCatch(suppressMessages(patristic_matrix_to_phylo(median.matrix,
+                clustering_method = clustering_method, fix_negative_brlen = TRUE)),
+                error = function(e) NULL)
         # sometimes max(branching.times) is off (too big or too small), so we could
 		# standardize by real median of original data (max(mrcas)).
 		# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))

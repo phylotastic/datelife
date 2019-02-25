@@ -17,7 +17,10 @@ test_that("median and sdm give a tree when source trees have different degrees o
     utils::data(names_subset2)
     spp_query <- make_datelife_query(names_subset2)
     spp_dl_result <- get_datelife_result(spp_query)
+    # length(spp_dl_result)  #24
     xx <- get_best_grove(spp_dl_result)
+    
+    xxphylo <- sdm_matrix_to_phylo(xx)
     # sdm_matrix_to_phylo(spp_dl_result)
     x1 <- summarize_datelife_result(datelife_query = spp_query,
       datelife_result = spp_dl_result, summary_format = "phylo_median")
