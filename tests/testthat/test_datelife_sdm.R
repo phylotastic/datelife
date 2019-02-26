@@ -11,9 +11,9 @@ test_that("SDM correctly returns tree", {
 
 
 test_that("names_subset2 gives good sdm tree", {
-    class(names_subset2_result)
+    # class(names_subset2_result)
     xx <- get_best_grove(names_subset2_result)
-    class(xx$best_grove)
+    # class(xx$best_grove)
     sdm_matrix <- datelife_result_median_matrix(xx$best_grove)
     # nrow(sdm.matrix)
 

@@ -119,7 +119,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		# sometimes max(branching.times) is off (too big or too small), so we could
 		# standardize by real median of original data (max(mrcas)).
 		# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
-		# tree <- sdm_matrix_to_phylo(median.matrix)
+		# tree <- summary_matrix_to_phylo(median.matrix)
 	}
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm")) {
 		sdm.result <- datelife_result_sdm(best_grove)
@@ -222,7 +222,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 #' @inheritParams patristic_matrix_to_phylo
 #' @inheritParams datelife_result_check
 datelife_result_median_matrix <- function(datelife_result) {
-	inherits(datelife_result)
+	datelife_result <- check_datelife_result(datelife_result)
 	patristic.array <- patristic_matrix_list_to_array(datelife_result)
 	median.matrix <- summary_patristic_matrix_array(patristic.array)
 	# when matrix comes from median, upgma gives much older ages than expected

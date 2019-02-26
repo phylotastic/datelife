@@ -109,21 +109,25 @@ get_best_grove <- function(datelife_result, criterion = "taxa", overlap = 2){
     # utils::data(names_subset2)
     # spp_query <- make_datelife_query(names_subset2)
     # datelife_result <- get_datelife_result(spp_query)
-	median.result <- NULL
-	while(!inherits(median.result, "phylo")){
-        message(paste0("Trying with overlap = ", overlap, "\n"))
-	  best_grove <- datelife::filter_for_grove(datelife_result,
-					criterion = criterion, n = overlap)
-                    # length(best_grove)
+    datelife_result <- check_datelife_result(datelife_result)
+	  median.result <- NULL
+  	while(!inherits(median.result, "phylo")){
+          message(paste0("Trying with overlap = ", overlap, "\n"))
+  	  best_grove <- datelife::filter_for_grove(datelife_result,
+  					criterion = criterion, n = overlap)
+      # length(best_grove)
+      # we use patristic_matrix_to_phylo as a test that the grove can be clustered into a tree
+      # fot that we first get the median matrix and then try to cluster catching the error
       median.matrix <- datelife_result_median_matrix(best_grove)
- 	  median.result <- tryCatch(suppressMessages(suppressWarnings(patristic_matrix_to_phylo(median.matrix,
-                clustering_method = "nj", fix_negative_brlen = TRUE))),
-                error = function(e) NULL)
-        # sometimes max(branching.times) is off (too big or too small), so we could
-		# standardize by real median of original data (max(mrcas)).
-		# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
-	  overlap <- overlap + 1
-	}
+   	  median.result <- tryCatch(suppressMessages(suppressWarnings(patristic_matrix_to_phylo(median.matrix,
+                  clustering_method = "nj", fix_negative_brlen = TRUE))),
+                  error = function(e) NULL)
+      # issue: sometimes max(branching.times) is off (too big or too small), so we could
+  		# standardize by real median of original data (max(mrcas)).
+  		# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
+      # We might have solved the above issue by using our method developped for sdm matrices
+  	  overlap <- overlap + 1
+  	}
     class(best_grove) <- class(datelife_result)
-	return(list(best_grove = best_grove, overlap = overlap-1))
+	  return(list(best_grove = best_grove, overlap = overlap-1))
 }

@@ -27,7 +27,7 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 			SDM.result <- get_sdm(unpadded.matrices, weighting, verbose)
 			# it is important to use upgma as clustering method; nj produces much younger ages when the matrix comes from sdm
 			# phy <- patristic_matrix_to_phylo(SDM.result, clustering_method = clustering_method, fix_negative_brlen = TRUE)
-			phy <- sdm_matrix_to_phylo(SDM.result)$phy # this also contains the age distributions and calibrations used
+			phy <- summary_matrix_to_phylo(SDM.result)$phy # this also contains the age distributions and calibrations used
 		} else {
 			if(length(good.matrix.indices) == length(datelife_result)) {
 				warning("There are not enough input chronograms to run SDM. You can help uploading trees to Open Tree of Life tree store.")
@@ -96,63 +96,4 @@ get_goodmatrices <- function(unpadded.matrices, verbose){
 		}
 	}
 	return(good.matrix.indices)
-}
-#' Go from an SDM matrix to an ultrametric phylo object.
-#' @param sdm_matrix A matrix from get_sdm
-#' @return An ultrametric phylo object.
-#' @export
-sdm_matrix_to_phylo <- function(sdm_matrix){ # enhance: allow other methods, not only bladj.
-	sdm_matrix <- sdm_matrix*0.5  # bc it's total distance tip to tip
-	ages <- tA <- tB <- c() # compute the final length of the data frame: it's ncol(xx)^2 - sum(1:(ncol(xx)-1))
-	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
-	# start <- ?
-	# identify if SDM matrix has some negative values; extract taxon names:
-	negs <- which(sdm_matrix < 0)
-	neg_names <- rownames(sdm_matrix)[ceiling(negs/nrow(sdm_matrix))]
-	# extract unique ages from sdm_matrix:
-	for(i in seq(ncol(sdm_matrix))){
-		# calibrations[start:start+i,1] <- xx[1:i,i]
-		# calibrations[start:start+i,2] <- rownames(xx)[1:i]
-		# calibrations[start:start+i,3] <- rep(colnames(xx)[i], i)
-		# start <- sum(!is.na(calibrations[,1])) +1
-		ages <- c(ages, sdm_matrix[1:i,i])
-		tA <- c(tA, rownames(sdm_matrix)[1:i])
-		tB <- c(tB, rep(colnames(sdm_matrix)[i], i))
-	}
-	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB)
-	calibrations$taxonA <- as.character(calibrations$taxonA)
-	calibrations$taxonB <- as.character(calibrations$taxonB)
-	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN
-	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
-	calibrations[calibrations[, "Age"] < 0, "Age"] <- 0.01 # replace negative values for a tiny number
-	if(any(is.na(calibrations[,"Age"]))){
-		warning("there are still NAs in the matrix")
-	}
-	# enhance: where does this negative values come from in SDM?
-	# get a backbone tree:
-	# chronogram <- geiger::PATHd8.phylo(phy_target, calibrations)
-	# try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
-	target_tree <- patristic_matrix_to_phylo(sdm_matrix)
-	if(!inherits(target_tree, "phylo")){
-		message("datelifeResult object has no good groves; try with get_best_grove first")
-		# enhance: add a more formal test of best grove
-		return(NA)
-	}
-	target_tree$edge.length <- NULL
-	target_tree <- tree_add_nodelabels(tree = target_tree, node_index = "consecutive")  # all nodes need to be named so make_bladj_tree runs properly
-	# get the coincident nodes:
-	target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
-			phytools::findMRCA(tree = target_tree,
-								 tips = as.character(calibrations[i,c("taxonA", "taxonB")]),
-								 type = "node"))
-	target_tree_nodes <- target_tree_nodes - ape::Ntip(target_tree)
-	all_nodes <- sort(unique(target_tree_nodes))
-	# get the node age distribution:
-	all_ages <- lapply(all_nodes, function(i) calibrations[target_tree_nodes == i, "Age"])
-	# any(sapply(all_ages, is.null)) # if FALSE, all nodes have at least one calibration.
-	calibrations2 <- data.frame(MRCA = paste0("n", all_nodes), MinAge = sapply(all_ages, min), MaxAge= sapply(all_ages, max), node = all_nodes)
-	# calibrations2$MRCA is a factor so have to be made as.character to work with bladj
-	new.phy <- make_bladj_tree(tree = target_tree, nodenames = as.character(calibrations2$MRCA), nodeages = sapply(seq(nrow(calibrations2)), function(i) sum(calibrations2[i,c("MinAge", "MaxAge")])/2))
-	new.phy$clustering_method <- "sdm"
-	return(list(phy = new.phy, sdm_ages_distribution = all_ages, calibrations = calibrations2))
 }
