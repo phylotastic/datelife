@@ -12,7 +12,13 @@ get_best_grove(datelife_result, criterion = "taxa", overlap = 2)
 \item{criterion}{Whether to get the grove with the most trees or the most taxa}
 }
 \value{
-A datelifResult object filtered to only include one grove of trees that can be summarized with median or sdm.
+A list of two elements:
+\describe{
+\item{best_grove}{A datelifResult object filtered to only include one grove of trees that can be summarized with median or sdm.
+}
+\item{overlap}{The degree of taxon names overlap among trees in the best grove.
+}
+}
 }
 \description{
 Get the best grove from a datelifeResult object that can be summmarized with median or sdm.

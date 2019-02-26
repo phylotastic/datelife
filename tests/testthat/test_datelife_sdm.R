@@ -7,14 +7,15 @@ test_that("SDM correctly returns tree", {
   datelife_result <- results_list_process(results_list, taxa, TRUE)
   result.tree <- datelife_result_sdm(datelife_result)$phy
   expect_true(inherits(result.tree, "phylo"))
+  ape::is.ultrametric(result.tree)
 })
 
-
-test_that("names_subset2 gives good sdm tree", {
+test_that("names_subset2 gives good summary trees", {
     # class(names_subset2_result)
     xx <- get_best_grove(names_subset2_result)
     # class(xx$best_grove)
-    sdm_matrix <- datelife_result_median_matrix(xx$best_grove)
+    xx_median <- datelife_result_median(xx$best_grove)
+    xx_sdm <- datelife_result_sdm(xx$best_grove)
     # nrow(sdm.matrix)
 
 })

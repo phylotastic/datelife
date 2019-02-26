@@ -10,7 +10,7 @@ cluster_patristicmatrix(patristic_matrix)
 \item{patristic_matrix}{A patristic matrix}
 }
 \value{
-A phylo object or NA
+A list of results from clustering with NJ and UPGMA
 }
 \description{
 Cluster a patristic matrix with several methods

@@ -102,7 +102,13 @@ filter_for_grove <- function(datelife_result, criterion= "taxa", n = 2) {
 
 #' Get the best grove from a datelifeResult object that can be summmarized with median or sdm.
 #' @inheritParams filter_for_grove
-#' @return A datelifResult object filtered to only include one grove of trees that can be summarized with median or sdm.
+#' @return A list of two elements:
+#' \describe{
+#'	\item{best_grove}{A datelifResult object filtered to only include one grove of trees that can be summarized with median or sdm.
+#'	}
+#'	\item{overlap}{The degree of taxon names overlap among trees in the best grove.
+#'	}
+#' }
 #' @export
 get_best_grove <- function(datelife_result, criterion = "taxa", overlap = 2){
     # for testing:
@@ -117,7 +123,8 @@ get_best_grove <- function(datelife_result, criterion = "taxa", overlap = 2){
   					criterion = criterion, n = overlap)
       # length(best_grove)
       # we use patristic_matrix_to_phylo as a test that the grove can be clustered into a tree
-      # fot that we first get the median matrix and then try to cluster catching the error
+      # for that we first get the median matrix and then try to cluster catching the error
+      # until we get a tree
       median.matrix <- datelife_result_median_matrix(best_grove)
    	  median.result <- tryCatch(suppressMessages(suppressWarnings(patristic_matrix_to_phylo(median.matrix,
                   clustering_method = "nj", fix_negative_brlen = TRUE))),
@@ -129,5 +136,5 @@ get_best_grove <- function(datelife_result, criterion = "taxa", overlap = 2){
   	  overlap <- overlap + 1
   	}
     class(best_grove) <- class(datelife_result)
-	  return(list(best_grove = best_grove, overlap = overlap-1))
+	return(list(best_grove = best_grove, overlap = overlap-1))
 }

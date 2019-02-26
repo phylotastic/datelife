@@ -12,6 +12,14 @@
 patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj", fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE) {
     # patristic_matrix <-  threebirds_dr[[5]]
     # patristic_matrix_to_phylo(threebirds_dr[[5]])
+    if(!inherits(patristic_matrix, "matrix") & !inherits(patristic_matrix, "data.frame")){
+        message("patristic_matrix argument is not a matrix")
+        return(NA)
+    }
+    # has to be matrix not data frame:
+    if(inherits(patristic_matrix, "data.frame")){
+        patristic_matrix <- as.matrix(patristic_matrix)
+    }
     clustering_method <- match.arg(arg = clustering_method, choices = c("nj", "upgma"), several.ok = FALSE)
     if(anyNA(patristic_matrix)) {
   	   patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
@@ -65,6 +73,10 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
 force_ultrametric <- function(phy){
       # enhance: check if there is an edge.length.original already There
       # something like how many grepl("edge.length.original") in names(phy) and add an integer after it.
+      if(!inherits(phy, "phylo")){
+          message("phy argument is not a phylo object.")
+          return(NA)
+      }
       if(!ape::is.ultrametric(phy)){
         phy$edge.length.original <- phy$edge.length
         phy <- phytools::force.ultrametric(tree = phy, method = "extend")
@@ -75,9 +87,17 @@ force_ultrametric <- function(phy){
 #' Cluster a patristic matrix with several methods
 #'
 #' @inheritParams patristic_matrix_to_phylo
-#' @return A phylo object or NA
+#' @return A list of results from clustering with NJ and UPGMA
 #' @export
 cluster_patristicmatrix <- function(patristic_matrix){
+    if(!inherits(patristic_matrix, "matrix") & !inherits(patristic_matrix, "data.frame")){
+        message("patristic_matrix argument is not a matrix")
+        return(NA)
+    }
+    # has to be matrix not data frame:
+    if(inherits(patristic_matrix, "data.frame")){
+        patristic_matrix <- as.matrix(patristic_matrix)
+    }
   if(dim(patristic_matrix)[1] < 2) {
      return(NA)
   }
@@ -128,6 +148,10 @@ cluster_patristicmatrix <- function(patristic_matrix){
 #' @return A phylo object or NA
 #' @export
 choose_cluster <- function(phycluster, clustering_method){
+    if(!inherits(phycluster, "list")){
+        message("phycluster arguments is not a list; check it out.")
+        return(NA)
+    }
   phy_return <- NA
   if(length(phycluster) == 0){
     message("phycluster argument is length 0")
@@ -198,6 +222,18 @@ choose_cluster <- function(phycluster, clustering_method){
 #' @details It can take a regular patristic distance matrix, but there are simpler methods for that implemented in patristic_matrix_to_phylo.
 #' @export
 summary_matrix_to_phylo <- function(summ_matrix){ # enhance: allow other methods, not only bladj.
+    # for debugging here
+    # best_grove <- get_best_grove(names_subset2_result)$best_grove
+    # summ_matrix <- datelife_result_median_matrix(best_grove)
+    if(!inherits(summ_matrix, "matrix") & !inherits(summ_matrix, "data.frame")){
+        message("summ_matrix argument is not a matrix")
+        return(NA)
+    }
+    # summ_matrix <- data.frame(summ_matrix)
+    # everything up to patristic_matryx_to_phylo ok if it is a data frame too
+    if(inherits(summ_matrix, "data.frame")){
+        summ_matrix <- as.matrix(summ_matrix)
+    }
 	summ_matrix <- summ_matrix*0.5  # bc it's total distance tip to tip
 	ages <- tA <- tB <- c() # compute the final length of the data frame: it's ncol(xx)^2 - sum(1:(ncol(xx)-1))
 	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
@@ -228,8 +264,9 @@ summary_matrix_to_phylo <- function(summ_matrix){ # enhance: allow other methods
 	# get a backbone tree:
 	# chronogram <- geiger::PATHd8.phylo(phy_target, calibrations)
 	# try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
-	target_tree <- patristic_matrix_to_phylo(summ_matrix)
-	if(!inherits(target_tree, "phylo")){
+	target_tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(summ_matrix, ultrametric = TRUE)))
+    # ape::is.ultrametric(target_tree)
+    if(!inherits(target_tree, "phylo")){
 		message("datelifeResult object has no good groves; try with get_best_grove first")
 		# enhance: add a more formal test of best grove
 		return(NA)
