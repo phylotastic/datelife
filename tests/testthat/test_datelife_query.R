@@ -1,4 +1,11 @@
 #testing functions that process or check datelife inputs
+test_that("Mus higher-taxon search is giving species back", {
+  skip("skipping Mus")
+  expect_silent(make_datelife_query("Echinus", get_spp_from_taxon = TRUE))
+  expect_silent(make_datelife_query("Mus", get_spp_from_taxon = TRUE))
+  expect_true(length(rphylotastic::taxon_get_species("Mus")) > 0)
+})
+
 test_that("datelife_query works", {
 	cleaned.input_tnrs <- tnrs_match(names = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))
 	input <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")

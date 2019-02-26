@@ -254,6 +254,7 @@
 #' usethis::use_data(names_subset2)
 "names_subset2"
 
+
 #' A list with datelieQuery and datelifeResult objects from a search of taxon names from names_subset2
 #'
 #' @name dlsearch_subset2

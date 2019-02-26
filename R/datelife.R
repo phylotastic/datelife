@@ -140,7 +140,7 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 #' @inheritParams datelife_search
 #' @param datelife_result An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.
 #' @export
-datelife_result_check <- function(datelife_result, use_tnrs, verbose = FALSE){
+datelife_result_check <- function(datelife_result, use_tnrs = FALSE, verbose = FALSE){
 	if(length(datelife_result) < 1) {
 		warning("Output is empty.", call. = FALSE)
 		if(verbose) {
@@ -150,6 +150,25 @@ datelife_result_check <- function(datelife_result, use_tnrs, verbose = FALSE){
 			}
 		}
 	}
+}
+#' checks if we obtained an empty search with the set of input taxon names
+#' @inheritParams datelife_result_check
+#' @return a datelifeResult object or a message explaining why it is not a datelifeResul tobject
+check_datelife_result <- function(datelife_result){
+	# datelife_result <- names_subset2_result
+	if(!inherits(datelife_result, "datelifeResult")){
+		if(is.list(datelife_result)){
+			class_dl <- unname(sapply(datelife_result, class))
+			if(all(grepl("matrix", class_dl))){
+				class(datelife_result) <- "datelifeResult"
+			} else {
+				message("datelife_result has some elements that are not matrices; check it out.")
+			}
+		} else {
+			message("datelife_result is not a list; check it out")
+		}
+	}
+	return(datelife_result)
 }
 
 #' datelifeResult object of three birds "Rhea americana", "Pterocnemia pennata", and "Struthio camelus"

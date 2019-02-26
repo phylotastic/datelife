@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_sdm.R
 \name{sdm_matrix_to_phylo}
 \alias{sdm_matrix_to_phylo}
-\title{Go from an SDM matrix to anultrametric phylo object.}
+\title{Go from an SDM matrix to an ultrametric phylo object.}
 \usage{
 sdm_matrix_to_phylo(sdm_matrix)
 }
@@ -13,5 +13,5 @@ sdm_matrix_to_phylo(sdm_matrix)
 An ultrametric phylo object.
 }
 \description{
-Go from an SDM matrix to anultrametric phylo object.
+Go from an SDM matrix to an ultrametric phylo object.
 }

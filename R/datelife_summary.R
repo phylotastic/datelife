@@ -100,6 +100,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm", "newick_median", "phylo_median")){
 		# start of replace with
 		best_grove <- get_best_grove(datelife_result, criterion = "taxa", overlap = 2)$best_grove
+		# best_grove <- get_best_grove(spp_dl_result, criterion = "taxa", overlap = 2)$best_grove
 		# median.result <- NULL
 		# overlap <- 2
 		# while(!inherits(median.result, "phylo")){
@@ -113,8 +114,8 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	}
 	if(grepl("median", summary_format.in)){
 		median.matrix <- datelife_result_median_matrix(best_grove)
-		tree <- patristic_matrix_to_phylo(median.matrix,
-                  clustering_method = clustering_method, fix_negative_brlen = TRUE)
+		tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(median.matrix,
+                  clustering_method = "nj", fix_negative_brlen = TRUE)))
 		# sometimes max(branching.times) is off (too big or too small), so we could
 		# standardize by real median of original data (max(mrcas)).
 		# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
@@ -221,6 +222,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 #' @inheritParams patristic_matrix_to_phylo
 #' @inheritParams datelife_result_check
 datelife_result_median_matrix <- function(datelife_result) {
+	inherits(datelife_result)
 	patristic.array <- patristic_matrix_list_to_array(datelife_result)
 	median.matrix <- summary_patristic_matrix_array(patristic.array)
 	# when matrix comes from median, upgma gives much older ages than expected

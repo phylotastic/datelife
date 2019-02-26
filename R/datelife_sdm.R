@@ -97,29 +97,11 @@ get_goodmatrices <- function(unpadded.matrices, verbose){
 	}
 	return(good.matrix.indices)
 }
-#' Go from an SDM matrix to anultrametric phylo object.
+#' Go from an SDM matrix to an ultrametric phylo object.
 #' @param sdm_matrix A matrix from get_sdm
 #' @return An ultrametric phylo object.
 #' @export
 sdm_matrix_to_phylo <- function(sdm_matrix){ # enhance: allow other methods, not only bladj.
-	# for testing:
-	# datelife_result <- get_datelife_result(input = "cetacea")
-    # unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
-    # good.matrix.indices <- get_goodmatrices(unpadded.matrices, verbose = TRUE)
-    # if(length(good.matrix.indices) > 1) {
-    #   unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-    #   sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat", verbose = TRUE)
-    # }
-	# which(sdm_matrix < 0)
-	# sdm_matrix[ceiling(7301/ncol(sdm_matrix)),] # Eubalaena japonica,
-	# sdm_matrix[,ceiling(261/nrow(sdm_matrix))]  # Eubalaena glacialis
-	# xx <- sdm_matrix #[1:5, 1:5]
-	#even removing negative values for small positive values gives back non ultrametric trees with njs
-	# sdm_matrix[which(sdm_matrix < 0)] <- 0.01
-	# test <- cluster_patristicmatrix(sdm_matrix)
-	# class(test) <- "multiPhylo"
-	# ape::is.ultrametric(test)
-	# plot(test$njs)
 	sdm_matrix <- sdm_matrix*0.5  # bc it's total distance tip to tip
 	ages <- tA <- tB <- c() # compute the final length of the data frame: it's ncol(xx)^2 - sum(1:(ncol(xx)-1))
 	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
@@ -143,11 +125,19 @@ sdm_matrix_to_phylo <- function(sdm_matrix){ # enhance: allow other methods, not
 	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN
 	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
 	calibrations[calibrations[, "Age"] < 0, "Age"] <- 0.01 # replace negative values for a tiny number
+	if(any(is.na(calibrations[,"Age"]))){
+		warning("there are still NAs in the matrix")
+	}
 	# enhance: where does this negative values come from in SDM?
 	# get a backbone tree:
 	# chronogram <- geiger::PATHd8.phylo(phy_target, calibrations)
 	# try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
 	target_tree <- patristic_matrix_to_phylo(sdm_matrix)
+	if(!inherits(target_tree, "phylo")){
+		message("datelifeResult object has no good groves; try with get_best_grove first")
+		# enhance: add a more formal test of best grove
+		return(NA)
+	}
 	target_tree$edge.length <- NULL
 	target_tree <- tree_add_nodelabels(tree = target_tree, node_index = "consecutive")  # all nodes need to be named so make_bladj_tree runs properly
 	# get the coincident nodes:
