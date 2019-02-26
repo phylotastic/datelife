@@ -15,7 +15,11 @@ test_that("names_subset2 gives good summary trees", {
     xx <- get_best_grove(names_subset2_result)
     # class(xx$best_grove)
     xx_median <- datelife_result_median(xx$best_grove)
+    ape::is.ultrametric(xx_median, option = 2)
+    plot(xx_median, cex = 0.5, label.offset = 50)
+    abline(v= max(ape::branching.times(xx_median)))
     xx_sdm <- datelife_result_sdm(xx$best_grove)
+    ape::is.ultrametric(xx_sdm)
     # nrow(sdm.matrix)
 
 })

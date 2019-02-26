@@ -1,10 +1,8 @@
 #' Function to compute the SDM supertree (Criscuolo et al. 2006) from a datelifeResult object.
 #' @inheritParams datelife_result_check
 #' @inheritParams get_sdm
-#' @return A list of two elements:
+#' @return A phylo object from SDM with an extra element:
 #' \describe{
-#'	\item{phy}{A phylo object with the output chronogram from SDM analysis.
-#'	}
 #'	\item{data}{A datelifeResult object with the chronograms that were used to construct the SDM tree.
 #'	}
 #' }
@@ -27,7 +25,7 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 			SDM.result <- get_sdm(unpadded.matrices, weighting, verbose)
 			# it is important to use upgma as clustering method; nj produces much younger ages when the matrix comes from sdm
 			# phy <- patristic_matrix_to_phylo(SDM.result, clustering_method = clustering_method, fix_negative_brlen = TRUE)
-			phy <- summary_matrix_to_phylo(SDM.result)$phy # this also contains the age distributions and calibrations used
+			phy <- summary_matrix_to_phylo(SDM.result) # this also contains the age distributions and calibrations used
 		} else {
 			if(length(good.matrix.indices) == length(datelife_result)) {
 				warning("There are not enough input chronograms to run SDM. You can help uploading trees to Open Tree of Life tree store.")
@@ -38,7 +36,9 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 		}
 		class(unpadded.matrices) <- "datelifeResult"
 	}
-	return(list(phy = phy, data = unpadded.matrices))
+	phy$data <-  unpadded.matrices
+	class(phy) <- c(class(phy), "datelifeSDM")
+	return(phy)
 }
 #' Get SDM result for list of working matrices.
 #' @param unpadded.matrices A list of patristic matrices, a datelifeResult object.

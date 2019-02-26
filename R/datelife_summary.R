@@ -104,7 +104,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		return.object <- datelife_result_median(best_grove)
 	}
 	if(grepl("sdm", summary_format.in)) {
-		return.object <- datelife_result_sdm(best_grove)$phy
+		return.object <- datelife_result_sdm(best_grove)
 	}
 	if(grepl("newick", summary_format.in)) {
 		return.object <- ape::write.tree(tree)

@@ -233,6 +233,7 @@ summary_matrix_to_phylo <- function(summ_matrix){ # enhance: allow other methods
     # everything up to patristic_matryx_to_phylo ok if it is a data frame too
     if(inherits(summ_matrix, "data.frame")){
         summ_matrix <- as.matrix(summ_matrix)
+        colnames(summ_matrix) <- gsub("\\.", " ", colnames(summ_matrix))
     }
 	summ_matrix <- summ_matrix*0.5  # bc it's total distance tip to tip
 	ages <- tA <- tB <- c() # compute the final length of the data frame: it's ncol(xx)^2 - sum(1:(ncol(xx)-1))
@@ -266,6 +267,8 @@ summary_matrix_to_phylo <- function(summ_matrix){ # enhance: allow other methods
 	# try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
 	target_tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(summ_matrix, ultrametric = TRUE)))
     # ape::is.ultrametric(target_tree)
+    # ape::is.binary(target_tree)
+    # plot(target_tree, cex = 0.5)
     if(!inherits(target_tree, "phylo")){
 		message("datelifeResult object has no good groves; try with get_best_grove first")
 		# enhance: add a more formal test of best grove
@@ -293,6 +296,10 @@ summary_matrix_to_phylo <- function(summ_matrix){ # enhance: allow other methods
 	target_tree$node.label <- NULL
 	target_tree <- tree_add_nodelabels(tree = target_tree, node_index = node_index)  # all nodes need to be named so make_bladj_tree runs properly
 	new.phy <- make_bladj_tree(tree = target_tree, nodenames = as.character(calibrations2$MRCA), nodeages = sapply(seq(nrow(calibrations2)), function(i) sum(calibrations2[i,c("MinAge", "MaxAge")])/2))
-	new.phy$clustering_method <- "sdm"
-	return(list(phy = new.phy, sdm_ages_distribution = all_ages, calibrations = calibrations2))
+    # plot(new.phy, cex = 0.5)
+    new.phy$clustering_method <- "datelife"
+    names(all_ages) <- all_nodes
+    new.phy$node_age_distrubution <- all_ages
+    new.phy$calibrations <- calibrations2
+	return(new.phy)
 }
