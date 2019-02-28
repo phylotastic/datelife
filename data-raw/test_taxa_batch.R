@@ -2,9 +2,9 @@
 #     skip("test taxa batch")
 #     skip_on_cran()
 #     skip_on_travis()
-    # utils::data(names_subset2)
+    # utils::data(subset2_taxa)
     # taxa_list <- list(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus", "Felis"))
-    # taxa_list <- c(taxa_list, lapply(1:50, function(x) sample(names_subset2, size = 20, replace = FALSE)))
+    # taxa_list <- c(taxa_list, lapply(1:50, function(x) sample(subset2_taxa, size = 20, replace = FALSE)))
     taxa_list <- list(c("Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",
       "Amphibia", "Sauropsida", "Bucerotiformes", "Struthioniformes",
       "Forpus passerinus", "Anhimidae", "Deinonychus", "Vorona", "Vegavis",
@@ -190,9 +190,9 @@
     }
 #end of test that
 # })
-# utils::data(names_subset2)
+# utils::data(subset2_taxa)
 # taxa_list <- list(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Gallus", "Felis"))
-# taxa_list <- c(taxa_list, lapply(1:50, function(x) sample(names_subset2, size = 20, replace = FALSE)))
+# taxa_list <- c(taxa_list, lapply(1:50, function(x) sample(subset2_taxa, size = 20, replace = FALSE)))
 # source("~/Desktop/datelife/data-raw/test_taxa_batch.R")
 x <- cbind(med_nj, med_upgma, sdm_nj, sdm_upgma, maxbr_all, true_all, sapply(phylo_all, length))
 final_test <- taxa_list[good_names]

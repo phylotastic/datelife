@@ -24,10 +24,8 @@ datelife_result_sdm(datelife_result, weighting = "flat",
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
 \value{
-A list of two elements:
+A phylo object from SDM with an extra element:
 \describe{
-\item{phy}{A phylo object with the output chronogram from SDM analysis.
-}
 \item{data}{A datelifeResult object with the chronograms that were used to construct the SDM tree.
 }
 }

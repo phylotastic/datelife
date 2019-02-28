@@ -110,17 +110,17 @@ filter_for_grove <- function(datelife_result, criterion= "taxa", n = 2) {
 #'	}
 #' }
 #' @export
-get_best_grove <- function(datelife_result, criterion = "taxa", overlap = 2){
+get_best_grove <- function(datelife_result, criterion = "taxa", n = 2){
     # for testing:
-    # utils::data(names_subset2)
-    # spp_query <- make_datelife_query(names_subset2)
+    # utils::data(subset2_taxa)
+    # spp_query <- make_datelife_query(subset2_taxa)
     # datelife_result <- get_datelife_result(spp_query)
     datelife_result <- check_datelife_result(datelife_result)
 	  median.result <- NULL
   	while(!inherits(median.result, "phylo")){
-          message(paste0("Trying with overlap = ", overlap, "\n"))
+          message(paste0("Trying with overlap = ", n, "\n"))
   	  best_grove <- datelife::filter_for_grove(datelife_result,
-  					criterion = criterion, n = overlap)
+  					criterion = criterion, n = n)
       # length(best_grove)
       # we use patristic_matrix_to_phylo as a test that the grove can be clustered into a tree
       # for that we first get the median matrix and then try to cluster catching the error
@@ -133,8 +133,8 @@ get_best_grove <- function(datelife_result, criterion = "taxa", overlap = 2){
   		# standardize by real median of original data (max(mrcas)).
   		# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
       # We might have solved the above issue by using our method developped for sdm matrices
-  	  overlap <- overlap + 1
+  	  n <- n + 1
   	}
     class(best_grove) <- class(datelife_result)
-	return(list(best_grove = best_grove, overlap = overlap-1))
+	return(list(best_grove = best_grove, overlap = n-1))
 }

@@ -1,7 +1,11 @@
 # helper data sets for testing
 
-utils::data(names_subset2)
-names_subset2_query <- make_datelife_query(names_subset2)
+threebirds <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
+threebirds_query <- make_datelife_query(threebirds)
+threebirds_result <- get_datelife_result(threebirds_query)
+
+utils::data(subset2_taxa)
+names_subset2_query <- make_datelife_query(subset2_taxa)
 names_subset2_result <- get_datelife_result(names_subset2_query)
 
 birds_wiki <- c("Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",

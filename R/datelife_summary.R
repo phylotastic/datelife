@@ -98,7 +98,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 	}
 	# the following chunck is to test if n_overlap = 2 is enough to summarize results with sdm and median
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm", "newick_median", "phylo_median")){
-		best_grove <- get_best_grove(datelife_result, criterion = "taxa", overlap = 2)$best_grove
+		best_grove <- get_best_grove(datelife_result, criterion = "taxa", n = 2)$best_grove
 	}
 	if(grepl("median", summary_format.in)){
 		return.object <- datelife_result_median(best_grove)
@@ -107,7 +107,7 @@ summarize_datelife_result <- function(datelife_query = NULL, datelife_result = N
 		return.object <- datelife_result_sdm(best_grove)
 	}
 	if(grepl("newick", summary_format.in)) {
-		return.object <- ape::write.tree(tree)
+		return.object <- ape::write.tree(return.object)
 	}
 	# if(summary_format.in %in% c("phylo_sdm", "phylo_median")) {
 	# 	return.object <- tree

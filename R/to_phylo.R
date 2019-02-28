@@ -10,8 +10,7 @@
 #' @return A rooted phylo object
 #' @export
 patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj", fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE) {
-    # patristic_matrix <-  threebirds_dr[[5]]
-    # patristic_matrix_to_phylo(threebirds_dr[[5]])
+    # patristic_matrix <- threebirds_result[[5]]
     if(!inherits(patristic_matrix, "matrix") & !inherits(patristic_matrix, "data.frame")){
         message("patristic_matrix argument is not a matrix")
         return(NA)
@@ -24,6 +23,11 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
     if(anyNA(patristic_matrix)) {
   	   patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
     }   # I'm not sure why this is here. It does not get rid of spp with NA or NaNs, then, what does it do?
+    if(dim(patristic_matrix)[1] == 2) {
+        phy <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = 0.5 * patristic_matrix[1,2])
+        phy$clustering_method <- "ape::rtree"
+        return(phy)
+    }
     phycluster <- cluster_patristicmatrix(patristic_matrix)
     phy <- choose_cluster(phycluster, clustering_method)
     if(!inherits(phy, "phylo")){
@@ -102,9 +106,8 @@ cluster_patristicmatrix <- function(patristic_matrix){
      return(NA)
   }
   if(dim(patristic_matrix)[1] == 2) {
-      phy <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = 0.5 * patristic_matrix[1,2])
-      phy$clustering_method <- "ape::rtree"
-      return(phy)
+      message("patristic_matrix is dimension 2, you don't need to cluster.")
+      return(NA)
   } else {
         phyclust <- vector(mode = "list", length = 4)
         names(phyclust) <- c("nj", "njs", "upgma", "upgma_daisy")

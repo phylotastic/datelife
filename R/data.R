@@ -243,21 +243,20 @@
 
 #' Long list of >2.7k virus, bacteria, plant and animal taxon names
 #'
-#' @name names_subset2
+#' @name subset2_taxa
 #' @docType data
 #' @format A character vector of length 2778
 #' @source \url{https://github.com/phylotastic/rphylotastic/tree/master/tests/testthat}
 #' @keywords taxon names subset virus bacteria plant animal
 #' @details
 #' Generated with:
-#' names_subset2 <- rphylotastic::url_get_scientific_names("https://github.com/phylotastic/rphylotastic/blob/master/tests/testthat/subset2.txt")
-#' usethis::use_data(names_subset2)
-"names_subset2"
+#' subset2_taxa <- rphylotastic::url_get_scientific_names("https://github.com/phylotastic/rphylotastic/blob/master/tests/testthat/subset2.txt")
+#' usethis::use_data(subset2_taxa)
+"subset2_taxa"
 
-
-#' A list with datelieQuery and datelifeResult objects from a search of taxon names from names_subset2
+#' A list with datelieQuery and datelifeResult objects from a search of taxon names from subset2_taxa
 #'
-#' @name dlsearch_subset2
+#' @name subset2_search
 #' @docType data
 #' @format A list with two named elements. datelifeResult object with 24 patristic matrices
 #' \describe{
@@ -267,11 +266,11 @@
 #' @keywords taxon names subset2 datelifeResult
 #' @details
 #' Generated with:
-#' datelife_query <- make_datelife_query(names_subset2)
+#' datelife_query <- make_datelife_query(subset2_taxa)
 #' datelife_result <- get_datelife_result(datelife_query)
-#' dlsearch_subset2 <- list(datelife_result = datelife_result, datelife_query = datelife_query)
-#' usethis::use_data(dlsearch_subset2)
-"dlsearch_subset2"
+#' subset2_search <- list(datelife_result = datelife_result, datelife_query = datelife_query)
+#' usethis::use_data(subset2_search)
+"subset2_search"
 
 #' A multiPhylo object with trees resulting from a datelife search of some birds and cats species
 #'

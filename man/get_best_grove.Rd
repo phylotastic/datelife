@@ -4,12 +4,14 @@
 \alias{get_best_grove}
 \title{Get the best grove from a datelifeResult object that can be summmarized with median or sdm.}
 \usage{
-get_best_grove(datelife_result, criterion = "taxa", overlap = 2)
+get_best_grove(datelife_result, criterion = "taxa", n = 2)
 }
 \arguments{
 \item{datelife_result}{datelifeResult object (named list of patristic matrices). Only needed for "taxa" criterion}
 
 \item{criterion}{Whether to get the grove with the most trees or the most taxa}
+
+\item{n}{Degree of overlap required}
 }
 \value{
 A list of two elements:
