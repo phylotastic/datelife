@@ -329,32 +329,10 @@ get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version =
 #' # if you want to make an ltt plot of a dated OToL tree you'll need to get rid of singleton nodes with ape::collapse.singles
 #' # and also probably do phytools::force.ultrametric
 get_dated_otol_induced_subtree <- function(input = NULL, ott_ids = NULL, ...){
-	# if(is.null(ott_ids)){
-	# 	input <- datelife_query_check(input)
-	# 	input_ott_match <- suppressWarnings(as.numeric(rotl::tnrs_match_names(input$cleaned_names)$ott_id))
-	# 	if(any(is.na(input_ott_match))){
-	# 		message(paste0("Input '", paste(input[which(is.na(input_ott_match))], collapse = "', '"), "', not found in Open Tree of Life Taxonomy."))
-	# 		input_ott_match <- input_ott_match[which(!is.na(input_ott_match))]
-	# 	}
-	# } else {
-	# 	input_ott_match <- suppressWarnings(as.numeric(ott_ids))
-	# 	if(any(is.na(input_ott_match))){
-	# 		message(paste0("Ott ids '", paste(ott_ids[which(is.na(input_ott_match))], collapse = "', '"), "', not numeric and will be excluded from the search."))
-	# 		input_ott_match <- input_ott_match[which(!is.na(input_ott_match))]
-	# 	}
-	# }
-
-
-	# if ott_ids are mantained in the tree after using `datelife_query_check` then we can add the line again here as:
-	# if(!is.null(ott_id){
-	# 	input <- datelife_query_check(input)
-	# 	if(any(c("ott_id", "ott_ids") %in% names(input$phy))){
-	# 		ott_id <- input$phy$ott_id
-	# 	} else {
-	# 		input <- input$cleaned_names
-	# 	}
-	# }
-	# all previous code is replaced by the following line:
+	# for debugging:
+	# utils::data(threebirds.rda)
+	# input <- threebirds_query$cleaned_names
+	# ott_ids <- threebirds_query$ott_ids
 	input_ott_match <- suppressMessages(check_ott_input(input, ott_ids, ...))
 	if(length(input_ott_match) < 2){
 		message("At least two valid names or numeric ott_ids are needed to get a tree")

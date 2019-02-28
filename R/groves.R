@@ -136,5 +136,5 @@ get_best_grove <- function(datelife_result, criterion = "taxa", n = 2){
   	  n <- n + 1
   	}
     class(best_grove) <- class(datelife_result)
-	return(list(best_grove = best_grove, overlap = n-1))
+	  return(list(best_grove = best_grove, overlap = n-1))
 }

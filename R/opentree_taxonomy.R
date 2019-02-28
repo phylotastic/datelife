@@ -44,14 +44,19 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
 #' @export
 #' @details By default it uses ott_id argument if it is not NULL.
 check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
+  # for debugging:
+  # utils::data(threebirds.rda)
+  # input <- threebirds_query$cleaned_names
+  # ott_ids <- threebirds_query$ott_ids
+
     if(is.null(input) & is.null(ott_ids)){
         message("Both input arguments are empty; please specify one.")
         return(NA)
     }
-    if(is.null(ott_ids)){
+    if(is.null(ott_ids) | all(is.na(ott_ids))){
           input <- datelife_query_check(input, ...)
           if(!inherits(input, "datelifeQuery")){
-              (message("Input must be a character rvector or a datelifeQuery object"))
+              (message("Input must be a character vector or a datelifeQuery object"))
               return(NA)
           }
           if(is.numeric(input$ott_id)){
