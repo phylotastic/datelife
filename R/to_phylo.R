@@ -221,15 +221,25 @@ choose_cluster <- function(phycluster, clustering_method){
 }
 #' Go from a smmary matrix to an ultrametric phylo object.
 #' @param summ_matrix A summary patristic distance matrix from sdm or median. See details.
-#' @inheritDotParams get_otol_synthetic_tree
+#' @param use A character vector indicating what type of age to use for summary. One of the following
+#' \describe{
+#'	\item{mean}{ It will use the mean of the node age distributions.
+#'	}
+#'	\item{min}{ It will use the minimum age from the node age distrbutions.
+#'	}
+#'	\item{max}{ Choose this if you wanna be conservative; it will use the maximum age from the node age distrbutions.
+#'	}
+#' }
 #' @param target_tree A phylo object. Use this in case you want a particular backbone for the output tree.
+#' @inheritDotParams get_otol_synthetic_tree
 #' @return An ultrametric phylo object.
 #' @details It can take a regular patristic distance matrix, but there are simpler methods for that implemented in patristic_matrix_to_phylo.
 #' @export
-summary_matrix_to_phylo <- function(summ_matrix, target_tree = NULL, ...){ # enhance: allow other methods, not only bladj.
+summary_matrix_to_phylo <- function(summ_matrix, use = "mean", target_tree = NULL, ...){ # enhance: allow other methods, not only bladj.
     # for debugging here
     # best_grove <- get_best_grove(names_subset2_result)$best_grove
     # summ_matrix <- datelife_result_median_matrix(best_grove)
+    use_age <- match.arg(use, c("mean", "median", "min", "max"))
     if(!inherits(summ_matrix, "matrix") & !inherits(summ_matrix, "data.frame")){
         message("summ_matrix argument is not a matrix")
         return(NA)
@@ -257,7 +267,7 @@ summary_matrix_to_phylo <- function(summ_matrix, target_tree = NULL, ...){ # enh
 		tA <- c(tA, rownames(summ_matrix)[1:i])
 		tB <- c(tB, rep(colnames(summ_matrix)[i], i))
 	}
-  # node_age_distribution() <- function(ages, taxonA, taxonB, phy)
+  # get_nodeage_distribution() <- function(ages, taxonA, taxonB, phy)
 	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB)
 	calibrations$taxonA <- as.character(calibrations$taxonA)
 	calibrations$taxonB <- as.character(calibrations$taxonB)
@@ -307,7 +317,16 @@ summary_matrix_to_phylo <- function(summ_matrix, target_tree = NULL, ...){ # enh
 	}
 	target_tree$node.label <- NULL
 	target_tree <- tree_add_nodelabels(tree = target_tree, node_index = node_index)  # all nodes need to be named so make_bladj_tree runs properly
-	new.phy <- make_bladj_tree(tree = target_tree, nodenames = as.character(calibrations2$MRCA), nodeages = sapply(seq(nrow(calibrations2)), function(i) sum(calibrations2[i,c("MinAge", "MaxAge")])/2))
+  if("mean" %in% use){
+    node_ages <- sapply(seq(nrow(calibrations2)), function(i) sum(calibrations2[i,c("MinAge", "MaxAge")])/2)
+  }
+  if("min" %in% use){
+    node_ages <- calibrations2[,c("MinAge")]
+  }
+  if("max" %in% use){
+    node_ages <- calibrations2[,c("MaxAge")]
+  }
+  new.phy <- make_bladj_tree(tree = target_tree, nodenames = as.character(calibrations2$MRCA), nodeages = node_ages)
     # plot(new.phy, cex = 0.5)
     new.phy$clustering_method <- "datelife"
     names(all_ages) <- all_nodes

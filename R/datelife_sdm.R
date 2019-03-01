@@ -97,3 +97,16 @@ get_goodmatrices <- function(unpadded.matrices, verbose){
 	}
 	return(good.matrix.indices)
 }
+#' Get good matrices for SDM
+#' @inheritParams datelife_result_check
+#' @return A numeric matrix.
+#' @export
+get_sdm_matrix <- function(datelife_result){
+  unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
+  good.matrix.indices <- get_goodmatrices(unpadded.matrices, verbose = TRUE)
+  if(length(good.matrix.indices) > 1) {
+    unpadded.matrices <- unpadded.matrices[good.matrix.indices]
+    sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat", verbose = TRUE)
+  }
+  return(sdm_matrix)
+}

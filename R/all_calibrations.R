@@ -21,7 +21,7 @@ use_all_calibrations <- function(phy = NULL,
 	all_calibrations = NULL, partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
 	update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1,
 	giveup = 100, verbose = FALSE) {
-		if(is.null(phy)){
+		if(is.null(phy)){ # just to run an example:
 			phy <- make_bold_otol_tree(c("Rhea americana", "Struthio camelus", "Gallus gallus"), chronogram = TRUE, verbose = FALSE)
 			if(!inherits(phy, "phylo")){
 				phy <- get_dated_otol_induced_subtree(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
@@ -80,6 +80,11 @@ use_all_calibrations <- function(phy = NULL,
 				message("Dates are even more approximate than usual: had to expand constraints to have them agree.", "\n")
 			}
 		}
+
+		get_nodeage_distribution(ages = calibrations.df[, c("MinAge", "MaxAge")],
+														 taxonA = calibrations.df[, c("taxonA", "taxonA")],
+													 	 taxonB = calibrations.df[, c("taxonB", "taxonB")],
+													 	 phy = phy)
 		return(list(phy = chronogram, calibrations.df = calibrations.df, original.calibrations.df = original.calibrations.df))
 }
 

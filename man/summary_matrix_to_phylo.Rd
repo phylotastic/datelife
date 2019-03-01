@@ -4,10 +4,30 @@
 \alias{summary_matrix_to_phylo}
 \title{Go from a smmary matrix to an ultrametric phylo object.}
 \usage{
-summary_matrix_to_phylo(summ_matrix)
+summary_matrix_to_phylo(summ_matrix, use = "mean", target_tree = NULL,
+  ...)
 }
 \arguments{
 \item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
+
+\item{use}{A character vector indicating what type of age to use for summary. One of the following
+\describe{
+\item{mean}{ It will use the mean of the node age distributions.
+}
+\item{min}{ It will use the minimum age from the node age distrbutions.
+}
+\item{max}{ Choose this if you wanna be conservative; it will use the maximum age from the node age distrbutions.
+}
+}}
+
+\item{target_tree}{A phylo object. Use this in case you want a particular backbone for the output tree.}
+
+\item{...}{Arguments passed on to \code{get_otol_synthetic_tree}
+\describe{
+  \item{otol_version}{Version of OToL to use}
+  \item{input}{Optional. A character vector of names or a datelifeQuery object}
+  \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+}}
 }
 \value{
 An ultrametric phylo object.
