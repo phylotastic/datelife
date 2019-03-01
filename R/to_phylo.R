@@ -271,11 +271,11 @@ summary_matrix_to_phylo <- function(summ_matrix, use = "mean", target_tree = NUL
 	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB)
 	calibrations$taxonA <- as.character(calibrations$taxonA)
 	calibrations$taxonB <- as.character(calibrations$taxonB)
-	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN
+	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN and NAs
 	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
-	calibrations[calibrations[, "Age"] < 0, "Age"] <- 0.01 # replace negative values for a tiny number
+	calibrations <- calibrations[calibrations[,"Age"] < 0, ] # get rif of negative values too
 	if(any(is.na(calibrations[,"Age"]))){
-		warning("there are still NAs in the matrix")
+		warning("for some reason there are still NAs in the matrix")
 	}
 	# enhance: where does this negative values come from in SDM?
 	# get a backbone tree:

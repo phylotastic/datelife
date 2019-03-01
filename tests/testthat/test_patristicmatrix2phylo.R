@@ -55,6 +55,7 @@ test_that("cetacea sdm matrix to phylo is accurate", {
   ape::ltt.plot(phycluster$upgma_daisy, col = "blue")
   ape::ltt.lines(force_ultrametric(phycluster$njs))
 })
+
 test_that("threebirds sdm matrix to phylo is accurate", {
   threebirds_dq <- make_datelife_query(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 get_spp_from_taxon = TRUE)
@@ -68,5 +69,19 @@ get_spp_from_taxon = TRUE)
   max(sdm_matrix, na.rm = TRUE)/2
   sdm_phylo <- summarize_datelife_result(datelife_result = threebirds_dr, summary_format = "phylo_sdm")
   names(sdm_phylo)
-
 })
+
+test_that("summary_matrix_to_phylo works"){
+  subset2_sdmphylo_mean <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix, use = "mean", target_tree = NULL)
+  plot(subset2_sdmphylo_mean, cex = 0.5)
+  ape::axisPhylo()
+  subset2_sdmphylo_min <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix, use = "min", target_tree = NULL)
+  plot(subset2_sdmphylo_min, cex = 0.5)
+  ape::axisPhylo()
+  subset2_sdmphylo_max <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix, use = "max", target_tree = NULL)
+  plot(subset2_sdmphylo_max, cex = 0.5)
+  ape::axisPhylo()
+  subset2_sdmphylo_all <- c(subset2_sdmphylo_mean, subset2_sdmphylo_min, subset2_sdmphylo_max)
+  ape::is.ultrametric(subset2_sdmphylo_all, option = 2)
+  ltt.plot()
+}

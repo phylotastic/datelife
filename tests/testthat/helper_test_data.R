@@ -7,6 +7,8 @@ threebirds_result <- get_datelife_result(threebirds_query)
 utils::data(subset2_taxa)
 names_subset2_query <- make_datelife_query(subset2_taxa)
 names_subset2_result <- get_datelife_result(names_subset2_query)
+subset2_bestgrove <- get_best_grove(names_subset2_result)$best_grove
+subset2_sdm_matrix <- get_sdm_matrix(subset2_bestgrove)
 
 birds_wiki <- c("Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",
   "Amphibia", "Sauropsida", "Bucerotiformes", "Struthioniformes",

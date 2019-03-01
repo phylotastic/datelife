@@ -1,6 +1,7 @@
 #' Function to compute median matrix of a datelifeResult object.
 #' @inheritParams datelife_result_check
 #' @return A patristic distance summary matrix from a datelifeResult object.
+#' @export
 datelife_result_median_matrix <- function(datelife_result) {
 	datelife_result <- check_datelife_result(datelife_result)
 	patristic.array <- patristic_matrix_list_to_array(datelife_result)
@@ -14,6 +15,7 @@ datelife_result_median_matrix <- function(datelife_result) {
 #' Get a median summary chronogram from a datelifeResult object.
 #' @inheritParams datelife_result_check
 #' @return A phylo object
+#' @export
 datelife_result_median <- function(datelife_result){
 	# for debugging here
 	# datelife_result <- get_best_grove(names_subset2_result)$best_grove
