@@ -221,10 +221,12 @@ choose_cluster <- function(phycluster, clustering_method){
 }
 #' Go from a smmary matrix to an ultrametric phylo object.
 #' @param summ_matrix A summary patristic distance matrix from sdm or median. See details.
+#' @inheritDotParams get_otol_synthetic_tree
+#' @param target_tree A phylo object. Use this in case you want a particular backbone for the output tree.
 #' @return An ultrametric phylo object.
 #' @details It can take a regular patristic distance matrix, but there are simpler methods for that implemented in patristic_matrix_to_phylo.
 #' @export
-summary_matrix_to_phylo <- function(summ_matrix){ # enhance: allow other methods, not only bladj.
+summary_matrix_to_phylo <- function(summ_matrix, target_tree = NULL, ...){ # enhance: allow other methods, not only bladj.
     # for debugging here
     # best_grove <- get_best_grove(names_subset2_result)$best_grove
     # summ_matrix <- datelife_result_median_matrix(best_grove)
@@ -239,9 +241,9 @@ summary_matrix_to_phylo <- function(summ_matrix){ # enhance: allow other methods
         colnames(summ_matrix) <- gsub("\\.", " ", colnames(summ_matrix))
     }
 	summ_matrix <- summ_matrix*0.5  # bc it's total distance tip to tip
-	ages <- tA <- tB <- c() # compute the final length of the data frame: it's ncol(xx)^2 - sum(1:(ncol(xx)-1))
+	ages <- tA <- tB <- c()
+  # to compute the final length of the data frame do: ncol(xx)^2 - sum(1:(ncol(xx)-1))
 	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
-	# start <- ?
 	# identify if SDM matrix has some negative values; extract taxon names:
 	negs <- which(summ_matrix < 0)
 	neg_names <- rownames(summ_matrix)[ceiling(negs/nrow(summ_matrix))]
@@ -255,6 +257,7 @@ summary_matrix_to_phylo <- function(summ_matrix){ # enhance: allow other methods
 		tA <- c(tA, rownames(summ_matrix)[1:i])
 		tB <- c(tB, rep(colnames(summ_matrix)[i], i))
 	}
+  # node_age_distribution() <- function(ages, taxonA, taxonB, phy)
 	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB)
 	calibrations$taxonA <- as.character(calibrations$taxonA)
 	calibrations$taxonB <- as.character(calibrations$taxonB)
@@ -268,12 +271,18 @@ summary_matrix_to_phylo <- function(summ_matrix){ # enhance: allow other methods
 	# get a backbone tree:
 	# chronogram <- geiger::PATHd8.phylo(phy_target, calibrations)
 	# try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
-	target_tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(summ_matrix, ultrametric = TRUE)))
-    # ape::is.ultrametric(target_tree)
-    # ape::is.binary(target_tree)
-    # plot(target_tree, cex = 0.5)
+  if(!inherits(target_tree, "phylo")){
+    target_tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(summ_matrix, ultrametric = TRUE)))
     if(!inherits(target_tree, "phylo")){
-		message("datelifeResult object has no good groves; try with get_best_grove first")
+      # we should find a better way to do this, but it should be ok for now:
+      target_tree <- get_otol_synthetic_tree(...)
+    }
+      # ape::is.ultrametric(target_tree)
+      # ape::is.binary(target_tree)
+      # plot(target_tree, cex = 0.5)
+  }
+  if(!inherits(target_tree, "phylo")){
+		message("target_tree is not phylo object; maybe summ_matrix object has no good groves; try with get_best_grove first")
 		# enhance: add a more formal test of best grove
 		return(NA)
 	}

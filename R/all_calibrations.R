@@ -338,10 +338,10 @@ get_dated_otol_induced_subtree <- function(input = NULL, ott_ids = NULL, ...){
 		message("At least two valid names or numeric ott_ids are needed to get a tree")
 		return(NA)
 	}
-  	pp <- tryCatch(httr::POST("http://141.211.236.35:10999/induced_subtree",
+  pp <- tryCatch(httr::POST("http://141.211.236.35:10999/induced_subtree",
 						body = list(ott_ids = input_ott_match),
 						encode = "json", httr::timeout(10)), error = function(e) NA)
-	if(length(pp) > 1){
+	if(length(pp) > 1){ # this means it retrieved a tree succesfully
 		pp <- httr::content(pp)
 		rr <- httr::POST("http://141.211.236.35:10999/rename_tree",
 		          body = list(newick = pp$newick),
@@ -350,7 +350,7 @@ get_dated_otol_induced_subtree <- function(input = NULL, ott_ids = NULL, ...){
 		rr <- ape::read.tree(text = rr$newick)
 		rr$ott_ids <- ape::read.tree(text = pp$newick)$tip.label
 	  return(rr)
-	}	else {
-		return(pp)
+	}	else { # this means it errored and we return NA
+		return(NA)
 	}
 }
