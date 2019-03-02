@@ -2,10 +2,12 @@
 #' @inheritParams datelife_query_check
 #' @inheritParams datelife_result_check
 #' @export
-get_taxon_summary <- function(datelife_query = NULL, datelife_result){
-	if(is.null(datelife_result) | !is.list(datelife_result)){
-		return(NA)
+get_taxon_summary <- function(datelife_result, datelife_query = NULL){
+	# datelife_result <- subset2_bestgrove
+	datelife_result <- check_datelife_result(datelife_result)
+	if(is.null(datelife_result) | !inherits(datelife_result, "datelifeResult")){
 		message("datelife_result argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
+		return(NA)
 	}
 	if(is.null(datelife_query)){
 		input <- NULL
@@ -58,18 +60,20 @@ get_taxon_summary <- function(datelife_query = NULL, datelife_result){
 #' @inheritParams datelife_search
 #' @inherit datelife_search return details
 #' @export
-summarize_datelife_result <- function(datelife_query = NULL, datelife_result = NULL,
+summarize_datelife_result <- function(datelife_result = NULL, datelife_query = NULL,
 	summary_format = "phylo_all", partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"),
 	summary_print = c("citations", "taxa"), taxon_summary = c("none", "summary", "matrix"),
 	verbose = FALSE, criterion = c("trees", "taxa")) {
 		# if(!partial) {
 		# 	datelife_result <- datelife_result[which(!sapply(datelife_result, anyNA))]
 		# } # not necessary cause already filtered in get_datelife_result
+		# datelife_result <- subset2_bestgrove
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
-	taxon_summ <- get_taxon_summary(datelife_query, datelife_result)
+	taxon_summ <- get_taxon_summary(datelife_result, datelife_query)
 	if(length(taxon_summ) == 1){
+		message("get_taxon_summary failed.")
 		return(NA)
 	}
 	summary_format.in <- match.arg(summary_format, choices = c("citations", "mrca", "newick_all", "newick_sdm", "newick_median", "phylo_sdm", "phylo_median", "phylo_biggest", "phylo_all", "html", "data_frame"))

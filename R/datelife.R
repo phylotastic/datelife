@@ -155,7 +155,7 @@ datelife_result_check <- function(datelife_result, use_tnrs = FALSE, verbose = F
 #' @inheritParams datelife_result_check
 #' @return a datelifeResult object or a message explaining why it is not a datelifeResul tobject
 check_datelife_result <- function(datelife_result){
-	# datelife_result <- names_subset2_result
+	# datelife_result <- subset2_result
 	if(!inherits(datelife_result, "datelifeResult")){
 		if(is.list(datelife_result)){
 			class_dl <- unname(sapply(datelife_result, class))

@@ -10,6 +10,7 @@
 #' @inheritDotParams graphics::segments
 #' @return Adds bars to nodes on a phylo plot.
 #' @export
+#' @details Make sure ape is loaded otherwise it won't find .PlotPhyloEnv
 HPDbars <-
 function(phy, label = "height_95%_HPD", tab = NULL, nodes, col, lwd, broken = FALSE, ...){
 
@@ -43,14 +44,23 @@ function(phy, label = "height_95%_HPD", tab = NULL, nodes, col, lwd, broken = FA
 	# -------------------
 	label <- paste(label, c("MIN", "MAX"), sep = "_")
 	if (is.null(tab)){
+		# label %in% names(phy)
+		# phy <- subset2_sdmphylo_mean
+		# label <- "height_95%_HPD"
 		id <- which(names(phy) %in% label)
-		x <- cbind(phy[[id[1]]], phy[[id[2]]])
-		x <- x[nodes - lastPP$Ntip, ]
-	}												else {
+		# previous line was not working anymore so modified it:
+		x <- cbind(phy[[id[1]]],
+							 phy[[id[2]]])
+		# length(nodes - lastPP$Ntip)
+		# enhance: add a tryCatch here, it will tell when there are less nodes in calibrations than actual nodes in phy
+		if(nrow(x) != length(nodes)){
+			x <- x[nodes - lastPP$Ntip, ]
+		}
+	}	else {
 		id <- which(colnames(tab) %in% label)
 		x <- tab[tab[, 1] %in% nodes, id]
 	}
-
+	phy$node.label <- NULL # important: if phy already has node labels the next two lines won't work
 	bt <- branching.times(phy)
 	bt <- bt[names(bt) %in% nodes]
 	x <- cbind(x, bt)
@@ -75,7 +85,7 @@ function(phy, label = "height_95%_HPD", tab = NULL, nodes, col, lwd, broken = FA
 			new.xlim <- c(minx, lastPP$x.lim[2] - minx)
 			new.xlim <- round(new.xlim, digits = 5)
 			new.xlim <- paste(new.xlim, collapse = ", ")
-			warning("HPD bar(s) for nodes ", ns,
+			message("HPD bar(s) for nodes ", ns,
 			  " exceed(s) plot region.",
 			  "\n  Try setting \"x.lim\" to c(", new.xlim, ")")
 			graphics::segments(xx[id, 1], y[id],

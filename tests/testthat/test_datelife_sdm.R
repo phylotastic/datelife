@@ -11,8 +11,8 @@ test_that("SDM correctly returns three birds tree", {
 })
 
 test_that("subset2_taxa gives ultrametric summary trees", {
-    # class(names_subset2_result)
-    xx <- get_best_grove(names_subset2_result)
+    # class(subset2_result)
+    xx <- get_best_grove(subset2_result)
     # class(xx$best_grove)
     xx_median <- datelife_result_median(xx$best_grove)
     ape::is.ultrametric(xx_median, option = 2)

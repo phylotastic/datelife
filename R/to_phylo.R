@@ -237,8 +237,7 @@ choose_cluster <- function(phycluster, clustering_method){
 #' @export
 summary_matrix_to_phylo <- function(summ_matrix, use = "mean", target_tree = NULL, ...){ # enhance: allow other methods, not only bladj.
     # for debugging here
-    # best_grove <- get_best_grove(names_subset2_result)$best_grove
-    # summ_matrix <- datelife_result_median_matrix(best_grove)
+    # summ_matrix <- subset2_sdm_matrix
     use_age <- match.arg(use, c("mean", "median", "min", "max"))
     if(!inherits(summ_matrix, "matrix") & !inherits(summ_matrix, "data.frame")){
         message("summ_matrix argument is not a matrix")
@@ -273,7 +272,7 @@ summary_matrix_to_phylo <- function(summ_matrix, use = "mean", target_tree = NUL
 	calibrations$taxonB <- as.character(calibrations$taxonB)
 	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN and NAs
 	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
-	calibrations <- calibrations[calibrations[,"Age"] < 0, ] # get rif of negative values too
+	calibrations <- calibrations[calibrations[,"Age"] > 0, ] # get rif of negative values too
 	if(any(is.na(calibrations[,"Age"]))){
 		warning("for some reason there are still NAs in the matrix")
 	}
@@ -282,10 +281,11 @@ summary_matrix_to_phylo <- function(summ_matrix, use = "mean", target_tree = NUL
 	# chronogram <- geiger::PATHd8.phylo(phy_target, calibrations)
 	# try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
   if(!inherits(target_tree, "phylo")){
-    target_tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(summ_matrix, ultrametric = TRUE)))
+    target_tree <- suppressMessages(get_otol_synthetic_tree(...))
     if(!inherits(target_tree, "phylo")){
       # we should find a better way to do this, but it should be ok for now:
-      target_tree <- get_otol_synthetic_tree(...)
+      # target_tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(summ_matrix, ultrametric = TRUE)))
+      target_tree <- consensus(phyloall, p = 0.5)
     }
       # ape::is.ultrametric(target_tree)
       # ape::is.binary(target_tree)
@@ -308,14 +308,16 @@ summary_matrix_to_phylo <- function(summ_matrix, use = "mean", target_tree = NUL
 	# get the node age distribution:
 	all_ages <- lapply(all_nodes, function(i) calibrations[target_tree_nodes == i, "Age"])
 	# any(sapply(all_ages, is.null)) # if FALSE, all nodes have at least one calibration.
-	calibrations2 <- data.frame(MRCA = paste0("n", all_nodes), MinAge = sapply(all_ages, min), MaxAge= sapply(all_ages, max), node = all_nodes)
+	calibrations2 <- data.frame(MRCA = paste0("n", all_nodes), MinAge = sapply(all_ages, min), MaxAge= sapply(all_ages, max))
 	# calibrations2$MRCA is a factor so have to be made as.character to work with bladj
 	if(all(all_nodes < ape::Ntip(target_tree))){
+    all_nodes_numbers <- all_nodes + ape::Ntip(target_tree)
 		node_index <- "consecutive"
 	} else {
+    all_nodes_numbers <- all_nodes
 		node_index <- "node_number"
 	}
-	target_tree$node.label <- NULL
+	target_tree$node.label <- NULL # make sure its nullso we can rename all nodes of interest to match our labels
 	target_tree <- tree_add_nodelabels(tree = target_tree, node_index = node_index)  # all nodes need to be named so make_bladj_tree runs properly
   if("mean" %in% use){
     node_ages <- sapply(seq(nrow(calibrations2)), function(i) sum(calibrations2[i,c("MinAge", "MaxAge")])/2)
@@ -326,11 +328,13 @@ summary_matrix_to_phylo <- function(summ_matrix, use = "mean", target_tree = NUL
   if("max" %in% use){
     node_ages <- calibrations2[,c("MaxAge")]
   }
-  new.phy <- make_bladj_tree(tree = target_tree, nodenames = as.character(calibrations2$MRCA), nodeages = node_ages)
-    # plot(new.phy, cex = 0.5)
-    new.phy$clustering_method <- "datelife"
+  new_phy <- make_bladj_tree(tree = target_tree, nodenames = as.character(calibrations2$MRCA), nodeages = node_ages)
+    # plot(new_phy, cex = 0.5)
+    new_phy$clustering_method <- "datelife"
     names(all_ages) <- all_nodes
-    new.phy$node_age_distrubution <- all_ages
-    new.phy$calibrations <- calibrations2
-	return(new.phy)
+    new_phy$calibrations_distribution <- all_ages
+    new_phy$calibrations_MIN <- calibrations2$MinAge
+    new_phy$calibrations_MAX <- calibrations2$MaxAge
+    new_phy$calibrations_MRCA <- all_nodes_numbers
+	return(new_phy)
 }

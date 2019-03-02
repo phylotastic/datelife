@@ -5,6 +5,7 @@
 #' @param names_2 Second vector of names
 #' @param n Degree of overlap required
 #' @return Boolean for whether the degree of overlap was met
+#' @export
 is_n_overlap <- function(names_1, names_2, n=2) {
   return(sum(names_1 %in% names_2) >= n)
 }
@@ -15,6 +16,7 @@ is_n_overlap <- function(names_1, names_2, n=2) {
 #' @param datelife_result datelifeResult object (named list of patristic matrices)
 #' @param n Degree of overlap required
 #' @return matrix; each cell shows whether n-overlap exists between that pair of inputs
+#' @export
 build_grove_matrix <- function(datelife_result, n=2) {
   grove_matrix <- matrix(FALSE, nrow=length(datelife_result), ncol=length(datelife_result))
   for (i in sequence(length(datelife_result))) {
@@ -32,6 +34,7 @@ build_grove_matrix <- function(datelife_result, n=2) {
 #' @param datelife_result datelifeResult object (named list of patristic matrices)
 #' @param n Degree of overlap required
 #' @return list of vectors; each list element is a grove
+#' @export
 build_grove_list <- function(datelife_result, n = 2) {
   grove_matrix <- build_grove_matrix(datelife_result, n)
   grove_list <- list()
@@ -62,7 +65,8 @@ build_grove_list <- function(datelife_result, n = 2) {
 #' @param grove_list A list of vectors of tree indices. Each element is a grove.
 #' @param criterion A character vector indicating whether to get the grove with the most "trees" or the most "taxa"
 #' @param datelife_result datelifeResult object (named list of patristic matrices). Only needed for "taxa" criterion
-#' @return A numeroc vector of the elements of the picked grove.
+#' @return A numeric vector of the elements of the picked grove.
+#' @export
 pick_grove <- function(grove_list, criterion = "taxa", datelife_result) {
   criterion <- match.arg(criterion, c("trees", "taxa"))
   if(length(grove_list)==1) {
@@ -119,7 +123,7 @@ get_best_grove <- function(datelife_result, criterion = "taxa", n = 2){
 	  median.result <- NULL
   	while(!inherits(median.result, "phylo")){
           message(paste0("Trying with overlap = ", n, "\n"))
-  	  best_grove <- datelife::filter_for_grove(datelife_result,
+  	  best_grove <- filter_for_grove(datelife_result,
   					criterion = criterion, n = n)
       # length(best_grove)
       # we use patristic_matrix_to_phylo as a test that the grove can be clustered into a tree

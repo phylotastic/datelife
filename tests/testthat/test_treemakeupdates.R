@@ -17,7 +17,7 @@ test_that("tree_fix_brlen works", {
     # prefer option = 2, using the variance to test ultrametricity, cf. E, Paradis'
     # comments on this post http://blog.phytools.org/2017/03/forceultrametric-method-for-ultrametric.html
     # fixing_criterion = "negative", fixing_method = 0
-    x4 <- summarize_datelife_result(datelife_result = subset2_search$datelife_result, summary_format = "phylo_sdm")
+    x4 <- summarize_datelife_result(datelife_result = subset2_search$result, summary_format = "phylo_sdm")
     skip("we need to debug tree_fix_brlen for this example")
     expect_true(ape::is.ultrametric(x4, option = 2))
 })

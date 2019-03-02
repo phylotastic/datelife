@@ -4,7 +4,7 @@ test_that("get_taxon_summary works", {
   taxa <- "Pan"
 	datelife_query <- make_datelife_query(taxa, get_spp_from_taxon = TRUE)
 	datelife_result <- get_datelife_result(taxa)
-	xx <- get_taxon_summary(datelife_query, datelife_result)
+	xx <- get_taxon_summary(datelife_result, datelife_query)
   # enhance: it should test if it's giving both matrix and summary
 })
 
@@ -13,9 +13,9 @@ test_that("summarize_datelife_result works", {
   taxa <- c("Rhea americana", "Struthio camelus", "Gallus gallus")
 	datelife_query <- make_datelife_query(taxa, get_spp_from_taxon = TRUE)
 	datelife_result <- get_datelife_result(taxa)
-  xx <- summarize_datelife_result(datelife_query, datelife_result, summary_format = "phylo_all", taxon_summary = "summary")
-  xx <- summarize_datelife_result(datelife_query, datelife_result, summary_format = "phylo_median", taxon_summary = "summary")
-  xx <- summarize_datelife_result(datelife_query, datelife_result, summary_format = "phylo_sdm", taxon_summary = "summary")
+  xx <- summarize_datelife_result(datelife_result, datelife_query, summary_format = "phylo_all", taxon_summary = "summary")
+  xx <- summarize_datelife_result(datelife_result, datelife_query, summary_format = "phylo_median", taxon_summary = "summary")
+  xx <- summarize_datelife_result(datelife_result, datelife_query, summary_format = "phylo_sdm", taxon_summary = "summary")
 
 })
 

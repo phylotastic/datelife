@@ -203,7 +203,7 @@
 #' Generated with:
 #' felid_spp <- make_datelife_query(input = "felidae", get_spp_from_taxon = TRUE)
 #' felid_gdr <- get_datelife_result(input = felid_spp, get_spp_from_taxon = TRUE)
-#' felid_gdr_phylo_all <- summarize_datelife_result(felid_gdr, taxon_summary = "summary", summary_format = "phylo_all", datelife_query = felid_spp)
+#' felid_gdr_phylo_all <- summarize_datelife_result(datelife_result = felid_gdr, taxon_summary = "summary", summary_format = "phylo_all", datelife_query = felid_spp)
 #' usethis::use_data(felid_gdr_phylo_all)
 "felid_gdr_phylo_all"
 
@@ -268,8 +268,8 @@
 #' Generated with:
 #' datelife_query <- make_datelife_query(subset2_taxa)
 #' datelife_result <- get_datelife_result(datelife_query)
-#' subset2_search <- list(datelife_result = datelife_result, datelife_query = datelife_query)
-#' usethis::use_data(subset2_search)
+#' subset2_search <- list(query = datelife_query, result = datelife_result)
+#' usethis::use_data(subset2_search, overwrite = TRUE)
 "subset2_search"
 
 #' A multiPhylo object with trees resulting from a datelife search of some birds and cats species

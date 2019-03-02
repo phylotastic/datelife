@@ -14,7 +14,7 @@ pick_grove(grove_list, criterion = "taxa", datelife_result)
 \item{datelife_result}{datelifeResult object (named list of patristic matrices). Only needed for "taxa" criterion}
 }
 \value{
-A numeroc vector of the elements of the picked grove.
+A numeric vector of the elements of the picked grove.
 }
 \description{
 Pick a grove in the case of multiple groves in a set of trees.

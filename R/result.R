@@ -19,5 +19,5 @@ run <- function(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camel
   use_tnrs <- ifelse(use_tnrs=="yes", TRUE, FALSE)
   approximate_match <- ifelse(approximate_match=="yes", TRUE, FALSE)
   datelife_result <- get_datelife_result(input, partial, use_tnrs, approximate_match, opentree_chronograms)
-  summarize_datelife_result(datelife_result, summary_format=format, partial, opentree_chronograms, verbose="none")
+  summarize_datelife_result(datelife_result = datelife_result, summary_format=format, partial, opentree_chronograms, verbose="none")
 }

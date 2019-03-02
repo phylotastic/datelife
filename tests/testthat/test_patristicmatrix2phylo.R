@@ -72,16 +72,36 @@ get_spp_from_taxon = TRUE)
 })
 
 test_that("summary_matrix_to_phylo works"){
-  subset2_sdmphylo_mean <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix, use = "mean", target_tree = NULL)
+  subset2_sdmphylo_mean <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix,
+          use = "mean", target_tree = NULL, input = colnames(subset2_sdm_matrix))
+  # ape::is.binary(subset2_sdmphylo_mean)
+  # names(subset2_sdmphylo_mean)
+  # subset2_sdmphylo_mean$calibrations_MRCA
+  # subset2_sdmphylo_mean$Nnode
   plot(subset2_sdmphylo_mean, cex = 0.5)
+  ape::nodelabels(cex = 0.35)
+  HPDbars(phy = subset2_sdmphylo_mean, label = "calibrations",
+        nodes = subset2_sdmphylo_mean$calibrations_MRCA)
   ape::axisPhylo()
-  subset2_sdmphylo_min <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix, use = "min", target_tree = NULL)
+  subset2_sdmphylo_min <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix,
+          use = "min", target_tree = NULL)
   plot(subset2_sdmphylo_min, cex = 0.5)
   ape::axisPhylo()
-  subset2_sdmphylo_max <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix, use = "max", target_tree = NULL)
+  HPDbars(phy = subset2_sdmphylo_min, label = "calibrations",
+        nodes = subset2_sdmphylo_min$calibrations_MRCA)
+  subset2_sdmphylo_max <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix,
+          use = "max", target_tree = NULL)
   plot(subset2_sdmphylo_max, cex = 0.5)
   ape::axisPhylo()
-  subset2_sdmphylo_all <- c(subset2_sdmphylo_mean, subset2_sdmphylo_min, subset2_sdmphylo_max)
+  HPDbars(phy = subset2_sdmphylo_max, label = "calibrations",
+        nodes = subset2_sdmphylo_max$calibrations_MRCA)
+  subset2_sdmphylo_max$calibrations_MIN
+  subset2_sdmphylo_max$calibrations_MAX
+  names(subset2_sdmphylo_max)
+  subset2_sdmphylo_max$calibrations_distribution
+  subset2_sdmphylo_all <- c(subset2_sdmphylo_mean,
+                            subset2_sdmphylo_min,
+                            subset2_sdmphylo_max)
   ape::is.ultrametric(subset2_sdmphylo_all, option = 2)
   ltt.plot()
 }
