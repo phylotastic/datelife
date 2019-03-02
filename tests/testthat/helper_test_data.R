@@ -10,10 +10,7 @@ subset2_result <- get_datelife_result(subset2_query)
 utils::data(subset2_search)
 subset2_result <- subset2_search$result
 subset2_bestgrove <- get_best_grove(subset2_result)$best_grove
-# trees <- lapply(subset2_bestgrove, patristic_matrix_to_phylo)
-
-subset2_bestgrove_phyloall <- summarize_datelife_result(subset2_bestgrove, summary_format = "phylo_all")
-# subset2_bestgrove_consensus <- ape::consensus()
+# subset2_bestgrove_phyloall <- summarize_datelife_result(subset2_bestgrove, summary_format = "phylo_all")
 subset2_sdm_matrix <- get_sdm_matrix(subset2_bestgrove)
 
 birds_wiki <- c("Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",

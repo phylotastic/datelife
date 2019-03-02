@@ -282,10 +282,11 @@ summary_matrix_to_phylo <- function(summ_matrix, use = "mean", target_tree = NUL
 	# try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
   if(!inherits(target_tree, "phylo")){
     target_tree <- suppressMessages(get_otol_synthetic_tree(...))
+    target_tree <- ape::collapse.singles(target_tree)
     if(!inherits(target_tree, "phylo")){
       # we should find a better way to do this, but it should be ok for now:
-      # target_tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(summ_matrix, ultrametric = TRUE)))
-      target_tree <- consensus(phyloall, p = 0.5)
+      target_tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(summ_matrix, ultrametric = TRUE)))
+      # target_tree <- consensus(phyloall, p = 0.5) # can't use consensus here: not all trees have the same number of tips, duh
     }
       # ape::is.ultrametric(target_tree)
       # ape::is.binary(target_tree)

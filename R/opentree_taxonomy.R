@@ -115,24 +115,26 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
 # ott_ids <- mrca_ottids
 #' @export
 get_ott_lineage <- function(input = NULL, ott_ids = NULL){
-    # ott_ids <- c(335590, 555178, 748370, 1070795, 3942422, 907458, 472526, 820645, 31926, 756728, 605194, 490099)
+  # ott_ids <- c(335590, 555178, 748370, 1070795, 3942422, 907458, 472526, 820645, 31926, 756728, 605194, 490099)
+  # ott_ids <- c(417116, 120960)
+  # ott_ids <- 417116
   input_ott_match <- check_ott_input(input, ott_ids)
   tax_info <- .get_ott_lineage(input_ott_match)
   lin <- lapply(tax_info, "[", "lineage")
-  ott_names <- sapply(lin, function(x) unlist(sapply(x[[1]], "[", "unique_name")))
+  ott_names <- lapply(lin, function(x) unlist(sapply(x[[1]], "[", "unique_name")))
   # unlist(sapply(lin[[1]][[1]], "[", "unique_name"))
   # length(ott_names) == length(tax_info)
   # ott_ids <- sapply(seq(length(lin)), function(x) stats::setNames(unlist(sapply(lin[[x]][[1]], "[", "ott_id")), ott_names[[x]]))
-  ott_ids <- sapply(seq(length(lin)), function(x) unlist(sapply(lin[[x]][[1]], "[", "ott_id")))
-  ott_ranks <- sapply(seq(length(lin)), function(x) unlist(sapply(lin[[x]][[1]], "[", "rank")))
-  if(length(ott_ids) == 1){
-      res <- list(matrix(c(ott_ids, ott_ranks), ncol =2, dimnames = list(ott_names, c("ott_ids", "ott_ranks"))))
-  } else {
+  ott_ids <- lapply(seq(length(lin)), function(x) unlist(sapply(lin[[x]][[1]], "[", "ott_id")))
+  ott_ranks <- lapply(seq(length(lin)), function(x) unlist(sapply(lin[[x]][[1]], "[", "rank")))
+  # if(length(ott_ids) == 1){
+  #     res <- list(matrix(c(ott_ids, ott_ranks), ncol =2, dimnames = list(ott_names, c("ott_ids", "ott_ranks"))))
+  # } else {
       mat <- function(x) {
           matrix(c(ott_ids[[x]], ott_ranks[[x]]), ncol =2, dimnames = list(ott_names[[x]], c("ott_ids", "ott_ranks")))
       }
-      res <- sapply(seq(length(lin)), mat)
-  }
+      res <- lapply(seq(length(lin)), mat)
+  # }
   # enhance: ott_id names should be the name of the rank, look at the example to see why
   names(res) <- names(input_ott_match)
   # stats::setNames(ott_ids, names(input_ott_match))

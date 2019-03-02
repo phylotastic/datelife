@@ -72,8 +72,12 @@ get_spp_from_taxon = TRUE)
 })
 
 test_that("summary_matrix_to_phylo works"){
+  subset2_otol <- get_otol_synthetic_tree(colnames(subset2_sdm_matrix))
+  plot(subset2_otol, cex = 0.5)
+  mrca_lin <- datelife::get_ott_lineage(ott_ids = as.numeric(c(4291, 4291)))
+
   subset2_sdmphylo_mean <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix,
-          use = "mean", target_tree = NULL, input = colnames(subset2_sdm_matrix))
+          use = "mean", target_tree = subset2_otol)
   # ape::is.binary(subset2_sdmphylo_mean)
   # names(subset2_sdmphylo_mean)
   # subset2_sdmphylo_mean$calibrations_MRCA
