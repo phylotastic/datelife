@@ -19,8 +19,8 @@ A list with datelieQuery and datelifeResult objects from a search of taxon names
 Generated with:
 datelife_query <- make_datelife_query(subset2_taxa)
 datelife_result <- get_datelife_result(datelife_query)
-subset2_search <- list(datelife_result = datelife_result, datelife_query = datelife_query)
-usethis::use_data(subset2_search)
+subset2_search <- list(query = datelife_query, result = datelife_result)
+usethis::use_data(subset2_search, overwrite = TRUE)
 }
 \keyword{datelifeResult}
 \keyword{names}

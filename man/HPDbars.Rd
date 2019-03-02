@@ -47,3 +47,6 @@ Adds bars to nodes on a phylo plot.
 \description{
 Function to add interval bars to nodes on a phylo plot.
 }
+\details{
+Make sure ape is loaded otherwise it won't find .PlotPhyloEnv
+}

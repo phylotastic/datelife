@@ -4,12 +4,12 @@
 \alias{get_taxon_summary}
 \title{Get taxon summary of a datelifeResult object}
 \usage{
-get_taxon_summary(datelife_query = NULL, datelife_result)
+get_taxon_summary(datelife_result, datelife_query = NULL)
 }
 \arguments{
-\item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
-
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
+
+\item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
 }
 \description{
 Get taxon summary of a datelifeResult object
