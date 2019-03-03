@@ -360,18 +360,19 @@ get_ott_children <- function(input = NULL, ott_ids = NULL, ott_rank = "species")
 #' @param tag A character vector with the mrca tag
 #' @return A numeric vector with ott id from original taxon named with the corresponding ott name
 #' @export
-recover_mrcaott_original <- function(tag){
+recover_mrcaott <- function(tag){
+  # tag <- "mrcaott7813ott454749"
+  # tag = "mrcaott4291ott4292"
+  # tag = "mrcaott27233ott44289"
   if(!grep("mrcaott", tag)){
     message("incorrect tag")
     return(NA)
   }
-  # tag = "mrcaott4291ott4292"
-  # tag = "mrcaott27233ott44289"
   mrca_ottids1 <- gsub("mrcaott", "", tag)
   mrca_ottids1 <- gsub("ott.*", "", mrca_ottids1)
   ott_ids <- c(mrca_ottids1, gsub("mrcaott.*ott", "", tag))
   mrca_lin <- datelife::get_ott_lineage(ott_ids = as.numeric(ott_ids))
-  mm <- match(mrca_lin[[1]][, "ott_ranks"], mrca_lin[[2]][, "ott_ranks"])
+  mm <- match(rownames(mrca_lin[[1]]), rownames(mrca_lin[[2]]))
   mm <- mm[!is.na(mm)]
   return(setNames(mrca_lin[[2]][mm[1],"ott_ids"], rownames(mrca_lin[[2]])[mm[1]]))
 }
