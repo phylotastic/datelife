@@ -74,7 +74,6 @@ get_spp_from_taxon = TRUE)
 test_that("summary_matrix_to_phylo works"){
   subset2_otol <- get_otol_synthetic_tree(colnames(subset2_sdm_matrix))
   plot(subset2_otol, cex = 0.5)
-  mrca_lin <- datelife::get_ott_lineage(ott_ids = as.numeric(c(4291, 4291)))
 
   subset2_sdmphylo_mean <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix,
           use = "mean", target_tree = subset2_otol)
@@ -82,7 +81,9 @@ test_that("summary_matrix_to_phylo works"){
   # names(subset2_sdmphylo_mean)
   # subset2_sdmphylo_mean$calibrations_MRCA
   # subset2_sdmphylo_mean$Nnode
-  plot(subset2_sdmphylo_mean, cex = 0.5)
+  subset2_sdmphylo_mean2 <- subset2_sdmphylo_mean
+  subset2_sdmphylo_mean2$edge.length <- NULL
+  plot(subset2_sdmphylo_mean2, cex = 0.5)
   ape::nodelabels(cex = 0.35)
   HPDbars(phy = subset2_sdmphylo_mean, label = "calibrations",
         nodes = subset2_sdmphylo_mean$calibrations_MRCA)

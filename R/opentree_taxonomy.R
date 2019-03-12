@@ -361,6 +361,7 @@ get_ott_children <- function(input = NULL, ott_ids = NULL, ott_rank = "species")
 #' @return A numeric vector with ott id from original taxon named with the corresponding ott name
 #' @export
 recover_mrcaott <- function(tag){
+  # for debugging:
   # tag <- "mrcaott7813ott454749"
   # tag = "mrcaott4291ott4292"
   # tag = "mrcaott27233ott44289"

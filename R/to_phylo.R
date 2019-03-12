@@ -221,6 +221,7 @@ choose_cluster <- function(phycluster, clustering_method){
 }
 #' Go from a smmary matrix to an ultrametric phylo object.
 #' @param summ_matrix A summary patristic distance matrix from sdm or median. See details.
+#' @param total_distance Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take iy as is.
 #' @param use A character vector indicating what type of age to use for summary. One of the following
 #' \describe{
 #'	\item{mean}{ It will use the mean of the node age distributions.
@@ -235,7 +236,7 @@ choose_cluster <- function(phycluster, clustering_method){
 #' @return An ultrametric phylo object.
 #' @details It can take a regular patristic distance matrix, but there are simpler methods for that implemented in patristic_matrix_to_phylo.
 #' @export
-summary_matrix_to_phylo <- function(summ_matrix, use = "mean", target_tree = NULL, ...){ # enhance: allow other methods, not only bladj.
+summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "mean", target_tree = NULL, ...){ # enhance: allow other methods, not only bladj.
     # for debugging here
     # summ_matrix <- subset2_sdm_matrix
     use_age <- match.arg(use, c("mean", "median", "min", "max"))
@@ -249,7 +250,9 @@ summary_matrix_to_phylo <- function(summ_matrix, use = "mean", target_tree = NUL
         summ_matrix <- as.matrix(summ_matrix)
         colnames(summ_matrix) <- gsub("\\.", " ", colnames(summ_matrix))
     }
-	summ_matrix <- summ_matrix*0.5  # bc it's total distance tip to tip
+    if(total_distance){
+      summ_matrix <- summ_matrix*0.5  # bc it's total distance tip to tip
+    }
 	ages <- tA <- tB <- c()
   # to compute the final length of the data frame do: ncol(xx)^2 - sum(1:(ncol(xx)-1))
 	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
@@ -267,12 +270,14 @@ summary_matrix_to_phylo <- function(summ_matrix, use = "mean", target_tree = NUL
 		tB <- c(tB, rep(colnames(summ_matrix)[i], i))
 	}
   # get_nodeage_distribution() <- function(ages, taxonA, taxonB, phy)
-	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB)
-	calibrations$taxonA <- as.character(calibrations$taxonA)
-	calibrations$taxonB <- as.character(calibrations$taxonB)
+  tA <- gsub(" ", "_", tA)
+  tB <- gsub(" ", "_", tB)
+	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB, stringsAsFactors = FALSE)
+	# calibrations$taxonA <- as.character(calibrations$taxonA)
+	# calibrations$taxonB <- as.character(calibrations$taxonB)
 	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN and NAs
 	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
-	calibrations <- calibrations[calibrations[,"Age"] > 0, ] # get rif of negative values too
+	calibrations <- calibrations[calibrations[,"Age"] > 0, ] # get rid of negative values too
 	if(any(is.na(calibrations[,"Age"]))){
 		warning("for some reason there are still NAs in the matrix")
 	}
@@ -293,16 +298,24 @@ summary_matrix_to_phylo <- function(summ_matrix, use = "mean", target_tree = NUL
       # plot(target_tree, cex = 0.5)
   }
   if(!inherits(target_tree, "phylo")){
-		message("target_tree is not phylo object; maybe summ_matrix object has no good groves; try with get_best_grove first")
+		message("target_tree is not phylo object; maybe summ_matrix was constructed from an object with no good groves; try with get_best_grove first")
 		# enhance: add a more formal test of best grove
 		return(NA)
 	}
 	target_tree$edge.length <- NULL
 	target_tree$edge.length.original <- NULL
+
+  # test that taxonA and taxonB are all in target tree tip labels
+  if(any(is.na(match(unique(c(calibrations$taxonA, calibrations$taxonB)), target_tree$tip.label)))){
+    message("taxa in summ_matrix are not in target_tree; please check this")
+    return(NA)
+  }
 	# get the coincident node numbers:
+  # target_tree$tip.label
 	target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
 			phytools::findMRCA(tree = target_tree,
 								 tips = as.character(calibrations[i,c("taxonA", "taxonB")]),
+                 as.character(calibrations[,c("taxonA", "taxonB")])
 								 type = "node"))
 	target_tree_nodes <- target_tree_nodes - ape::Ntip(target_tree)
 	all_nodes <- sort(unique(target_tree_nodes))
