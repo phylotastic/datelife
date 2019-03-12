@@ -304,19 +304,24 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
 	}
 	target_tree$edge.length <- NULL
 	target_tree$edge.length.original <- NULL
-
+  target_tree$tip.label <- gsub(" ", "_", target_tree$tip.label)
   # test that taxonA and taxonB are all in target tree tip labels
   if(any(is.na(match(unique(c(calibrations$taxonA, calibrations$taxonB)), target_tree$tip.label)))){
     message("taxa in summ_matrix are not in target_tree; please check this")
     return(NA)
   }
 	# get the coincident node numbers:
-  # target_tree$tip.label
+  # ape::is.binary(target_tree)
 	target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
 			phytools::findMRCA(tree = target_tree,
-								 tips = as.character(calibrations[i,c("taxonA", "taxonB")]),
-                 as.character(calibrations[,c("taxonA", "taxonB")])
+								 tips = calibrations[i,c("taxonA", "taxonB")],
 								 type = "node"))
+  for(i in seq_along(nrow(calibrations))){
+    print(i)
+    phytools::findMRCA(tree = target_tree,
+               tips = calibrations[i,c("taxonA", "taxonB")],
+               type = "node")
+  }
 	target_tree_nodes <- target_tree_nodes - ape::Ntip(target_tree)
 	all_nodes <- sort(unique(target_tree_nodes))
 	# get the node age distribution:
