@@ -16,7 +16,6 @@ test_that("summarize_datelife_result works", {
   xx <- summarize_datelife_result(datelife_result, datelife_query, summary_format = "phylo_all", taxon_summary = "summary")
   xx <- summarize_datelife_result(datelife_result, datelife_query, summary_format = "phylo_median", taxon_summary = "summary")
   xx <- summarize_datelife_result(datelife_result, datelife_query, summary_format = "phylo_sdm", taxon_summary = "summary")
-
 })
 
 test_that("Summarize as newick_median works correctly", {
@@ -29,6 +28,7 @@ test_that("Summarize as newick_median works correctly", {
   expect_false(anyNA(tree))
   expect_equal(class(ape::read.tree(text=tree)), "phylo")
 })
+
 test_that("Summarize as mrca works correctly", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")

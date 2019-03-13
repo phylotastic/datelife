@@ -239,6 +239,7 @@ choose_cluster <- function(phycluster, clustering_method){
 summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "mean", target_tree = NULL, ...){ # enhance: allow other methods, not only bladj.
     # for debugging here
     # summ_matrix <- subset2_sdm_matrix
+    # summ_matrix <- median.matrix
     use_age <- match.arg(use, c("mean", "median", "min", "max"))
     if(!inherits(summ_matrix, "matrix") & !inherits(summ_matrix, "data.frame")){
         message("summ_matrix argument is not a matrix")
@@ -287,12 +288,12 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
 	# try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
   if(!inherits(target_tree, "phylo")){
     target_tree <- suppressMessages(get_otol_synthetic_tree(...))
-    target_tree <- ape::collapse.singles(target_tree)
     if(!inherits(target_tree, "phylo")){
       # we should find a better way to do this, but it should be ok for now:
       target_tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(summ_matrix, ultrametric = TRUE)))
       # target_tree <- consensus(phyloall, p = 0.5) # can't use consensus here: not all trees have the same number of tips, duh
     }
+    target_tree <- ape::collapse.singles(target_tree)
       # ape::is.ultrametric(target_tree)
       # ape::is.binary(target_tree)
       # plot(target_tree, cex = 0.5)
@@ -314,14 +315,8 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
   # ape::is.binary(target_tree)
 	target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
 			phytools::findMRCA(tree = target_tree,
-								 tips = calibrations[i,c("taxonA", "taxonB")],
+								 tips = as.character(calibrations[i,c("taxonA", "taxonB")]),
 								 type = "node"))
-  for(i in seq_along(nrow(calibrations))){
-    print(i)
-    phytools::findMRCA(tree = target_tree,
-               tips = calibrations[i,c("taxonA", "taxonB")],
-               type = "node")
-  }
 	target_tree_nodes <- target_tree_nodes - ape::Ntip(target_tree)
 	all_nodes <- sort(unique(target_tree_nodes))
 	# get the node age distribution:
