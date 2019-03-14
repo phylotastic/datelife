@@ -1,6 +1,7 @@
 #' Function to compute the SDM supertree (Criscuolo et al. 2006) from a datelifeResult object.
 #' @inheritParams datelife_result_check
 #' @inheritParams get_sdm
+#' @inheritDotParams summary_matrix_to_phylo
 #' @return A phylo object from SDM with an extra element:
 #' \describe{
 #'	\item{data}{A datelifeResult object with the chronograms that were used to construct the SDM tree.
@@ -9,7 +10,7 @@
 #' @export
 #' @details
 #' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006. 55(5):740. doi: 10.1080/10635150600969872.
-datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = TRUE) {
+datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = TRUE, ...) {
 	# add check datelife_result
 	phy <- NA
 	# used.studies <- names(datelife_result)
@@ -25,7 +26,7 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 			SDM.result <- get_sdm(unpadded.matrices, weighting, verbose)
 			# it is important to use upgma as clustering method; nj produces much younger ages when the matrix comes from sdm
 			# phy <- patristic_matrix_to_phylo(SDM.result, clustering_method = clustering_method, fix_negative_brlen = TRUE)
-			phy <- summary_matrix_to_phylo(SDM.result) # this also contains the age distributions and calibrations used
+			phy <- summary_matrix_to_phylo(SDM.result, ...) # this also contains the age distributions and calibrations used
 		} else {
 			if(length(good.matrix.indices) == length(datelife_result)) {
 				warning("There are not enough input chronograms to run SDM. You can help uploading trees to Open Tree of Life tree store.")

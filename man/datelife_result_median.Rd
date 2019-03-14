@@ -4,10 +4,26 @@
 \alias{datelife_result_median}
 \title{Get a median summary chronogram from a datelifeResult object.}
 \usage{
-datelife_result_median(datelife_result)
+datelife_result_median(datelife_result, ...)
 }
 \arguments{
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
+
+\item{...}{Arguments passed on to \code{summary_matrix_to_phylo}
+\describe{
+  \item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
+  \item{total_distance}{Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take iy as is.}
+  \item{use}{A character vector indicating what type of age to use for summary. One of the following
+\describe{
+\item{mean}{ It will use the mean of the node age distributions.
+}
+\item{min}{ It will use the minimum age from the node age distrbutions.
+}
+\item{max}{ Choose this if you wanna be conservative; it will use the maximum age from the node age distrbutions.
+}
+}}
+  \item{target_tree}{A phylo object. Use this in case you want a particular backbone for the output tree.}
+}}
 }
 \value{
 A phylo object

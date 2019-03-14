@@ -14,9 +14,10 @@ datelife_result_median_matrix <- function(datelife_result) {
 
 #' Get a median summary chronogram from a datelifeResult object.
 #' @inheritParams datelife_result_check
+#' @inheritDotParams summary_matrix_to_phylo
 #' @return A phylo object
 #' @export
-datelife_result_median <- function(datelife_result){
+datelife_result_median <- function(datelife_result, ...){
 	# for debugging here
 	# datelife_result <- get_best_grove(subset2_result)$best_grove
 	median.matrix <- datelife_result_median_matrix(datelife_result)
@@ -25,6 +26,6 @@ datelife_result_median <- function(datelife_result){
 	# sometimes max(branching.times) is off (too big or too small), so we could
 	# standardize by real median of original data (max(mrcas)).
 	# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
-	tree <- summary_matrix_to_phylo(median.matrix)
+	tree <- summary_matrix_to_phylo(median.matrix, ...)
 	return(tree)
 }

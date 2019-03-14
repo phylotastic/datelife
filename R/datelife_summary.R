@@ -105,10 +105,10 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 		best_grove <- get_best_grove(datelife_result, criterion = "taxa", n = 2)$best_grove
 	}
 	if(grepl("median", summary_format.in)){
-		return.object <- datelife_result_median(best_grove)
+		return.object <- datelife_result_median(best_grove, target_tree = if(inherits("list", datelife_query)) datelife_query$phy else NULL)
 	}
 	if(grepl("sdm", summary_format.in)) {
-		return.object <- datelife_result_sdm(best_grove)
+		return.object <- datelife_result_sdm(best_grove, target_tree = if(inherits("list", datelife_query)) datelife_query$phy else NULL)
 	}
 	if(grepl("newick", summary_format.in)) {
 		return.object <- ape::write.tree(return.object)
