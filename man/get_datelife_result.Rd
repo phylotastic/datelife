@@ -7,8 +7,8 @@
 get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, use_tnrs = FALSE,
   approximate_match = TRUE, update_cache = FALSE,
-  cache = get("opentree_chronograms"), dating_method = "PATHd8",
-  get_spp_from_taxon = FALSE, verbose = FALSE)
+  cache = get("opentree_chronograms"), get_spp_from_taxon = FALSE,
+  verbose = FALSE)
 }
 \arguments{
 \item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
@@ -22,8 +22,6 @@ get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata",
 \item{update_cache}{default to FALSE}
 
 \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
-
-\item{dating_method}{The method used for tree dating.}
 
 \item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
 

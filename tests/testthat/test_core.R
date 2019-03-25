@@ -121,7 +121,9 @@ test_that("Crop plant taxa work", {
 test_that("Crop plant newick works", {
   skip_on_cran()
   skip_on_os("linux") #b/c no pathd8 on travis linux
-  trees <- datelife_search(input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);", summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, cache = opentree_chronograms, dating_method = "PATHd8")
+  trees <- datelife_search(input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);",
+  summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
+  cache = opentree_chronograms, dating_method = "PATHd8")
   # expect_s3_class(trees[[1]], "phylo")
 })
 

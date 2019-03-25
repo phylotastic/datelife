@@ -16,7 +16,8 @@ datelifeResult object of three birds "Rhea americana", "Pterocnemia pennata", an
 }
 \details{
 Generated with:
-threebirds_dr <- get_datelife_result(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"))
+threebirds_dr <- get_datelife_result(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
+partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"))
 use_data(threebirds_dr)
 }
 \keyword{ants}

@@ -81,18 +81,29 @@
 #' write(ages.html, file="some.bird.trees.html")
 #' system("open some.bird.trees.html")
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", summary_print= c("citations", "taxa"), taxon_summary = c("none", "summary", "matrix"),  get_spp_from_taxon = FALSE, verbose = FALSE, criterion="taxa") {
-			# find a way not to repeat partial and cache arguments, which are used in both get_datelife_result and summarize_datelife_result
-			if(update_cache){
-				cache <- update_datelife_cache(save = TRUE, verbose = verbose)
-			}
-			datelife_query <- make_datelife_query(input = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
-			datelife_result.here <- get_datelife_result(input = datelife_query, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = FALSE, cache = cache, dating_method = dating_method, verbose = verbose)
-			# print.datelife(datelife_result = datelife_result.here)
-			# datelife <- list(datelife_query = datelife_query, datelife_result = datelife_result.here)
-			# class(datelife) <- "datelife"
-			# return(datelife)
-			return(summarize_datelife_result(datelife_query = datelife_query, datelife_result = datelife_result.here, summary_format = summary_format, partial = partial, update_cache = FALSE, cache = cache, summary_print = summary_print, taxon_summary = taxon_summary, verbose = verbose, criterion=criterion))
+	summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
+	update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8",
+	summary_print= c("citations", "taxa"), taxon_summary = c("none", "summary", "matrix"),
+	get_spp_from_taxon = FALSE, verbose = FALSE, criterion="taxa") {
+	# find a way not to repeat partial and cache arguments, which are used in both get_datelife_result and summarize_datelife_result
+	if(update_cache){
+		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
+	}
+	datelife_query <- make_datelife_query(input = input, use_tnrs = use_tnrs,
+		approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon,
+		verbose = verbose)
+	datelife_result.here <- get_datelife_result(input = datelife_query,
+		partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match,
+		update_cache = FALSE, cache = cache, verbose = verbose)
+	# print.datelife(datelife_result = datelife_result.here)
+	# datelife <- list(datelife_query = datelife_query, datelife_result = datelife_result.here)
+	# class(datelife) <- "datelife"
+	# return(datelife)
+	return(summarize_datelife_result(datelife_result = datelife_result.here,
+		datelife_query = datelife_query, summary_format = summary_format,
+		partial = partial, update_cache = FALSE, cache = cache,
+		summary_print = summary_print, taxon_summary = taxon_summary,
+		verbose = verbose, criterion = criterion))
 }
 
 # print.datelife <- function(datelife){
@@ -109,7 +120,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 # #' @inheritDotParams make_bold_otol_tree
 #' @return A datelifeResult object (named list of patristic matrices).
 #' @export
-get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", get_spp_from_taxon = FALSE, verbose = FALSE) {
+get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), get_spp_from_taxon = FALSE, verbose = FALSE) {
 	# input <- datelife_query
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
@@ -130,7 +141,9 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 		warning("\t", "Clade contains only one lineage.")
 		return(NA)
 	}
-	results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input_dq$cleaned_names, phy = input_dq$phy, dating_method = dating_method)
+	# setting phy to NULL always; it is a bad idea to congruidy subset trees,
+	# do that later in summarizing steps
+	results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input_dq$cleaned_names, phy = NULL)
   	datelife_result <- results_list_process(results_list, input_dq$cleaned_names, partial)
 	datelife_result_check(datelife_result, use_tnrs)
 	class(datelife_result) <- c("datelifeResult")
@@ -181,6 +194,7 @@ check_datelife_result <- function(datelife_result){
 #' @keywords otol tree subset chronogram ants datelife
 #' @details
 #' Generated with:
-#' threebirds_dr <- get_datelife_result(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"))
+#' threebirds_dr <- get_datelife_result(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
+#' partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"))
 #' use_data(threebirds_dr)
 "threebirds_dr"

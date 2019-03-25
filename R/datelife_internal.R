@@ -264,11 +264,7 @@ phylo_subset_both <- function(reference_tree.in, taxa.in, phy.in = NULL, phy4.in
 #  }
 	congruify = FALSE
 	if(inherits(phy.in, "phylo")) {
-        if(is.null(phy.in$edge.lengths)){
-            congruify = FALSE
-        } else {
             congruify = TRUE
-        }
 	} else {
         congruify = FALSE
     }

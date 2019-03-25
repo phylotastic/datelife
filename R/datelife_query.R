@@ -6,42 +6,42 @@
 #' @details If input has length 1, get_spp_from_taxon is always set to TRUE from datelife_search, not in here bc other things depend on this function.
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose = FALSE, ...) {
+	use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE,
+	verbose = FALSE, ...) {
 	if(verbose) {
 		message("Processing input...")
 	}
+	# input <- xx
 	# input <- rphylotastic::taxa_get_otol_tree(url_get_scientific_names(
 	# 	URL="https://www.nps.gov/yell/learn/nature/upload/BirdChecklist2014.pdf"))
 	# input <- threebirds_median
 	# input$tip.label[3] <- "ttttttt"
 	phy.new <- input_process(input = input, verbose = verbose)
+	use_tnrs_global <- FALSE
+	if(use_tnrs | any(get_spp_from_taxon)){
+		use_tnrs_global <- TRUE }
 	if(inherits(phy.new, "phylo")) {
-	    # if(use_tnrs) {
-	      	# phy.new$tip.label <- gsub("_", " ", cleaned_names)
-	    # }
-	  	# cleaned_names <- gsub("_", " ", phy.new$tip.label)
 	  	cleaned.input <- phy.new$tip.label
+		if(!is.null(phy.new$ott_ids)){ # if we have ott_ids don't use_tnrs
+			# if(!any(is.na(phy.new$ott_ids))){ #if there are no NAs
+			use_tnrs_global <- FALSE
+			ott_ids <- phy.new$ott_ids
+			if(any(get_spp_from_taxon)){
+				cleaned.input_tnrs <- list(ott_id = phy.new$ott_ids,
+					unique_name = phy.new$tip.label) # to use when get_spp_from_taxon = TRUE
+			}
+		}
 	} else {
 		if(!is.character(input)){
 			message("Input must be a character vector, a newick character string, or a phylo object")
 			return(NA)
 		}
-		if(length(input) == 1) { # if it is a character vector of length 1 with comma separated names
-			cleaned.input <- strsplit(input, ',')[[1]] #  it splits it by the comma
-		}
+		if(length(input) == 1){ # if it is a character vector of length 1 with comma separated names
+			cleaned.input <- strsplit(input, ',')[[1]] } # split it by the comma
 		cleaned.input <- stringr::str_trim(input, side = "both") # cleans the input of lingering unneeded white spaces
+		ott_ids <- NULL
 	}
-	ott_ids <- NA
-	use_tnrs_global <- FALSE
-	if(use_tnrs | any(get_spp_from_taxon)){
-		use_tnrs_global <- TRUE
-	}
-	if(inherits(phy.new, "phylo")){
-		if(is.null(phy.new$ott_ids)){
-			use_tnrs_global <- TRUE
-		}
-	}
-  	if (use_tnrs_global) {
+  	if (use_tnrs_global){
 		# process names even if it's a "higher" taxon name:
 		cleaned.input_tnrs <- clean_tnrs(tnrs_match(names = cleaned.input),
 			remove_nonmatches = TRUE)
@@ -62,7 +62,6 @@ use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose 
 			}
 		}
   	}
-	cleaned_names <- gsub("_", " ", cleaned.input)
 	if(any(get_spp_from_taxon)){
 		if(length(get_spp_from_taxon) == 1) {
 				get_spp_from_taxon <- rep(get_spp_from_taxon, length(cleaned.input))
@@ -84,25 +83,22 @@ use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose 
 		# fixing it from get_ott_children function and here too
 		cleaned_names <- lapply(df, function (x) rownames(x)[grepl("\\bspecies\\b", x$rank)])
 		ott_ids <- lapply(df, function (x) x$ott_id[grepl("\\bspecies\\b", x$rank)])
-		cleaned_names <- lapply(cleaned_names, function(x) gsub("_", " ", x))
 		cleaned_names <- unlist(cleaned_names)
 		ott_ids <- unlist(ott_ids)
 		# enhance: create vector original_taxon with original names: rep(cleaned.input[i], length(cleaned_names[i]))
 		original_taxa <- lapply(seq(nrow(cleaned.input_tnrs)), function(i)
 			rep(cleaned.input_tnrs$unique_name[i], length(cleaned_names[[i]])))
 	}
+	cleaned_names <- gsub("_", " ", cleaned.input)
     if(verbose) {
-		message("OK.")
-	}
+		message("OK.")}
     cleaned_names.print <- paste(cleaned_names, collapse = " | ")
     if(verbose) {
-		message("Working with the following taxa: ", "\n", "\t", cleaned_names.print)
-	}
-	# enhance: add original_taxa vector (from get_spp_from_taxon) to output
+		message("Working with the following taxa: ", "\n", "\t", cleaned_names.print)}
+	# enhance: add original_taxa vector (from get_spp_from_taxon) to output here:
 	datelife_query.return <- list(cleaned_names = cleaned_names, ott_ids = ott_ids,
 		phy = phy.new)
-	class(datelife_query.return) <- "datelifeQuery"
-	return(datelife_query.return)
+	return(structure(datelife_query.return, class = "datelifeQuery"))
 }
 #' Takes a phylo object or a character string and figure out if it's correct newick format or a list of species
 #' @inheritParams datelife_search
@@ -110,12 +106,16 @@ use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE, verbose 
 #' @return A phylo object or NA if no tree
 #' @export
 input_process <- function(input, verbose = FALSE){
-	if(inherits(input, "phylo")) {
-		input <- ape::write.tree(input)
-	}
+	input_class <- "phylo"
+	ott_ids <- NULL
 	if(inherits(input, "multiPhylo")) {
-		input <- ape::write.tree(input[[1]])
+		input <- input[[1]]
 		message("Input is a multiPhylo object. Only the first tree will be used.")
+	}
+	if(inherits(input, "phylo")) {
+		input_class <- class(input) # in case it has other classes to inherit
+		ott_ids <- input$ott_ids
+		input <- ape::write.tree(input)
 	}
 	if(!is.character(input)){
 		message("Input must be a character vector of names or a phylo object.")
@@ -127,18 +127,16 @@ input_process <- function(input, verbose = FALSE){
 	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
 		input <- input[grepl("\\(.*\\).*;", input)] # leave only the elements that are newick strings
 		if(length(input)>1){
-			message("Input has several newick strings. Only the first one will be used.")
-		}
-  	phy.new.in <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input[1])))
-  	if(verbose) {
-			message("Input is a phylogeny and it is correcly formatted.")
-		}
+			message("Input has several newick strings. Only the first one will be used.")}
+  		phy.new.in <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input[1])))
+		phy.new.in$ott_ids <- ott_ids
+		class(phy.new.in) <- input_class
+  		if(verbose){
+			message("Input is a phylogeny and it is correcly formatted.")}
 	} else {
-		if(verbose) {
-			message("Input is not a phylogeny.")
-		} #not a warning nor stop, 'cause it is not a requirement for input to be a phylogeny at this step
+		if(verbose){ #not a requirement for input to be a phylogeny at this point
+			message("Input is not a phylogeny.")} #so messg instead of warning or stop
 	}
-  	# }
 	return(phy.new.in)
 }
 
