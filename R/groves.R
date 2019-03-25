@@ -133,7 +133,7 @@ get_best_grove <- function(datelife_result, criterion = "taxa", n = 2){
    	  median.result <- tryCatch(suppressMessages(suppressWarnings(patristic_matrix_to_phylo(median.matrix,
                   clustering_method = "nj", fix_negative_brlen = TRUE))),
                   error = function(e) NULL)
-      # issue: sometimes max(branching.times) is off (too big or too small), so we could
+      # issue: sometimes max(ape::branching.times) is off (too big or too small), so we could
   		# standardize by real median of original data (max(mrcas)).
   		# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
       # We might have solved the above issue by using our method developped for sdm matrices

@@ -259,7 +259,7 @@ phylo_to_patristic_matrix <- function(phy, test = TRUE, tol = 0.01, option = 2) 
 #Used inside: get_subset_array_dispatch.
 phylo_subset_both <- function(reference_tree.in, taxa.in, phy.in = NULL, phy4.in = NULL, dating_method.in = "PATHd8") {
 #COMMENTING OUT: OpenTree gives single trees, let's just standardize on those
-#  if (class(reference_tree)=="phylo") {
+#  if (inherits(reference_tree, "phylo")) {
 #    reference_tree<-c(reference_tree) #from here in, assumes multiphylo object, even if a single tree
 #  }
 	congruify = FALSE

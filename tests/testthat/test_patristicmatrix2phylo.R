@@ -71,7 +71,7 @@ get_spp_from_taxon = TRUE)
   names(sdm_phylo)
 })
 
-test_that("summary_matrix_to_phylo works"){
+test_that("summary_matrix_to_phylo works", {
   subset2_otol <- get_otol_synthetic_tree(colnames(subset2_sdm_matrix))
   plot(subset2_otol, cex = 0.5)
 
@@ -109,4 +109,4 @@ test_that("summary_matrix_to_phylo works"){
                             subset2_sdmphylo_max)
   ape::is.ultrametric(subset2_sdmphylo_all, option = 2)
   ltt.plot()
-}
+})

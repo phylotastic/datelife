@@ -23,7 +23,7 @@ datelife_result_median <- function(datelife_result, ...){
 	median.matrix <- datelife_result_median_matrix(datelife_result)
 	# tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(median.matrix,
 	# 		  clustering_method = "nj", fix_negative_brlen = TRUE)))
-	# sometimes max(branching.times) is off (too big or too small), so we could
+	# sometimes max(ape::branching.times) is off (too big or too small), so we could
 	# standardize by real median of original data (max(mrcas)).
 	# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
 	tree <- summary_matrix_to_phylo(median.matrix, ...)

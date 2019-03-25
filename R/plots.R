@@ -715,7 +715,7 @@ plot_phylo_all <- function(trees, cex = graphics::par("cex"), include = TRUE, in
   # getting an "unrecoverable" error with merge PDF:
   # if(!individually){
   #   # install_github("trinker/plotflow")
-  # if we decide to use this, we should add plotflow functions in datelife package so we don't have to add it to description... 
+  # if we decide to use this, we should add plotflow functions in datelife package so we don't have to add it to description...
   #   plotflow:::mergePDF(
   #       in.file= paste(file.path(gsub("\\.png$|\\.pdf$", "", file), dir(gsub("\\.png$|\\.pdf$", "", file)))),
   #       file= paste0(gsub("\\.png$|\\.pdf$", "", file), ".", write)
@@ -798,3 +798,5 @@ cex = graphics::par("cex"), mai4 = NULL, write = "nothing", file_name = NULL, GT
     grDevices::dev.off()
   }
 }
+
+.PlotPhyloEnv <- new.env()

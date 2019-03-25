@@ -375,7 +375,7 @@ recover_mrcaott <- function(tag){
   mrca_lin <- datelife::get_ott_lineage(ott_ids = as.numeric(ott_ids))
   mm <- match(rownames(mrca_lin[[1]]), rownames(mrca_lin[[2]]))
   mm <- mm[!is.na(mm)]
-  return(setNames(mrca_lin[[2]][mm[1],"ott_ids"], rownames(mrca_lin[[2]])[mm[1]]))
+  return(stats::setNames(mrca_lin[[2]][mm[1],"ott_ids"], rownames(mrca_lin[[2]])[mm[1]]))
 }
 
 # enhance: all these functions could be wrapped up into two or three single ones

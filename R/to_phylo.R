@@ -270,9 +270,8 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
 		tA <- c(tA, rownames(summ_matrix)[1:i])
 		tB <- c(tB, rep(colnames(summ_matrix)[i], i))
 	}
-  # get_nodeage_distribution() <- function(ages, taxonA, taxonB, phy)
-  tA <- gsub(" ", "_", tA)
-  tB <- gsub(" ", "_", tB)
+    tA <- gsub(" ", "_", tA)
+    tB <- gsub(" ", "_", tB)
 	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB, stringsAsFactors = FALSE)
 	# calibrations$taxonA <- as.character(calibrations$taxonA)
 	# calibrations$taxonB <- as.character(calibrations$taxonB)

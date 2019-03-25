@@ -80,14 +80,16 @@ use_all_calibrations <- function(phy = NULL,
 				message("Dates are even more approximate than usual: had to expand constraints to have them agree.", "\n")
 			}
 		}
-
-		get_nodeage_distribution(ages = calibrations.df[, c("MinAge", "MaxAge")],
-														 taxonA = calibrations.df[, c("taxonA", "taxonA")],
-													 	 taxonB = calibrations.df[, c("taxonB", "taxonB")],
-													 	 phy = phy)
+		# get_nodeage_distribution(ages = calibrations.df[, c("MinAge", "MaxAge")],
+		# 						 taxonA = calibrations.df[, c("taxonA", "taxonA")],
+		# 						 taxonB = calibrations.df[, c("taxonB", "taxonB")],
+		# 						 phy = phy)
 		return(list(phy = chronogram, calibrations.df = calibrations.df, original.calibrations.df = original.calibrations.df))
 }
-
+# figure out what part of patristic_matrix_to_phylo can be reused:
+# get_nodeage_distribution() <- function(ages, taxonA, taxonB, phy){
+#
+# }
 #' Get all calibrations from chronograms in a database (specified in cache).
 #' @param input vector of names, a newick string, a phylo or multiPhylo object, a datelifeResult object
 #' @param partial Boolean; default TRUE: use source trees even if they only match some of the desired taxa

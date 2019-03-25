@@ -61,7 +61,7 @@ function(phy, label = "height_95%_HPD", tab = NULL, nodes, col, lwd, broken = FA
 		x <- tab[tab[, 1] %in% nodes, id]
 	}
 	phy$node.label <- NULL # important: if phy already has node labels the next two lines won't work
-	bt <- branching.times(phy)
+	bt <- ape::branching.times(phy)
 	bt <- bt[names(bt) %in% nodes]
 	x <- cbind(x, bt)
 	x <- cbind(x[, 3] - x[, 1], x[, 2] - x[, 3], x)
