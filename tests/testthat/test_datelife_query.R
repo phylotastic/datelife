@@ -62,7 +62,8 @@ test_that("input_process works", {
 	expect_s3_class(x <- input_process(phy, verbose=FALSE), "phylo") # output is phylo
 })
 
-test_that("datelife_query_check works", {
+test_that("datelife_query_check works with phylo as input", {
     utils::data(felid_sdm)
     datelife_query_check(datelife_query  = felid_sdm$phy)
+    datelife_query_check(datelife_query  = threebirds_median)
 })

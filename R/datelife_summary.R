@@ -104,11 +104,16 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm", "newick_median", "phylo_median")){
 		best_grove <- get_best_grove(datelife_result, criterion = "taxa", n = 2)$best_grove
 	}
+	if(inherits(datelife_query, "list")){
+		target_tree <- datelife_query$phy
+	} else {
+		target_tree <- NULL
+	}
 	if(grepl("median", summary_format.in)){
-		return.object <- datelife_result_median(best_grove, target_tree = if(inherits("list", datelife_query)) datelife_query$phy else NULL)
+		return.object <- datelife_result_median(best_grove, target_tree = target_tree)
 	}
 	if(grepl("sdm", summary_format.in)) {
-		return.object <- datelife_result_sdm(best_grove, target_tree = if(inherits("list", datelife_query)) datelife_query$phy else NULL)
+		return.object <- datelife_result_sdm(best_grove, target_tree = target_tree)
 	}
 	if(grepl("newick", summary_format.in)) {
 		return.object <- ape::write.tree(return.object)

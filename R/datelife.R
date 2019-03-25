@@ -110,6 +110,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 #' @return A datelifeResult object (named list of patristic matrices).
 #' @export
 get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8", get_spp_from_taxon = FALSE, verbose = FALSE) {
+	# input <- datelife_query
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
@@ -130,7 +131,7 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 		return(NA)
 	}
 	results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input_dq$cleaned_names, phy = input_dq$phy, dating_method = dating_method)
-  datelife_result <- results_list_process(results_list, input_dq$cleaned_names, partial)
+  	datelife_result <- results_list_process(results_list, input_dq$cleaned_names, partial)
 	datelife_result_check(datelife_result, use_tnrs)
 	class(datelife_result) <- c("datelifeResult")
 	return(datelife_result)

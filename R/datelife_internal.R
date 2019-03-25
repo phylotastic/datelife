@@ -263,19 +263,20 @@ phylo_subset_both <- function(reference_tree.in, taxa.in, phy.in = NULL, phy4.in
 #    reference_tree<-c(reference_tree) #from here in, assumes multiphylo object, even if a single tree
 #  }
 	congruify = FALSE
-	if(!is.null(phy.in[1])) {
-		congruify = TRUE
-		if(is.na(phy.in[1])) {
-			congruify = FALSE
-		}
-	}
-  if (!congruify) {
-    return(phylo_get_subset_array(reference_tree = reference_tree.in, taxa = taxa.in, phy4 = phy4.in, dating_method = dating_method.in))
+	if(inherits(phy.in, "phylo")) {
+        if(is.null(phy.in$edge.lengths)){
+            congruify = FALSE
+        } else {
+            congruify = TRUE
+        }
+	} else {
+        congruify = FALSE
+    }
+  if (congruify) {
+      return(phylo_get_subset_array_congruify(reference_tree = reference_tree.in, taxa = taxa.in, phy = phy.in, dating_method = dating_method.in))
+  } else {  # when congruify is FALSE:
+      return(phylo_get_subset_array(reference_tree = reference_tree.in, taxa = taxa.in, phy4 = phy4.in, dating_method = dating_method.in))
   }
-  else {  # when congruify is TRUE
-    return(phylo_get_subset_array_congruify(reference_tree = reference_tree.in, taxa = taxa.in, phy = phy.in, dating_method = dating_method.in))
-  }
-
 }
 
 # Used inside: phylo_subset_both, when we don't congruify
@@ -320,7 +321,6 @@ phylo_get_subset_array_congruify <- function(reference_tree, taxa, phy = NULL, d
       problem.new <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
       patristic_matrix_array.new <- NA # to make sure no one uses the zero by mistake
       return(list(patristic_matrix_array = patristic_matrix_array.new, problem = problem.new))
-
     }
   }
   if (final.size >= 3) {
@@ -345,15 +345,21 @@ phylo_congruify <- function(reference_tree, target_tree, dating_method = "PATHd8
 }
 
 # Used inside: patristic_matrix_array_phylo_congruify and phylo_congruify.
-congruify_and_check <- function(reference, target, taxonomy = NULL, tol = 0.01, option = 2, scale = "pathd8", attempt.fix = TRUE) {
+congruify_and_check <- function(reference, target, taxonomy = NULL, tol = 0.01,
+    option = 2, scale = "pathd8", attempt.fix = TRUE) {
   if(!ape::is.ultrametric(reference, tol = tol, option = option)) {
     return(NA)
   }
-	new.tree <- phylo_tiplabel_underscore_to_space(suppressWarnings(geiger::congruify.phylo(phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(target), taxonomy = taxonomy, tol = tol, scale = scale)$phy)) #suppressing warnings b/c geiger ignores tolerance
+	new.tree <- phylo_tiplabel_underscore_to_space(suppressWarnings(geiger::congruify.phylo(
+        phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(target),
+        taxonomy = taxonomy, tol = tol, scale = scale)$phy)) #suppressing warnings b/c geiger ignores tolerance
 	if(anyNA(new.tree$edge.length) & attempt.fix) {
-		warning("Congruification resulted in NA edge lengths. Resolving polytomies and making up starting branch lengths")
-		new.tree <- phylo_tiplabel_underscore_to_space(geiger::congruify.phylo(phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(ape::compute.brlen(ape::multi2di(target))), taxonomy, tol, scale)$phy)
+		message("Congruification resulted in NA edge lengths. Resolving polytomies and making up starting branch lengths")
+		new.tree <- phylo_tiplabel_underscore_to_space(geiger::congruify.phylo(
+            phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(
+                ape::compute.brlen(ape::multi2di(target))), taxonomy, tol, scale)$phy)
 		if(anyNA(new.tree$edge.length)) {
+            message("There are still NAs in edge lengths; returning NA")
 			new.tree <- NA
 		}
 	}
