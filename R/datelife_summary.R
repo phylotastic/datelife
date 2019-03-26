@@ -102,7 +102,7 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm", "newick_median", "phylo_median")){
 		best_grove <- get_best_grove(datelife_result, criterion = "taxa", n = 2)$best_grove
 	}
-	if(inherits(datelife_query, "list")){
+	if(inherits(datelife_query, "datelifeQuery")){
 		target_tree <- datelife_query$phy
 	} else {
 		target_tree <- NULL

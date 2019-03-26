@@ -138,6 +138,8 @@ birds_yellowstone_phyloall <- summarize_datelife_result(birds_yellowstone_result
 # unname(sapply(phylo_all, function(x) max(ape::branching.times(x))))
 # unname(sapply(datelife_result, function(x) max(x)))
 # plot_phylo_all(birds_yellowstone_phyloall)
-birds_yellowstone_phylomedian <- summarize_datelife_result(birds_yellowstone_result, birds_yellowstone_query, "phylo_median")
+birds_yellowstone_phylomedian <- summarize_datelife_result(birds_yellowstone_result,
+    birds_yellowstone_query, "phylo_median", summary_print = "citations")
+names(birds_yellowstone_phylomedian)
 plot(birds_yellowstone_phylomedian, cex = 0.25)
 ape::axisPhylo(cex = 0.5)
