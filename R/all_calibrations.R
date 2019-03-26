@@ -278,30 +278,15 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 #' @return A phylo object
 #' @export
 get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version = "v2", ...){
+	# input <- birds_yellowstone
 	input_ott_match <- suppressMessages(check_ott_input(input, ott_ids, ...))
 	if(length(input_ott_match) < 2){
 		message("At least two valid names or numeric ott_ids are needed to get a tree")
 		return(NA)
 	}
-	# the following chunk is just to give the message of the taxa that are being pulled from otol
-	# else {
-	# 	# enhance: search for otl taxon name with a rotl function
-	# 	if(all(!c("cleaned_names", "unique_name") %in% names(input))){
-	# 		input$cleaned_names <- paste0("tax", seq(length(input$ott_id)))
-	# 	}
-	# 	if(is.data.frame(input)){
-	# 		if(is.null(rownames(input))){
-	# 			input$cleaned_names <- paste0("tax", seq(length(input$ott_id)))
-	# 		} else {
-	# 			input$cleaned_names <- rownames(input)
-	# 		}
-	# 	}
-	# }
 	# enhance: we might need a check of ott_id elements, are they all numeric, are there no NAs, etc.
-	# also, another check here, are all ott_ids from valid taxa? this is checked with get_ott_children, but from other functions we shoudl check This
+	# also, another check here, are all ott_ids from valid taxa? this is checked with get_ott_children, but from other functions we should check This
 	# enhance: add a class to get_ott_children outputs so its easier to check here if all ott ids are valid taxa, indicate if it has been cleaned, maybe within an atrribute
-	# message(paste("Getting tree for", paste0(input$cleaned_names, collapse = ", ")))
-	# message(paste("Getting tree for", paste0(input$unique_name, collapse = ", ")))
 	# system.time({sapply(rotl::taxonomy_taxon_info(df$ott_id), "[", "flags")})
 	# system.time({tnrs_match(rownames(df))}) # this one is faster
 	phy <- tryCatch(suppressWarnings(rotl::tol_induced_subtree(ott_ids = input_ott_match, label_format = "name",  otl_v = otol_version)),
@@ -313,16 +298,22 @@ get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version =
 	if(length(phy) == 1){
 		return(phy)
 	}
-	phy <- ape::multi2di(phy)
+	if(!ape::is.binary(phy)){
+		message(paste0("OToL synthetic tree of input taxa is not fully resolved (",
+		phy$Nnode, " nodes/", length(phy$tip.label), " tips)."))
+		message("Resolving at random...")
+		phy <- ape::multi2di(phy)
+	}
 	# example of weird behaviour on tip labeling from otol:
 	# tnrs <- rotl::tnrs_match_names(c("Staphylococcus aureus", "Bacillus subtilis", "Neisseria meningitidis"))
 	# tol_sub <- rotl::tol_induced_subtree(ott_ids = tnrs$ott_id)
 	# curl -X POST https://api.opentreeoflife.org/v3/tree_of_life/induced_subtree -H "content-type:application/json" -d '{"ott_ids":[1090496, 1084928, 611778]}'
 	# tol_subpost <- ape::read.tree(text = "((((((((((((((((((((((((Bacillus_subtilis_ott1084928)mrcaott6603ott41501)mrcaott6603ott219996)mrcaott6603ott51434)mrcaott6603ott7907)mrcaott1417ott6603)mrcaott1417ott130524)mrcaott609ott1417)mrcaott609ott695050)mrcaott609ott3174)mrcaott218ott609,(((((((mrcaott4291ott4292)mrcaott3204ott3205)mrcaott3204ott109201)mrcaott3204ott935729)mrcaott3204ott460129)Staphylococcus_ott720488)Staphylococcaceae_ott949800)mrcaott1420ott85485)mrcaott218ott1420)mrcaott218ott9340)mrcaott218ott1491)mrcaott217ott218)mrcaott217ott1456)mrcaott47ott53)mrcaott47ott63791)mrcaott47ott10726)mrcaott47ott184124)mrcaott47ott64165)mrcaott47ott2035)mrcaott47ott19087)mrcaott47ott63363,((((((((((((((((((((((((((((Neisseria_meningitidis_ott611778)mrcaott22944ott239089)mrcaott22944ott237408)mrcaott22944ott239091)mrcaott22944ott469870)mrcaott22944ott233491)mrcaott22944ott279619)mrcaott22944ott279613)mrcaott22944ott279628)mrcaott22944ott279610)mrcaott14134ott22944)mrcaott14134ott67965)mrcaott14134ott1011641)Neisseria_ott611812)mrcaott5074ott139204)Neisseriaceae_ott286853)Neisseriales_ott779197)mrcaott90ott5074)mrcaott90ott103)mrcaott90ott11872)mrcaott90ott191429)mrcaott89ott90)mrcaott89ott3892)mrcaott50ott89)mrcaott50ott21523)mrcaott50ott6117)mrcaott50ott107113)mrcaott50ott1100)mrcaott50ott73)mrcaott47ott50;")
 
-	# include ott_ids in phy:
+	# now include ott_ids as phy element:
 	if(is.null(phy$ott_ids)){
-		phy$ott_ids <- input_ott_match[match(gsub(" ", "_", names(input_ott_match)), phy$tip.label)]
+		phy$ott_ids <- input_ott_match[match(phy$tip.label, gsub(" ", "_",
+		names(input_ott_match)))] # will give NAs where there are mrcaotts, but fixed after
 	}
 	mrca_index <- grep("mrcaott", phy$tip.label)
 	if(length(mrca_index) > 0){
@@ -330,6 +321,7 @@ get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version =
 		phy$tip.label[mrca_index] <- names(mrcaott_names)
 		phy$ott_ids[mrca_index] <- mrcaott_names
 	}
+	phy$ott_ids <- as.numeric(phy$ott_ids)
 	return(phy)
 }
 

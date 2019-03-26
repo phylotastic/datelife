@@ -64,10 +64,8 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 	summary_format = "phylo_all", partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"),
 	summary_print = c("citations", "taxa"), taxon_summary = c("none", "summary", "matrix"),
 	verbose = FALSE, criterion = c("trees", "taxa")) {
-		# if(!partial) {
-		# 	datelife_result <- datelife_result[which(!sapply(datelife_result, anyNA))]
-		# } # not necessary cause already filtered in get_datelife_result
-		# datelife_result <- subset2_bestgrove
+	# datelife_result <- birds_yellowstone_result
+	# datelife_query <- birds_yellowstone_query
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
@@ -177,7 +175,8 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 	if(taxon_summary.in != "none" & summary_format.in !="html"){
 		return.object <- list(return.object)
 		if(taxon_summary.in == "matrix") {
-			if(summary_format.in !="data_frame") return.object <- c(return.object, list(taxon_distribution = taxon_summ$matrix))
+			if(summary_format.in !="data_frame"){
+				return.object <- c(return.object, list(taxon_distribution = taxon_summ$matrix))}
 		}
 		if(taxon_summary.in == "summary") {
 			return.object <- c(return.object, list(taxon_distribution = taxon_summ$summary))
@@ -186,7 +185,8 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 		names(return.object)[1] <- summary_format.in
 		if(summary_format.in =="data_frame"){
 			names(return.object)[1] <- "results"
-			if(taxon_summary.in == "matrix") names(return.object)[1] <- "results_and_missing_taxa"
+			if(taxon_summary.in == "matrix") {
+				names(return.object)[1] <- "results_and_missing_taxa"}
 		}
 	}
 	if(any("citations" %in% summary_print.in) & !any(summary_format.in %in% c("citations", "html", "data_frame"))) {

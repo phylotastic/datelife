@@ -120,20 +120,24 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 # #' @inheritDotParams make_bold_otol_tree
 #' @return A datelifeResult object (named list of patristic matrices).
 #' @export
-get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), get_spp_from_taxon = FALSE, verbose = FALSE) {
+get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
+	partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
+	cache = get("opentree_chronograms"), get_spp_from_taxon = FALSE, verbose = FALSE) {
 	# input <- datelife_query
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
-	input_dq <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon, verbose = verbose)
+	input_dq <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs,
+		approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon,
+		verbose = verbose)
 	if(length(input_dq$cleaned_names) == 1){
 			message("Cannot perform a search of divergence times with just one taxon.")
 			if(!get_spp_from_taxon) {
 				# message("Performing a clade search?? set get_spp_from_taxon = TRUE")
 				message("Setting up get_spp_from_taxon = TRUE")
 				input_dq <- make_datelife_query(input = input_dq$cleaned_names,
-													get_spp_from_taxon = TRUE, use_tnrs = use_tnrs,
-													approximate_match = approximate_match, verbose = verbose)
+					get_spp_from_taxon = TRUE, use_tnrs = use_tnrs,
+					approximate_match = approximate_match, verbose = verbose)
 			}
 	}
 	if(length(input_dq$cleaned_names) == 1){

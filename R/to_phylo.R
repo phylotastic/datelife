@@ -252,10 +252,10 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
         colnames(summ_matrix) <- gsub("\\.", " ", colnames(summ_matrix))
     }
     if(total_distance){
-      summ_matrix <- summ_matrix*0.5  # bc it's total distance tip to tip
+      summ_matrix <- summ_matrix * 0.5  # bc it's total distance tip to tip
     }
 	ages <- tA <- tB <- c()
-  # to compute the final length of the data frame do: ncol(xx)^2 - sum(1:(ncol(xx)-1))
+    # to compute the final length of the data frame do: ncol(xx)^2 - sum(1:(ncol(xx)-1))
 	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
 	# identify if SDM matrix has some negative values; extract taxon names:
 	negs <- which(summ_matrix < 0)
@@ -279,8 +279,7 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
 	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
 	calibrations <- calibrations[calibrations[,"Age"] > 0, ] # get rid of negative values too
 	if(any(is.na(calibrations[,"Age"]))){
-		warning("for some reason there are still NAs in the matrix")
-	}
+		warning("for some reason there are still NAs in the matrix")}
 	# enhance: where does this negative values come from in SDM?
 	# get a backbone tree:
 	# chronogram <- geiger::PATHd8.phylo(phy_target, calibrations)
@@ -298,24 +297,25 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
       # plot(target_tree, cex = 0.5)
   }
   if(!inherits(target_tree, "phylo")){
-		message("target_tree is not phylo object; maybe summ_matrix was constructed from an object with no good groves; try with get_best_grove first")
+		message("target_tree is not phylo object; returning NA")
+        message("Hint: Was summ_matrix constructed from an object with no good groves? try running get_best_grove first")
 		# enhance: add a more formal test of best grove
 		return(NA)
-	}
-	target_tree$edge.length <- NULL
-	target_tree$edge.length.original <- NULL
+  }
+  target_tree$edge.length <- NULL
+  target_tree$edge.length.original <- NULL
   target_tree$tip.label <- gsub(" ", "_", target_tree$tip.label)
   # test that taxonA and taxonB are all in target tree tip labels
   if(any(is.na(match(unique(c(calibrations$taxonA, calibrations$taxonB)), target_tree$tip.label)))){
-    message("taxa in summ_matrix are not in target_tree; please check this")
+    message("taxa in summ_matrix are not in target_tree; returning NA")
     return(NA)
   }
 	# get the coincident node numbers:
   # ape::is.binary(target_tree)
 	target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
-			phytools::findMRCA(tree = target_tree,
-								 tips = as.character(calibrations[i,c("taxonA", "taxonB")]),
-								 type = "node"))
+		phytools::findMRCA(tree = target_tree,
+			tips = as.character(calibrations[i,c("taxonA", "taxonB")]),
+			type = "node"))
 	target_tree_nodes <- target_tree_nodes - ape::Ntip(target_tree)
 	all_nodes <- sort(unique(target_tree_nodes))
 	# get the node age distribution:
@@ -324,7 +324,7 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
 	calibrations2 <- data.frame(MRCA = paste0("n", all_nodes), MinAge = sapply(all_ages, min), MaxAge= sapply(all_ages, max))
 	# calibrations2$MRCA is a factor so have to be made as.character to work with bladj
 	if(all(all_nodes < ape::Ntip(target_tree))){
-    all_nodes_numbers <- all_nodes + ape::Ntip(target_tree)
+        all_nodes_numbers <- all_nodes + ape::Ntip(target_tree)
 		node_index <- "consecutive"
 	} else {
     all_nodes_numbers <- all_nodes
@@ -342,12 +342,16 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
     node_ages <- calibrations2[,c("MaxAge")]
   }
   new_phy <- make_bladj_tree(tree = target_tree, nodenames = as.character(calibrations2$MRCA), nodeages = node_ages)
-    # plot(new_phy, cex = 0.5)
-    new_phy$clustering_method <- "datelife"
-    names(all_ages) <- all_nodes
-    new_phy$calibrations_distribution <- all_ages
-    new_phy$calibrations_MIN <- calibrations2$MinAge
-    new_phy$calibrations_MAX <- calibrations2$MaxAge
-    new_phy$calibrations_MRCA <- all_nodes_numbers
-	return(new_phy)
+  new_phy$clustering_method <- "datelife"
+  new_phy$calibrations_distribution <- stats::setNames(all_ages, all_nodes)
+  new_phy$calibrations_MIN <- calibrations2$MinAge
+  new_phy$calibrations_MAX <- calibrations2$MaxAge
+  new_phy$calibrations_MRCA <- all_nodes_numbers
+  new_phy$ott_ids <- NULL
+  if(!is.null(target_tree$ott_ids)){
+      tt <- match(new_phy$tip.label, target_tree$tip.label)
+      # match(c("a", "b", "c", "d"), c("c", "d", "a", "a", "a", "b"))
+      new_phy$ott_ids <- target_tree$ott_ids[tt]
+  }
+  return(new_phy)
 }

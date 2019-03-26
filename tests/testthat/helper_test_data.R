@@ -130,6 +130,7 @@ birds_yellowstone <- c("Caracara", "Chen caerulescens", "Gavia immer", "Chen ros
 
 birds_yellowstone_otoltree <- get_otol_synthetic_tree(birds_yellowstone)
 names(birds_yellowstone_otoltree)
+data.frame(birds_yellowstone_otoltree$tip.label, birds_yellowstone_otoltree$ott_ids)
 birds_yellowstone_query <- make_datelife_query(input = birds_yellowstone_otoltree)
 birds_yellowstone_result <- get_datelife_result(birds_yellowstone_query)
 birds_yellowstone_phyloall <- summarize_datelife_result(birds_yellowstone_result, birds_yellowstone_query, "phylo_all")

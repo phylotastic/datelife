@@ -16,6 +16,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	# 	URL="https://www.nps.gov/yell/learn/nature/upload/BirdChecklist2014.pdf"))
 	# input <- threebirds_median
 	# input$tip.label[3] <- "ttttttt"
+	# input <- birds_yellowstone_otoltree
 	phy_new <- input_process(input = input, verbose = verbose)
 	use_tnrs_global <- FALSE
 	if(use_tnrs | any(get_spp_from_taxon)){
