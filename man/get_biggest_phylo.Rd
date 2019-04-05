@@ -10,7 +10,7 @@ get_biggest_phylo(trees)
 \item{trees}{A list of trees as multiPhylo or as a plain list object.}
 }
 \value{
-A phylo object
+A phylo object with a citation slot with the citation of the biggest tree
 }
 \description{
 Get the tree with the most tips: the biggest tree

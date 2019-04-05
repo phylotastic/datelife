@@ -210,20 +210,24 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 
 #' Get the tree with the most tips: the biggest tree
 #' @param trees A list of trees as multiPhylo or as a plain list object.
-#' @return A phylo object
+#' @return A phylo object with a citation slot with the citation of the biggest tree
 #' @export
 get_biggest_phylo <- function(trees){
 	trees <- trees[which(!is.na(trees))] # removes NAs, which will return an error later on next logical:
+	tree_citation <- names(trees)
 	return.object <- trees[which(sapply(trees, ape::Ntip) == max(sapply(trees, ape::Ntip)))]
+	tree_citation <- tree_citation[which(sapply(trees, ape::Ntip) == max(sapply(trees, ape::Ntip)))]
 	if(length(return.object) >1 ) { #there are more than one tree with same number of taxa. Rather than take the first by default, take the one with the most intermediate depth (this assumes that the root node is the same for all trees). An example is the Bininda-Emonds et al mammal tree: there are three trees with min, max, and best guess calibrations. So, take the one in the middle.
 		max.branching.time <- function(x) {
 			return(max(ape::branching.times(x)))
 		}
 		tree.depths <- sapply(return.object, max.branching.time)
 		return.object <- return.object[which.min(abs(tree.depths - stats::median(tree.depths)))]
+		tree_citation <- tree_citation[which.min(abs(tree.depths - stats::median(tree.depths)))]
 	}
 	if(class(return.object) != "phylo") {
 		return.object <- return.object[[1]]
 	}
+	return.object$citation <- tree_citation
 	return.object
 }
