@@ -383,13 +383,3 @@ phylo_tiplabel_underscore_to_space <- function(phy) {
     # make sure there is only one consecutive blank at a time
 	return(phy)
 }
-#' Function to remove missing taxa from a datelifeResult object. Used in: datelife_result_sdm.
-#' @param patristic_matrix A patristic matrix with row and column names for taxa
-#' @return patristic_matrix for all_taxa
-patristic_matrix_unpad <- function(patristic_matrix) {
-	bad.ones <- which(apply(is.na(patristic_matrix),2,all))
-	if(length(bad.ones) > 0) {
-		patristic_matrix <- patristic_matrix[-bad.ones, -bad.ones]
-	}
-	return(patristic_matrix)
-}

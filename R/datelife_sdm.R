@@ -38,9 +38,22 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 		class(unpadded.matrices) <- "datelifeResult"
 	}
 	phy$data <-  unpadded.matrices
+	phy$citation <- names(unpadded.matrices)
 	class(phy) <- c(class(phy), "datelifeSDM")
 	return(phy)
 }
+#' Function to remove missing taxa from a datelifeResult object. Used in: datelife_result_sdm.
+#' @param patristic_matrix A patristic matrix with row and column names for taxa
+#' @return patristic_matrix for all_taxa
+#' @export
+patristic_matrix_unpad <- function(patristic_matrix) {
+	bad.ones <- which(apply(is.na(patristic_matrix),2,all))
+	if(length(bad.ones) > 0) {
+		patristic_matrix <- patristic_matrix[-bad.ones, -bad.ones]
+	}
+	return(patristic_matrix)
+}
+
 #' Get SDM result for list of working matrices.
 #' @param unpadded.matrices A list of patristic matrices, a datelifeResult object.
 #' @param weighting A character vector indicating how much weight to give to each input tree in the SDM analysis.

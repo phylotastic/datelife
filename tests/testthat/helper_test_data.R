@@ -5,7 +5,12 @@ threebirds_query <- make_datelife_query(threebirds)
 threebirds_result <- get_datelife_result(threebirds_query)
 threebirds_median <- summarize_datelife_result(threebirds_result, threebirds_query,
     summary_format = "phylo_median")
+threebirds_all <- summarize_datelife_result(threebirds_result, threebirds_query,
+        summary_format = "phylo_all")
+        trees_all <- lapply(threebirds_result, patristic_matrix_to_phylo)
 
+sapply(threebirds_all, "[", "citation")
+names(threebirds_all)
 utils::data(subset2_taxa)
 subset2_query <- make_datelife_query(subset2_taxa)
 subset2_result <- get_datelife_result(subset2_query)

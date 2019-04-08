@@ -22,26 +22,28 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
     clustering_method <- match.arg(arg = clustering_method, choices = c("nj", "upgma"), several.ok = FALSE)
     if(anyNA(patristic_matrix)) {
   	   patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
-    }   # I'm not sure why this is here. It does not get rid of spp with NA or NaNs, then, what does it do?
+   }   # Get rid of rows and columns with all NA or NaNs, leaves the ones with some NA or NaNs
     if(dim(patristic_matrix)[1] == 2) {
         phy <- ape::rtree(n = 2, rooted = TRUE, tip.label = rownames(patristic_matrix), br = 0.5 * patristic_matrix[1,2])
         phy$clustering_method <- "ape::rtree"
+        phy$citation <- names(patristic_matrix)
         return(phy)
     }
     phycluster <- cluster_patristicmatrix(patristic_matrix)
     phy <- choose_cluster(phycluster, clustering_method)
     if(!inherits(phy, "phylo")){
       message("Clustering patristic matrix to phylo failed.")
+      phy$citation <- names(patristic_matrix)
       return(phy)
     }
     phy$negative_brlen <- NA
     mess1 <- "Converting from patristic distance matrix to a tree resulted in some negative branch lengths;"
     mess2 <- "the largest by magnitude is"
-    # when orignal tree was ultrametric and there are neg edges:
+    # when original tree IS ultrametric and has negative edges:
     if(is.null(phy$edge.length.original) & any(phy$edge.length < 0)){
       warning(paste(mess1, mess2, min(phy$edge.length)))
     }
-    # when original tree was not ultrametric and it had neg edges
+    # when original tree is NOT ultrametric and has negative edges:
     if(!is.null(phy$edge.length.original) & any(phy$edge.length.original < 0)){
       warning(paste(mess1, mess2, min(phy$edge.length.original)))
       # and when tree was forced ultrametric and there still are neg edges:
@@ -67,6 +69,7 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
           phy <- force_ultrametric(phy)
       }
     }
+    phy$citation <- names(patristic_matrix)
     class(phy) <- c(class(phy), "datelifeTree")
     return(phy)
 }
