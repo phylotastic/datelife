@@ -18,7 +18,7 @@ subset2_bestgrove <- get_best_grove(subset2_result)$best_grove
 # subset2_bestgrove_phyloall <- summarize_datelife_result(subset2_bestgrove, summary_format = "phylo_all")
 subset2_sdm_matrix <- get_sdm_matrix(subset2_bestgrove)
 
-source("tests/testthat/helper_birdnames.R")
+# source("tests/testthat/helper_birdnames.R")
 
 birds_yellowstone_otoltree <- get_otol_synthetic_tree(birds_yellowstone)
 # names(birds_yellowstone_otoltree)

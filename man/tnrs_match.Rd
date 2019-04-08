@@ -48,7 +48,7 @@ An object of class  data frame or phylo, with the added class match_names.
 Taxon name resolution service (tnrs) applied to a query by batches.
 }
 \details{
-There is no limit to the numer of names that can be queried and matched.
+There is no limit to the number of names that can be queried and matched.
 
 The output will preserve all elements from original input phylo object and will add
 \describe{

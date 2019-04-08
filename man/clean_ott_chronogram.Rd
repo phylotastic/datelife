@@ -22,7 +22,7 @@ Clean up some issues with OToL chronograms
 For now it 1) checks unmapped taxa and maps them with tnrs_match.phylo, 2) roots the chronogram if unrooted
 }
 \details{
-There is no limit to the numer of names that can be queried and matched.
+There is no limit to the number of names that can be queried and matched.
 
 The output will preserve all elements from original input phylo object and will add
 \describe{
