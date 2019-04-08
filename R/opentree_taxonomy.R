@@ -63,7 +63,7 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
               ott_ids <- input$ott_ids
               names(ott_ids) <- input$cleaned_names
           } else {
-              input_tnrs <- datelife::tnrs_match(names = input$cleaned_names)
+              input_tnrs <- datelife::tnrs_match(input = input$cleaned_names)
               # should we clean tnrs from invalid? what about NA's? Maybe only NA's at the end, so we can tell users what was unsuccesful
               # if we decide to clean, the two following lines should be uncommented:
               # input_tnrs <- clean_tnrs(tnrs = input_tnrs)

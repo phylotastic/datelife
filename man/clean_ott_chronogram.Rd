@@ -11,13 +11,19 @@ clean_ott_chronogram(phy)
 \item{phy}{A phylo object}
 }
 \value{
-An object of class phylo and match_names. See details.
+An object of class  data frame or phylo, with the added class match_names.
+
+\code{NULL}
+
+\code{NULL}
 }
 \description{
 Clean up some issues with OToL chronograms
 For now it 1) checks unmapped taxa and maps them with tnrs_match.phylo, 2) roots the chronogram if unrooted
 }
 \details{
+There is no limit to the numer of names that can be queried and matched.
+
 The output will preserve all elements from original input phylo object and will add
 \describe{
     \item{phy$mapped}{A character vector indicating the state of mapping of phy$tip.labels:}

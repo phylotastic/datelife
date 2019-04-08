@@ -7,7 +7,7 @@ test_that("Mus higher-taxon search is giving species back", {
 })
 
 test_that("datelife_query works", {
-	cleaned.input_tnrs <- tnrs_match(names = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))
+	cleaned.input_tnrs <- tnrs_match(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))
 	input <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
 	df <- get_ott_children(ott_ids = cleaned.input_tnrs$ott_id, ott_rank = "species")
 	# head(rownames(df[[1]])[grepl("species", df[[1]]$rank)])
