@@ -153,16 +153,24 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	if (verbose) {
 		message("Searching ", marker, " sequences for these taxa in BOLD...")
 	}
-	xx <- seq(1, length(input), 250)
-	yy <- xx+249
-	yy[length(xx)] <- length(input)
+	# xx <- seq(1, length(input), 250)
+	# yy <- xx+249
+	# yy[length(xx)] <- length(input)
 	# if(length(input)%%250 != 0) {
 	# 	yy[length(xx)] <- length(input)
 	# }
+	input <- gsub("_", " ", input)
 	sequences <- c()
-	for (i in seq_len(length(xx))){
-		sequences <- rbind(sequences, bold::bold_seqspec(taxon = input[xx[i]:yy[i]], marker = marker)) # bold::bold_seqspec function only allows searches of up to 335 names, ater that, it gives following Error: Request-URI Too Long (HTTP 414)
+	progression <- utils::txtProgressBar(min = 0, max = length(input), style = 3)
+	for (i in seq(length(input))){
+		sequences <- rbind(sequences, bold::bold_seqspec(taxon = input[i]))
+		# allows up to 335 names, then it gives Error: Request-URI Too Long (HTTP 414)
+		# even if marker is specified, it will return other markers,
+		# so in here we just retrieve all sequences and filter after
+		utils::setTxtProgressBar(progression, i)
 	}
+	cat("\n") # just to make the progress bar look better
+	sequences <- sequences[grepl(marker, sequences$markercode), ] # filter other markers
 	if(length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available; if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
 		if (verbose) {
 			message("No sequences found in BOLD for input taxa...")

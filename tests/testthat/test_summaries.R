@@ -1,10 +1,6 @@
 # testing datelife functions to summarize source trees
 test_that("get_taxon_summary works", {
-  taxa <- c("Rhea americana", "Struthio camelus", "Gallus gallus")
-  taxa <- "Pan"
-	datelife_query <- make_datelife_query(taxa, get_spp_from_taxon = TRUE)
-	datelife_result <- get_datelife_result(taxa)
-	xx <- get_taxon_summary(datelife_result, datelife_query)
+	xx <- get_taxon_summary(threebirds_result, threebirds_query)
   # enhance: it should test if it's giving both matrix and summary
 })
 
@@ -19,22 +15,14 @@ test_that("summarize_datelife_result works", {
 })
 
 test_that("Summarize as newick_median works correctly", {
-  utils::data(opentree_chronograms)
-  taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
-  datelife_result <- results_list_process(results_list, taxa, partial=FALSE)
-  tree <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_median", cache=opentree_chronograms)
+  tree <- summarize_datelife_result(datelife_result = threebirds_result, summary_format="newick_median", cache=opentree_chronograms)
   expect_equal(class(tree), "character")
   expect_false(anyNA(tree))
   expect_equal(class(ape::read.tree(text=tree)), "phylo")
 })
 
 test_that("Summarize as mrca works correctly", {
-  utils::data(opentree_chronograms)
-  taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
-  datelife_result <- results_list_process(results_list, taxa, TRUE)
-  mrca.vector <- summarize_datelife_result(datelife_result = datelife_result, summary_format="mrca", cache=opentree_chronograms)
+  mrca.vector <- summarize_datelife_result(datelife_result = threebirds_result, summary_format="mrca", cache=opentree_chronograms)
   expect_equal(class(mrca.vector), "numeric")
   expect_gte(min(mrca.vector),5)
   expect_lte(max(mrca.vector),150)
@@ -42,23 +30,13 @@ test_that("Summarize as mrca works correctly", {
 
 
 test_that("Summarize as citations works correctly", {
-  utils::data(opentree_chronograms)
-  taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
-  datelife_result <- results_list_process(results_list, taxa, TRUE)
-  citation.results <- summarize_datelife_result(datelife_result = datelife_result, summary_format="cit", cache=opentree_chronograms)
+  citation.results <- summarize_datelife_result(datelife_result = threebirds_result, summary_format="cit", cache=opentree_chronograms)
   expect_equal(class(citation.results), "character")
   expect_gte(sum(grepl("Prum", citation.results)),1)
  })
 
 test_that("Summarize as newick_all works correctly", {
-  utils::data(opentree_chronograms)
-  utils::data(threebirds_dr)
-  # taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  # results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
-  # datelife_result <- results_list_process(results_list, taxa, TRUE)
-  datelife_result <- threebirds_dr
-  trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_all", cache=opentree_chronograms)
+  trees <- summarize_datelife_result(datelife_result = threebirds_result, summary_format="newick_all", cache=opentree_chronograms)
   trees <- sapply(datelife_result, patristic_matrix_to_newick)
   patristic_matrix_to_newick(threebirds_dr[[1]])
   tree <- patristic_matrix_to_phylo(threebirds_dr[[1]])
@@ -69,17 +47,10 @@ test_that("Summarize as newick_all works correctly", {
 })
 
 test_that("taxon_summary argument from summarize_datelife_result() works", {
-  datelife_result <- threebirds_dr
-  trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_all", cache=opentree_chronograms, taxon_summary = "summary")
-  # str(trees)
-  # trees$taxon_distribution
-  # trees$absent_taxa
+  trees <- summarize_datelife_result(datelife_result = threebirds_result, summary_format="newick_all", cache=opentree_chronograms, taxon_summary = "summary")
   expect_gte(length(trees), 3)
   trees2 <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_all", cache=opentree_chronograms, taxon_summary = "matrix")
   expect_gte(length(trees2), 3)
-  # str(trees2)
-  # trees2$taxon_distribution
-  # trees2$absent_taxa
 })
 
 test_that("get_dated_otol_induced_subtree works", {

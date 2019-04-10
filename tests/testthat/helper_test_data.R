@@ -41,3 +41,9 @@ birds_yellowstone_phylomedian <- summarize_datelife_result(birds_yellowstone_res
 
 cetacea_query <- make_datelife_query(input = "cetacea", get_spp_from_taxon = TRUE)
 cetacea_result <- get_datelife_result(cetacea_query)
+
+pan_query <- make_datelife_query(input = "Pan", get_spp_from_taxon = TRUE)
+pan_result <- get_datelife_result(pan_query)
+
+catsanddogs_query <- make_datelife_query(input = c("felis", "canidae"), get_spp_from_taxon = TRUE)
+catsanddogs_results <- get_datelife_result(input = catsanddogs_query)

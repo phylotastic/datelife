@@ -1,7 +1,5 @@
 test_that("felis/canidae divergence is accurate", {
-    query <- make_datelife_query(input = c("felis", "canidae"), get_spp_from_taxon = TRUE)
-    cats_and_dogs_results <- get_datelife_result(input = query)
-    matrix_max_ages <- sapply(cats_and_dogs_results, max)
+    matrix_max_ages <- sapply(catsanddogs_results, max)
     taxa <- c("felis", "canidae")
     cats_and_dogs <- datelife_search(input = taxa, get_spp_from_taxon = TRUE,
       summary_format = "phylo_all")
