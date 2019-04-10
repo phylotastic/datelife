@@ -249,7 +249,7 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
         return(NA)
     }
     # summ_matrix <- data.frame(summ_matrix)
-    # everything up to patristic_matryx_to_phylo ok if it is a data frame too
+    # everything up to patristic_matrix_to_phylo ok if it is a data frame too
     if(inherits(summ_matrix, "data.frame")){
         summ_matrix <- as.matrix(summ_matrix)
         colnames(summ_matrix) <- gsub("\\.", " ", colnames(summ_matrix))
@@ -288,7 +288,7 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
 	# chronogram <- geiger::PATHd8.phylo(phy_target, calibrations)
 	# try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
   if(!inherits(target_tree, "phylo")){
-    target_tree <- suppressMessages(get_otol_synthetic_tree(...))
+    target_tree <- suppressMessages(get_otol_synthetic_tree(input = colnames(summ_matrix), ...))
     if(!inherits(target_tree, "phylo")){
       # we should find a better way to do this, but it should be ok for now:
       target_tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(summ_matrix, ultrametric = TRUE)))
@@ -300,8 +300,8 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
       # plot(target_tree, cex = 0.5)
   }
   if(!inherits(target_tree, "phylo")){
-		message("target_tree is not phylo object; returning NA")
-        message("Hint: Was summ_matrix constructed from an object with no good groves? try running get_best_grove first")
+		message("target_tree is missing or not a phylo object and a backbone tree could not be constructed; returning NA")
+        message("Hint: Was summ_matrix constructed from an object with no good groves? Try running get_best_grove first.")
 		# enhance: add a more formal test of best grove
 		return(NA)
   }
@@ -313,7 +313,7 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
     message("taxa in summ_matrix are not in target_tree; returning NA")
     return(NA)
   }
-	# get the coincident node numbers:
+  # get the coincident node numbers:
   # ape::is.binary(target_tree)
 	target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
 		phytools::findMRCA(tree = target_tree,

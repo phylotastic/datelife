@@ -18,36 +18,27 @@ test_that("felis/canidae divergence is accurate", {
         summary_format = "phylo_sdm")
 })
 
-test_that("patristic_matrix_to_phylo gives ultrametric trees", {
-  t0 <- summarize_datelife_result(datelife_query=cetacea_query,
-    datelife_result=cetacea_result, summary_format = "phylo_sdm")
-  ape::is.ultrametric(t0, 2)
-})
-
-# test_that("We get species names back from subspecies and var names",{
-#   # rotl::tnrs_match_names("Ceratopogon slossonae")
-#   NA
-# })
-test_that("cetacea sdm matrix to phylo is accurate", {
-  datelife_result <- get_datelife_result(input = "cetacea")
-  unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
+test_that("patristic_matrix_to_phylo works", {
+  unpadded.matrices <- lapply(cetacea_result, patristic_matrix_unpad)
   good.matrix.indices <- get_goodmatrices(unpadded.matrices, verbose = TRUE)
   if(length(good.matrix.indices) > 1) {
     unpadded.matrices <- unpadded.matrices[good.matrix.indices]
     sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat", verbose = TRUE)
   }
   max(sdm_matrix, na.rm = TRUE)/2
-  sdm_phylo <- summarize_datelife_result(datelife_result = datelife_result, summary_format = "phylo_sdm")
-  max(ape::branching.times(sdm_phylo))
-  phycluster <- cluster_patristicmatrix(patristic_matrix = sdm_matrix)
-  sapply(phycluster, function(x) max(ape::branching.times(x)))
-  plot(phycluster$njs, cex=0.2)
-  ape::axisPhylo()
-  plot(phycluster$upgma_daisy, cex=0.2)
-  ape::axisPhylo()
-  phy <- choose_cluster(phycluster, clustering_method = "nj")
-  ape::ltt.plot(phycluster$upgma_daisy, col = "blue")
-  ape::ltt.lines(force_ultrametric(phycluster$njs))
+  t0 <- summarize_datelife_result(datelife_result = datelife_result, summary_format = "phylo_sdm")
+  max(ape::branching.times(t0))
+  ape::is.ultrametric(t0, 1)
+  ape::is.ultrametric(t0, 2)
+  p1 <- patristic_matrix_to_phylo(subset2_sdm_matrix, clustering_method = "nj",
+        fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE)
+  p2 <- patristic_matrix_to_phylo(subset2_sdm_matrix, clustering_method = "upgma",
+        fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE)
+  # plot(p2, cex = 0.5)
+})
+
+test_that("cluster_patristicmatrix works", {
+    c1 <- cluster_patristicmatrix(subset2_sdm_matrix)
 })
 
 test_that("threebirds sdm matrix to phylo is accurate", {
@@ -65,42 +56,15 @@ get_spp_from_taxon = TRUE)
   names(sdm_phylo)
 })
 
-test_that("summary_matrix_to_phylo works", {
+test_that("summary_matrix_to_phylo works with and without target trees", {
+  subset2_sdmphylo_mean1 <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix,
+            use = "mean")
+  # subset2_sdm_matrix[,"Lycopodium annotinum"]
+  # plot(subset2_sdmphylo_mean1, cex = 0.5)
   subset2_otol <- get_otol_synthetic_tree(colnames(subset2_sdm_matrix))
-  plot(subset2_otol, cex = 0.5)
+  # plot(subset2_otol, cex = 0.5)
 
-  subset2_sdmphylo_mean <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix,
+  subset2_sdmphylo_mean2 <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix,
           use = "mean", target_tree = subset2_otol)
-  # ape::is.binary(subset2_sdmphylo_mean)
-  # names(subset2_sdmphylo_mean)
-  # subset2_sdmphylo_mean$calibrations_MRCA
-  # subset2_sdmphylo_mean$Nnode
-  subset2_sdmphylo_mean2 <- subset2_sdmphylo_mean
-  subset2_sdmphylo_mean2$edge.length <- NULL
-  plot(subset2_sdmphylo_mean2, cex = 0.5)
-  ape::nodelabels(cex = 0.35)
-  HPDbars(phy = subset2_sdmphylo_mean, label = "calibrations",
-        nodes = subset2_sdmphylo_mean$calibrations_MRCA)
-  ape::axisPhylo()
-  subset2_sdmphylo_min <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix,
-          use = "min", target_tree = NULL)
-  plot(subset2_sdmphylo_min, cex = 0.5)
-  ape::axisPhylo()
-  HPDbars(phy = subset2_sdmphylo_min, label = "calibrations",
-        nodes = subset2_sdmphylo_min$calibrations_MRCA)
-  subset2_sdmphylo_max <- summary_matrix_to_phylo(summ_matrix = subset2_sdm_matrix,
-          use = "max", target_tree = NULL)
-  plot(subset2_sdmphylo_max, cex = 0.5)
-  ape::axisPhylo()
-  HPDbars(phy = subset2_sdmphylo_max, label = "calibrations",
-        nodes = subset2_sdmphylo_max$calibrations_MRCA)
-  subset2_sdmphylo_max$calibrations_MIN
-  subset2_sdmphylo_max$calibrations_MAX
-  names(subset2_sdmphylo_max)
-  subset2_sdmphylo_max$calibrations_distribution
-  subset2_sdmphylo_all <- c(subset2_sdmphylo_mean,
-                            subset2_sdmphylo_min,
-                            subset2_sdmphylo_max)
-  ape::is.ultrametric(subset2_sdmphylo_all, option = 2)
-  ltt.plot()
+  # plot(subset2_sdmphylo_mean2, cex = 0.5)
 })

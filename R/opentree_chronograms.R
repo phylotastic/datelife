@@ -20,8 +20,10 @@
 #' and updtated with update_datelife_cache()
 "opentree_chronograms"
 # modified get_otol_chronograms code to retain taxa ott_ids too
-# usethis::use_data_raw() # this function only setups a data-raw folder
 
+utils::data(opentree_chronograms)
+#' @export
+opentree_chronograms <- get("opentree_chronograms")
 
 #library(devtools)
 #install_github("ropensci/rotl", dependencies = TRUE, build_vignette=FALSE)
