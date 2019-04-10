@@ -71,6 +71,7 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
+
 	taxon_summ <- get_taxon_summary(datelife_result, datelife_query)
 	if(length(taxon_summ) == 1){
 		message("get_taxon_summary failed.")
@@ -115,7 +116,7 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 	if(grepl("sdm", summary_format.in)) {
 		return.object <- datelife_result_sdm(best_grove, target_tree = target_tree)
 	}
-	if(grepl("newick", summary_format.in)) {
+	if(summary_format.in %in% c("newick_sdm", "newick_median")) {
 		return.object <- ape::write.tree(return.object)
 	}
 	# if(summary_format.in %in% c("phylo_sdm", "phylo_median")) {

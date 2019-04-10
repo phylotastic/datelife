@@ -40,6 +40,7 @@ test_that("Summarize as mrca works correctly", {
   expect_lte(max(mrca.vector),150)
 })
 
+
 test_that("Summarize as citations works correctly", {
   utils::data(opentree_chronograms)
   taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
@@ -68,10 +69,7 @@ test_that("Summarize as newick_all works correctly", {
 })
 
 test_that("taxon_summary argument from summarize_datelife_result() works", {
-  utils::data(opentree_chronograms)
-  taxa <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  results_list <- lapply(opentree_chronograms$trees,get_subset_array_dispatch, taxa=taxa, phy=NULL)
-  datelife_result <- results_list_process(results_list, taxa, TRUE)
+  datelife_result <- threebirds_dr
   trees <- summarize_datelife_result(datelife_result = datelife_result, summary_format="newick_all", cache=opentree_chronograms, taxon_summary = "summary")
   # str(trees)
   # trees$taxon_distribution

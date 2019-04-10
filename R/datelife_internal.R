@@ -8,16 +8,7 @@ summary_patristic_matrix_array <- function(patristic_matrix_array, fn = stats::m
   return(apply(patristic_matrix_array, MARGIN = c(1,2), fn, na.rm = TRUE))
 }
 
-#' Convert patristic matrix to a newick string. Used inside: summarize_datelife_result.
-#' @param patristic_matrix A patristic matrix
-#' @return A newick string
-patristic_matrix_to_newick <- function(patristic_matrix) {
-  tree <- patristic_matrix_to_phylo(patristic_matrix)
-  if(inherits(tree, "phylo")){
-  	return(ape::write.tree(tree))
-  }
-  return(NA)
-}
+
 
 #' Find the index of relevant studies in a opentree_chronograms object. Used inside: summarize_datelife_result.
 #' @inheritParams datelife_result_check
