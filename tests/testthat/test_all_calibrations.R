@@ -2,7 +2,6 @@
 test_that("use_all_calibrations actually works", {
   skip_on_cran()
   skip_on_os("linux") #b/c no pathd8 on travis linux
-  utils::data(opentree_chronograms)
   results <- suppressWarnings(use_all_calibrations())
   # expect_true(ape::is.ultrametric(results$phy, tol=0.0000))
   expect_true(ape::is.ultrametric(results$phy, option = 2))
@@ -27,20 +26,13 @@ test_that("get_otol_synthetic_tree works", {
   # should it return all names always?
   # it should return the same number of names matched by tnrs_match
   # enhance: add such a test
-  child <- get_ott_children("Felis")
-  get_otol_synthetic_tree(input = child$Felis)
+  # child <- get_ott_children("Felis")
+  # get_otol_synthetic_tree(input = child$Felis)
 })
 
 
 test_that("get_all_calibrations works", {
-  skip_on_cran()
-  skip_on_os("linux") #b/c no pathd8 on travis linux
-  utils::data(opentree_chronograms)
-  input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-  datelife_phylo <- datelife_search(input = input)
-  class(datelife_phylo)
-  datelife_phylo <- get_datelife_result(input = input)
-  input <- datelife_phylo
+  # this function does not use pathd8
   xx <- get_all_calibrations()
-  class(xx) # should be a data.frame
+  expect_s3_class(xx, "data.frame") # should be a data.frame
 })
