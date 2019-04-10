@@ -13,7 +13,6 @@
 #' }
 #' @source \url{http://opentreeoflife.org}
 #' @keywords otol tree chronogram
-#' @export
 #' @details
 #' Generated with
 #' opentree_chronograms <- get_otol_chronograms()

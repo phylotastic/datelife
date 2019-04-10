@@ -1,4 +1,9 @@
 #testing functions that process or check datelife inputs
+# test_that("We get species names back from subspecies and var names",{
+#   # rotl::tnrs_match_names("Ceratopogon slossonae")
+#   NA
+# })
+
 test_that("Mus higher-taxon search is giving species back", {
   skip("skipping Mus")
   expect_silent(make_datelife_query("Echinus", get_spp_from_taxon = TRUE))

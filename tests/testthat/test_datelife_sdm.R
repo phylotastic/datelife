@@ -22,22 +22,7 @@ test_that("subset2_taxa gives ultrametric summary trees", {
     ape::is.ultrametric(xx_sdm, option = 2)
     # nrow(sdm.matrix)
 })
-
-# for testing sdm with cetacea:
-# datelife_result <- get_datelife_result(input = "cetacea")
-# unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
-# good.matrix.indices <- get_goodmatrices(unpadded.matrices, verbose = TRUE)
-# if(length(good.matrix.indices) > 1) {
-#   unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-#   sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat", verbose = TRUE)
-# }
-# which(sdm_matrix < 0)
-# sdm_matrix[ceiling(7301/ncol(sdm_matrix)),] # Eubalaena japonica,
-# sdm_matrix[,ceiling(261/nrow(sdm_matrix))]  # Eubalaena glacialis
-# xx <- sdm_matrix #[1:5, 1:5]
-# even removing negative values for small positive values gives back non ultrametric trees with njs
-# sdm_matrix[which(sdm_matrix < 0)] <- 0.01
-# test <- cluster_patristicmatrix(sdm_matrix)
-# class(test) <- "multiPhylo"
-# ape::is.ultrametric(test)
-# plot(test$njs)
+test_that("datelife_result_sdm works with all clustering methods", {
+    t1 <- datelife_result_sdm(cetacea_result, clustering_method = "nj")
+    t2 <- datelife_result_sdm(cetacea_result, clustering_method = "upgma")
+})

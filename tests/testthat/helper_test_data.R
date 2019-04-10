@@ -8,7 +8,6 @@ threebirds_median <- summarize_datelife_result(threebirds_result, threebirds_que
 threebirds_all <- summarize_datelife_result(threebirds_result, threebirds_query,
         summary_format = "phylo_all")
 
-names(threebirds_all)
 utils::data(subset2_taxa)
 subset2_query <- make_datelife_query(subset2_taxa)
 subset2_result <- get_datelife_result(subset2_query)
@@ -38,3 +37,7 @@ birds_yellowstone_phylomedian <- summarize_datelife_result(birds_yellowstone_res
 # birds_yellowstone_phylosdm <- summarize_datelife_result(birds_yellowstone_result,
 #     birds_yellowstone_query, "phylo_sdm", summary_print = "citations")
 # names(birds_yellowstone_phylosdm)
+
+
+cetacea_query <- make_datelife_query(input = "cetacea", get_spp_from_taxon = TRUE)
+cetacea_result <- get_datelife_result(cetacea_query)

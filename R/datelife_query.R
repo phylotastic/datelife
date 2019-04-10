@@ -21,7 +21,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	use_tnrs_global <- FALSE
 	if(use_tnrs | any(get_spp_from_taxon)){
 		use_tnrs_global <- TRUE }
-	if(inherits(phy_new, "phylo")) {
+	if(inherits(phy_new, "phylo")) { # if input is phylo
 	  	cleaned.input <- phy_new$tip.label
 		ott_ids <- NULL
 		if(!is.null(phy_new$ott_ids)){ # if we have ott_ids don't use_tnrs
@@ -97,6 +97,8 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
     cleaned_names.print <- paste(cleaned_names, collapse = " | ")
     if(verbose) {
 		message("Working with the following taxa: ", "\n", "\t", cleaned_names.print)}
+	if(inherits(ott_ids, "numeric")){
+		names(ott_ids) <- cleaned_names	}
 	# enhance: add original_taxa vector (from get_spp_from_taxon) to output here:
 	datelife_query.return <- list(cleaned_names = cleaned_names, ott_ids = ott_ids,
 		phy = phy_new)

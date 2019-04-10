@@ -19,15 +19,9 @@ test_that("felis/canidae divergence is accurate", {
 })
 
 test_that("patristic_matrix_to_phylo gives ultrametric trees", {
-  dq <- make_datelife_query(input = "cetacea", get_spp_from_taxon = TRUE)
-  dr <- get_datelife_result(dq)
-  t0 <- summarize_datelife_result(dq, dr, summary_format = "phylo_sdm")
-  t1 <- datelife_result_sdm(dr, clustering_method = "nj")
-  t2 <- datelife_result_sdm(dr, clustering_method = "upgma")
-  tt <- list(t0, t1$phy, t2$phy)
-  class(tt) <- "multiPhylo"
-  ape::is.ultrametric(tt, 2)
-  # plot(tt, cex = 0.5)
+  t0 <- summarize_datelife_result(datelife_query=cetacea_query,
+    datelife_result=cetacea_result, summary_format = "phylo_sdm")
+  ape::is.ultrametric(t0, 2)
 })
 
 # test_that("We get species names back from subspecies and var names",{
