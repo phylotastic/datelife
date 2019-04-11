@@ -51,7 +51,7 @@ get_taxon_summary <- function(datelife_result, datelife_query = NULL){
 		prop <- c(prop, paste(length(which(taxon == x)), "/", length(datelife_result), sep=""))
 	}
 	taxon_summary <- data.frame(taxon = input.match, chronograms = prop)
-	return(list(matrix = taxon_matrix, summary = taxon_summary, absent_taxa = absent.input))
+	return(list(matrix = taxon_matrix, summary = taxon_summary, absent_taxa = unique(absent.input)))
 }
 
 #' Summarize a filtered results list from get_datelife_result function in various ways
@@ -68,10 +68,10 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 	# datelife_query <- birds_yellowstone_query
 	# datelife_result <- threebirds_result
 	# datelife_query <- threebirds_query
+	# datelife_result <- birdswiki_result
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
-
 	taxon_summ <- get_taxon_summary(datelife_result, datelife_query)
 	if(length(taxon_summ) == 1){
 		message("get_taxon_summary failed.")

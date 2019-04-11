@@ -56,7 +56,6 @@ test_that("input_process works", {
 })
 
 test_that("datelife_query_check works with phylo as input", {
-    utils::data(felid_sdm)
     datelife_query_check(datelife_query = felid_sdm$phy)
     datelife_query_check(datelife_query = threebirds_median)
 })

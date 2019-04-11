@@ -287,6 +287,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 #' @export
 get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version = "v2", ...){
 	# input <- birds_yellowstone
+	# input <- birds_wiki
+	# input <- c(birds_wiki, "ttttt")
+	input <- unique(input)
 	input_ott_match <- suppressMessages(check_ott_input(input, ott_ids, ...))
 	if(length(input_ott_match) < 2){
 		message("At least two valid names or numeric ott_ids are needed to get a tree")

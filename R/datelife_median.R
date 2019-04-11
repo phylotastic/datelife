@@ -1,3 +1,24 @@
+#' Get a median summary chronogram from a datelifeResult object.
+#' @inheritParams datelife_result_check
+#' @inheritDotParams summary_matrix_to_phylo
+#' @return A phylo object
+#' @export
+datelife_result_median <- function(datelife_result, ...){
+	# for debugging here:
+	# datelife_result <- get_best_grove(subset2_result)$best_grove
+	# datelife_result <- best_grove
+	median_matrix <- datelife_result_median_matrix(datelife_result)
+	# tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(median.matrix,
+	# 		  clustering_method = "nj", fix_negative_brlen = TRUE)))
+	# sometimes max(ape::branching.times) is off (too big or too small), so we could
+	# standardize by real median of original data (max(mrcas)).
+	# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
+	phy <- summary_matrix_to_phylo(median_matrix, ...)
+	phy$data <- datelife_result
+	phy$citation <- names(datelife_result)
+	return(phy)
+}
+
 #' Function to compute median matrix of a datelifeResult object.
 #' @inheritParams datelife_result_check
 #' @return A patristic distance summary matrix from a datelifeResult object.
@@ -10,24 +31,4 @@ datelife_result_median_matrix <- function(datelife_result) {
 	# we used nj to cluster in this case
 	# now we prefer our algorithm
 	return(median.matrix)
-}
-
-#' Get a median summary chronogram from a datelifeResult object.
-#' @inheritParams datelife_result_check
-#' @inheritDotParams summary_matrix_to_phylo
-#' @return A phylo object
-#' @export
-datelife_result_median <- function(datelife_result, ...){
-	# for debugging here:
-	# datelife_result <- get_best_grove(subset2_result)$best_grove
-	median.matrix <- datelife_result_median_matrix(datelife_result)
-	# tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(median.matrix,
-	# 		  clustering_method = "nj", fix_negative_brlen = TRUE)))
-	# sometimes max(ape::branching.times) is off (too big or too small), so we could
-	# standardize by real median of original data (max(mrcas)).
-	# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
-	phy <- summary_matrix_to_phylo(median.matrix, ...)
-	phy$data <- datelife_result
-	phy$citation <- names(datelife_result)
-	return(phy)
 }

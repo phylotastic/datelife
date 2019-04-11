@@ -239,10 +239,11 @@ choose_cluster <- function(phycluster, clustering_method){
 #' @return An ultrametric phylo object.
 #' @details It can take a regular patristic distance matrix, but there are simpler methods for that implemented in patristic_matrix_to_phylo.
 #' @export
-summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "mean", target_tree = NULL, ...){ # enhance: allow other methods, not only bladj.
+summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "mean", target_tree = NULL, ...){
+    # enhance: add other methods, not only bladj.
     # for debugging here
     # summ_matrix <- subset2_sdm_matrix
-    # summ_matrix <- median.matrix
+    # summ_matrix <- median_matrix
     use_age <- match.arg(use, c("mean", "median", "min", "max"))
     if(!inherits(summ_matrix, "matrix") & !inherits(summ_matrix, "data.frame")){
         message("summ_matrix argument is not a matrix")
@@ -257,34 +258,7 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
     if(total_distance){
       summ_matrix <- summ_matrix * 0.5  # bc it's total distance tip to tip
     }
-	ages <- tA <- tB <- c()
-    # to compute the final length of the data frame do: ncol(xx)^2 - sum(1:(ncol(xx)-1))
-	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
-	# identify if SDM matrix has some negative values; extract taxon names:
-	negs <- which(summ_matrix < 0)
-	neg_names <- rownames(summ_matrix)[ceiling(negs/nrow(summ_matrix))]
-	# extract unique ages from summ_matrix:
-	for(i in seq(ncol(summ_matrix))){
-		# calibrations[start:start+i,1] <- xx[1:i,i]
-		# calibrations[start:start+i,2] <- rownames(xx)[1:i]
-		# calibrations[start:start+i,3] <- rep(colnames(xx)[i], i)
-		# start <- sum(!is.na(calibrations[,1])) +1
-		ages <- c(ages, summ_matrix[1:i,i])
-		tA <- c(tA, rownames(summ_matrix)[1:i])
-		tB <- c(tB, rep(colnames(summ_matrix)[i], i))
-	}
-    tA <- gsub(" ", "_", tA)
-    tB <- gsub(" ", "_", tB)
-	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB, stringsAsFactors = FALSE)
-	# calibrations$taxonA <- as.character(calibrations$taxonA)
-	# calibrations$taxonB <- as.character(calibrations$taxonB)
-	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN and NAs
-	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
-	calibrations <- calibrations[calibrations[,"Age"] > 0, ] # get rid of negative values too
-	if(any(is.na(calibrations[,"Age"]))){
-		warning("for some reason there are still NAs in the matrix")}
-	# enhance: where does this negative values come from in SDM?
-	# get a backbone tree:
+    # get a backbone tree:
 	# chronogram <- geiger::PATHd8.phylo(phy_target, calibrations)
 	# try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
   if(!inherits(target_tree, "phylo")){
@@ -309,10 +283,39 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
   target_tree$edge.length.original <- NULL
   target_tree$tip.label <- gsub(" ", "_", target_tree$tip.label)
   # test that taxonA and taxonB are all in target tree tip labels
-  if(any(is.na(match(unique(c(calibrations$taxonA, calibrations$taxonB)), target_tree$tip.label)))){
-    message("taxa in summ_matrix are not in target_tree; returning NA")
-    return(NA)
+  rownames(summ_matrix) <- gsub(" ", "_", rownames(summ_matrix))
+  colnames(summ_matrix) <- gsub(" ", "_", colnames(summ_matrix))
+  # find taxa missing in target tree and remove them from summ_matrix
+  missing <- is.na(match(colnames(summ_matrix), target_tree$tip.label))
+  wichmiss <- colnames(summ_matrix)[missing]
+  if(any(missing)){
+    message("There is taxa in summ_matrix that are not in target_tree (", paste0(whichmiss, collapse = ", "), ")")
+    missingrow <- is.na(match(rownames(summ_matrix), target_tree$tip.label))
+    summ_matrix <- summ_matrix[!missingrow, !missing]
   }
+
+  	ages <- tA <- tB <- c()
+    # to compute the final length of the data frame do: ncol(xx)^2 - sum(1:(ncol(xx)-1))
+	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
+	# identify if SDM matrix has some negative values; extract taxon names:
+	negs <- which(summ_matrix < 0)
+	neg_names <- rownames(summ_matrix)[ceiling(negs/nrow(summ_matrix))]
+	# extract unique ages from summ_matrix:
+	for(i in seq(ncol(summ_matrix))){
+		ages <- c(ages, summ_matrix[1:i,i])
+		tA <- c(tA, rownames(summ_matrix)[1:i])
+		tB <- c(tB, rep(colnames(summ_matrix)[i], i))
+	}
+    # tA <- gsub(" ", "_", tA)
+    # tB <- gsub(" ", "_", tB)
+	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB, stringsAsFactors = FALSE)
+	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN and NAs
+	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
+	calibrations <- calibrations[calibrations[,"Age"] > 0, ] # get rid of negative values too
+	if(any(is.na(calibrations[,"Age"]))){
+		warning("for some reason there are still NAs in the matrix")}
+	# enhance: where does this negative values come from in SDM?
+
   # get the coincident node numbers:
   # ape::is.binary(target_tree)
 	target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)

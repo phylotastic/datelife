@@ -4,6 +4,8 @@
 
 test_that("birds from wikipedia work", {
     # birds_wiki is defined in helper_test_data.R
-  expect_true(inherits(datelife_search(birds_wiki, summary_format="phylo_median"), "phylo"))
-  expect_true(inherits(datelife_search(birds_wiki, summary_format="phylo_sdm"), "phylo"))
+  xx <- datelife_search(birds_wiki, summary_format="phylo_median")
+  expect_true(inherits(xx, "phylo"))
+  xx <- datelife_search(birds_wiki, summary_format="phylo_sdm")
+  expect_true(inherits(xx, "phylo"))
 })
