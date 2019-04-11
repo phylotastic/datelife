@@ -5,28 +5,18 @@
 # })
 
 test_that("Mus higher-taxon search is giving species back", {
-  skip("skipping Mus")
-  expect_silent(make_datelife_query("Echinus", get_spp_from_taxon = TRUE))
-  expect_silent(make_datelife_query("Mus", get_spp_from_taxon = TRUE))
-  expect_true(length(rphylotastic::taxon_get_species("Mus")) > 0)
+  skip_on_cran()
+  skip_on_travis()
+  make_datelife_query("Echinus", get_spp_from_taxon = TRUE)
+  make_datelife_query("Mus", get_spp_from_taxon = TRUE)
+  # expect_true(length(rphylotastic::taxon_get_species("Mus")) > 0)
 })
 
-test_that("datelife_query works", {
-	cleaned.input_tnrs <- tnrs_match(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))
-	input <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
-	df <- get_ott_children(ott_ids = cleaned.input_tnrs$ott_id, ott_rank = "species")
-	# head(rownames(df[[1]])[grepl("species", df[[1]]$rank)])
-	cleaned_names <- lapply(df, function (x) rownames(x)[grepl("species", x$rank)])
+test_that("make_datelife_query works from phylo object as input", {
+    input.processed <- make_datelife_query(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), use_tnrs=FALSE, approximate_match=TRUE)
+    expect_equal(class(input.processed$phy),"phylo")
 })
-test_that("Processing input newick works", {
-	skip_on_cran()
-#	skip_on_travis() #b/c no pathd8
-  skip_on_os("linux") #b/c no pathd8 on travis linux
 
-  utils::data(opentree_chronograms)
-  input.processed <- make_datelife_query(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), use_tnrs=FALSE, approximate_match=TRUE)
-  expect_equal(class(input.processed$phy),"phylo")
-})
 
 # test_that("Processing complex newick works", {
 # 	skip_on_cran()
@@ -35,14 +25,12 @@ test_that("Processing input newick works", {
 # 	expect_error(datelife_search("((((((Typha latifolia,(Phragmites australis,(Sporobolus alterniflorus,Sporobolus pumilus)Sporobolus)PACMAD clade)Poales,(((Hydrilla verticillata,Vallisneria americana)Hydrocharitaceae,Potamogeton perfoliatus),Zostera marina,Ruppia maritima)Alismatales),(Lythrum salicaria,Myriophyllum spicatum)),(Ulva,Caulerpa taxifolia))Chloroplastida,((Skeletonema,(Gomphonema,Didymosphenia geminata)Bacillariophyceae)Bacillariophytina,Prorocentrum)SAR),Microcystis)Eukaryota;", summary_format="phylo_all"), NA)
 # })
 
-test_that("Processing input string", {
-	skip_on_cran()
-  utils::data(opentree_chronograms)
+test_that("make_datelife_query works from vector of taxa", {
   input.processed <- make_datelife_query(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), use_tnrs=FALSE, approximate_match=TRUE)
   expect_equal(length(input.processed$cleaned_names),3)
 })
 
-test_that("Processing newick input works", {
+test_that("make_datelife_query works from newick input", {
   processed <- make_datelife_query("((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum));")
   expect_equal(class(processed$phy), "phylo")
   expect_equal(ape::Ntip(processed$phy), 6)
@@ -69,6 +57,6 @@ test_that("input_process works", {
 
 test_that("datelife_query_check works with phylo as input", {
     utils::data(felid_sdm)
-    datelife_query_check(datelife_query  = felid_sdm$phy)
-    datelife_query_check(datelife_query  = threebirds_median)
+    datelife_query_check(datelife_query = felid_sdm$phy)
+    datelife_query_check(datelife_query = threebirds_median)
 })

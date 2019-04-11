@@ -54,7 +54,7 @@ test_that("taxon_summary argument from summarize_datelife_result() works", {
 })
 
 test_that("get_dated_otol_induced_subtree works", {
-    utils::data(felid_sdm)
+  utils::data(felid_sdm)
   xx <- get_dated_otol_induced_subtree()
   xx <- get_dated_otol_induced_subtree(input = felid_sdm$phy)
   xx <- get_dated_otol_induced_subtree(ott_id = c(563163, 770315)) # cat and human ott_ids

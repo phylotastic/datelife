@@ -16,23 +16,38 @@ test_that("felis/canidae divergence is accurate", {
         summary_format = "phylo_sdm")
 })
 
-test_that("patristic_matrix_to_phylo works", {
+test_that("patristic_matrix_to_phylo works: cetaceae", {
   unpadded.matrices <- lapply(cetacea_result, patristic_matrix_unpad)
   good.matrix.indices <- get_goodmatrices(unpadded.matrices, verbose = TRUE)
   if(length(good.matrix.indices) > 1) {
     unpadded.matrices <- unpadded.matrices[good.matrix.indices]
     sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat", verbose = TRUE)
   }
-  max(sdm_matrix, na.rm = TRUE)/2
-  t0 <- summarize_datelife_result(datelife_result = datelife_result, summary_format = "phylo_sdm")
+  # max(sdm_matrix, na.rm = TRUE)/2
+  t0 <- summarize_datelife_result(datelife_result = cetacea_result, summary_format = "phylo_sdm")
   max(ape::branching.times(t0))
   ape::is.ultrametric(t0, 1)
   ape::is.ultrametric(t0, 2)
+})
+test_that("patristic_matrix_to_phylo works: subset2", {
   p1 <- patristic_matrix_to_phylo(subset2_sdm_matrix, clustering_method = "nj",
         fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE)
   p2 <- patristic_matrix_to_phylo(subset2_sdm_matrix, clustering_method = "upgma",
         fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE)
   # plot(p2, cex = 0.5)
+})
+test_that("patristic_matrix_to_phylo works: some ants", {
+        utils::data(some_ants_datelife_result)
+      xx <- patristic_matrix_to_phylo(patristic_matrix = some_ants_datelife_result[[1]])
+      expect_s3_class(xx, "phylo")
+      expect_true(ape::is.ultrametric(xx))
+      #make sure it works with missing data:
+      withNaN <- some_ants_datelife_result[[1]]
+      withNaN[9, 8] <- NaN
+      withNaN[8, 9] <- NaN
+      xx <- patristic_matrix_to_phylo(patristic_matrix = withNaN)
+      expect_s3_class(xx, "phylo")
+      expect_true(ape::is.ultrametric(xx))# because NaN, it uses njs, and gives a tree
 })
 
 test_that("cluster_patristicmatrix works", {

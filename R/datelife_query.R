@@ -17,19 +17,20 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	# input <- threebirds_median
 	# input$tip.label[3] <- "ttttttt"
 	# input <- birds_yellowstone_otoltree
+	# input <- "Mus"
 	phy_new <- input_process(input = input, verbose = verbose)
 	use_tnrs_global <- FALSE
 	if(use_tnrs | any(get_spp_from_taxon)){
 		use_tnrs_global <- TRUE }
 	if(inherits(phy_new, "phylo")) { # if input is phylo
-	  	cleaned.input <- phy_new$tip.label
+	  	cleaned_input <- phy_new$tip.label
 		ott_ids <- NULL
 		if(!is.null(phy_new$ott_ids)){ # if we have ott_ids don't use_tnrs
 			# if(!any(is.na(phy_new$ott_ids))){ #if there are no NAs
 			use_tnrs_global <- FALSE
 			ott_ids <- phy_new$ott_ids
 			if(any(get_spp_from_taxon)){
-				cleaned.input_tnrs <- list(ott_id = phy_new$ott_ids,
+				cleaned_input_tnrs <- list(ott_id = phy_new$ott_ids,
 					unique_name = phy_new$tip.label) # to use when get_spp_from_taxon = TRUE
 			}
 		}
@@ -39,36 +40,36 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 			return(NA)
 		}
 		if(length(input) == 1){ # if it is a character vector of length 1 with comma separated names
-			cleaned.input <- strsplit(input, ',')[[1]] } # split it by the comma
-		cleaned.input <- stringr::str_trim(input, side = "both") # cleans the input of lingering unneeded white spaces
+			cleaned_input <- strsplit(input, ',')[[1]] } # split it by the comma
+		cleaned_input <- stringr::str_trim(input, side = "both") # cleans the input of lingering unneeded white spaces
 		ott_ids <- NULL
 	}
   	if (use_tnrs_global){
 		# process names even if it's a "higher" taxon name:
-		cleaned.input_tnrs <- clean_tnrs(tnrs_match(input = cleaned.input),
+		cleaned_input_tnrs <- clean_tnrs(tnrs_match(input = cleaned_input),
 			remove_nonmatches = TRUE)
 		# recover original names of invalid taxa and unmatched:
-		ii <- !tolower(cleaned.input)%in%cleaned.input_tnrs$search_string
-		cleaned.input <- c(cleaned.input_tnrs$unique_name, cleaned.input[ii])
+		ii <- !tolower(cleaned_input)%in%cleaned_input_tnrs$search_string
+		cleaned_input <- c(cleaned_input_tnrs$unique_name, cleaned_input[ii])
 		if(inherits(phy_new, "phylo")){
 			if(is.null(phy_new$ott_ids)){
-				cleaned.input <- gsub(" ", "_", cleaned.input)
-				ii <- match(cleaned.input_tnrs$search_string, tolower(phy_new$tip.label))
+				cleaned_input <- gsub(" ", "_", cleaned_input)
+				ii <- match(cleaned_input_tnrs$search_string, tolower(phy_new$tip.label))
 				# after some tests, decided to use rotl's method instead of taxize::gnr_resolve, and just output the original input and the actual query for users to check out.
-				# cleaned.input <- taxize::gnr_resolve(names = cleaned.input, data_source_ids=179, fields="all")$matched_name
+				# cleaned_input <- taxize::gnr_resolve(names = cleaned_input, data_source_ids=179, fields="all")$matched_name
 				# rename the tip labels with tnrs matched names
-				phy_new$tip.label[ii] <- cleaned.input[ii]
-				ott_ids <- rep(NA, length(cleaned.input))
-				ott_ids[ii] <- cleaned.input_tnrs$ott_id
+				phy_new$tip.label[ii] <- cleaned_input[ii]
+				ott_ids <- rep(NA, length(cleaned_input))
+				ott_ids[ii] <- cleaned_input_tnrs$ott_id
 				phy_new$ott_ids <- ott_ids
 			}
 		}
   	}
 	if(any(get_spp_from_taxon)){
 		if(length(get_spp_from_taxon) == 1) {
-				get_spp_from_taxon <- rep(get_spp_from_taxon, length(cleaned.input))
+				get_spp_from_taxon <- rep(get_spp_from_taxon, length(cleaned_input))
 			}
-		if(length(cleaned.input)!= length(get_spp_from_taxon)){
+		if(length(cleaned_input)!= length(get_spp_from_taxon)){
 			if(verbose) {
 					message("Specify all taxa in input to get species names from.")
 				}
@@ -79,25 +80,25 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 		# it has no argument to restrict it to species only
 		# so we are using our own function that wraps up their services nicely
 		# example: df <- get_ott_children(ott_ids = 698424, ott_rank = "species")
-		df <- get_ott_children(ott_ids = cleaned.input_tnrs$ott_id, ott_rank = "species")
+		df <- get_ott_children(ott_ids = cleaned_input_tnrs$ott_id, ott_rank = "species")
 		# head(rownames(df[[1]])[grepl("species", df[[1]]$rank)])
 		# the following does not work; it gives subspecies back
 		# fixing it from get_ott_children function and here too
-		cleaned.input <- lapply(df, function (x) rownames(x)[grepl("\\bspecies\\b", x$rank)])
-		# enhance: create vector original_taxon with original names: rep(cleaned.input[i], length(cleaned_names[i]))
-		original_taxa <- lapply(seq(nrow(cleaned.input_tnrs)), function(i)
-			rep(cleaned.input_tnrs$unique_name[i], length(cleaned.input[[i]])))
+		cleaned_input <- lapply(df, function (x) rownames(x)[grepl("\\bspecies\\b", x$rank)])
+		# enhance: create vector original_taxon with original names: rep(cleaned_input[i], length(cleaned_names[i]))
+		original_taxa <- lapply(seq(nrow(cleaned_input_tnrs)), function(i)
+			rep(cleaned_input_tnrs$unique_name[i], length(cleaned_input[[i]])))
 		ott_ids <- lapply(df, function (x) x$ott_id[grepl("\\bspecies\\b", x$rank)])
-		cleaned.input <- unlist(cleaned.input)
+		cleaned_input <- unlist(cleaned_input)
 		ott_ids <- unlist(ott_ids)
 	}
-	cleaned_names <- gsub("_", " ", cleaned.input)
+	cleaned_names <- gsub("_", " ", cleaned_input)
     if(verbose) {
 		message("OK.")}
     cleaned_names.print <- paste(cleaned_names, collapse = " | ")
     if(verbose) {
 		message("Working with the following taxa: ", "\n", "\t", cleaned_names.print)}
-	if(inherits(ott_ids, "numeric")){
+	if(inherits(ott_ids, "numeric") | inherits(ott_ids, "integer")){
 		names(ott_ids) <- cleaned_names	}
 	# enhance: add original_taxa vector (from get_spp_from_taxon) to output here:
 	datelife_query.return <- list(cleaned_names = cleaned_names, ott_ids = ott_ids,
