@@ -1,7 +1,8 @@
 
 test_that("use_all_calibrations actually works", {
   skip_on_cran()
-  skip_on_os("linux") #b/c no pathd8 on travis linux
+  skip_on_travis() #b/c no pathd8 
+  # skip_on_os("linux") #b/c no pathd8 on travis linux
   results <- suppressWarnings(use_all_calibrations())
   # expect_true(ape::is.ultrametric(results$phy, tol=0.0000))
   expect_true(ape::is.ultrametric(results$phy, option = 2))
