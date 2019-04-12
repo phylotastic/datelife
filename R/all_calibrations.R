@@ -115,7 +115,8 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 	}
 	constraints.df <- data.frame() # we cannot set an empty data frame because nrow depends on the number of nodes available on each tree
 	for (i in seq(length(datelife_phylo))) {
-		local.df <- suppressWarnings(geiger::congruify.phylo(reference = datelife_phylo[[i]], target = datelife_phylo[[i]], scale = NA))$calibrations
+		local.df <- suppressWarnings(geiger::congruify.phylo(reference = datelife_phylo[[i]],
+			target = datelife_phylo[[i]], scale = NA, ncores = 1))$calibrations
 		# suppressedWarnings bc of meesage when running geiger::congruify.phylo(reference = datelife_phylo[[i]], target = datelife_phylo[[i]], scale = NA)
 		# 		Warning message:
 		# In if (class(stock) == "phylo") { :

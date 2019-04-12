@@ -35,7 +35,6 @@ test_that("Summarize as citations works correctly", {
 
 test_that("Summarize as newick_all works correctly", {
   trees <- summarize_datelife_result(datelife_result = threebirds_result, summary_format="newick_all", cache=opentree_chronograms)
-  trees <- sapply(datelife_result, patristic_matrix_to_newick)
   expect_equal(class(trees), "character")
   expect_false(anyNA(trees))
   expect_equal(class(ape::read.tree(text=trees[1])), "phylo")

@@ -293,7 +293,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
   colnames(summ_matrix) <- gsub(" ", "_", colnames(summ_matrix))
   # find taxa missing in target tree and remove them from summ_matrix
   missing <- is.na(match(colnames(summ_matrix), target_tree$tip.label))
-  wichmiss <- colnames(summ_matrix)[missing]
+  whichmiss <- colnames(summ_matrix)[missing]
   if(any(missing)){
     message("There is taxa in summ_matrix that are not in target_tree (", paste0(whichmiss, collapse = ", "), ")")
     missingrow <- is.na(match(rownames(summ_matrix), target_tree$tip.label))

@@ -121,7 +121,8 @@ patristic_matrix_array_subset <- function(patristic_matrix_array, taxa, phy4 = N
 }
 
 # Used inside: patristic_matrix_array_subset_both. patristic_matrix_array_congruify
-patristic_matrix_array_congruify <- function(patristic_matrix_array, taxa, phy = NULL, dating_method = "PATHd8") {
+patristic_matrix_array_congruify <- function(patristic_matrix_array, taxa, phy = NULL,
+    dating_method = "PATHd8") {
   #gets a subset of the patristic_matrix_array.
   patristic_matrix_array <- patristic_matrix_array[rownames(patristic_matrix_array) %in% taxa, colnames(patristic_matrix_array) %in% taxa,  ]
   problem <- "none"
@@ -197,7 +198,9 @@ patristic_matrix_name_reorder <- function(patristic_matrix) {
 }
 
 # Used in: patristic_matrix_list_to_array.
-patristic_matrix_name_order_test <- function(patristic_matrix, standard.rownames, standard.colnames) {
+patristic_matrix_name_order_test <- function(patristic_matrix, standard.rownames,
+    standard.colnames) {
+
   if (compare::compare(rownames(patristic_matrix),standard.rownames)$result!= TRUE) {
     return(FALSE)
   }
@@ -208,13 +211,16 @@ patristic_matrix_name_order_test <- function(patristic_matrix, standard.rownames
 }
 
 # Used inside: patristic_matrix_array_congruify.
-patristic_matrix_array_phylo_congruify <- function(patristic_matrix, target_tree, dating_method = "PATHd8", attempt.fix = TRUE) {
+patristic_matrix_array_phylo_congruify <- function(patristic_matrix, target_tree,
+    dating_method = "PATHd8", attempt.fix = TRUE) {
+
   	result_matrix <- matrix(nrow = dim(patristic_matrix)[1], ncol = dim(patristic_matrix)[2])
   	if(is.null(target_tree$edge.length)) {
     	target_tree$edge.length<-numeric(nrow(target_tree$edge))
   	}
-#	try(result_matrix <- phylo_to_patristic_matrix(phylo_tiplabel_underscore_to_space(geiger::congruify.phylo(phylo_tiplabel_space_to_underscore(patristic_matrix_to_phylo(patristic_matrix)), phylo_tiplabel_space_to_underscore(target_tree), NULL, 0, scale = dating_method)$phy)))
-	try(result_matrix <- phylo_to_patristic_matrix(congruify_and_check(reference = patristic_matrix_to_phylo(patristic_matrix), target = target_tree, scale = dating_method, attempt.fix = attempt.fix)))
+	try(result_matrix <- phylo_to_patristic_matrix(congruify_and_check(
+        reference = patristic_matrix_to_phylo(patristic_matrix),
+        target = target_tree, scale = dating_method, attempt.fix = attempt.fix)))
   return(result_matrix)
 }
 
@@ -337,21 +343,21 @@ congruify_and_check <- function(reference, target, taxonomy = NULL, tol = 0.01,
   if(!ape::is.ultrametric(reference, tol = tol, option = option)) {
     return(NA)
   }
-	new.tree <- phylo_tiplabel_underscore_to_space(suppressWarnings(geiger::congruify.phylo(
-        phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(target),
-        taxonomy = taxonomy, tol = tol, scale = scale)$phy)) #suppressing warnings b/c geiger ignores tolerance
-	if(anyNA(new.tree$edge.length) & attempt.fix) {
-		message("Congruification resulted in NA edge lengths. Resolving polytomies and making up starting branch lengths")
-		new.tree <- phylo_tiplabel_underscore_to_space(geiger::congruify.phylo(
-            phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(
-                ape::compute.brlen(ape::multi2di(target))), taxonomy, tol, scale)$phy)
-		if(anyNA(new.tree$edge.length)) {
-            message("There are still NAs in edge lengths; returning NA")
-			new.tree <- NA
-		}
+  new.tree <- phylo_tiplabel_underscore_to_space(suppressWarnings(geiger::congruify.phylo(
+    phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(target),
+    taxonomy = taxonomy, tol = tol, scale = scale)$phy)) #suppressing warnings b/c geiger ignores tolerance
+  if(anyNA(new.tree$edge.length) & attempt.fix) {
+	message("Congruification resulted in NA edge lengths. Resolving polytomies and making up starting branch lengths")
+	new.tree <- phylo_tiplabel_underscore_to_space(geiger::congruify.phylo(
+        phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(
+            ape::compute.brlen(ape::multi2di(target))), taxonomy, tol, scale, ncores = 1)$phy)
+	if(anyNA(new.tree$edge.length)) {
+        message("There are still NAs in edge lengths; returning NA")
+		new.tree <- NA
 	}
-	new.tree$edge.length[which(new.tree$edge.length < 0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
-	return(new.tree)
+  }
+  new.tree$edge.length[which(new.tree$edge.length < 0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+  return(new.tree)
 }
 
 
@@ -367,7 +373,7 @@ phylo_tiplabel_space_to_underscore <- function(phy) {
 #' @inheritParams phylo_check
 #' @return A phylo object
 phylo_tiplabel_underscore_to_space <- function(phy) {
-    # a better name for this function would be underscore2blank
+    # a better name for this function would be underscore_to_blank
     # add method .phylo
     # change tip and node labels
 	phy$tip.label <- gsub("_", " ", phy$tip.label)
