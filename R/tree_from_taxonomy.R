@@ -159,10 +159,18 @@ tree_from_taxonomy <- function(taxa, sources = "Catalogue of Life", collapse_sin
   paths <- gsub('Not assigned\\|', "", paths) # CoL gives Not assigned for some taxa. We don't want these. Then we split
   paths <- strsplit( paths, "\\|")
   paths <- unique(paths)
-  # check that last name in classification path is from a species not a subspecies:
-  # sapply(sapply(paths, length), function(i) paths)
-  # paths.df <- do.call(rbind, paths)
-  # paths.df
+  # fix: check that last name in classification path is from a species not a subspecies:
+  # example that generates trouble:
+  # taxa_dq <- make_datelife_query("Phyllostomidae", get_spp_from_taxon = TRUE)
+  # taxa <- unname(taxa_dq$cleaned_names)
+  # taxtree_col <- tree_from_taxonomy(taxa, source = "Catalogue of Life")
+  # # Artibeus aztecus gives trouble in Catalogue of Life because it is assigned
+  # # a subspecies, so ranks do not coincide anymore, ending up with nodes that
+  # # are parents of themselves. Compare to Dermanura azteca wich has a coherent taxonomy.
+  # # we still need to develop the test, this is just the example:
+  # classification_results <- classification_paths_from_taxonomy(taxa=c("Dermanura azteca", "Artibeus aztecus"), sources="Catalogue of Life")
+  # paths <- classification_results$resolved$classification_path
+
   leaves <- sapply(paths, utils::tail, n=1)
   tip.label <- leaves
   node.label <- rev(unique(unlist(paths)))

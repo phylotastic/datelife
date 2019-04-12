@@ -37,6 +37,7 @@ datelife_result_sdm(datelife_result, weighting = "flat",
 }
 }}
   \item{target_tree}{A phylo object. Use this in case you want a particular backbone for the output tree.}
+  \item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
 }}
 }
 \value{

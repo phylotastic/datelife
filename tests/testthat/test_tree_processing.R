@@ -1,7 +1,5 @@
 test_that("tree_add_nodelabels works",{
-  utils::data(felid_gdr_phylo_all)
   expect_error(tree_add_nodelabels())
-
   expect_true(is.null(felid_gdr_phylo_all$phylo_all[[1]]$node.label))
   x <- tree_add_nodelabels(felid_gdr_phylo_all$phylo_all[[1]], node_index = "node_number")
   expect_true(!is.null(x$node.label))
@@ -9,7 +7,6 @@ test_that("tree_add_nodelabels works",{
   x <- tree_add_nodelabels(felid_gdr_phylo_all$phylo_all[[1]], node_index = "consecutive")
   expect_true(!is.null(x$node.label))
   expect_true(all(!is.na(x$node.label)))
-
   x$node.label[1:5] <- ""
   expect_true("" %in% x$node.label)
   xx <- tree_add_nodelabels(x, node_index = "node_number")

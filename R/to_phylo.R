@@ -224,6 +224,7 @@ choose_cluster <- function(phycluster, clustering_method){
 }
 #' Go from a smmary matrix to an ultrametric phylo object.
 #' @param summ_matrix A summary patristic distance matrix from sdm or median. See details.
+#' @inheritParams datelife_query_check
 #' @param total_distance Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take iy as is.
 #' @param use A character vector indicating what type of age to use for summary. One of the following
 #' \describe{
@@ -239,7 +240,7 @@ choose_cluster <- function(phycluster, clustering_method){
 #' @return An ultrametric phylo object.
 #' @details It can take a regular patristic distance matrix, but there are simpler methods for that implemented in patristic_matrix_to_phylo.
 #' @export
-summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "mean", target_tree = NULL, ...){
+summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_distance = TRUE, use = "mean", target_tree = NULL, ...){
     # enhance: add other methods, not only bladj.
     # for debugging here
     # summ_matrix <- subset2_sdm_matrix
@@ -248,6 +249,11 @@ summary_matrix_to_phylo <- function(summ_matrix, total_distance = TRUE, use = "m
     if(!inherits(summ_matrix, "matrix") & !inherits(summ_matrix, "data.frame")){
         message("summ_matrix argument is not a matrix")
         return(NA)
+    }
+    if(!is.null(datelife_query)){
+        input_ott_match <- suppressMessages(check_ott_input(input = datelife_query, ...))
+        # match inputt_ott_match and unique(c(colnames(summ_matrix), rownames(summ_matrix)))
+        # change the names in target tree to the names from summ_matrix (which are the ones that come from the original query)
     }
     # summ_matrix <- data.frame(summ_matrix)
     # everything up to patristic_matrix_to_phylo ok if it is a data frame too

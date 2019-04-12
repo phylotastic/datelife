@@ -1,4 +1,6 @@
 test_that("felis/canidae divergence is accurate", {
+    skip_on_cran()
+    skip_on_travis()
     matrix_max_ages <- sapply(catsanddogs_results, max)
     taxa <- c("felis", "canidae")
     cats_and_dogs <- datelife_search(input = taxa, get_spp_from_taxon = TRUE,
@@ -7,13 +9,13 @@ test_that("felis/canidae divergence is accurate", {
     expect_true(all(names(matrix_max_ages) == names(phylo_max_ages)))
     # names(matrix_max_ages) <- names(phylo_max_ages)<- NULL
     ns <- 20
-    format(round(sort(matrix_max_ages/2)), nsmall = ns) == format(round(sort(phylo_max_ages)), nsmall = ns)
+    xx <- format(round(sort(matrix_max_ages/2)), nsmall = ns) == format(round(sort(phylo_max_ages)), nsmall = ns)
     # ages from our cache range from 54.9 to 70.9, this includes upper limit confidence interval chronograms
     # timetree study-derived ages range from 39.7 to 67.1. This excludes confidence intervals
-    median_phy <- summarize_datelife_result(datelife_result = cats_and_dogs_results, datelife_query = query,
-      summary_format = "phylo_median")
-    sdm_phy <- summarize_datelife_result(datelife_result = cats_and_dogs_results, datelife_query = query,
-        summary_format = "phylo_sdm")
+    median_phy <- summarize_datelife_result(datelife_result = catsanddogs_results,
+        datelife_query = catsanddogs_query, summary_format = "phylo_median")
+    sdm_phy <- summarize_datelife_result(datelife_result = catsanddogs_results,
+        datelife_query = catsanddogs_query, summary_format = "phylo_sdm")
 })
 
 test_that("patristic_matrix_to_phylo works: cetaceae", {
@@ -26,8 +28,8 @@ test_that("patristic_matrix_to_phylo works: cetaceae", {
   # max(sdm_matrix, na.rm = TRUE)/2
   t0 <- summarize_datelife_result(datelife_result = cetacea_result, summary_format = "phylo_sdm")
   max(ape::branching.times(t0))
-  ape::is.ultrametric(t0, 1)
-  ape::is.ultrametric(t0, 2)
+  expect_true(ape::is.ultrametric(t0, 1))
+  expect_true(ape::is.ultrametric(t0, 2))
 })
 test_that("patristic_matrix_to_phylo works: subset2", {
   p1 <- patristic_matrix_to_phylo(subset2_sdm_matrix, clustering_method = "nj",
@@ -35,9 +37,10 @@ test_that("patristic_matrix_to_phylo works: subset2", {
   p2 <- patristic_matrix_to_phylo(subset2_sdm_matrix, clustering_method = "upgma",
         fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE)
   # plot(p2, cex = 0.5)
+  expect_true(inherits(p1, "phylo"))
+  expect_true(inherits(p2, "phylo"))
 })
 test_that("patristic_matrix_to_phylo works: some ants", {
-        utils::data(some_ants_datelife_result)
       xx <- patristic_matrix_to_phylo(patristic_matrix = some_ants_datelife_result[[1]])
       expect_s3_class(xx, "phylo")
       expect_true(ape::is.ultrametric(xx))
@@ -52,21 +55,21 @@ test_that("patristic_matrix_to_phylo works: some ants", {
 
 test_that("cluster_patristicmatrix works", {
     c1 <- cluster_patristicmatrix(subset2_sdm_matrix)
+    expect_true(inherits(c1, "list"))
 })
 
-test_that("threebirds sdm matrix to phylo is accurate", {
-  threebirds_dq <- make_datelife_query(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-get_spp_from_taxon = TRUE)
-  utils::data(threebirds_dr)
-  unpadded.matrices <- lapply(threebirds_dr, patristic_matrix_unpad)
+test_that("summary_matrix_to_phylo works: threebirds", {
+  unpadded.matrices <- lapply(threebirds_result, patristic_matrix_unpad)
   good.matrix.indices <- get_goodmatrices(unpadded.matrices, verbose = TRUE)
   if(length(good.matrix.indices) > 1) {
     unpadded.matrices <- unpadded.matrices[good.matrix.indices]
     sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat", verbose = TRUE)
   }
-  max(sdm_matrix, na.rm = TRUE)/2
-  sdm_phylo <- summarize_datelife_result(datelife_result = threebirds_dr, summary_format = "phylo_sdm")
-  names(sdm_phylo)
+  # max(sdm_matrix, na.rm = TRUE)/2
+  sdm_phylo <- summary_matrix_to_phylo(summ_matrix = sdm_matrix)
+  # names(sdm_phylo)
+  expect_true(inherits(sdm_phylo, "phylo"))
+  expect_true(ape::is.ultrametric(sdm_phylo, 2))
 })
 
 test_that("summary_matrix_to_phylo works with and without target trees", {

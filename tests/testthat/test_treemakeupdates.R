@@ -1,8 +1,8 @@
 test_that("tree_fix_brlen works", {
-    utils::data(plant_bold_otol_tree, subset2_search)
     x1 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = 0)
     expect_true(ape::is.ultrametric(x1, option = 2))
     skip_on_cran()
+    skip_on_travis()
     skip_on_os("linux") #b/c no mrbayes on travis linux
     install.packages("phylocomr", repos = "https://cloud.r-project.org")
     devtools::install_github("ropensci/phylocomr")
@@ -24,8 +24,6 @@ test_that("tree_fix_brlen works", {
 
 
 test_that("missing_taxa_check works", {
-  utils::data(felid_gdr_phylo_all)
-  utils::data(felid_sdm)
   mt1 <- missing_taxa_check(missing_taxa = felid_gdr_phylo_all$absent_taxa, dated_tree = felid_sdm$phy)
   mt2 <- missing_taxa_check(missing_taxa = NA, dated_tree = felid_sdm$phy)  # returns "NA"
   mt3 <- missing_taxa_check(missing_taxa = FALSE, dated_tree = felid_sdm$phy)  # returns "FALSE"
@@ -56,7 +54,6 @@ test_that("missing_taxa_check works", {
 # })
 
 test_that("tree_add_outgroup and tree_get_singleton_outgroup work", {
-  utils::data(felid_sdm)
   xx <- tree_add_outgroup(felid_sdm$phy)
   expect_true("outgroup" %in% xx$tip.label)
   expect_true("outgroup" %in% tree_get_singleton_outgroup(tree = xx))
@@ -103,8 +100,8 @@ test_that("tree_add_outgroup and tree_get_singleton_outgroup work", {
 
 test_that("tree_add_dates works", {
     skip_on_cran()
+    skip_on_travis()
     skip_on_os("linux") #b/c no mrbayes on travis linux
-    utils::data(felid_sdm)
     y <- tree_add_dates(dated_tree = felid_sdm$phy, missing_taxa = letters[1:5])
     missing_taxa <- felid_sdm$phy
     dated_tree <- ape::drop.tip(felid_sdm$phy, c(1,5,9,10,20))

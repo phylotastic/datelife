@@ -65,3 +65,8 @@ The output will preserve all elements from original input phylo object and will 
 }
 if tips are duplicated, tnrs will only be run once (avoiding increases in function running time) but the result will be applied to all duplicated tip labels
 }
+\examples{
+tnrs_match(input = c("Mus"))
+tnrs_match(input = c("Mus", "Mus musculus"))
+tnrs_match(input = c("Mus", "Echinus", "Hommo", "Mus"))
+}

@@ -13,7 +13,7 @@ tnrs_match <- function(input, reference_taxonomy, tip, ...) {
 #'
 #' @rdname tnrs_match
 #' @method tnrs_match default
-#' @example
+#' @examples
 #' tnrs_match(input = c("Mus"))
 #' tnrs_match(input = c("Mus", "Mus musculus"))
 #' tnrs_match(input = c("Mus", "Echinus", "Hommo", "Mus"))
@@ -21,7 +21,12 @@ tnrs_match <- function(input, reference_taxonomy, tip, ...) {
 tnrs_match.default <- function(input, reference_taxonomy = "otl", ...){  # enhance: add other reference taxonomies in the future
 	# names <- unique(names) # it is best to allow processing everything, i.e., without modifying the original input vector
 	# names <- names[!is.na(names)]  # tnrs_match_names does not allow NAs, but they're caught after with tryCatch
+    # for debugging:
+    # input <- c("Mus", "Mus musculus")
+    # input = c("cetaceae", "felis", "luke skywalker")
     input <- stringr::str_trim(input, side = "both") # cleans the input of lingering unneeded white spaces
+    allinput <- input
+    input <- unique(input)
 	# enhance: infer taxonomic contexts:
     # tnrs_infer_context(names = names)
     # rotl::tnrs_contexts()
@@ -29,20 +34,9 @@ tnrs_match.default <- function(input, reference_taxonomy = "otl", ...){  # enhan
 		df <- suppressWarnings(rotl::tnrs_match_names(names = "Apis mellifera")) # this just generates the dummy for the table, it will be removed at the end
 		df <- df[nrow(df)+1, ]
 		df[nrow(df)+length(input)-1, ] <- NA
-		# Doing it in batches of 250
-		# xx <- seq(1, length(input), 250)
-		# yy <- xx+249
-		# yy[length(xx)] <- length(input)
-		# # not very useful to add progression here, we would need it from tnrs_match_names, or do it one by one, hmmm....
-		# for (i in seq(length(xx))){
-		# 	df[xx[i]:yy[i],] <- suppressWarnings(rotl::tnrs_match_names(names = input[xx[i]:yy[i]], ...))
-		# 	# utils::setTxtProgressBar(progression, i)
-		# }
-        # input <- c("Mus", "Mus musculus")
-		# Doing it one by one now:
 		progression <- utils::txtProgressBar(min = 0, max = length(input), style = 3)
 		for (i in seq(length(input))){
-			df[i,] <- tryCatch(suppressWarnings(rotl::tnrs_match_names(names = input[i], ...)),
+			df[i,] <- tryCatch(suppressMessages(rotl::tnrs_match_names(names = input[i], ...)),
 								error = function(e) {
 										no_match <- rep(NA, length(df[1,]))
 										no_match[1] <- input[i]
@@ -60,9 +54,11 @@ tnrs_match.default <- function(input, reference_taxonomy = "otl", ...){  # enhan
 		# df <- rotl::tnrs_match_names(names = input)
 		# df has the same order as input
 		# when some input are not matched it gives a warning: NAs introduced by coercion
-		# but if all input are not macthed, it gives an error that needs to be caught
+		# but if no input is matched, it gives an error that needs to be caught
+        ii <- match(tolower(allinput), df$search_string)
+        result <- df[ii,]
 	}
-	return(df) #returns the whole data frame
+	return(result) #returns the whole data frame
 }
 #' @return \code{NULL}
 #'

@@ -23,6 +23,7 @@ datelife_result_median(datelife_result, ...)
 }
 }}
   \item{target_tree}{A phylo object. Use this in case you want a particular backbone for the output tree.}
+  \item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
 }}
 }
 \value{

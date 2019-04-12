@@ -4,11 +4,13 @@
 \alias{summary_matrix_to_phylo}
 \title{Go from a smmary matrix to an ultrametric phylo object.}
 \usage{
-summary_matrix_to_phylo(summ_matrix, total_distance = TRUE,
-  use = "mean", target_tree = NULL, ...)
+summary_matrix_to_phylo(summ_matrix, datelife_query = NULL,
+  total_distance = TRUE, use = "mean", target_tree = NULL, ...)
 }
 \arguments{
 \item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
+
+\item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
 
 \item{total_distance}{Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take iy as is.}
 

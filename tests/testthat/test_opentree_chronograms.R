@@ -1,49 +1,56 @@
 test_that("get_otol_chronograms works", {
-	# skip_on_cran()
-  #	skip_on_travis()
-  # utils::data(opentree_chronograms)
-  xx <- get_otol_chronograms(verbose=TRUE, max_tree_count = 5)
-  expect_true(all(c("trees", "authors", "curators", "studies", "dois") %in% names(xx)))
+  xx5 <- get_otol_chronograms(verbose=TRUE, max_tree_count = 5)
+  expect_true(all(c("trees", "authors", "curators", "studies", "dois") %in% names(xx5)))
   # xx <- get_otol_chronograms(verbose=TRUE)
   # table(unlist((sapply(xx$trees, "[", "mapped"))))
   # check the state of trees with ott_id problems:
+  skip_on_cran()
+  skip_on_travis()
   skip("check ott_id problems_500")  # read.csv always gives an error with check(), so just run this tests locally
   rr <- read.csv(file = "data-raw/ott_id_problems_500.csv", row.names = 1)
-  tt <- xx$trees[[grep(rr$study.id[1], unlist(xx$studies))]] # get the first tree with ott_ids download problem
-  tt$tip.label
-  sapply(tt[c("tip.label", "mapped", "ott_ids", "original.tip.label")], length) == length(tt$tip.label)
+  tt <- opentree_chronograms$trees[[grep(rr$study.id[1], unlist(opentree_chronograms$studies))]] # get the first tree with ott_ids download problem
+  # tt$tip.label
+  # sapply(tt[c("tip.label", "mapped", "ott_ids", "original.tip.label")], length) == length(tt$tip.label)
 
 })
 
 test_that("is_good_chronogram works as expected", {
-  utils::data(felid_gdr_phylo_all)
   t1 <- felid_gdr_phylo_all$phylo_all[[1]]
   expect_true(is_good_chronogram(t1))
   # test that all types of not.mapped are detected:
   t1$tip.label[1] <-  "*tip_#1_not_mapped_to_OTT._Original_label_-_Hagensia_havilandi"
   t1$tip.label[2] <-  "*tip_#1_not_mapped_to_OTT._Original_label_-_Felis_silvestris"
-  expect_false(is_good_chronogram(t1))
+  expect_warning(xx <- is_good_chronogram(t1))
+  expect_false(xx)
   t1$tip.label <- gsub("_", " ", t1$tip.label)
-  expect_false(is_good_chronogram(t1))
+  expect_warning(xx <- is_good_chronogram(t1))
+  expect_false(xx)
   # test presence of unmapped tip labels
   utils::data(problems)
-  expect_false(is_good_chronogram(problems[[5]]))
-  # test tips with less that two characters as labels
+  expect_warning(xx <- is_good_chronogram(problems[[5]]))
+  expect_false(xx)
+  # test tips with less than two characters as labels
   xx <- problems[[3]]
   xx$tip.label <- sub(" ", "", sub(".*-.", "", xx$tip.label))
-  expect_false(is_good_chronogram(xx))
+  expect_warning(xx <- is_good_chronogram(xx))
+  expect_false(xx)
   # enhance: test that there are no duplicated labels in chronogram:
   t1$tip.label[4] <-  "*tip_#1_not_mapped_to_OTT._Original_label_-_Hagensia_havilandi"
   # is_good_chronogram(t1)
   # enhance: test that ott_ids element is ok
+  skip_on_cran()
+  skip_on_travis()
   skip("check ott_id problems_500")  # read.csv always gives an error with check()
   rr <- read.csv(file = "data-raw/ott_id_problems_500.csv", row.names = 1)
-  tt <- xx$trees[[grep(rr$study.id[1], unlist(xx$studies))]] # get the first tree with ott_ids download problem
-  is_good_chronogram(tt)
+  tt <- opentree_chronograms$trees[[grep(rr$study.id[1], unlist(opentree_chronograms$studies))]] # get the first tree with ott_ids download problem
+  expect_true(is_good_chronogram(tt))
 
 })
 
 test_that("clean_ott_chronogram works as expected", {
+    skip_on_cran()
+    skip_on_travis()
+    skip("this test takes too long")
   # test class of output:
   tree1 <- rotl::get_study_tree(study_id = "ot_1250", tree_id = "tree2", tip_label = "ott_taxon_name")
   # length(tree1$tip.label) # 31749
@@ -86,16 +93,17 @@ test_that("clean_ott_chronogram works as expected", {
 })
 
 test_that("opentree_chronograms object is ok", {
-  utils::data(opentree_chronograms)
   # write(paste(names(opentree_chronograms), collapse = '", "'), file = "data-raw/names.txt")
   # test that all expected elements are in opentree_chronograms:
   expect_true(all(c("trees", "authors", "curators", "studies", "dois") %in% names(opentree_chronograms)))
   # test that all opentree_chronograms elements have the same length:
   # length(opentree_chronograms[[1]])
   expect_true(all(sapply(opentree_chronograms, length) == length(opentree_chronograms$trees)))
-  opentree_chronograms$studies[1]
+  # opentree_chronograms$studies[1]
   # check mapping of labels
-  skip("opentree_chronograms object is ok local tests")
+  skip_on_cran()
+  skip_on_travis()
+  skip("opentree_chronograms object is ok, local tests")
   # xx object is a tmp opentree_chronograms object
   names(xx$trees[[1]])
   class(xx$trees[[1]])

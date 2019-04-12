@@ -52,3 +52,6 @@ catsanddogs_results <- get_datelife_result(input = catsanddogs_query)
 
 
 utils::data(felid_sdm)
+utils::data(felid_gdr_phylo_all)
+utils::data(some_ants_datelife_result)
+utils::data(plant_bold_otol_tree, subset2_search)
