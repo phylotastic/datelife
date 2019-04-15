@@ -4,6 +4,7 @@
 #' @export
 get_taxon_summary <- function(datelife_result, datelife_query = NULL){
 	# datelife_result <- subset2_bestgrove
+	# datelife_query <- subset2_query
 	datelife_result <- check_datelife_result(datelife_result)
 	if(is.null(datelife_result) | !inherits(datelife_result, "datelifeResult")){
 		message("datelife_result argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
@@ -43,17 +44,30 @@ get_taxon_summary <- function(datelife_result, datelife_query = NULL){
 	taxon_matrix <- do.call(rbind, taxon_list) #transforms a list of names into a matrix of names
 	taxon_matrix <- !is.na(taxon_matrix) # makes a boolean matrix
 	colnames(taxon_matrix) <- input.match
-	rownames(taxon_matrix) <- sequence(nrow(taxon_matrix))
+	rownames(taxon_matrix) <- paste0("Chronogram", sequence(nrow(taxon_matrix)))
+	chronogram_names <- names(datelife_result)
+	names(chronogram_names) <- rownames(taxon_matrix)
+	# from here, replace by print: take it to a print function, so we only store the matrix, absent taxa and chronogram names
 	# tax <- unique(rapply(datelife_result, rownames)) #rownames(datelife_result[[1]])
 	x <- rapply(datelife_result, rownames)
 	prop <- c()
 	for (taxon in input.match){
-		prop <- c(prop, paste(length(which(taxon == x)), "/", length(datelife_result), sep=""))
+		prop <- c(prop, paste0(length(which(taxon == x)), "/", length(datelife_result)))
 	}
 	taxon_summary <- data.frame(taxon = input.match, chronograms = prop)
-	return(list(matrix = taxon_matrix, summary = taxon_summary, absent_taxa = unique(absent.input)))
+	taxon_number <- sapply(seq(nrow(taxon_matrix)), function(x) sum(taxon_matrix[x,]))
+	taxon_summary2 <- data.frame(chronogram = names(datelife_result),
+		taxon_number = taxon_number, total_taxa = rep(ncol(taxon_matrix), length(datelife_result)))
+	res <- list(matrix = taxon_matrix, summary = taxon_summary, summary2 = taxon_summary2,
+		absent_taxa = unique(absent.input))
+	# end replace by print
+	# res <- list(matrix = taxon_matrix, chronogram_names = chronogram_names, absent_taxa = unique(absent.input))
+	class(res) <- "datelifeTaxonSummary"
+	return(res)
 }
-
+# print.datelifeTaxonSummary <- function(taxon_summary){
+#
+# }
 #' Summarize a filtered results list from get_datelife_result function in various ways
 #' @inheritParams datelife_query_check
 #' @inheritParams datelife_result_check

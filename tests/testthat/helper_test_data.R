@@ -11,8 +11,8 @@ threebirds_all <- summarize_datelife_result(threebirds_result, threebirds_query,
 utils::data(subset2_taxa)
 subset2_query <- make_datelife_query(subset2_taxa)
 subset2_result <- get_datelife_result(subset2_query)
-utils::data(subset2_search)
-subset2_result <- subset2_search$result
+# utils::data(subset2_search)
+# subset2_result <- subset2_search$result
 subset2_bestgrove <- get_best_grove(subset2_result)$best_grove
 # subset2_bestgrove_phyloall <- summarize_datelife_result(subset2_bestgrove, summary_format = "phylo_all")
 subset2_sdm_matrix <- get_sdm_matrix(subset2_bestgrove)

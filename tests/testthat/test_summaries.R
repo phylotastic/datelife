@@ -1,7 +1,8 @@
 # testing datelife functions to summarize source trees
 test_that("get_taxon_summary works", {
 	xx <- get_taxon_summary(threebirds_result, threebirds_query)
-	expect_true(all(names(xx) %in% c("matrix", "summary", "absent_taxa")))
+	expect_true(inherits(xx, "datelifeTaxonSummary"))
+	expect_true(inherits(xx$matrix, "matrix"))
   # enhance: it should test if it's giving both matrix and summary
 })
 
