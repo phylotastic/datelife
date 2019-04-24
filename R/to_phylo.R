@@ -124,7 +124,7 @@ cluster_patristicmatrix <- function(patristic_matrix){
                           error = function(e) NULL)
             }
         } else {
-            phyclust$nj <- tryCatch(phytools::midpoint.root(phyclust$njs),
+            phyclust$nj <- tryCatch(phytools::midpoint.root(phyclust$nj),
                       error = function(e) NULL)
         }
         # root the tree on the midpoint (only for trees with ape::Ntip(phy) > 2):
