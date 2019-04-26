@@ -295,33 +295,12 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
   missing <- is.na(match(colnames(summ_matrix), target_tree$tip.label))
   whichmiss <- colnames(summ_matrix)[missing]
   if(any(missing)){
-    message("There is taxa in summ_matrix that are not in target_tree (", paste0(whichmiss, collapse = ", "), ")")
+    message("Some taxa in summ_matrix are not in target_tree (", paste0(whichmiss, collapse = ", "), ")")
     missingrow <- is.na(match(rownames(summ_matrix), target_tree$tip.label))
     summ_matrix <- summ_matrix[!missingrow, !missing]
   }
 
-  	ages <- tA <- tB <- c()
-    # to compute the final length of the data frame do: ncol(xx)^2 - sum(1:(ncol(xx)-1))
-	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
-	# identify if SDM matrix has some negative values; extract taxon names:
-	negs <- which(summ_matrix < 0)
-	neg_names <- rownames(summ_matrix)[ceiling(negs/nrow(summ_matrix))]
-	# extract unique ages from summ_matrix:
-	for(i in seq(ncol(summ_matrix))){
-		ages <- c(ages, summ_matrix[1:i,i])
-		tA <- c(tA, rownames(summ_matrix)[1:i])
-		tB <- c(tB, rep(colnames(summ_matrix)[i], i))
-	}
-    # tA <- gsub(" ", "_", tA)
-    # tB <- gsub(" ", "_", tB)
-	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB, stringsAsFactors = FALSE)
-	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN and NAs
-	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
-	calibrations <- calibrations[calibrations[,"Age"] > 0, ] # get rid of negative values too
-	if(any(is.na(calibrations[,"Age"]))){
-		warning("for some reason there are still NAs in the matrix")}
-	# enhance: where does this negative values come from in SDM?
-
+  calibrations <- summarize_summary_matrix(summ_matrix)
   # get the coincident node numbers:
   # ape::is.binary(target_tree)
 	target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
@@ -366,4 +345,31 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
       new_phy$ott_ids <- target_tree$ott_ids[tt]
   }
   return(new_phy)
+}
+
+#' Internal for summary_matrix_to_phylo().
+#' @inheritParams summ_matrix
+summarize_summary_matrix <- function(summ_matrix){
+      	ages <- tA <- tB <- c()
+        # to compute the final length of the data frame do: ncol(xx)^2 - sum(1:(ncol(xx)-1))
+    	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
+    	# identify if SDM matrix has some negative values; extract taxon names:
+    	negs <- which(summ_matrix < 0)
+    	neg_names <- rownames(summ_matrix)[ceiling(negs/nrow(summ_matrix))]
+    	# extract unique ages from summ_matrix:
+    	for(i in seq(ncol(summ_matrix))){
+    		ages <- c(ages, summ_matrix[1:i,i])
+    		tA <- c(tA, rownames(summ_matrix)[1:i])
+    		tB <- c(tB, rep(colnames(summ_matrix)[i], i))
+    	}
+        # tA <- gsub(" ", "_", tA)
+        # tB <- gsub(" ", "_", tB)
+    	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB, stringsAsFactors = FALSE)
+    	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN and NAs
+    	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
+    	calibrations <- calibrations[calibrations[,"Age"] > 0, ] # get rid of negative values too
+    	if(any(is.na(calibrations[,"Age"]))){
+    		warning("for some reason there are still NAs in the matrix")}
+    	# enhance: where does this negative values come from in SDM?
+        return(calibrations)
 }
