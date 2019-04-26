@@ -6,6 +6,9 @@
 \usage{
 summarize_summary_matrix(summ_matrix)
 }
+\arguments{
+\item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
+}
 \description{
 Internal for summary_matrix_to_phylo().
 }

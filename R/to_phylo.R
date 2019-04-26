@@ -112,38 +112,68 @@ cluster_patristicmatrix <- function(patristic_matrix){
       message("patristic_matrix is dimension 2, you don't need to cluster.")
       return(NA)
   } else {
-        phyclust <- vector(mode = "list", length = 4)
-        names(phyclust) <- c("nj", "njs", "upgma", "upgma_daisy")
+        phyclust <- vector(mode = "list", length = 8)
+        names(phyclust) <- c("nj", "njs", "upgma", "upgma_daisy", "bionj", "bionjs", "triangMtd", "triangMtds")
         phyclust$nj <- tryCatch(ape::nj(patristic_matrix), error = function (e) NULL)
-        if (is.null(phyclust$nj)){ # case when we have missing data (NA) on patristic_matrix and regular nj does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
+        # if (is.null(phyclust$nj)){ # case when we have missing data (NA) on patristic_matrix and regular nj does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
             # njs appears to be the only option for missing data with NJ
             # but see Criscuolo and Gascuel. 2008. Fast NJ-like algorithms to deal with incomplete distance matrices. BMC Bioinformatics 9:166
-            phyclust$njs <- tryCatch(ape::njs(patristic_matrix), error = function(e) NULL)
-            if(!is.null(phyclust$njs)){
-              phyclust$njs <- tryCatch(phytools::midpoint.root(phyclust$njs),
-                          error = function(e) NULL)
-            }
-        } else {
+        phyclust$njs <- tryCatch(ape::njs(patristic_matrix), error = function(e) NA)
+        if(inherits(phyclust$njs, "phylo")){
+          phyclust$njs <- tryCatch(phytools::midpoint.root(phyclust$njs),
+                      error = function(e) NA)
+        }
+        # } else {
+        if(inherits(phyclust$njs, "phylo")){
             phyclust$nj <- tryCatch(phytools::midpoint.root(phyclust$nj),
-                      error = function(e) NULL)
+                      error = function(e) NA)
         }
         # root the tree on the midpoint (only for trees with ape::Ntip(phy) > 2):
         # phy <- tryCatch(phangorn::midpoint(phy), error = function(e) NULL)
         # using phytools::midpoint.root instead of phangorn::midpoint bc it's less error prone.
         # sometimes, nj and njs do not work if patristic matrices come from sdm. why? it was probably the midpoint function from phangorn. Using phytools one now.
         # use regular upgma (or implemented with daisy and hclust) when nj or midpoint.root fail
-        phyclust$upgma <- tryCatch(phangorn::upgma(patristic_matrix), error = function (e) NULL)
-        if (is.null(phyclust$upgma)){ # case when we have missing data (NA) on patristic_matrix and regular upgma does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
-            phyclust$upgma_daisy <- tryCatch({
-              # using daisy to calculate dissimilarity matrix instead of as.dist (which is used in phangorn::upgma) when there are NAs in the matrix; agnes does not work with NAs either.
-              patristic_matrix <- patristic_matrix*0.25 # doing this because it's giving ages that are too old, but it's a random number
-              DD <- cluster::daisy(x = patristic_matrix, metric = "euclidean")
-              hc <- stats::hclust(DD, method = "average") # original clustering method from phangorn::upgma. Using agnes() instead hclust() to cluster gives the same result.
-              phy <- ape::as.phylo(hc)
-              phy <- phylobase::reorder(phy, "postorder")
-              phy
-            }, error = function(e) NULL)
+        phyclust$upgma <- tryCatch(phangorn::upgma(patristic_matrix), error = function (e) NA)
+        # if (is.null(phyclust$upgma)){ # case when we have missing data (NA) on patristic_matrix and regular upgma does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
+        phyclust$upgma_daisy <- tryCatch({
+          # using daisy to calculate dissimilarity matrix instead of as.dist (which is used in phangorn::upgma) when there are NAs in the matrix; agnes does not work with NAs either.
+          patristic_matrix <- patristic_matrix*0.25 # doing this because it's giving ages that are too old, but it's a random number
+          DD <- cluster::daisy(x = patristic_matrix, metric = "euclidean")
+          hc <- stats::hclust(DD, method = "average") # original clustering method from phangorn::upgma. Using agnes() instead hclust() to cluster gives the same result.
+          phy <- ape::as.phylo(hc)
+          phy <- phylobase::reorder(phy, "postorder")
+          phy
+      }, error = function(e) NA)
+        # }
+        phyclust$bionj <- tryCatch(ape::bionj(patristic_matrix), error = function (e) NA)
+        # if (is.null(phyclust$bionj)){ # case when we have missing data (NA) on patristic_matrix and regular nj does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
+            # njs appears to be the only option for missing data with NJ
+            # but see Criscuolo and Gascuel. 2008. Fast NJ-like algorithms to deal with incomplete distance matrices. BMC Bioinformatics 9:166
+        phyclust$bionjs <- tryCatch(ape::bionjs(patristic_matrix), error = function(e) NA)
+        if(inherits(phyclust$bionjs, "phylo")){
+          phyclust$bionjs <- tryCatch(phytools::midpoint.root(phyclust$bionjs),
+                      error = function(e) NA)
         }
+        # } else {
+        if(inherits(phyclust$bionj, "phylo")){
+            phyclust$bionj <- tryCatch(phytools::midpoint.root(phyclust$bionj),
+                      error = function(e) NA)
+        }
+        phyclust$triangMtd <- tryCatch(ape::triangMtd(patristic_matrix), error = function (e) NA)
+        # if (is.null(phyclust$triangMtd)){ # case when we have missing data (NA) on patristic_matrix and regular nj does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
+            # njs appears to be the only option for missing data with NJ
+            # but see Criscuolo and Gascuel. 2008. Fast NJ-like algorithms to deal with incomplete distance matrices. BMC Bioinformatics 9:166
+        phyclust$triangMtds <- tryCatch(ape::triangMtds(patristic_matrix), error = function(e) NA)
+        if(inherits(phyclust$triangMtds, "phylo")){
+          phyclust$triangMtds <- tryCatch(phytools::midpoint.root(phyclust$triangMtds),
+                      error = function(e) NA)
+        }
+        # } else {
+        if(inherits(phyclust$triangMtd, "phylo")){
+            phyclust$triangMtd <- tryCatch(phytools::midpoint.root(phyclust$triangMtd),
+                      error = function(e) NA)
+        }
+
         return(phyclust)
   }
 }
@@ -348,7 +378,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
 }
 
 #' Internal for summary_matrix_to_phylo().
-#' @inheritParams summ_matrix
+#' @inheritParams summary_matrix_to_phylo 
 summarize_summary_matrix <- function(summ_matrix){
       	ages <- tA <- tB <- c()
         # to compute the final length of the data frame do: ncol(xx)^2 - sum(1:(ncol(xx)-1))
