@@ -6,10 +6,11 @@
 # Before, we hard coded it to try Neighbor-Joining first; if it errors, it will try UPGMA.\
 # Now, it uses nj for phylo_all summary,
 #' @param fix_negative_brlen Boolean indicating whether to fix negative branch lengths in resulting tree or not. Default to TRUE.
+#' @param variance_matrix A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function.
 #' @inheritParams tree_fix_brlen
 #' @return A rooted phylo object
 #' @export
-patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj", fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE) {
+patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj", fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE, variance_matrix = NULL) {
     # patristic_matrix <- threebirds_result[[5]]
     if(!inherits(patristic_matrix, "matrix") & !inherits(patristic_matrix, "data.frame")){
         message("patristic_matrix argument is not a matrix")
@@ -96,7 +97,7 @@ force_ultrametric <- function(phy){
 #' @inheritParams patristic_matrix_to_phylo
 #' @return A list of results from clustering with NJ and UPGMA
 #' @export
-cluster_patristicmatrix <- function(patristic_matrix){
+cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL){
     if(!inherits(patristic_matrix, "matrix") & !inherits(patristic_matrix, "data.frame")){
         message("patristic_matrix argument is not a matrix")
         return(NA)
@@ -173,6 +174,7 @@ cluster_patristicmatrix <- function(patristic_matrix){
             phyclust$triangMtd <- tryCatch(phytools::midpoint.root(phyclust$triangMtd),
                       error = function(e) NA)
         }
+        phyclust$mvr <- tryCatch(ape::mvr(patristic_matrix), error = function (e) NA)
 
         return(phyclust)
   }
