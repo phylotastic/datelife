@@ -177,17 +177,21 @@ cluster_patristicmatrix <- function(patristic_matrix){
         return(phyclust)
   }
 }
-#' Choose a phylo object from cluster_patristicmatrix. If not ultrametric, it does not force it.
+#' Choose an ultrametric phylo object from cluster_patristicmatrix obtained with a particular clustering method, or the next best tree.
+#' If there are not any ultrametric trees, it does not force them.
 #'
 #' @inheritParams patristic_matrix_to_phylo
 #' @param phycluster An output from cluster_patristicmatrix
 #' @return A phylo object or NA
 #' @export
-choose_cluster <- function(phycluster, clustering_method){
-    if(!inherits(phycluster, "list")){
-        message("phycluster arguments is not a list; check it out.")
+choose_cluster <- function(phycluster, clustering_method = "nj"){
+    if(!mode(phycluster) %in% "list"){
+        message("phycluster argument is not a list; check that out.")
         return(NA)
     }
+  # Choose between nj, njs, upgma or upgma_daisy only for now.
+  # keep <- match(c("nj", "njs", "upgma", "upgma_daisy"), names(phycluster))
+  # phycluster <- phycluster[keep]
   phy_return <- NA
   if(length(phycluster) == 0){
     message("phycluster argument is length 0")
@@ -196,7 +200,7 @@ choose_cluster <- function(phycluster, clustering_method){
   if(inherits(phycluster, "phylo")){ # it is a tree of two tips
     return(phycluster)
   } else { # it is a list of results from cluster_patristicmatrix
-    fail <- sapply(phycluster, is.null)
+    fail <- sapply(phycluster, function(x) !inherits(x, "phylo"))
     if(all(fail)){
         message("The patristic matrix could not be transformed into a tree with any of the default methods (NJ, UPGMA)")
         return(NA)
@@ -215,24 +219,27 @@ choose_cluster <- function(phycluster, clustering_method){
       ultram <- sapply(phycluster, ape::is.ultrametric)
       ultram2 <- sapply(phycluster, ape::is.ultrametric, 2)
       if(length(ultram) == 0 & length(ultram2) == 0){
-        message("The patristic matrix could not be transformed into an ultrametric tree with any of the default methods (NJ, UPGMA)")
+        message(paste("The patristic matrix could not be transformed into an ultrametric tree with any of the default methods:", toupper(names(phycluster))))
         # return(NA)
       }
       choice <- grepl(clustering_method, names(phycluster)) # choice can only be one
       ff <- which(choice & ultram) # if the chosen method gives an ultrametric tree
-      if(length(ff) == 1){
+      if(length(ff) != 0){
+        ff <- ff[1]
         phy <- phycluster[[ff]]
         phy$clustering_method <- names(phycluster)[ff]
         return(phy)
       }
       ff <- which(!choice & ultram) # if not, take the not chosen but ultrametric
-      if(length(ff) == 1){
+      if(length(ff) != 0){
+        ff <- ff[1]
         phy <- phycluster[[ff]]
         phy$clustering_method <- names(phycluster)[ff]
         return(phy)
       }
       ff <- which(choice & ultram2) # if not, take the chosen one but less ultrametric
-      if(length(ff) == 1){
+      if(length(ff) != 0){
+        ff <- ff[1]
         phy <- phycluster[[ff]]
         # phy$edge.length.original <- phy$edge.length
         # phy <- phytools::force.ultrametric(tree = phy, method = "extend")
@@ -241,7 +248,8 @@ choose_cluster <- function(phycluster, clustering_method){
         return(phy)
       }
       ff <- which(!choice & ultram2) # if not, take the not chosen one but less ultrametric
-      if(length(ff) == 1){
+      if(length(ff) != 1){
+        ff <- ff[1]
         phy <- phycluster[[ff]]
         # phy$edge.length.original <- phy$edge.length
         # phy <- phytools::force.ultrametric(tree = phy, method = "extend")
@@ -378,7 +386,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
 }
 
 #' Internal for summary_matrix_to_phylo().
-#' @inheritParams summary_matrix_to_phylo 
+#' @inheritParams summary_matrix_to_phylo
 summarize_summary_matrix <- function(summ_matrix){
       	ages <- tA <- tB <- c()
         # to compute the final length of the data frame do: ncol(xx)^2 - sum(1:(ncol(xx)-1))

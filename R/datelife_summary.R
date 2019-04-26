@@ -83,6 +83,7 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 	# datelife_result <- threebirds_result
 	# datelife_query <- threebirds_query
 	# datelife_result <- birdswiki_result
+	# datelife_result <- datelife_result.here
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}

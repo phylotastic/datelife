@@ -55,7 +55,7 @@ test_that("patristic_matrix_to_phylo works: some ants", {
 
 test_that("cluster_patristicmatrix works", {
     c1 <- cluster_patristicmatrix(subset2_sdm_matrix)
-    expect_true(inherits(c1, "list"))
+    expect_true(mode(c1) %in% "list")
 })
 
 test_that("summary_matrix_to_phylo works: threebirds", {

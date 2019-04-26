@@ -89,6 +89,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
+	# input <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus")
 	datelife_query <- make_datelife_query(input = input, use_tnrs = use_tnrs,
 		approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon,
 		verbose = verbose)

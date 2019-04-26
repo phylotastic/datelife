@@ -2,9 +2,10 @@
 % Please edit documentation in R/to_phylo.R
 \name{choose_cluster}
 \alias{choose_cluster}
-\title{Choose a phylo object from cluster_patristicmatrix. If not ultrametric, it does not force it.}
+\title{Choose an ultrametric phylo object from cluster_patristicmatrix obtained with a particular clustering method, or the next best tree.
+If there are not any ultrametric trees, it does not force them.}
 \usage{
-choose_cluster(phycluster, clustering_method)
+choose_cluster(phycluster, clustering_method = "nj")
 }
 \arguments{
 \item{phycluster}{An output from cluster_patristicmatrix}
@@ -15,5 +16,6 @@ choose_cluster(phycluster, clustering_method)
 A phylo object or NA
 }
 \description{
-Choose a phylo object from cluster_patristicmatrix. If not ultrametric, it does not force it.
+Choose an ultrametric phylo object from cluster_patristicmatrix obtained with a particular clustering method, or the next best tree.
+If there are not any ultrametric trees, it does not force them.
 }

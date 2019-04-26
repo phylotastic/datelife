@@ -120,7 +120,7 @@ get_best_grove <- function(datelife_result, criterion = "taxa", n = 2){
     # spp_query <- make_datelife_query(subset2_taxa)
     # datelife_result <- get_datelife_result(spp_query)
     datelife_result <- check_datelife_result(datelife_result)
-	  median.result <- NULL
+	median.result <- NULL
   	while(!inherits(median.result, "phylo")){
           message(paste0("Trying with overlap = ", n, "\n"))
   	  best_grove <- filter_for_grove(datelife_result,
