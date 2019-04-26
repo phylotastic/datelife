@@ -30,7 +30,7 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
         phy$citation <- names(patristic_matrix)
         return(phy)
     }
-    phycluster <- cluster_patristicmatrix(patristic_matrix)
+    phycluster <- cluster_patristicmatrix(patristic_matrix, variance_matrix)
     phy <- choose_cluster(phycluster, clustering_method)
     if(!inherits(phy, "phylo")){
       message("Clustering patristic matrix to phylo failed.")
@@ -92,10 +92,10 @@ force_ultrametric <- function(phy){
       }
       return(phy)
 }
-#' Cluster a patristic matrix with several methods
+#' Cluster a patristic matrix into a tree with various methods.
 #'
 #' @inheritParams patristic_matrix_to_phylo
-#' @return A list of results from clustering with NJ and UPGMA
+#' @return A list of trees (with potential NAs if a method was unsuccesful) from clustering with NJ, UPGMA, BIONJ, triangle method and MVR.
 #' @export
 cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL){
     if(!inherits(patristic_matrix, "matrix") & !inherits(patristic_matrix, "data.frame")){
@@ -114,7 +114,7 @@ cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL){
       return(NA)
   } else {
         phyclust <- vector(mode = "list", length = 8)
-        names(phyclust) <- c("nj", "njs", "upgma", "upgma_daisy", "bionj", "bionjs", "triangMtd", "triangMtds")
+        names(phyclust) <- c("nj", "njs", "upgma", "upgma_daisy", "bionj", "bionjs", "triangMtd", "triangMtds", "mvr", "mvrs")
         phyclust$nj <- tryCatch(ape::nj(patristic_matrix), error = function (e) NULL)
         # if (is.null(phyclust$nj)){ # case when we have missing data (NA) on patristic_matrix and regular nj does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
             # njs appears to be the only option for missing data with NJ
@@ -174,7 +174,9 @@ cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL){
             phyclust$triangMtd <- tryCatch(phytools::midpoint.root(phyclust$triangMtd),
                       error = function(e) NA)
         }
-        phyclust$mvr <- tryCatch(ape::mvr(patristic_matrix), error = function (e) NA)
+        if(inherits(variance_matrix, "matrix")){
+            phyclust$mvr <- tryCatch(ape::mvr(patristic_matrix, variance_matrix), error = function (e) NA)            
+        }
 
         return(phyclust)
   }

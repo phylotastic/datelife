@@ -5,7 +5,8 @@
 \title{Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruiyTree.}
 \usage{
 patristic_matrix_to_phylo(patristic_matrix, clustering_method = "nj",
-  fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE)
+  fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE,
+  variance_matrix = NULL)
 }
 \arguments{
 \item{patristic_matrix}{A patristic matrix}
@@ -17,6 +18,8 @@ patristic_matrix_to_phylo(patristic_matrix, clustering_method = "nj",
 \item{fixing_method}{A character vector specifying the method to fix branch lengths: "bladj", "mrbayes" or a number to be assigned to all branches meeting fixing_criterion}
 
 \item{ultrametric}{Boolean indicating whether to force ultrametric or not.}
+
+\item{variance_matrix}{A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function.}
 }
 \value{
 A rooted phylo object

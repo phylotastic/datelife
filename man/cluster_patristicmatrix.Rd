@@ -2,16 +2,18 @@
 % Please edit documentation in R/to_phylo.R
 \name{cluster_patristicmatrix}
 \alias{cluster_patristicmatrix}
-\title{Cluster a patristic matrix with several methods}
+\title{Cluster a patristic matrix into a tree with various methods.}
 \usage{
-cluster_patristicmatrix(patristic_matrix)
+cluster_patristicmatrix(patristic_matrix, variance_matrix = NULL)
 }
 \arguments{
 \item{patristic_matrix}{A patristic matrix}
+
+\item{variance_matrix}{A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function.}
 }
 \value{
-A list of results from clustering with NJ and UPGMA
+A list of trees (with potential NAs if a method was unsuccesful) from clustering with NJ, UPGMA, BIONJ, triangle method and MVR.
 }
 \description{
-Cluster a patristic matrix with several methods
+Cluster a patristic matrix into a tree with various methods.
 }
