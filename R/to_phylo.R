@@ -1,12 +1,13 @@
 
 #' Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruiyTree.
 #' @param patristic_matrix A patristic matrix
-#' @param clustering_method A character vector indicating the method to construct the tree. Options are "nj" for Neighbor-Joining and "upgma" for Unweighted Pair Group Method with Arithmetic Mean.
+#' @param clustering_method A character vector indicating the method to construct the tree. Options are
+"nj" for Neighbor-Joining and "upgma" for Unweighted Pair Group Method with Arithmetic Mean.
 # We might add the option to insert a function as clustering_method.
 # Before, we hard coded it to try Neighbor-Joining first; if it errors, it will try UPGMA.\
 # Now, it uses nj for phylo_all summary,
 #' @param fix_negative_brlen Boolean indicating whether to fix negative branch lengths in resulting tree or not. Default to TRUE.
-#' @param variance_matrix A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function.
+#' @param variance_matrix A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function. Only used if clustering_method is "mvr".
 #' @inheritParams tree_fix_brlen
 #' @return A rooted phylo object
 #' @export
@@ -20,7 +21,7 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
     if(inherits(patristic_matrix, "data.frame")){
         patristic_matrix <- as.matrix(patristic_matrix)
     }
-    clustering_method <- match.arg(arg = clustering_method, choices = c("nj", "upgma"), several.ok = FALSE)
+    clustering_method <- match.arg(arg = tolower(clustering_method), choices = c("nj", "upgma", "bionj", "triangle", "mvr"), several.ok = FALSE)
     if(anyNA(patristic_matrix)) {
   	   patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix),colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
    }   # Get rid of rows and columns with all NA or NaNs, leaves the ones with some NA or NaNs
@@ -114,7 +115,7 @@ cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL){
       return(NA)
   } else {
         phyclust <- vector(mode = "list", length = 8)
-        names(phyclust) <- c("nj", "njs", "upgma", "upgma_daisy", "bionj", "bionjs", "triangMtd", "triangMtds", "mvr", "mvrs")
+        names(phyclust) <- c("nj", "njs", "upgma", "upgma_daisy", "bionj", "bionjs", "triangMtd", "triangMtds", "mvrs")
         phyclust$nj <- tryCatch(ape::nj(patristic_matrix), error = function (e) NULL)
         # if (is.null(phyclust$nj)){ # case when we have missing data (NA) on patristic_matrix and regular nj does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
             # njs appears to be the only option for missing data with NJ
@@ -175,9 +176,9 @@ cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL){
                       error = function(e) NA)
         }
         if(inherits(variance_matrix, "matrix")){
-            phyclust$mvr <- tryCatch(ape::mvr(patristic_matrix, variance_matrix), error = function (e) NA)            
+            # not possible to use the version for complete matrices, how to fill a variance matrix with missing values? I tried filling it with 0s and it runs but the output trees are network like...
+            phyclust$mvrs <- tryCatch(ape::mvrs(patristic_matrix, variance_matrix), error = function (e) NA)
         }
-
         return(phyclust)
   }
 }
