@@ -9,11 +9,21 @@ cluster_patristicmatrix(patristic_matrix, variance_matrix = NULL)
 \arguments{
 \item{patristic_matrix}{A patristic matrix}
 
-\item{variance_matrix}{A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function.}
+\item{variance_matrix}{A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function. Only used if clustering_method is "mvr".}
 }
 \value{
 A list of trees (with potential NAs if a method was unsuccesful) from clustering with NJ, UPGMA, BIONJ, triangle method and MVR.
 }
 \description{
 Cluster a patristic matrix into a tree with various methods.
+}
+\details{
+Methods include the following and their variants to handle missing values:
+\describe{
+\item{nj}{Neighbor-Joining method applied with ape::nj function.}
+\item{upgma}{Unweighted Pair Group Method with Arithmetic Mean method applied with phangorn::upgma function.}
+\item{bionj}{An improved version of the Neighbor-Joining method applied with ape::bionj function.}
+\item{triangle}{Riangles method applied with ape::triangMtd function.}
+\item{mvr}{Minimum Variance Reduction method applied with ape::mvr function.}
+}
 }

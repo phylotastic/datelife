@@ -10,7 +10,14 @@ choose_cluster(phycluster, clustering_method = "nj")
 \arguments{
 \item{phycluster}{An output from cluster_patristicmatrix}
 
-\item{clustering_method}{A character vector indicating the method to construct the tree. Options are "nj" for Neighbor-Joining and "upgma" for Unweighted Pair Group Method with Arithmetic Mean.}
+\item{clustering_method}{A character vector indicating the method to construct the tree. Options are
+\describe{
+\item{nj}{Neighbor-Joining method applied with ape::nj function.}
+\item{upgma}{Unweighted Pair Group Method with Arithmetic Mean method applied with phangorn::upgma function.}
+\item{bionj}{An improved version of the Neighbor-Joining method applied with ape::bionj function.}
+\item{triangle}{Riangles method applied with ape::triangMtd function.}
+\item{mvr}{Minimum Variance Reduction method applied with ape::mvr function.}
+}}
 }
 \value{
 A phylo object or NA

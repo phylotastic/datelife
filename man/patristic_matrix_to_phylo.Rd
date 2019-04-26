@@ -11,7 +11,14 @@ patristic_matrix_to_phylo(patristic_matrix, clustering_method = "nj",
 \arguments{
 \item{patristic_matrix}{A patristic matrix}
 
-\item{clustering_method}{A character vector indicating the method to construct the tree. Options are "nj" for Neighbor-Joining and "upgma" for Unweighted Pair Group Method with Arithmetic Mean.}
+\item{clustering_method}{A character vector indicating the method to construct the tree. Options are
+\describe{
+\item{nj}{Neighbor-Joining method applied with ape::nj function.}
+\item{upgma}{Unweighted Pair Group Method with Arithmetic Mean method applied with phangorn::upgma function.}
+\item{bionj}{An improved version of the Neighbor-Joining method applied with ape::bionj function.}
+\item{triangle}{Riangles method applied with ape::triangMtd function.}
+\item{mvr}{Minimum Variance Reduction method applied with ape::mvr function.}
+}}
 
 \item{fix_negative_brlen}{Boolean indicating whether to fix negative branch lengths in resulting tree or not. Default to TRUE.}
 
@@ -19,7 +26,7 @@ patristic_matrix_to_phylo(patristic_matrix, clustering_method = "nj",
 
 \item{ultrametric}{Boolean indicating whether to force ultrametric or not.}
 
-\item{variance_matrix}{A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function.}
+\item{variance_matrix}{A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function. Only used if clustering_method is "mvr".}
 }
 \value{
 A rooted phylo object
