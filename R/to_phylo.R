@@ -192,6 +192,11 @@ cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL){
         if(inherits(variance_matrix, "matrix")){
             # not possible to use the version for complete matrices, how to fill a variance matrix with missing values? I tried filling it with 0s and it runs but the output trees are network like...
             phyclust$mvrs <- tryCatch(ape::mvrs(patristic_matrix, variance_matrix), error = function (e) NA)
+            if(inherits(phyclust$mvrs, "phylo")){
+                if(any(is.na(phyclust$mvrs$edge.length))){
+                    phyclust$mvrs <- NA
+                }
+            }
         }
         return(phyclust)
   }
