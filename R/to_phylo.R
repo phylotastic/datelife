@@ -128,9 +128,13 @@ cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL){
       message("patristic_matrix is dimension 2, you don't need to cluster.")
       return(NA)
   } else {
-        phyclust <- vector(mode = "list", length = 8)
+        phyclust <- vector(mode = "list", length = 9)
         names(phyclust) <- c("nj", "njs", "upgma", "upgma_daisy", "bionj", "bionjs", "triangMtd", "triangMtds", "mvrs")
-        phyclust$nj <- tryCatch(ape::nj(patristic_matrix), error = function (e) NULL)
+        phyclust$nj <- tryCatch(ape::nj(patristic_matrix), error = function (e) NA)
+        if(inherits(phyclust$nj, "phylo")){
+            phyclust$nj <- tryCatch(phytools::midpoint.root(phyclust$nj),
+                      error = function(e) NA)
+        }
         # if (is.null(phyclust$nj)){ # case when we have missing data (NA) on patristic_matrix and regular nj does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
             # njs appears to be the only option for missing data with NJ
             # but see Criscuolo and Gascuel. 2008. Fast NJ-like algorithms to deal with incomplete distance matrices. BMC Bioinformatics 9:166
@@ -140,10 +144,6 @@ cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL){
                       error = function(e) NA)
         }
         # } else {
-        if(inherits(phyclust$njs, "phylo")){
-            phyclust$nj <- tryCatch(phytools::midpoint.root(phyclust$nj),
-                      error = function(e) NA)
-        }
         # root the tree on the midpoint (only for trees with ape::Ntip(phy) > 2):
         # phy <- tryCatch(phangorn::midpoint(phy), error = function(e) NULL)
         # using phytools::midpoint.root instead of phangorn::midpoint bc it's less error prone.
