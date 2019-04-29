@@ -153,7 +153,7 @@ cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL){
         # if (is.null(phyclust$upgma)){ # case when we have missing data (NA) on patristic_matrix and regular upgma does not work; e.g. clade thraupidae SDM.results have missing data, and upgma chokes
         phyclust$upgma_daisy <- tryCatch({
           # using daisy to calculate dissimilarity matrix instead of as.dist (which is used in phangorn::upgma) when there are NAs in the matrix; agnes does not work with NAs either.
-          patristic_matrix <- patristic_matrix*0.25 # doing this because it's giving ages that are too old, but it's a random number
+          patristic_matrix <- patristic_matrix*0.5 # doing this because it's giving ages that are too old, so it must be taking total distance
           DD <- cluster::daisy(x = patristic_matrix, metric = "euclidean")
           hc <- stats::hclust(DD, method = "average") # original clustering method from phangorn::upgma. Using agnes() instead hclust() to cluster gives the same result.
           phy <- ape::as.phylo(hc)
