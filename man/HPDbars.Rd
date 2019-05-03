@@ -2,7 +2,8 @@
 % Please edit documentation in R/phyloch_functions.R
 \name{HPDbars}
 \alias{HPDbars}
-\title{Function to add interval bars to nodes on a phylo plot.}
+\title{Function from phyloch package
+ Add interval bars to nodes on a phylo plot.}
 \usage{
 HPDbars(phy, label = "height_95\%_HPD", tab = NULL, nodes, col, lwd,
   broken = FALSE, ...)
@@ -45,8 +46,12 @@ HPDbars(phy, label = "height_95\%_HPD", tab = NULL, nodes, col, lwd,
 Adds bars to nodes on a phylo plot.
 }
 \description{
-Function to add interval bars to nodes on a phylo plot.
+Function from phyloch package
+ Add interval bars to nodes on a phylo plot.
 }
 \details{
 Make sure ape is loaded otherwise it won't find .PlotPhyloEnv
+}
+\author{
+Christoph Heibl
 }
