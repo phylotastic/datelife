@@ -9,6 +9,7 @@
 #' @param lwd Line width for the bars, default to 5.
 #' @param broken Something I'm not sure of, should ask Christoph Heibl.
 #' @inheritDotParams graphics::segments
+#' @importFrom ape .PlotPhyloEnv
 #' @return Adds bars to nodes on a phylo plot.
 #' @export
 #' @details Make sure ape is loaded otherwise it won't find .PlotPhyloEnv
@@ -163,6 +164,7 @@ function(phy, label = "height_95%_HPD", tab = NULL, nodes, col, lwd, broken = FA
 #' @param texcol a vector of mode character used to select font color(s). Will be recycled if necessary.
 #' @param gridty an integer representing the line type of the grid exactly in the same way as \code{lty} argument in \code{\link{par}}: 0 or \code{blank}, 1 or \code{"solid"}, 2 or \code{"dashed"}, 3 or \code{"dotted"}, 4 or \code{"dotdash"}, 5 or \code{"longdash"}, and 6 or \code{"twodash"}.
 #' @param gridcol a vector of mode character used to select grid color(s). Will be recycled if necessary.
+#' @importFrom ape .PlotPhyloEnv
 #' @return Adds geological time scale to a phylo plot.
 #' @export
 #' @details

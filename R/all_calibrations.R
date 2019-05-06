@@ -63,7 +63,7 @@ use_all_calibrations <- function(phy = NULL,
 		attempts = 0
 		if(expand != 0) {
 			while(is.null(chronogram) & attempts < giveup) {
-				print(rep(attempts, 10))
+				# print(rep(attempts, 10))
 				calibrations.df <- original.calibrations.df
 				calibrations.df$MaxAge <- calibrations.df$MaxAge * ((1+expand)^attempts)
 				calibrations.df$MinAge <- calibrations.df$MinAge * ((1-expand)^attempts)
@@ -73,6 +73,10 @@ use_all_calibrations <- function(phy = NULL,
 				phy2 <- phytools::bind.tip(ape::reorder.phylo(phy), "tinytip", edge.length = made.up.edgelength, where = 1, position = made.up.edgelength) #bind tip has weird behavior for non-reordered trees
 				calibrations.df[dim(calibrations.df)[1]+1,]<- c("fixed", 0, 0, phy$tip.label[1], "tinytip", "none")
 				chronogram <- tryCatch(geiger::PATHd8.phylo(phy2, calibrations.df), error = function(e) NULL)
+				# data that errors in geiger::PATHd8.phylo(phy2, calibrations.df) (and hence the tryCatch):
+				# phy2 <- cetaceae_phyloall[2]# cetaceae_phyloall[3] and cetaceae_phyloall[4] also error
+				# calibrations.df <- get_all_calibrations(cetaceae_phyloall[2])
+				# Error in write.pathd8(phy, calibrations, base): Some calibrations not encountered in tree
 				if(!is.null(chronogram)) {
 					chronogram$edge.length[which(chronogram$edge.length < 0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
 					chronogram <- ape::drop.tip(chronogram, "tinytip")
@@ -102,7 +106,9 @@ use_all_calibrations <- function(phy = NULL,
 #' @inheritParams datelife_search
 #' @return A data_frame of calibrations
 #' @export
-get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"), verbose = FALSE) {
+get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
+		partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
+		cache = get("opentree_chronograms"), verbose = FALSE) {
 	if(!inherits(input, "datelifeResult") & !inherits(input, "phylo") & !inherits(input, "multiPhylo")){
 		datelife_phylo <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = update_cache, cache = cache, summary_format = "phylo_all", verbose = verbose)
 	}

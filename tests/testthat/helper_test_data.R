@@ -41,6 +41,7 @@ birdswiki_result <- get_datelife_result(birds_wiki)
 
 cetacea_query <- make_datelife_query(input = "cetacea", get_spp_from_taxon = TRUE)
 cetacea_result <- get_datelife_result(cetacea_query)
+cetaceae_phyloall <- summarize_datelife_result(cetacea_result, cetacea_query, "phylo_all")
 
 pan_query <- make_datelife_query(input = "Pan", get_spp_from_taxon = TRUE)
 pan_result <- get_datelife_result(pan_query)
