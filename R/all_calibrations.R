@@ -17,10 +17,12 @@
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
 use_all_calibrations <- function(phy = NULL,
-	# enhance: use congruification to exapnd calibrations.
+	# enhance: use congruification to expand calibrations.
 	all_calibrations = NULL, partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
 	update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1,
 	giveup = 100, verbose = FALSE) {
+		# calibrations.df <- eachcal[[2]]
+		# phy <- tax_phyloallall[[2]][[3]]
 		if(is.null(phy)){ # just to run an example:
 			phy <- make_bold_otol_tree(c("Rhea americana", "Struthio camelus", "Gallus gallus"), chronogram = TRUE, verbose = FALSE)
 			if(!inherits(phy, "phylo")){
@@ -52,6 +54,7 @@ use_all_calibrations <- function(phy = NULL,
 		calibrations.df <- calibrations.df[which(calibrations.df$taxonA %in% phy$tip.label),]
 		calibrations.df <- calibrations.df[which(calibrations.df$taxonB %in% phy$tip.label),]
 		original.calibrations.df <- calibrations.df
+		# original.calibrations.df <- get_all_calibrations(phy2)
 		chronogram <- NULL
 		try(chronogram <- geiger::PATHd8.phylo(phy, calibrations.df), silent = TRUE)
 		if(!is.null(chronogram)) {
@@ -60,16 +63,16 @@ use_all_calibrations <- function(phy = NULL,
 		attempts = 0
 		if(expand != 0) {
 			while(is.null(chronogram) & attempts < giveup) {
+				print(rep(attempts, 10))
 				calibrations.df <- original.calibrations.df
 				calibrations.df$MaxAge <- calibrations.df$MaxAge * ((1+expand)^attempts)
 				calibrations.df$MinAge <- calibrations.df$MinAge * ((1-expand)^attempts)
-
 				# We will have no fixed ages. Pathd8 just quietly gives up. So instead, we add a tiny branch with a zero calibration
 				# between it and its sister.
 				made.up.edgelength <- min(1e-9, .001*min(phy$edge.length))
 				phy2 <- phytools::bind.tip(ape::reorder.phylo(phy), "tinytip", edge.length = made.up.edgelength, where = 1, position = made.up.edgelength) #bind tip has weird behavior for non-reordered trees
 				calibrations.df[dim(calibrations.df)[1]+1,]<- c("fixed", 0, 0, phy$tip.label[1], "tinytip", "none")
-				try(chronogram <- geiger::PATHd8.phylo(phy2, calibrations.df))
+				chronogram <- tryCatch(geiger::PATHd8.phylo(phy2, calibrations.df), error = function(e) NULL)
 				if(!is.null(chronogram)) {
 					chronogram$edge.length[which(chronogram$edge.length < 0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
 					chronogram <- ape::drop.tip(chronogram, "tinytip")

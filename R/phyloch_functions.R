@@ -169,7 +169,7 @@ function(phy, label = "height_95%_HPD", tab = NULL, nodes, col, lwd, broken = FA
 #' Make sure ape is loaded otherwise it won't find .PlotPhyloEnv
 #' If the name of a time interval does not fit the space on the plotting device provided by that time frame, \code{axisGeo} tries to fit the name string by lowering the original character expansion. In order to avoid undiscernable small font sizes only character expansion of 50 percent or more of the original \code{cex} is allowed; in all other cases strings are abreviated and plotted with the original character expansion.
 #' @author Christoph Heibl
-#' @references 
+#' @references
 #' Gradstein F.M., J.G. Ogg & A.G. Smith. 2004. A Geologic Time Scale. Cambridge University Press, Cambridge, UK. \url{www.cambridge.org/uk/catalogue/catalogue.asp?isbn=0521786738}.
 #' International Commission on Stratigraphy. 2012. International stratigraphic chart: \url{http://www.stratigraphy.org/upload/ISChart2009.pdf}.
 
@@ -178,7 +178,7 @@ axisGeo <- function(GTS, tip.time = 0, unit = c("epoch", "period"), ages =
                     gridcol = "black"){
 
   adjustCex <- function(space, string, cex){
-    while (strwidth(string, cex = cex) >= space & cex > .001)
+    while (graphics::strwidth(string, cex = cex) >= space & cex > .001)
       cex <- cex - .001
     cex
   }
@@ -196,7 +196,7 @@ axisGeo <- function(GTS, tip.time = 0, unit = c("epoch", "period"), ages =
   # ----------------------
   gts <- GTS
   maid <- grep("MA", names(gts))
-  gts <- cbind(gts[, 1:maid], c(0, head(gts[, maid], -1)), gts[, ((maid + 1):dim(gts)[2])])
+  gts <- cbind(gts[, 1:maid], c(0, utils::head(gts[, maid], -1)), gts[, ((maid + 1):dim(gts)[2])])
   names(gts)[maid:(maid + 1)] <- c("fromMA", "toMA")
   if ( sum(gts[1, maid:(maid + 1)]) == 0 )
     gts <- gts[-1, ]
@@ -211,7 +211,7 @@ axisGeo <- function(GTS, tip.time = 0, unit = c("epoch", "period"), ages =
 
   # allow plot to extent into outer margin of device region
   # -------------------------------------------------------
-  par(xpd = NA)
+  graphics::par(xpd = NA)
 
   #
   # ----------------------------
@@ -227,10 +227,10 @@ axisGeo <- function(GTS, tip.time = 0, unit = c("epoch", "period"), ages =
     # --------------
     if (length(col) == 1) col <- rep(col, 2)
     col1 <- rep(col, length(stages))
-    col1 <- head(col1, length(col1) / 2)
+    col1 <- utils::head(col1, length(col1) / 2)
     if (length(texcol) == 1) texcol <- rep(texcol, 2)
     col2 <- rep(texcol, length(stages))
-    col2 <- head(col2, length(col2) / 2)
+    col2 <- utils::head(col2, length(col2) / 2)
 
     xgrid <- NULL
     for (i in seq(along = stages)){
@@ -240,23 +240,23 @@ axisGeo <- function(GTS, tip.time = 0, unit = c("epoch", "period"), ages =
       # ---------------------
       from <- maxage - max(gts[gts$unit == stages[i], 2])
       to <- maxage - min(gts[gts$unit == stages[i], 3])
-      rect(from, yy[1], to, yy[2], col = col1[i],
+      graphics::rect(from, yy[1], to, yy[2], col = col1[i],
            border = "black", lwd = 0.5)
       xgrid <- c(xgrid, from, to)
 
       # plot names of stages:
       # ---------------------
       en <- as.character(stages[i])
-      if ((to - from) > strwidth(en, cex = cex))
-        text(mean(c(from, to)), mean(yy), en, 					cex = cex, col = col2[4])				else {
+      if ((to - from) > graphics::strwidth(en, cex = cex))
+        graphics::text(mean(c(from, to)), mean(yy), en, 					cex = cex, col = col2[4])				else {
           thiscex <- adjustCex(to - from, en, cex) * 0.95
           if (2 * thiscex >= cex)
-            text(mean(c(from, to)), mean(yy), en, 						cex = thiscex, col = col2[i])				else {
-              while (nchar(en) > 0 & 								strwidth(en, cex = cex) >= (to - from))
-                en <- paste(head(unlist(strsplit(en, "")), 					-1), collapse = "")
+            graphics::text(mean(c(from, to)), mean(yy), en, 						cex = thiscex, col = col2[i])				else {
+              while (nchar(en) > 0 & 								graphics::strwidth(en, cex = cex) >= (to - from))
+                en <- paste(utils::head(unlist(strsplit(en, "")), 					-1), collapse = "")
               if (nchar(en) > 1)
-                en <- paste(paste(head(unlist(strsplit(						en, "")), -1), collapse = ""), ".", 						sep = "")
-              text(mean(c(from, to)), mean(yy), en, 						cex = cex, col = col2[i])
+                en <- paste(paste(utils::head(unlist(strsplit(						en, "")), -1), collapse = ""), ".", 						sep = "")
+              graphics::text(mean(c(from, to)), mean(yy), en, 						cex = cex, col = col2[i])
             }
         }
     }
@@ -277,39 +277,39 @@ axisGeo <- function(GTS, tip.time = 0, unit = c("epoch", "period"), ages =
     # --------------
     if (length(col) == 1) col <- rep(col, 2)
     col1 <- rep(col, length(stages))
-    col1 <- head(col1, length(col1) / 2)
+    col1 <- utils::head(col1, length(col1) / 2)
     if (length(texcol) == 1) texcol <- rep(texcol, 2)
     col2 <- rep(texcol, length(stages))
-    col2 <- head(col2, length(col2) / 2)
+    col2 <- utils::head(col2, length(col2) / 2)
 
     xgrid <- NULL
     for (i in seq(along = stages)){
       from <- maxage - max(gts[gts$unit == stages[i], 2])
       to <- maxage - min(gts[gts$unit == stages[i], 3])
-      rect(yy[2], from, yy[1], to, col = col1[i], 				border = "black", lwd = 0.5)
+      graphics::rect(yy[2], from, yy[1], to, col = col1[i], 				border = "black", lwd = 0.5)
       xgrid <- c(xgrid, from, to)
 
-      # text labels
+      # graphics::text labels
       en <- as.character(stages[i])
       yxr <- (max(lastPP$y.lim) - min(lastPP$y.lim)) / 				(max(lastPP$x.lim) - min(lastPP$x.lim)) * 1.5
-      if ((to - from) > strwidth(en, cex = cex * yxr))
-        text(mean(yy), mean(c(from, to)), en, 					cex = cex, col = col2[4], srt = 90)			else {
+      if ((to - from) > graphics::strwidth(en, cex = cex * yxr))
+        graphics::text(mean(yy), mean(c(from, to)), en, 					cex = cex, col = col2[4], srt = 90)			else {
           asp <- (to - from) / yxr
           thiscex <- adjustCex(asp, en, cex) * 0.95
           if (1.5 * thiscex >= cex)
-            text(mean(yy), mean(c(from, to)), en, 						cex = thiscex, col = col2[i], srt = 90)				else{
-              while (nchar(en) > 0 & 								strwidth(en, cex = cex * yxr) 						>= (to - from))
-                en <- paste(head(unlist(strsplit(en, "")), 					-1), collapse = "")
+            graphics::text(mean(yy), mean(c(from, to)), en, 						cex = thiscex, col = col2[i], srt = 90)				else{
+              while (nchar(en) > 0 & 								graphics::strwidth(en, cex = cex * yxr) 						>= (to - from))
+                en <- paste(utils::head(unlist(strsplit(en, "")), 					-1), collapse = "")
               if (nchar(en) > 1)
-                en <- paste(paste(head(unlist(strsplit(						en, "")), -1), collapse = ""), ".", 						sep = "")
-              text(mean(yy), mean(c(from, to)),  en, 						cex = cex, col = col2[i], srt = 90)
+                en <- paste(paste(utils::head(unlist(strsplit(						en, "")), -1), collapse = ""), ".", 						sep = "")
+              graphics::text(mean(yy), mean(c(from, to)),  en, 						cex = cex, col = col2[i], srt = 90)
             }
         }
     }
     xgrid
   } # end of plotGeoLeft
 
-  bh <- - strheight("Ap", cex = cex) * 1.5
+  bh <- - graphics::strheight("Ap", cex = cex) * 1.5
   if ( lastPP$direction == "rightwards" ){
     if ( ages ) yy <- c(bh, 2 * bh) else yy <- c(0, bh)
     for ( j in seq_along(unit) ){
@@ -338,14 +338,14 @@ axisGeo <- function(GTS, tip.time = 0, unit = c("epoch", "period"), ages =
   id <- TRUE
   for (k in seq(along = xgrid)){
     if (lastPP$direction == "rightwards")
-      lines(rep(xgrid[k], 2), c(0, ntips + 1),
+      graphics::lines(rep(xgrid[k], 2), c(0, ntips + 1),
             lty = gridty, col = gridcol)
     if (lastPP$direction == "upwards")
-      lines(c(0, ntips + 1), rep(xgrid[k], 2),
+      graphics::lines(c(0, ntips + 1), rep(xgrid[k], 2),
             lty = gridty, col = gridcol)
 
     if (k < length(xgrid)) {
-      spneeded <- strwidth(label[k], cex = cex * 0.8)/2
+      spneeded <- graphics::strwidth(label[k], cex = cex * 0.8)/2
       spavailable <- xgrid[k] - xgrid[k + 1]
       if (spavailable  < spneeded * 1.5) id <- c(id, FALSE) 			else id <- c(id, TRUE)
     }
@@ -356,11 +356,11 @@ axisGeo <- function(GTS, tip.time = 0, unit = c("epoch", "period"), ages =
     xgrid <- xgrid[id]
     label <- label[id]
     if (lastPP$direction == "rightwards")
-      text(xgrid, -0.2, round(label, digits = 1), cex = cex * 0.8)
+      graphics::text(xgrid, -0.2, round(label, digits = 1), cex = cex * 0.8)
     if (lastPP$direction == "upwards")
-      text(-0.2, xgrid, round(label, digits = 1), cex = cex * 0.8)
+      graphics::text(-0.2, xgrid, round(label, digits = 1), cex = cex * 0.8)
 
   }
 
-  par(xpd = FALSE)
+  graphics::par(xpd = FALSE)
 }

@@ -799,4 +799,4 @@ cex = graphics::par("cex"), mai4 = NULL, write = "nothing", file_name = NULL, GT
   }
 }
 
-.PlotPhyloEnv <- new.env()
+# .PlotPhyloEnv <- new.env()

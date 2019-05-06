@@ -77,6 +77,7 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
           phy <- force_ultrametric(phy)
       }
     }
+    phy$tip.label <- gsub(" ", "_", phy$tip.label)
     phy$citation <- names(patristic_matrix)
     class(phy) <- c(class(phy), "datelifeTree")
     return(phy)
