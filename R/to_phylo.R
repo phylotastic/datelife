@@ -384,7 +384,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
     all_nodes_numbers <- all_nodes
 		node_index <- "node_number"
 	}
-	target_tree$node.label <- NULL # make sure its nullso we can rename all nodes of interest to match our labels
+	target_tree$node.label <- NULL # make sure its null, so we can rename all nodes of interest to match our labels
 	target_tree <- tree_add_nodelabels(tree = target_tree, node_index = node_index)  # all nodes need to be named so make_bladj_tree runs properly
   if("mean" %in% use){
     node_ages <- sapply(seq(nrow(calibrations2)), function(i) sum(calibrations2[i,c("MinAge", "MaxAge")])/2)
@@ -397,10 +397,10 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
   }
   new_phy <- make_bladj_tree(tree = target_tree, nodenames = as.character(calibrations2$MRCA), nodeages = node_ages)
   new_phy$clustering_method <- "datelife"
-  new_phy$calibrations_distribution <- stats::setNames(all_ages, all_nodes)
-  new_phy$calibrations_MIN <- calibrations2$MinAge
-  new_phy$calibrations_MAX <- calibrations2$MaxAge
-  new_phy$calibrations_MRCA <- all_nodes_numbers
+  new_phy$calibration_distribution <- stats::setNames(all_ages, all_nodes)
+  new_phy$calibration_MIN <- calibrations2$MinAge
+  new_phy$calibration_MAX <- calibrations2$MaxAge
+  new_phy$calibration_MRCA <- all_nodes_numbers
   new_phy$ott_ids <- NULL
   if(!is.null(target_tree$ott_ids)){
       tt <- match(new_phy$tip.label, target_tree$tip.label)
@@ -408,31 +408,4 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
       new_phy$ott_ids <- target_tree$ott_ids[tt]
   }
   return(new_phy)
-}
-
-#' Internal for summary_matrix_to_phylo().
-#' @inheritParams summary_matrix_to_phylo
-summarize_summary_matrix <- function(summ_matrix){
-      	ages <- tA <- tB <- c()
-        # to compute the final length of the data frame do: ncol(xx)^2 - sum(1:(ncol(xx)-1))
-    	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
-    	# identify if SDM matrix has some negative values; extract taxon names:
-    	negs <- which(summ_matrix < 0)
-    	neg_names <- rownames(summ_matrix)[ceiling(negs/nrow(summ_matrix))]
-    	# extract unique ages from summ_matrix:
-    	for(i in seq(ncol(summ_matrix))){
-    		ages <- c(ages, summ_matrix[1:i,i])
-    		tA <- c(tA, rownames(summ_matrix)[1:i])
-    		tB <- c(tB, rep(colnames(summ_matrix)[i], i))
-    	}
-        # tA <- gsub(" ", "_", tA)
-        # tB <- gsub(" ", "_", tB)
-    	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB, stringsAsFactors = FALSE)
-    	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN and NAs
-    	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
-    	calibrations <- calibrations[calibrations[,"Age"] > 0, ] # get rid of negative values too
-    	if(any(is.na(calibrations[,"Age"]))){
-    		warning("for some reason there are still NAs in the matrix")}
-    	# enhance: where does this negative values come from in SDM?
-        return(calibrations)
 }
