@@ -1,11 +1,11 @@
 #' Map calibrations to nodes of a tree topology
 #'
 #' @param phy A phylo object to map calibrations to its nodes
-#' @param calibrations A list of calibrations extracted with get_all_calibrations function
+#' @param calibrations A data frame of calibrations from get_all_calibrations function
 #' @return A list with two elements
 #' \describe{
 #'	\item{phy}{A phylo object containing the list of calibration distributions}
-#'	\item{calibrations}{A data frame}
+#'	\item{calibrations}{A data frame of summarized calibrations}
 #'	}
 #' @details If input is a phylo object, it is used as backbone. If it is a character vector of taxon names, an induced OToL tree is used as backbone.
 #' @export
@@ -28,7 +28,13 @@ map_all_calibrations <- function(phy, calibrations){
   	# get the node age distribution (ages taken from the first column with "age" in its name):
   	all_ages <- lapply(all_nodes, function(i) calibrations[target_tree_nodes == i, age_column[1]])
   	# any(sapply(all_ages, is.null)) # if FALSE, all nodes have at least one calibration.
-  	calibrations2 <- data.frame(MRCA = paste0("n", all_nodes), MinAge = sapply(all_ages, min),
+    rowsies <- !duplicated(target_tree_nodes)
+    target_tree_nodes2 <- target_tree_nodes[rowsies]
+  	calibrations2 <- calibrations[rowsies,]
+    calibrations2 <- calibrations2[order(target_tree_nodes2),]
+    calibrations2$MaxAge <- sapply(all_ages, max)
+    calibrations2$MinAge <- sapply(all_ages, min)
+    data.frame(MRCA = paste0("n", all_nodes), MinAge = sapply(all_ages, min),
         MaxAge = sapply(all_ages, max))
     if(all(all_nodes < ape::Ntip(phy))){
         all_nodes_numbers <- all_nodes + ape::Ntip(phy)

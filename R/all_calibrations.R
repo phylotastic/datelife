@@ -17,11 +17,14 @@
 #' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
 #' expand sets the expansion value: should be between 0 and 1
 use_all_calibrations <- function(phy = NULL,
-	# enhance: use congruification to expand calibrations.
 	all_calibrations = NULL, partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
 	update_cache = FALSE, cache = get("opentree_chronograms"), expand = 0.1,
 	giveup = 100, verbose = FALSE) {
+		# enhance: use congruification to expand calibrations:
+			# already implemented in map_all_calibrations(phy, get_all_caibrations(phy))$calibrations
+			# and pathd8 still does not work sometimes
 		# calibrations.df <- eachcal[[2]]
+		# calibrations.df <- calibs$calibration
 		# phy <- tax_phyloallall[[2]][[3]]
 		if(is.null(phy)){ # just to run an example:
 			phy <- make_bold_otol_tree(c("Rhea americana", "Struthio camelus", "Gallus gallus"), chronogram = TRUE, verbose = FALSE)
@@ -53,15 +56,12 @@ use_all_calibrations <- function(phy = NULL,
 		calibrations.df$taxonB <- gsub(' ', '_', calibrations.df$taxonB)
 		calibrations.df <- calibrations.df[which(calibrations.df$taxonA %in% phy$tip.label),]
 		calibrations.df <- calibrations.df[which(calibrations.df$taxonB %in% phy$tip.label),]
-		original.calibrations.df <- calibrations.df
-		# original.calibrations.df <- get_all_calibrations(phy2)
 		chronogram <- NULL
 		try(chronogram <- geiger::PATHd8.phylo(phy, calibrations.df), silent = TRUE)
-		if(!is.null(chronogram)) {
-			chronogram$edge.length[which(chronogram$edge.length<0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
-		}
-		attempts = 0
 		if(expand != 0) {
+			attempts = 0
+			original.calibrations.df <- calibrations.df
+			# original.calibrations.df <- get_all_calibrations(phy2)
 			while(is.null(chronogram) & attempts < giveup) {
 				# print(rep(attempts, 10))
 				calibrations.df <- original.calibrations.df
@@ -83,32 +83,44 @@ use_all_calibrations <- function(phy = NULL,
 				}
 				attempts <- attempts+1
 			}
-			if(attempts > 0) {
-				message("Dates are even more approximate than usual: had to expand constraints to have them agree.", "\n")
+			if(attempts > 0 & inherits(chronogram, "phylo")) {
+				message("Dates are even more approximate than usual: had to expand constraints to have them agree")
 			}
+		} else { # alternative to expansion: summarize calibrations
+			calibs <- map_all_calibrations(phy, calibrations)
+			try(chronogram <- geiger::PATHd8.phylo(calibs$phy, calibs$calibrations), silent = TRUE)
 		}
-		# get_nodeage_distribution(ages = calibrations.df[, c("MinAge", "MaxAge")],
-		# 						 taxonA = calibrations.df[, c("taxonA", "taxonA")],
-		# 						 taxonB = calibrations.df[, c("taxonB", "taxonB")],
-		# 						 phy = phy)
+		if(!is.null(chronogram)) {
+			# sometimes pathd8 returns tiny negative branch lengths.
+			# https://github.com/phylotastic/datelife/issues/11
+			chronogram <- tree_fix_brlen(tree = chronogram, fixing_criterion =
+				"negative", fixing_method = 0, ultrametric = TRUE)
+			# chronogram$edge.length[which(chronogram$edge.length<0)] <- 0
+		}
 		return(list(phy = chronogram, calibrations.df = calibrations.df, original.calibrations.df = original.calibrations.df))
 }
 
-use_all_calibrations_bladj <- function(phy, calibrations, use){
-	use <- match.arg(tolower(use), c("mean", "min", "max", "median"))
+# calibrations <- get_all_calibrations(cetaceae_phyloall)
+# phy <- cetaceae_phyloall[[2]]
+# plot(use_all_calibrations_bladj(phy,calibrations, use = "Mean"))
+use_all_calibrations_bladj <- function(phy, calibrations, type = "median"){
+	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
 	calibs <- map_all_calibrations(phy, calibrations)
-	if("mean" %in% use){
-      node_ages <- sapply(seq(nrow(calibs$calibrations)), function(i) sum(calibs$calibrations[i,c("MinAge", "MaxAge")])/2)
+	if("mean" %in% type){
+	  node_ages <- sapply(calibs$phy$calibration_distribution, mean)
     }
-    if("min" %in% use){
-      node_ages <- calibs$calibrations[,c("MinAge")]
+    if("min" %in% type){
+	  node_ages <- sapply(calibs$phy$calibration_distribution, min)
     }
-    if("max" %in% use){
-      node_ages <- calibrations2[,c("MaxAge")]
+    if("max" %in% type){
+	  node_ages <- sapply(calibs$phy$calibration_distribution, max)
     }
-	if("median" %in% use){
-      node_ages <- sapply(seq(nrow(calibrations2)), function(i) sum(calibrations2[i,c("MinAge", "MaxAge")])/2)
+	if("median" %in% type){
+	  node_ages <- sapply(calibs$phy$calibration_distribution, stats::median)
     }
-	new_phy <- make_bladj_tree(tree = phy, nodenames = as.character(calibrations$MRCA), nodeages = node_ages)
-
+	new_phy <- make_bladj_tree(tree = calibs$phy, nodeages = node_ages,
+	  nodenames = as.character(calibs$calibrations$MRCA))
+	new_phy$dating_method <- "bladj"
+	new_phy$calibration_distribution <- stats::setNames(calibs$phy$calibration_distribution)
+	return(new_phy)
 }

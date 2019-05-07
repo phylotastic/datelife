@@ -305,7 +305,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
     # for debugging here
     # summ_matrix <- subset2_sdm_matrix
     # summ_matrix <- median_matrix
-    use_age <- match.arg(use, c("mean", "median", "min", "max"))
+    use <- match.arg(use, c("mean", "median", "min", "max"))
     if(!inherits(summ_matrix, "matrix") & !inherits(summ_matrix, "data.frame")){
         message("summ_matrix argument is not a matrix")
         return(NA)
@@ -360,7 +360,16 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
     summ_matrix <- summ_matrix[!missingrow, !missing]
   }
 
+  # to be get_all_calibrations.data.frame:
   calibrations <- summarize_summary_matrix(summ_matrix)
+
+
+
+
+
+  # ATTENTION
+  # start of use_all_calibrations_bladj, that contains map_all_calibrations
+  # use_all_calibrations_bladj(phy = target_tree, calibrations = caibrations, type = use)
   # start of map_all_calibrations:
   # get the coincident node numbers:
   # ape::is.binary(target_tree)
@@ -394,12 +403,19 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
   if("max" %in% use){
     node_ages <- calibrations2[,c("MaxAge")]
   }
-  new_phy <- make_bladj_tree(tree = target_tree, nodenames = as.character(calibrations2$MRCA), nodeages = node_ages)
-  new_phy$clustering_method <- "datelife"
-  new_phy$calibration_distribution <- stats::setNames(all_ages, all_nodes)
-  new_phy$calibration_MIN <- calibrations2$MinAge
-  new_phy$calibration_MAX <- calibrations2$MaxAge
-  new_phy$calibration_MRCA <- all_nodes_numbers
+  new_phy <- make_bladj_tree(tree = target_tree, nodenames = as.character(calibrations2$MRCA),
+    nodeages = node_ages)
+  new_phy$dating_method <- "bladj"
+  new_phy$calibration_distribution <- stats::setNames(all_ages, all_nodes_numbers)
+  # new_phy$calibration_MIN <- calibrations2$MinAge
+  # new_phy$calibration_MAX <- calibrations2$MaxAge
+  # new_phy$calibration_MRCA <- all_nodes_numbers
+  # end use_all_calibrations_bladj
+
+
+
+
+  new_phy$clustering_method <- NULL
   new_phy$ott_ids <- NULL
   if(!is.null(target_tree$ott_ids)){
       tt <- match(new_phy$tip.label, target_tree$tip.label)
