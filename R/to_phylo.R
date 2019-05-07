@@ -291,12 +291,9 @@ choose_cluster <- function(phycluster, clustering_method = "nj"){
 #' @param total_distance Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take iy as is.
 #' @param use A character vector indicating what type of age to use for summary. One of the following
 #' \describe{
-#'	\item{mean}{ It will use the mean of the node age distributions.
-#'	}
-#'	\item{min}{ It will use the minimum age from the node age distrbutions.
-#'	}
-#'	\item{max}{ Choose this if you wanna be conservative; it will use the maximum age from the node age distrbutions.
-#'	}
+#'	\item{mean}{It will use the mean of the node age distributions.}
+#'	\item{min}{It will use the minimum age from the node age distrbutions.}
+#'	\item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distrbutions.}
 #' }
 #' @param target_tree A phylo object. Use this in case you want a particular backbone for the output tree.
 #' @inheritDotParams get_otol_synthetic_tree
@@ -364,6 +361,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
   }
 
   calibrations <- summarize_summary_matrix(summ_matrix)
+  # start of map_all_calibrations:
   # get the coincident node numbers:
   # ape::is.binary(target_tree)
 	target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
@@ -386,6 +384,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
 	}
 	target_tree$node.label <- NULL # make sure its null, so we can rename all nodes of interest to match our labels
 	target_tree <- tree_add_nodelabels(tree = target_tree, node_index = node_index)  # all nodes need to be named so make_bladj_tree runs properly
+    # end of map_all_calibrations
   if("mean" %in% use){
     node_ages <- sapply(seq(nrow(calibrations2)), function(i) sum(calibrations2[i,c("MinAge", "MaxAge")])/2)
   }

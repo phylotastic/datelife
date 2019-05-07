@@ -93,7 +93,22 @@ use_all_calibrations <- function(phy = NULL,
 		# 						 phy = phy)
 		return(list(phy = chronogram, calibrations.df = calibrations.df, original.calibrations.df = original.calibrations.df))
 }
-# figure out what part of patristic_matrix_to_phylo can be reused:
-# get_nodeage_distribution() <- function(ages, taxonA, taxonB, phy){
-#
-# }
+
+use_all_calibrations_bladj <- function(phy, calibrations, use){
+	use <- match.arg(tolower(use), c("mean", "min", "max", "median"))
+	calibs <- map_all_calibrations(phy, calibrations)
+	if("mean" %in% use){
+      node_ages <- sapply(seq(nrow(calibs$calibrations)), function(i) sum(calibs$calibrations[i,c("MinAge", "MaxAge")])/2)
+    }
+    if("min" %in% use){
+      node_ages <- calibs$calibrations[,c("MinAge")]
+    }
+    if("max" %in% use){
+      node_ages <- calibrations2[,c("MaxAge")]
+    }
+	if("median" %in% use){
+      node_ages <- sapply(seq(nrow(calibrations2)), function(i) sum(calibrations2[i,c("MinAge", "MaxAge")])/2)
+    }
+	new_phy <- make_bladj_tree(tree = phy, nodenames = as.character(calibrations$MRCA), nodeages = node_ages)
+
+}

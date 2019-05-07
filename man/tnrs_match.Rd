@@ -4,7 +4,7 @@
 \alias{tnrs_match}
 \alias{tnrs_match.default}
 \alias{tnrs_match.phylo}
-\title{Taxon name resolution service (tnrs) applied to a query by batches.}
+\title{Taxon name resolution service (tnrs) applied to a vector of names by batches.}
 \usage{
 tnrs_match(input, reference_taxonomy, tip, ...)
 
@@ -45,7 +45,7 @@ An object of class  data frame or phylo, with the added class match_names.
 \code{NULL}
 }
 \description{
-Taxon name resolution service (tnrs) applied to a query by batches.
+Taxon name resolution service (tnrs) applied to a vector of names by batches.
 }
 \details{
 There is no limit to the number of names that can be queried and matched.
