@@ -21,6 +21,9 @@ tree_fix_brlen <- function(tree = NULL, fixing_criterion = "negative", fixing_me
 	} else {
 		index <- which(phy$edge.length == 0)  # identifies edge numbers with null/zero edge lengths value
 	}
+	if(length(index) == 0){
+		return(phy)
+	}
 	if(!is.numeric(fixing_method)){
 		fixing_method <- match.arg(fixing_method, c("bladj", "mrbayes"))
 	} else { # chunk for neg or zero br len to zero or any number determined by user

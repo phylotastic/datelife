@@ -57,10 +57,10 @@ use_all_calibrations <- function(phy = NULL,
 		calibrations.df <- calibrations.df[which(calibrations.df$taxonA %in% phy$tip.label),]
 		calibrations.df <- calibrations.df[which(calibrations.df$taxonB %in% phy$tip.label),]
 		chronogram <- NULL
-		try(chronogram <- geiger::PATHd8.phylo(phy, calibrations.df), silent = TRUE)
 		if(expand != 0) {
 			attempts = 0
 			original.calibrations.df <- calibrations.df
+			try(chronogram <- geiger::PATHd8.phylo(phy, calibrations.df), silent = TRUE)
 			# original.calibrations.df <- get_all_calibrations(phy2)
 			while(is.null(chronogram) & attempts < giveup) {
 				# print(rep(attempts, 10))
@@ -89,6 +89,7 @@ use_all_calibrations <- function(phy = NULL,
 		} else { # alternative to expansion: summarize calibrations
 			calibs <- map_all_calibrations(phy, calibrations)
 			try(chronogram <- geiger::PATHd8.phylo(calibs$phy, calibs$calibrations), silent = TRUE)
+			calibrations.df <- calibs$calibrations
 		}
 		if(!is.null(chronogram)) {
 			# sometimes pathd8 returns tiny negative branch lengths.
@@ -97,7 +98,7 @@ use_all_calibrations <- function(phy = NULL,
 				"negative", fixing_method = 0, ultrametric = TRUE)
 			# chronogram$edge.length[which(chronogram$edge.length<0)] <- 0
 		}
-		return(list(phy = chronogram, calibrations.df = calibrations.df, original.calibrations.df = original.calibrations.df))
+		return(list(phy = chronogram, calibrations.df = calibrations.df))
 }
 
 # calibrations <- get_all_calibrations(cetaceae_phyloall)
