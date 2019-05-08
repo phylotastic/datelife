@@ -56,6 +56,10 @@ use_all_calibrations <- function(phy = NULL,
 		calibrations.df$taxonB <- gsub(' ', '_', calibrations.df$taxonB)
 		calibrations.df <- calibrations.df[which(calibrations.df$taxonA %in% phy$tip.label),]
 		calibrations.df <- calibrations.df[which(calibrations.df$taxonB %in% phy$tip.label),]
+		if(nrow(calibrations.df) == 0){
+			message("Taxon name pairs do not match phy tip labels; phy cannot be dated")
+			return(list(phy = NA, calibrations.df = calibrations.df))
+		}
 		chronogram <- NULL
 		if(expand != 0) {
 			attempts = 0
@@ -87,7 +91,7 @@ use_all_calibrations <- function(phy = NULL,
 				message("Dates are even more approximate than usual: had to expand constraints to have them agree")
 			}
 		} else { # alternative to expansion: summarize calibrations
-			calibs <- map_all_calibrations(phy, calibrations)
+			calibs <- map_all_calibrations(phy, calibrations.df)
 			try(chronogram <- geiger::PATHd8.phylo(calibs$phy, calibs$calibrations), silent = TRUE)
 			calibrations.df <- calibs$calibrations
 		}
@@ -99,29 +103,4 @@ use_all_calibrations <- function(phy = NULL,
 			# chronogram$edge.length[which(chronogram$edge.length<0)] <- 0
 		}
 		return(list(phy = chronogram, calibrations.df = calibrations.df))
-}
-
-# calibrations <- get_all_calibrations(cetaceae_phyloall)
-# phy <- cetaceae_phyloall[[2]]
-# plot(use_all_calibrations_bladj(phy,calibrations, use = "Mean"))
-use_all_calibrations_bladj <- function(phy, calibrations, type = "median"){
-	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
-	calibs <- map_all_calibrations(phy, calibrations)
-	if("mean" %in% type){
-	  node_ages <- sapply(calibs$phy$calibration_distribution, mean)
-    }
-    if("min" %in% type){
-	  node_ages <- sapply(calibs$phy$calibration_distribution, min)
-    }
-    if("max" %in% type){
-	  node_ages <- sapply(calibs$phy$calibration_distribution, max)
-    }
-	if("median" %in% type){
-	  node_ages <- sapply(calibs$phy$calibration_distribution, stats::median)
-    }
-	new_phy <- make_bladj_tree(tree = calibs$phy, nodeages = node_ages,
-	  nodenames = as.character(calibs$calibrations$MRCA))
-	new_phy$dating_method <- "bladj"
-	new_phy$calibration_distribution <- stats::setNames(calibs$phy$calibration_distribution)
-	return(new_phy)
 }
