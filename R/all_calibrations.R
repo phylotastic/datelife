@@ -57,7 +57,7 @@ use_all_calibrations <- function(phy = NULL,
 		calibrations.df <- calibrations.df[which(calibrations.df$taxonA %in% phy$tip.label),]
 		calibrations.df <- calibrations.df[which(calibrations.df$taxonB %in% phy$tip.label),]
 		if(nrow(calibrations.df) == 0){
-			message("Taxon name pairs do not match phy tip labels; phy cannot be dated")
+			message("phy cannot be dated")
 			return(list(phy = NA, calibrations.df = calibrations.df))
 		}
 		chronogram <- NULL

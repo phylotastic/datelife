@@ -4,6 +4,11 @@
 # calibrations <- get_all_calibrations(cetaceae_phyloall)
 # phy <- cetaceae_phyloall[[2]]
 # plot(use_all_calibrations_bladj(phy,calibrations, use = "Mean"))
+# for (i in seq(length(tax_phyloallall[[1]]))){
+#   print(i)
+#   calibs <- map_all_calibrations(phy = tax_phyloallall[[1]][[i]], calibrations = tax_othercalall[[1]][[i]])
+# }
+# tax_othercalall[[1]][[i]][-6]
 #' Use calibrations to date a topology with bladj.
 #' @param phy A phylo object
 #' @param calibrations A data frame of calibrations from get_all_calibrations function
@@ -13,6 +18,10 @@
 use_calibrations_bladj <- function(phy, calibrations, type = "median"){
 	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
 	calibs <- map_all_calibrations(phy, calibrations)
+  if(nrow(calibs$calibrations) == 0){
+    message("Nodes in calibrations (determined by taxon pairs) do not match any nodes in phy; phy cannot be dated")
+    return(NA)
+  }
 	if("mean" %in% type){
 	  node_ages <- sapply(calibs$phy$calibration_distribution, mean)
     }
@@ -26,8 +35,9 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median"){
 	  node_ages <- sapply(calibs$phy$calibration_distribution, stats::median)
     }
 	new_phy <- make_bladj_tree(tree = calibs$phy, nodeages = node_ages,
-	  nodenames = as.character(calibs$calibrations$MRCA))
+	  nodenames = as.character(calibs$calibrations$NodeNames))
 	new_phy$dating_method <- "bladj"
-	new_phy$calibration_distribution <- stats::setNames(calibs$phy$calibration_distribution)
+	new_phy$calibration_distribution <- calibs$phy$calibration_distribution
+  new_phy$calibrations <- calibs$calibrations
 	return(new_phy)
 }
