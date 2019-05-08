@@ -9,13 +9,13 @@ map_all_calibrations(phy, calibrations)
 \arguments{
 \item{phy}{A phylo object to map calibrations to its nodes}
 
-\item{calibrations}{A list of calibrations extracted with get_all_calibrations function}
+\item{calibrations}{A data frame of calibrations from get_all_calibrations function}
 }
 \value{
 A list with two elements
 \describe{
 \item{phy}{A phylo object containing the list of calibration distributions}
-\item{calibrations}{A data frame}
+\item{calibrations}{A data frame of summarized calibrations}
 }
 }
 \description{

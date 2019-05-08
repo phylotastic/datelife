@@ -45,9 +45,10 @@ Imports:
     phylocomr
 Suggests:
     testthat,
-    rphylotastic,
     rmarkdown,
     knitr
+Remotes:
+    phylotastic/rphylotastic
 SystemRequirements: mafft, PATHd8
 URL: https://github.com/phylotastic/datelife, http://www.datelife.org
 License: GPL (>=2)

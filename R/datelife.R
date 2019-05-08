@@ -4,6 +4,12 @@
 # calibrations <- get_all_calibrations(cetaceae_phyloall)
 # phy <- cetaceae_phyloall[[2]]
 # plot(use_all_calibrations_bladj(phy,calibrations, use = "Mean"))
+#' Use calibrations to date a topology with bladj.
+#' @param phy A phylo object
+#' @param calibrations A data frame of calibrations from get_all_calibrations function
+#' @param type A character vector
+#' @return A phylo object
+#' @export
 use_calibrations_bladj <- function(phy, calibrations, type = "median"){
 	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
 	calibs <- map_all_calibrations(phy, calibrations)
