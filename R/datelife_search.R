@@ -24,7 +24,6 @@
 #' @param approximate_match If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).
 #' @param update_cache default to FALSE
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms).
-#' @param dating_method The method used for tree dating.
 #' @param get_spp_from_taxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.
 #' @param verbose Boolean. If TRUE, it gives printed updates to the user.
 #' @param criterion Whether to get the grove with the most trees or the most taxa
@@ -82,7 +81,7 @@
 #' system("open some.bird.trees.html")
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 	summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
-	update_cache = FALSE, cache = get("opentree_chronograms"), dating_method="PATHd8",
+	update_cache = FALSE, cache = get("opentree_chronograms"),
 	summary_print= c("citations", "taxa"), taxon_summary = c("none", "summary", "matrix"),
 	get_spp_from_taxon = FALSE, verbose = FALSE, criterion="taxa") {
 	# find a way not to repeat partial and cache arguments, which are used in both get_datelife_result and summarize_datelife_result
