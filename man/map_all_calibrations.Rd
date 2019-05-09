@@ -14,8 +14,8 @@ map_all_calibrations(phy, calibrations)
 \value{
 A list with two elements
 \describe{
-\item{phy}{A phylo object containing the list of calibration distributions}
-\item{calibrations}{A data frame of summarized calibrations}
+\item{phy}{A phylo object with a list of calibration distributions per node.}
+\item{calibrations}{A data frame of summarized calibrations.}
 }
 }
 \description{

@@ -1,13 +1,14 @@
 #' Use calibrations to date a tree with branch lengths with PATHd8.
 #' @inheritParams use_calibrations_bladj
-#' @param expand How much to expand by each step to get consistent calibrations
+#' @param expand How much to expand by each step to get consistent calibrations. Should be between 0 and 1.
 #' @param giveup How many expansions to try before giving up
 #' @return A phylo object
 #' @export
 #' @details
-#' This will try to use the calibrations as fixed ages.
-#' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
-#' expand sets the expansion value: should be between 0 and 1
+#' This function will try to use the calibrations as fixed ages.
+#' If that fails (often due to conflict between calibrations), it will expand the
+#' range of the minimum age and maximum age and try again. And repeat.
+#' If expand = 0, it uses the summarized calibrations.
 use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 100){
     if (!inherits(phy, "phylo")){
 		message("phy is not a phylo object")

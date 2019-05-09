@@ -2,38 +2,42 @@
 % Please edit documentation in R/bold_tree.R
 \name{make_bold_otol_tree}
 \alias{make_bold_otol_tree}
-\title{Use Barcode of Life data to get branch lengths on the OToL tree of a set of taxa.}
+\title{Use Barcode of Life Data (BOLD) to get branch lengths on a tree topology.
+If input is not a tree, then it uses the OToL tree of the set of input taxa.}
 \usage{
 make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus",
-  "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE,
-  marker = "COI", otol_version = "v3", chronogram = TRUE,
-  doML = FALSE, get_spp_from_taxon = FALSE, verbose = FALSE)
+  "Gallus gallus"), marker = "COI", otol_version = "v3",
+  chronogram = TRUE, doML = FALSE, verbose = FALSE, ...)
 }
 \arguments{
 \item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
 
-\item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
+\item{marker}{A character vector indicating the gene from BOLD system to be used for branch length estimation.}
 
-\item{approximate_match}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
+\item{chronogram}{Boolean. If TRUE (default), branch lengths returned are estimated with ape::chronoMPL. If FALSE, branch lengths returned are estimated with phangorn::acctran and represent relative substitution rates .}
 
-\item{marker}{A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.}
-
-\item{otol_version}{Version of OToL to use}
-
-\item{chronogram}{Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.}
-
-\item{doML}{Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml}
-
-\item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
+\item{doML}{Boolean; only relevant if chronogram = TRUE. If TRUE, it does ML branch length optimization with phangorn::optim.pml}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+
+\item{...}{Arguments passed on to \code{get_otol_synthetic_tree}
+\describe{
+  \item{otol_version}{Version of OToL to use}
+  \item{input}{Optional. A character vector of names or a datelifeQuery object}
+  \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+}}
 }
 \value{
 A phylogeny with branch lengths proportional to relative substitution rate.
 }
 \description{
-Use Barcode of Life data to get branch lengths on the OToL tree of a set of taxa.
+Use Barcode of Life Data (BOLD) to get branch lengths on a tree topology.
+If input is not a tree, then it uses the OToL tree of the set of input taxa.
 }
 \details{
-If input is a phylo object, it is used as backbone. If it is a character vector of taxon names, an induced OToL tree is used as backbone.
+If input is a phylo object, that is used as backbone topology.
+If input is a character vector of taxon names, an induced OToL tree is used as backbone.
+If there are not enough sequences to return a tree with branch lengths, it returns
+a tree with no branch lengths (either the original input topology or the OToL tree
+obtained for the set of input taxon names.
 }

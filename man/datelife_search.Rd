@@ -8,10 +8,9 @@
 datelife_search(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), summary_format = "phylo_all", partial = TRUE,
   use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
-  cache = get("opentree_chronograms"), dating_method = "PATHd8",
-  summary_print = c("citations", "taxa"), taxon_summary = c("none",
-  "summary", "matrix"), get_spp_from_taxon = FALSE, verbose = FALSE,
-  criterion = "taxa")
+  cache = get("opentree_chronograms"), summary_print = c("citations",
+  "taxa"), taxon_summary = c("none", "summary", "matrix"),
+  get_spp_from_taxon = FALSE, verbose = FALSE, criterion = "taxa")
 }
 \arguments{
 \item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
@@ -27,8 +26,6 @@ datelife_search(input = c("Rhea americana", "Pterocnemia pennata",
 \item{update_cache}{default to FALSE}
 
 \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
-
-\item{dating_method}{The method used for tree dating.}
 
 \item{summary_print}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
 

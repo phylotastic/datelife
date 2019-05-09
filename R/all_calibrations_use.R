@@ -1,53 +1,68 @@
-# Functions to perform a molecular dating analysis on a set of input taxa, using calibrations from chronograms in a database.
-
-#' Use all calibrations from chronograms in a database to date a tree.
-#' @param phy A phylo object
-#' @param all_calibrations A data frame of calibrations from get_all_calibrations function
-#' @param partial If TRUE, use source trees even if they only match some of the desired taxa
-#' @param use_tnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
-#' @param approximate_match If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
-#' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
+#' Perform a dating analysis on a set of input taxa.
+#' It uses all calibrations from chronograms in the datelife database.
 #' @inheritParams datelife_search
-#' @return list with chronogram, original calibrations, and expanded calibrations
+#' @inheritDotParams get_all_calibrations
+#' @return A list with a chronogram and all calibrations found
 #' @export
 #' @details
-#' This will try to use the calibrations as fixed ages.
-#' If that fails (often due to conflict between calibrations), it will expand the range of the minage and maxage and try again. And repeat.
-#' expand sets the expansion value: should be between 0 and 1
-use_all_calibrations <- function(phy = NULL,
-	all_calibrations = NULL, partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
-	update_cache = FALSE, cache = get("opentree_chronograms"), verbose = FALSE) {
-		# enhance: use congruification to expand calibrations:
-			# already implemented in map_all_calibrations(phy, get_all_caibrations(phy))$calibrations
-			# and pathd8 still does not work sometimes
+#' If input is a tree, it will get all calibrations and date it with bladj if it
+#' has no branch lengths or with PATHd8 if it has branch lengths.
+#' If input is a vector of names, it will try to construct a bold tree first to get
+#' a topology with branch lengths. If it can't, it will get the open tree of life
+#' topology only and date it with bladj.
+use_all_calibrations <- function(input = NULL, ...) { # dating_method = "bladj",
+		# use congruification to expand calibrations: already implemented in map_all_calibrations
+		# and pathd8 still does not work sometimes
 		# calibrations.df <- eachcal[[2]]
 		# calibrations.df <- calibs$calibration
 		# phy <- tax_phyloallall[[2]][[3]]
-		if(is.null(phy)){ # just to run an example:
-			phy <- make_bold_otol_tree(c("Rhea americana", "Struthio camelus", "Gallus gallus"), chronogram = TRUE, verbose = FALSE)
+		# this is just to be able to run if input is NULL, as an example:
+		if(is.null(input)){
+			phy <- make_bold_otol_tree(c("Rhea americana", "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE)
 			if(!inherits(phy, "phylo")){
 				phy <- get_dated_otol_induced_subtree(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
 			}
+		}
+		datelife_query <- make_datelife_query(input = input, verbose = verbose) # it removes singleton nodes in phy
+		# if input is not a tree, get one with bold or just otol:
+		if(!inherits(datelife_query$phy, "phylo")){
+			phy <- make_bold_otol_tree(datelife_query$cleaned_names, chronogram = FALSE, verbose = FALSE)
 		} else {
-			input <- input_process(input = phy, verbose = verbose)
-			phy <- input
+			phy <- datelife_query$phy
 		}
-		# phy must be a tree, check this
-		if(!inherits(phy, "phylo")){
-			message("phy is not a phylo object")
-			return(NA)
-		}
-		# remove singleton nodes in phy:
-		phy <- ape::collapse.singles(phy)
-		if(is.null(all_calibrations)){
-			calibrations.df <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label),
-			partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match,
-			update_cache = update_cache, cache = cache, verbose = verbose)
-		} else {
-			# enhance: add a check for object structure
-			# enhance: check that input names are in calibrations.df
-			calibrations.df <- all_calibrations
-		}
-
+		# perform the datelife_search through get_all_calibrations:
+		calibrations <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), ...)
+		# date the tree with bladj, pathd8 if branch lengths:
+		chronogram <- use_calibrations(phy, calibrations)
 		return(list(phy = chronogram, calibrations.df = calibrations.df))
+}
+
+#' Perform a dating analysis on a tree topology using a determined set of calibrations.
+#' @inheritParams use_calibrations_bladj
+#' @param dating_method The method used for tree dating.
+#' @inheritDotParams use_calibrations_pathd8
+#' @return A phylo object with branch lengths propotional to time.
+#' @export
+#' @details
+#' If phy does not have branch lengths, dating_method is ignored and BLADJ will be used.
+use_calibrations <- function(phy = NULL, calibrations = NULL, dating_method = "bladj", type = "median", ...){
+	# check that input names are in calibrations.df: done in map_all_calibrations inside use_calibrations_bladj
+	if(!inherits(phy, "phylo")){
+		message("phy is not a phylo object")
+		return(NA)
+	}
+	# enhance: add a check for calibrations object structure
+	dating_method <- match.arg(tolower(dating_method), c("bladj", "pathd8"))
+	if(dating_method %in% "bladj"){
+		phy$edge.length <- NULL
+		chronogram <- use_all_calibrations_bladj(phy, calibrations, type)
+	}
+	if(dating_method %in% "pathd8"){
+		if(is.null(phy$edge.length)){
+			message('phy has no branch lengths, using dating_method = "bladj" instead.')
+			chronogram <- use_all_calibrations_bladj(phy, calibrations, type)
+		}
+		chronogram <- use_all_calibrations_pathd8(phy, calibrations, ...)
+	}
+	return(chronogram)
 }

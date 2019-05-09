@@ -1,20 +1,26 @@
-#' Use Barcode of Life data to get branch lengths on the OToL tree of a set of taxa.
+#' Use Barcode of Life Data (BOLD) to get branch lengths on a tree topology.
+#' If input is not a tree, then it uses the OToL tree of the set of input taxa.
 #' @inheritParams datelife_search
-#' @inheritParams get_otol_synthetic_tree
-#' @param marker A character vector with the name of the gene from Barcode of Life Data Systems (BOLD) to be used for branch length estimation.
-#' @param chronogram Boolean; default to TRUE:  branch lengths represent time estimated with ape::chronoMPL. If FALSE, branch lengths represent relative substitution rates estimated with phangorn::acctran.
-#' @param doML Boolean; if TRUE, does ML branch length optimization with phangorn::optim.pml
-#' @inheritParams make_datelife_query
+#' @param marker A character vector indicating the gene from BOLD system to be used for branch length estimation.
+#' @param chronogram Boolean. If TRUE (default), branch lengths returned are estimated with ape::chronoMPL. If FALSE, branch lengths returned are estimated with phangorn::acctran and represent relative substitution rates .
+#' @param doML Boolean; only relevant if chronogram = TRUE. If TRUE, it does ML branch length optimization with phangorn::optim.pml
+#' @inheritDotParams get_otol_synthetic_tree
 #' @return A phylogeny with branch lengths proportional to relative substitution rate.
-#' @details If input is a phylo object, it is used as backbone. If it is a character vector of taxon names, an induced OToL tree is used as backbone.
+#' @details
+#' If input is a phylo object, that is used as backbone topology.
+#' If input is a character vector of taxon names, an induced OToL tree is used as backbone.
+#' If there are not enough sequences to return a tree with branch lengths, it returns
+#' a tree with no branch lengths (either the original input topology or the OToL tree
+#' obtained for the set of input taxon names.
 #' @export
-make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"), use_tnrs = FALSE, approximate_match = TRUE, marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, get_spp_from_taxon = FALSE, verbose = FALSE) {
+make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"),
+marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = FALSE, ...) {
 	# enhance: add an input check here to accept newick strings too
 	if(inherits(input, "phylo")){
 		phy <- input
 		input <- phy$tip.label
 	} else {
-		phy <- get_otol_synthetic_tree(input = input, otol_version = otol_version, use_tnrs = use_tnrs, approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon)
+		phy <- get_otol_synthetic_tree(input = input, otol_version = otol_version, ...)
 		#otol returns error with missing taxa in v3 of rotl
 		input <- phy$tip.label
 	}
@@ -37,15 +43,13 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 		# so in here we just retrieve all sequences and filter after
 		utils::setTxtProgressBar(progression, i)
 	}
-	cat("\n") # just to make the progress bar look better
+	# cat("\n") # just to make the progress bar look better
 	sequences <- sequences[grepl(marker, sequences$markercode), ] # filter other markers
 	if(length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available; if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
-		if (verbose) {
-			message("No sequences found in BOLD for input taxa...")
-		}
 		# if (!use_tnrs) cat("Setting use_tnrs = TRUE might change this, but it can be slowish.", "\n")
-		warning("Names in input do not match BOLD specimen records. No tree was constructed.")
-		return(NA)
+		message("Names in input do not match BOLD specimen records; no sequences
+			were found in BOLD for the set of input taxa. Returning tree with no branch lengths.")
+		return(phy)
 	}
 	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides)  # preserve good nucleotide data, i.e., only A,T,G,C
 	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
@@ -88,9 +92,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 		if (verbose) {
 			message("BOLD sequences found only for one input name: ", input[which(!input %in% taxa.to.drop)], ".","\n","\t", "Cannot construct a tree." )
 		}
-		message("Not enough sequences available in BOLD. No tree was constructed.")
+		message("There are not enough sequences available in BOLD to reconstruct branch lengths. Returning tree with no branch lengths.")
 		# if (use_tnrs == FALSE) cat("Setting use_tnrs = TRUE might change this, but it is time consuming.", "\n")
-		return(NA)
+		return(phy)
 	}
 	if(length(taxa.to.drop) > 0) {
 		if (verbose) {

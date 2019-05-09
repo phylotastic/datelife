@@ -43,7 +43,7 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median"){
 	  nodenames = node_names)
 	new_phy$dating_method <- "bladj"
 	new_phy$calibration_distribution <- calibs$phy$calibration_distribution
-  new_phy$calibrations <- calibs$calibrations
+    new_phy$calibrations <- calibs$calibrations
 	return(new_phy)
 }
 # #' functions to check if calibrations are younger or older relative to descendants and ancestors, respectively
