@@ -41,7 +41,7 @@ datelife_result_MRCA <- function(datelife_result, partial = TRUE) {
 #' @param taxa Vector of taxon names to get a subset for
 #' @param phy A user tree to congruify as phylo object (ape)
 #' @param phy4 A user tree to congruify in phylo4 format (phylobase)
-#' @inheritParams datelife_search
+#' @param dating_method The method used for tree dating.
 #' @return A patristic matrix with ages for the target taxa.
 get_subset_array_dispatch <- function(study_element, taxa, phy = NULL, phy4 = NULL, dating_method = "PATHd8") {
   if(class(study_element) == "array") {

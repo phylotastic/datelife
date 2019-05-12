@@ -27,7 +27,7 @@ test_that("datelife_search returns phylo_all: Crop plants, vector input", {
 test_that("datelife_search returns phylo_all: Crop plants, newick input", {
   trees <- datelife_search(input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);",
   summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
-  cache = opentree_chronograms, dating_method = "PATHd8")
+  cache = opentree_chronograms)
   # expect_s3_class(trees[[1]], "phylo")
 })
 test_that("datelife_search returns one phylo_biggest", {

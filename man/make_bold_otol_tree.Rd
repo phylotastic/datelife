@@ -14,6 +14,8 @@ make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus",
 
 \item{marker}{A character vector indicating the gene from BOLD system to be used for branch length estimation.}
 
+\item{otol_version}{Version of OToL to use}
+
 \item{chronogram}{Boolean. If TRUE (default), branch lengths returned are estimated with ape::chronoMPL. If FALSE, branch lengths returned are estimated with phangorn::acctran and represent relative substitution rates .}
 
 \item{doML}{Boolean; only relevant if chronogram = TRUE. If TRUE, it does ML branch length optimization with phangorn::optim.pml}

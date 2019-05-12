@@ -27,6 +27,8 @@ tree_add_dates(dated_tree = NULL, missing_taxa = NULL,
 }
 }}
 
+\item{dating_method}{The method used for tree dating.}
+
 \item{adding_criterion}{Only valid when dating_method = "mrbayes". A character vector to specify how missing_taxa should be added to dated_tree.
      Choose one of:
 \describe{

@@ -126,7 +126,7 @@ cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL){
      return(NA)
   }
   if(dim(patristic_matrix)[1] == 2) {
-      message("patristic_matrix is dimension 2, you don't need to cluster.")
+      message("patristic_matrix has two taxa only, you don't need to cluster.")
       return(NA)
   } else {
         phyclust <- vector(mode = "list", length = 9)

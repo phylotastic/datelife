@@ -104,7 +104,7 @@ filter_for_grove <- function(datelife_result, criterion= "taxa", n = 2) {
   return(datelife_result[final_trees])
 }
 
-#' Get the best grove from a datelifeResult object that can be summmarized with median or sdm.
+#' Get grove from a datelifeResult object that can be converted to phylo from a median summary matrix.
 #' @inheritParams filter_for_grove
 #' @return A list of two elements:
 #' \describe{
@@ -114,25 +114,24 @@ filter_for_grove <- function(datelife_result, criterion= "taxa", n = 2) {
 #'	}
 #' }
 #' @export
+#' @details 
 get_best_grove <- function(datelife_result, criterion = "taxa", n = 2){
     # for testing:
     # utils::data(subset2_taxa)
     # spp_query <- make_datelife_query(subset2_taxa)
     # datelife_result <- get_datelife_result(spp_query)
     datelife_result <- check_datelife_result(datelife_result)
-	median.result <- NULL
-  	while(!inherits(median.result, "phylo")){
-          message(paste0("Trying with overlap = ", n, "\n"))
-  	  best_grove <- filter_for_grove(datelife_result,
-  					criterion = criterion, n = n)
+	  median_nj <- NULL
+  	while(!inherits(median_nj, "phylo")){
+      message(paste0("Trying with overlap = ", n, "\n"))
+  	  best_grove <- filter_for_grove(datelife_result, criterion = criterion, n = n)
       # length(best_grove)
       # we use patristic_matrix_to_phylo as a test that the grove can be clustered into a tree
-      # for that we first get the median matrix and then try to cluster catching the error
+      # for that we first get the median matrix and then try to cluster (with njs) catching the error
       # until we get a tree
-      median.matrix <- datelife_result_median_matrix(best_grove)
-   	  median.result <- tryCatch(suppressMessages(suppressWarnings(patristic_matrix_to_phylo(median.matrix,
-                  clustering_method = "nj", fix_negative_brlen = TRUE))),
-                  error = function(e) NULL)
+      median_matrix <- datelife_result_median_matrix(best_grove)
+   	  median_nj <- tryCatch(suppressMessages(suppressWarnings(ape::njs(median_matrix))),
+        error = function (e) NA)
       # issue: sometimes max(ape::branching.times) is off (too big or too small), so we could
   		# standardize by real median of original data (max(mrcas)).
   		# median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))

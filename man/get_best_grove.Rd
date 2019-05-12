@@ -2,7 +2,7 @@
 % Please edit documentation in R/groves.R
 \name{get_best_grove}
 \alias{get_best_grove}
-\title{Get the best grove from a datelifeResult object that can be summmarized with median or sdm.}
+\title{Get grove from a datelifeResult object that can be converted to phylo from a median summary matrix.}
 \usage{
 get_best_grove(datelife_result, criterion = "taxa", n = 2)
 }
@@ -23,5 +23,5 @@ A list of two elements:
 }
 }
 \description{
-Get the best grove from a datelifeResult object that can be summmarized with median or sdm.
+Get grove from a datelifeResult object that can be converted to phylo from a median summary matrix.
 }

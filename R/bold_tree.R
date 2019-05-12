@@ -4,6 +4,7 @@
 #' @param marker A character vector indicating the gene from BOLD system to be used for branch length estimation.
 #' @param chronogram Boolean. If TRUE (default), branch lengths returned are estimated with ape::chronoMPL. If FALSE, branch lengths returned are estimated with phangorn::acctran and represent relative substitution rates .
 #' @param doML Boolean; only relevant if chronogram = TRUE. If TRUE, it does ML branch length optimization with phangorn::optim.pml
+#' @inheritParams get_otol_synthetic_tree
 #' @inheritDotParams get_otol_synthetic_tree
 #' @return A phylogeny with branch lengths proportional to relative substitution rate.
 #' @details

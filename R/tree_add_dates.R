@@ -2,7 +2,7 @@
 #' Fabricates dates of missing taxa (with no data) on an already dated tree.
 #' @param dated_tree a tree (newick or phylo) with branch lengths proportional to absolute time
 #' @inheritParams  missing_taxa_check
-#' @inheritParams datelife_search
+#' @param dating_method The method used for tree dating.
 #' @param adding_criterion Only valid when dating_method = "mrbayes". A character vector to specify how missing_taxa should be added to dated_tree.
 #' 	 Choose one of:
 #' \describe{
@@ -16,7 +16,8 @@
 #' @inheritParams make_mrbayes_runfile
 #' @return A phylo object
 #' @export
-tree_add_dates <- function(dated_tree = NULL, missing_taxa = NULL, dating_method = "mrbayes", adding_criterion = "random", mrbayes_output_file = "mrbayes_tree_add_dates.nexus"){
+tree_add_dates <- function(dated_tree = NULL, missing_taxa = NULL, dating_method = "mrbayes", 
+adding_criterion = "random", mrbayes_output_file = "mrbayes_tree_add_dates.nexus"){
 	dated_tree <- tree_check(tree = dated_tree, dated = TRUE)
 	missing_taxa <- missing_taxa_check(missing_taxa = missing_taxa, dated_tree = dated_tree)
 	dating_method <- match.arg(dating_method, c("bladj", "mrbayes"))

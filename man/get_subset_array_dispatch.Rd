@@ -15,6 +15,8 @@ get_subset_array_dispatch(study_element, taxa, phy = NULL, phy4 = NULL,
 \item{phy}{A user tree to congruify as phylo object (ape)}
 
 \item{phy4}{A user tree to congruify in phylo4 format (phylobase)}
+
+\item{dating_method}{The method used for tree dating.}
 }
 \value{
 A patristic matrix with ages for the target taxa.

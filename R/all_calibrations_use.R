@@ -23,7 +23,7 @@ use_all_calibrations <- function(input = NULL, ...) { # dating_method = "bladj",
 				phy <- get_dated_otol_induced_subtree(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
 			}
 		}
-		datelife_query <- make_datelife_query(input = input, verbose = verbose) # it removes singleton nodes in phy
+		datelife_query <- make_datelife_query(input = input, verbose = FALSE) # it removes singleton nodes in phy
 		# if input is not a tree, get one with bold or just otol:
 		if(!inherits(datelife_query$phy, "phylo")){
 			phy <- make_bold_otol_tree(datelife_query$cleaned_names, chronogram = FALSE, verbose = FALSE)
@@ -34,7 +34,7 @@ use_all_calibrations <- function(input = NULL, ...) { # dating_method = "bladj",
 		calibrations <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), ...)
 		# date the tree with bladj, pathd8 if branch lengths:
 		chronogram <- use_calibrations(phy, calibrations)
-		return(list(phy = chronogram, calibrations.df = calibrations.df))
+		return(list(phy = chronogram, calibrations.df = calibrations))
 }
 
 #' Perform a dating analysis on a tree topology using a determined set of calibrations.
@@ -55,14 +55,14 @@ use_calibrations <- function(phy = NULL, calibrations = NULL, dating_method = "b
 	dating_method <- match.arg(tolower(dating_method), c("bladj", "pathd8"))
 	if(dating_method %in% "bladj"){
 		phy$edge.length <- NULL
-		chronogram <- use_all_calibrations_bladj(phy, calibrations, type)
+		chronogram <- use_calibrations_bladj(phy, calibrations, type)
 	}
 	if(dating_method %in% "pathd8"){
 		if(is.null(phy$edge.length)){
 			message('phy has no branch lengths, using dating_method = "bladj" instead.')
-			chronogram <- use_all_calibrations_bladj(phy, calibrations, type)
+			chronogram <- use_calibrations_bladj(phy, calibrations, type)
 		}
-		chronogram <- use_all_calibrations_pathd8(phy, calibrations, ...)
+		chronogram <- use_calibrations_pathd8(phy, calibrations, ...)
 	}
 	return(chronogram)
 }
