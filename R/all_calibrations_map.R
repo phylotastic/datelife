@@ -42,7 +42,7 @@ map_all_calibrations <- function(phy, calibrations){
         calibrations2 <- calibrations2[order(target_tree_nodes2),]
         calibrations2$MaxAge <- sapply(all_ages, max)
         calibrations2$MinAge <- sapply(all_ages, min)
-        calibrations$NodeNames <- paste0("n", all_nodes)
+        calibrations2$NodeNames <- paste0("n", all_nodes)
         if(all(all_nodes < ape::Ntip(phy))){
             all_nodes_numbers <- all_nodes + ape::Ntip(phy)
     		node_index <- "consecutive"

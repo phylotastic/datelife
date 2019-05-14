@@ -14,10 +14,10 @@
 use_calibrations_bladj <- function(phy, calibrations, type = "median"){
 	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
 	calibs <- map_all_calibrations(phy, calibrations)
-  if(nrow(calibs$calibrations) == 0){
-    message("Nodes in calibrations (determined by taxon pairs) do not match any nodes in phy; phy cannot be dated")
-    return(NA)
-  }
+    if(nrow(calibs$calibrations) == 0){
+      message("Nodes in calibrations (determined by taxon pairs) do not match any nodes in phy; phy cannot be dated")
+      return(NA)
+    }
 	if("mean" %in% type){
 	  node_ages <- sapply(calibs$phy$calibration_distribution, mean)
     }
@@ -36,7 +36,7 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median"){
   # it will not run if there is no calibration for the root
   node_names <- calibs$calibrations$NodeNames
   if(!"n1" %in% calibs$calibrations$NodeNames){
-    node_ages <- c(max(node_ages) + mean(abs(diff(node_ages))), node_ages)
+    node_ages <- c(max(node_ages) + mean(abs(diff(sort(node_ages)))), node_ages)
     node_names <- c("n1", node_names)
   }
 	new_phy <- make_bladj_tree(tree = calibs$phy, nodeages = node_ages,

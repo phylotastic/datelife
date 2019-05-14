@@ -14,6 +14,7 @@
 #' a tree with no branch lengths (either the original input topology or the OToL tree
 #' obtained for the set of input taxon names.
 #' @export
+# input <- phyloall[[1]]
 make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"),
 marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = FALSE, ...) {
 	# enhance: add an input check here to accept newick strings too
@@ -34,6 +35,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 	# if(length(input)%%250 != 0) {
 	# 	yy[length(xx)] <- length(input)
 	# }
+	phy$tip.label <- gsub("_", " ", phy$tip.label)
 	input <- gsub("_", " ", input)
 	sequences <- c()
 	progression <- utils::txtProgressBar(min = 0, max = length(input), style = 3)
