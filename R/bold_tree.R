@@ -35,6 +35,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 	# if(length(input)%%250 != 0) {
 	# 	yy[length(xx)] <- length(input)
 	# }
+	phy$edge.length <- NULL # making sure there are no branch lengths in phy
 	phy$tip.label <- gsub(" ", "_", phy$tip.label) # so phangorn::acctran works
 	input <- gsub("_", " ", input) # so bold search works
 	sequences <- c()
