@@ -35,8 +35,8 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 	# if(length(input)%%250 != 0) {
 	# 	yy[length(xx)] <- length(input)
 	# }
-	phy$tip.label <- gsub("_", " ", phy$tip.label)
-	input <- gsub("_", " ", input)
+	phy$tip.label <- gsub(" ", "_", phy$tip.label) # so phangorn::acctran works
+	input <- gsub("_", " ", input) # so bold search works
 	sequences <- c()
 	progression <- utils::txtProgressBar(min = 0, max = length(input), style = 3)
 	for (i in seq(length(input))){
@@ -46,7 +46,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 		# so in here we just retrieve all sequences and filter after
 		utils::setTxtProgressBar(progression, i)
 	}
-	# cat("\n") # just to make the progress bar look better
+	cat("\n") # just to make the progress bar look better
 	sequences <- sequences[grepl(marker, sequences$markercode), ] # filter other markers
 	if(length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available; if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
 		# if (!use_tnrs) cat("Setting use_tnrs = TRUE might change this, but it can be slowish.", "\n")
@@ -62,15 +62,6 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 
 	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
 	final.sequences.names <- rep(NA, length(input))
-	# for (i in sequence(dim(sequences)[1])) {
-		# taxon <- sequences$species_name[i]
-		# if(!(taxon %in% final.sequences.names)) {
-			# seq <- strsplit(sequences$nucleotide[i],"")[[1]]
-			# matching.index <- 1+sum(!is.na(final.sequences.names))
-			# final.sequences[matching.index, sequence(length(seq))] <- seq
-			# final.sequences.names[matching.index] <- taxon
-		# }
-	# }
 	row.index <- 0
 	taxa.to.drop <- c()
 	for (i in input){
@@ -96,8 +87,6 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 			message("BOLD sequences found only for one input name: ", input[which(!input %in% taxa.to.drop)], ".","\n","\t", "Cannot construct a tree." )
 		}
 		message("There are not enough sequences available in BOLD to reconstruct branch lengths. Returning tree with no branch lengths.")
-		# if (use_tnrs == FALSE) cat("Setting use_tnrs = TRUE might change this, but it is time consuming.", "\n")
-		phy$tip.label <- gsub(' ', '_', phy$tip.label)
 		return(phy)
 	}
 	if(length(taxa.to.drop) > 0) {
@@ -106,7 +95,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 			message("No ", marker, " sequences found for ", taxa.to.drop.print, ".", "\n", "\t", "Dropping taxa from tree.")
 		}
 		#warning("No ", marker, " sequences found for ", taxa.to.drop.print, "...", "\n", "\t", "Taxa dropped from tree.")
-		taxa.to.drop <- gsub("_", " ", taxa.to.drop)
+		taxa.to.drop <- gsub(" ", "_", taxa.to.drop)
 		phy <- ape::drop.tip(phy, taxa.to.drop)
 	}
 	if (verbose) {
@@ -121,8 +110,6 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 	# this usually happens when the input/otol tree has only two tips
 	if(length(alignment) <= 2){
 		message("There are not enough sequences available in BOLD to reconstruct branch lengths. Returning tree with no branch lengths.")
-		# if (use_tnrs == FALSE) cat("Setting use_tnrs = TRUE might change this, but it is time consuming.", "\n")
-		phy$tip.label <- gsub(' ', '_', phy$tip.label)
 		return(phy)
 	}
 	xx <- phangorn::acctran(phy, alignment)
