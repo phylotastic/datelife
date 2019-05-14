@@ -97,6 +97,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 		}
 		message("There are not enough sequences available in BOLD to reconstruct branch lengths. Returning tree with no branch lengths.")
 		# if (use_tnrs == FALSE) cat("Setting use_tnrs = TRUE might change this, but it is time consuming.", "\n")
+		phy$tip.label <- gsub(' ', '_', phy$tip.label)
 		return(phy)
 	}
 	if(length(taxa.to.drop) > 0) {
@@ -105,7 +106,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 			message("No ", marker, " sequences found for ", taxa.to.drop.print, ".", "\n", "\t", "Dropping taxa from tree.")
 		}
 		#warning("No ", marker, " sequences found for ", taxa.to.drop.print, "...", "\n", "\t", "Taxa dropped from tree.")
-		taxa.to.drop <- gsub(" ", "_", taxa.to.drop)
+		taxa.to.drop <- gsub("_", " ", taxa.to.drop)
 		phy <- ape::drop.tip(phy, taxa.to.drop)
 	}
 	if (verbose) {
@@ -115,6 +116,14 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
 	if (verbose) {
 		message( "\t", "OK.", "\n", "Estimating BOLD-OToL tree...")
+	}
+	# if there are only two sequences in the alignment phangorn::acctran will throw an error
+	# this usually happens when the input/otol tree has only two tips
+	if(length(alignment) <= 2){
+		message("There are not enough sequences available in BOLD to reconstruct branch lengths. Returning tree with no branch lengths.")
+		# if (use_tnrs == FALSE) cat("Setting use_tnrs = TRUE might change this, but it is time consuming.", "\n")
+		phy$tip.label <- gsub(' ', '_', phy$tip.label)
+		return(phy)
 	}
 	xx <- phangorn::acctran(phy, alignment)
 	pml.object <- phangorn::pml(xx, data = alignment)
@@ -147,7 +156,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 			phy <- phangorn::optim.pml(pml.object, data = alignment, rearrangement = "none", optRooted = TRUE, optQ = TRUE)$tree
 		}
 	}
-	phy$tip.label <- gsub('_', ' ', phy$tip.label)
+	phy$tip.label <- gsub(' ', '_', phy$tip.label)
 	if (verbose) {
 		message("Done.")
 	}
