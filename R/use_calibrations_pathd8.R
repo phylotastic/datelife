@@ -29,17 +29,18 @@ use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 10
     #     message("phy cannot be dated")
     #     return(list(phy = NA, calibrations = calibrations))
     # }
+    # following checks wether all calibrations in calibrations are present in phy, and returns that in calibs$present_calibrations
     calibs <- match_all_calibrations(phy, calibrations)
     chronogram <- NA
     if(expand != 0) {
         attempts = 0
-        used_calibrations <- calibrations
+        used_calibrations <- calibs$present_calibrations
         try(chronogram <- geiger::PATHd8.phylo(phy, used_calibrations), silent = TRUE)
         # original_calibrations <- get_all_calibrations(phy2)
-        while(is.null(chronogram) & attempts < giveup) {
-            # print(rep(attempts, 10))
-            used_calibrations <- calibrations
-            used_calibrations$MaxAge <- used_calibrations$MaxAge * ((1+expand)^attempts)
+        while(!inherits(chronogram, "phylo") & attempts < giveup) {
+            print(rep(attempts, 10))
+            used_calibrations <- calibs$present_calibrations
+            used_calibrations$MaxAge <- as.numeric(used_calibrations$MaxAge) * ((1+expand)^attempts)
             used_calibrations$MinAge <- used_calibrations$MinAge * ((1-expand)^attempts)
             # We will have no fixed ages. Pathd8 just quietly gives up. So instead, we add a tiny branch with a zero calibration
             # between it and its sister.
@@ -52,7 +53,10 @@ use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 10
             # used_calibrations <- get_all_calibrations(cetaceae_phyloall[2])
             # Error in write.pathd8(phy, used_calibrations, base): Some calibrations not encountered in tree
             if(!is.null(chronogram)) {
-                chronogram$edge.length[which(chronogram$edge.length < 0)] <- 0 #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+                # chronogram$edge.length[which(chronogram$edge.length < 0)] <- 0
+                #sometimes pathd8 returns tiny negative branch lengths. https://github.com/phylotastic/datelife/issues/11
+                # fix this with tree_fix_brlen
+                chronogram <- tree_fix_brlen(chronogram, fixing_criterion = "negative", fixing_method = 0, ultrametric = FALSE)
                 chronogram <- ape::drop.tip(chronogram, "tinytip")
             }
             attempts <- attempts+1
