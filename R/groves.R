@@ -114,7 +114,7 @@ filter_for_grove <- function(datelife_result, criterion= "taxa", n = 2) {
 #'	}
 #' }
 #' @export
-#' @details 
+# #' @details 
 get_best_grove <- function(datelife_result, criterion = "taxa", n = 2){
     # for testing:
     # utils::data(subset2_taxa)

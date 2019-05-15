@@ -10,7 +10,7 @@ use_calibrations(phy = NULL, calibrations = NULL,
 \arguments{
 \item{phy}{A phylo object}
 
-\item{calibrations}{A data frame of calibrations from get_all_calibrations function}
+\item{calibrations}{A data frame of calibrations from get_all_calibrations function, or a subset of it.}
 
 \item{dating_method}{The method used for tree dating.}
 
@@ -21,7 +21,7 @@ use_calibrations(phy = NULL, calibrations = NULL,
   \item{expand}{How much to expand by each step to get consistent calibrations. Should be between 0 and 1.}
   \item{giveup}{How many expansions to try before giving up}
   \item{phy}{A phylo object}
-  \item{calibrations}{A data frame of calibrations from get_all_calibrations function}
+  \item{calibrations}{A data frame of calibrations from get_all_calibrations function, or a subset of it.}
 }}
 }
 \value{

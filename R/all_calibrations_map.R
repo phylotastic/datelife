@@ -11,7 +11,7 @@
 #' @export
 # calibrations <- get_all_calibrations(cetaceae_phyloall)
 # phy <- cetaceae_phyloall[[2]]
-map_all_calibrations <- function(phy, calibrations){
+match_all_calibrations <- function(phy, calibrations){
     # get the coincident node numbers:
     # ape::is.binary(target_tree)
     if (!inherits(phy, "phylo")){
@@ -25,7 +25,7 @@ map_all_calibrations <- function(phy, calibrations){
     calibrations <- calibrations[which(calibrations$taxonB %in% phy$tip.label),]
     if(nrow(calibrations) == 0){
         message("Taxon name pairs do not match phy tip labels.")
-        calibrations2 <- calibrations
+        calibrations2 <- NA
     } else {
         age_column <- grep("age", tolower(names(calibrations))) # get columns with "age" in their names
         target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
@@ -54,5 +54,5 @@ map_all_calibrations <- function(phy, calibrations){
     	phy <- tree_add_nodelabels(tree = phy, node_index = node_index)  # all nodes need to be named so make_bladj_tree runs properly
         phy$calibration_distribution <- stats::setNames(all_ages, all_nodes_numbers)
     }
-    return(list(phy = phy, calibrations = calibrations2, all_calibrations = calibrations))
+    return(list(phy = phy, matched_calibrations = calibrations2, present_calibrations = calibrations))
 }

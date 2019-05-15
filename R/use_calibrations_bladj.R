@@ -13,7 +13,7 @@
 #' @export
 use_calibrations_bladj <- function(phy, calibrations, type = "median"){
 	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
-	calibs <- map_all_calibrations(phy, calibrations)
+	calibs <- match_all_calibrations(phy, calibrations)
     if(nrow(calibs$calibrations) == 0){
       message("Nodes in calibrations (determined by taxon pairs) do not match any nodes in phy; phy cannot be dated")
       return(NA)

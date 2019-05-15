@@ -3,7 +3,7 @@
 \name{use_all_calibrations}
 \alias{use_all_calibrations}
 \title{Perform a dating analysis on a set of input taxa.
-It uses all calibrations from chronograms in the datelife database.}
+It searches and uses all calibrations from chronograms in the DateLife database.}
 \usage{
 use_all_calibrations(input = NULL, ...)
 }
@@ -26,7 +26,7 @@ A list with a chronogram and all calibrations found
 }
 \description{
 Perform a dating analysis on a set of input taxa.
-It uses all calibrations from chronograms in the datelife database.
+It searches and uses all calibrations from chronograms in the DateLife database.
 }
 \details{
 If input is a tree, it will get all calibrations and date it with bladj if it

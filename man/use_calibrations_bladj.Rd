@@ -9,7 +9,7 @@ use_calibrations_bladj(phy, calibrations, type = "median")
 \arguments{
 \item{phy}{A phylo object}
 
-\item{calibrations}{A data frame of calibrations from get_all_calibrations function}
+\item{calibrations}{A data frame of calibrations from get_all_calibrations function, or a subset of it.}
 
 \item{type}{The type of age to use as calibration.}
 }

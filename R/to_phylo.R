@@ -368,9 +368,9 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
 
 
   # ATTENTION
-  # start of use_all_calibrations_bladj, that contains map_all_calibrations
+  # start of use_all_calibrations_bladj, that contains match_all_calibrations
   # use_all_calibrations_bladj(phy = target_tree, calibrations = caibrations, type = use)
-  # start of map_all_calibrations:
+  # start of match_all_calibrations:
   # get the coincident node numbers:
   # ape::is.binary(target_tree)
 	target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
@@ -393,7 +393,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
 	}
 	target_tree$node.label <- NULL # make sure its null, so we can rename all nodes of interest to match our labels
 	target_tree <- tree_add_nodelabels(tree = target_tree, node_index = node_index)  # all nodes need to be named so make_bladj_tree runs properly
-    # end of map_all_calibrations
+    # end of match_all_calibrations
   if("mean" %in% use){
     node_ages <- sapply(seq(nrow(calibrations2)), function(i) sum(calibrations2[i,c("MinAge", "MaxAge")])/2)
   }

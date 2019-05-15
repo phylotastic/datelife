@@ -11,7 +11,7 @@
 #' a topology with branch lengths. If it can't, it will get the open tree of life
 #' topology only and date it with bladj.
 use_all_calibrations <- function(input = NULL, ...) { # dating_method = "bladj",
-		# use congruification to expand calibrations: already implemented in map_all_calibrations
+		# use congruification to expand calibrations: already implemented in match_all_calibrations
 		# and pathd8 still does not work sometimes
 		# calibrations.df <- eachcal[[2]]
 		# calibrations.df <- calibs$calibration
@@ -46,7 +46,7 @@ use_all_calibrations <- function(input = NULL, ...) { # dating_method = "bladj",
 #' @details
 #' If phy does not have branch lengths, dating_method is ignored and BLADJ will be used.
 use_calibrations <- function(phy = NULL, calibrations = NULL, dating_method = "bladj", type = "median", ...){
-	# check that input names are in calibrations.df: done in map_all_calibrations inside use_calibrations_bladj
+	# check that input names are in calibrations.df: done in match_all_calibrations inside use_calibrations_bladj
 	if(!inherits(phy, "phylo")){
 		message("phy is not a phylo object")
 		return(NA)

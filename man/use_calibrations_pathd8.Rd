@@ -9,7 +9,7 @@ use_calibrations_pathd8(phy, calibrations, expand = 0.1, giveup = 100)
 \arguments{
 \item{phy}{A phylo object}
 
-\item{calibrations}{A data frame of calibrations from get_all_calibrations function}
+\item{calibrations}{A data frame of calibrations from get_all_calibrations function, or a subset of it.}
 
 \item{expand}{How much to expand by each step to get consistent calibrations. Should be between 0 and 1.}
 
