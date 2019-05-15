@@ -7,7 +7,7 @@
 
 #' Use calibrations to date a topology with bladj.
 #' @param phy A phylo object
-#' @param calibrations A data frame of calibrations from get_all_calibrations function
+#' @param calibrations A data frame of calibrations from get_all_calibrations function, or a subset of it.
 #' @param type The type of age to use as calibration.
 #' @return A phylo object
 #' @export

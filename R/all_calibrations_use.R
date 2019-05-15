@@ -1,5 +1,5 @@
 #' Perform a dating analysis on a set of input taxa.
-#' It uses all calibrations from chronograms in the datelife database.
+#' It searches and uses all calibrations from chronograms in the DateLife database.
 #' @inheritParams datelife_search
 #' @inheritDotParams get_all_calibrations
 #' @return A list with a chronogram and all calibrations found
