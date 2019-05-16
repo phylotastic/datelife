@@ -86,14 +86,17 @@ use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 10
     if(inherits(chronogram, "phylo")) {
         # sometimes pathd8 returns tiny negative branch lengths.
         # https://github.com/phylotastic/datelife/issues/11
-        chronogram <- tree_fix_brlen(tree = chronogram, fixing_criterion =
-            "negative", fixing_method = 0, ultrametric = TRUE)
-        # chronogram$edge.length[which(chronogram$edge.length<0)] <- 0
+        problem <- NULL
         if(is.null(chronogram$edge.length) | all(is.na(chronogram$edge.length))){
             problem <- "PATHd8 returned a tree with no branch lengths."
         }
         if(all(chronogram$edge.length == 0)){
-            problem <- "PATHd8 returned a tree with branch lengths equal 0."
+            problem <- "PATHd8 returned a tree with branch lengths equal to 0."
+        }
+        if(is.null(problem)){ # then fix negative branch lengths
+            # chronogram$edge.length[which(chronogram$edge.length<0)] <- 0
+            chronogram <- tree_fix_brlen(tree = chronogram, fixing_criterion =
+                "negative", fixing_method = 0, ultrametric = TRUE)
         }
         if(round(max(ape::node.depth.edgelength(chronogram)), digits = 3) == 1){
             problem <- "Edge lengths seem to be relative to maximum age = 1 (and not absolute to time given by calibrations)."
