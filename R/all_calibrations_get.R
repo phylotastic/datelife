@@ -64,6 +64,6 @@ summarize_summary_matrix <- function(summ_matrix){
     	calibrations <- calibrations[calibrations[,"Age"] > 0, ] # get rid of negative values too
     	if(any(is.na(calibrations[,"Age"]))){
     		warning("for some reason there are still NAs in the matrix")}
-    	# enhance: where does this negative values come from in SDM?
+    	# SDM summary matrix sometimes has negative values, bc ages are transformed to be approximated in a similar way as a linear regression
         return(calibrations)
 }

@@ -111,23 +111,25 @@ tree_add_outgroup <- function(tree = NULL, outgroup = "outgroup"){
 
 #' Checks if phy is a phylo class object and/or a chronogram
 #' @param phy A phylo object
-#' @param dated Boolean. If TRUE it checks if phylo object has branch lengths and is ultrametric.
+#' @param brlen Boolean. If TRUE it checks if phylo object has branch lengths.
+#' @param dated Boolean. If TRUE it checks if phylo object is ultrametric.
 #' @return Nothing
 #' @export
-phylo_check <- function(phy = NULL, dated = FALSE){
+phylo_check <- function(phy = NULL, brlen = FALSE, dated = FALSE){
 	if (!inherits(phy, "phylo")){
 		stop("tree is not a phylo object")
 	}
-	if(dated){
+	if(brlen){
 		if(!phylo_has_brlen(phy = phy)){
 			stop("tree must have branch lengths")
 		}
+	}
+	if(dated){
 		if(!ape::is.ultrametric(phy, option = 2)){
 			warning("branch lengths in tree should be proportional to time")
-			stop("tree must be ultrametric")  # is this true?  # Think how to incorporate trees with extinct taxa
+			stop("tree must be ultrametric")  # really?  # Think how to incorporate trees with extinct taxa
 		}
 	}
-	# return(phy)
 }
 
 #' Checks if a tree is a phylo class object otherwise it uses input_process. Additionally it can check if tree is a chronogram with phylo_check

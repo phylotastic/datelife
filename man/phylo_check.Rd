@@ -4,12 +4,14 @@
 \alias{phylo_check}
 \title{Checks if phy is a phylo class object and/or a chronogram}
 \usage{
-phylo_check(phy = NULL, dated = FALSE)
+phylo_check(phy = NULL, brlen = FALSE, dated = FALSE)
 }
 \arguments{
 \item{phy}{A phylo object}
 
-\item{dated}{Boolean. If TRUE it checks if phylo object has branch lengths and is ultrametric.}
+\item{brlen}{Boolean. If TRUE it checks if phylo object has branch lengths.}
+
+\item{dated}{Boolean. If TRUE it checks if phylo object is ultrametric.}
 }
 \value{
 Nothing

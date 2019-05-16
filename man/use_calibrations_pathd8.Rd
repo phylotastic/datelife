@@ -27,6 +27,6 @@ If that fails (often due to conflict between calibrations), it will expand the
 range of the minimum age and maximum age and try again. And repeat.
 If expand = 0, it uses the summarized calibrations.
 In some cases, it returns edge lengths in relative time (with maximum tree depth = 1)
-instead of absolute time, as given by calibrations. In this case, the function returns NA. 
+instead of absolute time, as given by calibrations. In this case, the function returns NA.
 This is an issue from PATHd8.
 }

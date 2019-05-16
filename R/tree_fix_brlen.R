@@ -1,21 +1,22 @@
-# functions to fix negative or null branch lengths and to add dates of missing taxa at random
+# functions to fix negative or null branch lengths from an ultranetric treem, and to add dates of missing taxa at random
 
-#' Takes a tree and fixes negative or zero length branches in several ways
+#' Takes a tree with branch lengths and fixes negative or zero length branches in several ways
 #' @param tree A tree either as a newick character string or as a phylo object
-#' @param fixing_criterion A character vector specifying the type of branch length to be fixed: "negative" or "zero"
+#' @param fixing_criterion A character vector specifying the type of branch length to be fixed: "negative" or "zero" (the number 0 is also allowed).
 #' @param fixing_method A character vector specifying the method to fix branch lengths: "bladj", "mrbayes" or a number to be assigned to all branches meeting fixing_criterion
 #' @param ultrametric Boolean indicating whether to force ultrametric or not.
 #' @return A phylo object with fixed branch lengths
 #' @export
 tree_fix_brlen <- function(tree = NULL, fixing_criterion = "negative", fixing_method = 0, ultrametric = TRUE){
-	phy <- tree_check(tree = tree)
+	phy <- tree_check(tree = tree, brlen = TRUE, dated = FALSE)
 	# phytools::force.ultrametric fixes negative branch lengths at some extent, but it sometimes leaves tiny neg branches still; those can be fixed later in here.
-	# but it is helpful to keep the tree ultrametric, so it is implememted within force_ultrametric:
+	# but it is helpful to keep the tree ultrametric, that is implememted within force_ultrametric:
 	if(ultrametric){
 		phy <- force_ultrametric(phy)
 	}
 	# enhance: allow to fix both neg and zero at the same time!
-	fixing_criterion <- match.arg(arg = fixing_criterion, choices = c("negative", "zero"), several.ok = FALSE)
+	fixing_criterion <- match.arg(arg = as.character(fixing_criterion), choices =
+		c("negative", "zero", "0"), several.ok = FALSE)
 	if(fixing_criterion == "negative"){
 		index <- which(phy$edge.length < 0)  # identifies edge numbers with negative edge lengths value
 	} else {

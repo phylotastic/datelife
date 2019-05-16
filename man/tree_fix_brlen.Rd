@@ -2,7 +2,7 @@
 % Please edit documentation in R/tree_fix_brlen.R
 \name{tree_fix_brlen}
 \alias{tree_fix_brlen}
-\title{Takes a tree and fixes negative or zero length branches in several ways}
+\title{Takes a tree with branch lengths and fixes negative or zero length branches in several ways}
 \usage{
 tree_fix_brlen(tree = NULL, fixing_criterion = "negative",
   fixing_method = 0, ultrametric = TRUE)
@@ -10,7 +10,7 @@ tree_fix_brlen(tree = NULL, fixing_criterion = "negative",
 \arguments{
 \item{tree}{A tree either as a newick character string or as a phylo object}
 
-\item{fixing_criterion}{A character vector specifying the type of branch length to be fixed: "negative" or "zero"}
+\item{fixing_criterion}{A character vector specifying the type of branch length to be fixed: "negative" or "zero" (the number 0 is also allowed).}
 
 \item{fixing_method}{A character vector specifying the method to fix branch lengths: "bladj", "mrbayes" or a number to be assigned to all branches meeting fixing_criterion}
 
@@ -20,5 +20,5 @@ tree_fix_brlen(tree = NULL, fixing_criterion = "negative",
 A phylo object with fixed branch lengths
 }
 \description{
-Takes a tree and fixes negative or zero length branches in several ways
+Takes a tree with branch lengths and fixes negative or zero length branches in several ways
 }

@@ -10,7 +10,7 @@
 #' range of the minimum age and maximum age and try again. And repeat.
 #' If expand = 0, it uses the summarized calibrations.
 #' In some cases, it returns edge lengths in relative time (with maximum tree depth = 1)
-#' instead of absolute time, as given by calibrations. In this case, the function returns NA. 
+#' instead of absolute time, as given by calibrations. In this case, the function returns NA.
 #' This is an issue from PATHd8.
 # i=3
 # phy <- tax_phyloall_bold[[1]][[i]]
@@ -90,14 +90,16 @@ use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 10
             "negative", fixing_method = 0, ultrametric = TRUE)
         # chronogram$edge.length[which(chronogram$edge.length<0)] <- 0
         if(is.null(chronogram$edge.length) | all(is.na(chronogram$edge.length))){
-            message("PATHd8 returned a tree with no branch lengths.")
-            return(NA)
+            problem <- "PATHd8 returned a tree with no branch lengths."
+        }
+        if(all(chronogram$edge.length == 0)){
+            problem <- "PATHd8 returned a tree with branch lengths equal 0."
         }
         if(round(max(ape::node.depth.edgelength(chronogram)), digits = 3) == 1){
-            message("Edge lengths seem to be relative to maximum age = 1 (and not absolute to time given by calibrations).")
-            message("This is an issue from PATHd8; returning NA.")
-            return(NA)
+            problem <- "Edge lengths seem to be relative to maximum age = 1 (and not absolute to time given by calibrations)."
         }
+        chronogram$problem <- problem
+        message(problem, "This is an issue from PATHd8; returning tree with a $problem.")
         chronogram$dating_method <- "pathd8"
     	chronogram$calibration_distribution <- calibs$phy$calibration_distribution
         chronogram$used_calibrations <- used_calibrations
