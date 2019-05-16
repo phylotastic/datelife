@@ -15,6 +15,7 @@
 #' obtained for the set of input taxon names.
 #' @export
 # input <- phyloall[[1]]
+# input <- tax_phyloallall[[3]][[13]] # it is now working with this input
 make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"),
 marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = FALSE, ...) {
 	# enhance: add an input check here to accept newick strings too
@@ -41,7 +42,10 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 	sequences <- c()
 	progression <- utils::txtProgressBar(min = 0, max = length(input), style = 3)
 	for (i in seq(length(input))){
-		sequences <- rbind(sequences, bold::bold_seqspec(taxon = input[i]))
+		ss <- bold::bold_seqspec(taxon = input[i])
+		if(inherits(ss, "data.frame")){
+			sequences <- rbind(sequences, ss)
+		}
 		# allows up to 335 names, then it gives Error: Request-URI Too Long (HTTP 414)
 		# even if marker is specified, it will return other markers,
 		# so in here we just retrieve all sequences and filter after
