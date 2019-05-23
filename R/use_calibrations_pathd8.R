@@ -85,9 +85,11 @@ use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 10
         # https://github.com/phylotastic/datelife/issues/11
         problem <- NULL
         if(is.null(chronogram$edge.length ) | all(is.na(chronogram$edge.length))){
+            chronogram$edge.length <- NULL
             problem <- "PATHd8 returned a tree with no branch lengths."
         } else {
           if(all(chronogram$edge.length == 0)){
+              chronogram$edge.length <- NULL
               problem <- "PATHd8 returned a tree with branch lengths equal to 0."
           }
           if(is.null(problem)){ # then fix negative branch lengths again
@@ -99,14 +101,16 @@ use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 10
               problem <- "Edge lengths seem to be relative to maximum age = 1 (and not absolute to time given by calibrations)."
           }
         }
+        if(!is.null(problem)){
+            message(paste(problem, "\nThis is an issue from PATHd8; returning tree with a $problem."))
+        }
         chronogram$problem <- problem
-        message(paste(problem, "\nThis is an issue from PATHd8; returning tree with a $problem."))
         chronogram$dating_method <- "pathd8"
     	  chronogram$calibration_distribution <- calibs$phy$calibration_distribution
         chronogram$used_calibrations <- used_calibrations
         chronogram$present_calibrations <- calibs$present_calibrations
     } else {
-      message("\nDating analysis with PATHd8 failed with this tree and set of calibrations.")
+      message("Dating analysis with PATHd8 failed with this tree and set of calibrations.")
       return(NA)
     }
 	return(chronogram)
