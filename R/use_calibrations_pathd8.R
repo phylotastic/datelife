@@ -13,8 +13,8 @@
 #' instead of absolute time, as given by calibrations. In this case, the function returns NA.
 #' This is an issue from PATHd8.
 # i=1
-# phy <- tax_phyloall_bold[[3]][[4]]
-# calibrations <- tax_othercalall[[3]][[4]]
+# phy <- tax_phyloall_bold[[3]][[1]]
+# calibrations <- tax_othercalall[[3]][[1]]
 # phy$edge.length
 # calibrations$MaxAge
 # calibs <- match_all_calibrations(tax_phyloall_bold[[1]][[i]], tax_othercalall[[1]][[i]])
