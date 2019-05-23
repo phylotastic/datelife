@@ -18,7 +18,8 @@
 # input <- tax_phyloallall[[3]][[13]] # it is now working with this input
 make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"),
 marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = FALSE, ...) {
-	# enhance: add an input check here to accept newick strings too
+	# done: add an input check here to accept newick strings too
+	input <- input_process(input, verbose = FALSE)
 	if(inherits(input, "phylo")){
 		phy <- input
 		input <- phy$tip.label
