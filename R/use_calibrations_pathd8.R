@@ -12,11 +12,11 @@
 #' In some cases, it returns edge lengths in relative time (with maximum tree depth = 1)
 #' instead of absolute time, as given by calibrations. In this case, the function returns NA.
 #' This is an issue from PATHd8.
-# i=3
-# phy <- tax_phyloall_bold[[1]][[i]]
-# calibrations <- tax_othercalall[[1]][[i]]
-# tax_phyloall_bold[[1]][[i]]$edge.length
-# tax_othercalall[[1]][[i]]$MaxAge
+# i=1
+# phy <- tax_phyloall_bold[[3]][[4]]
+# calibrations <- tax_othercalall[[3]][[4]]
+# phy$edge.length
+# calibrations$MaxAge
 # calibs <- match_all_calibrations(tax_phyloall_bold[[1]][[i]], tax_othercalall[[1]][[i]])
 # calibs$phy$edge.length
 # used_calibrations <- calibs$matched_calibrations
@@ -26,30 +26,28 @@
 # plot(chronogram, main = i)
 # ape::axisPhylo()
 use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 100){
+    phy <- input_process(phy, verbose = FALSE)
     if (!inherits(phy, "phylo")){
-		message("phy is not a phylo object")
+		    message("phy is not a phylo object")
         return(NA)
 	  }
     if(is.null(phy$edge.length)){
         message("phy does not have branch lengths, consider using a dating method that does not require data, such as BLADJ or MrBayes.")
         return(NA)
     }
-    # phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.
-    # calibrations$taxonA <- gsub(' ', '_', calibrations$taxonA)
-    # calibrations$taxonB <- gsub(' ', '_', calibrations$taxonB)
-    # calibrations <- calibrations[which(calibrations$taxonA %in% phy$tip.label),]
-    # calibrations <- calibrations[which(calibrations$taxonB %in% phy$tip.label),]
-    # if(nrow(calibrations) == 0){
-    #     message("phy cannot be dated")
-    #     return(list(phy = NA, calibrations = calibrations))
-    # }
-    # following checks wether all calibrations in calibrations are present in phy, and returns that in calibs$present_calibrations
+    # fix any negative branch lengths, otherwise pathd8 will silently not work:
+    phy <- tree_fix_brlen(phy, fixing_criterion = "negative", fixing_method = 0, ultrametric = FALSE)
+    # following line checks wether all calibrations are present in phy, and returns that in calibs$present_calibrations
     calibs <- match_all_calibrations(phy, calibrations)
+    if(nrow(calibs$present_calibrations) < 1){
+      message("\nDating analysis is not possible with this set of calibrations.")
+      return(NA)
+    }
     chronogram <- NA
     if(expand != 0) {
         attempts = 0
-        used_calibrations <- calibs$present_calibrations
-        try(chronogram <- geiger::PATHd8.phylo(phy, used_calibrations), silent = TRUE)
+        used_calibrations <- calibs$present_calibrations[,c("MRCA", "MaxAge", "MinAge", "taxonA", "taxonB")]
+        try(chronogram <- suppressWarnings(geiger::PATHd8.phylo(phy, used_calibrations)), silent = TRUE)
         # original_calibrations <- get_all_calibrations(phy2)
         while(!inherits(chronogram, "phylo") & attempts < giveup) {
             # print(rep(attempts, 10))
@@ -78,7 +76,6 @@ use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 10
         if(attempts > 0 & inherits(chronogram, "phylo")) {
             message("Dates are even more approximate than usual: had to expand constraints to have them agree.")
         }
-
     } else { # alternative to expansion: summarize calibrations
         used_calibrations <- calibs$matched_calibrations
         try(chronogram <- geiger::PATHd8.phylo(calibs$phy, used_calibrations), silent = TRUE)
@@ -87,26 +84,30 @@ use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 10
         # sometimes pathd8 returns tiny negative branch lengths.
         # https://github.com/phylotastic/datelife/issues/11
         problem <- NULL
-        if(is.null(chronogram$edge.length) | all(is.na(chronogram$edge.length))){
+        if(is.null(chronogram$edge.length ) | all(is.na(chronogram$edge.length))){
             problem <- "PATHd8 returned a tree with no branch lengths."
-        }
-        if(all(chronogram$edge.length == 0)){
-            problem <- "PATHd8 returned a tree with branch lengths equal to 0."
-        }
-        if(is.null(problem)){ # then fix negative branch lengths
-            # chronogram$edge.length[which(chronogram$edge.length<0)] <- 0
-            chronogram <- tree_fix_brlen(tree = chronogram, fixing_criterion =
-                "negative", fixing_method = 0, ultrametric = TRUE)
-        }
-        if(round(max(ape::node.depth.edgelength(chronogram)), digits = 3) == 1){
-            problem <- "Edge lengths seem to be relative to maximum age = 1 (and not absolute to time given by calibrations)."
+        } else {
+          if(all(chronogram$edge.length == 0)){
+              problem <- "PATHd8 returned a tree with branch lengths equal to 0."
+          }
+          if(is.null(problem)){ # then fix negative branch lengths again
+              # chronogram$edge.length[which(chronogram$edge.length<0)] <- 0
+              chronogram <- tree_fix_brlen(tree = chronogram, fixing_criterion =
+                  "negative", fixing_method = 0, ultrametric = TRUE)
+          }
+          if(round(max(ape::node.depth.edgelength(chronogram)), digits = 3) == 1){
+              problem <- "Edge lengths seem to be relative to maximum age = 1 (and not absolute to time given by calibrations)."
+          }
         }
         chronogram$problem <- problem
-        message(problem, "This is an issue from PATHd8; returning tree with a $problem.")
+        message(paste(problem, "\nThis is an issue from PATHd8; returning tree with a $problem."))
         chronogram$dating_method <- "pathd8"
-    	chronogram$calibration_distribution <- calibs$phy$calibration_distribution
+    	  chronogram$calibration_distribution <- calibs$phy$calibration_distribution
         chronogram$used_calibrations <- used_calibrations
         chronogram$present_calibrations <- calibs$present_calibrations
+    } else {
+      message("\nDating analysis with PATHd8 failed with this tree and set of calibrations.")
+      return(NA)
     }
 	return(chronogram)
 }
