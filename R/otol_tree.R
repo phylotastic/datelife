@@ -1,10 +1,11 @@
 #' Gets Open Tree of Life synthetic tree of a set of lineages.
 #' @inheritParams check_ott_input
 #' @param otol_version Version of OToL to use
+#' @param resolve boolean default to TRUE. Whether to resolve the tree at random or not.
 #' @inheritDotParams make_datelife_query -input
 #' @return A phylo object
 #' @export
-get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version = "v2", ...){
+get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version = "v2", resolve = TRUE, ...){
 	# input <- birds_yellowstone
 	# input <- birds_wiki
 	# input <- c(birds_wiki, "ttttt")
@@ -31,8 +32,12 @@ get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version =
 	if(!ape::is.binary(phy)){
 		message(paste0("OToL synthetic tree of input taxa is not fully resolved (",
 		phy$Nnode, " nodes/", length(phy$tip.label), " tips)."))
-		message("Resolving at random...")
-		phy <- ape::multi2di(phy)
+		if(resolve){
+			message("Resolving at random...")
+			phy <- ape::multi2di(phy)
+		}
+	} else {
+		message("OToL synthetic tree of input taxa is fully resolved.")
 	}
 	# example of weird behaviour on tip labeling from otol:
 	# tnrs <- rotl::tnrs_match_names(c("Staphylococcus aureus", "Bacillus subtilis", "Neisseria meningitidis"))

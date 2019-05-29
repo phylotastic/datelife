@@ -5,7 +5,7 @@
 \title{Gets Open Tree of Life synthetic tree of a set of lineages.}
 \usage{
 get_otol_synthetic_tree(input = NULL, ott_ids = NULL,
-  otol_version = "v2", ...)
+  otol_version = "v2", resolve = TRUE, ...)
 }
 \arguments{
 \item{input}{Optional. A character vector of names or a datelifeQuery object}
@@ -13,6 +13,8 @@ get_otol_synthetic_tree(input = NULL, ott_ids = NULL,
 \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 
 \item{otol_version}{Version of OToL to use}
+
+\item{resolve}{boolean default to TRUE. Whether to resolve the tree at random or not.}
 
 \item{...}{Arguments passed on to \code{make_datelife_query}
 \describe{

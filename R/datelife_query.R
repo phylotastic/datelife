@@ -8,6 +8,8 @@
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 	use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE,
 	verbose = FALSE, ...) {
+		# enhance: add mapped (has tnrs been performed?) and matched (was it matched succesfullly?) element to phylo object
+		# add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
 	if(verbose) {
 		message("Processing input...")
 	}

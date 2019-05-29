@@ -25,6 +25,7 @@ make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus",
 \item{...}{Arguments passed on to \code{get_otol_synthetic_tree}
 \describe{
   \item{otol_version}{Version of OToL to use}
+  \item{resolve}{boolean default to TRUE. Whether to resolve the tree at random or not.}
   \item{input}{Optional. A character vector of names or a datelifeQuery object}
   \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 }}
