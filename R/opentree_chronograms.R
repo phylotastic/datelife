@@ -1,3 +1,4 @@
+
 #' Chronograms in Open Tree of Life and other related data
 #'
 #' Now storing >200 chronograms from OToL
@@ -139,7 +140,10 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 							if(verbose) {
 									message("tree_id = '", tree.id, "', study_id = '", study.id, "'")
 							}
-							try(new.tree <- rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name")) #would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
+							new.tree <- tryCatch(rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name")
+								error = function(e){
+									NULL
+								}) #would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
 							#try(new.tree <- datelife:::get_study_tree_with_dups(study_id=study.id,tree_id=tree.id ))
 							#try(new.tree <- rotl::get_study_subtree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name", subtree_id="ingroup")) #only want ingroup, as it's the one that's been lovingly curated.
 							if(!is.null(new.tree) & phylo_has_brlen(phy = new.tree)) {
@@ -181,9 +185,9 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 
 									}
 								}
+								# add taxonomic nodelabels to trees object here
+								new.tree <- map_nodes_ott(tree = new.tree)
 							}
-							# add taxonomic nodelabels to trees object here
-							new.tree <- map_nodes_ott(tree = new.tree)
 					} else {
 							warning("Not all trees could be loaded from this study due to ellipsis bug, https://github.com/ropensci/rotl/issues/85")
 					}
