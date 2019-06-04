@@ -93,8 +93,15 @@ phylo_has_brlen <- function(phy) {
 # #' @param tree_id Open Tree tree id
 # #' @param tip_label Which Open Tree tree label format you want
 # #' @return A phylo object
-# get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ot:otttaxonname") {
-# 	tr <- rotl:::.get_study_tree(study_id=study_id, tree_id=tree_id, tip_label=tip_label, format="newick")
+# get_study_tree(study_id="pg_710", tree_id="tree1277",
+#                tip_label='ott_taxon_name', file = "/tmp/tree.tre",
+#                file_format = "newick")
+# tr <- ape::read.tree(file = "/tmp/tree.tre")
+# study.id <- "ot_1207"
+# tree.id <- "Tr48913"
+# get_study_tree_with_dups <- function(study_id, tree_id, tip_label="ott_taxon_name") {
+# 	tr <- rotl::get_study_tree(study_id=study_id, tree_id=tree_id, tip_label=tip_label,
+# 		file_format="newick", file = "/data-raw/tree.tre")
 # 	phy <- ape::read.tree(text=gsub(" ", "_", tr))
 # 	phy$tip.label <- gsub("'", "", gsub("_", " ", phy$tip.label))
 # 	return(	phy)
@@ -132,7 +139,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 					study.id <- chronogram.matches$study_ids[study.index]
 					# if(study.id %in% opentree_chronograms$studies)  # unlist(opentree_chronograms$studies) if new_studies_only
 					#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
-					new.tree2 <- new.tree <- NULL
+					try.tree <- new.tree2 <- new.tree <- NULL
 					tree.id <- strsplit(chronogram.matches$match_tree_ids[study.index], ", ")[[1]][chrono.index]
 					potential.bad <- paste("tree_id='", tree.id, "', study_id='", study.id, "'", sep="")
 
@@ -140,7 +147,8 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 							if(verbose) {
 									message("tree_id = '", tree.id, "', study_id = '", study.id, "'")
 							}
-							new.tree <- tryCatch(rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_taxon_name")
+							new.tree <- tryCatch(rotl::get_study_tree(study_id=study.id,tree_id=tree.id,
+								tip_label="ott_taxon_name", deduplicate = TRUE),
 								error = function(e){
 									NULL
 								}) #would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
