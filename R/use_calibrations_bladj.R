@@ -46,46 +46,49 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median"){
     new_phy$calibrations <- calibs$calibrations
 	return(new_phy)
 }
-# #' functions to check if calibrations are younger or older relative to descendants and ancestors, respectively
-# #' @details it removes them if needed, but bladj works as long as it has an age for the root
-# check_nodeages_bladj <- function(phy, node_ages){
-#   if(!inherits(phy, "phylo")){
-#     message("phy is not a phylo object")
-#     return(NA)
-#   }
-#   des <- lapply(as.numeric(names(node_ages)), function(i) phy$edge[phy$edge[,1] == i,2])
-#   anc <- lapply(as.numeric(names(node_ages)), function(i) phy$edge[phy$edge[,2] == i,1])
-#   foo1 <- function(node, des){
-#     des <- des[!is.na(des)]
-#     any(node < des)
-#   }
-#   foo2 <- function(node, anc){
-#     anc <- anc[!is.na(anc)]
-#     any(node > anc)
-#   }
-#   node_ages_des <- lapply(des, function(x) node_ages[as.character(x)])
-#   node_ages_anc <- lapply(anc, function(x) node_ages[as.character(x)])
-#   node_younger <- mapply(foo1, node_ages, node_ages_des) # which node_ages are younger than their descendants
-#   node_older <- mapply(foo2, node_ages, node_ages_anc) # which node_ages are older than their ancestor
-#   list(des, anc, node_ages_des, node_ages_anc, node_younger, node_older)
-# }
-# fix_nodeages_for_bladj <- function(phy, node_ages, remove = TRUE, remove_which = "younger", expand = FALSE){
+#' function to check for conflicting calibrations
+#' if calibrations are younger or older relative to descendants and ancestors, respectively
+#' @details it removes them if needed, but bladj works as long as it has an age for the root
+#' @param calibration_distribution is a list of node ages distributions, named with the node number from phy
+# calibration_distribution <- calibs$phy$calibration_distribution
+check_conflicting_calibrations <- function(phy, calibration_distribution){
+  if(!inherits(phy, "phylo")){
+    message("phy is not a phylo object")
+    return(NA)
+  }
+  des <- lapply(as.numeric(names(calibration_distribution)), function(i) phy$edge[phy$edge[,1] == i,2])
+  anc <- lapply(as.numeric(names(calibration_distribution)), function(i) phy$edge[phy$edge[,2] == i,1])
+  foo1 <- function(node, des){
+    des <- des[!is.na(des)]
+    any(node < des)
+  }
+  foo2 <- function(node, anc){
+    anc <- anc[!is.na(anc)]
+    any(node > anc)
+  }
+  calibration_distribution_des <- sapply(des, function(x) unlist(calibration_distribution[as.character(x)[as.character(x) %in% names(calibration_distribution)]]))
+  calibration_distribution_anc <- lapply(anc, function(x) unlist(calibration_distribution[as.character(x)[as.character(x) %in% names(calibration_distribution)]]))
+  node_younger <- mapply(foo1, calibration_distribution, calibration_distribution_des) # which calibration_distribution are younger than their descendants
+  node_older <- mapply(foo2, calibration_distribution, calibration_distribution_anc) # which calibration_distribution are older than their ancestor
+  list(des, anc, calibration_distribution_des, calibration_distribution_anc, node_younger, node_older)
+}
+# fix_nodeages_for_bladj <- function(phy, calibration_distribution, remove = TRUE, remove_which = "younger", expand = FALSE){
 #   remove <- match.arg(tolower(remove), c("older", "younger"))
-#   node_ages_original <- node_ages
-#   cc <- check_nodeages_bladj(phy, node_ages)
+#   calibration_distribution_original <- calibration_distribution
+#   cc <- check_conflicting_calibrations(phy, calibration_distribution)
 #   if("older" %in% remove){
-#     node_ages <- node_ages[!cc$node_older]
+#     calibration_distribution <- calibration_distribution[!cc$node_older]
 #   }
 #   if("younger" %in% remove){
-#     node_ages <- node_ages[!cc$node_younger]
+#     calibration_distribution <- calibration_distribution[!cc$node_younger]
 #   }
 #   # the root needs to be fixed in bladj always,
 #   # so if it is the root that is younger than any of its descendants, we need to fix that
 #   # we will just add the difference:
 #   if(cc$node_younger[1]){
-#     node_ages[1] <- max(cc$node_ages_des[[1]], na.rm = TRUE) +
-#       abs(max(cc$node_ages_des[[1]], na.rm = TRUE) - node_ages[1])
+#     calibration_distribution[1] <- max(cc$calibration_distribution_des[[1]], na.rm = TRUE) +
+#       abs(max(cc$calibration_distribution_des[[1]], na.rm = TRUE) - calibration_distribution[1])
 #     cc$node_younger[1] <- FALSE
 #   }
-#   node_ages
+#   calibration_distribution
 # }
