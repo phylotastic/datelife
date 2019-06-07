@@ -25,7 +25,7 @@
 # chronogram$edge.length
 # plot(chronogram, main = i)
 # ape::axisPhylo()
-chr <- use_calibrations_treePL(phy, calibrations)
+# chr <- use_calibrations_treePL(phy, calibrations)
 use_calibrations_treePL <- function(phy, calibrations){
     phy <- input_process(phy, verbose = FALSE)
     if (!inherits(phy, "phylo")){

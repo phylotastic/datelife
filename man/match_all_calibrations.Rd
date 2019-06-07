@@ -9,7 +9,7 @@ match_all_calibrations(phy, calibrations)
 \arguments{
 \item{phy}{A phylo object to map calibrations to its nodes}
 
-\item{calibrations}{A data frame of calibrations from get_all_calibrations function}
+\item{calibrations}{A data frame of calibrations from taxon pairs. Usually an output from get_all_calibrations function (see this function for format)}
 }
 \value{
 A list with two elements
@@ -22,5 +22,5 @@ A list with two elements
 Map calibrations to nodes of a tree topology
 }
 \details{
-If input is a phylo object, it is used as backbone. If it is a character vector of taxon names, an induced OToL tree is used as backbone.
+The function will check if taxon pairs in calibrations are present in phy.
 }
