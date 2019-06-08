@@ -19,14 +19,12 @@
 make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"),
 marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = FALSE, ...) {
 	# done: add an input check here to accept newick strings too
-	input <- input_process(input, verbose = FALSE)
-	if(inherits(input, "phylo")){
-		phy <- input
-		input <- phy$tip.label
+	input <- datelife_query_check(input)
+	if(inherits(input$phy, "phylo")){
+		phy <- input$phy
 	} else {
-		phy <- get_otol_synthetic_tree(input = input, otol_version = otol_version, ...)
+		phy <- get_otol_synthetic_tree(ott_ids = input$ott_ids, otol_version = otol_version, ...)
 		#otol returns error with missing taxa in v3 of rotl
-		input <- phy$tip.label
 	}
 	if (verbose) {
 		message("Searching ", marker, " sequences for these taxa in BOLD...")
@@ -39,7 +37,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 	# }
 	phy$edge.length <- NULL # making sure there are no branch lengths in phy
 	phy$tip.label <- gsub(" ", "_", phy$tip.label) # so phangorn::acctran works
-	input <- gsub("_", " ", input) # so bold search works
+	input <- gsub("_", " ", phy$tip.label) # so bold search works
 	sequences <- c()
 	progression <- utils::txtProgressBar(min = 0, max = length(input), style = 3)
 	for (i in seq(length(input))){

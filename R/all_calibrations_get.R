@@ -11,7 +11,9 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 		partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
 		cache = get("opentree_chronograms"), verbose = FALSE) {
 	if(!inherits(input, "datelifeResult") & !inherits(input, "phylo") & !inherits(input, "multiPhylo")){
-		datelife_phylo <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match, update_cache = update_cache, cache = cache, summary_format = "phylo_all", verbose = verbose)
+		datelife_phylo <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs,
+			approximate_match = approximate_match, update_cache = update_cache, cache = cache,
+			summary_format = "phylo_all", verbose = verbose)
 	}
 	# inherits(datelife_phylo, "datelifeResult")
 	if(inherits(input, "datelifeResult")){

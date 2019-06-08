@@ -129,8 +129,8 @@ input_process <- function(input, verbose = FALSE){
 		return(NA)
 	}
  	input <- gsub("\\+"," ",input)
-  	input <- stringr::str_trim(input, side = "both")
-  	phy_new.in <- NA
+  input <- stringr::str_trim(input, side = "both")
+  phy_new.in <- NA
 	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
 		input <- input[grepl("\\(.*\\).*;", input)] # leave only the elements that are newick strings
 		if(length(input)>1){
@@ -142,7 +142,7 @@ input_process <- function(input, verbose = FALSE){
 			message("Input is a phylogeny and it is correcly formatted.")}
 	} else {
 		if(verbose){ #not a requirement for input to be a phylogeny at this point
-			message("Input is not a phylogeny.")} #so messg instead of warning or stop
+			message("Input is not a phylogeny.")} #so message instead of warning or stop
 	}
 	return(phy_new.in)
 }

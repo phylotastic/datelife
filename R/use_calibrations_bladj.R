@@ -14,7 +14,7 @@
 use_calibrations_bladj <- function(phy, calibrations, type = "median"){
 	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
 	calibs <- match_all_calibrations(phy, calibrations)
-    if(nrow(calibs$calibrations) == 0){
+    if(nrow(calibs$matched_calibrations) == 0){
       message("Nodes in calibrations (determined by taxon pairs) do not match any nodes in phy; phy cannot be dated")
       return(NA)
     }
@@ -34,8 +34,8 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median"){
   # otherwise, add one
   # bladj will run if calibrations are in conflict
   # it will not run if there is no calibration for the root
-  node_names <- calibs$calibrations$NodeNames
-  if(!"n1" %in% calibs$calibrations$NodeNames){
+  node_names <- calibs$matched_calibrations$NodeNames
+  if(!"n1" %in% calibs$matched_calibrations$NodeNames){
     node_ages <- c(max(node_ages) + mean(abs(diff(sort(node_ages)))), node_ages)
     node_names <- c("n1", node_names)
   }
@@ -43,7 +43,7 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median"){
 	  nodenames = node_names)
 	new_phy$dating_method <- "bladj"
 	new_phy$calibration_distribution <- calibs$phy$calibration_distribution
-    new_phy$calibrations <- calibs$calibrations
+    new_phy$calibrations <- calibs$matched_calibrations
 	return(new_phy)
 }
 #' function to check for conflicting calibrations

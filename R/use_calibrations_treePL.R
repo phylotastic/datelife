@@ -25,7 +25,8 @@
 # chronogram$edge.length
 # plot(chronogram, main = i)
 # ape::axisPhylo()
-# chr <- use_calibrations_treePL(phy, calibrations)
+# chr <- use_calibrations_treePL(phy = catsanddogs_phyloall[[1]], calibrations = catsanddogs_calibrations)
+
 use_calibrations_treePL <- function(phy, calibrations){
     phy <- input_process(phy, verbose = FALSE)
     if (!inherits(phy, "phylo")){
@@ -35,6 +36,10 @@ use_calibrations_treePL <- function(phy, calibrations){
     if(is.null(phy$edge.length)){
         message("phy does not have branch lengths, consider using a dating method that does not require data, such as BLADJ or MrBayes.")
         return(NA)
+    }
+    if(any(phy$edge.length < 0)){
+      message("phy has not have branch lengths, consider using a dating method that does not require data, such as BLADJ or MrBayes.")
+      phy <- fix_negative_brlen(phy)
     }
     # fix any negative branch lengths, otherwise pathd8 will silently not work:
     phy <- tree_fix_brlen(phy, fixing_criterion = "negative", fixing_method = 0, ultrametric = FALSE)
@@ -51,7 +56,7 @@ use_calibrations_treePL <- function(phy, calibrations){
     # make sure that the max age of the most inclusive calibration (the deepest calibrated node) is at least the same as the oldest internal calibration:
     # first, find the most inclusive node that has a calibration:
     # this is a vector with the number of tips included by each calibrated node:
-    pp <- sapply(prop.part(phy), length)[as.numeric(names(calibs$phy$calibration_distribution))-ape::Ntip(calibs$phy)]
+    pp <- sapply(ape::prop.part(phy), length)[as.numeric(names(calibs$phy$calibration_distribution))-ape::Ntip(calibs$phy)]
     # the most inclusive is the one with the most extant tips,
     # but this might not be true
     # we might have two most inclusive nodes, set up a better test to find these

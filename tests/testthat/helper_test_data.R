@@ -47,6 +47,15 @@ pan_result <- get_datelife_result(pan_query)
 
 catsanddogs_query <- make_datelife_query(input = c("felis", "canidae"), get_spp_from_taxon = TRUE)
 catsanddogs_results <- get_datelife_result(input = catsanddogs_query)
+catsanddogs_phyloall <- summarize_datelife_result(catsanddogs_results, catsanddogs_query, "phylo_all")
+catsanddogs_calibrations <- get_all_calibrations(input = catsanddogs_phyloall)
+catsanddogs_bold <- make_bold_otol_tree(input = catsanddogs_query, chronogram = FALSE)
+ape::is.binary(catsanddogs_bold)
+catsanddogs_bladj <- use_calibrations_bladj(phy = catsanddogs_bold, calibrations = catsanddogs_calibrations)
+catsanddogs_treepl <- use_calibrations_treePL(phy = catsanddogs_bold, calibrations = catsanddogs_calibrations)
+# plot(catsanddogs_treepl$phy)
+# catsanddogs_treepl$phy$edge.length
+
 
 
 utils::data(felid_sdm)
