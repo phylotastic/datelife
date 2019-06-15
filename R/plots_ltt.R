@@ -12,14 +12,17 @@
 #' @param add_legend Boolean
 #' @param add_title Boolean
 #' @export
-plot_ltt_phyloall <- function(taxon, phy, ltt_colors = NULL, tax_datedotol = NULL,
+plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedotol = NULL,
     file_name = NULL, file_dir = NULL, height = 3.5, width = 7, add_legend = FALSE, add_title = FALSE){
 
+    if(!inherits(taxon, "character")){
+      taxon <- "Some species"
+    }
   if(!inherits(file_dir, "character")){
     file_dir <- "~//datelife//data-raw//"
   }
   if(!inherits(file_name, "character")){
-    file_name <- paste0(taxon, "_LTTplot_phyloall.pdf")
+    file_name <- paste0(gsub(" ", "_", taxon), "_LTTplot_phyloall.pdf")
   }
   file_out <- paste0(file_dir, file_name)
   phy_mrca <- sapply(phy, function(x) max(ape::branching.times(x)))
@@ -49,13 +52,17 @@ plot_ltt_phyloall <- function(taxon, phy, ltt_colors = NULL, tax_datedotol = NUL
   lwd_arrows <- 2
   length_arrowhead <- 0.075
   nn <- unique(names(phy))[order(unique(names(phy)))] # get ordered names
+  # get a sample of colors the size of the number of studies (one color for each study):
   if(!inherits(ltt_colors, "character")){
     # col_sample <- sample(gray.colors(n = length(nn)), length(nn))
     col_sample <- sample(rainbow(n = length(nn)), length(nn))
-    col_phyloall_sample <- col_sample[match(names(phy), nn)]
-    write(paste0('"', paste(col_phyloall_sample, collapse = '" '), '"'),
-      file = "~//datelife//data-raw//lttplot_phyloall_colors.txt")
+    write(paste0('"', paste(col_sample, collapse = '", "'), '"'),
+      file = paste0(file_dir, "lttplot_phyloall_colors.txt"))
+  } else {
+    col_sample <- ltt_colors
   }
+  # match the color to each study:
+  col_phyloall_sample <- col_sample[match(names(phy), nn)]
   study_number <- seq(length(nn))[match(names(phy), nn)]
   ss <- which(table(study_number)>1)
   for(ii in ss){ # case when a study has multiple chronograms and we need to adjust x position of number
@@ -78,7 +85,7 @@ plot_ltt_phyloall <- function(taxon, phy, ltt_colors = NULL, tax_datedotol = NUL
         col = paste0("#ffffff", "80"), ylab = paste(taxon, "Species N"),
         xlab = "Time (MYA)")
   cond2 <- (!duplicated(study_number) | !duplicated(round(max_ages)))
-  for (i in seq(length(phy))){
+  for (i in order(phy_mrca, decreasing = TRUE)){ # plot the oldest chronogrm first, it looks better in graph
     col_phyloall <- col_phyloall_sample[i]
     ape::ltt.lines(phy = phy[[i]], col = paste0(col_phyloall), lwd = 1.5)
     x0 <- x1 <- -phy_mrca[i]

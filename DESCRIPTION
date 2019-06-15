@@ -42,7 +42,8 @@ Imports:
     plyr,
     graphics,
     utils,
-    phylocomr
+    phylocomr,
+    viridis
 Suggests:
     testthat,
     rmarkdown,

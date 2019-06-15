@@ -28,3 +28,8 @@ test_that("plot_densitree works", {
     plot_densitree(trees = birds_and_cats, include_all = FALSE)
     plot_densitree(trees = birds_and_cats, include_all = TRUE)
   })
+
+test_that("plot_ltt_phyloall works", {
+    plot_ltt_phyloall(taxon = "Three birds", phy = threebirds_all, ltt_colors = NULL, tax_datedotol = NULL,
+        file_name = NULL, file_dir = "~//Desktop//datelife//data-raw//", height = 3.5, width = 7, add_legend = FALSE, add_title = FALSE)
+})
