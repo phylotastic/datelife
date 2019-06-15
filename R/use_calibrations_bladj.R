@@ -14,8 +14,9 @@
 use_calibrations_bladj <- function(phy, calibrations, type = "median"){
 	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
 	calibs <- match_all_calibrations(phy, calibrations)
-    if(nrow(calibs$matched_calibrations) == 0){
-      message("Nodes in calibrations (determined by taxon pairs) do not match any nodes in phy; phy cannot be dated")
+    if(nrow(calibs$present_calibrations) < 1){
+			message("Nodes in calibrations (determined by taxon pairs) do not match any nodes in phy.")
+      message("Dating analysis is not possible with this set of calibrations.")
       return(NA)
     }
 	if("mean" %in% type){

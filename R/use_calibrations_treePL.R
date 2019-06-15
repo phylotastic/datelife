@@ -41,12 +41,13 @@ use_calibrations_treePL <- function(phy, calibrations){
       message("phy has not have branch lengths, consider using a dating method that does not require data, such as BLADJ or MrBayes.")
       phy <- fix_negative_brlen(phy)
     }
-    # fix any negative branch lengths, otherwise pathd8 will silently not work:
-    phy <- tree_fix_brlen(phy, fixing_criterion = "negative", fixing_method = 0, ultrametric = FALSE)
+    # fix any negative branch lengths?
+    # phy <- tree_fix_brlen(phy, fixing_criterion = "negative", fixing_method = 0, ultrametric = FALSE)
     # following line checks wether all calibrations are present in phy, and returns that in calibs$present_calibrations
     calibs <- match_all_calibrations(phy, calibrations)
     if(nrow(calibs$present_calibrations) < 1){
-      message("\nDating analysis is not possible with this set of calibrations.")
+      message("Nodes in calibrations (determined by taxon pairs) do not match any nodes in phy.")
+      message("Dating analysis is not possible with this set of calibrations.")
       return(NA)
     }
     chronogram <- NA
