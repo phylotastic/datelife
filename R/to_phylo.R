@@ -425,11 +425,14 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
   return(new_phy)
 }
 
-#' function to get all summaries from a summary matrix.
+#' function to get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.
 #' @inheritParams summary_matrix_to_phylo
 #' @inheritDotParams summary_matrix_to_phylo
 #' @export
-#modified from get_all_summaries function from datelife_examples
+#' @details
+#' With the function summary_matrix_to_phylo users can choose the minimum, mean or maximum ages from the saummary matrix as calibration points to get a single summary chronogram.
+#' With this function users get all three summary chronograms in a multiphylo object.
+# modified from get_all_summaries function from datelife_examples
 summary_matrix_to_phylo_all <- function(summ_matrix, target_tree = NULL, ...){
   tmean <- summary_matrix_to_phylo(summ_matrix = summ_matrix, use = "mean", target_tree = target_tree, ...)
   tmin <- summary_matrix_to_phylo(summ_matrix = summ_matrix, use = "min", target_tree = target_tree, ...)

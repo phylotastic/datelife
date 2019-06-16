@@ -25,7 +25,6 @@ ltt_summary <- function(phy_summ, phy_summ_type = NULL, phy_summ_col = NULL, max
     for (i in seq(phy_summ)){
       foo(phy = phy_summ[[i]], color_here = phy_summ_col, labels_here = lab[i], length_arrowhead, max_tips)
     }
-    mtext(text = paste(phy_summ_type, "summary chronograms"), side = 3, cex = 1, font = 2, line = -1.5)
 }
 #' Lineage through time plots of all chronograms in multiphylo object and its summaries.
 #'
@@ -43,7 +42,7 @@ ltt_summary <- function(phy_summ, phy_summ_type = NULL, phy_summ_col = NULL, max
 # modified from make_lttplot_summchrono2 function in datelife_examples
 plot_ltt_summary <- function(taxon, phy, phy_sdm, phy_median,
         file_name = NULL, file_dir = NULL, height = 3.5, width = 7,
-        add_legend = TRUE, tax_datedotol = NULL){
+        add_legend = TRUE, add_title = FALSE, tax_datedotol = NULL){
 
     if(!inherits(taxon, "character")){
       taxon <- "Some species"
@@ -70,23 +69,27 @@ plot_ltt_summary <- function(taxon, phy, phy_sdm, phy_median,
     xlim0 <- round(max(max_ages)+5, digits = -1)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # general variables for source chronogram plotting:
-    col_sample <- paste0("#778899", sample(20:90, length(nn))) #color is lightslategrey
+    col_sample <- paste0("#778899", sample(20:90, length(unique(names(phy))))) #color is lightslategrey
     treesall <- c(trees, phy_sdm, phy_median)
     max_tips <- max(sapply(treesall, function(x) max(ape::Ntip(x))))
     length_arrowhead <- 0.075
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # start the plot:
     grDevices::pdf(file = file_name, height = height, width = width)
+    par(mai = c(1.02, 0.82, 0.2, 0.2))
     ltt_phyloall(phy, trees = treesall, max_tips, max_ages, xlim0, taxon, phy_mrca,
       col_sample, length_arrowhead, lwd_phyloall = 1.5)
     ltt_summary(phy_summ = phy_median, phy_summ_type = "Median",
-        phy_summ_col = "#0000FF", max_tips, length_arrowhead)
+        phy_summ_col = "#FFDB6D", max_tips, length_arrowhead) #color yellowish
     ltt_summary(phy_summ = phy_sdm, phy_summ_type = "SDM",
-        phy_summ_col = "#0000FF", max_tips, length_arrowhead)
+        phy_summ_col = "#00AFBB", max_tips, length_arrowhead) # color teal
     if(add_legend){
         leg <- paste(taxon, c("source chronograms", "summary chronograms"))
-        legend(x = -xlim0, y = max_tips*1.35, legend = leg, cex = 0.75, pch = 19,
-            bty = "n", xpd = NA, col = c("#77889980", paste0(phy_summ_col, 80)), inset = -1)
+        legend(x = -xlim0, y = max_tips*1.1, legend = leg, cex = 0.75, pch = 19,
+            bty = "n", xpd = NA, col = c("#77889980", "#00AFBB80"), inset = -1)
+    }
+    if(add_title){
+      graphics::mtext(text = "SDM and median summary chronograms", side = 3, cex = 1, font = 2, line = -1.5)
     }
     dev.off()
 }
