@@ -108,9 +108,25 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
   dev.off()
 }
 
-ltt_phyloall <- function(max_tips, max_ages, study_number, xlim0, taxon, phy_mrca,
-  col_phyloall_sample, length_arrowhead = 0.075, lwd_phyloall = 1.5){
+ltt_phyloall <- function(phy, trees = NULL, max_tips, max_ages, xlim0, taxon, phy_mrca,
+  col_sample, length_arrowhead = 0.075, lwd_phyloall = 1.5){
 
+  if(!inherits(trees, "multiPhylo")){
+    trees <- phy
+  }
+  nn <- unique(names(phy))[order(unique(names(phy)))] # get ordered names
+  col_phyloall_sample <- col_sample[match(names(phy), nn)]
+  study_number <- seq(length(nn))[match(names(phy), nn)]
+  ss <- which(table(study_number)>1)
+  for(ii in ss){ # case when a study has multiple chronograms and we need to adjust x position of number
+      tt <- which(ii==study_number)
+      dd <- abs(diff(phy_mrca[tt]))
+      eq <- which(dd < 0.02*xlim0)
+      if(length(eq) == 0) next
+      for(j in eq){ # uses the mean age for those chronograms that are closer by less than 0.5 myrs
+          phy_mrca[tt[c(j, j+1)]] <- mean(phy_mrca[ii==study_number][c(j, j+1)])
+      }
+  }
   y_numbers <- rep(-max_tips*0.14, length(max_ages))
   cond1 <- duplicated(round(max_ages)) & !duplicated(study_number)
   y_numbers[cond1] <- -max_tips*0.23

@@ -66,32 +66,19 @@ plot_ltt_summary <- function(taxon, phy, phy_sdm, phy_median,
         leg <- c(leg, "dated OToL tree")
         leg_color <- c(leg_color, "#80808080")
     }
-    max_ages <- c(trees, max(ape::branching.times(tax_datedotol)))
+    max_ages <- sapply(trees, function(x) max(ape::branching.times(x)))
     xlim0 <- round(max(max_ages)+5, digits = -1)
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # general variables for source chronogram plotting:
-    nn <- unique(names(phy))[order(unique(names(phy)))] # get ordered names
     col_sample <- paste0("#778899", sample(20:90, length(nn))) #color is lightslategrey
-    col_phyloall_sample <- col_sample[match(names(phy), nn)]
-    study_number <- seq(length(nn))[match(names(phy), nn)]
-    ss <- which(table(study_number)>1)
-    for(ii in ss){ # case when a study has multiple chronograms and we need to adjust x position of number
-        tt <- which(ii==study_number)
-        dd <- abs(diff(phy_mrca[tt]))
-        eq <- which(dd < 0.02*xlim0)
-        if(length(eq) == 0) next
-        for(j in eq){ # uses the mean age for those chronograms that are closer by less than 0.5 myrs
-            phy_mrca[tt[c(j, j+1)]] <- mean(phy_mrca[ii==study_number][c(j, j+1)])
-        }
-    }
     treesall <- c(trees, phy_sdm, phy_median)
     max_tips <- max(sapply(treesall, function(x) max(ape::Ntip(x))))
     length_arrowhead <- 0.075
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # start the plot:
     grDevices::pdf(file = file_name, height = height, width = width)
-    ltt_phyloall(max_tips, max_ages, study_number, xlim0, taxon, phy_mrca,
-      col_phyloall_sample, length_arrowhead, lwd_phyloall = 1.5)
+    ltt_phyloall(phy, trees = treesall, max_tips, max_ages, xlim0, taxon, phy_mrca,
+      col_sample, length_arrowhead, lwd_phyloall = 1.5)
     ltt_summary(phy_summ = phy_median, phy_summ_type = "Median",
         phy_summ_col = "#0000FF", max_tips, length_arrowhead)
     ltt_summary(phy_summ = phy_sdm, phy_summ_type = "SDM",
