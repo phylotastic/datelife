@@ -4,16 +4,16 @@
 \alias{plot_ltt_phyloall}
 \title{Lineahe through time plots of  all chronograms in multiphylo object.}
 \usage{
-plot_ltt_phyloall(taxon, phy, ltt_colors = NULL, tax_datedotol = NULL,
-  file_name = NULL, file_dir = NULL, height = 3.5, width = 7,
-  add_legend = FALSE, add_title = FALSE)
+plot_ltt_phyloall(taxon = NULL, phy, ltt_colors = NULL,
+  tax_datedotol = NULL, file_name = NULL, file_dir = NULL,
+  height = 3.5, width = 7, add_legend = FALSE, add_title = FALSE)
 }
 \arguments{
 \item{taxon}{Character vector indicating the name of the taxon or lineage that the chronograms in phy belong to.}
 
 \item{phy}{A phylo or multiphylo object with chronograms (trees with branch lengths proportional to geologic time), ideally.}
 
-\item{ltt_colors}{Acharacter vector indicating the colors to be ised for plotting ltt}
+\item{ltt_colors}{A character vector indicating the colors to be ised for plotting ltt}
 
 \item{tax_datedotol}{A chronogram to compare trees in phy to.}
 

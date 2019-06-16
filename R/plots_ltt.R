@@ -4,7 +4,7 @@
 #'
 #' @param taxon Character vector indicating the name of the taxon or lineage that the chronograms in phy belong to.
 #' @param phy A phylo or multiphylo object with chronograms (trees with branch lengths proportional to geologic time), ideally.
-#' @param ltt_colors Acharacter vector indicating the colors to be ised for plotting ltt
+#' @param ltt_colors A character vector indicating the colors to be ised for plotting ltt
 #' @param tax_datedotol A chronogram to compare trees in phy to.
 #' @param file_name A character string giving the name of the pdf file.
 #' @param file_dir A character string giving the path to write the file to.
@@ -83,7 +83,8 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
   ape::ltt.plot(trees[[which.max(max_tipsall)]], xlim = c(-xlim0, 0),
         ylim = c(-max_tips*0.30, max_tips),
         col = paste0("#ffffff", "80"), ylab = paste(taxon, "Species N"),
-        xlab = "Time (MYA)")
+        xlab = "")
+  graphics::mtext("Time (MYA)", side = 1, cex = 1, font = 1, line = 2)
   cond2 <- (!duplicated(study_number) | !duplicated(round(max_ages)))
   for (i in order(phy_mrca, decreasing = TRUE)){ # plot the oldest chronogrm first, it looks better in graph
     col_phyloall <- col_phyloall_sample[i]
@@ -105,4 +106,26 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
              cex = 0.5, pch = 19, bty = "n")
   }
   dev.off()
+}
+
+ltt_phyloall <- function(max_tips, max_ages, study_number, xlim0, taxon, phy_mrca,
+  col_phyloall_sample, length_arrowhead = 0.075, lwd_phyloall = 1.5){
+
+  y_numbers <- rep(-max_tips*0.14, length(max_ages))
+  cond1 <- duplicated(round(max_ages)) & !duplicated(study_number)
+  y_numbers[cond1] <- -max_tips*0.23
+  ape::ltt.plot(trees[[which.max(max_tips)]], xlim = c(-xlim0, 0),
+        ylim = c(-max_tips*0.30, max_tips),
+        col = paste0("#ffffff", "10"), ylab = paste(taxon, "Species N"),
+        xlab = "") # we need to plot it white because argument plot = FALSE is not working with ltt.plot
+  graphics::mtext("Time (MYA)", side = 1, cex = 1, font = 1, line = 2)
+  cond2 <- (!duplicated(study_number) | !duplicated(round(max_ages)))
+  for (i in order(phy_mrca, decreasing = TRUE)){
+    col_phyloall <- col_phyloall_sample[i]
+    ape::ltt.lines(phy = phy[[i]], col = paste0(col_phyloall), lwd = lwd_phyloall)
+    x0 <- x1 <- -phy_mrca[i]
+    arrows(x0, y0 = -max_tips*0.075, x1, y1 = 0, length = length_arrowhead, col = paste0(col_phyloall), lwd = 2)
+    text(x = -max_ages[i], y = y_numbers[i], labels = ifelse(cond2[i], study_number[i], ""),
+        font = 4, col = col_phyloall, cex = 1.1)
+  }
 }
