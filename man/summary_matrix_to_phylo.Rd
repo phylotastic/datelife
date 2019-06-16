@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_phylo.R
 \name{summary_matrix_to_phylo}
 \alias{summary_matrix_to_phylo}
-\title{Go from a smmary matrix to an ultrametric phylo object.}
+\title{Go from a summary matrix to an ultrametric phylo object.}
 \usage{
 summary_matrix_to_phylo(summ_matrix, datelife_query = NULL,
   total_distance = TRUE, use = "mean", target_tree = NULL, ...)
@@ -35,7 +35,7 @@ summary_matrix_to_phylo(summ_matrix, datelife_query = NULL,
 An ultrametric phylo object.
 }
 \description{
-Go from a smmary matrix to an ultrametric phylo object.
+Go from a summary matrix to an ultrametric phylo object.
 }
 \details{
 It can take a regular patristic distance matrix, but there are simpler methods for that implemented in patristic_matrix_to_phylo.

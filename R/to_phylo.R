@@ -285,7 +285,7 @@ choose_cluster <- function(phycluster, clustering_method = "nj"){
     }
   }
 }
-#' Go from a smmary matrix to an ultrametric phylo object.
+#' Go from a summary matrix to an ultrametric phylo object.
 #' @param summ_matrix A summary patristic distance matrix from sdm or median. See details.
 #' @inheritParams datelife_query_check
 #' @param total_distance Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take iy as is.
@@ -423,4 +423,18 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
       new_phy$ott_ids <- target_tree$ott_ids[tt]
   }
   return(new_phy)
+}
+
+#' function to get all summaries from a summary matrix.
+#' @inheritParams summary_matrix_to_phylo
+#' @inheritDotParams summary_matrix_to_phylo
+#' @export
+#modified from get_all_summaries function from datelife_examples
+summary_matrix_to_phylo_all <- function(summ_matrix, target_tree = NULL, ...){
+  tmean <- summary_matrix_to_phylo(summ_matrix = summ_matrix, use = "mean", target_tree = target_tree, ...)
+  tmin <- summary_matrix_to_phylo(summ_matrix = summ_matrix, use = "min", target_tree = target_tree, ...)
+  tmax <- summary_matrix_to_phylo(summ_matrix = summ_matrix, use = "max", target_tree = target_tree, ...)
+  res <- c(tmean, tmin, tmax)
+  names(res) <- c("mean_tree", "min_tree", "max_tree")
+  return(res)
 }
