@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{get_ott_lineage}
 \alias{get_ott_lineage}
-\title{gets the ott id and name of all lineages from one or more input taxa}
+\title{Gets the ott id and name of all lineages from one or more input taxa}
 \usage{
 get_ott_lineage(input = NULL, ott_ids = NULL)
 }
@@ -15,7 +15,7 @@ get_ott_lineage(input = NULL, ott_ids = NULL)
 a list of named numeric vectors of ott ids from input and all the clades it belongs to.
 }
 \description{
-gets the ott id and name of all lineages from one or more input taxa
+Gets the ott id and name of all lineages from one or more input taxa
 }
 \examples{
 taxa <- c("Homo", "Bacillus anthracis", "Apis", "Salvia")

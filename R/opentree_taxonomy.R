@@ -35,8 +35,7 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
     return(taxon_info)
 }
 
-#' checks input for get_ott_clade,  get_ott_children functions
-#' returns a numeric vector of ott ids
+#' Checks input for get_ott_clade,  get_ott_children functions
 #' @param input Optional. A character vector of names or a datelifeQuery object
 #' @param ott_ids If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match
 #' @inheritDotParams make_datelife_query -input
@@ -103,7 +102,7 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
     }
     return(ott_ids)
 }
-#' gets the ott id and name of all lineages from one or more input taxa
+#' Gets the ott id and name of all lineages from one or more input taxa
 #' @inheritParams check_ott_input
 #' @return a list of named numeric vectors of ott ids from input and all the clades it belongs to.
 #' @examples
@@ -156,7 +155,7 @@ get_ott_lineage <- function(input = NULL, ott_ids = NULL){
 }
 
 
-#' gets the ott id and name of one or several given taxonomic rank from one or more input taxa
+#' Gets the ott id and name of one or several given taxonomic ranks from one or more input taxa
 #' @inheritParams check_ott_input
 #' @inheritParams get_ott_children
 #' @return a list of named numeric vectors with ott ids from input and all requested ranks
@@ -233,10 +232,14 @@ get_ott_clade <- function(input = NULL, ott_ids = NULL, ott_rank = "family"){
 # }
 
 #'
-#' extracts valid children from a set of input names or ott ids (not from a taxonomy taxon info object)
+#' Extracts valid children from a set of input names or ott ids (not from a taxonomy taxon info object)
 #' @inheritParams check_ott_input
+#' @param taxonomic_source A character vector with the desired taxonomic sources. One of "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources. NCBI by default.
 #' @export
 #' @details
+#' Gbif and other taxonomies contain deprecated taxa that are not marked as such in the Open Tree Taxonomy.
+#' We are relying mainly in the NCBI taxonomy for now.
+#' @examples
 #' # genus Dictyophyllidites with ott id = 6003921 has only extinct children
 #' # in cases like this the same name will be returned
 #' tti <- rotl::taxonomy_taxon_info(6003921, include_children = TRUE)
@@ -244,7 +247,12 @@ get_ott_clade <- function(input = NULL, ott_ids = NULL, ott_rank = "family"){
 #' # More examples:
 #' get_valid_children(ott_ids = 769681) # Psilotopsida
 #' get_valid_children(ott_ids = 56601)  # Marchantiophyta
-get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_ids = NULL){
+# input= "Erythrospiza"
+# input = c("Felis", "Homo", "Malvaceae")
+# input = "Telespiza"
+get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = "ncbi"){
+    taxonomic_source_here <- tryCatch(match.arg(taxonomic_source, c("ncbi", "gbif", "irmng")),
+      error = function(e) NULL)
     input_ott_match <- check_ott_input(input, ott_ids)
     all_children <- vector(mode = "list", length = length(input_ott_match))
     # monotypic <- vector(mode = "logical", length = length(input_ott_match))
@@ -260,17 +268,27 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_ids 
           # which(unlist(sapply(tt[[1]]$children, "[", "unique_name")) == "Mesangiospermae")
           # tt[[1]]$children[108]
           rr <- unname(unlist(sapply(tt[[1]]$children, "[", "rank")))
-          # ii <- grep(paste0("^", ott_rank, "$"), unname(unlist(rr)))  # need to unlist rr
           child <- unname(unlist(sapply(tt[[1]]$children, "[", "ott_id")))
-          # if(length(child)>0){
-              names(child) <- names(rr) <- unname(unlist(sapply(tt[[1]]$children, "[", "unique_name")))
-          # }
+          tax_sources <- unname(lapply(seq(length(tt[[1]]$children)), function(k)
+            unlist(tt[[1]]$children[[k]]$tax_sources)))
+          # names(tt[[1]]$children[[1]])
+          # unname(unlist(sapply(tt[[1]]$children, "[", "flags")))
+          # unname(unlist(sapply(tt[[1]]$children, "[", "is_suppressed")))
+          # unname(unlist(sapply(tt[[1]]$children, "[", "source")))
+          names(tax_sources) <- names(child) <- names(rr) <- unname(unlist(sapply(tt[[1]]$children, "[", "unique_name")))
           monotypic <- FALSE
         } else {
           child <- tt[[1]]$ott_id
           rr <- tt[[1]]$rank
-          names(child) <- names(rr) <- tt[[1]]$unique_name
+          # tax_sources <- list(unlist(tt[[1]]$children[[2]]$tax_sources))
+          tax_sources <- list(unlist(tt[[1]]$tax_sources))
+          names(tax_sources) <- names(child) <- names(rr) <- tt[[1]]$unique_name
           monotypic <- TRUE
+        }
+        if(inherits(taxonomic_source_here, "character")){
+          keep <- sapply(tax_sources, function(x) any(grepl(taxonomic_source_here, x)))
+          child <- child[keep]
+          rr <- rr[keep]
         }
         all_children[[i]] <- list(children = data.frame(ott_id = child, rank = rr), is_monotypic = monotypic)
         utils::setTxtProgressBar(progression, i)
@@ -280,9 +298,10 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_ids 
     return(all_children)
 }
 
-#' use this instead of rotl::tol_subtree when taxa are not in synthesis tree and you still need to get all species or an induced otol subtree
+#' Use this instead of rotl::tol_subtree when taxa are not in synthesis tree and you still need to get all species or an induced otol subtree
 #' @inheritParams check_ott_input
 #' @param ott_rank A character vector with the ranks you wanna get lineage children from.
+#' @param taxonomic_source A character vector with the desired taxonomic sources. One of "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources.
 #' @return A data frame
 #' @examples
 #' # try getting an otol tree of a taxon missing from the synthetic tree
@@ -307,7 +326,12 @@ get_valid_children <- function(input = c("Felis", "Homo", "Malvaceae"), ott_ids 
 #' oo <- get_ott_children(input= "magnoliophyta", ott_rank = "order")
 #' sum(oo$Magnoliophyta$rank == "order") # to know how many orders of flowering plants we have
 #' @export
-get_ott_children <- function(input = NULL, ott_ids = NULL, ott_rank = "species"){
+# children <- get_ott_children(input = "Fringillidae")
+# rotl::tol_subtree(ott_id = 839319) #broken taxa
+# children <- get_ott_children(input = "Cetaceae")
+# nrow(children[[1]])
+# sum(children[[1]]$rank == "species")
+get_ott_children <- function(input = NULL, ott_ids = NULL, ott_rank = "species", ...){
     # iput <- c("Felis", "Homo", "Malvaceae")
     input_ott_match <- check_ott_input(input, ott_ids)
     # names(input_ott_match)
@@ -324,13 +348,14 @@ get_ott_children <- function(input = NULL, ott_ids = NULL, ott_rank = "species")
       input_ott_match <- input_ott_match[sapply(all_children, is.null)]
       for (i in seq(length(input_ott_match))){
           mm <- data.frame(ott_ids = vector(mode = "numeric", length = 0), rank = vector(mode = "logical", length = 0))
-          vv <- get_valid_children(ott_ids = input_ott_match[i])
+          vv <- get_valid_children(ott_ids = input_ott_match[i], ...)
           success <- vv[[1]]$children$rank == ott_rank | vv[[1]]$is_monotypic
           if(any(success)){
             mm <- rbind(mm, vv[[1]]$children[success,])
           }
           while(!all(success)){
-            vv <- get_valid_children(ott_ids = unlist(sapply(sapply(vv, "[", "children"), "[", "ott_id"))[!success])
+            vv <- get_valid_children(ott_ids = unlist(sapply(sapply(vv, "[",
+              "children"), "[", "ott_id"))[!success], ...)
             if(any(unlist(sapply(vv, "[", "is_monotypic")))){
               dd <- do.call("rbind", sapply(vv[unlist(sapply(vv, "[", "is_monotypic"))], "[", "children"))
               rownames(dd) <- unname(unlist(sapply(sapply(vv[unlist(sapply(vv, "[", "is_monotypic"))], "[", "children"), rownames)))
@@ -356,7 +381,7 @@ get_ott_children <- function(input = NULL, ott_ids = NULL, ott_rank = "species")
     return(all_children)
 }
 
-#' gets an mrcaott tag from an open tree of life tree and gets its name and ott id
+#' Gets an mrcaott tag from an open tree of life tree and gets its name and ott id
 #' @param tag A character vector with the mrca tag
 #' @return A numeric vector with ott id from original taxon named with the corresponding ott name
 #' @export

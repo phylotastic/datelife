@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{recover_mrcaott}
 \alias{recover_mrcaott}
-\title{gets an mrcaott tag from an open tree of life tree and gets its name and ott id}
+\title{Gets an mrcaott tag from an open tree of life tree and gets its name and ott id}
 \usage{
 recover_mrcaott(tag)
 }
@@ -13,5 +13,5 @@ recover_mrcaott(tag)
 A numeric vector with ott id from original taxon named with the corresponding ott name
 }
 \description{
-gets an mrcaott tag from an open tree of life tree and gets its name and ott id
+Gets an mrcaott tag from an open tree of life tree and gets its name and ott id
 }

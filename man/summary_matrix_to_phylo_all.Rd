@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_phylo.R
 \name{summary_matrix_to_phylo_all}
 \alias{summary_matrix_to_phylo_all}
-\title{function to get all summaries from a summary matrix.}
+\title{function to get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.}
 \usage{
 summary_matrix_to_phylo_all(summ_matrix, target_tree = NULL, ...)
 }
@@ -26,5 +26,9 @@ summary_matrix_to_phylo_all(summ_matrix, target_tree = NULL, ...)
 }}
 }
 \description{
-function to get all summaries from a summary matrix.
+function to get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.
+}
+\details{
+With the function summary_matrix_to_phylo users can choose the minimum, mean or maximum ages from the saummary matrix as calibration points to get a single summary chronogram.
+With this function users get all three summary chronograms in a multiphylo object.
 }

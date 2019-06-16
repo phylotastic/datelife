@@ -2,8 +2,7 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{check_ott_input}
 \alias{check_ott_input}
-\title{checks input for get_ott_clade,  get_ott_children functions
-returns a numeric vector of ott ids}
+\title{Checks input for get_ott_clade,  get_ott_children functions}
 \usage{
 check_ott_input(input = NULL, ott_ids = NULL, ...)
 }
@@ -24,8 +23,7 @@ check_ott_input(input = NULL, ott_ids = NULL, ...)
 A named numeric vector of valid ott IDs
 }
 \description{
-checks input for get_ott_clade,  get_ott_children functions
-returns a numeric vector of ott ids
+Checks input for get_ott_clade,  get_ott_children functions
 }
 \details{
 By default it uses ott_id argument if it is not NULL.

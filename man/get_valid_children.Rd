@@ -2,20 +2,26 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{get_valid_children}
 \alias{get_valid_children}
-\title{extracts valid children from a set of input names or ott ids (not from a taxonomy taxon info object)}
+\title{Extracts valid children from a set of input names or ott ids (not from a taxonomy taxon info object)}
 \usage{
-get_valid_children(input = c("Felis", "Homo", "Malvaceae"),
-  ott_ids = NULL)
+get_valid_children(input = NULL, ott_ids = NULL,
+  taxonomic_source = "ncbi")
 }
 \arguments{
 \item{input}{Optional. A character vector of names or a datelifeQuery object}
 
 \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+
+\item{taxonomic_source}{A character vector with the desired taxonomic sources. One of "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources. NCBI by default.}
 }
 \description{
-extracts valid children from a set of input names or ott ids (not from a taxonomy taxon info object)
+Extracts valid children from a set of input names or ott ids (not from a taxonomy taxon info object)
 }
 \details{
+Gbif and other taxonomies contain deprecated taxa that are not marked as such in the Open Tree Taxonomy.
+We are relying mainly in the NCBI taxonomy for now.
+}
+\examples{
 # genus Dictyophyllidites with ott id = 6003921 has only extinct children
 # in cases like this the same name will be returned
 tti <- rotl::taxonomy_taxon_info(6003921, include_children = TRUE)

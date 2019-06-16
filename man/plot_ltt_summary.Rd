@@ -6,7 +6,7 @@
 \usage{
 plot_ltt_summary(taxon, phy, phy_sdm, phy_median, file_name = NULL,
   file_dir = NULL, height = 3.5, width = 7, add_legend = TRUE,
-  tax_datedotol = NULL)
+  add_title = FALSE, tax_datedotol = NULL)
 }
 \arguments{
 \item{taxon}{Character vector indicating the name of the taxon or lineage that the chronograms in phy belong to.}
@@ -23,9 +23,9 @@ plot_ltt_summary(taxon, phy, phy_sdm, phy_median, file_name = NULL,
 
 \item{add_legend}{Boolean}
 
-\item{tax_datedotol}{A chronogram to compare trees in phy to.}
-
 \item{add_title}{Boolean}
+
+\item{tax_datedotol}{A chronogram to compare trees in phy to.}
 }
 \description{
 Lineage through time plots of all chronograms in multiphylo object and its summaries.
