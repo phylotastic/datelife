@@ -110,10 +110,10 @@ use_calibrations_treePL <- function(phy, calibrations){
 treePL.phylo=function(phy, calibrations=NULL, base="", rm=TRUE, ...){
 	phy$node.label=NULL
 	if(!is.null(calibrations)){
-		infile=write.treePL(phy=phy, calibrations=calibrations, base=base, ...)
+		infile = ape::write.treePL(phy=phy, calibrations=calibrations, base=base, ...)
 	} else {
 		infile=paste(base, "infile", sep=".")
-		write.tree(phy, infile)
+		ape::write.tree(phy, infile)
 	}
 	smooth.file=paste(base, "dated.tre", sep=".")
 	outfile=paste(base, "treePL.orig.out", sep=".")
@@ -125,7 +125,7 @@ treePL.phylo=function(phy, calibrations=NULL, base="", rm=TRUE, ...){
   # outfile <- ".tmp_treePL.orig.out"
 	system(paste("treePL ", infile, " >", outfile, sep=" "))
 	#system(paste("grep \"tree\" ", outfile, ">", parsed.outfile, sep=" "))
-	smoothed=read.tree(smooth.file)
+	smoothed = ape::read.tree(smooth.file)
   # smoothed=read.tree(".tmp_treePL.dated.tre.r8s")
 	if(rm & base=="") {
 		unlink(smooth.file)
@@ -193,7 +193,7 @@ write.treePL=function(phy, calibrations, nsites=10000, min=0.0001, base="", opts
 		scl=min/min(z)
 		phy$edge.length=phy$edge.length*scl
 	}
-	write.tree(phy, file=int)
+	ape::write.tree(phy, file=int)
 
 ##	check appropriateness of constraints ##
 #	check for 'calibrations' and 'phy' congruence

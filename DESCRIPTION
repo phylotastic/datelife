@@ -40,6 +40,7 @@ Imports:
     devtools,
     reports,
     plyr,
+    grDevices,
     graphics,
     utils,
     phylocomr,

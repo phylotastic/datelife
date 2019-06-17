@@ -247,7 +247,7 @@ get_ott_clade <- function(input = NULL, ott_ids = NULL, ott_rank = "family"){
 #' # More examples:
 #' get_valid_children(ott_ids = 769681) # Psilotopsida
 #' get_valid_children(ott_ids = 56601)  # Marchantiophyta
-# input= "Erythrospiza"
+# input= "Erythrospiza" # obsolete genus that is still on ott
 # input = c("Felis", "Homo", "Malvaceae")
 # input = "Telespiza"
 get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = "ncbi"){

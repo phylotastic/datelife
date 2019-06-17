@@ -15,9 +15,9 @@ ltt_summary <- function(phy_summ, phy_summ_type = NULL, phy_summ_col = NULL, max
         ape::ltt.lines(phy = phy, col = paste0(color_here, "90"), lty = 1, lwd = 2)
         # points(x = -max(ape::branching.times(tax_phycluster[[i]])), y = 2, pch = 25, col = paste0(col_here, "60"), lwd = 0.75)
         x0 <- x1 <- -max(ape::node.depth.edgelength(phy))
-        arrows(x0, y0 = 2.5+max_tips*0.1, x1, y1 = 2.5, length = length_arrowhead,
+        graphics::arrows(x0, y0 = 2.5+max_tips*0.1, x1, y1 = 2.5, length = length_arrowhead,
             col = paste0(color_here, "99"), lwd = 2.5, lty = 1)
-        text(x = x0, y = 2.5+max_tips*0.14, labels = labels_here, srt = 45,
+        graphics::text(x = x0, y = 2.5+max_tips*0.14, labels = labels_here, srt = 45,
             adj = 0, cex = 0.85, col = color_here, font = 2)
     }
     lab <- paste(gsub("_tree", " ", names(phy_summ)), ifelse("median" %in% tolower(phy_summ_type),
@@ -76,7 +76,7 @@ plot_ltt_summary <- function(taxon, phy, phy_sdm, phy_median,
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # start the plot:
     grDevices::pdf(file = file_name, height = height, width = width)
-    par(mai = c(1.02, 0.82, 0.2, 0.2))
+    graphics::par(mai = c(1.02, 0.82, 0.2, 0.2))
     ltt_phyloall(phy, trees = treesall, max_tips, max_ages, xlim0, taxon, phy_mrca,
       col_sample, length_arrowhead, lwd_phyloall = 1.5)
     ltt_summary(phy_summ = phy_median, phy_summ_type = "Median",
@@ -85,11 +85,11 @@ plot_ltt_summary <- function(taxon, phy, phy_sdm, phy_median,
         phy_summ_col = "#00AFBB", max_tips, length_arrowhead) # color teal
     if(add_legend){
         leg <- paste(taxon, c("source chronograms", "summary chronograms"))
-        legend(x = -xlim0, y = max_tips*1.1, legend = leg, cex = 0.75, pch = 19,
+        graphics::legend(x = -xlim0, y = max_tips*1.1, legend = leg, cex = 0.75, pch = 19,
             bty = "n", xpd = NA, col = c("#77889980", "#00AFBB80"), inset = -1)
     }
     if(add_title){
       graphics::mtext(text = "SDM and median summary chronograms", side = 3, cex = 1, font = 2, line = -1.5)
     }
-    dev.off()
+    grDevices::dev.off()
 }

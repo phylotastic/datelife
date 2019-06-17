@@ -101,7 +101,7 @@ plot_runtime <- function(file = NULL, width = 6, height = 3, benchmark = NULL,
     plt <- plt + ggplot2::scale_y_log10(name = ylabel)
     if (!is.null(file)) {
         print(plt)
-        dev.off()
+        grDevices::dev.off()
     } else {
         return(plt)
     }

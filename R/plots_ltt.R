@@ -1,4 +1,4 @@
-# plots all chronograms from a phyloall datelife summary, using a sample of colors from rainbow
+# plots all chronograms from a phyloall datelife summary, using a sample of colors from grDevices::rainbow()
 # can plot dated otol tree too
 #' Lineahe through time plots of  all chronograms in multiphylo object.
 #'
@@ -55,7 +55,7 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
   # get a sample of colors the size of the number of studies (one color for each study):
   if(!inherits(ltt_colors, "character")){
     # col_sample <- sample(gray.colors(n = length(nn)), length(nn))
-    col_sample <- sample(rainbow(n = length(nn)), length(nn))
+    col_sample <- sample(grDevices::rainbow(n = length(nn)), length(nn))
     write(paste0('"', paste(col_sample, collapse = '", "'), '"'),
       file = paste0(file_dir, "lttplot_phyloall_colors.txt"))
   } else {
@@ -79,7 +79,7 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
   y_numbers[cond1] <- -max_tips*0.23
 
   grDevices::pdf(file = file_out, height = height, width = width)
-  par(mai = c(1.02, 0.82, 0.2, 0.2))
+  graphics::par(mai = c(1.02, 0.82, 0.2, 0.2))
   ape::ltt.plot(trees[[which.max(max_tipsall)]], xlim = c(-xlim0, 0),
         ylim = c(-max_tips*0.30, max_tips),
         col = paste0("#ffffff", "80"), ylab = paste(taxon, "Species N"),
@@ -100,12 +100,10 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
   }
   if(add_legend){
       leg <- paste(taxon, leg)
-      graphics::legend(x = "topleft", #round(-max_age, digits = -1),
-             # y = round(max_tips, digits = -2),
-             legend = leg, col = leg_col,
-             cex = 0.5, pch = 19, bty = "n")
+      graphics::legend(x = "topleft", #round(-max_age, digits = -1), y = round(max_tips, digits = -2),
+        legend = leg, col = leg_col, cex = 0.5, pch = 19, bty = "n")
   }
-  dev.off()
+  grDevices::dev.off()
 }
 
 ltt_phyloall <- function(phy, trees = NULL, max_tips, max_ages, xlim0, taxon, phy_mrca,
@@ -140,8 +138,8 @@ ltt_phyloall <- function(phy, trees = NULL, max_tips, max_ages, xlim0, taxon, ph
     col_phyloall <- col_phyloall_sample[i]
     ape::ltt.lines(phy = phy[[i]], col = paste0(col_phyloall), lwd = lwd_phyloall)
     x0 <- x1 <- -phy_mrca[i]
-    arrows(x0, y0 = -max_tips*0.075, x1, y1 = 0, length = length_arrowhead, col = paste0(col_phyloall), lwd = 2)
-    text(x = -max_ages[i], y = y_numbers[i], labels = ifelse(cond2[i], study_number[i], ""),
+    graphics::arrows(x0, y0 = -max_tips*0.075, x1, y1 = 0, length = length_arrowhead, col = paste0(col_phyloall), lwd = 2)
+    graphics::text(x = -max_ages[i], y = y_numbers[i], labels = ifelse(cond2[i], study_number[i], ""),
         font = 4, col = col_phyloall, cex = 1.1)
   }
 }
