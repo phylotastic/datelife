@@ -4,7 +4,8 @@
 \alias{use_calibrations_bladj}
 \title{Use calibrations to date a topology with bladj.}
 \usage{
-use_calibrations_bladj(phy, calibrations, type = "median")
+use_calibrations_bladj(phy, calibrations, type = "median",
+  root_age = NULL)
 }
 \arguments{
 \item{phy}{A phylo object}
@@ -12,6 +13,8 @@ use_calibrations_bladj(phy, calibrations, type = "median")
 \item{calibrations}{A data frame of calibrations from get_all_calibrations function, or a subset of it.}
 
 \item{type}{The type of age to use as calibration.}
+
+\item{root_age}{Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.}
 }
 \value{
 A phylo object

@@ -9,9 +9,10 @@
 #' @param phy A phylo object
 #' @param calibrations A data frame of calibrations from get_all_calibrations function, or a subset of it.
 #' @param type The type of age to use as calibration.
+#' @param root_age Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.
 #' @return A phylo object
 #' @export
-use_calibrations_bladj <- function(phy, calibrations, type = "median"){
+use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age = NULL){
 	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
 	calibs <- match_all_calibrations(phy, calibrations)
     if(nrow(calibs$present_calibrations) < 1){
@@ -37,14 +38,21 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median"){
   # it will not run if there is no calibration for the root
   node_names <- calibs$matched_calibrations$NodeNames
   if(!"n1" %in% calibs$matched_calibrations$NodeNames){
-    node_ages <- c(max(node_ages) + mean(abs(diff(sort(node_ages)))), node_ages)
+		if(length(node_ages) > 1){
+			root_age <- max(node_ages) + mean(abs(diff(sort(node_ages))))
+		} else {
+			# if there is only one calibration the line above will give NaN
+			root_age <- 1.1*max(node_ages)
+		}
+    node_ages <- c(root_age, node_ages)
     node_names <- c("n1", node_names)
   }
 	new_phy <- make_bladj_tree(tree = calibs$phy, nodeages = node_ages,
 	  nodenames = node_names)
 	new_phy$dating_method <- "bladj"
 	new_phy$calibration_distribution <- calibs$phy$calibration_distribution
-    new_phy$calibrations <- calibs$matched_calibrations
+  new_phy$calibrations <- calibs$matched_calibrations
+	new_phy$used_calibrations <- stats::setNames(node_ages, node_names)
 	return(new_phy)
 }
 #' function to check for conflicting calibrations

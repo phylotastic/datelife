@@ -5,7 +5,7 @@
 \title{Gets Open Tree of Life synthetic tree of a set of lineages.}
 \usage{
 get_otol_synthetic_tree(input = NULL, ott_ids = NULL,
-  otol_version = "v2", resolve = TRUE, ...)
+  otol_version = "v3", resolve = FALSE, ...)
 }
 \arguments{
 \item{input}{Optional. A character vector of names or a datelifeQuery object}

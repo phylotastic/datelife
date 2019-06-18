@@ -11,20 +11,23 @@
 #' @inheritParams ape::plot.phylo
 #' @param add_legend Boolean
 #' @param add_title Boolean
+#' @param title_text Character vector
 #' @export
 plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedotol = NULL,
-    file_name = NULL, file_dir = NULL, height = 3.5, width = 7, add_legend = FALSE, add_title = FALSE){
+    file_name = NULL, file_dir = NULL, height = 3.5, width = 7, add_legend = FALSE,
+    add_title = FALSE, title_text = NULL){
 
     if(!inherits(taxon, "character")){
       taxon <- "Some species"
     }
   if(!inherits(file_dir, "character")){
-    file_dir <- "~//datelife//data-raw//"
+    file_dir <- getwd()
   }
   if(!inherits(file_name, "character")){
-    file_name <- paste0(gsub(" ", "_", taxon), "_LTTplot_phyloall.pdf")
+    file_name <- "_LTTplot_phyloall.pdf"
   }
-  file_out <- paste0(file_dir, file_name)
+  file_out <- paste0(file_dir, "//", paste0(gsub(" ", "_", taxon), file_name))
+  message(file_out)
   phy_mrca <- sapply(phy, function(x) max(ape::branching.times(x)))
   leg <- "source chronograms"
   leg_col <- "#8B008B" # "darkmagenta"
@@ -57,7 +60,7 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
     # col_sample <- sample(gray.colors(n = length(nn)), length(nn))
     col_sample <- sample(grDevices::rainbow(n = length(nn)), length(nn))
     write(paste0('"', paste(col_sample, collapse = '", "'), '"'),
-      file = paste0(file_dir, "lttplot_phyloall_colors.txt"))
+      file = paste0(file_dir, "//", taxon, "_lttplot_phyloall_colors.txt"))
   } else {
     col_sample <- ltt_colors
   }
@@ -96,7 +99,10 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
   }
   if(add_title){
     # text(labels = paste(taxon, "source chronograms"), x = -xlim0, y = max_tips*0.925, cex = 0.75, adj = 0, font = 1)
-    graphics::mtext(text = paste(taxon, "source chronograms"), side = 3, cex = 1, font = 2, line = -1.5)
+    if(!inherits(title_text, "character")){
+      title_text <- "source chronograms"
+    }
+    graphics::mtext(text = paste(taxon, title_text), side = 3, cex = 1, font = 2, line = -1.5)
   }
   if(add_legend){
       leg <- paste(taxon, leg)

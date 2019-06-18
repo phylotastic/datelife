@@ -6,7 +6,8 @@
 \usage{
 plot_ltt_phyloall(taxon = NULL, phy, ltt_colors = NULL,
   tax_datedotol = NULL, file_name = NULL, file_dir = NULL,
-  height = 3.5, width = 7, add_legend = FALSE, add_title = FALSE)
+  height = 3.5, width = 7, add_legend = FALSE, add_title = FALSE,
+  title_text = NULL)
 }
 \arguments{
 \item{taxon}{Character vector indicating the name of the taxon or lineage that the chronograms in phy belong to.}
@@ -24,6 +25,8 @@ plot_ltt_phyloall(taxon = NULL, phy, ltt_colors = NULL,
 \item{add_legend}{Boolean}
 
 \item{add_title}{Boolean}
+
+\item{title_text}{Character vector}
 }
 \description{
 Lineahe through time plots of  all chronograms in multiphylo object.

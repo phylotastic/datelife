@@ -54,6 +54,8 @@ use_all_calibrations <- function(input = NULL, ...) { # dating_method = "bladj",
 #' my_calibrations <- get_all_calibrations(input = phylo_all1, each = TRUE)
 #' use_each_calibration(phy = my_phy, calibrations = my_calibrations)
 #' All this means that you can use your own set of calibrations, not necessarily the ones found only in datelife.
+# phy <- tax_otolall[[1]]
+# calibrations <- tax_eachcalall[[1]]
 use_each_calibration <- function(phy = NULL, phylo_all = NULL, calibrations = NULL, ...) {
 		if(!inherits(phy, "phylo")){
 			message("phy is not a phylo object")
@@ -69,10 +71,10 @@ use_each_calibration <- function(phy = NULL, phylo_all = NULL, calibrations = NU
 			}
 		}
 		# date the tree with bladj, or pathd8 if branch lengths:
-		chronograms <- lapply(calibrations, function(x) use_calibration(phy, x))
-		names(chronograms) <- names(calibrations)
+		chronograms <- lapply(calibrations, function(x) use_calibrations(phy, x))
 		class(chronograms) <- "multiPhylo"
-		return(list(phy = chronograms, calibrations.df = calibrations))
+		names(chronograms) <- names(calibrations)
+		return(list(phy = chronograms, calibrations = calibrations))
 }
 #' Perform a dating analysis on a tree topology using a determined set of calibrations.
 #' @inheritParams use_calibrations_bladj
