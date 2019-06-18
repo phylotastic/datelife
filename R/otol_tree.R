@@ -5,11 +5,13 @@
 #' @inheritDotParams make_datelife_query -input
 #' @return A phylo object
 #' @export
-get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version = "v2", resolve = TRUE, ...){
+get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version = "v3", resolve = FALSE, ...){
 	# input <- birds_yellowstone
 	# input <- birds_wiki
 	# input <- c(birds_wiki, "ttttt")
-	input <- unique(input)
+	# input <- unique(input) # if you do this and input is a datelifeQuery, it looses all structure.
+	# input <- tax_dqall[[2]]
+	# input_ott_match <- suppressMessages(check_ott_input(input))
 	input_ott_match <- suppressMessages(check_ott_input(input, ott_ids, ...))
 	if(length(input_ott_match) < 2){
 		message("At least two valid names or numeric ott_ids are needed to get a tree")

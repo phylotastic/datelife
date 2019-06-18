@@ -53,6 +53,7 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
         return(NA)
     }
     if(is.null(ott_ids) | all(is.na(ott_ids))){
+          # checks that input is a datelifeQuery object, otherwise it uses make_bladj_tree-datelife_query on input
           input <- datelife_query_check(input, ...)
           if(!inherits(input, "datelifeQuery")){
               (message("Input must be a character vector or a datelifeQuery object"))
