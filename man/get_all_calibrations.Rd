@@ -7,7 +7,7 @@
 get_all_calibrations(input = c("Rhea americana", "Pterocnemia pennata",
   "Struthio camelus"), partial = TRUE, use_tnrs = FALSE,
   approximate_match = TRUE, update_cache = FALSE,
-  cache = get("opentree_chronograms"), verbose = FALSE)
+  cache = get("opentree_chronograms"), verbose = FALSE, each = FALSE)
 }
 \arguments{
 \item{input}{vector of names, a newick string, a phylo or multiPhylo object, a datelifeResult object}
@@ -23,6 +23,8 @@ get_all_calibrations(input = c("Rhea americana", "Pterocnemia pennata",
 \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+
+\item{each}{Boolean, default to FALSE (all calibrations are returned in the same data frame). If TRUE, calibrations from each chronogram are returned in a separate data frame.}
 }
 \value{
 A data_frame of calibrations

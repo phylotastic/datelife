@@ -125,7 +125,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 	dois <- list()
 	tree.count <- 0
 	bad.ones <- c()
-	ott_id_problems <- data.frame(study.id = character(), tree.id = character()) # nrow(ott_id_problems) is 0
+	ott_id_problems <- data.frame(study.id = character(), tree.id = character()) # nrow(fix_negative_brlen) is 0
 	# utils::opentree_chronograms
 	for (study.index in sequence(dim(chronogram.matches)[1])) {
 			# the only purpose for this conditional is to run the testhat for this function.

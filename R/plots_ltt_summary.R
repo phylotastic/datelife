@@ -42,7 +42,8 @@ ltt_summary <- function(phy_summ, phy_summ_type = NULL, phy_summ_col = NULL, max
 # modified from make_lttplot_summchrono2 function in datelife_examples
 plot_ltt_summary <- function(taxon, phy, phy_sdm, phy_median,
         file_name = NULL, file_dir = NULL, height = 3.5, width = 7,
-        add_legend = TRUE, add_title = FALSE, tax_datedotol = NULL){
+        add_legend = TRUE, add_title = FALSE, col_sdm = "#00AFBB", col_median = "#CC79A7",
+        tax_datedotol = NULL){
 
     if(!inherits(taxon, "character")){
       taxon <- "Some species"
@@ -80,9 +81,9 @@ plot_ltt_summary <- function(taxon, phy, phy_sdm, phy_median,
     ltt_phyloall(phy, trees = treesall, max_tips, max_ages, xlim0, taxon, phy_mrca,
       col_sample, length_arrowhead, lwd_phyloall = 1.5)
     ltt_summary(phy_summ = phy_median, phy_summ_type = "Median",
-        phy_summ_col = "#FFDB6D", max_tips, length_arrowhead) #color yellowish
+        phy_summ_col = col_median, max_tips, length_arrowhead) # default color pinkish
     ltt_summary(phy_summ = phy_sdm, phy_summ_type = "SDM",
-        phy_summ_col = "#00AFBB", max_tips, length_arrowhead) # color teal
+        phy_summ_col = col_sdm, max_tips, length_arrowhead) # default color teal
     if(add_legend){
         leg <- paste(taxon, c("source chronograms", "summary chronograms"))
         graphics::legend(x = -xlim0, y = max_tips*1.1, legend = leg, cex = 0.75, pch = 19,

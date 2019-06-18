@@ -17,6 +17,7 @@ use_all_calibrations(input = NULL, ...)
   \item{use_tnrs}{Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer}
   \item{approximate_match}{Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)}
   \item{cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
+  \item{each}{Boolean, default to FALSE (all calibrations are returned in the same data frame). If TRUE, calibrations from each chronogram are returned in a separate data frame.}
   \item{update_cache}{default to FALSE}
   \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }}

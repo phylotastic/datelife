@@ -6,7 +6,8 @@
 \usage{
 plot_ltt_summary(taxon, phy, phy_sdm, phy_median, file_name = NULL,
   file_dir = NULL, height = 3.5, width = 7, add_legend = TRUE,
-  add_title = FALSE, tax_datedotol = NULL)
+  add_title = FALSE, col_sdm = "#00AFBB", col_median = "#CC79A7",
+  tax_datedotol = NULL)
 }
 \arguments{
 \item{taxon}{Character vector indicating the name of the taxon or lineage that the chronograms in phy belong to.}

@@ -5,11 +5,13 @@
 #' @param approximate_match Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @inheritParams datelife_search
+#' @param each Boolean, default to FALSE (all calibrations are returned in the same data frame). If TRUE, calibrations from each chronogram are returned in a separate data frame.
 #' @return A data_frame of calibrations
 #' @export
+# input <- tax_phyloallall[[1]]
 get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 		partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
-		cache = get("opentree_chronograms"), verbose = FALSE) {
+		cache = get("opentree_chronograms"), verbose = FALSE, each = FALSE) {
 	if(!inherits(input, "datelifeResult") & !inherits(input, "phylo") & !inherits(input, "multiPhylo")){
 		datelife_phylo <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs,
 			approximate_match = approximate_match, update_cache = update_cache, cache = cache,
@@ -25,21 +27,33 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 	if(inherits(input, "multiPhylo")){
 		datelife_phylo <- input
 	}
-	constraints.df <- data.frame() # we cannot set an empty data frame because nrow depends on the number of nodes available on each tree
+	if(each){
+		constraints.df <- vector(mode= "list") # we cannot set an empty data frame because nrow depends on the number of nodes available on each tree
+	} else {
+		constraints.df <- data.frame() # we cannot set an empty data frame because nrow depends on the number of nodes available on each tree
+	}
 	for (i in seq(length(datelife_phylo))) {
 		local.df <- suppressWarnings(geiger::congruify.phylo(reference = datelife_phylo[[i]],
 			target = datelife_phylo[[i]], scale = NA, ncores = 1))$calibrations
-		# suppressedWarnings bc of meesage when running geiger::congruify.phylo(reference = datelife_phylo[[i]], target = datelife_phylo[[i]], scale = NA)
+		# suppressedWarnings bc of message when running geiger::congruify.phylo(reference = datelife_phylo[[i]], target = datelife_phylo[[i]], scale = NA)
 		# 		Warning message:
 		# In if (class(stock) == "phylo") { :
 		# the condition has length > 1 and only the first element will be used
 		local.df$reference <- names(datelife_phylo)[i]
-		if(i == 1) {
-			constraints.df <- local.df
-		} else {
-			constraints.df <- rbind(constraints.df, local.df)
-		}
+			if(each){
+				constraints.df <- c(constraints.df, list(local.df))
+			} else {
+				if(i == 1) {
+					constraints.df <- local.df
+				} else {
+					constraints.df <- rbind(constraints.df, local.df)
+				}
+		 }
 	}
+	if(each){
+		names(constraints.df) <- names(datelife_phylo)
+	}
+	attr(constraints.df, "phylo_all") <- datelife_phylo
 	return(constraints.df)
 }
 

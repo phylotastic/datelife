@@ -38,8 +38,8 @@ use_calibrations_treePL <- function(phy, calibrations){
         return(NA)
     }
     if(any(phy$edge.length < 0)){
-      message("phy has not have branch lengths, consider using a dating method that does not require data, such as BLADJ or MrBayes.")
-      phy <- fix_negative_brlen(phy)
+      message("phy has negative branch lengths. treePL fixes this to be able to run, but asigning them to 0 right now.")
+      phy <- tree_fix_brlen(phy)
     }
     # fix any negative branch lengths?
     # phy <- tree_fix_brlen(phy, fixing_criterion = "negative", fixing_method = 0, ultrametric = FALSE)

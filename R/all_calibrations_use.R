@@ -37,6 +37,43 @@ use_all_calibrations <- function(input = NULL, ...) { # dating_method = "bladj",
 		return(list(phy = chronogram, calibrations.df = calibrations))
 }
 
+#' Use calibrations from each source chronogram to date a tree.
+#' @param phy A tree with or without branch lengths to be dated. Only as phylo object for now.
+#' @param phylo_all Can be NULL. A datelifeResult list of patristic matrices, or a chronogram as phylo or multiPhylo.
+#' @param calibrations Can be NULL. A list of dataframes from get_all_calibrations function.
+#' @return A list with a multiPhylo object of chronograms and a list of all calibrations used
+#' @export
+#' @details
+#' You can  get the datelifeResult object or the list of chronograms first
+#' phylo_all1 <- get_datelife_result(input = my_phy)
+#' phylo_all2 <- summarize_datelife_result(phylo_all1)
+#' Either will work the same:
+#' use_each_calibration(phy = my_phy, phylo_all = phylo_all1)
+#' use_each_calibration(phy = my_phy, phylo_all = phylo_all2)
+#' You can also get the list of calibrations outside
+#' my_calibrations <- get_all_calibrations(input = phylo_all1, each = TRUE)
+#' use_each_calibration(phy = my_phy, calibrations = my_calibrations)
+#' All this means that you can use your own set of calibrations, not necessarily the ones found only in datelife.
+use_each_calibration <- function(phy = NULL, phylo_all = NULL, calibrations = NULL, ...) {
+		if(!inherits(phy, "phylo")){
+			message("phy is not a phylo object")
+			return(NA)
+		}
+		# when calibrations are not given as a list of dataframes
+		if(!inherits(calibrations, "list")){
+			if(inherits(input, "datelifeResult") | inherits(input, "phylo") | inherits(input, "multiPhylo")){
+				calibrations <- get_all_calibrations(input = phylo_all, each = TRUE, ...)
+			} else {
+				# can perform the datelife_search through get_all_calibrations:
+				calibrations <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), each = TRUE, ...)
+			}
+		}
+		# date the tree with bladj, or pathd8 if branch lengths:
+		chronograms <- lapply(calibrations, function(x) use_calibration(phy, x))
+		names(chronograms) <- names(calibrations)
+		class(chronograms) <- "multiPhylo"
+		return(list(phy = chronograms, calibrations.df = calibrations))
+}
 #' Perform a dating analysis on a tree topology using a determined set of calibrations.
 #' @inheritParams use_calibrations_bladj
 #' @param dating_method The method used for tree dating.
