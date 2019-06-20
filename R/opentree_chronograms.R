@@ -137,6 +137,9 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 			}
 			for(chrono.index in sequence((chronogram.matches$n_matched_trees[study.index]))) {
 					study.id <- chronogram.matches$study_ids[study.index]
+					# study.id <- "ot_409" # largest tree in Hedges et al. 2015
+					# chronogram.matches[chronogram.matches$study_ids == study.id,]
+					# tree.id <- "tree2"
 					# if(study.id %in% opentree_chronograms$studies)  # unlist(opentree_chronograms$studies) if new_studies_only
 					#	new.tree <- get_study_tree(study_id=study.id, tree_id=tree.id, tip_label='ott_taxon_name')
 					try.tree <- new.tree2 <- new.tree <- NULL
@@ -159,8 +162,13 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 								# right now the function is having trouble to retrieve trees with ott ids as tip labels from certain studies
 								new.tree2 <- tryCatch(rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_id"),
 												error = function (e) NULL)
-								if(is.null(new.tree2)){
+								head(new.tree2$tip.label)
+								if(!inherits(new.tree2, "phylo")){
+									problem <- "otol database does not have ott ids for this tree (names have not been curated)"
 									ott_id_problems <- rbind(ott_id_problems, data.frame(study.id, tree.id))
+									# do tnrs here?
+									# new.tree_tnrs <- tnrs_match(input = new.tree$tip.label)
+									# new.tree_tnrs <- tnrs_match.phylo(input = new.tree)
 								}
 								new.tree$ott_ids <- gsub("_.*", "", new.tree2$tip.label) # if new.tree2 is null it will generate an empty vector
 								try.tree <- clean_ott_chronogram(new.tree)

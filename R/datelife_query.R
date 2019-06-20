@@ -27,13 +27,13 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	if(inherits(phy_new, "phylo")) { # if input is phylo
 	  	cleaned_input <- phy_new$tip.label
 		ott_ids <- NULL
-		if(!is.null(phy_new$ott_ids)){ # if we have ott_ids don't use_tnrs
+		# if we have ott_ids in phy, don't use_tnrs again:
+		if(inherits(phy_new$ott_ids, "numeric") | inherits(phy_new$ott_ids, "integer")){
 			# if(!any(is.na(phy_new$ott_ids))){ #if there are no NAs
 			use_tnrs_global <- FALSE
 			ott_ids <- phy_new$ott_ids
-			if(any(get_spp_from_taxon)){
-				cleaned_input_tnrs <- list(ott_id = phy_new$ott_ids,
-					unique_name = phy_new$tip.label) # to use when get_spp_from_taxon = TRUE
+			if(any(get_spp_from_taxon)){ # to use later, when get_spp_from_taxon = TRUE
+				cleaned_input_tnrs <- list(ott_id = phy_new$ott_ids, unique_name = phy_new$tip.label) 
 			}
 		}
 	} else {

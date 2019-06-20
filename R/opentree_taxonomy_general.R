@@ -87,7 +87,7 @@ tnrs_match.default <- function(input, reference_taxonomy = "otl", ...){  # enhan
 #' }
 #' if tips are duplicated, tnrs will only be run once (avoiding increases in function running time) but the result will be applied to all duplicated tip labels
 #' @export
-tnrs_match.phylo <- function(input, reference_taxonomy = "otl", tip, ...){  # we can add other reference taxonomies in the future
+tnrs_match.phylo <- function(input, reference_taxonomy = "otl", tip = NULL, ...){  # we can add other reference taxonomies in the future
 	# enhance_aproximates: add an argument in case we want to give the choice to users of changing only direct matches or also approximated matches
 	phylo_check(input, dated = FALSE)
 	phy.ori <- phy <- input
