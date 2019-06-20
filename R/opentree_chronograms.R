@@ -227,6 +227,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 		write("There were no problematic chronograms.", paste0(getwd(), "/data-raw/ott_id_problems_", max_tree_count, ".csv"))
 	}
 	tot_time <- Sys.time() - start_time # end of registering function running time
+	class(trees) <- "multiPhylo"
 	result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
 	attr(result, "running_time") <- tot_time
 	return(result)
