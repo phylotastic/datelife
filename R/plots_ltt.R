@@ -1,6 +1,6 @@
 # plots all chronograms from a phyloall datelife summary, using a sample of colors from grDevices::rainbow()
 # can plot dated otol tree too
-#' Lineahe through time plots of  all chronograms in multiphylo object.
+#' Easy visualization of lineage through time plots of all chronograms in a multiphylo object.
 #'
 #' @param taxon Character vector indicating the name of the taxon or lineage that the chronograms in phy belong to.
 #' @param phy A phylo or multiphylo object with chronograms (trees with branch lengths proportional to geologic time), ideally.
@@ -9,17 +9,23 @@
 #' @param file_name A character string giving the name of the pdf file.
 #' @param file_dir A character string giving the path to write the file to.
 #' @inheritParams ape::plot.phylo
+#' @inheritDotParams ape::ltt.plot -phy
 #' @param add_legend Boolean
 #' @param add_title Boolean
 #' @param title_text Character vector
 #' @export
 plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedotol = NULL,
     file_name = NULL, file_dir = NULL, height = 3.5, width = 7, add_legend = FALSE,
-    add_title = FALSE, title_text = NULL){
+    add_title = FALSE, title_text = NULL, ...){
 
-    if(!inherits(taxon, "character")){
-      taxon <- "Some species"
-    }
+  if(!inherits(taxon, "character")){
+    taxon <- "Some species"
+  }
+  if(inherits(phy, "phylo")){
+    phy <- list(phy)
+    class(phy) <- "multiPhylo"
+    names(phy) <- taxon
+  }
   if(!inherits(file_dir, "character")){
     file_dir <- getwd()
   }
@@ -86,12 +92,12 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
   ape::ltt.plot(trees[[which.max(max_tipsall)]], xlim = c(-xlim0, 0),
         ylim = c(-max_tips*0.30, max_tips),
         col = paste0("#ffffff", "80"), ylab = paste(taxon, "Species N"),
-        xlab = "")
+        xlab = "", ...)
   graphics::mtext("Time (MYA)", side = 1, cex = 1, font = 1, line = 2)
   cond2 <- (!duplicated(study_number) | !duplicated(round(max_ages)))
   for (i in order(phy_mrca, decreasing = TRUE)){ # plot the oldest chronogrm first, it looks better in graph
     col_phyloall <- col_phyloall_sample[i]
-    ape::ltt.lines(phy = phy[[i]], col = paste0(col_phyloall), lwd = 1.5)
+    ape::ltt.lines(phy = phy[[i]], col = paste0(col_phyloall), lwd = 1.5, ...)
     x0 <- x1 <- -phy_mrca[i]
     graphics::arrows(x0, y0, x1, y1, length = length_arrowhead, col = paste0(col_phyloall), lwd = lwd_arrows)
     graphics::text(x = -max_ages[i], y = y_numbers[i], labels = ifelse(cond2[i], study_number[i], ""),
@@ -112,8 +118,9 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
   grDevices::dev.off()
 }
 
+# enhance: use the following plot inside other plots requiring ltt phylo all plotting
 ltt_phyloall <- function(phy, trees = NULL, max_tips, max_ages, xlim0, taxon, phy_mrca,
-  col_sample, length_arrowhead = 0.075, lwd_phyloall = 1.5){
+  col_sample, length_arrowhead = 0.075, lwd_phyloall = 1.5, ...){
 
   if(!inherits(trees, "multiPhylo")){
     trees <- phy
@@ -137,12 +144,12 @@ ltt_phyloall <- function(phy, trees = NULL, max_tips, max_ages, xlim0, taxon, ph
   ape::ltt.plot(trees[[which.max(max_tips)]], xlim = c(-xlim0, 0),
         ylim = c(-max_tips*0.30, max_tips),
         col = paste0("#ffffff", "10"), ylab = paste(taxon, "Species N"),
-        xlab = "") # we need to plot it white because argument plot = FALSE is not working with ltt.plot
+        xlab = "", ...) # we need to plot it white because argument plot = FALSE is not working with ltt.plot
   graphics::mtext("Time (MYA)", side = 1, cex = 1, font = 1, line = 2)
   cond2 <- (!duplicated(study_number) | !duplicated(round(max_ages)))
   for (i in order(phy_mrca, decreasing = TRUE)){
     col_phyloall <- col_phyloall_sample[i]
-    ape::ltt.lines(phy = phy[[i]], col = paste0(col_phyloall), lwd = lwd_phyloall)
+    ape::ltt.lines(phy = phy[[i]], col = paste0(col_phyloall), lwd = lwd_phyloall, ...)
     x0 <- x1 <- -phy_mrca[i]
     graphics::arrows(x0, y0 = -max_tips*0.075, x1, y1 = 0, length = length_arrowhead, col = paste0(col_phyloall), lwd = 2)
     graphics::text(x = -max_ages[i], y = y_numbers[i], labels = ifelse(cond2[i], study_number[i], ""),

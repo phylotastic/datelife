@@ -6,8 +6,10 @@
 #' @param phy_summ_col A character value.
 #' @param max_tips A numeric value
 #' @param length_arrowhead A numeric value
+#' @inheritDotParams ape::ltt.plot
+
 ltt_summary <- function(phy_summ, phy_summ_type = NULL, phy_summ_col = NULL, max_tips,
-  length_arrowhead = 0.075){
+  length_arrowhead = 0.075, ...){
     if(!inherits(phy_summ_type, "character")){
       phy_summ_type <- "Summary"
     }
@@ -15,7 +17,7 @@ ltt_summary <- function(phy_summ, phy_summ_type = NULL, phy_summ_col = NULL, max
       phy_summ <- list(phy_summ)
     }
     foo <- function(phy, color_here, labels_here, length_arrowhead, max_tips){
-        ape::ltt.lines(phy = phy, col = paste0(color_here, "90"), lty = 1, lwd = 2)
+        ape::ltt.lines(phy = phy, col = paste0(color_here, "90"), lty = 1, lwd = 2, ...)
         # points(x = -max(ape::branching.times(tax_phycluster[[i]])), y = 2, pch = 25, col = paste0(col_here, "60"), lwd = 0.75)
         x0 <- x1 <- -max(ape::node.depth.edgelength(phy))
         graphics::arrows(x0, y0 = 2.5+max_tips*0.1, x1, y1 = 2.5, length = length_arrowhead,
@@ -39,6 +41,7 @@ ltt_summary <- function(phy_summ, phy_summ_type = NULL, phy_summ_col = NULL, max
 #' @param file_name A character string giving the name of the pdf file.
 #' @param file_dir A character string giving the path to write the file to.
 #' @inheritParams ape::plot.phylo
+#' @inheritDotParams ape::ltt.plot
 #' @param add_legend Boolean
 #' @param add_title Boolean
 #' @export
@@ -46,7 +49,7 @@ ltt_summary <- function(phy_summ, phy_summ_type = NULL, phy_summ_col = NULL, max
 plot_ltt_summary <- function(taxon, phy, phy_sdm, phy_median,
         file_name = NULL, file_dir = NULL, height = 3.5, width = 7,
         add_legend = TRUE, add_title = FALSE, col_sdm = "#00AFBB", col_median = "#CC79A7",
-        tax_datedotol = NULL){
+        tax_datedotol = NULL, ...){
 
     if(!inherits(taxon, "character")){
       taxon <- "Some species"
@@ -82,7 +85,7 @@ plot_ltt_summary <- function(taxon, phy, phy_sdm, phy_median,
     grDevices::pdf(file = file_name, height = height, width = width)
     graphics::par(mai = c(1.02, 0.82, 0.2, 0.2))
     ltt_phyloall(phy, trees = treesall, max_tips, max_ages, xlim0, taxon, phy_mrca,
-      col_sample, length_arrowhead, lwd_phyloall = 1.5)
+      col_sample, length_arrowhead, lwd_phyloall = 1.5, ...)
     ltt_summary(phy_summ = phy_median, phy_summ_type = "Median",
         phy_summ_col = col_median, max_tips, length_arrowhead) # default color pinkish
     ltt_summary(phy_summ = phy_sdm, phy_summ_type = "SDM",

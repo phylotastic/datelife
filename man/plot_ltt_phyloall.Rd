@@ -2,12 +2,12 @@
 % Please edit documentation in R/plots_ltt.R
 \name{plot_ltt_phyloall}
 \alias{plot_ltt_phyloall}
-\title{Lineahe through time plots of  all chronograms in multiphylo object.}
+\title{Easy visualization of lineage through time plots of all chronograms in a multiphylo object.}
 \usage{
 plot_ltt_phyloall(taxon = NULL, phy, ltt_colors = NULL,
   tax_datedotol = NULL, file_name = NULL, file_dir = NULL,
   height = 3.5, width = 7, add_legend = FALSE, add_title = FALSE,
-  title_text = NULL)
+  title_text = NULL, ...)
 }
 \arguments{
 \item{taxon}{Character vector indicating the name of the taxon or lineage that the chronograms in phy belong to.}
@@ -27,7 +27,20 @@ plot_ltt_phyloall(taxon = NULL, phy, ltt_colors = NULL,
 \item{add_title}{Boolean}
 
 \item{title_text}{Character vector}
+
+\item{...}{further arguments to be passed to \code{plot} or to
+    \code{plot.phylo}.}
+
+\item{...}{Arguments passed on to \code{ape::ltt.plot}
+\describe{
+  \item{xlab}{a character string (or a variable of mode character)
+    giving the label for the \eqn{x}-axis (default is "Time").}
+  \item{ylab}{idem for the \eqn{y}-axis (default is "N").}
+  \item{backward}{a logical value: should the time axis be traced from
+    the present (the default), or from the root of the tree?}
+  \item{tol}{a numeric value (see details).}
+}}
 }
 \description{
-Lineahe through time plots of  all chronograms in multiphylo object.
+Easy visualization of lineage through time plots of all chronograms in a multiphylo object.
 }
