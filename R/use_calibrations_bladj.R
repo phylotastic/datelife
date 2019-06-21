@@ -15,7 +15,7 @@
 # @details
 # enhance: explain what matching calibrations mean, inherit explanation from match_all_calibrations function
 #' @export
-use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age = NULL, match_calibrations = TRUE){
+use_calibrations_bladj <- function(phy = NULL, calibrations, type = "median", root_age = NULL, match_calibrations = TRUE){
 	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
 	if(match_calibrations){
 		calibs <- match_all_calibrations(phy, calibrations)
