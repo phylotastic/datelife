@@ -14,9 +14,9 @@ plot_ltt_summary(taxon, phy, phy_sdm, phy_median, file_name = NULL,
 
 \item{phy}{A phylo or multiphylo object with chronograms (trees with branch lengths proportional to geologic time), ideally.}
 
-\item{phy_sdm}{A multiphylo object with chronograms from and SDM summary.}
+\item{phy_sdm}{A multiphylo object with chronograms from a SDM summary.}
 
-\item{phy_median}{A multiphylo object with chronograms from an median summary.}
+\item{phy_median}{A multiphylo object with chronograms from a median summary.}
 
 \item{file_name}{A character string giving the name of the pdf file.}
 
@@ -26,7 +26,7 @@ plot_ltt_summary(taxon, phy, phy_sdm, phy_median, file_name = NULL,
 
 \item{add_title}{Boolean}
 
-\item{tax_datedotol}{A chronogram to compare trees in phy to.}
+\item{tax_datedotol}{A chronogram to compare other chronograms to.}
 }
 \description{
 Lineage through time plots of all chronograms in multiphylo object and its summaries.

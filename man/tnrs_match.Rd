@@ -10,7 +10,8 @@ tnrs_match(input, reference_taxonomy, tip, ...)
 
 \method{tnrs_match}{default}(input, reference_taxonomy = "otl", ...)
 
-\method{tnrs_match}{phylo}(input, reference_taxonomy = "otl", tip, ...)
+\method{tnrs_match}{phylo}(input, reference_taxonomy = "otl",
+  tip = NULL, ...)
 }
 \arguments{
 \item{input}{A character vector of taxon names, or a phylo object with tip names, to be matched to taxonomy.}
