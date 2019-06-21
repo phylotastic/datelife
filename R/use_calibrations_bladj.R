@@ -21,6 +21,7 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age 
 		calibs <- match_all_calibrations(phy, calibrations)
 	} else {
 		calibs <- calibrations
+		# calibs <- all_calibs_93_matched
 	}
     if(nrow(calibs$present_calibrations) < 1){
 			message("Nodes in calibrations (determined by taxon pairs) do not match any nodes in phy.")
@@ -29,6 +30,7 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age 
     }
 	if("mean" %in% type){
 	  node_ages <- sapply(calibs$phy$calibration_distribution, mean)
+		# length(node_ages)
     }
     if("min" %in% type){
 	  node_ages <- sapply(calibs$phy$calibration_distribution, min)
@@ -44,6 +46,7 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age 
   # bladj will run if calibrations are in conflict
   # it will not run if there is no calibration for the root
   node_names <- calibs$matched_calibrations$NodeNames
+	# length(node_names)
   if(!"n1" %in% calibs$matched_calibrations$NodeNames){
 		if(length(node_ages) > 1){
 			root_age <- max(node_ages) + mean(abs(diff(sort(node_ages))))

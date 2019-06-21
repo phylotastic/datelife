@@ -9,6 +9,9 @@
 #' @export
 make_bladj_tree <- function(tree = NULL, nodenames = NULL, nodeages = NULL){
 	# tree <- missing_taxa_phy
+	# tree = calibs$phy
+	# nodeages = node_ages
+  # nodenames = node_names
 	phy <- tree_check(tree = tree, dated = FALSE)
 	# needs to be fully resolved to work with bladj?
 	# ape::is.binary(phy)
@@ -42,7 +45,13 @@ make_bladj_tree <- function(tree = NULL, nodenames = NULL, nodeages = NULL){
 	new.phy <- phytools::read.newick(text = new.phy)
 	# to keep the same names as original phy (bladj modifies all names to lowercase):
 	phy <- phylo_tiplabel_space_to_underscore(phy)
+	phy$tip.label <- gsub(":", "", phy$tip.label) # one tip label in Hedges et al. 2015 chronogram
 	index <- match(tolower(phy$tip.label), new.phy$tip.label)
+	# any(is.na(index))
+	# tolower(new.phy$tip.label)[is.na(index)]
 	new.phy$tip.label[index] <- phy$tip.label
+	# Error in new.phy$tip.label[index] <- phy$tip.label :
+  # NAs are not allowed in subscripted assignments
 	return(new.phy)
 }
+# new.phy_save <- new.phy
