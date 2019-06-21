@@ -11,6 +11,9 @@ ltt_summary <- function(phy_summ, phy_summ_type = NULL, phy_summ_col = NULL, max
     if(!inherits(phy_summ_type, "character")){
       phy_summ_type <- "Summary"
     }
+    if(inherits(phy_summ, "phylo")){
+      phy_summ <- list(phy_summ)
+    }
     foo <- function(phy, color_here, labels_here, length_arrowhead, max_tips){
         ape::ltt.lines(phy = phy, col = paste0(color_here, "90"), lty = 1, lwd = 2)
         # points(x = -max(ape::branching.times(tax_phycluster[[i]])), y = 2, pch = 25, col = paste0(col_here, "60"), lwd = 0.75)
@@ -30,9 +33,9 @@ ltt_summary <- function(phy_summ, phy_summ_type = NULL, phy_summ_col = NULL, max
 #'
 #' @param taxon Character vector indicating the name of the taxon or lineage that the chronograms in phy belong to.
 #' @param phy A phylo or multiphylo object with chronograms (trees with branch lengths proportional to geologic time), ideally.
-#' @param phy_sdm A multiphylo object with chronograms from and SDM summary.
-#' @param phy_median A multiphylo object with chronograms from an median summary.
-#' @param tax_datedotol A chronogram to compare trees in phy to.
+#' @param phy_sdm A multiphylo object with chronograms from a SDM summary.
+#' @param phy_median A multiphylo object with chronograms from a median summary.
+#' @param tax_datedotol A chronogram to compare other chronograms to.
 #' @param file_name A character string giving the name of the pdf file.
 #' @param file_dir A character string giving the path to write the file to.
 #' @inheritParams ape::plot.phylo

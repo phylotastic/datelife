@@ -10,11 +10,18 @@
 #' @param calibrations A data frame of calibrations from get_all_calibrations function, or a subset of it.
 #' @param type The type of age to use as calibration.
 #' @param root_age Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.
+#' @param match_calibrations Boolean, default to TRUE. It will run match_all_calibrations function. Set to FALSE if your calibrations have already been matched.
 #' @return A phylo object
+# @details
+# enhance: explain what matching calibrations mean, inherit explanation from match_all_calibrations function
 #' @export
-use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age = NULL){
+use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age = NULL, match_calibrations = TRUE){
 	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
-	calibs <- match_all_calibrations(phy, calibrations)
+	if(match_calibrations){
+		calibs <- match_all_calibrations(phy, calibrations)
+	} else {
+		calibs <- calibrations
+	}
     if(nrow(calibs$present_calibrations) < 1){
 			message("Nodes in calibrations (determined by taxon pairs) do not match any nodes in phy.")
       message("Dating analysis is not possible with this set of calibrations.")
