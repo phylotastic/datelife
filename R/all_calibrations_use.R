@@ -63,7 +63,7 @@ use_each_calibration <- function(phy = NULL, phylo_all = NULL, calibrations = NU
 		}
 		# when calibrations are not given as a list of dataframes
 		if(!inherits(calibrations, "list")){
-			if(inherits(input, "datelifeResult") | inherits(input, "phylo") | inherits(input, "multiPhylo")){
+			if(inherits(phylo_all, "datelifeResult") | inherits(phylo_all, "phylo") | inherits(phylo_all, "multiPhylo")){
 				calibrations <- get_all_calibrations(input = phylo_all, each = TRUE, ...)
 			} else {
 				# can perform the datelife_search through get_all_calibrations:

@@ -46,9 +46,10 @@ make_bladj_tree <- function(tree = NULL, nodenames = NULL, nodeages = NULL){
 	# to keep the same names as original phy (bladj modifies all names to lowercase):
 	phy <- phylo_tiplabel_space_to_underscore(phy)
 	phy$tip.label <- gsub(":", "", phy$tip.label) # one tip label in Hedges et al. 2015 chronogram
-	phy$tip.label <- gsub("\\(", "", phy$tip.label) # one tip label in Jetz et al. 2012 chronogram # "bernieria_madagascariensis_(gmelin,_1789)"
+	phy$tip.label <- gsub("\\(", "-", phy$tip.label) # one tip label in Jetz et al. 2012 chronogram # "bernieria_madagascariensis_(gmelin,_1789)"
 	phy$tip.label <- gsub(")", "", phy$tip.label) # one tip label in Jetz et al. 2012 chronogram # "bernieria_madagascariensis_(gmelin,_1789)"
-	phy$tip.label <- gsub(",", "", phy$tip.label) # one tip label in Hedges et al. 2015 chronogram
+	phy$tip.label <- gsub(",", "", phy$tip.label) # one tip label in Jetz et al. 2012 chronogram # "bernieria_madagascariensis_(gmelin,_1789)"
+	# new.phy$tip.label <- gsub("-", "", new.phy$tip.label) # one tip label in Jetz et al. 2012 chronogram # "bernieria_madagascariensis_(gmelin,_1789)"
 	index <- match(tolower(phy$tip.label), new.phy$tip.label)
 	# index2 <- match(new.phy$tip.label, tolower(phy$tip.label))
 	# tolower(new.phy$tip.label)[is.na(index2)]

@@ -13,10 +13,11 @@
 #' @param add_legend Boolean
 #' @param add_title Boolean
 #' @param title_text Character vector
+#' @param study_number_cex A numeric value
 #' @export
 plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedotol = NULL,
     file_name = NULL, file_dir = NULL, height = 3.5, width = 7, add_legend = FALSE,
-    add_title = FALSE, title_text = NULL, ...){
+    add_title = FALSE, title_text = NULL,  study_number_cex = 0.75, ...){
 
   if(!inherits(taxon, "character")){
     taxon <- "Some species"
@@ -101,7 +102,7 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
     x0 <- x1 <- -phy_mrca[i]
     graphics::arrows(x0, y0, x1, y1, length = length_arrowhead, col = paste0(col_phyloall), lwd = lwd_arrows)
     graphics::text(x = -max_ages[i], y = y_numbers[i], labels = ifelse(cond2[i], study_number[i], ""),
-        font = 4, col = col_phyloall, cex = 0.75)
+        font = 4, col = col_phyloall, cex = study_number_cex)
   }
   if(add_title){
     # text(labels = paste(taxon, "source chronograms"), x = -xlim0, y = max_tips*0.925, cex = 0.75, adj = 0, font = 1)

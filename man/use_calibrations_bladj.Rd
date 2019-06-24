@@ -4,7 +4,7 @@
 \alias{use_calibrations_bladj}
 \title{Use calibrations to date a topology with bladj.}
 \usage{
-use_calibrations_bladj(phy, calibrations, type = "median",
+use_calibrations_bladj(phy = NULL, calibrations, type = "median",
   root_age = NULL, match_calibrations = TRUE)
 }
 \arguments{
