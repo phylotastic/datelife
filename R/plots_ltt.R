@@ -14,10 +14,11 @@
 #' @param add_title Boolean
 #' @param title_text Character vector
 #' @param study_number_cex A numeric value
+#' @param lwd_arrows A numeric value
 #' @export
 plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedotol = NULL,
     file_name = NULL, file_dir = NULL, height = 3.5, width = 7, add_legend = FALSE,
-    add_title = FALSE, title_text = NULL,  study_number_cex = 0.75, ...){
+    add_title = FALSE, title_text = NULL,  study_number_cex = 0.75, lwd_arrows = 2, ...){
 
   if(!inherits(taxon, "character")){
     taxon <- "Some species"
@@ -57,9 +58,8 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
   max_tipsall <- sapply(trees, function(x) max(ape::Ntip(x)))
   max_tips <- max(max_tipsall)
   # col_phyloall <- "#cce5ff" # blue
-  y1 <- 0
+  y1 <- -max_tips*0.015
   y0 <- -max_tips*0.075
-  lwd_arrows <- 2
   length_arrowhead <- 0.075
   nn <- unique(names(phy))[order(unique(names(phy)))] # get ordered names
   # get a sample of colors the size of the number of studies (one color for each study):
@@ -121,7 +121,7 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
 
 # enhance: use the following plot inside other plots requiring ltt phylo all plotting
 ltt_phyloall <- function(phy, trees = NULL, max_tips, max_ages, xlim0, taxon, phy_mrca,
-  col_sample, length_arrowhead = 0.075, lwd_phyloall = 1.5, ...){
+  col_sample, length_arrowhead = 0.075, lwd_phyloall = 1.5,  study_number_cex = 0.75, ...){
 
   if(!inherits(trees, "multiPhylo")){
     trees <- phy
@@ -152,8 +152,9 @@ ltt_phyloall <- function(phy, trees = NULL, max_tips, max_ages, xlim0, taxon, ph
     col_phyloall <- col_phyloall_sample[i]
     ape::ltt.lines(phy = phy[[i]], col = paste0(col_phyloall), lwd = lwd_phyloall, ...)
     x0 <- x1 <- -phy_mrca[i]
-    graphics::arrows(x0, y0 = -max_tips*0.075, x1, y1 = 0, length = length_arrowhead, col = paste0(col_phyloall), lwd = 2)
-    graphics::text(x = -max_ages[i], y = y_numbers[i], labels = ifelse(cond2[i], study_number[i], ""),
-        font = 4, col = col_phyloall, cex = 1.1)
+    graphics::arrows(x0, y0 = -max_tips*0.075, x1, y1 = 0, length = length_arrowhead,
+      col = paste0(col_phyloall), lwd = 2)
+    graphics::text(x = -max_ages[i], y = y_numbers[i], labels = ifelse(cond2[i],
+      study_number[i], ""), font = 4, col = col_phyloall, cex = study_number_cex)
   }
 }

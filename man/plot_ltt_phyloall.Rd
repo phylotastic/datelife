@@ -7,7 +7,7 @@
 plot_ltt_phyloall(taxon = NULL, phy, ltt_colors = NULL,
   tax_datedotol = NULL, file_name = NULL, file_dir = NULL,
   height = 3.5, width = 7, add_legend = FALSE, add_title = FALSE,
-  title_text = NULL, study_number_cex = 0.75, ...)
+  title_text = NULL, study_number_cex = 0.75, lwd_arrows = 2, ...)
 }
 \arguments{
 \item{taxon}{Character vector indicating the name of the taxon or lineage that the chronograms in phy belong to.}
@@ -29,6 +29,8 @@ plot_ltt_phyloall(taxon = NULL, phy, ltt_colors = NULL,
 \item{title_text}{Character vector}
 
 \item{study_number_cex}{A numeric value}
+
+\item{lwd_arrows}{A numeric value}
 
 \item{...}{further arguments to be passed to \code{plot} or to
     \code{plot.phylo}.}
