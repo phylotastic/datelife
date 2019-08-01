@@ -160,13 +160,13 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 #' @export
 datelife_result_check <- function(datelife_result, use_tnrs = FALSE, verbose = FALSE){
 	if(length(datelife_result) < 1) {
-		warning("Output is empty.", call. = FALSE)
-		if(verbose) {
-			message("Input species were not found in any chronograms available in cache.")
+		warning("Datelife Result object is empty.", call. = FALSE)
+		# if(verbose) {
+			message("Input taxa were not found across available chronograms.")
 			if(!use_tnrs) {
 				message("Setting use_tnrs = TRUE might change this, but it is time consuming.")
 			}
-		}
+		# }
 	}
 }
 #' checks if we obtained an empty search with the set of input taxon names

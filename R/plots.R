@@ -784,6 +784,11 @@ cex = graphics::par("cex"), mai4 = NULL, write = "nothing", file_name = NULL, GT
             col = c("gray80", "white"), gridcol = c("gray80", "white"), cex = 0.5,
             gridty = "twodash")
       }
+      if(axis_type == 3){
+        strap::geoscalePhylo(tree=timeTree, ages=timeTree$ranges.used, cex.tip=0.7,
+          cex.ts=0.7,cex.age=0.7, width=4, tick.scale = 15, boxes = "Epoch", erotate = 90,
+          quat.rm=TRUE, units=c("Period","Epoch"), x.lim=c(65,-10))
+      }
       graphics::mtext("Time (MYA)", cex = cex, side = 1, font = 2, line = (ho$omi1-0.2)/0.2,
       outer = TRUE, at = 0.4)
   } else (
@@ -798,5 +803,19 @@ cex = graphics::par("cex"), mai4 = NULL, write = "nothing", file_name = NULL, GT
     grDevices::dev.off()
   }
 }
-
+# tree <- plant_bold_otol_tree
+# plot_phylo_gg <- function(tree, title = "Tree", time_depth = NULL, axis_type = 1,
+# cex = graphics::par("cex"), mai4 = NULL, write = "nothing", file_name = NULL, GTS = get("strat2012")){
+#   max_age <- max(ape::branching.times(tree))
+#   age_lim <- max_age*1.2
+#   grDevices::pdf("test.pdf")
+#   p <- ggtree::ggtree(tree) + ggtree::geom_tiplab()  + #ggplot2::xlim(age_lim*0.1,-age_lim) +
+#   ggplot2::coord_cartesian(xlim = c(age_lim*0.5,-age_lim), ylim = c(-1, ape::Ntip(tree)), expand = FALSE) +
+#   ggplot2::scale_x_continuous(breaks=seq(-age_lim,0,100), labels=abs(seq(-age_lim,0,100))) +
+#   ggtree::theme_tree2()
+#   p <- ggtree::revts(p)
+#   deeptime::gggeo_scale(p, neg = TRUE)
+#   print(p)
+#   grDevices::dev.off()
+# }
 # .PlotPhyloEnv <- new.env()
