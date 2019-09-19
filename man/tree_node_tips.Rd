@@ -7,7 +7,11 @@
 tree_node_tips(tree = NULL, node = NULL, curr = NULL)
 }
 \arguments{
-\item{tree}{A tree either as a newick character string or as a phylo object}
+\item{tree}{a phylogenetic tree as an object of class \code{"phylo"}.}
+
+\item{node}{an integer specifying a node number in the tree.}
+
+\item{curr}{the set of previously stored node numbers - used in recursive function calls.}
 }
 \value{
 A numeric vector with tip numbers descending from a node
