@@ -1,7 +1,7 @@
 
 test_that("use_all_calibrations actually works", {
   skip_on_cran()
-  skip_on_travis() #b/c no pathd8 
+  skip_on_travis() #b/c no pathd8
   # skip_on_os("linux") #b/c no pathd8 on travis linux
   results <- suppressWarnings(use_all_calibrations())
   # expect_true(ape::is.ultrametric(results$phy, tol=0.0000))
@@ -33,6 +33,8 @@ test_that("get_otol_synthetic_tree works", {
 
 
 test_that("get_all_calibrations works", {
+  skip_on_cran()
+  skip_on_travis()
   # this function does not use pathd8
   xx <- get_all_calibrations()
   expect_s3_class(xx, "data.frame") # should be a data.frame
