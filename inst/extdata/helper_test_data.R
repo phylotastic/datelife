@@ -1,6 +1,4 @@
 # helper data sets for testing
-skip_on_cran()
-skip_on_travis() #b/c no pathd8
 
 threebirds <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus")
 threebirds_query <- make_datelife_query(threebirds)
