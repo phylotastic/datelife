@@ -12,6 +12,8 @@ use_each_calibration(phy = NULL, phylo_all = NULL, calibrations = NULL, ...)
 \item{phylo_all}{Can be NULL. A datelifeResult list of patristic matrices, or a chronogram as phylo or multiPhylo.}
 
 \item{calibrations}{Can be NULL. A list of dataframes from get_all_calibrations function.}
+
+\item{...}{Arguments to pass to get_all_calibrations}
 }
 \value{
 A list with a multiPhylo object of chronograms and a list of all calibrations used

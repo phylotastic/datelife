@@ -41,6 +41,7 @@ use_all_calibrations <- function(input = NULL, ...) { # dating_method = "bladj",
 #' @param phy A tree with or without branch lengths to be dated. Only as phylo object for now.
 #' @param phylo_all Can be NULL. A datelifeResult list of patristic matrices, or a chronogram as phylo or multiPhylo.
 #' @param calibrations Can be NULL. A list of dataframes from get_all_calibrations function.
+#' @param ... Arguments to pass to get_all_calibrations
 #' @return A list with a multiPhylo object of chronograms and a list of all calibrations used
 #' @export
 #' @details

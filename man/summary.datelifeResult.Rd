@@ -10,6 +10,8 @@
 \item{object}{A "datelifeResult" object, typically an output of get_datelife_result function.}
 
 \item{...}{further arguments passed to or from other methods}
+
+\item{partial}{Boolean for whether to include partial matches}
 }
 \description{
 Main function to summarize a datelifeResult object

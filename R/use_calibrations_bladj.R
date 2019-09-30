@@ -68,6 +68,7 @@ use_calibrations_bladj <- function(phy = NULL, calibrations, type = "median", ro
 #' function to check for conflicting calibrations
 #' if calibrations are younger or older relative to descendants and ancestors, respectively
 #' @details it removes them if needed, but bladj works as long as it has an age for the root
+#' @param phy A phylo object
 #' @param calibration_distribution is a list of node ages distributions, named with the node number from phy
 # calibration_distribution <- calibs$phy$calibration_distribution
 check_conflicting_calibrations <- function(phy, calibration_distribution){

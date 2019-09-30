@@ -34,9 +34,17 @@ plot_ltt_summary(
 
 \item{file_dir}{A character string giving the path to write the file to.}
 
+\item{height}{Height of the plot}
+
+\item{width}{Width of the plot}
+
 \item{add_legend}{Boolean}
 
 \item{add_title}{Boolean}
+
+\item{col_sdm}{Color of the SDM tree}
+
+\item{col_median}{Color of the median tree}
 
 \item{tax_datedotol}{A chronogram to compare other chronograms to.}
 

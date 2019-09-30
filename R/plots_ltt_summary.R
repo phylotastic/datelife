@@ -40,10 +40,14 @@ ltt_summary <- function(phy_summ, phy_summ_type = NULL, phy_summ_col = NULL, max
 #' @param tax_datedotol A chronogram to compare other chronograms to.
 #' @param file_name A character string giving the name of the pdf file.
 #' @param file_dir A character string giving the path to write the file to.
+#' @param height Height of the plot
+#' @param width Width of the plot
 #' @inheritParams ape::plot.phylo
 #' @inheritDotParams ape::ltt.plot
 #' @param add_legend Boolean
 #' @param add_title Boolean
+#' @param col_sdm Color of the SDM tree
+#' @param col_median Color of the median tree
 #' @export
 # modified from make_lttplot_summchrono2 function in datelife_examples
 plot_ltt_summary <- function(taxon, phy, phy_sdm, phy_median,
