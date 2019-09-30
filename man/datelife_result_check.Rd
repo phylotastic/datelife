@@ -4,8 +4,7 @@
 \alias{datelife_result_check}
 \title{checks if we obtained an empty search with the set of input taxon names}
 \usage{
-datelife_result_check(datelife_result, use_tnrs = FALSE,
-  verbose = FALSE)
+datelife_result_check(datelife_result, use_tnrs = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}

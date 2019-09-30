@@ -4,8 +4,14 @@
 \alias{plot_phylo_all}
 \title{plot all trees with study titles and geochronological axis}
 \usage{
-plot_phylo_all(trees, cex = graphics::par("cex"), include = TRUE,
-  individually = TRUE, write = "no", file = "phylo_all")
+plot_phylo_all(
+  trees,
+  cex = graphics::par("cex"),
+  include = TRUE,
+  individually = TRUE,
+  write = "no",
+  file = "phylo_all"
+)
 }
 \arguments{
 \item{trees}{A list of trees as multiPhylo or as a plain list object.}

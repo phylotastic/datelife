@@ -4,9 +4,11 @@
 \alias{clean_taxon_info_children}
 \title{Identifies, extracts and cleans children names from a taxonomy_taxon_info() output}
 \usage{
-clean_taxon_info_children(taxon_info, invalid = c("barren", "extinct",
-  "uncultured", "major_rank_conflict", "incertae_sedis", "unplaced",
-  "conflict", "environmental", "not_otu", "hidden", "hybrid"))
+clean_taxon_info_children(
+  taxon_info,
+  invalid = c("barren", "extinct", "uncultured", "major_rank_conflict", "incertae_sedis",
+    "unplaced", "conflict", "environmental", "not_otu", "hidden", "hybrid")
+)
 }
 \arguments{
 \item{taxon_info}{An output of rotl::taxonomy_taxon_info()}

@@ -10,8 +10,6 @@
 \item{object}{A "datelifeResult" object, typically an output of get_datelife_result function.}
 
 \item{...}{further arguments passed to or from other methods}
-
-\item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
 }
 \description{
 Main function to summarize a datelifeResult object

@@ -4,8 +4,7 @@
 \alias{get_fossil_range}
 \title{Get the ages for a taxon from PBDB}
 \usage{
-get_fossil_range(taxon, recent = FALSE,
-  assume_recent_if_missing = TRUE)
+get_fossil_range(taxon, recent = FALSE, assume_recent_if_missing = TRUE)
 }
 \arguments{
 \item{taxon}{The scientific name of the taxon you want the range of occurrences of}

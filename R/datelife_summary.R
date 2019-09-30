@@ -228,7 +228,6 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 #' Main function to summarize a datelifeResult object
 #' @param object A "datelifeResult" object, typically an output of get_datelife_result function.
 #' @param ... further arguments passed to or from other methods
-#' @inheritParams datelife_search
 #' @method summary datelifeResult
 #' @export
 summary.datelifeResult <- function(object, ..., partial = TRUE){

@@ -4,8 +4,10 @@
 \alias{datelife_result_study_index}
 \title{Find the index of relevant studies in a opentree_chronograms object. Used inside: summarize_datelife_result.}
 \usage{
-datelife_result_study_index(datelife_result,
-  cache = get("opentree_chronograms"))
+datelife_result_study_index(
+  datelife_result,
+  cache = get("opentree_chronograms")
+)
 }
 \arguments{
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}

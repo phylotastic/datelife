@@ -9,11 +9,12 @@ tree_check(tree = NULL, ...)
 \arguments{
 \item{tree}{A tree either as a newick character string or as a phylo object}
 
-\item{...}{Arguments passed on to \code{phylo_check}
-\describe{
-  \item{brlen}{Boolean. If TRUE it checks if phylo object has branch lengths.}
-  \item{dated}{Boolean. If TRUE it checks if phylo object is ultrametric.}
-}}
+\item{...}{
+  Arguments passed on to \code{\link[=phylo_check]{phylo_check}}
+  \describe{
+    \item{\code{brlen}}{Boolean. If TRUE it checks if phylo object has branch lengths.}
+    \item{\code{dated}}{Boolean. If TRUE it checks if phylo object is ultrametric.}
+  }}
 }
 \value{
 If tree is correctly formatted, it returns a phylo object
