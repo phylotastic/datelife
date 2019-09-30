@@ -116,7 +116,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 		message("There are not enough sequences available in BOLD to reconstruct branch lengths. Returning tree with no branch lengths.")
 		return(phy)
 	}
-	xx <- phangorn::acctran(phy, alignment)
+	xx <- phangorn::acctran(ape::multi2di(phy), alignment)
 	pml.object <- phangorn::pml(xx, data = alignment)
 	phy <- pml.object$tree
 	if(!ape::is.binary.tree(pml.object$tree)){
