@@ -68,7 +68,7 @@ use_calibrations_treePL <- function(phy, calibrations){
       message(paste("setting max age to", maxage_allnodes, "(instead of", maxage_deepestnode, ")"))
       used_calibrations[which.max(pp),"MaxAge"] <- maxage_allnodes
     }
-    chronogram <- tryCatch(datelife:::treePL.phylo(calibs$phy, used_calibrations,
+    chronogram <- tryCatch(treePL.phylo(calibs$phy, used_calibrations,
       base=".tmp_treePL", rm=FALSE, opts=list(smooth=100, nthreads=1, optad=0, opt=1,
         cvstart=1000, cviter=3, cvend=0.1, thorough=TRUE)),
         error = function(e) NULL)

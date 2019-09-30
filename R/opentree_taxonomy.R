@@ -303,6 +303,7 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
 #' @inheritParams check_ott_input
 #' @param ott_rank A character vector with the ranks you wanna get lineage children from.
 #' @param taxonomic_source A character vector with the desired taxonomic sources. One of "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources.
+#' @param ... Other arguments to pass to get_valid_children()
 #' @return A data frame
 #' @examples
 #' # try getting an otol tree of a taxon missing from the synthetic tree
