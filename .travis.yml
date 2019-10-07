@@ -13,8 +13,16 @@ fortran: false
 env:
   - _R_CHECK_FORCE_SUGGESTS_=false
 warnings_are_errors: false
-os: osx
+
+os:
+  - linux
+  - osx
+
 
 before_install:
-- brew install git-lfs
-- brew install imagemagick
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install llvm &&
+    brew install git-lfs &&
+    brew install imagemagick &&
+    export PATH="/usr/local/opt/llvm/bin:$PATH" &&
+    export LDFLAGS="-L/usr/local/opt/llvm/lib" &&
+    export CFLAGS="-I/usr/local/opt/llvm/include"; fi
