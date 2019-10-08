@@ -3,7 +3,7 @@ title: "datelife package"
 author: "Luna L. Sánchez-Reyes and Brian O'Meara"
 date: "`r Sys.Date()`"
 output:
-    rmarkdown::html_vignette
+    pdf_document
 header-includes: \usepackage{graphicx}
 graphics: yes
 vignette: >

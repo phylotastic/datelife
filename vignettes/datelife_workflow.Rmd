@@ -3,7 +3,7 @@ title: "DateLife Workflow"
 author: "Luna L. Sanchez Reyes"
 date: "`r Sys.Date()`"
 output:
-      rmarkdown::html_vignette
+      pdf_document
 header-includes: \usepackage{graphicx}
 graphics: yes
 vignette: >

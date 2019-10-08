@@ -2,7 +2,7 @@
 title: "DateLife Examples"
 author: "Luna L. Sanchez Reyes"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: pdf_document
 vignette: >
   %\VignetteIndexEntry{DateLife Example}
   %\VignetteEngine{knitr::rmarkdown}
