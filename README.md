@@ -13,3 +13,5 @@ Then install datelife:
 `devtools::install_github("phylotastic/datelife")`
 
 You can update the cached objects with the `update_all_cached()` function
+
+You can see PDFs of the vignettes at https://github.com/phylotastic/datelife/tree/master/doc
