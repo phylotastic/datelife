@@ -4,16 +4,11 @@
 \alias{get_datelife_result}
 \title{Go from a vector of species, newick string, or phylo object to a list of patristic matrices}
 \usage{
-get_datelife_result(
-  input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-  partial = TRUE,
-  use_tnrs = FALSE,
-  approximate_match = TRUE,
-  update_cache = FALSE,
-  cache = get("opentree_chronograms"),
-  get_spp_from_taxon = FALSE,
-  verbose = FALSE
-)
+get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata",
+  "Struthio camelus"), partial = TRUE, use_tnrs = FALSE,
+  approximate_match = TRUE, update_cache = FALSE,
+  cache = get("opentree_chronograms"), get_spp_from_taxon = FALSE,
+  verbose = FALSE)
 }
 \arguments{
 \item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}

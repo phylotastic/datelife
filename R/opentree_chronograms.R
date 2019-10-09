@@ -66,13 +66,13 @@ save_otol_chronograms <- function(file = "opentree_chronograms.RData", verbose =
 #' @export
 update_all_cached <- function() {
 	opentree_chronograms <- get_otol_chronograms()
-	devtools::use_data(opentree_chronograms, overwrite=TRUE)
+	usethis::use_data(opentree_chronograms, overwrite=TRUE)
 	contributor_cache <- make_contributor_cache(outputfile=paste0(tempdir(), '/contributor.rda'))
-	devtools::use_data(contributor_cache, overwrite=TRUE)
+	usethis::use_data(contributor_cache, overwrite=TRUE)
 	treebase_cache <- make_treebase_cache(outputfile=paste0(tempdir(), '/treebase.rda'))
-	devtools::use_data(treebase_cache, overwrite=TRUE)
+	usethis::use_data(treebase_cache, overwrite=TRUE)
 	depositor_cache <- make_all_associations(outputfile=NULL)
-	devtools::use_data(depositor_cache, overwrite=TRUE)
+	usethis::use_data(depositor_cache, overwrite=TRUE)
 }
 
 #' Check for branch lengths in a tree

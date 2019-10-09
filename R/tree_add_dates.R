@@ -16,7 +16,7 @@
 #' @inheritParams make_mrbayes_runfile
 #' @return A phylo object
 #' @export
-tree_add_dates <- function(dated_tree = NULL, missing_taxa = NULL, dating_method = "mrbayes", 
+tree_add_dates <- function(dated_tree = NULL, missing_taxa = NULL, dating_method = "mrbayes",
 adding_criterion = "random", mrbayes_output_file = "mrbayes_tree_add_dates.nexus"){
 	dated_tree <- tree_check(tree = dated_tree, dated = TRUE)
 	missing_taxa <- missing_taxa_check(missing_taxa = missing_taxa, dated_tree = dated_tree)

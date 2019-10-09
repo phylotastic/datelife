@@ -37,18 +37,21 @@ Imports:
     taxize,
     treebase,
     httr,
-    devtools,
+    usethis,
     reports,
     plyr,
     grDevices,
     graphics,
     utils,
     phylocomr,
-    viridis
+    viridis,
+    phyloch,
+    strap
 Suggests:
     testthat,
     rmarkdown,
-    knitr
+    knitr,
+    devtools
 Remotes:
     phylotastic/rphylotastic
 SystemRequirements: mafft, PATHd8

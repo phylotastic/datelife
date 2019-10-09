@@ -110,7 +110,7 @@ use_calibrations_treePL <- function(phy, calibrations){
 treePL.phylo=function(phy, calibrations=NULL, base="", rm=TRUE, ...){
 	phy$node.label=NULL
 	if(!is.null(calibrations)){
-		infile = ape::write.treePL(phy=phy, calibrations=calibrations, base=base, ...)
+		infile = geiger::write.treePL(phy=phy, calibrations=calibrations, base=base, ...)
 	} else {
 		infile=paste(base, "infile", sep=".")
 		ape::write.tree(phy, infile)

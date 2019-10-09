@@ -4,7 +4,8 @@
 \alias{get_ott_children}
 \title{Use this instead of rotl::tol_subtree when taxa are not in synthesis tree and you still need to get all species or an induced otol subtree}
 \usage{
-get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species", ...)
+get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species",
+  ...)
 }
 \arguments{
 \item{input}{Optional. A character vector of names or a datelifeQuery object}
@@ -12,6 +13,8 @@ get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species", ...)
 \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 
 \item{ott_rank}{A character vector with the ranks you wanna get lineage children from.}
+
+\item{...}{Other arguments to pass to get_valid_children()}
 
 \item{taxonomic_source}{A character vector with the desired taxonomic sources. One of "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources.}
 }

@@ -10,7 +10,8 @@ tnrs_match(input, reference_taxonomy, tip, ...)
 
 \method{tnrs_match}{default}(input, reference_taxonomy = "otl", ...)
 
-\method{tnrs_match}{phylo}(input, reference_taxonomy = "otl", tip = NULL, ...)
+\method{tnrs_match}{phylo}(input, reference_taxonomy = "otl",
+  tip = NULL, ...)
 }
 \arguments{
 \item{input}{A character vector of taxon names, or a phylo object with tip names, to be matched to taxonomy.}
@@ -19,24 +20,23 @@ tnrs_match(input, reference_taxonomy, tip, ...)
 
 \item{tip}{A vector of mode numeric or character specifying the tips to match. If left empty all tips will be matched.}
 
-\item{...}{
-  Arguments passed on to \code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names}}
-  \describe{
-    \item{\code{context_name}}{name of the taxonomic context to be searched
+\item{...}{Arguments passed on to \code{rotl::tnrs_match_names}
+\describe{
+  \item{context_name}{name of the taxonomic context to be searched
 (length-one character vector). Must match (case sensitive) one
-of the values returned by \code{\link[rotl]{tnrs_contexts}}.}
-    \item{\code{do_approximate_matching}}{A logical indicating whether or not
+of the values returned by \code{\link{tnrs_contexts}}.}
+  \item{do_approximate_matching}{A logical indicating whether or not
 to perform approximate string (a.k.a. \dQuote{fuzzy})
 matching. Using \code{FALSE} will greatly improve
 speed. Default, however, is \code{TRUE}.}
-    \item{\code{ids}}{A vector of ids to use for identifying names. These
+  \item{ids}{A vector of ids to use for identifying names. These
 will be assigned to each name in the names array. If ids is
 provided, then ids and names must be identical in length.}
-    \item{\code{include_suppressed}}{Ordinarily, some quasi-taxa, such as
+  \item{include_suppressed}{Ordinarily, some quasi-taxa, such as
 incertae sedis buckets and other non-OTUs, are suppressed from
 TNRS results. If this parameter is true, these quasi-taxa are
 allowed as possible TNRS results.}
-  }}
+}}
 }
 \value{
 An object of class  data frame or phylo, with the added class match_names.

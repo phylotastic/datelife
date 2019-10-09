@@ -4,7 +4,8 @@
 \alias{datelife_result_sdm}
 \title{Function to compute the SDM supertree (Criscuolo et al. 2006) from a datelifeResult object.}
 \usage{
-datelife_result_sdm(datelife_result, weighting = "flat", verbose = TRUE, ...)
+datelife_result_sdm(datelife_result, weighting = "flat",
+  verbose = TRUE, ...)
 }
 \arguments{
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
@@ -22,20 +23,19 @@ datelife_result_sdm(datelife_result, weighting = "flat", verbose = TRUE, ...)
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=summary_matrix_to_phylo]{summary_matrix_to_phylo}}
-  \describe{
-    \item{\code{summ_matrix}}{A summary patristic distance matrix from sdm or median. See details.}
-    \item{\code{total_distance}}{Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take iy as is.}
-    \item{\code{use}}{A character vector indicating what type of age to use for summary. One of the following
+\item{...}{Arguments passed on to \code{summary_matrix_to_phylo}
+\describe{
+  \item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
+  \item{total_distance}{Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take iy as is.}
+  \item{use}{A character vector indicating what type of age to use for summary. One of the following
 \describe{
 \item{mean}{It will use the mean of the node age distributions.}
 \item{min}{It will use the minimum age from the node age distrbutions.}
 \item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distrbutions.}
 }}
-    \item{\code{target_tree}}{A phylo object. Use this in case you want a particular backbone for the output tree.}
-    \item{\code{datelife_query}}{A datelifeQuery object, output of make_datelife_query function}
-  }}
+  \item{target_tree}{A phylo object. Use this in case you want a particular backbone for the output tree.}
+  \item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
+}}
 }
 \value{
 A phylo object from SDM with an extra element:
