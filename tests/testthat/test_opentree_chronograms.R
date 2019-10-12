@@ -6,12 +6,12 @@ test_that("get_otol_chronograms works", {
   # check the state of trees with ott_id problems:
   skip_on_cran()
   skip_on_travis()
-  skip("check ott_id problems_500")  # read.csv always gives an error with check(), so just run this tests locally
-  rr <- read.csv(file = "data-raw/ott_id_problems_500.csv", row.names = 1)
-  tt <- opentree_chronograms$trees[[grep(rr$study.id[1], unlist(opentree_chronograms$studies))]] # get the first tree with ott_ids download problem
+#  skip("check ott_id problems_500")  # read.csv always gives an error with check(), so just run this tests locally
+  #rr <- read.csv(file = "data-raw/ott_id_problems_500.csv", row.names = 1)
+  tt <- opentree_chronograms$trees[[grep('ot_1041', unlist(opentree_chronograms$studies))]] # get the first tree with ott_ids download problem
   # tt$tip.label
   # sapply(tt[c("tip.label", "mapped", "ott_ids", "original.tip.label")], length) == length(tt$tip.label)
-
+  expect_s3_class(tt, "phylo")
 })
 
 test_that("is_good_chronogram works as expected", {
