@@ -162,7 +162,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 								# right now the function is having trouble to retrieve trees with ott ids as tip labels from certain studies
 								new.tree2 <- tryCatch(rotl::get_study_tree(study_id=study.id,tree_id=tree.id, tip_label="ott_id"),
 												error = function (e) NULL)
-								head(new.tree2$tip.label)
+								utils::head(new.tree2$tip.label)
 								if(!inherits(new.tree2, "phylo")){
 									problem <- "otol database does not have ott ids for this tree (names have not been curated)"
 									ott_id_problems <- rbind(ott_id_problems, data.frame(study.id, tree.id))

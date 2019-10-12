@@ -4,10 +4,22 @@
 \alias{plot_ltt_summary}
 \title{Lineage through time plots of all chronograms in multiphylo object and its summaries.}
 \usage{
-plot_ltt_summary(taxon, phy, phy_sdm, phy_median, file_name = NULL,
-  file_dir = NULL, height = 3.5, width = 7, add_legend = TRUE,
-  add_title = FALSE, col_sdm = "#00AFBB", col_median = "#CC79A7",
-  tax_datedotol = NULL, ...)
+plot_ltt_summary(
+  taxon,
+  phy,
+  phy_sdm,
+  phy_median,
+  file_name = NULL,
+  file_dir = NULL,
+  height = 3.5,
+  width = 7,
+  add_legend = TRUE,
+  add_title = FALSE,
+  col_sdm = "#00AFBB",
+  col_median = "#CC79A7",
+  tax_datedotol = NULL,
+  ...
+)
 }
 \arguments{
 \item{taxon}{Character vector indicating the name of the taxon or lineage that the chronograms in phy belong to.}
@@ -36,20 +48,16 @@ plot_ltt_summary(taxon, phy, phy_sdm, phy_median, file_name = NULL,
 
 \item{tax_datedotol}{A chronogram to compare other chronograms to.}
 
-\item{...}{further arguments to be passed to \code{plot} or to
-    \code{plot.phylo}.}
-
-\item{...}{Arguments passed on to \code{ape::ltt.plot}
-\describe{
-  \item{phy}{an object of class \code{"phylo"}; this could be an object
-    of class \code{"multiPhylo"} in the case of \code{mltt.plot}.}
-  \item{xlab}{a character string (or a variable of mode character)
+\item{...}{
+  Arguments passed on to \code{\link[ape:ltt.plot]{ape::ltt.plot}}
+  \describe{
+    \item{\code{xlab}}{a character string (or a variable of mode character)
     giving the label for the \eqn{x}-axis (default is "Time").}
-  \item{ylab}{idem for the \eqn{y}-axis (default is "N").}
-  \item{backward}{a logical value: should the time axis be traced from
+    \item{\code{ylab}}{idem for the \eqn{y}-axis (default is "N").}
+    \item{\code{backward}}{a logical value: should the time axis be traced from
     the present (the default), or from the root of the tree?}
-  \item{tol}{a numeric value (see details).}
-}}
+    \item{\code{tol}}{a numeric value (see details).}
+  }}
 }
 \description{
 Lineage through time plots of all chronograms in multiphylo object and its summaries.

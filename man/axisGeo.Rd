@@ -5,9 +5,17 @@
 \title{Function from Christoph Heibl's phyloch package
 Add a Geological Time Axis for Time-Calibrated Phylogenies.}
 \usage{
-axisGeo(GTS, tip.time = 0, unit = c("epoch", "period"), ages = TRUE,
-  cex = 1, col = "white", texcol = "black", gridty = 0,
-  gridcol = "black")
+axisGeo(
+  GTS,
+  tip.time = 0,
+  unit = c("epoch", "period"),
+  ages = TRUE,
+  cex = 1,
+  col = "white",
+  texcol = "black",
+  gridty = 0,
+  gridcol = "black"
+)
 }
 \arguments{
 \item{GTS}{a data frame containing the geological time scale such as provided by \code{\link{strat2012}}.}

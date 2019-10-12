@@ -785,7 +785,7 @@ cex = graphics::par("cex"), mai4 = NULL, write = "nothing", file_name = NULL, GT
             gridty = "twodash")
       }
       if(axis_type == 3){
-        strap::geoscalePhylo(tree=timeTree, ages=timeTree$ranges.used, cex.tip=0.7,
+        strap::geoscalePhylo(tree=tree, ages=tree$ranges.used, cex.tip=0.7,
           cex.ts=0.7,cex.age=0.7, width=4, tick.scale = 15, boxes = "Epoch", erotate = 90,
           quat.rm=TRUE, units=c("Period","Epoch"), x.lim=c(65,-10))
       }

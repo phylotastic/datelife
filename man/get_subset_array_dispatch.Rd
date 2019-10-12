@@ -4,8 +4,13 @@
 \alias{get_subset_array_dispatch}
 \title{Figure out which subset function to use. Used inside: get_datelife_result}
 \usage{
-get_subset_array_dispatch(study_element, taxa, phy = NULL, phy4 = NULL,
-  dating_method = "PATHd8")
+get_subset_array_dispatch(
+  study_element,
+  taxa,
+  phy = NULL,
+  phy4 = NULL,
+  dating_method = "PATHd8"
+)
 }
 \arguments{
 \item{study_element}{The thing being passed in: an array or a phylo object to serve as reference for congruification}

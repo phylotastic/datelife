@@ -12,8 +12,6 @@
 #' @param root_age Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.
 #' @param match_calibrations Boolean, default to TRUE. It will run match_all_calibrations function. Set to FALSE if your calibrations have already been matched.
 #' @return A phylo object
-# @details
-# enhance: explain what matching calibrations mean, inherit explanation from match_all_calibrations function
 #' @export
 use_calibrations_bladj <- function(phy = NULL, calibrations, type = "median", root_age = NULL, match_calibrations = TRUE){
 	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))

@@ -15,37 +15,38 @@ plot_densitree(trees, include = TRUE, ...)
 in trees. If FALSE, exclude chronograms with only two tips. If numeric, it is used
 as indices to subset trees object.}
 
-\item{...}{Arguments passed on to \code{phangorn::densiTree}
-\describe{
-  \item{type}{a character string specifying the type of phylogeny, so far
+\item{...}{
+  Arguments passed on to \code{\link[phangorn:densiTree]{phangorn::densiTree}}
+  \describe{
+    \item{\code{type}}{a character string specifying the type of phylogeny, so far
 "cladogram" (default) or "phylogram" are supported.}
-  \item{alpha}{parameter for semi-transparent colors.}
-  \item{direction}{a character string specifying the direction of the tree.
+    \item{\code{alpha}}{parameter for semi-transparent colors.}
+    \item{\code{direction}}{a character string specifying the direction of the tree.
 Four values are possible: "rightwards" (the default), "leftwards", "upwards",
 and "downwards".}
-  \item{optim}{not yet used.}
-  \item{scaleX}{scale trees to have identical heights.}
-  \item{col}{a skalar or vector giving the colours used to draw the edges for
+    \item{\code{optim}}{not yet used.}
+    \item{\code{scaleX}}{scale trees to have identical heights.}
+    \item{\code{col}}{a skalar or vector giving the colours used to draw the edges for
 each plotted phylogeny. These are taken to be in the same order than input
 trees x. If fewer colours are given than the number of trees, then the
 colours are recycled.}
-  \item{width}{edge width.}
-  \item{lty}{line type.}
-  \item{cex}{a numeric value giving the factor scaling of the tip labels.}
-  \item{font}{an integer specifying the type of font for the labels: 1 (plain text),
+    \item{\code{width}}{edge width.}
+    \item{\code{lty}}{line type.}
+    \item{\code{cex}}{a numeric value giving the factor scaling of the tip labels.}
+    \item{\code{font}}{an integer specifying the type of font for the labels: 1 (plain text),
 2 (bold), 3 (italic, the default), or 4 (bold italic).}
-  \item{tip.color}{color of the tip labels.}
-  \item{adj}{a numeric specifying the justification of the text strings of the
+    \item{\code{tip.color}}{color of the tip labels.}
+    \item{\code{adj}}{a numeric specifying the justification of the text strings of the
 labels: 0 (left-justification), 0.5 (centering), or 1 (right-justification).}
-  \item{srt}{a numeric giving how much the labels are rotated in degrees.}
-  \item{underscore}{a logical specifying whether the underscores in tip labels
+    \item{\code{srt}}{a numeric giving how much the labels are rotated in degrees.}
+    \item{\code{underscore}}{a logical specifying whether the underscores in tip labels
 should be written as spaces (the default) or left as are (if TRUE).}
-  \item{label.offset}{a numeric giving the space between the nodes and the tips of the
+    \item{\code{label.offset}}{a numeric giving the space between the nodes and the tips of the
 phylogeny and their corresponding labels.}
-  \item{scale.bar}{a logical specifying whether add scale.bar to the plot.}
-  \item{jitter}{allows to shift treees. a list with two arguments: the amount of
+    \item{\code{scale.bar}}{a logical specifying whether add scale.bar to the plot.}
+    \item{\code{jitter}}{allows to shift treees. a list with two arguments: the amount of
 jitter and random or equally spaced (see details below)}
-}}
+  }}
 }
 \description{
 get a densiTree plot from a set of opentree_chronograms

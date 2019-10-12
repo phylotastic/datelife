@@ -11,19 +11,18 @@ summary_matrix_to_phylo_all(summ_matrix, target_tree = NULL, ...)
 
 \item{target_tree}{A phylo object. Use this in case you want a particular backbone for the output tree.}
 
-\item{...}{Arguments passed on to \code{summary_matrix_to_phylo}
-\describe{
-  \item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
-  \item{total_distance}{Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take iy as is.}
-  \item{use}{A character vector indicating what type of age to use for summary. One of the following
+\item{...}{
+  Arguments passed on to \code{\link[=summary_matrix_to_phylo]{summary_matrix_to_phylo}}
+  \describe{
+    \item{\code{total_distance}}{Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take iy as is.}
+    \item{\code{use}}{A character vector indicating what type of age to use for summary. One of the following
 \describe{
 \item{mean}{It will use the mean of the node age distributions.}
 \item{min}{It will use the minimum age from the node age distrbutions.}
 \item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distrbutions.}
 }}
-  \item{target_tree}{A phylo object. Use this in case you want a particular backbone for the output tree.}
-  \item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
-}}
+    \item{\code{datelife_query}}{A datelifeQuery object, output of make_datelife_query function}
+  }}
 }
 \description{
 function to get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.
