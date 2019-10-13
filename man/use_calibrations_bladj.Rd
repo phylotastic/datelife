@@ -5,7 +5,7 @@
 \title{Use calibrations to date a topology with bladj.}
 \usage{
 use_calibrations_bladj(
-  phy = NULL,
+  phy,
   calibrations,
   type = "median",
   root_age = NULL,
@@ -19,7 +19,7 @@ use_calibrations_bladj(
 
 \item{type}{The type of age to use as calibration.}
 
-\item{root_age}{Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.}
+\item{root_age}{Not implemented yet}
 
 \item{match_calibrations}{Boolean, default to TRUE. It will run match_all_calibrations function. Set to FALSE if your calibrations have already been matched.}
 }
@@ -28,4 +28,7 @@ A phylo object
 }
 \description{
 Use calibrations to date a topology with bladj.
+}
+\details{
+root_age Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.
 }

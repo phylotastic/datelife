@@ -14,8 +14,6 @@ get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species", ...)
 \item{ott_rank}{A character vector with the ranks you wanna get lineage children from.}
 
 \item{...}{Other arguments to pass to get_valid_children()}
-
-\item{taxonomic_source}{A character vector with the desired taxonomic sources. One of "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources.}
 }
 \value{
 A data frame

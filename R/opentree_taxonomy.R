@@ -302,7 +302,6 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
 #' Use this instead of rotl::tol_subtree when taxa are not in synthesis tree and you still need to get all species or an induced otol subtree
 #' @inheritParams check_ott_input
 #' @param ott_rank A character vector with the ranks you wanna get lineage children from.
-#' @param taxonomic_source A character vector with the desired taxonomic sources. One of "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources.
 #' @param ... Other arguments to pass to get_valid_children()
 #' @return A data frame
 #' @examples

@@ -34,6 +34,10 @@ plot_ltt_phyloall(
 
 \item{file_dir}{A character string giving the path to write the file to.}
 
+\item{height}{Height of the plot output}
+
+\item{width}{width of the plot output}
+
 \item{add_legend}{Boolean}
 
 \item{add_title}{Boolean}

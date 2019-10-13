@@ -8,6 +8,8 @@
 #' @param tax_datedotol A chronogram to compare trees in phy to.
 #' @param file_name A character string giving the name of the pdf file.
 #' @param file_dir A character string giving the path to write the file to.
+#' @param height Height of the plot output
+#' @param width width of the plot output
 #' @inheritParams ape::plot.phylo
 #' @inheritDotParams ape::ltt.plot -phy
 #' @param add_legend Boolean

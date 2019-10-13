@@ -9,11 +9,13 @@
 #' @param phy A phylo object
 #' @param calibrations A data frame of calibrations from get_all_calibrations function, or a subset of it.
 #' @param type The type of age to use as calibration.
-#' @param root_age Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.
+#' @param root_age Not implemented yet
 #' @param match_calibrations Boolean, default to TRUE. It will run match_all_calibrations function. Set to FALSE if your calibrations have already been matched.
 #' @return A phylo object
+#' @details
+#' root_age Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.
 #' @export
-use_calibrations_bladj <- function(phy = NULL, calibrations, type = "median", root_age = NULL, match_calibrations = TRUE){
+use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age = NULL, match_calibrations = TRUE){
 	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
 	if(match_calibrations){
 		calibs <- match_all_calibrations(phy, calibrations)
@@ -63,6 +65,8 @@ use_calibrations_bladj <- function(phy = NULL, calibrations, type = "median", ro
 	new_phy$used_calibrations <- stats::setNames(node_ages, node_names)
 	return(new_phy)
 }
+
+
 #' function to check for conflicting calibrations
 #' if calibrations are younger or older relative to descendants and ancestors, respectively
 #' @details it removes them if needed, but bladj works as long as it has an age for the root
@@ -90,6 +94,7 @@ check_conflicting_calibrations <- function(phy, calibration_distribution){
   node_older <- mapply(foo2, calibration_distribution, calibration_distribution_anc) # which calibration_distribution are older than their ancestor
   list(des, anc, calibration_distribution_des, calibration_distribution_anc, node_younger, node_older)
 }
+
 # fix_nodeages_for_bladj <- function(phy, calibration_distribution, remove = TRUE, remove_which = "younger", expand = FALSE){
 #   remove <- match.arg(tolower(remove), c("older", "younger"))
 #   calibration_distribution_original <- calibration_distribution
