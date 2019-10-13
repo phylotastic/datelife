@@ -1,11 +1,12 @@
 test_that("get_otol_chronograms works", {
+  skip_on_cran()
+  skip_on_travis()
   xx5 <- get_otol_chronograms(verbose=TRUE, max_tree_count = 5)
   expect_true(all(c("trees", "authors", "curators", "studies", "dois") %in% names(xx5)))
   # xx <- get_otol_chronograms(verbose=TRUE)
   # table(unlist((sapply(xx$trees, "[", "mapped"))))
   # check the state of trees with ott_id problems:
-  skip_on_cran()
-  skip_on_travis()
+
 #  skip("check ott_id problems_500")  # read.csv always gives an error with check(), so just run this tests locally
   #rr <- read.csv(file = "data-raw/ott_id_problems_500.csv", row.names = 1)
   tt <- opentree_chronograms$trees[[grep('ot_1041', unlist(opentree_chronograms$studies))]] # get the first tree with ott_ids download problem
