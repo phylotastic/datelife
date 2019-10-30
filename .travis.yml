@@ -6,10 +6,14 @@ r_github_packages:
 r_packages:
   - covr
   - data.table
+  - ape
+  - phytools
+  - quadprog
+  - igraph
 after_success:
   - Rscript -e 'library(covr); codecov()'
 latex: false
-fortran: false
+fortran: true
 env:
   - _R_CHECK_FORCE_SUGGESTS_=false
 
@@ -17,10 +21,6 @@ matrix:
   include:
     - dist: trusty
     - dist: xenial
-    - os: osx
-      brew_packages: imagemagick
-    - os: osx
-      brew_packages: imagemagick@6
     - os: osx
       osx_image: xcode7.3
       disable_homebrew: true
@@ -65,7 +65,7 @@ addons:
 bioc_packages: EBImage
 
 
-# 
+#
 # language: r
 # cache: packages
 # latex: false
