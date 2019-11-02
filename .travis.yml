@@ -14,3 +14,11 @@ r_packages:
   - igraph
 after_success:
   - Rscript -e 'library(covr); codecov()'
+
+addons:
+  apt:
+    update: true
+    sources:
+      - sourceline: 'ppa:cran/imagemagick'
+    packages:
+      - libmagick++-dev
