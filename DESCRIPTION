@@ -1,6 +1,6 @@
 Package: datelife
 Title: Underlying Code for DateLife Web Service
-Version: 0.2.17
+Version: 0.2.18
 Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.brian@gmail.com"),
   person("Luna L.", "Sanchez Reyes", role=c("aut")),
   person("Jonathan", "Eastman", role=c("aut")),
@@ -14,6 +14,7 @@ Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.bria
   person("Matt", "Pennell", role=c("aut")),
   person("Mike", "Alfaro", role=c("aut")))
 Maintainer: Brian O'Meara <omeara.brian@gmail.com>
+Author: Brian O'Meara and Luna L. Sanchez Reyes
 Description: This contains the core code for going from a tree or list of taxa
     to a chronogram.
 Depends:
