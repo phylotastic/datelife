@@ -50,7 +50,8 @@ Suggests:
     testthat,
     rmarkdown,
     knitr,
-    devtools
+    devtools,
+    covr
 Remotes:
     phylotastic/rphylotastic
 SystemRequirements: mafft, PATHd8
