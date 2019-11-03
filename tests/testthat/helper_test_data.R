@@ -49,10 +49,10 @@ catsanddogs_query <- make_datelife_query(input = c("felis", "canidae"), get_spp_
 catsanddogs_results <- get_datelife_result(input = catsanddogs_query)
 catsanddogs_phyloall <- summarize_datelife_result(catsanddogs_results, catsanddogs_query, "phylo_all")
 catsanddogs_calibrations <- get_all_calibrations(input = catsanddogs_phyloall)
-catsanddogs_bold <- make_bold_otol_tree(input = catsanddogs_query, chronogram = FALSE)
-ape::is.binary(catsanddogs_bold)
-catsanddogs_bladj <- use_calibrations_bladj(phy = catsanddogs_bold, calibrations = catsanddogs_calibrations)
-catsanddogs_treepl <- use_calibrations_treePL(phy = catsanddogs_bold, calibrations = catsanddogs_calibrations)
+try(catsanddogs_bold <- make_bold_otol_tree(input = catsanddogs_query, chronogram = FALSE))
+try(ape::is.binary(catsanddogs_bold))
+try(catsanddogs_bladj <- use_calibrations_bladj(phy = catsanddogs_bold, calibrations = catsanddogs_calibrations))
+try(catsanddogs_treepl <- use_calibrations_treePL(phy = catsanddogs_bold, calibrations = catsanddogs_calibrations))
 # plot(catsanddogs_treepl$phy)
 # catsanddogs_treepl$phy$edge.length
 
@@ -61,4 +61,4 @@ catsanddogs_treepl <- use_calibrations_treePL(phy = catsanddogs_bold, calibratio
 utils::data(felid_sdm)
 utils::data(felid_gdr_phylo_all)
 utils::data(some_ants_datelife_result)
-utils::data(plant_bold_otol_tree, subset2_search)
+try(utils::data(plant_bold_otol_tree, subset2_search))
