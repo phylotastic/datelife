@@ -14,7 +14,6 @@ Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.bria
   person("Matt", "Pennell", role=c("aut")),
   person("Mike", "Alfaro", role=c("aut")))
 Maintainer: Brian O'Meara <omeara.brian@gmail.com>
-Author: Brian O'Meara and Luna L. Sanchez Reyes
 Description: This contains the core code for going from a tree or list of taxa
     to a chronogram.
 Depends:
@@ -45,7 +44,6 @@ Imports:
     graphics,
     utils,
     phylocomr,
-    viridis,
     phyloch,
     strap
 Suggests:
