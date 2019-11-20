@@ -4,7 +4,8 @@
 \alias{tree_add_nodelabels}
 \title{Adds labels to nodes with no asigned label}
 \usage{
-tree_add_nodelabels(tree = NULL, node_prefix = "n", node_index = "node_number")
+tree_add_nodelabels(tree = NULL, node_prefix = "n",
+  node_index = "node_number")
 }
 \arguments{
 \item{tree}{A tree either as a newick character string or as a phylo object}

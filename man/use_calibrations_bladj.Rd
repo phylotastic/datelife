@@ -4,13 +4,8 @@
 \alias{use_calibrations_bladj}
 \title{Use calibrations to date a topology with bladj.}
 \usage{
-use_calibrations_bladj(
-  phy,
-  calibrations,
-  type = "median",
-  root_age = NULL,
-  match_calibrations = TRUE
-)
+use_calibrations_bladj(phy, calibrations, type = "median",
+  root_age = NULL, match_calibrations = TRUE)
 }
 \arguments{
 \item{phy}{A phylo object}

@@ -4,14 +4,8 @@
 \alias{summary_matrix_to_phylo}
 \title{Go from a summary matrix to an ultrametric phylo object.}
 \usage{
-summary_matrix_to_phylo(
-  summ_matrix,
-  datelife_query = NULL,
-  total_distance = TRUE,
-  use = "mean",
-  target_tree = NULL,
-  ...
-)
+summary_matrix_to_phylo(summ_matrix, datelife_query = NULL,
+  total_distance = TRUE, use = "mean", target_tree = NULL, ...)
 }
 \arguments{
 \item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
@@ -29,14 +23,13 @@ summary_matrix_to_phylo(
 
 \item{target_tree}{A phylo object. Use this in case you want a particular backbone for the output tree.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree}}
-  \describe{
-    \item{\code{otol_version}}{Version of OToL to use}
-    \item{\code{resolve}}{boolean default to TRUE. Whether to resolve the tree at random or not.}
-    \item{\code{input}}{Optional. A character vector of names or a datelifeQuery object}
-    \item{\code{ott_ids}}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
-  }}
+\item{...}{Arguments passed on to \code{get_otol_synthetic_tree}
+\describe{
+  \item{otol_version}{Version of OToL to use}
+  \item{resolve}{boolean default to TRUE. Whether to resolve the tree at random or not.}
+  \item{input}{Optional. A character vector of names or a datelifeQuery object}
+  \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+}}
 }
 \value{
 An ultrametric phylo object.

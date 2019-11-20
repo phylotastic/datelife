@@ -4,16 +4,10 @@
 \alias{run}
 \title{Core function to generate results}
 \usage{
-run(
-  input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-  format = "citations",
-  partial = "yes",
-  plot.width = 600,
-  plot.height = 600,
-  use_tnrs = "no",
-  approximate_match = "yes",
-  opentree_chronograms = NULL
-)
+run(input = c("Rhea americana", "Pterocnemia pennata",
+  "Struthio camelus"), format = "citations", partial = "yes",
+  plot.width = 600, plot.height = 600, use_tnrs = "no",
+  approximate_match = "yes", opentree_chronograms = NULL)
 }
 \arguments{
 \item{input}{A newick string or vector of taxa}

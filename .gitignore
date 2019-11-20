@@ -1,7 +1,6 @@
 inst/doc
 .Rproj.user
 *.Rproj
-.tmp_PATHd8*  
+.tmp_PATHd8*
 doc
 Meta
-cran-comments.md

@@ -5,16 +5,8 @@
 \title{Function from phyloch package
  Add interval bars to nodes on a phylo plot.}
 \usage{
-HPDbars(
-  phy,
-  label = "height_95\%_HPD",
-  tab = NULL,
-  nodes,
-  col,
-  lwd,
-  broken = FALSE,
-  ...
-)
+HPDbars(phy, label = "height_95\%_HPD", tab = NULL, nodes, col, lwd,
+  broken = FALSE, ...)
 }
 \arguments{
 \item{phy}{A phylo object with two extra elements specifying the MAX and MIN limits of intervals to plot.}
@@ -31,19 +23,24 @@ HPDbars(
 
 \item{broken}{Something I'm not sure of, should ask Christoph Heibl.}
 
-\item{...}{
-  Arguments passed on to \code{\link[graphics:segments]{graphics::segments}}
-  \describe{
-    \item{\code{x0}}{coordinates of points \bold{from} which to draw.}
-    \item{\code{y0}}{coordinates of points \bold{from} which to draw.}
-    \item{\code{x1}}{coordinates of points \bold{to} which to draw.  At least
+\item{...}{Arguments passed on to \code{graphics::segments}
+\describe{
+  \item{x0}{coordinates of points \bold{from} which to draw.}
+  \item{y0}{coordinates of points \bold{from} which to draw.}
+  \item{x1}{coordinates of points \bold{to} which to draw.  At least
     one must be supplied.}
-    \item{\code{y1}}{coordinates of points \bold{to} which to draw.  At least
+  \item{y1}{coordinates of points \bold{to} which to draw.  At least
     one must be supplied.}
-    \item{\code{lty}}{\link[graphics]{graphical parameters} as in
-    \code{\link[graphics]{par}}, possibly vectors.  \code{NA} values in \code{col}
+  \item{col}{\link{graphical parameters} as in
+    \code{\link{par}}, possibly vectors.  \code{NA} values in \code{col}
     cause the segment to be omitted.}
-  }}
+  \item{lty}{\link{graphical parameters} as in
+    \code{\link{par}}, possibly vectors.  \code{NA} values in \code{col}
+    cause the segment to be omitted.}
+  \item{lwd}{\link{graphical parameters} as in
+    \code{\link{par}}, possibly vectors.  \code{NA} values in \code{col}
+    cause the segment to be omitted.}
+}}
 }
 \value{
 Adds bars to nodes on a phylo plot.

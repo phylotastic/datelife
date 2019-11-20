@@ -4,7 +4,8 @@
 \alias{get_ott_children}
 \title{Use this instead of rotl::tol_subtree when taxa are not in synthesis tree and you still need to get all species or an induced otol subtree}
 \usage{
-get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species", ...)
+get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species",
+  ...)
 }
 \arguments{
 \item{input}{Optional. A character vector of names or a datelifeQuery object}

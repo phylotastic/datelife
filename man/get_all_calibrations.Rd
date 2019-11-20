@@ -4,16 +4,10 @@
 \alias{get_all_calibrations}
 \title{Get all calibrations from chronograms in a database (specified in cache).}
 \usage{
-get_all_calibrations(
-  input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-  partial = TRUE,
-  use_tnrs = FALSE,
-  approximate_match = TRUE,
-  update_cache = FALSE,
-  cache = get("opentree_chronograms"),
-  verbose = FALSE,
-  each = FALSE
-)
+get_all_calibrations(input = c("Rhea americana", "Pterocnemia pennata",
+  "Struthio camelus"), partial = TRUE, use_tnrs = FALSE,
+  approximate_match = TRUE, update_cache = FALSE,
+  cache = get("opentree_chronograms"), verbose = FALSE, each = FALSE)
 }
 \arguments{
 \item{input}{vector of names, a newick string, a phylo or multiPhylo object, a datelifeResult object}
