@@ -4,7 +4,8 @@
 \alias{summary_patristic_matrix_array}
 \title{Summarize patristic matrix array (by default, median). Used inside: summarize_datelife_result.}
 \usage{
-summary_patristic_matrix_array(patristic_matrix_array, fn = stats::median)
+summary_patristic_matrix_array(patristic_matrix_array,
+  fn = stats::median)
 }
 \arguments{
 \item{patristic_matrix_array}{3D array of patristic matrices}

@@ -4,15 +4,10 @@
 \alias{make_mrbayes_tree}
 \title{Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations without any data.}
 \usage{
-make_mrbayes_tree(
-  constraint = NULL,
-  taxa = NULL,
-  ncalibration = NULL,
-  missing_taxa = NULL,
-  age_distribution = "fixed",
-  root_calibration = FALSE,
-  mrbayes_output_file = "mrbayes_run.nexus"
-)
+make_mrbayes_tree(constraint = NULL, taxa = NULL,
+  ncalibration = NULL, missing_taxa = NULL,
+  age_distribution = "fixed", root_calibration = FALSE,
+  mrbayes_output_file = "mrbayes_run.nexus")
 }
 \arguments{
 \item{constraint}{The constraint tree: a phylo object or a newick character string, with or without branch lengths.}

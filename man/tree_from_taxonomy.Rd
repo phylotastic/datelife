@@ -4,11 +4,8 @@
 \alias{tree_from_taxonomy}
 \title{Gets a taxonomic tree from a vector of taxa}
 \usage{
-tree_from_taxonomy(
-  taxa,
-  sources = "Catalogue of Life",
-  collapse_singles = TRUE
-)
+tree_from_taxonomy(taxa, sources = "Catalogue of Life",
+  collapse_singles = TRUE)
 }
 \arguments{
 \item{taxa}{Vector of taxon names}

@@ -4,7 +4,8 @@
 \alias{summarize_fossil_range}
 \title{Summarize taxon age from PBDB to just a single min and max age}
 \usage{
-summarize_fossil_range(taxon, recent = FALSE, assume_recent_if_missing = TRUE)
+summarize_fossil_range(taxon, recent = FALSE,
+  assume_recent_if_missing = TRUE)
 }
 \arguments{
 \item{taxon}{The scientific name of the taxon you want the range of occurrences of}

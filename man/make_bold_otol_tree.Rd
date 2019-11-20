@@ -5,15 +5,9 @@
 \title{Use Barcode of Life Data (BOLD) to get branch lengths on a tree topology.
 If input is not a tree, then it uses the OToL tree of the set of input taxa.}
 \usage{
-make_bold_otol_tree(
-  input = c("Rhea americana", "Struthio camelus", "Gallus gallus"),
-  marker = "COI",
-  otol_version = "v3",
-  chronogram = TRUE,
-  doML = FALSE,
-  verbose = FALSE,
-  ...
-)
+make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus",
+  "Gallus gallus"), marker = "COI", otol_version = "v3",
+  chronogram = TRUE, doML = FALSE, verbose = FALSE, ...)
 }
 \arguments{
 \item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
@@ -28,12 +22,13 @@ make_bold_otol_tree(
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree}}
-  \describe{
-    \item{\code{resolve}}{boolean default to TRUE. Whether to resolve the tree at random or not.}
-    \item{\code{ott_ids}}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
-  }}
+\item{...}{Arguments passed on to \code{get_otol_synthetic_tree}
+\describe{
+  \item{otol_version}{Version of OToL to use}
+  \item{resolve}{boolean default to TRUE. Whether to resolve the tree at random or not.}
+  \item{input}{Optional. A character vector of names or a datelifeQuery object}
+  \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+}}
 }
 \value{
 A phylogeny with branch lengths proportional to relative substitution rate.

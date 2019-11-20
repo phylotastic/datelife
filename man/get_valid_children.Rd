@@ -4,7 +4,8 @@
 \alias{get_valid_children}
 \title{Extracts valid children from a set of input names or ott ids (not from a taxonomy taxon info object)}
 \usage{
-get_valid_children(input = NULL, ott_ids = NULL, taxonomic_source = "ncbi")
+get_valid_children(input = NULL, ott_ids = NULL,
+  taxonomic_source = "ncbi")
 }
 \arguments{
 \item{input}{Optional. A character vector of names or a datelifeQuery object}

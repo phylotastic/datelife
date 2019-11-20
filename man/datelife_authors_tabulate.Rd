@@ -4,7 +4,8 @@
 \alias{datelife_authors_tabulate}
 \title{Return the relevant authors for a set of studies}
 \usage{
-datelife_authors_tabulate(results.index, cache = get("opentree_chronograms"))
+datelife_authors_tabulate(results.index,
+  cache = get("opentree_chronograms"))
 }
 \arguments{
 \item{results.index}{A vector from datelife_result_study_index() with the indices of the relevant studies}

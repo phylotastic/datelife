@@ -6,12 +6,9 @@
 Useful to get ott ids to retrieve an otol induced subtree from.
 Needed because using include_suppressed = FALSE in tnrs_match_names does not drop all invalid taxa}
 \usage{
-clean_tnrs(
-  tnrs,
-  invalid = c("barren", "extinct", "uncultured", "major_rank_conflict", "incertae",
-    "unplaced", "conflict", "environmental", "not_otu"),
-  remove_nonmatches = FALSE
-)
+clean_tnrs(tnrs, invalid = c("barren", "extinct", "uncultured",
+  "major_rank_conflict", "incertae", "unplaced", "conflict",
+  "environmental", "not_otu"), remove_nonmatches = FALSE)
 }
 \arguments{
 \item{tnrs}{A data frame, usually an output from datelife::tnrs_match or rotl::tnrs_match_names functions, but see details.}

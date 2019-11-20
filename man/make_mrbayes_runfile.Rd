@@ -4,15 +4,10 @@
 \alias{make_mrbayes_runfile}
 \title{Makes a mrBayes run block file with a constraint topology and a set of node calibrations and missing taxa.}
 \usage{
-make_mrbayes_runfile(
-  constraint = NULL,
-  taxa = NULL,
-  ncalibration = NULL,
-  missing_taxa = NULL,
-  age_distribution = "fixed",
-  root_calibration = FALSE,
-  mrbayes_output_file = "mrbayes_run.nexus"
-)
+make_mrbayes_runfile(constraint = NULL, taxa = NULL,
+  ncalibration = NULL, missing_taxa = NULL,
+  age_distribution = "fixed", root_calibration = FALSE,
+  mrbayes_output_file = "mrbayes_run.nexus")
 }
 \arguments{
 \item{constraint}{The constraint tree: a phylo object or a newick character string, with or without branch lengths.}
