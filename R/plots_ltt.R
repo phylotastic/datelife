@@ -100,7 +100,7 @@ plot_ltt_phyloall <- function(taxon = NULL, phy, ltt_colors = NULL, tax_datedoto
   cond2 <- (!duplicated(study_number) | !duplicated(round(max_ages)))
   for (i in order(phy_mrca, decreasing = TRUE)){ # plot the oldest chronogrm first, it looks better in graph
     col_phyloall <- col_phyloall_sample[i]
-    ape::ltt.lines(phy = phy[[i]], col = paste0(col_phyloall), lwd = 1.5, ...)
+    ape::ltt.lines(phy = phy[[i]], col = paste0(col_phyloall), lwd = 1.5)
     x0 <- x1 <- -phy_mrca[i]
     graphics::arrows(x0, y0, x1, y1, length = length_arrowhead, col = paste0(col_phyloall), lwd = lwd_arrows)
     graphics::text(x = -max_ages[i], y = y_numbers[i], labels = ifelse(cond2[i], study_number[i], ""),
@@ -152,7 +152,7 @@ ltt_phyloall <- function(phy, trees = NULL, max_tips, max_ages, xlim0, taxon, ph
   cond2 <- (!duplicated(study_number) | !duplicated(round(max_ages)))
   for (i in order(phy_mrca, decreasing = TRUE)){
     col_phyloall <- col_phyloall_sample[i]
-    ape::ltt.lines(phy = phy[[i]], col = paste0(col_phyloall), lwd = lwd_phyloall, ...)
+    ape::ltt.lines(phy = phy[[i]], col = paste0(col_phyloall), lwd = lwd_phyloall)
     x0 <- x1 <- -phy_mrca[i]
     graphics::arrows(x0, y0 = -max_tips*0.075, x1, y1 = 0, length = length_arrowhead,
       col = paste0(col_phyloall), lwd = 2)

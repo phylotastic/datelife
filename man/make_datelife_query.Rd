@@ -4,9 +4,14 @@
 \alias{make_datelife_query}
 \title{Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with input_process first.}
 \usage{
-make_datelife_query(input = c("Rhea americana", "Pterocnemia pennata",
-  "Struthio camelus"), use_tnrs = FALSE, approximate_match = TRUE,
-  get_spp_from_taxon = FALSE, verbose = FALSE, ...)
+make_datelife_query(
+  input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
+  use_tnrs = FALSE,
+  approximate_match = TRUE,
+  get_spp_from_taxon = FALSE,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
@@ -19,10 +24,11 @@ make_datelife_query(input = c("Rhea americana", "Pterocnemia pennata",
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 
-\item{...}{Arguments passed on to \code{rphylotastic::taxon_get_species}
-\describe{
-  \item{filters}{A character vector of strings to exclude.}
-}}
+\item{...}{
+  Arguments passed on to \code{\link[rphylotastic:taxon_get_species]{rphylotastic::taxon_get_species}}
+  \describe{
+    \item{\code{filters}}{A character vector of strings to exclude.}
+  }}
 }
 \value{
 A list with the phy (or NA, if no tree) and cleaned vector of taxa

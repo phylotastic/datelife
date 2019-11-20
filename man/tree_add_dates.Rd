@@ -4,9 +4,13 @@
 \alias{tree_add_dates}
 \title{Fabricates dates of missing taxa (with no data) on an already dated tree.}
 \usage{
-tree_add_dates(dated_tree = NULL, missing_taxa = NULL,
-  dating_method = "mrbayes", adding_criterion = "random",
-  mrbayes_output_file = "mrbayes_tree_add_dates.nexus")
+tree_add_dates(
+  dated_tree = NULL,
+  missing_taxa = NULL,
+  dating_method = "mrbayes",
+  adding_criterion = "random",
+  mrbayes_output_file = "mrbayes_tree_add_dates.nexus"
+)
 }
 \arguments{
 \item{dated_tree}{a tree (newick or phylo) with branch lengths proportional to absolute time}

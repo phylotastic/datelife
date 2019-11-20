@@ -4,8 +4,7 @@
 \alias{use_each_calibration}
 \title{Use calibrations from each source chronogram to date a tree.}
 \usage{
-use_each_calibration(phy = NULL, phylo_all = NULL,
-  calibrations = NULL, ...)
+use_each_calibration(phy = NULL, phylo_all = NULL, calibrations = NULL, ...)
 }
 \arguments{
 \item{phy}{A tree with or without branch lengths to be dated. Only as phylo object for now.}

@@ -4,8 +4,7 @@
 \alias{make_contributor_cache}
 \title{Create a cache  from Open Tree of Life}
 \usage{
-make_contributor_cache(outputfile = "contributorcache.RData",
-  verbose = TRUE)
+make_contributor_cache(outputfile = "contributorcache.RData", verbose = TRUE)
 }
 \arguments{
 \item{outputfile}{Path including file name}
