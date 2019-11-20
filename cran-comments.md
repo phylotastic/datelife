@@ -4,29 +4,19 @@
 * win-builder (devel and release)
 
 ## R CMD check results
-There were no ERRORs, WARNINGs or NOTEs.
+There were no ERRORs, WARNINGs
 
+There was 1 NOTE:
+
+* checking installed package size ... NOTE
+    installed size is 10.2Mb
+    sub-directories of 1Mb or more:
+      R      5.0Mb
+      data   4.7Mb
+
+    The package is hosting a database (data/opentree_chronograms.rda), increasing the size of the data dir. This database is needed to run main functions.
+    The R dir appears of a much smaller size locally (351Kb). 
 
 ## Downstream dependencies
-This is the first release of this package
 
-
-  #####################
-  > devtools::check()
-Updating datelife documentation
-Warning: Version of roxygen2 last used with this package is 6.1.99.9001.  You only have version 6.1.1
-Writing NAMESPACE
-Loading datelife
-Registered S3 method overwritten by 'compare':
-  method           from
-  print.comparison testthat
-Registered S3 method overwritten by 'geiger':
-  method            from
-  unique.multiPhylo ape
-Registered S3 method overwritten by 'httr':
-  method                 from
-  as.character.form_file crul
-Warning in (function (dep_name, dep_ver = "*")  :
-  Dependency package 'strap' not available.
-Error: Dependency package(s) 'strap' not available.
-Call `rlang::last_error()` to see a backtrace.
+This is the first release of this package.
