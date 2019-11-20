@@ -3,9 +3,6 @@
 language: R
 cache: packages
 warnings_are_errors: false
-r_github_packages:
-  - phylotastic/rphylotastic
-  - fmichonneau/phyloch
 r_packages:
   - covr
   - data.table
@@ -15,7 +12,7 @@ r_packages:
   - igraph
 after_success:
   - Rscript -e 'covr::codecov()'
-  
+
 addons:
   apt:
     update: true

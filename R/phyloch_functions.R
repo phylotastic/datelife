@@ -1,4 +1,8 @@
-# hosting phyloch functions here so cran won't complain
+# Functions from `phyloch` package used in datelife
+# Hosting phyloch functions here so we can submit to CRAN
+
+
+
 #' Function from phyloch package
 #'  Add interval bars to nodes on a phylo plot.
 #' @param phy A phylo object with two extra elements specifying the MAX and MIN limits of intervals to plot.

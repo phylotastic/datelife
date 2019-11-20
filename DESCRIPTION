@@ -44,7 +44,6 @@ Imports:
     graphics,
     utils,
     phylocomr,
-    phyloch,
     strap
 Suggests:
     testthat,
@@ -52,12 +51,10 @@ Suggests:
     knitr,
     devtools,
     covr
-Remotes:
-    phylotastic/rphylotastic
 SystemRequirements: mafft, PATHd8
 URL: https://github.com/phylotastic/datelife, http://www.datelife.org
 License: GPL (>=2)
 LazyData: true
-RoxygenNote: 6.1.99.9001
+RoxygenNote: 7.0.0
 Encoding: UTF-8
 VignetteBuilder: knitr

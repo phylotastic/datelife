@@ -775,12 +775,12 @@ cex = graphics::par("cex"), mai4 = NULL, write = "nothing", file_name = NULL, GT
   graphics::par(xpd = FALSE)
   if(!is.null(tree$edge.length)){
       if(axis_type == 1){
-        phyloch::axisGeo(GTS = GTS, unit = c("period"),
+        axisGeo(GTS = GTS, unit = c("period"),
             col = c("gray80", "white"), gridcol = c("gray80", "white"), cex = 0.5,
             gridty = "twodash")
       }
       if(axis_type == 2){
-        phyloch::axisGeo(GTS = GTS, unit = c("period","epoch"),
+        axisGeo(GTS = GTS, unit = c("period","epoch"),
             col = c("gray80", "white"), gridcol = c("gray80", "white"), cex = 0.5,
             gridty = "twodash")
       }
