@@ -3,7 +3,7 @@ citHeader("To cite package 'datelife' in publications, please use the first entr
 year <- format(Sys.time(), "%Y")
 vers <- paste("R package version", meta$Version)
 authors <- personList(person("Brian", "O'Meara", email = "omeara.brian@gmail.com", role = c("aut", "cre")),
-                      person("Luna L.", "Sanchez Reyes", email = "sanchez.reyes.luna@gmail.com", role = "aut"),
+                      person("Luna L.", "Sanchez-Reyes", email = "sanchez.reyes.luna@gmail.com", role = "aut"),
                       person("Jonathan", "Eastman", role=c("aut")),
                       person("Tracy", "Heath", role=c("aut")),
                       person("April", "Wright", role=c("aut")),
@@ -20,21 +20,21 @@ pkg_title <- paste0(meta$Package, ": ", meta$Title)
 
 citEntry(entry="Manual",
  		  title = pkg_title,
- 		  author =  authors_format,
+ 		  author =  authors,
  		  year = year,
  		  note = vers,
  		  textVersion = paste(authors_format, year, pkg_title, vers, sep=". "))
 
-authors2 <- personList(person("Luna L.", "Sanchez Reyes", email = "sanchez.reyes.luna@gmail.com"),
+authors2 <- personList(person("Luna L.", "Sanchez-Reyes", email = "sanchez.reyes.luna@gmail.com"),
                        person("Brian", "O'Meara", email = "omeara.brian@gmail.com"))
 authors2_format <- paste(format(authors2, include = c("given", "family")), collapse = ", ")
 
 citEntry(entry="Article",
-	title = "datelife: leveraging databases and analytical tools to reveal the dated tree of life",
+	title = "datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life",
   author = authors2,
-	journal = "Bioarxiv",
+	journal = "bioRxiv",
   	year = "2019",
-	volume = "xx",
-	pages = "xxx-xxx",
+	volume = "782094",
+	doi = "https://doi.org/10.1101/782094",
   textVersion = paste0(authors2_format, ". 2019. datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life. bioRxiv 782094; doi: https://doi.org/10.1101/782094.")
   )

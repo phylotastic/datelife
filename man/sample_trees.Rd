@@ -4,8 +4,7 @@
 \alias{sample_trees}
 \title{Function to sample trees from a file containing multiple trees. Usually from a bayesian analysis output trees file.}
 \usage{
-sample_trees(trees_file, trees_object = NULL, burnin = 0.25,
-  size = 100)
+sample_trees(trees_file, trees_object = NULL, burnin = 0.25, size = 100)
 }
 \arguments{
 \item{trees_file}{A character vector indicating the name and directory of file with trees to sample.}

@@ -54,12 +54,12 @@ function
 
 ## Citation
 
-If you use `datelife`, please cite the R package and the accompanying
-publication:
+If you use `datelife` for a publication, please cite the R package and
+the accompanying paper:
 
 <p>
 
-O’Meara B, Reyes LLS, Eastman J, Heath T, Wright A, Schliep K,
+O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K,
 Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2019).
 <em>datelife: Go from a list of taxa or a tree to a chronogram using
 open scientific data</em>. R package version 0.2.19.
@@ -68,9 +68,10 @@ open scientific data</em>. R package version 0.2.19.
 
 <p>
 
-Sanchez Reyes L, O’Meara B (2019). “datelife: leveraging databases and
-analytical tools to reveal the dated tree of life.” <em>Bioarxiv</em>,
-<b>xx</b>, xxx-xxx.
+Sanchez-Reyes L, O’Meara B (2019). “datelife: leveraging databases and
+analytical tools to reveal the dated tree of life.” <em>bioRxiv</em>,
+<b>782094</b>. doi:
+<a href="https://doi.org/10.1101/782094">10.1101/782094</a>.
 
 </p>
 

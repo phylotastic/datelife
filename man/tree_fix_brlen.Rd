@@ -4,8 +4,12 @@
 \alias{tree_fix_brlen}
 \title{Takes a tree with branch lengths and fixes negative or zero length branches in several ways}
 \usage{
-tree_fix_brlen(tree = NULL, fixing_criterion = "negative",
-  fixing_method = 0, ultrametric = TRUE)
+tree_fix_brlen(
+  tree = NULL,
+  fixing_criterion = "negative",
+  fixing_method = 0,
+  ultrametric = TRUE
+)
 }
 \arguments{
 \item{tree}{A tree either as a newick character string or as a phylo object}

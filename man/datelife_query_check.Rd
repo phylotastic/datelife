@@ -9,13 +9,14 @@ datelife_query_check(datelife_query = NULL, ...)
 \arguments{
 \item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
 
-\item{...}{Arguments passed on to \code{make_datelife_query}
-\describe{
-  \item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
-  \item{approximate_match}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
-  \item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
-  \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
-}}
+\item{...}{
+  Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}
+  \describe{
+    \item{\code{use_tnrs}}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
+    \item{\code{approximate_match}}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
+    \item{\code{get_spp_from_taxon}}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
+    \item{\code{verbose}}{Boolean. If TRUE, it gives printed updates to the user.}
+  }}
 }
 \description{
 checks if input is a datelifeQuery object, otherwise it uses make_datelife_query to process it
