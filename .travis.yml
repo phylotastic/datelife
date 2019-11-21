@@ -3,6 +3,7 @@
 language: R
 cache: packages
 warnings_are_errors: false
+r_build_args: '--compact-vignettes="gs+qpdf"'
 r_packages:
   - covr
   - data.table
