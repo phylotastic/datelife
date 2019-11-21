@@ -84,9 +84,9 @@ toBibtex(citation("datelife"))
 
 ## Feedback
 
-All comments, ideas and questions about \`datelife1 are encouraged. You
+All comments, ideas and questions about `datelife` are encouraged. You
 are welcome to post an issue
-[here](https://github.com/phylotastic/datelife/issues/new) or to make a
+[here](https://github.com/phylotastic/datelife/issues/new), or to make a
 [pull request](https://github.com/phylotastic/datelife/pulls) if you
 want to contribute with code directly.
 
