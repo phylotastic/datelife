@@ -33,8 +33,9 @@ implemented in _geiger_ ([Harmon et al. 2008](http://bioinformatics.oxfordjourna
 
 - [Installation](#installation)
 - [Quick Intro](#quick-intro)
-- [Citing `datelife`](#citing `datelife`)
+- [Citing `datelife`](#citation)
 - [Feedback](#feedback)
+- [License](#license)
 
 ## Installation
 
@@ -55,9 +56,9 @@ devtools::install_github("phylotastic/datelife")
 You can update the cached objects with the `update_all_cached()` function
 
 
-## Citing `datelife`
+## Citation
 
-If you use `datelife`, please cite the R package and the accompanying publication:
+If you use `datelife` for a publication, please cite the R package and the accompanying paper:
 
 ```{r eval = TRUE, echo = FALSE}
 print(citation("datelife"), bibtex = FALSE, style = "html")
@@ -75,3 +76,7 @@ All comments, ideas and questions about `datelife1 are encouraged. You are welco
 to post an issue [here](https://github.com/phylotastic/datelife/issues/new) or
 to make a [pull request](https://github.com/phylotastic/datelife/pulls) if you
 want to contribute with code directly.
+
+## License
+
+This package is free and open source software, licensed under GPL.

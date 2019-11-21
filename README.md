@@ -28,8 +28,9 @@ project. It is still under rapid development.
 
   - [Installation](#installation)
   - [Quick Intro](#quick-intro)
-  - [Citing `datelife`](#citing%20%60datelife%60)
+  - [Citing `datelife`](#citation)
   - [Feedback](#feedback)
+  - [License](#license)
 
 ## Installation
 
@@ -51,7 +52,7 @@ devtools::install_github("phylotastic/datelife")
 You can update the cached objects with the `update_all_cached()`
 function
 
-## Citing `datelife`
+## Citation
 
 If you use `datelife`, please cite the R package and the accompanying
 publication:
@@ -73,7 +74,7 @@ analytical tools to reveal the dated tree of life.” <em>Bioarxiv</em>,
 
 </p>
 
-Get these citations and the bibtex entry from R with:
+You can get these citations and the bibtex entry with:
 
 ``` r
 citation("datelife")
@@ -87,3 +88,7 @@ are welcome to post an issue
 [here](https://github.com/phylotastic/datelife/issues/new) or to make a
 [pull request](https://github.com/phylotastic/datelife/pulls) if you
 want to contribute with code directly.
+
+## License
+
+This package is free and open source software, licensed under GPL.
