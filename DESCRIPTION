@@ -1,6 +1,7 @@
 Package: datelife
-Title: Underlying Code for the datelife Web Service
-Version: 0.2.18
+Title: Go from a list of taxa or a tree to a chronogram using open scientific data
+Version: 0.2.19
+Date: 2019-11-21
 Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.brian@gmail.com"),
   person("Luna L.", "Sanchez Reyes", role=c("aut")),
   person("Jonathan", "Eastman", role=c("aut")),
@@ -14,8 +15,8 @@ Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.bria
   person("Matt", "Pennell", role=c("aut")),
   person("Mike", "Alfaro", role=c("aut")))
 Maintainer: Brian O'Meara <omeara.brian@gmail.com>
-Description: This contains the core code for going from a tree or list of taxa
-    to a chronogram.
+Description: Methods and workflows to date phylogenetic trees using open scientific data.
+    Underlying code of the datelife website services at www.datelife.org.
 Depends:
     R (>= 3.2.3)
 Imports:
