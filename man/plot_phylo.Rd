@@ -4,17 +4,9 @@
 \alias{plot_phylo}
 \title{plot one tree with study title and geochronological axis}
 \usage{
-plot_phylo(
-  tree,
-  title = "Tree",
-  time_depth = NULL,
-  axis_type = 1,
-  cex = graphics::par("cex"),
-  mai4 = NULL,
-  write = "nothing",
-  file_name = NULL,
-  GTS = get("strat2012")
-)
+plot_phylo(tree, title = "Tree", time_depth = NULL, axis_type = 1,
+  cex = graphics::par("cex"), mai4 = NULL, write = "nothing",
+  file_name = NULL, GTS = get("strat2012"))
 }
 \arguments{
 \item{tree}{A tree either as a newick character string or as a phylo object}

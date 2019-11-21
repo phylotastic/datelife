@@ -4,18 +4,12 @@
 \alias{summarize_datelife_result}
 \title{Summarize a filtered results list from get_datelife_result function in various ways}
 \usage{
-summarize_datelife_result(
-  datelife_result = NULL,
-  datelife_query = NULL,
-  summary_format = "phylo_all",
-  partial = TRUE,
-  update_cache = FALSE,
-  cache = get("opentree_chronograms"),
-  summary_print = c("citations", "taxa"),
-  taxon_summary = c("none", "summary", "matrix"),
-  verbose = FALSE,
-  criterion = c("trees", "taxa")
-)
+summarize_datelife_result(datelife_result = NULL,
+  datelife_query = NULL, summary_format = "phylo_all",
+  partial = TRUE, update_cache = FALSE,
+  cache = get("opentree_chronograms"), summary_print = c("citations",
+  "taxa"), taxon_summary = c("none", "summary", "matrix"),
+  verbose = FALSE, criterion = c("trees", "taxa"))
 }
 \arguments{
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}

@@ -4,14 +4,9 @@
 \alias{patristic_matrix_to_phylo}
 \title{Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruiyTree.}
 \usage{
-patristic_matrix_to_phylo(
-  patristic_matrix,
-  clustering_method = "nj",
-  fix_negative_brlen = TRUE,
-  fixing_method = 0,
-  ultrametric = TRUE,
-  variance_matrix = NULL
-)
+patristic_matrix_to_phylo(patristic_matrix, clustering_method = "nj",
+  fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE,
+  variance_matrix = NULL)
 }
 \arguments{
 \item{patristic_matrix}{A patristic matrix}

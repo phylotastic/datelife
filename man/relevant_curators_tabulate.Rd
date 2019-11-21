@@ -4,7 +4,8 @@
 \alias{relevant_curators_tabulate}
 \title{Return the relevant curators for a set of studies}
 \usage{
-relevant_curators_tabulate(results.index, cache = get("opentree_chronograms"))
+relevant_curators_tabulate(results.index,
+  cache = get("opentree_chronograms"))
 }
 \arguments{
 \item{results.index}{A vector from datelife_result_study_index() with the indices of the relevant studies}

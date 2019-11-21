@@ -1,0 +1,40 @@
+citHeader("To cite package 'datelife' in publications, please use the first entry. To cite the accompanying paper, use the second entry:")
+
+year <- format(Sys.time(), "%Y")
+vers <- paste("R package version", meta$Version)
+authors <- personList(person("Brian", "O'Meara", email = "omeara.brian@gmail.com", role = c("aut", "cre")),
+                      person("Luna L.", "Sanchez Reyes", email = "sanchez.reyes.luna@gmail.com", role = "aut"),
+                      person("Jonathan", "Eastman", role=c("aut")),
+                      person("Tracy", "Heath", role=c("aut")),
+                      person("April", "Wright", role=c("aut")),
+                      person("Klaus", "Schliep", role=c("aut")),
+                      person("Scott", "Chamberlain", role=c("aut")),
+                      person("Peter", "Midford", role=c("aut")),
+                      person("Luke", "Harmon", role=c("aut")),
+                      person("Joseph", "Brown", role=c("aut")),
+                      person("Matt", "Pennell", role=c("aut")),
+                      person("Mike", "Alfaro", role=c("aut")))
+
+authors_format <- paste(format(authors, include = c("given", "family")), collapse = ", ")
+pkg_title <- paste0(meta$Package, ": ", meta$Title)
+
+citEntry(entry="Manual",
+ 		  title = pkg_title,
+ 		  author =  authors_format,
+ 		  year = year,
+ 		  note = vers,
+ 		  textVersion = paste(authors_format, year, pkg_title, vers, sep=". "))
+
+authors2 <- personList(person("Brian", "O'Meara", email = "omeara.brian@gmail.com", role = c("aut", "cre")),
+                      person("Luna L.", "Sanchez Reyes", email = "sanchez.reyes.luna@gmail.com"))
+authors2_format <- paste(format(authors2, include = c("given", "family")), collapse = ", ")
+
+citEntry(entry="Article",
+	title = "datelife: leveraging databases and analytical tools to reveal the dated tree of life",
+  author = authors2,
+	journal = "Bioarxiv",
+  	year = "2019",
+	volume = "xx",
+	pages = "xxx-xxx",
+  textVersion = paste0(authors2_format, ". 2019. Bioarxiv xx: xxx-xxx.")
+  )
