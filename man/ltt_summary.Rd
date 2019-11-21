@@ -23,6 +23,8 @@ ltt_summary(
 \item{max_tips}{A numeric value}
 
 \item{length_arrowhead}{A numeric value}
+
+\item{...}{parameters passed to ape::ltt.lines}
 }
 \description{
 Lineage through time plots of  all chronograms in multiphylo object and its summaries.

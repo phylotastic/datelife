@@ -6,7 +6,7 @@
 #' @param phy_summ_col A character value.
 #' @param max_tips A numeric value
 #' @param length_arrowhead A numeric value
-
+#' @param ... parameters passed to ape::ltt.lines
 ltt_summary <- function(phy_summ, phy_summ_type = NULL, phy_summ_col = NULL, max_tips,
   length_arrowhead = 0.075, ...){
     if(!inherits(phy_summ_type, "character")){
