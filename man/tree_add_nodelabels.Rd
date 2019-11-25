@@ -2,7 +2,7 @@
 % Please edit documentation in R/tree_processing.R
 \name{tree_add_nodelabels}
 \alias{tree_add_nodelabels}
-\title{Adds labels to nodes with no asigned label}
+\title{Adds labels to nodes with no assigned label}
 \usage{
 tree_add_nodelabels(tree = NULL, node_prefix = "n", node_index = "node_number")
 }
@@ -17,5 +17,5 @@ tree_add_nodelabels(tree = NULL, node_prefix = "n", node_index = "node_number")
 A phylo object
 }
 \description{
-Adds labels to nodes with no asigned label
+Adds labels to nodes with no assigned label
 }

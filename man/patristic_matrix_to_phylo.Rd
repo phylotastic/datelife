@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_phylo.R
 \name{patristic_matrix_to_phylo}
 \alias{patristic_matrix_to_phylo}
-\title{Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruiyTree.}
+\title{Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruifyTree.}
 \usage{
 patristic_matrix_to_phylo(
   patristic_matrix,
@@ -37,5 +37,5 @@ patristic_matrix_to_phylo(
 A rooted phylo object
 }
 \description{
-Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruiyTree.
+Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruifyTree.
 }

@@ -4,7 +4,7 @@
 #' Gets node numbers, node names, descendant tip numbers and labels of nodes from a any tree and node ages from dated trees
 #' @inheritParams tree_fix_brlen
 #' @param node_data A character vector containing one or all from: "node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label"
-#' @param nodes Numeric vector with node numbers from which you want to obtain data. Defaut to NULL: obtain data for all nodes in the tree.
+#' @param nodes Numeric vector with node numbers from which you want to obtain data. Default to NULL: obtain data for all nodes in the tree.
 #' @return A list
 #' @export
 tree_get_node_data <- function(tree = NULL, nodes = NULL, node_data = c("node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label")){
@@ -44,7 +44,7 @@ tree_get_node_data <- function(tree = NULL, nodes = NULL, node_data = c("node_nu
 	return(res)
 }
 
-#' Adds labels to nodes with no asigned label
+#' Adds labels to nodes with no assigned label
 #' @inheritParams tree_fix_brlen
 #' @param node_prefix Character vector. If length 1, it will be used to name all nodes with no labels, followed by a number which can be the node_number or consecutive, as specified in node_index.
 #' @param node_index Character vector. Choose between "consecutive" and "node_number" as numeric index for node labels. It will use consecutive numbers from 1 to total node number in the first case and phylo node numbers in the second case (i.e, from Ntip + 1).

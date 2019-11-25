@@ -1,5 +1,5 @@
 
-#' Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruiyTree.
+#' Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruifyTree.
 #' @param patristic_matrix A patristic matrix
 #' @param clustering_method A character vector indicating the method to construct the tree. Options are
 #' \describe{
@@ -103,7 +103,7 @@ force_ultrametric <- function(phy){
 #' Cluster a patristic matrix into a tree with various methods.
 #'
 #' @inheritParams patristic_matrix_to_phylo
-#' @return A list of trees (with potential NAs if a method was unsuccesful) from clustering with NJ, UPGMA, BIONJ, triangle method and MVR.
+#' @return A list of trees (with potential NAs if a method was unsuccessful) from clustering with NJ, UPGMA, BIONJ, triangle method and MVR.
 #' @details Methods include the following and their variants to handle missing values:
 #' \describe{
 #'	\item{nj}{Neighbor-Joining method applied with ape::nj function.}
@@ -288,12 +288,12 @@ choose_cluster <- function(phycluster, clustering_method = "nj"){
 #' Go from a summary matrix to an ultrametric phylo object.
 #' @param summ_matrix A summary patristic distance matrix from sdm or median. See details.
 #' @inheritParams datelife_query_check
-#' @param total_distance Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take iy as is.
+#' @param total_distance Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take it as is.
 #' @param use A character vector indicating what type of age to use for summary. One of the following
 #' \describe{
 #'	\item{mean}{It will use the mean of the node age distributions.}
-#'	\item{min}{It will use the minimum age from the node age distrbutions.}
-#'	\item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distrbutions.}
+#'	\item{min}{It will use the minimum age from the node age distributions.}
+#'	\item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
 #' }
 #' @param target_tree A phylo object. Use this in case you want a particular backbone for the output tree.
 #' @inheritDotParams get_otol_synthetic_tree
@@ -430,7 +430,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
 #' @inheritDotParams summary_matrix_to_phylo
 #' @export
 #' @details
-#' With the function summary_matrix_to_phylo users can choose the minimum, mean or maximum ages from the saummary matrix as calibration points to get a single summary chronogram.
+#' With the function summary_matrix_to_phylo users can choose the minimum, mean or maximum ages from the summary matrix as calibration points to get a single summary chronogram.
 #' With this function users get all three summary chronograms in a multiphylo object.
 # modified from get_all_summaries function from datelife_examples
 summary_matrix_to_phylo_all <- function(summ_matrix, target_tree = NULL, ...){

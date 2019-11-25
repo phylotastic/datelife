@@ -78,9 +78,9 @@ tnrs_match.default <- function(input, reference_taxonomy = "otl", ...){  # enhan
 #' 		\describe{
 #' 		    \item{original}{Tnrs matching was not attempted. Original labeling is preserved.}
 #' 		    \item{ott}{Matching was manually made by a curator in Open Tree of Life.}
-#' 		    \item{tnrs}{Tnrs matching was attempted and succesful with no approximate matching. Original label is replaced by the matched name.}
-#' 		    \item{approximated}{Tnrs matching was attempted and succesful but with approximate matching. Original labeling is preserved.}
-#' 		    \item{unmatched}{Tnrs matching was attempted and unsuccesful. Original labeling is preserved.}
+#' 		    \item{tnrs}{Tnrs matching was attempted and successful with no approximate matching. Original label is replaced by the matched name.}
+#' 		    \item{approximated}{Tnrs matching was attempted and successful but with approximate matching. Original labeling is preserved.}
+#' 		    \item{unmatched}{Tnrs matching was attempted and unsuccessful. Original labeling is preserved.}
 #' 		}
 #'     \item{phy$original.tip.label}{A character vector preserving all original labels.}
 #'     \item{phy$ott_ids}{A numeric vector with ott id numbers of matched tips. Unmatched and original tips will be NaN.}
@@ -145,7 +145,7 @@ tnrs_match.phylo <- function(input, reference_taxonomy = "otl", tip = NULL, ...)
 #'
 #' @param tnrs A data frame, usually an output from datelife::tnrs_match or rotl::tnrs_match_names functions, but see details.
 #' @param invalid A character string with flags to be removed from final object.
-#' @param remove_nonmatches Boolean, whether to remove unssuccesfully matched names or not.
+#' @param remove_nonmatches Boolean, whether to remove unsuccessfully matched names or not.
 #' @details Input can be any data frame or named list that relates taxa stored in an element named "unique" to a validity category stored in "flags".
 #' @return A data frame or named list (depending on the input) with valid taxa only.
 #' @export

@@ -10,7 +10,7 @@ check_datelife_result(datelife_result)
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
 }
 \value{
-a datelifeResult object or a message explaining why it is not a datelifeResul tobject
+a datelifeResult object or a message explaining why it is not a datelifeResult object
 }
 \description{
 checks if we obtained an empty search with the set of input taxon names

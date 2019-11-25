@@ -18,7 +18,7 @@ clean_tnrs(
 
 \item{invalid}{A character string with flags to be removed from final object.}
 
-\item{remove_nonmatches}{Boolean, whether to remove unssuccesfully matched names or not.}
+\item{remove_nonmatches}{Boolean, whether to remove unsuccessfully matched names or not.}
 }
 \value{
 A data frame or named list (depending on the input) with valid taxa only.

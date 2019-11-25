@@ -40,7 +40,7 @@ phylo_generate_uncertainty(
 
 \item{age_sd}{The standard deviation around the age to use for generating the uncertainty. If not a numeric value, var will be used to calculate it.}
 
-\item{age_var}{The variance to calculate age_sd and generate unvcertainty.}
+\item{age_var}{The variance to calculate age_sd and generate uncertainty.}
 
 \item{age_scale}{How to scale sd by the depth of the node. If 0, same sd for all. If not, older nodes have more uncertainty}
 

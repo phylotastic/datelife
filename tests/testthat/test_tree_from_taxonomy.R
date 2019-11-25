@@ -36,7 +36,7 @@ test_that("tree_from_taxonomy works with weird inputs and PBDB", {
 })
 
 test_that("get_fossil_range works", {
-    dates <- get_fossil_range("Tyrannosaurus rax") # yep, with mispellings
+    dates <- get_fossil_range("Tyrannosaurus rax") # yep, with misspellings
     expect_true(all(dates$min_ma > 64))
     dates <- get_fossil_range("Tyrannosaurus rex", recent=TRUE) # I'm not allowed to say how I know this, but T. rex is still alive.
     expect_true(min(dates$min_ma) == 0)
@@ -44,7 +44,7 @@ test_that("get_fossil_range works", {
 })
 
 test_that("summarize_fossil_range works", {
-    dates <- summarize_fossil_range("Tyrannosaurus rax") # yep, with mispellings
+    dates <- summarize_fossil_range("Tyrannosaurus rax") # yep, with misspellings
     expect_true(dates$min_ma > 64)
     expect_true(nrow(dates)==1)
     expect_true(rownames(dates)=="Tyrannosaurus rax") # we get the name we put in (which may match our tree), not the GNR'ed name

@@ -24,7 +24,7 @@ Now storing >200 chronograms from OToL
 Generated with
 opentree_chronograms <- get_otol_chronograms()
 usethis::use_data(opentree_chronograms, overwrite = T)
-and updtated with update_datelife_cache()
+and updated with update_datelife_cache()
 }
 \keyword{chronogram}
 \keyword{otol}

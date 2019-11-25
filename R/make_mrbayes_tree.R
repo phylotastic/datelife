@@ -126,7 +126,7 @@ run_mrbayes <- function(mrbayes_output_file = NULL){
 
 #' Makes a node constraints and node calibrations block for a MrBayes run file from a list of taxa and ages or from a dated tree
 #' @param constraint The constraint tree: a phylo object or a newick character string, with or without branch lengths.
-#' @param taxa A character vector with taxon names to be mantained in tree
+#' @param taxa A character vector with taxon names to be maintained in tree
 #' @inheritParams missing_taxa_check
 #' @param ncalibration The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.
 #' @param age_distribution A character string specifying the type of calibration. Only "fixed" and "uniform" are implemented for now.
@@ -144,7 +144,7 @@ run_mrbayes <- function(mrbayes_output_file = NULL){
 #' }
 #'
 #' @param root_calibration Used to set a calibration at the root or not. Default to FALSE. Only relevant if ncalibration is specified.
-#' @param mrbayes_constraints_file NULL or a character vector indicating the name of mrbayes costraint and/or calibration block file.
+#' @param mrbayes_constraints_file NULL or a character vector indicating the name of mrbayes constraint and/or calibration block file.
 #' @param clockratepr A character vector indicating the clockrateprior to be used.
 #' @return A set of MrBayes constraints and/or calibration commands printed in console as character strings or as a text file specified in mrbayes_constraints_file.
 #' @export

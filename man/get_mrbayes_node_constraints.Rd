@@ -18,7 +18,7 @@ get_mrbayes_node_constraints(
 \arguments{
 \item{constraint}{The constraint tree: a phylo object or a newick character string, with or without branch lengths.}
 
-\item{taxa}{A character vector with taxon names to be mantained in tree}
+\item{taxa}{A character vector with taxon names to be maintained in tree}
 
 \item{missing_taxa}{A tree, a data frame or a vector enlisting all missing taxa you want to include.
 \describe{
@@ -54,7 +54,7 @@ get_mrbayes_node_constraints(
 
 \item{root_calibration}{Used to set a calibration at the root or not. Default to FALSE. Only relevant if ncalibration is specified.}
 
-\item{mrbayes_constraints_file}{NULL or a character vector indicating the name of mrbayes costraint and/or calibration block file.}
+\item{mrbayes_constraints_file}{NULL or a character vector indicating the name of mrbayes constraint and/or calibration block file.}
 
 \item{clockratepr}{A character vector indicating the clockrateprior to be used.}
 }

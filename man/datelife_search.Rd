@@ -29,7 +29,7 @@ datelife_search(
 
 \item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
-\item{approximate_match}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
+\item{approximate_match}{If TRUE, use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches).}
 
 \item{update_cache}{default to FALSE}
 

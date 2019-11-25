@@ -84,7 +84,7 @@ get_dated_otol_induced_subtree <- function(input = NULL, ott_ids = NULL, ...){
     pp <- tryCatch(httr::POST("http://141.211.236.35:10999/induced_subtree",
 						body = list(ott_ids = input_ott_match),
 						encode = "json", httr::timeout(10)), error = function(e) NA)
-	if(length(pp) > 1){ # this means it retrieved a tree succesfully
+	if(length(pp) > 1){ # this means it retrieved a tree successfully
 		pp <- httr::content(pp)
 		rr <- httr::POST("http://141.211.236.35:10999/rename_tree",
 		          body = list(newick = pp$newick),

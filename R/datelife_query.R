@@ -8,7 +8,7 @@
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 	use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE,
 	verbose = FALSE, ...) {
-		# enhance: add mapped (has tnrs been performed?) and matched (was it matched succesfullly?) element to phylo object
+		# enhance: add mapped (has tnrs been performed?) and matched (was it matched successfully?) element to phylo object
 		# add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
 	if(verbose) {
 		message("Processing input...")
@@ -33,7 +33,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 			use_tnrs_global <- FALSE
 			ott_ids <- phy_new$ott_ids
 			if(any(get_spp_from_taxon)){ # to use later, when get_spp_from_taxon = TRUE
-				cleaned_input_tnrs <- list(ott_id = phy_new$ott_ids, unique_name = phy_new$tip.label) 
+				cleaned_input_tnrs <- list(ott_id = phy_new$ott_ids, unique_name = phy_new$tip.label)
 			}
 		}
 	} else {

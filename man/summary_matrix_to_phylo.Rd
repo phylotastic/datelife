@@ -18,13 +18,13 @@ summary_matrix_to_phylo(
 
 \item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
 
-\item{total_distance}{Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take iy as is.}
+\item{total_distance}{Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take it as is.}
 
 \item{use}{A character vector indicating what type of age to use for summary. One of the following
 \describe{
 \item{mean}{It will use the mean of the node age distributions.}
-\item{min}{It will use the minimum age from the node age distrbutions.}
-\item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distrbutions.}
+\item{min}{It will use the minimum age from the node age distributions.}
+\item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
 }}
 
 \item{target_tree}{A phylo object. Use this in case you want a particular backbone for the output tree.}

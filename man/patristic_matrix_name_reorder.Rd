@@ -10,7 +10,7 @@ patristic_matrix_name_reorder(patristic_matrix)
 \item{patristic_matrix}{A patristic matrix with row and column names for taxa}
 }
 \value{
-patristic_matrix A patristic matrix with row and column names for taxa in alphabetial order
+patristic_matrix A patristic matrix with row and column names for taxa in alphabetical order
 }
 \description{
 Function to reorder a matrix so that row and column labels are in alphabetical order. Used in: patristic_matrix_pad.

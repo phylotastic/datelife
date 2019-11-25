@@ -192,7 +192,7 @@ patristic_matrix_pad <- function(patristic_matrix, all_taxa) {
 
 #' Function to reorder a matrix so that row and column labels are in alphabetical order. Used in: patristic_matrix_pad.
 #' @param patristic_matrix A patristic matrix with row and column names for taxa
-#' @return patristic_matrix A patristic matrix with row and column names for taxa in alphabetial order
+#' @return patristic_matrix A patristic matrix with row and column names for taxa in alphabetical order
 patristic_matrix_name_reorder <- function(patristic_matrix) {
   return(patristic_matrix[order(rownames(patristic_matrix)),order(colnames(patristic_matrix))])
 }

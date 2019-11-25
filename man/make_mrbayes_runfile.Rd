@@ -17,7 +17,7 @@ make_mrbayes_runfile(
 \arguments{
 \item{constraint}{The constraint tree: a phylo object or a newick character string, with or without branch lengths.}
 
-\item{taxa}{A character vector with taxon names to be mantained in tree}
+\item{taxa}{A character vector with taxon names to be maintained in tree}
 
 \item{ncalibration}{The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.}
 

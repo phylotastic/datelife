@@ -162,7 +162,7 @@ function(phy, label = "height_95%_HPD", tab = NULL, nodes, col, lwd, broken = FA
 #' @param GTS a data frame containing the geological time scale such as provided by \code{\link{strat2012}}.
 #' @param tip.time a real number giving time units back from present were the youngest taxa were sampled.
 #' @param unit a vector of mode character used to select geological time units that shall be displayed. When using \code{gradstein04}, \code{"eon"}, \code{"era"}, \code{"period"}, \code{"epoch"}, and \code{"stage"} are available.
-#' @param ages logical: if \code{TRUE}, a real-numbered axis of unit bounderies is added to the plot.
+#' @param ages logical: if \code{TRUE}, a real-numbered axis of unit boundaries is added to the plot.
 #' @param cex a real number giving the \bold{c}haracter \bold{ex}pansion.
 #' @param col a vector of mode character used to select background color(s). Will be recycled if necessary.
 #' @param texcol a vector of mode character used to select font color(s). Will be recycled if necessary.
@@ -173,7 +173,7 @@ function(phy, label = "height_95%_HPD", tab = NULL, nodes, col, lwd, broken = FA
 #' @export
 #' @details
 #' Make sure ape is loaded otherwise it won't find .PlotPhyloEnv
-#' If the name of a time interval does not fit the space on the plotting device provided by that time frame, \code{axisGeo} tries to fit the name string by lowering the original character expansion. In order to avoid undiscernable small font sizes only character expansion of 50 percent or more of the original \code{cex} is allowed; in all other cases strings are abreviated and plotted with the original character expansion.
+#' If the name of a time interval does not fit the space on the plotting device provided by that time frame, \code{axisGeo} tries to fit the name string by lowering the original character expansion. In order to avoid undiscernable small font sizes only character expansion of 50 percent or more of the original \code{cex} is allowed; in all other cases strings are abbreviated and plotted with the original character expansion.
 #' @author Christoph Heibl
 #' @references
 #' Gradstein F.M., J.G. Ogg & A.G. Smith. 2004. A Geologic Time Scale. Cambridge University Press, Cambridge, UK. \url{www.cambridge.org/uk/catalogue/catalogue.asp?isbn=0521786738}.

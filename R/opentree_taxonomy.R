@@ -64,7 +64,7 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
               names(ott_ids) <- input$cleaned_names
           } else {
               input_tnrs <- datelife::tnrs_match(input = input$cleaned_names)
-              # should we clean tnrs from invalid? what about NA's? Maybe only NA's at the end, so we can tell users what was unsuccesful
+              # should we clean tnrs from invalid? what about NA's? Maybe only NA's at the end, so we can tell users what was unsuccessful
               # if we decide to clean, the two following lines should be uncommented:
               # input_tnrs <- clean_tnrs(tnrs = input_tnrs)
               # input_tnrs <- input_tnrs[!is.na(input_tnrs$unique_name),]  # gets rid of names not matched with rotl::tnrs_match_names; otherwise rotl::tol_induced_subtree won't run

@@ -18,7 +18,7 @@ make_datelife_query(
 
 \item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
-\item{approximate_match}{If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).}
+\item{approximate_match}{If TRUE, use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches).}
 
 \item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
 

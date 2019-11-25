@@ -14,7 +14,7 @@ filter_for_grove(datelife_result, criterion = "taxa", n = 2)
 \item{n}{Degree of overlap required}
 }
 \value{
-A datelifResult object filtered to only include one grove of trees
+A datelifeResult object filtered to only include one grove of trees
 }
 \description{
 Filter a datelifeResult object to find the largest grove

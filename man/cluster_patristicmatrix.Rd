@@ -12,7 +12,7 @@ cluster_patristicmatrix(patristic_matrix, variance_matrix = NULL)
 \item{variance_matrix}{A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function. Only used if clustering_method is "mvr".}
 }
 \value{
-A list of trees (with potential NAs if a method was unsuccesful) from clustering with NJ, UPGMA, BIONJ, triangle method and MVR.
+A list of trees (with potential NAs if a method was unsuccessful) from clustering with NJ, UPGMA, BIONJ, triangle method and MVR.
 }
 \description{
 Cluster a patristic matrix into a tree with various methods.

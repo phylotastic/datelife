@@ -2,7 +2,7 @@
 #' @param input vector of names, a newick string, a phylo or multiPhylo object, a datelifeResult object
 #' @param partial Boolean; default TRUE: use source trees even if they only match some of the desired taxa
 #' @param use_tnrs Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
-#' @param approximate_match Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)
+#' @param approximate_match Boolean; default TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @inheritParams datelife_search
 #' @param each Boolean, default to FALSE (all calibrations are returned in the same data frame). If TRUE, calibrations from each chronogram are returned in a separate data frame.

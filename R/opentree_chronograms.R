@@ -18,7 +18,7 @@
 #' Generated with
 #' opentree_chronograms <- get_otol_chronograms()
 #' usethis::use_data(opentree_chronograms, overwrite = T)
-#' and updtated with update_datelife_cache()
+#' and updated with update_datelife_cache()
 "opentree_chronograms"
 # modified get_otol_chronograms code to retain taxa ott_ids too
 
@@ -291,7 +291,7 @@ is_good_chronogram <- function(phy) {
 #' @source \url{http://opentreeoflife.org}
 #' @keywords otol tree chronogram unmapped tnrs
 #' @details
-#' Before we developped tools to clean and map tip labels for our cached trees
+#' Before we developed tools to clean and map tip labels for our cached trees
 #' we found some trees that were stored with unmapped tip labels
 #' we extracted them and saved them to be used for testing functions.
 #' Generated with

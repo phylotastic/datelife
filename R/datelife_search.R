@@ -21,7 +21,7 @@
 #' @param taxon_summary A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on taxon_summary added to the output.
 #' @param partial If TRUE, use source chronograms even if they only match some of the desired taxa
 #' @param use_tnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.
-#' @param approximate_match If TRUE, use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches).
+#' @param approximate_match If TRUE, use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches).
 #' @param update_cache default to FALSE
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms).
 #' @param get_spp_from_taxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.
@@ -171,7 +171,7 @@ datelife_result_check <- function(datelife_result, use_tnrs = FALSE, verbose = F
 }
 #' checks if we obtained an empty search with the set of input taxon names
 #' @inheritParams datelife_result_check
-#' @return a datelifeResult object or a message explaining why it is not a datelifeResul tobject
+#' @return a datelifeResult object or a message explaining why it is not a datelifeResult object
 check_datelife_result <- function(datelife_result){
 	# datelife_result <- subset2_result
 	if(!inherits(datelife_result, "datelifeResult")){

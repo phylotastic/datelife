@@ -6,7 +6,7 @@
 #' @param uncertainty_method A character vector specifying the method to generate uncertainty. mrbayes is default.
 #' @inheritParams make_mrbayes_tree
 #' @param age_sd The standard deviation around the age to use for generating the uncertainty. If not a numeric value, var will be used to calculate it.
-#' @param age_var The variance to calculate age_sd and generate unvcertainty.
+#' @param age_var The variance to calculate age_sd and generate uncertainty.
 #' @param age_scale How to scale sd by the depth of the node. If 0, same sd for all. If not, older nodes have more uncertainty
 #' @param alpha The significance level on uncertainty to generate. By default 0.025
 #' @param rescale Boolean. If true, observed age will be rescaled each round.

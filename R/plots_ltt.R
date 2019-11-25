@@ -4,7 +4,7 @@
 #'
 #' @param taxon Character vector indicating the name of the taxon or lineage that the chronograms in phy belong to.
 #' @param phy A phylo or multiphylo object with chronograms (trees with branch lengths proportional to geologic time), ideally.
-#' @param ltt_colors A character vector indicating the colors to be ised for plotting ltt
+#' @param ltt_colors A character vector indicating the colors to be used for plotting ltt
 #' @param tax_datedotol A chronogram to compare trees in phy to.
 #' @param file_name A character string giving the name of the pdf file.
 #' @param file_dir A character string giving the path to write the file to.

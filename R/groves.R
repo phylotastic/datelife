@@ -95,7 +95,7 @@ pick_grove <- function(grove_list, criterion = "taxa", datelife_result) {
 #' @param datelife_result datelifeResult object (named list of patristic matrices). Only needed for "taxa" criterion
 #' @param criterion Whether to get the grove with the most trees or the most taxa
 #' @param n Degree of overlap required
-#' @return A datelifResult object filtered to only include one grove of trees
+#' @return A datelifeResult object filtered to only include one grove of trees
 #' @export
 filter_for_grove <- function(datelife_result, criterion= "taxa", n = 2) {
   criterion <- match.arg(criterion, c("trees", "taxa"))
@@ -108,13 +108,13 @@ filter_for_grove <- function(datelife_result, criterion= "taxa", n = 2) {
 #' @inheritParams filter_for_grove
 #' @return A list of two elements:
 #' \describe{
-#'	\item{best_grove}{A datelifResult object filtered to only include one grove of trees that can be summarized with median or sdm.
+#'	\item{best_grove}{A datelifeResult object filtered to only include one grove of trees that can be summarized with median or sdm.
 #'	}
 #'	\item{overlap}{The degree of taxon names overlap among trees in the best grove.
 #'	}
 #' }
 #' @export
-# #' @details 
+# #' @details
 get_best_grove <- function(datelife_result, criterion = "taxa", n = 2){
     # for testing:
     # utils::data(subset2_taxa)

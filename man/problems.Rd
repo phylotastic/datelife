@@ -15,7 +15,7 @@ problems
 Problematic chronograms from Open Tree of Life
 }
 \details{
-Before we developped tools to clean and map tip labels for our cached trees
+Before we developed tools to clean and map tip labels for our cached trees
 we found some trees that were stored with unmapped tip labels
 we extracted them and saved them to be used for testing functions.
 Generated with

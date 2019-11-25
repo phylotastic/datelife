@@ -30,9 +30,9 @@ The output will preserve all elements from original input phylo object and will 
 		\describe{
 		    \item{original}{Tnrs matching was not attempted. Original labeling is preserved.}
 		    \item{ott}{Matching was manually made by a curator in Open Tree of Life.}
-		    \item{tnrs}{Tnrs matching was attempted and succesful with no approximate matching. Original label is replaced by the matched name.}
-		    \item{approximated}{Tnrs matching was attempted and succesful but with approximate matching. Original labeling is preserved.}
-		    \item{unmatched}{Tnrs matching was attempted and unsuccesful. Original labeling is preserved.}
+		    \item{tnrs}{Tnrs matching was attempted and successful with no approximate matching. Original label is replaced by the matched name.}
+		    \item{approximated}{Tnrs matching was attempted and successful but with approximate matching. Original labeling is preserved.}
+		    \item{unmatched}{Tnrs matching was attempted and unsuccessful. Original labeling is preserved.}
 		}
     \item{phy$original.tip.label}{A character vector preserving all original labels.}
     \item{phy$ott_ids}{A numeric vector with ott id numbers of matched tips. Unmatched and original tips will be NaN.}

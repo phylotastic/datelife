@@ -26,7 +26,7 @@ plot_ltt_phyloall(
 
 \item{phy}{A phylo or multiphylo object with chronograms (trees with branch lengths proportional to geologic time), ideally.}
 
-\item{ltt_colors}{A character vector indicating the colors to be ised for plotting ltt}
+\item{ltt_colors}{A character vector indicating the colors to be used for plotting ltt}
 
 \item{tax_datedotol}{A chronogram to compare trees in phy to.}
 

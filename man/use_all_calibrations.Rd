@@ -15,7 +15,7 @@ use_all_calibrations(input = NULL, ...)
   \describe{
     \item{\code{partial}}{Boolean; default TRUE: use source trees even if they only match some of the desired taxa}
     \item{\code{use_tnrs}}{Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer}
-    \item{\code{approximate_match}}{Boolean; default TRUE: use a slower TNRS to correct mispellings, increasing the chance of matches (including false matches)}
+    \item{\code{approximate_match}}{Boolean; default TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)}
     \item{\code{cache}}{The cached set of chronograms and other info from data(opentree_chronograms)}
     \item{\code{each}}{Boolean, default to FALSE (all calibrations are returned in the same data frame). If TRUE, calibrations from each chronogram are returned in a separate data frame.}
     \item{\code{update_cache}}{default to FALSE}
