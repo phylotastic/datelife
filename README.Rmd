@@ -19,21 +19,23 @@ library(datelife)
 
 [![Build Status](https://travis-ci.org/phylotastic/datelife.svg)](https://travis-ci.org/phylotastic/datelife) [![DOI](https://zenodo.org/badge/23036/phylotastic/datelife.svg)](https://zenodo.org/badge/latestdoi/23036/phylotastic/datelife) [![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://codecov.io/gh/phylotastic/datelife) [![Github Open Issues](https://img.shields.io/github/issues-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues) [![Github Closed Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues?q=is%3Aissue+is%3Aclosed)
 
-# `datelife`
+# datelife
 
 Get a phylogenetic tree with branch lengths proportional to geologic time (aka a
 _**chronogram**_) of any two or more lineages of interest to you.
 Use this R package or go to [www.datelife.org](http://datelife.org/query/) to make
-a query of chronograms available for your lineages in the [Open Tree of Life](http://opentreeoflife.org)'s
+a query of chronograms available for your lineages in the [Open Tree of Life](https://tree.opentreeoflife.org/curator)'s
 tree store.
-A phylogenetic tree of your own making or choosing can be dated using ages from these chronograms
+Date a phylogenetic tree of your own making or choosing, using ages from these chronograms
 and the congruification method ([Eastman et al. 2013](http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12051/abstract))
 implemented in _geiger_ ([Harmon et al. 2008](http://bioinformatics.oxfordjournals.org/content/24/1/129.short)).
-`datelife` was developed as part of the phylotastic (NSF-funded) project. It is still under rapid development.
+
+
+`datelife` has been developed as part of the [phylotastic]() (NSF-funded) project, and is still under rapid development.
 
 - [Installation](#installation)
-- [Quick Intro](#quick-intro)
-- [Citing `datelife`](#citation)
+- [Quick intro](#quick-intro)
+- [Citation](#citation)
 - [Feedback](#feedback)
 - [License](#license)
 

@@ -14,7 +14,7 @@ Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.bria
   person("Joseph", "Brown", role=c("aut")),
   person("Matt", "Pennell", role=c("aut")),
   person("Mike", "Alfaro", role=c("aut")))
-Maintainer: Brian O'Meara <omeara.brian@gmail.com>
+Maintainer: Luna L Sanchez-Reyes <lunalsr@gmail.com>
 Description: Methods and workflows to date phylogenetic trees using open scientific data.
     Underlying code of the datelife website services at www.datelife.org.
 Depends:
