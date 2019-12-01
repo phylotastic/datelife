@@ -14,13 +14,14 @@ Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg
 
 Get a phylogenetic tree with branch lengths proportional to geologic
 time (aka a ***chronogram***) of any two or more lineages of interest to
-you. Use this R package or go to
+you: use this R package or go to
 [www.datelife.org](http://datelife.org/query/) to make a query of
 chronograms available for your lineages in the [Open Tree of
-Life](https://tree.opentreeoflife.org/curator)’s tree store. Date a
-phylogenetic tree of your own making or choosing from the literature,
-using ages from chronograms queried with `datelife` and the
-congruification method ([Eastman et
+Life](https://tree.opentreeoflife.org/curator)’s tree store.
+
+You can also date a phylogenetic tree of your own making (or choosing
+one from the literature), using node ages from chronograms queried with
+`datelife` and the congruification method ([Eastman et
 al. 2013](http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12051/abstract))
 implemented with *geiger* ([Harmon et
 al. 2008](http://bioinformatics.oxfordjournals.org/content/24/1/129.short)).
