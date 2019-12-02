@@ -288,7 +288,7 @@ choose_cluster <- function(phycluster, clustering_method = "nj"){
 #' Go from a summary matrix to an ultrametric phylo object.
 #' @param summ_matrix A summary patristic distance matrix from sdm or median. See details.
 #' @inheritParams datelife_query_check
-#' @param total_distance Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take it as is.
+#' @param total_distance Boolean. If TRUE it will divide the matrix in half, if FALSE it will take it as is.
 #' @param use A character vector indicating what type of age to use for summary. One of the following
 #' \describe{
 #'	\item{mean}{It will use the mean of the node age distributions.}
@@ -301,8 +301,8 @@ choose_cluster <- function(phycluster, clustering_method = "nj"){
 #' @details It can take a regular patristic distance matrix, but there are simpler methods for that implemented in patristic_matrix_to_phylo.
 #' @export
 summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_distance = TRUE, use = "mean", target_tree = NULL, ...){
-    # enhance: add other methods, not only bladj.
-    # for debugging here
+    # enhance: add other methods, besides bladj.
+    # for debugging:
     # summ_matrix <- subset2_sdm_matrix
     # summ_matrix <- median_matrix
     use <- match.arg(use, c("mean", "median", "min", "max"))
@@ -311,7 +311,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
         return(NA)
     }
     if(!is.null(datelife_query)){
-        input_ott_match <- suppressMessages(check_ott_input(input = datelife_query, ...))
+        input_ott_match <- suppressMessages(check_ott_input(input = datelife_query))
         # match inputt_ott_match and unique(c(colnames(summ_matrix), rownames(summ_matrix)))
         # change the names in target tree to the names from summ_matrix (which are the ones that come from the original query)
     }
@@ -330,9 +330,9 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
   if(!inherits(target_tree, "phylo")){
     target_tree <- suppressMessages(get_otol_synthetic_tree(input = colnames(summ_matrix), ...))
     if(!inherits(target_tree, "phylo")){
-      # we should find a better way to do this, but it should be ok for now:
+      # enhance: we should find a better way to do this, but it should be ok for now:
       target_tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(summ_matrix, ultrametric = TRUE)))
-      # target_tree <- consensus(phyloall, p = 0.5) # can't use consensus here: not all trees have the same number of tips, duh
+      # target_tree <- consensus(phyloall, p = 0.5) # can't use consensus here: bc not all trees have the same number of tips
     }
     target_tree <- ape::collapse.singles(target_tree)
       # ape::is.ultrametric(target_tree)

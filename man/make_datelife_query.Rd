@@ -9,8 +9,7 @@ make_datelife_query(
   use_tnrs = FALSE,
   approximate_match = TRUE,
   get_spp_from_taxon = FALSE,
-  verbose = FALSE,
-  ...
+  verbose = FALSE
 )
 }
 \arguments{
@@ -23,19 +22,13 @@ make_datelife_query(
 \item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
-
-\item{...}{
-  Arguments passed on to \code{\link[rphylotastic:taxon_get_species]{rphylotastic::taxon_get_species}}
-  \describe{
-    \item{\code{filters}}{A character vector of strings to exclude.}
-  }}
 }
 \value{
-A list with the phy (or NA, if no tree) and cleaned vector of taxa
+A list with a phylo object (or NA, if input is not a tree) and a cleaned vector of taxon names
 }
 \description{
 Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with input_process first.
 }
 \details{
-If input has length 1, get_spp_from_taxon is always set to TRUE from datelife_search, not in here bc other things depend on this function.
+If input has length 1, get_spp_from_taxon is always set to TRUE (in datelife_search, not in here, because of function dependencies)
 }

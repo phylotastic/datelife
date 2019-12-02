@@ -35,10 +35,10 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
     return(taxon_info)
 }
 
-#' Checks input for get_ott_clade,  get_ott_children functions
+#' Checks input for get_ott_clade,  get_ott_children functions, get_otol_synthetic_tree
 #' @param input Optional. A character vector of names or a datelifeQuery object
 #' @param ott_ids If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match
-#' @inheritDotParams make_datelife_query -input
+#' @inheritDotParams datelife_query_check -datelife_query
 #' @return A named numeric vector of valid ott IDs
 #' @export
 #' @details By default it uses ott_id argument if it is not NULL.
@@ -54,7 +54,7 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
     }
     if(is.null(ott_ids) | all(is.na(ott_ids))){
           # checks that input is a datelifeQuery object, otherwise it uses make_bladj_tree-datelife_query on input
-          input <- datelife_query_check(input, ...)
+          input <- datelife_query_check(datelife_query = input, ...) # this function does not need to inherit any params here, I think.
           if(!inherits(input, "datelifeQuery")){
               (message("Input must be a character vector or a datelifeQuery object"))
               return(NA)

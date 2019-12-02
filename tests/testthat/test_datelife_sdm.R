@@ -22,6 +22,7 @@ test_that("subset2_taxa gives ultrametric summary trees", {
     # nrow(sdm.matrix)
 })
 test_that("datelife_result_sdm works with all clustering methods", {
-    t1 <- datelife_result_sdm(cetacea_result, clustering_method = "nj")
-    t2 <- datelife_result_sdm(cetacea_result, clustering_method = "upgma")
+    t0 <- datelife_result_sdm(cetacea_result)
+    # t1 <- datelife_result_sdm(cetacea_result, clustering_method = "nj")
+    # t2 <- datelife_result_sdm(cetacea_result, clustering_method = "upgma")
 })

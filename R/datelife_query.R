@@ -1,13 +1,12 @@
 
 #' Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with input_process first.
 #' @inheritParams datelife_search
-#' @inheritDotParams rphylotastic::taxon_get_species -taxon
-#' @return A list with the phy (or NA, if no tree) and cleaned vector of taxa
-#' @details If input has length 1, get_spp_from_taxon is always set to TRUE from datelife_search, not in here bc other things depend on this function.
+#' @return A list with a phylo object (or NA, if input is not a tree) and a cleaned vector of taxon names
+#' @details If input has length 1, get_spp_from_taxon is always set to TRUE (in datelife_search, not in here, because of function dependencies)
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 	use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE,
-	verbose = FALSE, ...) {
+	verbose = FALSE) {
 		# enhance: add mapped (has tnrs been performed?) and matched (was it matched successfully?) element to phylo object
 		# add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
 	if(verbose) {
@@ -154,7 +153,7 @@ input_process <- function(input, verbose = FALSE){
 #' @export
 datelife_query_check <- function(datelife_query = NULL, ...){
 	if(missing(datelife_query) | is.null(datelife_query)){
-		stop("datelife_query argument is missing, we have nothing to check")
+		stop("datelife_query argument is missing")
 	}
 	badformat <- TRUE
 	if(is.list(datelife_query) & "phy" %in% names(datelife_query) & "cleaned_names" %in% names(datelife_query)) {
@@ -165,7 +164,6 @@ datelife_query_check <- function(datelife_query = NULL, ...){
 	}
 	if(badformat){
 		datelife_query <- make_datelife_query(input = datelife_query, ...)
-		# badformat <- FALSE  # useful for next block
 	}
 	return(datelife_query)
 }

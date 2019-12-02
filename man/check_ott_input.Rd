@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{check_ott_input}
 \alias{check_ott_input}
-\title{Checks input for get_ott_clade,  get_ott_children functions}
+\title{Checks input for get_ott_clade,  get_ott_children functions, get_otol_synthetic_tree}
 \usage{
 check_ott_input(input = NULL, ott_ids = NULL, ...)
 }
@@ -12,19 +12,16 @@ check_ott_input(input = NULL, ott_ids = NULL, ...)
 \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 
 \item{...}{
-  Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}
+  Arguments passed on to \code{\link[=datelife_query_check]{datelife_query_check}}
   \describe{
-    \item{\code{use_tnrs}}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
-    \item{\code{approximate_match}}{If TRUE, use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches).}
-    \item{\code{get_spp_from_taxon}}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
-    \item{\code{verbose}}{Boolean. If TRUE, it gives printed updates to the user.}
+    \item{\code{}}{}
   }}
 }
 \value{
 A named numeric vector of valid ott IDs
 }
 \description{
-Checks input for get_ott_clade,  get_ott_children functions
+Checks input for get_ott_clade,  get_ott_children functions, get_otol_synthetic_tree
 }
 \details{
 By default it uses ott_id argument if it is not NULL.

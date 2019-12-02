@@ -2,7 +2,7 @@
 #' @inheritParams check_ott_input
 #' @param otol_version Version of OToL to use
 #' @param resolve boolean default to TRUE. Whether to resolve the tree at random or not.
-#' @inheritDotParams make_datelife_query -input
+#' @inheritDotParams check_ott_input
 #' @return A phylo object
 #' @export
 get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version = "v3", resolve = FALSE, ...){
@@ -64,7 +64,8 @@ get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version =
 
 #' Get an otol induced dated subtree from your set of queried taxa
 #' @inheritParams check_ott_input
-#' @inheritDotParams make_datelife_query -input
+#' @inheritDotParams check_ott_input
+##' @param ... Arguments to pass to check_ott_input
 #' @return A phylo object with edge length proportional to time in Myrs. It will return NA if any ott_id is invalid.
 #' @export
 #' @details otol dated tree from Stephen Smith's otol scaling service.
