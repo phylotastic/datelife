@@ -4,7 +4,7 @@
 * win-builder (devel and release)
 
 ## R CMD check results
-There were no ERRORs, WARNINGs
+There were no ERRORs, and no WARNINGs
 
 There was 1 NOTE:
 
@@ -15,7 +15,7 @@ There was 1 NOTE:
       data   4.7Mb
 
     The package is hosting a database (data/opentree_chronograms.rda), increasing the size of the data dir. This database is needed to run main functions.
-    The R dir appears of a much smaller size locally (351Kb). 
+    The R dir appears of a much smaller size locally (351Kb).
 
 ## Downstream dependencies
 
