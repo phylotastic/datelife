@@ -52,7 +52,7 @@ Suggests:
     devtools,
     covr
 SystemRequirements: mafft, PATHd8
-URL: https://github.com/phylotastic/datelife, http://www.datelife.org
+URL: https://github.com/phylotastic/datelife
 License: GPL (>=2)
 LazyData: true
 RoxygenNote: 7.0.0
