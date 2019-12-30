@@ -13,7 +13,7 @@ datelife_result_median(datelife_result, ...)
   Arguments passed on to \code{\link[=summary_matrix_to_phylo]{summary_matrix_to_phylo}}
   \describe{
     \item{\code{summ_matrix}}{A summary patristic distance matrix from sdm or median. See details.}
-    \item{\code{total_distance}}{Boolean. If TRUE it will divide the matrix byhalf, if FALSE it will take it as is.}
+    \item{\code{total_distance}}{Boolean. If TRUE it will divide the matrix in half, if FALSE it will take it as is.}
     \item{\code{use}}{A character vector indicating what type of age to use for summary. One of the following
 \describe{
 \item{mean}{It will use the mean of the node age distributions.}

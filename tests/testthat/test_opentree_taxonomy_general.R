@@ -51,3 +51,7 @@ test_that("tnrs_match and clean_tnrs works",{
   df <- clean_tnrs(tnrs, remove_nonmatches = TRUE)
   expect_true(nrow(df) == 2)
 })
+
+test_that("extract_ott_ids works",{
+  extract_ott_ids(x = canis_taxonomy$tip_label)
+})

@@ -170,3 +170,37 @@ clean_tnrs <- function(tnrs, invalid = c("barren", "extinct", "uncultured", "maj
 	}
   return(tt)
 }
+
+#' Get ott ids from a character vector containing species names and ott ids.
+#' @param x A character vector of taxon names, or a phylo object with tip names containing ott ids.
+#' @return An object of class numeric containing ott ids only and an .
+#' @export
+extract_ott_ids <- function(x, rm.na = TRUE...) {
+    UseMethod("extract_ott_ids", x)
+}
+
+#' @return \code{NULL}
+#'
+#' @rdname extract_ott_ids
+#' @method extract_ott_ids default
+#' @examples
+#' canis <- rotl::tnrs_match_names("canis")
+#' canis_taxonomy <- rotl::taxonomy_subtree(canis$ott_id)
+#' my_ott_ids <-  extract_ott_ids(x = canis_taxonomy$tip_label)
+#' # get the problematic elements from input
+#' canis_taxonomy$tip_label[attr(my_ott_ids, "na.action")]
+#' @export
+extract_ott_ids.default <- function(x, na.rm = TRUE){
+  res <- stringr::str_extract(x, "_ott\\d+")
+  res <- gsub("_ott", "", res)
+  res <- as.numeric(res)
+  if(anyNA(res)){
+    message("After extracting ott ids, there are some non numeric elements:\n")
+    message(paste(paste("\t", x[which(is.na(res))]), collapse = "\n"))
+  }
+  if(na.rm & anyNA(res)){
+    message("\nNAs removed.")
+    res <- stats::na.omit(res)
+  }
+  return(res)
+}
