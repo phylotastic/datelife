@@ -5,15 +5,17 @@
 \alias{extract_ott_ids.default}
 \title{Get ott ids from a character vector containing species names and ott ids.}
 \usage{
-extract_ott_ids(x, rm.na = TRUE...)
+extract_ott_ids(x, na.rm = TRUE, ...)
 
 \method{extract_ott_ids}{default}(x, na.rm = TRUE)
 }
 \arguments{
 \item{x}{A character vector of taxon names, or a phylo object with tip names containing ott ids.}
+
+\item{na.rm}{A logical value indicating whether \code{NA} values should be stripped in the output.}
 }
 \value{
-An object of class numeric containing ott ids only and an .
+An object of class numeric containing ott ids only.
 
 \code{NULL}
 }

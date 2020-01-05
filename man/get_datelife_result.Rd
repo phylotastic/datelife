@@ -33,7 +33,7 @@ get_datelife_result(
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
 \value{
-A datelifeResult object (named list of patristic matrices).
+A datelifeResult object - a named list of patristic matrices. You can ccess the original query with attributes(my_datelife_result)$query
 }
 \description{
 Go from a vector of species, newick string, or phylo object to a list of patristic matrices

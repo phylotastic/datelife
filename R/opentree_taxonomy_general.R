@@ -173,9 +173,10 @@ clean_tnrs <- function(tnrs, invalid = c("barren", "extinct", "uncultured", "maj
 
 #' Get ott ids from a character vector containing species names and ott ids.
 #' @param x A character vector of taxon names, or a phylo object with tip names containing ott ids.
-#' @return An object of class numeric containing ott ids only and an .
+#' @param na.rm A logical value indicating whether \code{NA} values should be stripped in the output.
+#' @return An object of class numeric containing ott ids only.
 #' @export
-extract_ott_ids <- function(x, rm.na = TRUE...) {
+extract_ott_ids <- function(x, na.rm = TRUE, ...) {
     UseMethod("extract_ott_ids", x)
 }
 

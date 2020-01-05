@@ -10,17 +10,21 @@ get_taxon_summary <- function(datelife_result, datelife_query = NULL){
 		message("datelife_result argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
 		return(NA)
 	}
-	if(is.null(datelife_query)){
+	if(is.null(datelife_query) & is.null(attributes(datelife_result)$query)){
 		input <- NULL
 		input.in <- unique(rapply(datelife_result, rownames))
 		# if(taxon_summary.in != "none") {
-			message("datelife_query argument is empty: showing taxon distribution of taxa found only in at least one chronogram. This excludes input taxa not found in any chronogram.")
+			message("datelife_query is absent: showing taxon distribution of taxa found only in at least one chronogram. This excludes input taxa not found in any chronogram.")
 		# }
 	} else {
 		# if(!is.character(input)) stop("input must be a character vector")
-		input <- datelife_query_check(datelife_query = datelife_query)
-		input.in <- input$cleaned_names
-		# input.in <- input
+		if(!is.null(attributes(datelife_result)$query)){
+			input <- attributes(datelife_result)$query
+			input.in <- attributes(datelife_result)$query$cleaned_names
+		} else {
+			input <- datelife_query_check(datelife_query = datelife_query)
+			input.in <- input$cleaned_names
+		}
 	}
 	# results.index <- datelife_result_study_index(datelife_result, cache)
 	return.object <- NA
@@ -107,7 +111,7 @@ summarize_datelife_result <- function(datelife_result = NULL, datelife_query = N
 		return.object <- trees[which(!is.na(trees))]
 	}
 	if(summary_format.in == "phylo_all") {
-		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
+		trees <- suppressWarnings(lapply(datelife_result, patristic_matrix_to_phylo)) # suppress warning "Converting from patristic distance matrix to a tree resulted in some negative branch lengths"
 		return.object <- trees[which(!is.na(trees))]
 		class(return.object) <- "multiPhylo"
 	}

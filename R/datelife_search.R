@@ -118,7 +118,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 #' @inheritParams make_datelife_query
 # #' @inheritParams make_bold_otol_tree
 # #' @inheritDotParams make_bold_otol_tree
-#' @return A datelifeResult object (named list of patristic matrices).
+#' @return A datelifeResult object - a named list of patristic matrices. You can ccess the original query with attributes(my_datelife_result)$query
 #' @export
 get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 	partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
@@ -151,6 +151,7 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
   	datelife_result <- results_list_process(results_list, input_dq$cleaned_names, partial)
 	datelife_result_check(datelife_result, use_tnrs)
 	class(datelife_result) <- c("datelifeResult")
+	attr(datelife_result, "query") <- input_dq
 	return(datelife_result)
 }
 
