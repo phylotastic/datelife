@@ -18,8 +18,7 @@
 #' @export
 #' @details Make sure ape is loaded otherwise it won't find .PlotPhyloEnv
 #' @author Christoph Heibl
-HPDbars <-
-function(phy, label = "height_95%_HPD", tab = NULL, nodes, col, lwd, broken = FALSE, ...){
+HPDbars <- function(phy, label = "height_95%_HPD", tab = NULL, nodes, col, lwd, broken = FALSE, ...){
 
 	# check input data
 	# ----------------
@@ -240,7 +239,7 @@ axisGeo <- function(GTS, tip.time = 0, unit = c("epoch", "period"), ages =
 
     xgrid <- NULL
     for (i in seq(along = stages)){
-      cat("\nStage ", i, ": ", stages[i], sep = "")
+      message(paste0("\nStage ", i, ": ", stages[i], sep = ""))
 
       # plot boxes of stages:
       # ---------------------
@@ -319,7 +318,7 @@ axisGeo <- function(GTS, tip.time = 0, unit = c("epoch", "period"), ages =
   if ( lastPP$direction == "rightwards" ){
     if ( ages ) yy <- c(bh, 2 * bh) else yy <- c(0, bh)
     for ( j in seq_along(unit) ){
-      cat("\nPlot unit:", unit[j])
+      message(paste0("\nPlot unit:", unit[j]))
       if ( j == 1 ) xgrid <- plotGeo(gts, unit[j], yy)
       else plotGeo(gts, unit[j], yy)
       yy <- yy + bh

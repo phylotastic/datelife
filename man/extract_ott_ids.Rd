@@ -5,7 +5,7 @@
 \alias{extract_ott_ids.default}
 \title{Get ott ids from a character vector containing species names and ott ids.}
 \usage{
-extract_ott_ids(x, na.rm = TRUE, ...)
+extract_ott_ids(x, na.rm = TRUE)
 
 \method{extract_ott_ids}{default}(x, na.rm = TRUE)
 }
