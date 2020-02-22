@@ -1,5 +1,5 @@
 #' Use Barcode of Life Data (BOLD) to get branch lengths on a tree topology.
-#' If input is not a tree, then it uses the OToL tree of the set of input taxa.
+#' If input is not a tree, then it gets and induced OToL subtree of the set of input taxa.
 #' @inheritParams datelife_search
 #' @param marker A character vector indicating the gene from BOLD system to be used for branch length estimation.
 #' @param chronogram Boolean. If TRUE (default), branch lengths returned are estimated with ape::chronoMPL. If FALSE, branch lengths returned are estimated with phangorn::acctran and represent relative substitution rates .
@@ -8,17 +8,16 @@
 #' @inheritDotParams get_otol_synthetic_tree
 #' @return A phylogeny with branch lengths proportional to relative substitution rate.
 #' @details
-#' If input is a phylo object, that is used as backbone topology.
+#' If input is a phylo object or a newick string, it is used as backbone topology.
 #' If input is a character vector of taxon names, an induced OToL tree is used as backbone.
 #' If there are not enough sequences to return a tree with branch lengths, it returns
-#' a tree with no branch lengths (either the original input topology or the OToL tree
-#' obtained for the set of input taxon names.
+#' either the original input topology or the OToL tree obtained for the set of input taxon names.
 #' @export
 # input <- phyloall[[1]]
 # input <- tax_phyloallall[[3]][[13]] # it is now working with this input
 make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"),
-marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = FALSE, ...) {
-	# done: add an input check here to accept newick strings too
+marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = FALSE, aligner = "muscle", ...) {
+	# input check (accepts newick strings too)
 	input <- datelife_query_check(input)
 	if(inherits(input$phy, "phylo")){
 		phy <- input$phy
@@ -29,12 +28,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 	if (verbose) {
 		message("Searching ", marker, " sequences for these taxa in BOLD...")
 	}
-	# xx <- seq(1, length(input), 250)
-	# yy <- xx+249
-	# yy[length(xx)] <- length(input)
-	# if(length(input)%%250 != 0) {
-	# 	yy[length(xx)] <- length(input)
-	# }
+	aligner = match.arg(arg = lowercase(aligner), choices = c("muscle", "mafft"), several.ok = FALSE)
 	phy$edge.length <- NULL # making sure there are no branch lengths in phy
 	phy$tip.label <- gsub(" ", "_", phy$tip.label) # so phangorn::acctran works
 	input <- gsub("_", " ", phy$tip.label) # so bold search works
@@ -47,7 +41,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 		}
 		# allows up to 335 names, then it gives Error: Request-URI Too Long (HTTP 414)
 		# even if marker is specified, it will return other markers,
-		# so in here we just retrieve all sequences and filter after
+		# so in here we just get all sequences and then filter after
 		utils::setTxtProgressBar(progression, i)
 	}
 	cat("\n") # just to make the progress bar look better
@@ -102,11 +96,17 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 		taxa.to.drop <- gsub(" ", "_", taxa.to.drop)
 		phy <- ape::drop.tip(phy, taxa.to.drop)
 	}
-	if (verbose) {
-		message("Aligning with MAFFT...")
+	if("mafft" %in% aligner){
+		if (verbose) {
+			message("Aligning with MAFFT...")
+		}
+		alignment <- ape::as.DNAbin(final.sequences)
+		alignment <- phangorn::as.phyDat(ips::mafft(alignment))
 	}
-	alignment <- ape::as.DNAbin(final.sequences)
-	alignment <- phangorn::as.phyDat(ips::mafft(alignment))
+	if("muscle" %in% aligner){
+		alignment <- msa::msa(final.sequences, "Muscle")
+	}
+
 	if (verbose) {
 		message( "\t", "OK.", "\n", "Estimating BOLD-OToL tree...")
 	}
