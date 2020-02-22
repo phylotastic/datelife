@@ -2,7 +2,11 @@
 % Please edit documentation in R/datelife_summary.R
 \name{summarize_datelife_result}
 \alias{summarize_datelife_result}
-\title{Summarize a filtered results list from get_datelife_result function in various ways}
+\title{Summarize an output from get_datelife_result function
+Get different types of summaries from a datelifeResult object.
+A datelifeResult object is a named list of patristic matrcies.
+This allows rapid processing of data.
+If you need a list of chronograms from your datelifeResult object, this is the function you are looking for.}
 \usage{
 summarize_datelife_result(
   datelife_result = NULL,
@@ -39,7 +43,11 @@ summarize_datelife_result(
 \item{criterion}{Whether to get the grove with the most trees or the most taxa}
 }
 \description{
-Summarize a filtered results list from get_datelife_result function in various ways
+Summarize an output from get_datelife_result function
+Get different types of summaries from a datelifeResult object.
+A datelifeResult object is a named list of patristic matrcies.
+This allows rapid processing of data.
+If you need a list of chronograms from your datelifeResult object, this is the function you are looking for.
 }
 \details{
 Available output formats are:

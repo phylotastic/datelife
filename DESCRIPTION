@@ -45,7 +45,9 @@ Imports:
     graphics,
     utils,
     phylocomr,
-    strap
+    strap,
+    BiocManager,
+    msa
 Suggests:
     testthat,
     knitr,

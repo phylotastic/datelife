@@ -3,7 +3,7 @@
 \name{make_bold_otol_tree}
 \alias{make_bold_otol_tree}
 \title{Use Barcode of Life Data (BOLD) to get branch lengths on a tree topology.
-If input is not a tree, then it uses the OToL tree of the set of input taxa.}
+If input is not a tree, then it gets and induced OToL subtree of the set of input taxa.}
 \usage{
 make_bold_otol_tree(
   input = c("Rhea americana", "Struthio camelus", "Gallus gallus"),
@@ -12,6 +12,7 @@ make_bold_otol_tree(
   chronogram = TRUE,
   doML = FALSE,
   verbose = FALSE,
+  aligner = "muscle",
   ...
 )
 }
@@ -40,12 +41,11 @@ A phylogeny with branch lengths proportional to relative substitution rate.
 }
 \description{
 Use Barcode of Life Data (BOLD) to get branch lengths on a tree topology.
-If input is not a tree, then it uses the OToL tree of the set of input taxa.
+If input is not a tree, then it gets and induced OToL subtree of the set of input taxa.
 }
 \details{
-If input is a phylo object, that is used as backbone topology.
+If input is a phylo object or a newick string, it is used as backbone topology.
 If input is a character vector of taxon names, an induced OToL tree is used as backbone.
 If there are not enough sequences to return a tree with branch lengths, it returns
-a tree with no branch lengths (either the original input topology or the OToL tree
-obtained for the set of input taxon names.
+either the original input topology or the OToL tree obtained for the set of input taxon names.
 }

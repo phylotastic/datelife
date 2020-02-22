@@ -72,7 +72,11 @@ get_taxon_summary <- function(datelife_result, datelife_query = NULL){
 # print.datelifeTaxonSummary <- function(taxon_summary){
 #
 # }
-#' Summarize a filtered results list from get_datelife_result function in various ways
+#' Summarize an output from get_datelife_result function
+#' Get different types of summaries from a datelifeResult object.
+#' A datelifeResult object is a named list of patristic matrcies.
+#' This allows rapid processing of data.
+#' If you need a list of chronograms from your datelifeResult object, this is the function you are looking for.
 #' @inheritParams datelife_query_check
 #' @inheritParams datelife_result_check
 #' @inheritParams datelife_search
