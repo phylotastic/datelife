@@ -18,6 +18,9 @@ datelife_query_check(datelife_query = NULL, ...)
     \item{\code{verbose}}{Boolean. If TRUE, it gives printed updates to the user.}
   }}
 }
+\value{
+A datelifeQuery object
+}
 \description{
 checks if input is a datelifeQuery object, otherwise it uses make_datelife_query to process it
 }

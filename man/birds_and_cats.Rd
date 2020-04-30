@@ -4,7 +4,9 @@
 \name{birds_and_cats}
 \alias{birds_and_cats}
 \title{A multiPhylo object with trees resulting from a datelife search of some birds and cats species}
-\format{A multiPhylo object}
+\format{
+A multiPhylo object
+}
 \usage{
 birds_and_cats
 }

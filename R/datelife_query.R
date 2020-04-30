@@ -1,7 +1,7 @@
 
 #' Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with input_process first.
 #' @inheritParams datelife_search
-#' @return A list with a phylo object (or NA, if input is not a tree) and a cleaned vector of taxon names
+#' @return A datelifeQuery object, a list of three elements: $phy a phylo object or NA, if input is not a tree; a cleaned vector of taxon names; and $ott_ids a numeric vector of OTT ids if use_tnrs = TRUE, or NULL if use_tnrs = FALSE.
 #' @details If input has length 1, get_spp_from_taxon is always set to TRUE (in datelife_search, not in here, because of function dependencies)
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
@@ -22,8 +22,9 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	phy_new <- input_process(input = input, verbose = verbose)
 	use_tnrs_global <- FALSE
 	if(use_tnrs | any(get_spp_from_taxon)){
-		use_tnrs_global <- TRUE }
-	if(inherits(phy_new, "phylo")) { # if input is phylo
+		use_tnrs_global <- TRUE
+	}
+	if(inherits(phy_new, "phylo")) { # if input IS phylo
 	  	cleaned_input <- phy_new$tip.label
 		ott_ids <- NULL
 		# if we have ott_ids in phy, don't use_tnrs again:
@@ -35,13 +36,14 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 				cleaned_input_tnrs <- list(ott_id = phy_new$ott_ids, unique_name = phy_new$tip.label)
 			}
 		}
-	} else {
+	} else { # if input is NOT phylo
 		if(!is.character(input)){
 			message("Input must be a character vector, a newick character string, or a phylo object")
 			return(NA)
 		}
 		if(length(input) == 1){ # if it is a character vector of length 1 with comma separated names
-			cleaned_input <- strsplit(input, ',')[[1]] } # split it by the comma
+			cleaned_input <- strsplit(input, ',')[[1]]
+		} # split it by the comma
 		cleaned_input <- stringr::str_trim(input, side = "both") # cleans the input of lingering unneeded white spaces
 		ott_ids <- NULL
 	}
@@ -150,6 +152,7 @@ input_process <- function(input, verbose = FALSE){
 #' @param datelife_query A datelifeQuery object, output of make_datelife_query function
 #' @inheritParams datelife_search
 #' @inheritDotParams make_datelife_query -input
+#' @return A datelifeQuery object
 #' @export
 datelife_query_check <- function(datelife_query = NULL, ...){
 	if(missing(datelife_query) | is.null(datelife_query)){

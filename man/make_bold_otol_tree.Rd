@@ -29,6 +29,8 @@ make_bold_otol_tree(
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 
+\item{aligner}{A character vector indicating whether to use MAFFT or MUSCLE to align BOLD sequences. It is not lower or upper case sensitive.}
+
 \item{...}{
   Arguments passed on to \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree}}
   \describe{

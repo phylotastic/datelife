@@ -4,7 +4,9 @@
 \name{subset2_taxa}
 \alias{subset2_taxa}
 \title{Long list of >2.7k virus, bacteria, plant and animal taxon names}
-\format{A character vector of length 2778}
+\format{
+A character vector of length 2778
+}
 \source{
 \url{https://github.com/phylotastic/rphylotastic/tree/master/tests/testthat}
 }

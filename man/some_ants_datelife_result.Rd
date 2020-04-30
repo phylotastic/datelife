@@ -4,7 +4,9 @@
 \name{some_ants_datelife_result}
 \alias{some_ants_datelife_result}
 \title{datelifeResult object of some ants}
-\format{A list of one element, containing a named patristic matrix}
+\format{
+A list of one element, containing a named patristic matrix
+}
 \source{
 \url{http://opentreeoflife.org}
 }

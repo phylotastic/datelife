@@ -70,8 +70,8 @@ test_that("get_datelife_result works", {
 test_that("Making OToL and BOLD tree works", {
   skip_on_cran()
   skip_on_travis() #b/c no pathd8
-  phy.pars <- make_bold_otol_tree(input=c("Rhea americana",  "Struthio camelus","Gallus gallus", "Pterocnemia pennata"), marker="COI", otol_version="v2", doML=FALSE)
-  phy.ml <- make_bold_otol_tree(input=c("Rhea americana",  "Struthio camelus","Gallus gallus", "Pterocnemia pennata"), marker="COI", otol_version="v2", doML=TRUE)
+  phy.pars <- make_bold_otol_tree( input=c("Rhea americana",  "Struthio camelus","Gallus gallus", "Pterocnemia pennata"), marker="COI", otol_version="v3", doML=FALSE)
+  phy.ml <- make_bold_otol_tree(input=c("Rhea americana",  "Struthio camelus","Gallus gallus", "Pterocnemia pennata"), marker="COI", otol_version="v3", doML=TRUE)
   expect_equal(class(phy.pars), "phylo")
   expect_equal(class(phy.ml), "phylo")
   expect_gte(max(phy.pars$edge.length), 1)

@@ -4,7 +4,9 @@
 \name{threebirds_dr}
 \alias{threebirds_dr}
 \title{datelifeResult object of three birds "Rhea americana", "Pterocnemia pennata", and "Struthio camelus"}
-\format{A list of 9 named patristic matrix}
+\format{
+A list of 9 named patristic matrix
+}
 \source{
 \url{http://opentreeoflife.org}
 }

@@ -5,7 +5,9 @@
 \alias{geostellar}
 \title{Table of geological ages and time before earth formation
 Goldblatt et al. 2010 doi:10.5194/se-1-1-2010}
-\format{A data frame}
+\format{
+A data frame
+}
 \source{
 \url{https://sites.google.com/site/geologicdatascale/timescale}
 }

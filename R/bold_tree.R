@@ -4,6 +4,7 @@
 #' @param marker A character vector indicating the gene from BOLD system to be used for branch length estimation.
 #' @param chronogram Boolean. If TRUE (default), branch lengths returned are estimated with ape::chronoMPL. If FALSE, branch lengths returned are estimated with phangorn::acctran and represent relative substitution rates .
 #' @param doML Boolean; only relevant if chronogram = TRUE. If TRUE, it does ML branch length optimization with phangorn::optim.pml
+#' @param aligner A character vector indicating whether to use MAFFT or MUSCLE to align BOLD sequences. It is not lower or upper case sensitive.
 #' @inheritParams get_otol_synthetic_tree
 #' @inheritDotParams get_otol_synthetic_tree
 #' @return A phylogeny with branch lengths proportional to relative substitution rate.
@@ -22,13 +23,16 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 	if(inherits(input$phy, "phylo")){
 		phy <- input$phy
 	} else {
-		phy <- get_otol_synthetic_tree(ott_ids = input$ott_ids, otol_version = otol_version, ...)
+		if (verbose) {
+			message("No tree was provided; getting induced subtree from OToL ...")
+		}
+		phy <- get_otol_synthetic_tree(input = input, otol_version = otol_version, ...)
 		#otol returns error with missing taxa in v3 of rotl
 	}
 	if (verbose) {
 		message("Searching ", marker, " sequences for these taxa in BOLD...")
 	}
-	aligner = match.arg(arg = lowercase(aligner), choices = c("muscle", "mafft"), several.ok = FALSE)
+	aligner = match.arg(arg = tolower(aligner), choices = c("muscle", "mafft"), several.ok = FALSE)
 	phy$edge.length <- NULL # making sure there are no branch lengths in phy
 	phy$tip.label <- gsub(" ", "_", phy$tip.label) # so phangorn::acctran works
 	input <- gsub("_", " ", phy$tip.label) # so bold search works
@@ -104,6 +108,9 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 		alignment <- phangorn::as.phyDat(ips::mafft(alignment))
 	}
 	if("muscle" %in% aligner){
+		if (verbose) {
+			message("Aligning with MUSCLE...")
+		}
 		alignment <- msa::msa(final.sequences, "Muscle")
 	}
 

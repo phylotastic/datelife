@@ -4,12 +4,14 @@
 \name{felid_gdr_phylo_all}
 \alias{felid_gdr_phylo_all}
 \title{datelifeSummary of a datelifeResult object of all Felidae species.}
-\format{A list of three elements, containing the summary of a datelifeResult object
+\format{
+A list of three elements, containing the summary of a datelifeResult object
 \describe{
   \item{phylo_all}{List of subset chronograms in phylo format}
   \item{taxon_distribution}{A data frame with taxon presence across subset chronograms}
   \item{absent_taxa}{A dataframe with names of taxon not found in any chronogram}
-}}
+}
+}
 \source{
 \url{http://opentreeoflife.org}
 }

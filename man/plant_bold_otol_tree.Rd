@@ -4,14 +4,16 @@
 \name{plant_bold_otol_tree}
 \alias{plant_bold_otol_tree}
 \title{Some plants chronogram}
-\format{A phylo object with 6 tips and 5 internal nodes
+\format{
+A phylo object with 6 tips and 5 internal nodes
 \describe{
   \item{edge}{Integer vector with edge (branch) numbers}
   \item{tip.label}{Character vector with species names of plants}
   \item{Nnode}{Integer vector with the number of nodes}
   \item{node.label}{Character vector with node names}
   \item{edge.length}{Numeric vector with edge (branch) lengths}
-}}
+}
+}
 \source{
 \url{http://opentreeoflife.org}
 

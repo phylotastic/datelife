@@ -24,7 +24,7 @@ make_datelife_query(
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
 \value{
-A list with a phylo object (or NA, if input is not a tree) and a cleaned vector of taxon names
+A datelifeQuery object, a list of three elements: $phy a phylo object or NA, if input is not a tree; a cleaned vector of taxon names; and $ott_ids a numeric vector of OTT ids if use_tnrs = TRUE, or NULL if use_tnrs = FALSE.
 }
 \description{
 Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with input_process first.

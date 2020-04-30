@@ -4,13 +4,15 @@
 \name{opentree_chronograms}
 \alias{opentree_chronograms}
 \title{Chronograms in Open Tree of Life and other related data}
-\format{A list of four elements, containing data on OToL chronograms
+\format{
+A list of four elements, containing data on OToL chronograms
 \describe{
   \item{authors}{List of lists of authors of the included studies}
   \item{curators}{List of lists of curators of the included studies}
   \item{studies}{List of study identifiers}
   \item{trees}{List storing the chronograms from OpenTree}
-}}
+}
+}
 \source{
 \url{http://opentreeoflife.org}
 }

@@ -4,7 +4,9 @@
 \name{problems}
 \alias{problems}
 \title{Problematic chronograms from Open Tree of Life}
-\format{A list of trees with unmapped taxa}
+\format{
+A list of trees with unmapped taxa
+}
 \source{
 \url{http://opentreeoflife.org}
 }

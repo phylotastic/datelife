@@ -1,6 +1,6 @@
 # Functions from `phyloch` package used in datelife
-# Hosting phyloch functions here so we can submit to CRAN
-
+# Hosting phyloch functions here for now so we can submit to CRAN
+# phyloch on github at https://github.com/fmichonneau/phyloch
 
 
 #' Function from phyloch package

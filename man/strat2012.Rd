@@ -4,7 +4,8 @@
 \name{strat2012}
 \alias{strat2012}
 \title{A data frame containing the stratigraphic chart by issued in 2012 by the International Commission on Stratigraphy.}
-\format{A data frame
+\format{
+A data frame
 \describe{
   \item{eon}{Eon name.}
   \item{era}{Era name.}
@@ -14,7 +15,8 @@
   \item{MA}{Estimated boundary age for the associated interval.}
   \item{error}{Estimated errors associated with each age estimate.}
   \item{GSSP}{Binary response denoting whether the age estimate is defined by a basal Global Standard Section and Point}
-}}
+}
+}
 \source{
 \url{https://github.com/fmichonneau/phyloch}
 }

@@ -4,11 +4,13 @@
 \name{subset2_search}
 \alias{subset2_search}
 \title{A list with datelieQuery and datelifeResult objects from a search of taxon names from subset2_taxa}
-\format{A list with two named elements. datelifeResult object with 24 patristic matrices
+\format{
+A list with two named elements. datelifeResult object with 24 patristic matrices
 \describe{
   \item{datelife_query}{A datelifeQuery object using names_subset 2 as input.}
   \item{datelife_result}{A datelifeResult object resulting from a search of names in datelifeQuery}
-}}
+}
+}
 \usage{
 subset2_search
 }

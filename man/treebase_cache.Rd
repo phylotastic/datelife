@@ -4,11 +4,13 @@
 \name{treebase_cache}
 \alias{treebase_cache}
 \title{Information on contributors, authors, study ids and clades from studies with chronograms in Open tree of Life}
-\format{A list of five data sets
+\format{
+A list of five data sets
 \describe{
   \item{tb.author.pretty}{A dataframe with two elements: author names and number of studies in TreeBase authored by each}
   \item{tb.author.results}{A dataframe with two elements: author names and study identifiers}
-}}
+}
+}
 \source{
 \url{http://treebase.org}
 }
