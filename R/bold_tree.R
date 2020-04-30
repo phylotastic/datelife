@@ -111,7 +111,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 		if (verbose) {
 			message("Aligning with MUSCLE...")
 		}
-		alignment <- msa::msa(final.sequences, "Muscle")
+		alignment <- msa::msaMuscle(final.sequences)
 	}
 
 	if (verbose) {
