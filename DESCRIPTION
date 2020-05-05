@@ -47,7 +47,8 @@ Imports:
     phylocomr,
     strap,
     BiocManager,
-    msa
+    msa,
+    Biostrings
 Suggests:
     testthat,
     knitr,

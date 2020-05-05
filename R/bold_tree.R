@@ -4,7 +4,7 @@
 #' @param marker A character vector indicating the gene from BOLD system to be used for branch length estimation.
 #' @param chronogram Boolean. If TRUE (default), branch lengths returned are estimated with ape::chronoMPL. If FALSE, branch lengths returned are estimated with phangorn::acctran and represent relative substitution rates .
 #' @param doML Boolean; only relevant if chronogram = TRUE. If TRUE, it does ML branch length optimization with phangorn::optim.pml
-#' @param aligner A character vector indicating whether to use MAFFT or MUSCLE to align BOLD sequences. It is not lower or upper case sensitive.
+#' @param aligner A character vector indicating whether to use MAFFT or MUSCLE to align BOLD sequences. It is not case sensitive. Default to MUSCLE.
 #' @inheritParams get_otol_synthetic_tree
 #' @inheritDotParams get_otol_synthetic_tree
 #' @return A phylogeny with branch lengths proportional to relative substitution rate.
@@ -111,7 +111,14 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 		if (verbose) {
 			message("Aligning with MUSCLE...")
 		}
-		alignment <- msa::msaMuscle(final.sequences)
+		in_bold <- sapply(1:nrow(final.sequences), function(x) ! "-" %in% final.sequences[x,])
+		vector.sequences <- sapply(1:nrow(final.sequences), function(x) paste0(final.sequences[x,], collapse = ""))
+		msa.sequences <- Biostrings::DNAStringSet(vector.sequences)
+		names(msa.sequences) <- rownames(final.sequences)
+		msa.sequences <- msa.sequences[in_bold]
+		alignment <- msa::msaMuscle(msa.sequences, type = "dna")
+		alignment <- phangorn::as.phyDat(alignment)
+		# alignment MUST BE OF CLASS phyDat TO BE READ BY ACCTRAN on next step
 	}
 
 	if (verbose) {
@@ -119,6 +126,7 @@ marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = 
 	}
 	# if there are only two sequences in the alignment phangorn::acctran will throw an error
 	# this usually happens when the input/otol tree has only two tips
+	# browser()
 	if(length(alignment) <= 2){
 		message("There are not enough sequences available in BOLD to reconstruct branch lengths. Returning tree with no branch lengths.")
 		return(phy)
