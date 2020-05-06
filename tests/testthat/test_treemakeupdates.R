@@ -4,13 +4,13 @@ test_that("tree_fix_brlen works", {
     skip_on_cran()
     skip_on_travis()
     skip_on_os("linux") #b/c no mrbayes on travis linux
-    install.packages("phylocomr", repos = "https://cloud.r-project.org")
-    devtools::install_github("ropensci/phylocomr")
+    #install.packages("phylocomr", repos = "https://cloud.r-project.org")
+    #devtools::install_github("ropensci/phylocomr")
     x2 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
     expect_true(ape::is.ultrametric(x2, option = 2))
     # mrbayes fix brlen test. It takes a while:
     wwdd <- getwd()
-    setwd("~/")
+    setwd(tempdir())
     x3 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "mrbayes")
     setwd(wwdd)
     expect_true(ape::is.ultrametric(x3, option = 2))
