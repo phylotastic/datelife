@@ -17,19 +17,21 @@ use_all_calibrations <- function(input = NULL, ...) { # dating_method = "bladj",
 		# calibrations.df <- calibs$calibration
 		# phy <- tax_phyloallall[[2]][[3]]
 		# this is just to be able to run if input is NULL, as an example:
-		if(is.null(input)){
+		if(is.null(input)){ # run with an example of three birds
 			phy <- make_bold_otol_tree(c("Rhea americana", "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE)
 			if(!inherits(phy, "phylo")){
 				phy <- get_dated_otol_induced_subtree(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
 			}
+		} else { # run with taxa provided by user
+			datelife_query <- datelife_query_check(datelife_query = input) # this also removes singleton nodes in phy
+			# if input is not a tree, get one with bold or just otol:
+			if(!inherits(datelife_query$phy, "phylo")){
+				phy <- make_bold_otol_tree(datelife_query$cleaned_names, chronogram = FALSE, verbose = FALSE)
+			} else {
+				phy <- datelife_query$phy
+			}
 		}
-		datelife_query <- make_datelife_query(input = input, verbose = FALSE) # it removes singleton nodes in phy
-		# if input is not a tree, get one with bold or just otol:
-		if(!inherits(datelife_query$phy, "phylo")){
-			phy <- make_bold_otol_tree(datelife_query$cleaned_names, chronogram = FALSE, verbose = FALSE)
-		} else {
-			phy <- datelife_query$phy
-		}
+
 		# perform the datelife_search through get_all_calibrations:
 		calibrations <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), ...)
 		# date the tree with bladj, pathd8 if branch lengths:
