@@ -39,22 +39,26 @@ Imports:
     treebase,
     httr,
     usethis,
-    reports,
     plyr,
     grDevices,
     graphics,
     utils,
     phylocomr,
     strap,
-    BiocManager,
-    msa,
-    Biostrings
+    BiocManager
 Suggests:
     testthat,
     knitr,
     devtools,
-    covr
+    covr,
+    reports,
+    msa,
+    Biostrings
 SystemRequirements: mafft, PATHd8
+Additional_repositories:
+    https://github.com/trinker/reports,
+    https://github.com/UBod/msa,
+    https://github.com/Bioconductor/Biostrings
 URL: https://github.com/phylotastic/datelife
 License: GPL (>=2)
 LazyData: true
