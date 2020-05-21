@@ -19,6 +19,7 @@ Description: Methods and workflows to date phylogenetic trees using open scienti
     Underlying code of the datelife website services at www.datelife.org.
 Depends:
     R (>= 3.2.3)
+biocViews:
 Imports:
     ape,
     abind,
@@ -45,7 +46,9 @@ Imports:
     utils,
     phylocomr,
     strap,
-    BiocManager
+    BiocManager,
+    msa,
+    Biostrings
 Suggests:
     testthat,
     knitr,
@@ -53,8 +56,6 @@ Suggests:
     covr
 Remotes:
     trinker/reports,
-    UBod/msa,
-    Bioconductor/Biostrings
 SystemRequirements: mafft, PATHd8
 URL: https://github.com/phylotastic/datelife
 License: GPL (>=2)
