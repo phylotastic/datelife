@@ -21,6 +21,10 @@ make_bladj_tree <- function(tree = NULL, nodenames = NULL, nodeages = NULL){
 	if(!is.null(phy$edge.length)) {
 		phy$edge.length <- NULL
 	}
+	# phylocomr takes nodenames with spaces in it as two items, so it fails to read
+	# the table of ages later, thinking that it has 3 columns instead of 2
+	nodenames <- gsub(" ", "_", nodenames)
+	phy$node.label <- gsub(" ", "_", phy$node.label)
 	m <- match(nodenames, phy$node.label)
 	if(any(is.na(m))) {
 		warning("Not all nodenames are in phy$node.label; these will be ignored.") # add a printed line saying which nodenames are not in phy$node.label
