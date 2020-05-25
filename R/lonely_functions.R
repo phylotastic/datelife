@@ -22,7 +22,7 @@ patristic_matrix_sample <- function(patristic_matrix_array, uncertainty) {
 #  	}
 #  }
 #  else {
-  	return(patristic_matrix <- patristic_matrix_array[,,sample.int(1, size = dim(patristic_matrix_array)[3] )] )
+  	return(patristic_matrix <- patristic_matrix_array[,,sample.int(1, size = dim(patristic_matrix_array)[3], replace = TRUE)] )
  # }
 }
 
