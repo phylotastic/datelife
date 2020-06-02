@@ -2,8 +2,8 @@ Package: datelife
 Title: Go from a List of Taxa or a Tree to a Chronogram using Open Scientific Data
 Version: 0.3.1
 Date: 2019-11-21
-Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.brian@gmail.com"),
-  person("Luna L.", "Sanchez-Reyes", role=c("aut"), email="lunalsr@gmail.com"),
+Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre")),
+  person("Luna L.", "Sanchez-Reyes", role=c("aut")),
   person("Jonathan", "Eastman", role=c("aut")),
   person("Tracy", "Heath", role=c("aut")),
   person("April", "Wright", role=c("aut")),
@@ -14,7 +14,7 @@ Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.bria
   person("Joseph", "Brown", role=c("aut")),
   person("Matt", "Pennell", role=c("aut")),
   person("Mike", "Alfaro", role=c("aut")))
-Maintainer: Luna L. Sanchez-Reyes <lunalsr@gmail.com>
+Maintainer: "Luna L. Sanchez-Reyes" <lunalsr@gmail.com>
 Description: Methods and workflows to date phylogenetic trees using open scientific data.
     Underlying code of the datelife website services at www.datelife.org.
 Depends:
@@ -55,8 +55,8 @@ Suggests:
     devtools,
     covr
 Remotes:
-    trinker/reports,
-SystemRequirements: mafft, PATHd8
+    trinker/reports
+SystemRequirements: PATHd8
 URL: https://github.com/phylotastic/datelife
 License: GPL (>=2)
 LazyData: true

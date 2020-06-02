@@ -706,7 +706,7 @@ plot_phylo_all <- function(trees, cex = graphics::par("cex"), include = TRUE, in
       # dev.size("px")
       on.exit(grDevices::devAskNewPage(FALSE))
   } else {
-      reports::folder(folder.name = gsub("\\.png$|\\.pdf$", "", file))
+      reports:::folder(folder.name = gsub("\\.png$|\\.pdf$", "", file))
   }
   for (i in 1:length(trees)){
     file_name <- paste0(gsub("\\.png$|\\.pdf$", "", file), "/", gsub("\\.png$|\\.pdf$", "", file), "_", i, ".", write)
