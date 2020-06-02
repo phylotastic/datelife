@@ -1,6 +1,6 @@
 Package: datelife
 Title: Go from a List of Taxa or a Tree to a Chronogram using Open Scientific Data
-Version: 0.3.0
+Version: 0.3.1
 Date: 2019-11-21
 Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="omeara.brian@gmail.com"),
   person("Luna L.", "Sanchez-Reyes", role=c("aut"), email="lunalsr@gmail.com"),
