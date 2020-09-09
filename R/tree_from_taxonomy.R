@@ -135,7 +135,6 @@ classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life"
 #' @inheritParams classification_paths_from_taxonomy
 #' @param collapse_singles If true, collapses singleton nodes
 #' @return A list containing a phylo object with resolved names and a vector with unresolved names
-#' @export
 #' @examples
 #' taxa <- c("Homo sapiens", "Ursus arctos", "Pan paniscus", "Tyrannosaurus rex",
 #'          "Ginkgo biloba", "Vulcan", "Klingon")
@@ -146,6 +145,7 @@ classification_paths_from_taxonomy <- function(taxa, sources="Catalogue of Life"
 #' # got rid of singles, but this also removes a lot of the node.labels
 # tree_from_taxonomy(taxa = c("Felis", "pan", "ursus"), sources = "Open Tree of Life Reference Taxonomy") # this is not working for some reason
 # tree_from_taxonomy(taxa = c("Felis", "pan", "ursus"), sources = "NCBI")
+#' @export
 tree_from_taxonomy <- function(taxa, sources = "Catalogue of Life", collapse_singles=TRUE) {
   # taxa <- tax_dqall[[7]]$cleaned_names # Primates spp
   # classification_results <- classification_paths_from_taxonomy(taxa=taxa, sources="NCBI")
