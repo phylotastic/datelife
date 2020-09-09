@@ -3,9 +3,9 @@
 \docType{data}
 \name{opentree_chronograms}
 \alias{opentree_chronograms}
-\title{Chronograms in Open Tree of Life and other related data}
+\title{Chronogram database}
 \format{
-A list of four elements, containing data on OToL chronograms
+A list of four elements, containing data from OpenTree of Life chronograms
 \describe{
   \item{authors}{List of lists of authors of the included studies}
   \item{curators}{List of lists of curators of the included studies}
@@ -20,7 +20,7 @@ A list of four elements, containing data on OToL chronograms
 opentree_chronograms
 }
 \description{
-Now storing >200 chronograms from OToL
+Now storing >200 chronograms from Open Tree of Life
 }
 \details{
 Generated with
@@ -29,5 +29,10 @@ usethis::use_data(opentree_chronograms, overwrite = T)
 and updated with update_datelife_cache()
 }
 \keyword{chronogram}
-\keyword{otol}
-\keyword{tree}
+\keyword{dates}
+\keyword{million}
+\keyword{myrs}
+\keyword{opentree}
+\keyword{phylogeny}
+\keyword{time}
+\keyword{years}

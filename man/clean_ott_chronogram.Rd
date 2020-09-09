@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_chronograms.R
 \name{clean_ott_chronogram}
 \alias{clean_ott_chronogram}
-\title{Clean up some issues with OToL chronograms
+\title{Clean up some issues with Open Tree of Life chronograms
 For now it 1) checks unmapped taxa and maps them with tnrs_match.phylo, 2) roots the chronogram if unrooted}
 \usage{
 clean_ott_chronogram(phy)
@@ -18,7 +18,7 @@ An object of class  data frame or phylo, with the added class match_names.
 \code{NULL}
 }
 \description{
-Clean up some issues with OToL chronograms
+Clean up some issues with Open Tree of Life chronograms
 For now it 1) checks unmapped taxa and maps them with tnrs_match.phylo, 2) roots the chronogram if unrooted
 }
 \details{

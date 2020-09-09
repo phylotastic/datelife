@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_chronograms.R
 \name{update_all_cached}
 \alias{update_all_cached}
-\title{Update all cached files for the package}
+\title{Update all data files}
 \usage{
 update_all_cached()
 }
@@ -10,5 +10,6 @@ update_all_cached()
 nothing
 }
 \description{
+This includes opentree chronograms, contributors, treebase and curators
 For speed, datelife caches chronograms and other information. Running this (within the checked out version of datelife) will refresh these. Then git commit and git push them back
 }

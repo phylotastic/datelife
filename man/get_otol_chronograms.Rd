@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_chronograms.R
 \name{get_otol_chronograms}
 \alias{get_otol_chronograms}
-\title{Get all chronograms from Open Tree of Life}
+\title{Get all chronograms from Open Tree of Life database}
 \usage{
 get_otol_chronograms(verbose = FALSE, max_tree_count = 500)
 }
@@ -15,5 +15,5 @@ get_otol_chronograms(verbose = FALSE, max_tree_count = 500)
 A list with elements for the trees, authors, curators, and study ids
 }
 \description{
-Get all chronograms from Open Tree of Life
+Get all chronograms from Open Tree of Life database
 }

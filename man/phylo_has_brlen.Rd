@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_chronograms.R
 \name{phylo_has_brlen}
 \alias{phylo_has_brlen}
-\title{Check for branch lengths in a tree}
+\title{Check if a tree has branch lengths}
 \usage{
 phylo_has_brlen(phy)
 }
@@ -13,5 +13,5 @@ phylo_has_brlen(phy)
 A TRUE or FALSE
 }
 \description{
-Check for branch lengths in a tree
+Check if a tree has branch lengths
 }

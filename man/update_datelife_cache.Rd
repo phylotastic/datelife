@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_chronograms.R
 \name{update_datelife_cache}
 \alias{update_datelife_cache}
-\title{update Open Tree of Life cache}
+\title{Update chronogram database cache}
 \usage{
 update_datelife_cache(
   save = TRUE,
@@ -21,5 +21,5 @@ update_datelife_cache(
 None
 }
 \description{
-update Open Tree of Life cache
+Update chronogram database cache
 }
