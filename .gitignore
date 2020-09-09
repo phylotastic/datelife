@@ -6,3 +6,5 @@ doc
 Meta
 .Rhistory
 .DS_Store
+R/.Rapp.history
+..Rcheck
