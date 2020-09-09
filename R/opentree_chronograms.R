@@ -1,11 +1,11 @@
 
-#' Chronograms in Open Tree of Life and other related data
+#' Chronogram database
 #'
-#' Now storing >200 chronograms from OToL
+#' Now storing >200 chronograms from Open Tree of Life
 #'
 #' @name opentree_chronograms
 #' @docType data
-#' @format A list of four elements, containing data on OToL chronograms
+#' @format A list of four elements, containing data from OpenTree of Life chronograms
 #' \describe{
 #'   \item{authors}{List of lists of authors of the included studies}
 #'   \item{curators}{List of lists of curators of the included studies}
@@ -13,26 +13,16 @@
 #'   \item{trees}{List storing the chronograms from OpenTree}
 #' }
 #' @source \url{http://opentreeoflife.org}
-#' @keywords otol tree chronogram
+#' @keywords opentree dates myrs million years time phylogeny chronogram
 #' @details
 #' Generated with
 #' opentree_chronograms <- get_otol_chronograms()
 #' usethis::use_data(opentree_chronograms, overwrite = T)
 #' and updated with update_datelife_cache()
 "opentree_chronograms"
-# modified get_otol_chronograms code to retain taxa ott_ids too
 
-utils::data(opentree_chronograms)
-#' @export
-opentree_chronograms <- get("opentree_chronograms")
 
-#library(devtools)
-#install_github("ropensci/rotl", dependencies = TRUE, build_vignette=FALSE)
-#library(rotl)
-#library(ape)
-#library(knitcitations)
-
-#' update Open Tree of Life cache
+#' Update chronogram database cache
 #' @param save Boolean; default TRUE: save all chronograms from Open Tree of Life to an RData file (default to opentree_chronograms.RData)
 #' @inheritParams save_otol_chronograms
 #' @inherit get_otol_chronograms return
@@ -59,8 +49,9 @@ save_otol_chronograms <- function(file = "opentree_chronograms.RData", verbose =
 	save(opentree_chronograms, file = file, compress = "xz")
 }
 
-#' Update all cached files for the package
+#' Update all data files
 #'
+#' This includes opentree chronograms, contributors, treebase and curators
 #' For speed, datelife caches chronograms and other information. Running this (within the checked out version of datelife) will refresh these. Then git commit and git push them back
 #' @return nothing
 #' @export
@@ -75,7 +66,7 @@ update_all_cached <- function() {
 	usethis::use_data(depositor_cache, overwrite=TRUE)
 }
 
-#' Check for branch lengths in a tree
+#' Check if a tree has branch lengths
 #' @inheritParams phylo_check
 #' @return A TRUE or FALSE
 #' @export
@@ -107,7 +98,7 @@ phylo_has_brlen <- function(phy) {
 # 	return(	phy)
 # }
 
-#' Get all chronograms from Open Tree of Life
+#' Get all chronograms from Open Tree of Life database
 #' @param verbose If TRUE, give updates to the user
 #' @param max_tree_count Numeric indicating the max number of trees to be cached. For testing purposes only.
 #' @return A list with elements for the trees, authors, curators, and study ids
@@ -242,7 +233,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
 }
 
 
-#' Check to see that a tree is a valid chronogram
+#' Check if a tree is a valid chronogram
 #' @inheritParams phylo_check
 #' @return Boolean: TRUE if good tree
 #' @export
@@ -300,7 +291,7 @@ is_good_chronogram <- function(phy) {
 #' opentree_chronograms object from commit https://github.com/phylotastic/datelife/tree/be894448f6fc437241cd0916fab45e84ac3e09c6
 "problems"
 
-#' Clean up some issues with OToL chronograms
+#' Clean up some issues with Open Tree of Life chronograms
 #' For now it 1) checks unmapped taxa and maps them with tnrs_match.phylo, 2) roots the chronogram if unrooted
 #'
 #' @inheritParams phylo_check
