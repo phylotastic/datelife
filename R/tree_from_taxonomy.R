@@ -235,7 +235,7 @@ get_fossil_range <- function(taxon, recent=FALSE, assume_recent_if_missing=TRUE)
   }
   taxon_gnred <- utils::tail(strsplit(taxon_gnred_df$classification_path, "\\|")[[1]],1)
   if(length(taxon_gnred)==0){
-    message("Unable to get classification path for taxon '", taxon, "'. Returning NA.")
+    message("Unable to get classification path for '", taxon, "'. Returning NA.")
     return(NA)
   }
   taxon_string <- utils::URLencode(taxon_gnred)
