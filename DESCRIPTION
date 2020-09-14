@@ -43,7 +43,6 @@ Imports:
     plyr,
     grDevices,
     graphics,
-    utils,
     phylocomr,
     strap,
     BiocManager,
@@ -52,6 +51,8 @@ Imports:
 Suggests:
     testthat,
     knitr,
+    rmarkdown,
+    utils,
     devtools,
     covr,
     reports
