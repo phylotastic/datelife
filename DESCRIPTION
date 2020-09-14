@@ -54,10 +54,7 @@ Suggests:
     rmarkdown,
     utils,
     devtools,
-    covr,
-    reports
-Remotes:
-    trinker/reports
+    covr
 SystemRequirements: PATHd8
 URL: https://github.com/phylotastic/datelife
 License: GPL (>=2)
