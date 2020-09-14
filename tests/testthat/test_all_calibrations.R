@@ -1,12 +1,14 @@
 
-test_that("use_all_calibrations actually works", {
-  skip_on_cran()
-  skip_on_travis() #b/c no pathd8
-  # skip_on_os("linux") #b/c no pathd8 on travis linux
-  results <- suppressWarnings(use_all_calibrations())
+test_that("all calibrations functions", {
+  # test parts of function that do not use pathd8
+  results <- suppressWarnings(use_all_calibrations(input=threebirds_nbl))
   # expect_true(ape::is.ultrametric(results$phy, tol=0.0000))
   expect_true(ape::is.ultrametric(results$phy, option = 2))
   expect_s3_class(results$phy, "phylo")
+  # this function does not use pathd8
+  # xx <- get_all_calibrations()
+  # expect_s3_class(xx, "data.frame") # should be a data.frame
+
   # skip("data in url is not yet available")
   # # enhance:
   # # the following loads a file from an url:
@@ -29,13 +31,4 @@ test_that("get_otol_synthetic_tree works", {
   # enhance: add such a test
   # child <- get_ott_children("Felis")
   # get_otol_synthetic_tree(input = child$Felis)
-})
-
-
-test_that("get_all_calibrations works", {
-  skip_on_cran()
-  skip_on_travis()
-  # this function does not use pathd8
-  xx <- get_all_calibrations()
-  expect_s3_class(xx, "data.frame") # should be a data.frame
 })
