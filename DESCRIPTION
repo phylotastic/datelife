@@ -53,7 +53,8 @@ Suggests:
     testthat,
     knitr,
     devtools,
-    covr
+    covr,
+    reports
 Remotes:
     trinker/reports
 SystemRequirements: PATHd8
