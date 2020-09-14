@@ -285,6 +285,32 @@ choose_cluster <- function(phycluster, clustering_method = "nj"){
     }
   }
 }
+#' Internal for summary_matrix_to_phylo().
+#' @inheritParams summary_matrix_to_phylo
+summarize_summary_matrix <- function(summ_matrix){
+      	ages <- tA <- tB <- c()
+        # to compute the final length of the data frame do: ncol(xx)^2 - sum(1:(ncol(xx)-1))
+    	# calibrations <- matrix(nrow = ncol(xx)^2 - sum(1:(ncol(xx)-1)), ncol = 3)
+    	# identify if SDM matrix has some negative values; extract taxon names:
+    	negs <- which(summ_matrix < 0)
+    	neg_names <- rownames(summ_matrix)[ceiling(negs/nrow(summ_matrix))]
+    	# extract unique ages from summ_matrix:
+    	for(i in seq(ncol(summ_matrix))){
+    		ages <- c(ages, summ_matrix[1:i,i])
+    		tA <- c(tA, rownames(summ_matrix)[1:i])
+    		tB <- c(tB, rep(colnames(summ_matrix)[i], i))
+    	}
+        # tA <- gsub(" ", "_", tA)
+        # tB <- gsub(" ", "_", tB)
+    	calibrations <- data.frame(Age = ages, taxonA = tA, taxonB = tB, stringsAsFactors = FALSE)
+    	calibrations <- calibrations[!is.na(calibrations[,"Age"]), ] # get rid of NaN and NAs
+    	calibrations <- calibrations[calibrations[,"Age"] != 0, ] # get rid of 0's
+    	calibrations <- calibrations[calibrations[,"Age"] > 0, ] # get rid of negative values too
+    	if(any(is.na(calibrations[,"Age"]))){
+    		warning("for some reason there are still NAs in the matrix")}
+    	# SDM summary matrix sometimes has negative values, bc ages are transformed to be approximated in a similar way as a linear regression
+        return(calibrations)
+}
 #' Go from a summary matrix to an ultrametric phylo object.
 #' @param summ_matrix A summary patristic distance matrix from sdm or median. See details.
 #' @inheritParams datelife_query_check
