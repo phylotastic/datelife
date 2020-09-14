@@ -233,7 +233,11 @@ get_fossil_range <- function(taxon, recent=FALSE, assume_recent_if_missing=TRUE)
       return(NA)
     }
   }
-  taxon_gnred <- utils::tail(strsplit( taxon_gnred_df$classification_path, "\\|")[[1]],1)
+  taxon_gnred <- utils::tail(strsplit(taxon_gnred_df$classification_path, "\\|")[[1]],1)
+  if(length(taxon_gnred)==0){
+    message("Unable to get classification path for taxon '", taxon, "'. Returning NA.")
+    return(NA)
+  }
   taxon_string <- utils::URLencode(taxon_gnred)
   dates <- data.frame()
   try(dates <- utils::read.csv(url(paste0("https://paleobiodb.org/data1.2/occs/list.txt?base_name=", taxon_string))))
@@ -265,6 +269,10 @@ get_fossil_range <- function(taxon, recent=FALSE, assume_recent_if_missing=TRUE)
 #' @export
 summarize_fossil_range <- function(taxon, recent=FALSE, assume_recent_if_missing=TRUE) {
   dates <- get_fossil_range(taxon, recent, assume_recent_if_missing)
+  if(is.na(dates)){
+    message("Unable to get fossil range. Returning NA.")
+    return(NA)
+  }
   result <- data.frame(max_ma=max(dates$max_ma), min_ma=min(dates$min_ma), stringsAsFactors=FALSE)
   rownames(result) <- taxon
   return(result)
