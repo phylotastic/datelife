@@ -8,3 +8,4 @@ Meta
 .DS_Store
 R/.Rapp.history
 ..Rcheck
+cov.RData
