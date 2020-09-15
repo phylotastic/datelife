@@ -90,10 +90,12 @@ use_each_calibration <- function(phy = NULL, phylo_all = NULL, calibrations = NU
 use_calibrations <- function(phy = NULL, calibrations = NULL, dating_method = "bladj", type = "median", ...){
 	# check that input names are in calibrations.df: done in match_all_calibrations inside use_calibrations_bladj
 	if(!inherits(phy, "phylo")){
-		message("phy is not a phylo object")
-		return(NA)
+		stop("'phy' is not a phylo object.")
 	}
 	# enhance: add a check for calibrations object structure
+	if(!inherits(calibrations, "data.frame")){
+		stop("'calibrations' is not a data.frame.\n\t Provide a set of calibrations for 'phy', hint: see get_all_calibrations function.")
+	}
 	dating_method <- match.arg(tolower(dating_method), c("bladj", "pathd8"))
 	if(dating_method %in% "bladj"){
 		phy$edge.length <- NULL
@@ -101,10 +103,11 @@ use_calibrations <- function(phy = NULL, calibrations = NULL, dating_method = "b
 	}
 	if(dating_method %in% "pathd8"){
 		if(is.null(phy$edge.length)){
-			message('phy has no branch lengths, using dating_method = "bladj" instead.')
+			message("\nPATHd8 requires initial branch lengths and 'phy' has no branch lengths, using dating_method = bladj instead.\n")
 			chronogram <- use_calibrations_bladj(phy, calibrations, type)
+		} else {
+			chronogram <- use_calibrations_pathd8(phy, calibrations, ...)
 		}
-		chronogram <- use_calibrations_pathd8(phy, calibrations, ...)
 	}
 	return(chronogram)
 }

@@ -21,6 +21,21 @@ test_that("all calibrations functions", {
 
 })
 
+test_that("use_calibrations fails when phy or calibrations are not provided",{
+  expect_error(use_calibrations())
+  expect_error(use_calibrations(phy = threebirds_nbl))
+})
+
+test_that("use_calibrations when dating_method = pathd8 works",{
+  xx <- get_all_calibrations(input = threebirds_median)
+  # initial branch lengths are required for pathd8 dating
+  # this will use bladj instead of pathd8 bc phy has no branch lengths:
+  use_calibrations(phy = threebirds_nbl, calibrations = xx, dating_method = "pathd8")
+  skip_on_cran()
+  use_calibrations(phy = threebirds_median, calibrations = xx, dating_method = "pathd8")
+  use_calibrations(phy = threebirds_median, calibrations = xx, dating_method = "PATHd8")
+})
+
 test_that("get_otol_synthetic_tree works", {
   otol_tree <- get_otol_synthetic_tree(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))
   expect_s3_class(otol_tree, "phylo") # output is phylo

@@ -16,6 +16,12 @@
 #' root_age Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.
 #' @export
 use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age = NULL, match_calibrations = TRUE){
+	if(!inherits(phy, "phylo")){
+		stop("'phy' is not a phylo object.")
+	}
+	if(!inherits(calibrations, "data.frame")){
+		stop("'calibrations' is not a data.frame, dating with BLADJ is not possible.\n\t Provide a set of calibrations for 'phy', hint: see get_all_calibrations function.")
+	}
 	type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
 	if(match_calibrations){
 		calibs <- match_all_calibrations(phy, calibrations)
@@ -24,9 +30,8 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age 
 		# calibs <- all_calibs_93_matched
 	}
     if(nrow(calibs$present_calibrations) < 1){
-			message("Nodes in calibrations (determined by taxon pairs) do not match any nodes in phy.")
-      message("Dating analysis is not possible with this set of calibrations.")
-      return(NA)
+			stop("Nodes in 'calibrations' (determined by taxon pairs) do not match any nodes
+						in 'phy'.\n\t Dating analysis is not possible with this set of calibrations.")
     }
 	if("mean" %in% type){
 	  node_ages <- sapply(calibs$phy$calibration_distribution, mean)
@@ -75,7 +80,7 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age 
 # calibration_distribution <- calibs$phy$calibration_distribution
 check_conflicting_calibrations <- function(phy, calibration_distribution){
   if(!inherits(phy, "phylo")){
-    message("phy is not a phylo object")
+    message("'phy' is not a phylo object")
     return(NA)
   }
   des <- lapply(as.numeric(names(calibration_distribution)), function(i) phy$edge[phy$edge[,1] == i,2])

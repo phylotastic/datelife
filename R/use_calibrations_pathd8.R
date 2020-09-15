@@ -32,7 +32,7 @@ use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 10
         return(NA)
 	  }
     if(is.null(phy$edge.length)){
-        message("phy does not have branch lengths, consider using a dating method that does not require data, such as BLADJ or MrBayes.")
+        message("'phy' does not have branch lengths, consider using a dating method that does not require data, such as BLADJ or MrBayes.")
         return(NA)
     }
     # fix any negative branch lengths, otherwise pathd8 will silently not work:

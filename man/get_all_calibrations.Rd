@@ -2,7 +2,7 @@
 % Please edit documentation in R/all_calibrations_get.R
 \name{get_all_calibrations}
 \alias{get_all_calibrations}
-\title{Get all calibrations from chronograms in a database (specified in cache).}
+\title{Get all calibrations from chronograms that have at least two input taxa.}
 \usage{
 get_all_calibrations(
   input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
@@ -36,5 +36,5 @@ get_all_calibrations(
 A data_frame of calibrations
 }
 \description{
-Get all calibrations from chronograms in a database (specified in cache).
+Get all calibrations from chronograms that have at least two input taxa.
 }
