@@ -7,7 +7,7 @@
 use_calibrations_pathd8(phy, calibrations, expand = 0.1, giveup = 100)
 }
 \arguments{
-\item{phy}{A phylo object}
+\item{phy}{A phylo object with branch lengths}
 
 \item{calibrations}{A data frame of calibrations from get_all_calibrations function, or a subset of it.}
 
@@ -16,7 +16,7 @@ use_calibrations_pathd8(phy, calibrations, expand = 0.1, giveup = 100)
 \item{giveup}{How many expansions to try before giving up}
 }
 \value{
-A phylo object
+A phylo object with branch length proportional to time.
 }
 \description{
 Use calibrations to date a tree with branch lengths with PATHd8.

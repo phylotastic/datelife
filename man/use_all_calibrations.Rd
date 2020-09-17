@@ -5,7 +5,7 @@
 \title{Perform a dating analysis on a set of input taxa.
 It searches and uses all calibrations from chronograms in the DateLife database.}
 \usage{
-use_all_calibrations(input = NULL, ...)
+use_all_calibrations(input = NULL, dating_method = NULL, ...)
 }
 \arguments{
 \item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}

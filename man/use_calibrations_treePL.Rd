@@ -7,7 +7,7 @@
 use_calibrations_treePL(phy, calibrations)
 }
 \arguments{
-\item{phy}{A phylo object}
+\item{phy}{A phylo object with or wothput branch lengths}
 
 \item{calibrations}{A data frame of calibrations from get_all_calibrations function, or a subset of it.}
 }

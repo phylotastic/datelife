@@ -13,18 +13,18 @@ use_calibrations_bladj(
 )
 }
 \arguments{
-\item{phy}{A phylo object}
+\item{phy}{A phylo object with or wothput branch lengths}
 
 \item{calibrations}{A data frame of calibrations from get_all_calibrations function, or a subset of it.}
 
-\item{type}{The type of age to use as calibration.}
+\item{type}{The type of age to use as calibration: "median", "mean", "min", or "max".}
 
 \item{root_age}{Not implemented yet}
 
 \item{match_calibrations}{Boolean, default to TRUE. It will run match_all_calibrations function. Set to FALSE if your calibrations have already been matched.}
 }
 \value{
-A phylo object
+A phylo object with branch lengths proportional to time.
 }
 \description{
 Use calibrations to date a topology with bladj.
