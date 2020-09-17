@@ -10,32 +10,40 @@
 #' If input is a vector of names, it will try to construct a bold tree first to get
 #' a topology with branch lengths. If it can't, it will get the open tree of life
 #' topology only and date it with bladj.
-use_all_calibrations <- function(input = NULL, ...) { # dating_method = "bladj",
+use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { # dating_method = "bladj",
 		# use congruification to expand calibrations: already implemented in match_all_calibrations
 		# and pathd8 still does not work sometimes
 		# calibrations.df <- eachcal[[2]]
 		# calibrations.df <- calibs$calibration
 		# phy <- tax_phyloallall[[2]][[3]]
-		# this is just to be able to run if input is NULL, as an example:
-		if(is.null(input)){ # run with an example of three birds
+
+		# run with an example of three birds when input is NULL
+		if(is.null(input)){
 			phy <- make_bold_otol_tree(c("Rhea americana", "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE)
 			if(!inherits(phy, "phylo")){
 				phy <- get_dated_otol_induced_subtree(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
 			}
-		} else { # run with taxa provided by user
+		} else {
+			# run with taxa provided by user
 			datelife_query <- datelife_query_check(datelife_query = input) # this also removes singleton nodes in phy
-			# if input is not a tree, get one with bold or just otol:
+			# if input is not a tree, get one with bold or otol:
 			if(!inherits(datelife_query$phy, "phylo")){
 				phy <- make_bold_otol_tree(datelife_query$cleaned_names, chronogram = FALSE, verbose = FALSE)
+				if(!inherits(phy, "phylo")){
+					phy <- get_dated_otol_induced_subtree(input = datelife_query$cleaned_names)
+				}
 			} else {
 				phy <- datelife_query$phy
 			}
 		}
 
-		# perform the datelife_search through get_all_calibrations:
+		# perform a datelife_search through get_all_calibrations:
 		calibrations <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), ...)
 		# date the tree with bladj, pathd8 if branch lengths:
-		chronogram <- use_calibrations(phy, calibrations)
+		# TODO
+		# find a way to inherit params for use_calibrations_pathd8
+		# phytools method for argument assignation seems a nice option
+		chronogram <- use_calibrations(phy, calibrations, dating_method = dating_method)
 		return(list(phy = chronogram, calibrations.df = calibrations))
 }
 
@@ -79,7 +87,7 @@ use_each_calibration <- function(phy = NULL, phylo_all = NULL, calibrations = NU
 		names(chronograms) <- names(calibrations)
 		return(list(phy = chronograms, calibrations = calibrations))
 }
-#' Perform a dating analysis on a tree topology using a determined set of calibrations.
+#' Perform a dating analysis on a tree topology using a given set of calibrations.
 #' @inheritParams use_calibrations_bladj
 #' @param dating_method The method used for tree dating.
 #' @inheritDotParams use_calibrations_pathd8
@@ -105,9 +113,12 @@ use_calibrations <- function(phy = NULL, calibrations = NULL, dating_method = "b
 		if(is.null(phy$edge.length)){
 			message("\nPATHd8 requires initial branch lengths and 'phy' has no branch lengths, using dating_method = bladj instead.\n")
 			chronogram <- use_calibrations_bladj(phy, calibrations, type)
+			dating_method <- "bladj"
 		} else {
 			chronogram <- use_calibrations_pathd8(phy, calibrations, ...)
 		}
 	}
+	# TODO
+	# add dating_method attribute to chronogram
 	return(chronogram)
 }
