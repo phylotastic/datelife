@@ -1,0 +1,51 @@
+---
+title: "package_development"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{package_development}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+```{r setup}
+library(datelife)
+```
+
+# Coverage of tests
+
+We are using the package `covr`.
+We set it up pn Travis, so everytime it tests coverage is calculated and shown very nicely in here.
+However, this takes time, because some tests take a looong time.
+
+What I do to check coverage locally:
+
+```{r}
+cov <- covr::package_coverage()
+save(cov, file = "cov.RData")
+# This last one will save the object on the root of the package.
+```
+
+It is important to add cov.RData to your `.gitignore` file, so the file is not version controlled.
+
+You can load you robejct on any R environment you want (terminal, RStudio, R console)
+```{r}
+load("~/pj_datelife/datelife/cov.RData")
+```
+
+Let's look at the object now
+
+```{r, eval = TRUE}
+cov
+```
+If you are using RStudio, the following will print all the lines that are not covered in tests, and will allow you to navigate them interactively `r emo::ji("star_struck")`
+```{r}
+covr::zero_coverage(cov)
+```
