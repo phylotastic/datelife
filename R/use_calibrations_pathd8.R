@@ -1,8 +1,9 @@
 #' Use calibrations to date a tree with branch lengths with PATHd8.
+#' @param phy A phylo object with branch lengths
 #' @inheritParams use_calibrations_bladj
 #' @param expand How much to expand by each step to get consistent calibrations. Should be between 0 and 1.
 #' @param giveup How many expansions to try before giving up
-#' @return A phylo object
+#' @return A phylo object with branch length proportional to time.
 #' @export
 #' @details
 #' This function will try to use the calibrations as fixed ages.
@@ -28,7 +29,7 @@
 use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 100){
     phy <- input_process(phy, verbose = FALSE)
     if (!inherits(phy, "phylo")){
-		    message("phy is not a phylo object")
+		    message("'phy' is not a phylo object")
         return(NA)
 	  }
     if(is.null(phy$edge.length)){
@@ -110,7 +111,7 @@ use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 10
         chronogram$used_calibrations <- used_calibrations
         chronogram$present_calibrations <- calibs$present_calibrations
     } else {
-      message("Dating analysis with PATHd8 failed with this tree and set of calibrations.")
+      warning("Dating analysis with PATHd8 failed with this tree and set of calibrations.")
       return(NA)
     }
 	return(chronogram)
