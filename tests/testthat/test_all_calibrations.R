@@ -12,7 +12,11 @@ test_that("use_all_calibration returns a dated tree", {
 
   # test with a datelife query object
 
-  # test with a datelife result object
+  # test with a datelifeResult object
+  # must throw error here:
+  expect_error(suppressWarnings(use_all_calibrations(input=threebirds_result)))
+  # but not here:
+  get_all_calibrations(input= threebirds_result)
 
 
 
