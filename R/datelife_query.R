@@ -155,6 +155,8 @@ input_process <- function(input, verbose = FALSE){
 #' @return A datelifeQuery object
 #' @export
 datelife_query_check <- function(datelife_query = NULL, ...){
+# TODO:
+#  is_datelifeQuery <- function(input = NULL, ...){
 	if(missing(datelife_query) | is.null(datelife_query)){
 		stop("datelife_query argument is missing")
 	}
@@ -166,6 +168,7 @@ datelife_query_check <- function(datelife_query = NULL, ...){
 		badformat <- FALSE
 	}
 	if(badformat){
+	  message("Input is not a datelifeQuery object. Running 'make_datelife_query'...")
 		datelife_query <- make_datelife_query(input = datelife_query, ...)
 	}
 	return(datelife_query)
