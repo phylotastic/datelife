@@ -15,7 +15,7 @@
 
 #' Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.
 #' @aliases datelife
-#' @param input Target taxa names as a character vector, a newick character string, or a phylo object.
+#' @param input A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function. 
 #' @param summary_format The desired output format for target chronograms (chronograms of target taxa). See details.
 #' @param summary_print A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
 #' @param taxon_summary A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on taxon_summary added to the output.
