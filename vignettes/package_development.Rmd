@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(datelife)
+library(covr)
 ```
 
 # Coverage of tests
@@ -27,7 +28,7 @@ However, this takes time, because some tests take a looong time.
 
 What I do to check coverage locally:
 
-```{r}
+```{r, eval = FALSE}
 cov <- covr::package_coverage()
 save(cov, file = "cov.RData")
 # This last one will save the object on the root of the package.
@@ -36,7 +37,7 @@ save(cov, file = "cov.RData")
 It is important to add cov.RData to your `.gitignore` file, so the file is not version controlled.
 
 You can load you robejct on any R environment you want (terminal, RStudio, R console)
-```{r}
+```{r, eval = TRUE}
 load("~/pj_datelife/datelife/cov.RData")
 ```
 
@@ -46,6 +47,6 @@ Let's look at the object now
 cov
 ```
 If you are using RStudio, the following will print all the lines that are not covered in tests, and will allow you to navigate them interactively `r emo::ji("star_struck")`
-```{r}
+```{r, eval = FALSE}
 covr::zero_coverage(cov)
 ```
