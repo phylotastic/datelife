@@ -13,7 +13,7 @@ make_datelife_query(
 )
 }
 \arguments{
-\item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
+\item{input}{A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
 
 \item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 

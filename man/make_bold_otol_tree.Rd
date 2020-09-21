@@ -17,7 +17,7 @@ make_bold_otol_tree(
 )
 }
 \arguments{
-\item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
+\item{input}{A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
 
 \item{marker}{A character vector indicating the gene from BOLD system to be used for branch length estimation.}
 

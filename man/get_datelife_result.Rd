@@ -16,7 +16,7 @@ get_datelife_result(
 )
 }
 \arguments{
-\item{input}{Target taxa names as a character vector, a newick character string, or a phylo object.}
+\item{input}{A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
 
 \item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
 
