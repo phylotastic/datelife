@@ -25,16 +25,21 @@ use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { #
 			}
 		} else {
 			# run with taxa provided by user
-			datelife_query <- datelife_query_check(datelife_query = input) # this also removes singleton nodes in phy
-			# if input is not a tree, get one with bold or otol:
-			if(!inherits(datelife_query$phy, "phylo")){
-				phy <- make_bold_otol_tree(datelife_query$cleaned_names, chronogram = FALSE, verbose = FALSE)
-				if(!inherits(phy, "phylo")){
-					phy <- get_dated_otol_induced_subtree(input = datelife_query$cleaned_names)
-				}
-			} else {
-				phy <- datelife_query$phy
-			}
+		  if(inherits(input, "datelifeResult") | any(is.numeric(input))){
+		    # a datelifeResult object is a list of chronograms from OpenTree matching at least 2 queried taxa
+		    stop("Input must be any of the following: \n\t 1) a character vector of taxon names, \n\t 2) a tree as 'phylo' object or newick character string, or \n\t 3) a 'datelifeQuery' object, see 'make_datelife_query' function.")
+		  } else {  
+			  datelife_query <- datelife_query_check(datelife_query = input) # this also removes singleton nodes in phy
+			  # if input is not a tree, get one with bold or otol:
+			  if(!inherits(datelife_query$phy, "phylo")){
+			  	phy <- make_bold_otol_tree(datelife_query$cleaned_names, chronogram = FALSE, verbose = FALSE)
+			  	if(!inherits(phy, "phylo")){
+			  		phy <- get_dated_otol_induced_subtree(input = datelife_query$cleaned_names)
+			  	}
+			  } else {
+			  	phy <- datelife_query$phy
+			  }
+		  }
 		}
 
 		# perform a datelife_search through get_all_calibrations:
