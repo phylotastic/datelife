@@ -36,7 +36,7 @@ use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { #
 		    if(!is_datelife_query(input)){
 		      message("Running 'make_datelife_query'...")
           # make_datelife_query also removes singleton nodes in phy
-		      datelife_query <- make_datelife_query(input = datelife_query, ...)
+		      datelife_query <- make_datelife_query(input = input, ...)
 		    } else {
 		      datelife_query <- input
 		    }
