@@ -18,6 +18,8 @@ test_that("use_all_calibration returns a dated tree", {
   # but not here:
   get_all_calibrations(input= threebirds_result)
 
+  # test with a multiPhylo object
+  use_all_calibrations(input=threebirds_all)
 
 
 
