@@ -29,7 +29,17 @@ use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { #
 		    # a datelifeResult object is a list of chronograms from OpenTree matching at least 2 queried taxa
 		    stop("Input must be any of the following: \n\t 1) a character vector of taxon names, \n\t 2) a tree as 'phylo' object or newick character string, or \n\t 3) a 'datelifeQuery' object, see 'make_datelife_query' function.")
 		  } else {  
-			  datelife_query <- datelife_query_check(datelife_query = input) # this also removes singleton nodes in phy
+      	if(inherits(input, "multiPhylo")) {
+      		input <- input[[1]]
+      		message("input is a multiPhylo object. Only the first 'phylo' object will be used.")
+      	}
+		    if(!is_datelife_query(input)){
+		      message("Running 'make_datelife_query'...")
+          # make_datelife_query also removes singleton nodes in phy
+		      datelife_query <- make_datelife_query(input = datelife_query, ...)
+		    } else {
+		      datelife_query <- input
+		    }
 			  # if input is not a tree, get one with bold or otol:
 			  if(!inherits(datelife_query$phy, "phylo")){
 			  	phy <- make_bold_otol_tree(datelife_query$cleaned_names, chronogram = FALSE, verbose = FALSE)
