@@ -176,7 +176,7 @@ datelife_query_check <- function(datelife_query = NULL, ...){
 	return(datelife_query)
 }
 
-#' checks if input is a datelifeQuery object, 
+#' checks if input is formatted as a datelifeQuery object 
 #' @param input Any object to be tested for 'datelifeQuery' class format
 #' @return boolean
 #' @export
@@ -184,12 +184,13 @@ is_datelife_query <- function(input){
 	badformat <- TRUE
 	if(is.list(input) & "phy" %in% names(input) & "cleaned_names" %in% names(input)) {
 		if(!inherits(input, "datelifeQuery")) {
-			class(input) <- "datelifeQuery"
+		  message("input has correct 'datelifeQuery' format but is class:", class(input))
+			# class(input) <- "datelifeQuery"
 		}
 		badformat <- FALSE
 	}
 	if(badformat){
-	  message("Input is not a datelifeQuery object")
+	  message("input is not a 'datelifeQuery' object")
 	}
 	return(!badformat)
 }
