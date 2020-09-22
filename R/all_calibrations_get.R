@@ -1,4 +1,4 @@
-#' Get all calibrations from chronograms that have at least two input taxa.
+#' Get all calibrations available for a set of taxa.
 #' @param input vector of names, a newick string, a phylo or multiPhylo object, a datelifeResult object
 #' @param partial Boolean; default TRUE: use source trees even if they only match some of the desired taxa
 #' @param use_tnrs Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
