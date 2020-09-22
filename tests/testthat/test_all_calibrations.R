@@ -6,8 +6,13 @@ test_that("use_all_calibration returns a dated tree", {
   r1 <- use_all_calibrations()
   # test with a tree with no branch lengths
   r2 <- suppressWarnings(use_all_calibrations(input=threebirds_nbl))
+  get_all_calibrations(input=threebirds_nbl)
+
+
+
   # test with a tree with branch lengths
   r3 <- suppressWarnings(use_all_calibrations(input=threebirds_median))
+  get_all_calibrations(input=threebirds_median)
   #test with a vector of Names
 
   # test with a datelife query object
@@ -20,6 +25,7 @@ test_that("use_all_calibration returns a dated tree", {
 
   # test with a multiPhylo object
   use_all_calibrations(input=threebirds_all)
+  get_all_calibrations(input=threebirds_all)
 
 
 
