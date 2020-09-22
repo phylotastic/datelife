@@ -116,6 +116,8 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 input_process <- function(input, verbose = FALSE){
 	input_class <- "phylo"
 	ott_ids <- NULL
+	#TODO remove the multiPhylo if option from here
+	# make a method for input processing on multiPhylo objects
 	if(inherits(input, "multiPhylo")) {
 		input <- input[[1]]
 		message("Input is a multiPhylo object. Only the first tree will be used.")
@@ -168,8 +170,31 @@ datelife_query_check <- function(datelife_query = NULL, ...){
 		badformat <- FALSE
 	}
 	if(badformat){
-	  message("Input is not a datelifeQuery object. Running 'make_datelife_query'...")
+	  message("Running 'make_datelife_query'...")
 		datelife_query <- make_datelife_query(input = datelife_query, ...)
 	}
 	return(datelife_query)
 }
+
+#' checks if input is a datelifeQuery object, 
+#' @param input Any object to be tested for 'datelifeQuery' class format
+#' @return boolean
+#' @export
+is_datelife_query <- function(input){
+	badformat <- TRUE
+	if(is.list(input) & "phy" %in% names(input) & "cleaned_names" %in% names(input)) {
+		if(!inherits(input, "datelifeQuery")) {
+			class(input) <- "datelifeQuery"
+		}
+		badformat <- FALSE
+	}
+	if(badformat){
+	  message("Input is not a datelifeQuery object")
+	}
+	return(!badformat)
+}
+
+
+
+
+
