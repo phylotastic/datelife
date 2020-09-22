@@ -36,7 +36,7 @@ save(cov, file = "cov.RData")
 
 It is important to add cov.RData to your `.gitignore` file, so the file is not version controlled.
 
-You can load you robejct on any R environment you want (terminal, RStudio, R console)
+You can load your object on any R environment you want (terminal, RStudio, R console)
 ```{r, eval = TRUE}
 load("~/pj_datelife/datelife/cov.RData")
 ```
