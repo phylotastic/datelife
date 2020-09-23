@@ -1,40 +1,40 @@
-
-
-
-test_that("use_all_calibration returns a dated tree", {
-  # also tests make_bold_otol_tree and get_dated_otol_induced_subtree:
+test_that(" getting all calibrations works", {
+  # TEST make_bold_otol_tree and get_dated_otol_induced_subtree
+  # from use_all_calibrations:
   r1 <- use_all_calibrations()
-  # test with a tree with no branch lengths
+  expect_true(ape::is.ultrametric(r1$phy, option = 2))
+  expect_s3_class(r1$phy, "phylo")
+
+  # TEST with a tree with no branch lengths
   r2 <- suppressWarnings(use_all_calibrations(input=threebirds_nbl))
-  get_all_calibrations(input=threebirds_nbl)
+  # initial branch lengths are required for pathd8 dating
+  # the following will use bladj instead of pathd8 bc phy has no branch lengths:
+  c2 <- use_calibrations(phy = threebirds_nbl, calibrations = r2$calibrations, dating_method = "pathd8")
+  # test dating_method attribute is "bladj"
+  # get all calibrations should not work with a tree with no branch lengths:
+  expect_error(get_all_calibrations(input=threebirds_nbl))
 
-
-
-  # test with a tree with branch lengths
+  # TEST with A tree with branch lengths
   r3 <- suppressWarnings(use_all_calibrations(input=threebirds_median))
   get_all_calibrations(input=threebirds_median)
   #test with a vector of Names
 
-  # test with a datelife query object
+  # TEST with a datelife query object
 
-  # test with a datelifeResult object
+  # TEST with a datelifeResult object
   # must throw error here:
   expect_error(suppressWarnings(use_all_calibrations(input=threebirds_result)))
   # but not here:
   get_all_calibrations(input= threebirds_result)
 
-  # test with a multiPhylo object
+  # TEST with a multiPhylo object
   use_all_calibrations(input=threebirds_all)
   get_all_calibrations(input=threebirds_all)
+  threebirds_all0 <- threebirds_all
+  threebirds_all0[[1]]$edge.length <- NULL
+  get_all_calibrations(input=threebirds_all0)
 
 
-
-  expect_true(ape::is.ultrametric(r1$phy, option = 2))
-  expect_s3_class(r1$phy, "phylo")
-  # initial branch lengths are required for pathd8 dating
-  # the following will use bladj instead of pathd8 bc phy has no branch lengths:
-  c2 <- use_calibrations(phy = threebirds_nbl, calibrations = r2$calibrations, dating_method = "pathd8")
-  # test dating_method attribute is "bladj"
 
   skip_on_cran()
   use_calibrations(phy = threebirds_median, calibrations = r2$calibrations, dating_method = "pathd8")
