@@ -16,7 +16,7 @@ get_all_calibrations(
 )
 }
 \arguments{
-\item{input}{vector of names, a newick string, a phylo or multiPhylo object, a datelifeResult object}
+\item{input}{vector of names, a newick string, a phylo or multiPhylo object with branch lengths proportional to time, a datelifeResult object}
 
 \item{partial}{Boolean; default TRUE: use source trees even if they only match some of the desired taxa}
 
@@ -33,7 +33,7 @@ get_all_calibrations(
 \item{each}{Boolean, default to FALSE (all calibrations are returned in the same data frame). If TRUE, calibrations from each chronogram are returned in a separate data frame.}
 }
 \value{
-A data_frame of calibrations
+A data frame of calibrations
 }
 \description{
 Get all calibrations available for a set of taxa.
