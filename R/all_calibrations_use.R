@@ -18,12 +18,15 @@ use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { #
 		# phy <- tax_phyloallall[[2]][[3]]
 
     # get_all_calibrations arguments
-    if(hasArg("each")){
+    if(methods::hasArg("each")){
       each <- list(...)$each
+      if(!is.logical(each)){
+        stop("'each' argument must be one of TRUE or FALSE")
+      }
     } else {
       each <- FALSE
     }
-  
+
 		# run with an example of three birds when input is NULL
 		if(is.null(input)){
 			phy <- make_bold_otol_tree(c("Rhea americana", "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE)
@@ -35,7 +38,7 @@ use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { #
 		  if(inherits(input, "datelifeResult") | any(is.numeric(input))){
 		    # a datelifeResult object is a list of chronograms from OpenTree matching at least 2 queried taxa
 		    stop("Input must be any of the following: \n\t 1) a character vector of taxon names, \n\t 2) a tree as 'phylo' object or newick character string, or \n\t 3) a 'datelifeQuery' object, see 'make_datelife_query' function.")
-		  } else {  
+		  } else {
       	if(inherits(input, "multiPhylo")) {
       		input <- input[[1]]
       		message("input is a multiPhylo object. Only the first 'phylo' object will be used.")
@@ -66,7 +69,7 @@ use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { #
 		# TODO
 		# find a way to inherit params for use_calibrations_pathd8
 		# phytools method for argument assignation seems a nice option
-		
+
 		#if calibrations is a list of data frames:
 		if(each){
   		chronogram <- use_each_calibration(phy=phy, calibrations=calibrations, dating_method = dating_method)$chronograms

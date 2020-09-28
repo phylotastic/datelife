@@ -47,7 +47,8 @@ Imports:
     strap,
     BiocManager,
     msa,
-    Biostrings
+    Biostrings,
+    methods
 Suggests:
     testthat,
     knitr,
