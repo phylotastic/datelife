@@ -5,13 +5,16 @@
 #' @param approximate_match Boolean; default TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @inheritParams datelife_search
-#' @param each Boolean, default to FALSE (all calibrations are returned in the same data frame). If TRUE, calibrations from each chronogram are returned in a separate data frame.
-#' @return A data frame of calibrations
+#' @param each Boolean, default to FALSE all calibrations are returned in the same data frame. If TRUE, calibrations from each chronogram are returned in a separate data frame.
+#' @return A data frame of calibrations with attribute "chronograms" containing the dated trees that were used to extract calibartions
 #' @export
 # input <- tax_phyloallall[[1]]
 get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 		partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
 		cache = get("opentree_chronograms"), verbose = FALSE, each = FALSE) {
+  # TODO: is_datelife_search_input function
+  # to replace the following long conditional
+  # and trap the case were input is a list
 	if(!inherits(input, "datelifeResult") & !inherits(input, "phylo") & !inherits(input, "multiPhylo")){
 		datelife_phylo <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs,
 			approximate_match = approximate_match, update_cache = update_cache, cache = cache,
@@ -26,12 +29,13 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 		xx <- sapply(datelife_phylo, "[", "edge.length")
 		xx <- unname(sapply(xx, is.null))
 	  if(all(xx)){
-	    stop("input trees have no branch lengths")
+	    message("trees in 'multiPhylo' input have no branch lengths. \n There are no calibrations to return.")
+	    return(NA)
 	  }
 		if(any(xx)){
 	    ii <- which(xx)
-	    message("Some input trees have no branch lengths")
-	    message("Will leave [", paste(ii, collapse=" - "), "] out of the analysis")
+	    message("Some trees in 'multiPhylo' input have no branch lengths.")
+	    message("Will leave tree ", paste(ii, collapse=" - "), " out of the analysis")
 	    datelife_phylo <- datelife_phylo[which(!xx)]
 	  }
 	}
@@ -40,7 +44,8 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 	    stop("input tree has no branch lengths")
 	  }
 		datelife_phylo <- list(input)
-	}
+	} 
+
 	if(each){
 		constraints.df <- vector(mode= "list") # we cannot set an empty data frame because nrow depends on the number of nodes available on each tree
 	} else {
@@ -49,7 +54,7 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 	for (i in seq(length(datelife_phylo))) {
 		local.df <- suppressWarnings(geiger::congruify.phylo(reference = datelife_phylo[[i]],
 			target = datelife_phylo[[i]], scale = NA, ncores = 1))$calibrations
-		# suppressedWarnings bc of warbibg message when running 
+		# suppressedWarnings bc of warning message when running 
 		# geiger::congruify.phylo(reference = datelife_phylo[[i]], target = datelife_phylo[[i]], scale = NA)
 		# 		Warning message:
 		# In if (class(stock) == "phylo") { :
@@ -68,6 +73,6 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 	if(each){
 		names(constraints.df) <- names(datelife_phylo)
 	}
-	attr(constraints.df, "phylo_all") <- datelife_phylo
+	attr(constraints.df, "chronograms") <- datelife_phylo
 	return(constraints.df)
 }

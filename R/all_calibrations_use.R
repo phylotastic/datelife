@@ -59,6 +59,7 @@ use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { #
 		# find a way to inherit params for use_calibrations_pathd8
 		# phytools method for argument assignation seems a nice option
 		chronogram <- use_calibrations(phy, calibrations, dating_method = dating_method)
+		# TODO: make a 'datelife' class for chronograms with calibrations data.frame attached, produced by use_all_calibrations
 		return(list(phy = chronogram, calibrations.df = calibrations))
 }
 

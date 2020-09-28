@@ -1,11 +1,11 @@
-test_that(" getting all calibrations works", {
+test_that(" getting all calibrations to work", {
   # TEST make_bold_otol_tree and get_dated_otol_induced_subtree
   # from use_all_calibrations:
   r1 <- use_all_calibrations()
   expect_true(ape::is.ultrametric(r1$phy, option = 2))
   expect_s3_class(r1$phy, "phylo")
 
-  # TEST with a tree with no branch lengths
+  # TEST with a tree with NO branch lengths
   r2 <- suppressWarnings(use_all_calibrations(input=threebirds_nbl))
   # initial branch lengths are required for pathd8 dating
   # the following will use bladj instead of pathd8 bc phy has no branch lengths:
@@ -14,10 +14,13 @@ test_that(" getting all calibrations works", {
   # get all calibrations should not work with a tree with no branch lengths:
   expect_error(get_all_calibrations(input=threebirds_nbl))
 
-  # TEST with A tree with branch lengths
+  # TEST a tree WITH branch lengths
   r3 <- suppressWarnings(use_all_calibrations(input=threebirds_median))
   get_all_calibrations(input=threebirds_median)
+
   #test with a vector of Names
+  # use_all_calibrations(input = c("Rhea americana", "Pterocnemia pennata",
+                                 # "Struthio camelus"))
 
   # TEST with a datelife query object
 
@@ -28,12 +31,20 @@ test_that(" getting all calibrations works", {
   get_all_calibrations(input= threebirds_result)
 
   # TEST with a multiPhylo object
-  use_all_calibrations(input=threebirds_all)
-  get_all_calibrations(input=threebirds_all)
+  xx <- use_all_calibrations(input=threebirds_all)
+  get_all_calibrations(input=threebirds_all, each = TRUE)
+
   threebirds_all0 <- threebirds_all
   threebirds_all0[[1]]$edge.length <- NULL
   get_all_calibrations(input=threebirds_all0)
 
+  threebirds_all_nbl <- c(threebirds_nbl, threebirds_all0[[1]])
+  class(threebirds_all_nbl) <- 'multiPhylo'
+  get_all_calibrations(input=threebirds_all_nbl)
+
+  #TEST match_all_calibrations
+  match_all_calibrations(phy = NULL, calibrations= NULL)
+  match_all_calibrations(phy = xx$phy, calibrations= NULL)
 
 
   skip_on_cran()
