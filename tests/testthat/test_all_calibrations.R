@@ -12,7 +12,12 @@ test_that("getting, mapping and using all calibrations", {
     # In scan(file = file, what = what, sep = sep, quote = quote, dec = dec,  :
   # EOF within quoted string
 
-  u1.1 <- use_all_calibrations(input = c("Felis catus", "Canis canis", "Elephas maximus"))
+  # TODO
+  # taking too long to get bol tree I think? Check it out
+  # u1.2 <- use_all_calibrations(input = c("Felis catus", "Homo sapiens", "Elephas maximus"))
+  # u1.2 <- use_all_calibrations(input = c("Delphinus delphus", "Homo sapiens", "Elephas maximus"))
+  u1.4 <- use_all_calibrations(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
+  u1.5 <- use_all_calibrations(input = c("Chen caerulescens", "Cygnus columbianus", "Anas acuta"))
 
 
   # 2) TEST with a tree with NO branch lengths
@@ -57,6 +62,8 @@ test_that("getting, mapping and using all calibrations", {
   #TEST match_all_calibrations
   match_all_calibrations(phy = NULL, calibrations= NULL)
   match_all_calibrations(phy = u2$phy, calibrations= NULL)
+  match_all_calibrations(phy = u1.5$phy, calibrations = u1.4$calibrations.df)
+  match_all_calibrations(phy = u1.4$phy, calibrations = u1.5$calibrations.df)
 
 
   skip_on_cran()

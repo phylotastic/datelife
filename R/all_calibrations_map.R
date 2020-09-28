@@ -18,9 +18,13 @@ match_all_calibrations <- function(phy, calibrations){
     # get the coincident node numbers:
     # ape::is.binary(target_tree)
     if (!inherits(phy, "phylo")){
-		    message("phy is not a phylo object")
+		message("'phy' is not a phylo object")
         return(NA)
-	  }
+	}
+    if (!inherits(calibrations, "data.frame")){
+		message("calibrations is not a 'data.frame'")
+        return(NA)
+	}
     phy$tip.label <- gsub(' ', '_', phy$tip.label) #underscores vs spaces: the battle will never end.
     calibrations$taxonA <- gsub(' ', '_', calibrations$taxonA)
     calibrations$taxonB <- gsub(' ', '_', calibrations$taxonB)
@@ -28,7 +32,7 @@ match_all_calibrations <- function(phy, calibrations){
     calibrations <- calibrations[which(calibrations$taxonB %in% phy$tip.label),]
     if(nrow(calibrations) == 0){
         message("Taxon name pairs in calibrations do not match phy tip labels.")
-        calibrations2 <- NA
+        return(NA)
     } else {
         age_column <- grep("age", tolower(names(calibrations))) # get columns with "age" in their names
         target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i)
