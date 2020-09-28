@@ -17,6 +17,13 @@ use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { #
 		# calibrations.df <- calibs$calibration
 		# phy <- tax_phyloallall[[2]][[3]]
 
+    # get_all_calibrations arguments
+    if(hasArg("each")){
+      each <- list(...)$each
+    } else {
+      each <- FALSE
+    }
+  
 		# run with an example of three birds when input is NULL
 		if(is.null(input)){
 			phy <- make_bold_otol_tree(c("Rhea americana", "Struthio camelus", "Gallus gallus"), chronogram = FALSE, verbose = FALSE)
@@ -36,7 +43,8 @@ use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { #
 		    if(!is_datelife_query(input)){
 		      message("Running 'make_datelife_query'...")
           # make_datelife_query also removes singleton nodes in phy
-		      datelife_query <- make_datelife_query(input = input, ...)
+		      # TODO: add extra arguments for make_datelife_query function with hasArg (phytools method)
+		      datelife_query <- make_datelife_query(input = input)
 		    } else {
 		      datelife_query <- input
 		    }
@@ -53,12 +61,18 @@ use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { #
 		}
 
 		# perform a datelife_search through get_all_calibrations:
-		calibrations <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), ...)
+		calibrations <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), each = each)
 		# date the tree with bladj, pathd8 if branch lengths:
 		# TODO
 		# find a way to inherit params for use_calibrations_pathd8
 		# phytools method for argument assignation seems a nice option
-		chronogram <- use_calibrations(phy, calibrations, dating_method = dating_method)
+		
+		#if calibrations is a list of data frames:
+		if(each){
+  		chronogram <- use_each_calibration(phy=phy, calibrations=calibrations, dating_method = dating_method)
+		} else {
+			chronogram <- use_calibrations(phy, calibrations, dating_method = dating_method)
+		}
 		# TODO: make a 'datelife' class for chronograms with calibrations data.frame attached, produced by use_all_calibrations
 		return(list(phy = chronogram, calibrations.df = calibrations))
 }
@@ -88,17 +102,17 @@ use_each_calibration <- function(phy = NULL, phylo_all = NULL, calibrations = NU
 			message("phy is not a phylo object")
 			return(NA)
 		}
-		# when calibrations are not given as a list of dataframes
+		# when calibrations are not given as a list of data frames
 		if(!inherits(calibrations, "list")){
 			if(inherits(phylo_all, "datelifeResult") | inherits(phylo_all, "phylo") | inherits(phylo_all, "multiPhylo")){
-				calibrations <- get_all_calibrations(input = phylo_all, each = TRUE, ...)
+				calibrations <- get_all_calibrations(input = phylo_all, each = TRUE)
 			} else {
 				# can perform the datelife_search through get_all_calibrations:
-				calibrations <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), each = TRUE, ...)
+				calibrations <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), each = TRUE)
 			}
 		}
 		# date the tree with bladj, or pathd8 if branch lengths:
-		chronograms <- lapply(calibrations, function(x) use_calibrations(phy, x))
+		chronograms <- lapply(calibrations, function(x) use_calibrations(phy, x, ...))
 		class(chronograms) <- "multiPhylo"
 		names(chronograms) <- names(calibrations)
 		return(list(phy = chronograms, calibrations = calibrations))
