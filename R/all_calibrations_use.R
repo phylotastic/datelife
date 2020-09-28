@@ -69,7 +69,7 @@ use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { #
 		
 		#if calibrations is a list of data frames:
 		if(each){
-  		chronogram <- use_each_calibration(phy=phy, calibrations=calibrations, dating_method = dating_method)
+  		chronogram <- use_each_calibration(phy=phy, calibrations=calibrations, dating_method = dating_method)$chronograms
 		} else {
 			chronogram <- use_calibrations(phy, calibrations, dating_method = dating_method)
 		}
@@ -115,13 +115,13 @@ use_each_calibration <- function(phy = NULL, phylo_all = NULL, calibrations = NU
 		chronograms <- lapply(calibrations, function(x) use_calibrations(phy, x, ...))
 		class(chronograms) <- "multiPhylo"
 		names(chronograms) <- names(calibrations)
-		return(list(phy = chronograms, calibrations = calibrations))
+		return(list(chronograms = chronograms, calibrations = calibrations))
 }
 #' Perform a dating analysis on a tree topology using a given set of calibrations.
 #' @inheritParams use_calibrations_bladj
 #' @param dating_method The method used for tree dating.
 #' @inheritDotParams use_calibrations_pathd8
-#' @return A phylo object with branch lengths propotional to time.
+#' @return A phylo object with branch lengths proportional to time.
 #' @export
 #' @details
 #' If phy does not have branch lengths, dating_method is ignored and BLADJ will be used.

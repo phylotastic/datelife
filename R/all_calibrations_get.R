@@ -6,7 +6,7 @@
 #' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
 #' @inheritParams datelife_search
 #' @param each Boolean, default to FALSE all calibrations are returned in the same data frame. If TRUE, calibrations from each chronogram are returned in a separate data frame.
-#' @return A data frame of calibrations with attribute "chronograms" containing the dated trees that were used to extract calibartions
+#' @return A data frame (or list of data frames if each = TRUE) of calibrations, with attribute "chronograms" containing the dated trees that were used to get calibrations from.
 #' @export
 # input <- tax_phyloallall[[1]]
 get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),

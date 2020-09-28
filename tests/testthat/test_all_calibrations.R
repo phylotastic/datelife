@@ -1,38 +1,39 @@
-test_that(" getting all calibrations to work", {
-  # TEST make_bold_otol_tree and get_dated_otol_induced_subtree
-  # from use_all_calibrations:
-  r1 <- use_all_calibrations()
-  expect_true(ape::is.ultrametric(r1$phy, option = 2))
-  expect_s3_class(r1$phy, "phylo")
+test_that("getting, mapping and using all calibrations", {
+  # 1) TEST with a vector of names
+  # tests make_bold_otol_tree and get_dated_otol_induced_subtree from use_all_calibrations
+  u1 <- use_all_calibrations()
+  expect_true(ape::is.ultrametric(u1$phy, option = 2))
+  expect_s3_class(u1$phy, "phylo")
+  # TODO:
+  # u1.1 <- use_all_calibrations(input = c("Felis catus", "Canis canis", "Elephas maximus"))
+  # Giving error:
+  # Error in convertAlnRows(result$msa, type) : There is an invalid aln file!
+    # In addition: Warning message:
+    # In scan(file = file, what = what, sep = sep, quote = quote, dec = dec,  :
+  # EOF within quoted string
 
-  # TEST with a tree with NO branch lengths
-  r2 <- suppressWarnings(use_all_calibrations(input=threebirds_nbl))
+  u1.1 <- use_all_calibrations(input = c("Felis catus", "Canis canis", "Elephas maximus"))
+
+
+  # 2) TEST with a tree with NO branch lengths
+  u2 <- suppressWarnings(use_all_calibrations(input=threebirds_nbl))
   # initial branch lengths are required for pathd8 dating
   # the following will use bladj instead of pathd8 bc phy has no branch lengths:
-  c2 <- use_calibrations(phy = threebirds_nbl, calibrations = r2$calibrations, dating_method = "pathd8")
+  c1 <- use_calibrations(phy = threebirds_nbl, calibrations = u2$calibrations, dating_method = "pathd8")
   # test dating_method attribute is "bladj"
   # get all calibrations should not work with a tree with no branch lengths:
   expect_error(get_all_calibrations(input=threebirds_nbl))
 
-  # TEST a tree WITH branch lengths
-  r3 <- suppressWarnings(use_all_calibrations(input=threebirds_median))
-  get_all_calibrations(input=threebirds_median)
+  # 3) TEST a tree WITH branch lengths
+  u3 <- suppressWarnings(use_all_calibrations(input=threebirds_median))
+  g3 <- get_all_calibrations(input=threebirds_median)
+  g3.2 <- get_all_calibrations(input=threebirds_median, each = TRUE)
 
-  #test with a vector of Names
-  # use_all_calibrations(input = c("Rhea americana", "Pterocnemia pennata",
-                                 # "Struthio camelus"))
 
-  # TEST with a datelife query object
-
-  # TEST with a datelifeResult object
-  # must throw error here:
-  expect_error(suppressWarnings(use_all_calibrations(input=threebirds_result)))
-  # but not here:
-  get_all_calibrations(input= threebirds_result)
-
-  # TEST with a multiPhylo object
-  xx <- use_all_calibrations(input=threebirds_all)
-  get_all_calibrations(input=threebirds_all, each = TRUE)
+  # 4) TEST with a multiPhylo object
+  u4.1 <- use_all_calibrations(input=threebirds_all) # tests argument each = FALSE
+  u4.2 <- use_all_calibrations(input=threebirds_all, each = TRUE)
+  g4 <- get_all_calibrations(input=threebirds_all, each = TRUE)
 
   threebirds_all0 <- threebirds_all
   threebirds_all0[[1]]$edge.length <- NULL
@@ -42,17 +43,27 @@ test_that(" getting all calibrations to work", {
   class(threebirds_all_nbl) <- 'multiPhylo'
   get_all_calibrations(input=threebirds_all_nbl)
 
+
+  # TEST with a datelife query object
+
+  # TEST with a datelifeResult object
+  # must throw error here:
+  expect_error(suppressWarnings(use_all_calibrations(input=threebirds_result)))
+  # but not here:
+  get_all_calibrations(input= threebirds_result)
+
+
+
   #TEST match_all_calibrations
   match_all_calibrations(phy = NULL, calibrations= NULL)
-  match_all_calibrations(phy = xx$phy, calibrations= NULL)
+  match_all_calibrations(phy = u2$phy, calibrations= NULL)
 
 
   skip_on_cran()
-  use_calibrations(phy = threebirds_median, calibrations = r2$calibrations, dating_method = "pathd8")
-  use_calibrations(phy = threebirds_median, calibrations = r2$calibrations, dating_method = "PATHd8")
+  use_calibrations(phy = threebirds_median, calibrations = u2$calibrations, dating_method = "pathd8")
+  use_calibrations(phy = threebirds_median, calibrations = u2$calibrations, dating_method = "PATHd8")
 
 })
-
 
 
 test_that("use_calibrations fails when necessary",{
