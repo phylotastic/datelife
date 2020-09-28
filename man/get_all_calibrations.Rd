@@ -30,10 +30,10 @@ get_all_calibrations(
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 
-\item{each}{Boolean, default to FALSE (all calibrations are returned in the same data frame). If TRUE, calibrations from each chronogram are returned in a separate data frame.}
+\item{each}{Boolean, default to FALSE all calibrations are returned in the same data frame. If TRUE, calibrations from each chronogram are returned in a separate data frame.}
 }
 \value{
-A data frame of calibrations
+A data frame (or list of data frames if each = TRUE) of calibrations, with attribute "chronograms" containing the dated trees that were used to get calibrations from.
 }
 \description{
 Get all calibrations available for a set of taxa.

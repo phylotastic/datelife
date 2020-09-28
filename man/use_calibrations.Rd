@@ -29,7 +29,7 @@ use_calibrations(
   }}
 }
 \value{
-A phylo object with branch lengths propotional to time.
+A phylo object with branch lengths proportional to time.
 }
 \description{
 Perform a dating analysis on a tree topology using a given set of calibrations.
