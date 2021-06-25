@@ -83,7 +83,7 @@ get_taxon_summary <- function(datelife_result, datelife_query = NULL){
 #' @inherit datelife_search return details
 #' @export
 summarize_datelife_result <- function(datelife_result = NULL, datelife_query = NULL,
-	summary_format = "phylo_all", partial = TRUE, update_cache = FALSE, cache = get("opentree_chronograms"),
+	summary_format = "phylo_all", partial = TRUE, update_cache = FALSE, cache = getAnywhere("opentree_chronograms"),
 	summary_print = c("citations", "taxa"), taxon_summary = c("none", "summary", "matrix"),
 	verbose = FALSE, criterion = c("trees", "taxa")) {
 	# datelife_result <- birds_yellowstone_result

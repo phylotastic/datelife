@@ -6,7 +6,7 @@ axisGeo3 <- function (GTS, tip.time = 0, unit = c("epoch", "period"), ages = TRU
             0.001
         cex
     }
-    lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
+    lastPP <- getAnywhere("last_plot.phylo", envir = .PlotPhyloEnv)
     ntips <- lastPP$Ntip
     root <- ntips + 1
     if (lastPP$direction == "rightwards") 

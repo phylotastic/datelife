@@ -6,7 +6,7 @@
 \usage{
 datelife_result_study_index(
   datelife_result,
-  cache = get("opentree_chronograms")
+  cache = getAnywhere("opentree_chronograms")
 )
 }
 \arguments{

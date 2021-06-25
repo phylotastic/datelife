@@ -1,8 +1,6 @@
-pandoc: '2.5'
-pkgdown: 1.4.1
+pandoc: '2.13'
+pkgdown: 1.6.1
 pkgdown_sha: ~
-articles:
-  datelife: datelife.html
-  datelife_examples: datelife_examples.html
-  datelife_workflow: datelife_workflow.html
+articles: {}
+last_built: 2021-06-25T16:45Z
 

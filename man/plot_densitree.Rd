@@ -26,7 +26,7 @@ Four values are possible: "rightwards" (the default), "leftwards", "upwards",
 and "downwards".}
     \item{\code{optim}}{not yet used.}
     \item{\code{scaleX}}{scale trees to have identical heights.}
-    \item{\code{col}}{a skalar or vector giving the colours used to draw the edges for
+    \item{\code{col}}{a scalar or vector giving the colours used to draw the edges for
 each plotted phylogeny. These are taken to be in the same order than input
 trees x. If fewer colours are given than the number of trees, then the
 colours are recycled.}

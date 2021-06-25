@@ -12,7 +12,7 @@ datelife_search(
   use_tnrs = FALSE,
   approximate_match = TRUE,
   update_cache = FALSE,
-  cache = get("opentree_chronograms"),
+  cache = getAnywhere("opentree_chronograms"),
   summary_print = c("citations", "taxa"),
   taxon_summary = c("none", "summary", "matrix"),
   get_spp_from_taxon = FALSE,
@@ -89,7 +89,7 @@ ages.again <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struth
 plot(ages.again)
 library(ape)
 ape::axisPhylo()
-mtext("Time (million years ago)", side = 1, line = 2, at = (max(get("last_plot.phylo",
+mtext("Time (million years ago)", side = 1, line = 2, at = (max(getAnywhere("last_plot.phylo",
 		envir = .PlotPhyloEnv)$xx) * 0.5))
 write.tree(ages.again, file="some.bird.tree.again.txt") # saves phylo object in newick format
 

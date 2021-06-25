@@ -69,7 +69,7 @@
 #' plot(ages.again)
 #' library(ape)
 #' ape::axisPhylo()
-#' mtext("Time (million years ago)", side = 1, line = 2, at = (max(get("last_plot.phylo",
+#' mtext("Time (million years ago)", side = 1, line = 2, at = (max(getAnywhere("last_plot.phylo",
 #' 		envir = .PlotPhyloEnv)$xx) * 0.5))
 #' write.tree(ages.again, file="some.bird.tree.again.txt") # saves phylo object in newick format
 #'
@@ -81,7 +81,7 @@
 #' system("open some.bird.trees.html")
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 	summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
-	update_cache = FALSE, cache = get("opentree_chronograms"),
+	update_cache = FALSE, cache = getAnywhere("opentree_chronograms"),
 	summary_print= c("citations", "taxa"), taxon_summary = c("none", "summary", "matrix"),
 	get_spp_from_taxon = FALSE, verbose = FALSE, criterion="taxa") {
 	# find a way not to repeat partial and cache arguments, which are used in both get_datelife_result and summarize_datelife_result
@@ -122,7 +122,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 #' @export
 get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 	partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
-	cache = get("opentree_chronograms"), get_spp_from_taxon = FALSE, verbose = FALSE) {
+	cache = getAnywhere("opentree_chronograms"), get_spp_from_taxon = FALSE, verbose = FALSE) {
 	# input <- datelife_query
 	if(update_cache){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
@@ -200,6 +200,6 @@ check_datelife_result <- function(datelife_result){
 #' @details
 #' Generated with:
 #' threebirds_dr <- get_datelife_result(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-#' partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"))
+#' partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=getAnywhere("opentree_chronograms"))
 #' use_data(threebirds_dr)
 "threebirds_dr"

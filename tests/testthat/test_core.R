@@ -60,7 +60,7 @@ test_that("datelife_search returns mrca", {
 test_that("get_datelife_result works", {
   # skip_on_cran()
   # skip_on_os("linux") #b/c no pathd8 on travis linux
-  datelife_result.in <- get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=get("opentree_chronograms"))
+  datelife_result.in <- get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=getAnywhere("opentree_chronograms"))
   expect_equal(typeof(datelife_result.in), "list")
   expect_s3_class(datelife_result.in, "datelifeResult")
   # expect_gte(length(datelife_result.in), 4) #as of Nov 4, 2016, had length 8
