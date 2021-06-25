@@ -14,7 +14,7 @@ summarize_datelife_result(
   summary_format = "phylo_all",
   partial = TRUE,
   update_cache = FALSE,
-  cache = get("opentree_chronograms"),
+  cache = getAnywhere("opentree_chronograms"),
   summary_print = c("citations", "taxa"),
   taxon_summary = c("none", "summary", "matrix"),
   verbose = FALSE,

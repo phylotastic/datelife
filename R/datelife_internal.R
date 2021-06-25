@@ -14,7 +14,7 @@ summary_patristic_matrix_array <- function(patristic_matrix_array, fn = stats::m
 #' @inheritParams datelife_result_check
 #' @param cache The cache of studies
 #' @return A vector with the indices of studies that have relevant info
-datelife_result_study_index <- function(datelife_result, cache = get("opentree_chronograms")) {
+datelife_result_study_index <- function(datelife_result, cache = getAnywhere("opentree_chronograms")) {
     return(which(names(cache$trees) %in% names(datelife_result)))
 }
 

@@ -11,7 +11,7 @@
 # input <- tax_phyloallall[[1]]
 get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 		partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
-		cache = get("opentree_chronograms"), verbose = FALSE, each = FALSE) {
+		cache = getAnywhere("opentree_chronograms"), verbose = FALSE, each = FALSE) {
   # TODO: is_datelife_search_input function
   # to replace the following long conditional
   # and trap the case were input is a list

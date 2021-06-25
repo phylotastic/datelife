@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back. — datelife_search" />
 <meta property="og:description" content="Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">datelife</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -77,30 +80,12 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
-</li>
-<li>
-  <a href="../articles/datelife.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/datelife_examples.html">DateLife Examples</a>
-    </li>
-    <li>
-      <a href="../articles/datelife_workflow.html">DateLife Workflow</a>
-    </li>
-  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -108,8 +93,8 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/phylotastic/datelife">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/phylotastic/datelife/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -135,27 +120,27 @@
     <p>Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>datelife_search</span>(
-  <span class='kw'>input</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Rhea americana"</span>, <span class='st'>"Pterocnemia pennata"</span>, <span class='st'>"Struthio camelus"</span>),
-  <span class='kw'>summary_format</span> <span class='kw'>=</span> <span class='st'>"phylo_all"</span>,
-  <span class='kw'>partial</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>use_tnrs</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>approximate_match</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>update_cache</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>cache</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"opentree_chronograms"</span>),
-  <span class='kw'>summary_print</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"citations"</span>, <span class='st'>"taxa"</span>),
-  <span class='kw'>taxon_summary</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"none"</span>, <span class='st'>"summary"</span>, <span class='st'>"matrix"</span>),
-  <span class='kw'>get_spp_from_taxon</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>criterion</span> <span class='kw'>=</span> <span class='st'>"taxa"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>datelife_search</span><span class='op'>(</span>
+  input <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Rhea americana"</span>, <span class='st'>"Pterocnemia pennata"</span>, <span class='st'>"Struthio camelus"</span><span class='op'>)</span>,
+  summary_format <span class='op'>=</span> <span class='st'>"phylo_all"</span>,
+  partial <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  use_tnrs <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  approximate_match <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  update_cache <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  cache <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/utils/getAnywhere.html'>getAnywhere</a></span><span class='op'>(</span><span class='st'>"opentree_chronograms"</span><span class='op'>)</span>,
+  summary_print <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"citations"</span>, <span class='st'>"taxa"</span><span class='op'>)</span>,
+  taxon_summary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"none"</span>, <span class='st'>"summary"</span>, <span class='st'>"matrix"</span><span class='op'>)</span>,
+  get_spp_from_taxon <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  criterion <span class='op'>=</span> <span class='st'>"taxa"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>input</th>
-      <td><p>Target taxa names as a character vector, a newick character string, or a phylo object.</p></td>
+      <td><p>A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function.</p></td>
     </tr>
     <tr>
       <th>summary_format</th>
@@ -221,46 +206,34 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># obtain median ages from a set of source chronograms in newick format:</span>
-<span class='no'>ages</span> <span class='kw'>&lt;-</span> <span class='fu'>datelife_search</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Rhea americana"</span>, <span class='st'>"Pterocnemia pennata"</span>, <span class='st'>"Struthio camelus"</span>,
-                <span class='st'>"Mus musculus"</span>), <span class='kw'>summary_format</span><span class='kw'>=</span><span class='st'>"newick_median"</span>)</div><div class='output co'>#&gt; <span class='message'>Trying with overlap = 2</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt; <span class='message'>Source chronograms from:</span></div><div class='output co'>#&gt; <span class='message'>1: Grealy, Alicia, Matthew Phillips, Gifford Miller, M. Thomas P. Gilbert, Jean-Marie Rouillard, David Lambert, Michael Bunce, James Haile. 2017. Eggshell palaeogenomics: Palaeognath evolutionary history revealed through ancient nuclear and mitochondrial DNA from Madagascan elephant bird (Aepyornis sp.) eggshell. Molecular Phylogenetics and Evolution 109: 151-163</span></div><div class='output co'>#&gt; <span class='message'>2: Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845</span></div><div class='output co'>#&gt; <span class='message'>3: Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845</span></div><div class='output co'>#&gt; <span class='message'>4: Prum, Richard O., Jacob S. Berv, Alex Dornburg, Daniel J. Field, Jeffrey P. Townsend, Emily Moriarty Lemmon, Alan R. Lemmon. 2015. A comprehensive phylogeny of birds (Aves) using targeted next-generation DNA sequencing. Nature 526, (7574): 569-573</span></div><div class='output co'>#&gt; <span class='message'>5: Prum, Richard O., Jacob S. Berv, Alex Dornburg, Daniel J. Field, Jeffrey P. Townsend, Emily Moriarty Lemmon, Alan R. Lemmon. 2015. A comprehensive phylogeny of birds (Aves) using targeted next-generation DNA sequencing. Nature 526, (7574): 569-573</span></div><div class='output co'>#&gt; <span class='message'>6: Claramunt, Santiago, Joel Cracraft. 2015. A new time tree reveals Earth historys imprint on the evolution of modern birds. Science Advances 1 (11): e1501005-e1501005</span></div><div class='output co'>#&gt; <span class='message'>7: Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448</span></div><div class='output co'>#&gt; <span class='message'>8: Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448</span></div><div class='output co'>#&gt; <span class='message'>9: Mitchell, K. J., B. Llamas, J. Soubrier, N. J. Rawlence, T. H. Worthy, J. Wood, M. S. Y. Lee, A. Cooper. 2014. Ancient DNA reveals elephant birds and kiwi are sister taxa and clarifies ratite bird evolution. Science 344 (6186): 898-900.</span></div><div class='output co'>#&gt; <span class='message'>Input taxa presence across source chronograms:</span></div><div class='output co'>#&gt; <span class='message'>                taxon chronograms</span>
-#&gt; <span class='message'>1 Pterocnemia pennata         6/9</span>
-#&gt; <span class='message'>2      Rhea americana         9/9</span>
-#&gt; <span class='message'>3    Struthio camelus         9/9</span>
-#&gt; <span class='message'>4        Mus musculus         1/9</span></div><div class='output co'>#&gt; <span class='message'>Input taxa completely absent from source chronograms:</span></div><div class='output co'>#&gt; <span class='message'>  taxon</span>
-#&gt; <span class='message'>1  None</span></div><div class='input'><span class='co'># save the tree in newick format</span>
-<span class='fu'><a href='https://rdrr.io/r/base/write.html'>write</a></span>(<span class='no'>ages</span>, <span class='kw'>file</span><span class='kw'>=</span><span class='st'>"some.bird.ages.txt"</span>)
-
+<span class='va'>ages</span> <span class='op'>&lt;-</span> <span class='fu'>datelife_search</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Rhea americana"</span>, <span class='st'>"Pterocnemia pennata"</span>, <span class='st'>"Struthio camelus"</span>,
+    <span class='st'>"Mus musculus"</span><span class='op'>)</span>, summary_format<span class='op'>=</span><span class='st'>"newick_median"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Datelife Result object is empty.</span></div><div class='output co'>#&gt; <span class='message'>Input taxa were not found across available chronograms.</span></div><div class='output co'>#&gt; <span class='message'>Setting use_tnrs = TRUE might change this, but it is time consuming.</span></div><div class='output co'>#&gt; <span class='error'>Error in `rownames&lt;-`(`*tmp*`, value = paste0("Chronogram", sequence(nrow(taxon_matrix)))): attempt to set 'rownames' on an object with no dimensions</span></div><div class='input'><span class='co'># save the tree in newick format</span>
+<span class='fu'><a href='https://rdrr.io/r/base/write.html'>write</a></span><span class='op'>(</span><span class='va'>ages</span>, file<span class='op'>=</span><span class='st'>"some.bird.ages.txt"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in cat(x, file = file, sep = c(rep.int(sep, ncolumns - 1), "\n"),     append = append): object 'ages' not found</span></div><div class='input'>
 <span class='co'># obtain median ages from a set of source chronograms in phylo format</span>
 <span class='co'># will produce same tree as above but in r phylo format:</span>
-<span class='no'>ages.again</span> <span class='kw'>&lt;-</span> <span class='fu'>datelife_search</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Rhea americana"</span>, <span class='st'>"Pterocnemia pennata"</span>, <span class='st'>"Struthio camelus"</span>,
-                <span class='st'>"Mus musculus"</span>), <span class='kw'>summary_format</span><span class='kw'>=</span><span class='st'>"phylo_median"</span>)</div><div class='output co'>#&gt; <span class='message'>Trying with overlap = 2</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt; <span class='message'>Source chronograms from:</span></div><div class='output co'>#&gt; <span class='message'>1: Grealy, Alicia, Matthew Phillips, Gifford Miller, M. Thomas P. Gilbert, Jean-Marie Rouillard, David Lambert, Michael Bunce, James Haile. 2017. Eggshell palaeogenomics: Palaeognath evolutionary history revealed through ancient nuclear and mitochondrial DNA from Madagascan elephant bird (Aepyornis sp.) eggshell. Molecular Phylogenetics and Evolution 109: 151-163</span></div><div class='output co'>#&gt; <span class='message'>2: Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845</span></div><div class='output co'>#&gt; <span class='message'>3: Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845</span></div><div class='output co'>#&gt; <span class='message'>4: Prum, Richard O., Jacob S. Berv, Alex Dornburg, Daniel J. Field, Jeffrey P. Townsend, Emily Moriarty Lemmon, Alan R. Lemmon. 2015. A comprehensive phylogeny of birds (Aves) using targeted next-generation DNA sequencing. Nature 526, (7574): 569-573</span></div><div class='output co'>#&gt; <span class='message'>5: Prum, Richard O., Jacob S. Berv, Alex Dornburg, Daniel J. Field, Jeffrey P. Townsend, Emily Moriarty Lemmon, Alan R. Lemmon. 2015. A comprehensive phylogeny of birds (Aves) using targeted next-generation DNA sequencing. Nature 526, (7574): 569-573</span></div><div class='output co'>#&gt; <span class='message'>6: Claramunt, Santiago, Joel Cracraft. 2015. A new time tree reveals Earth historys imprint on the evolution of modern birds. Science Advances 1 (11): e1501005-e1501005</span></div><div class='output co'>#&gt; <span class='message'>7: Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448</span></div><div class='output co'>#&gt; <span class='message'>8: Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448</span></div><div class='output co'>#&gt; <span class='message'>9: Mitchell, K. J., B. Llamas, J. Soubrier, N. J. Rawlence, T. H. Worthy, J. Wood, M. S. Y. Lee, A. Cooper. 2014. Ancient DNA reveals elephant birds and kiwi are sister taxa and clarifies ratite bird evolution. Science 344 (6186): 898-900.</span></div><div class='output co'>#&gt; <span class='message'>Input taxa presence across source chronograms:</span></div><div class='output co'>#&gt; <span class='message'>                taxon chronograms</span>
-#&gt; <span class='message'>1 Pterocnemia pennata         6/9</span>
-#&gt; <span class='message'>2      Rhea americana         9/9</span>
-#&gt; <span class='message'>3    Struthio camelus         9/9</span>
-#&gt; <span class='message'>4        Mus musculus         1/9</span></div><div class='output co'>#&gt; <span class='message'>Input taxa completely absent from source chronograms:</span></div><div class='output co'>#&gt; <span class='message'>  taxon</span>
-#&gt; <span class='message'>1  None</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>ages.again</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ape</span>)
-<span class='kw pkg'>ape</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ape/man/axisPhylo.html'>axisPhylo</a></span>()</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/mtext.html'>mtext</a></span>(<span class='st'>"Time (million years ago)"</span>, <span class='kw'>side</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>line</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>at</span> <span class='kw'>=</span> (<span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/get.html'>get</a></span>(<span class='st'>"last_plot.phylo"</span>,
-                <span class='kw'>envir</span> <span class='kw'>=</span> <span class='no'>.PlotPhyloEnv</span>)$<span class='no'>xx</span>) * <span class='fl'>0.5</span>))</div><div class='img'><img src='datelife_search-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/ape/man/write.tree.html'>write.tree</a></span>(<span class='no'>ages.again</span>, <span class='kw'>file</span><span class='kw'>=</span><span class='st'>"some.bird.tree.again.txt"</span>) <span class='co'># saves phylo object in newick format</span>
-
+<span class='va'>ages.again</span> <span class='op'>&lt;-</span> <span class='fu'>datelife_search</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Rhea americana"</span>, <span class='st'>"Pterocnemia pennata"</span>, <span class='st'>"Struthio camelus"</span>,
+    <span class='st'>"Mus musculus"</span><span class='op'>)</span>, summary_format<span class='op'>=</span><span class='st'>"phylo_median"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Datelife Result object is empty.</span></div><div class='output co'>#&gt; <span class='message'>Input taxa were not found across available chronograms.</span></div><div class='output co'>#&gt; <span class='message'>Setting use_tnrs = TRUE might change this, but it is time consuming.</span></div><div class='output co'>#&gt; <span class='error'>Error in `rownames&lt;-`(`*tmp*`, value = paste0("Chronogram", sequence(nrow(taxon_matrix)))): attempt to set 'rownames' on an object with no dimensions</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>ages.again</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in plot(ages.again): object 'ages.again' not found</span></div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://ape-package.ird.fr/'>ape</a></span><span class='op'>)</span>
+<span class='fu'>ape</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ape/man/axisPhylo.html'>axisPhylo</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in get("last_plot.phylo", envir = .PlotPhyloEnv): object 'last_plot.phylo' not found</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/mtext.html'>mtext</a></span><span class='op'>(</span><span class='st'>"Time (million years ago)"</span>, side <span class='op'>=</span> <span class='fl'>1</span>, line <span class='op'>=</span> <span class='fl'>2</span>, at <span class='op'>=</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/getAnywhere.html'>getAnywhere</a></span><span class='op'>(</span><span class='st'>"last_plot.phylo"</span>,
+    envir <span class='op'>=</span> <span class='va'>.PlotPhyloEnv</span><span class='op'>)</span><span class='op'>$</span><span class='va'>xx</span><span class='op'>)</span> <span class='op'>*</span> <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in getAnywhere("last_plot.phylo", envir = .PlotPhyloEnv): unused argument (envir = .PlotPhyloEnv)</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/ape/man/write.tree.html'>write.tree</a></span><span class='op'>(</span><span class='va'>ages.again</span>, file<span class='op'>=</span><span class='st'>"some.bird.tree.again.txt"</span><span class='op'>)</span> <span class='co'># saves phylo object in newick format</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in write.tree(ages.again, file = "some.bird.tree.again.txt"): object 'ages.again' not found</span></div><div class='input'>
 <span class='co'># obtain mrca ages and target chronograms from all source chronograms</span>
 <span class='co'># generate an html  output readable in any web browser:</span>
-<span class='no'>ages.html</span> <span class='kw'>&lt;-</span> <span class='fu'>datelife_search</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Rhea americana"</span>, <span class='st'>"Pterocnemia pennata"</span>, <span class='st'>"Struthio camelus"</span>,
-                <span class='st'>"Mus musculus"</span>), <span class='kw'>summary_format</span><span class='kw'>=</span><span class='st'>"html"</span>)</div><div class='output co'>#&gt; <span class='message'>Input taxa presence across source chronograms:</span></div><div class='output co'>#&gt; <span class='message'>                taxon chronograms</span>
-#&gt; <span class='message'>1 Pterocnemia pennata         6/9</span>
-#&gt; <span class='message'>2      Rhea americana         9/9</span>
-#&gt; <span class='message'>3    Struthio camelus         9/9</span>
-#&gt; <span class='message'>4        Mus musculus         1/9</span></div><div class='output co'>#&gt; <span class='message'>Input taxa completely absent from source chronograms:</span></div><div class='output co'>#&gt; <span class='message'>  taxon</span>
-#&gt; <span class='message'>1  None</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/write.html'>write</a></span>(<span class='no'>ages.html</span>, <span class='kw'>file</span><span class='kw'>=</span><span class='st'>"some.bird.trees.html"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/system.html'>system</a></span>(<span class='st'>"open some.bird.trees.html"</span>)</div></pre>
+<span class='va'>ages.html</span> <span class='op'>&lt;-</span> <span class='fu'>datelife_search</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Rhea americana"</span>, <span class='st'>"Pterocnemia pennata"</span>, <span class='st'>"Struthio camelus"</span>,
+    <span class='st'>"Mus musculus"</span><span class='op'>)</span>, summary_format<span class='op'>=</span><span class='st'>"html"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Datelife Result object is empty.</span></div><div class='output co'>#&gt; <span class='message'>Input taxa were not found across available chronograms.</span></div><div class='output co'>#&gt; <span class='message'>Setting use_tnrs = TRUE might change this, but it is time consuming.</span></div><div class='output co'>#&gt; <span class='error'>Error in `rownames&lt;-`(`*tmp*`, value = paste0("Chronogram", sequence(nrow(taxon_matrix)))): attempt to set 'rownames' on an object with no dimensions</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/write.html'>write</a></span><span class='op'>(</span><span class='va'>ages.html</span>, file<span class='op'>=</span><span class='st'>"some.bird.trees.html"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in cat(x, file = file, sep = c(rep.int(sep, ncolumns - 1), "\n"),     append = append): object 'ages.html' not found</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/system.html'>system</a></span><span class='op'>(</span><span class='st'>"open some.bird.trees.html"</span><span class='op'>)</span>
+</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -271,7 +244,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

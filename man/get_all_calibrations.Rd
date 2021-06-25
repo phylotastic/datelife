@@ -10,7 +10,7 @@ get_all_calibrations(
   use_tnrs = FALSE,
   approximate_match = TRUE,
   update_cache = FALSE,
-  cache = get("opentree_chronograms"),
+  cache = getAnywhere("opentree_chronograms"),
   verbose = FALSE,
   each = FALSE
 )

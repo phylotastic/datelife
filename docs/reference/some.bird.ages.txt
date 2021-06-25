@@ -1,1 +1,0 @@
-(Mus_musculus:320.523834,((Pterocnemia_pennata:10.103721,Rhea_americana:10.103721)n3:50.981117,Struthio_camelus:61.084839)n2:259.438995)n1;

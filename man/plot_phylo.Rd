@@ -13,7 +13,7 @@ plot_phylo(
   mai4 = NULL,
   write = "nothing",
   file_name = NULL,
-  GTS = get("strat2012")
+  GTS = getAnywhere("strat2012")
 )
 }
 \arguments{
