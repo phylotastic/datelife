@@ -14,8 +14,14 @@ summary_patristic_matrix_array <- function(patristic_matrix_array, fn = stats::m
 #' @inheritParams datelife_result_check
 #' @param cache The cache of studies
 #' @return A vector with the indices of studies that have relevant info
-datelife_result_study_index <- function(datelife_result, cache = getAnywhere("opentree_chronograms")) {
-    return(which(names(cache$trees) %in% names(datelife_result)))
+datelife_result_study_index <- function(datelife_result,
+                                        cache = "opentree_chronograms") {
+
+  if("opentree_chronograms" %in% cache){
+   utils::data("opentree_chronograms")
+   cache <- get("opentree_chronograms")
+  }
+  return(which(names(cache$trees) %in% names(datelife_result)))
 }
 
 #' Get time of MRCA from patristic matrix. Used in: datelife_result_MRCA.

@@ -32,7 +32,7 @@ HPDbars <- function(phy, label = "height_95%_HPD", tab = NULL, nodes, col, lwd, 
     if (!paste(label, "MAX", sep = "_") %in% names(phy))
         stop("there is no upper bound for '", label,
             "' in 'phy': the corresponding element must be named '", 			label, "_MAX'")
-	lastPP <- getAnywhere("last_plot.phylo", envir = .PlotPhyloEnv)
+	lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
 	if (!lastPP$use.edge.length)
 	    stop("function needs edge length information")
 	if (lastPP$type != "phylogram")
@@ -188,7 +188,7 @@ axisGeo <- function(GTS, tip.time = 0, unit = c("epoch", "period"), ages =
     cex
   }
 
-  lastPP <- getAnywhere("last_plot.phylo", envir = .PlotPhyloEnv)
+  lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
   ntips <- lastPP$Ntip
   root <- ntips + 1
 

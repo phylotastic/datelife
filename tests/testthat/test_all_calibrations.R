@@ -1,5 +1,5 @@
 test_that("getting, mapping and using all calibrations", {
-  # 1) TEST with a vector of names
+  # 1) TEST use_all_calibrations with a vector of names
   # tests make_bold_otol_tree and get_dated_otol_induced_subtree from use_all_calibrations
   u1 <- use_all_calibrations()
   expect_true(ape::is.ultrametric(u1$phy, option = 2))
@@ -13,14 +13,20 @@ test_that("getting, mapping and using all calibrations", {
   # EOF within quoted string
 
   # TODO
-  # taking too long to get bol tree I think? Check it out
+  # these are taking too long to get bold tree I think? Check it out:
   # u1.2 <- use_all_calibrations(input = c("Felis catus", "Homo sapiens", "Elephas maximus"))
   # u1.2 <- use_all_calibrations(input = c("Delphinus delphus", "Homo sapiens", "Elephas maximus"))
   u1.4 <- use_all_calibrations(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
   u1.5 <- use_all_calibrations(input = c("Chen caerulescens", "Cygnus columbianus", "Anas acuta"))
 
+  #TEST match_all_calibrations
+  match_all_calibrations(phy = NULL, calibrations= NULL)
+  match_all_calibrations(phy = u2$phy, calibrations= NULL)
+  match_all_calibrations(phy = u1.5$phy, calibrations = u1.4$calibrations.df)
+  match_all_calibrations(phy = u1.4$phy, calibrations = u1.5$calibrations.df)
 
-  # 2) TEST with a tree with NO branch lengths
+
+  # 2) TEST use_all_calibrations with a tree with NO branch lengths
   u2 <- suppressWarnings(use_all_calibrations(input=threebirds_nbl))
   # initial branch lengths are required for pathd8 dating
   # the following will use bladj instead of pathd8 bc phy has no branch lengths:
@@ -29,13 +35,13 @@ test_that("getting, mapping and using all calibrations", {
   # get all calibrations should not work with a tree with no branch lengths:
   expect_error(get_all_calibrations(input=threebirds_nbl))
 
-  # 3) TEST a tree WITH branch lengths
+  # 3) TEST use_all_calibrations with a tree WITH branch lengths
   u3 <- suppressWarnings(use_all_calibrations(input=threebirds_median))
   g3 <- get_all_calibrations(input=threebirds_median)
   g3.2 <- get_all_calibrations(input=threebirds_median, each = TRUE)
 
 
-  # 4) TEST with a multiPhylo object
+  # 4) TEST use_all_calibrations with a multiPhylo object
   u4.1 <- use_all_calibrations(input=threebirds_all) # tests argument each = FALSE
   u4.2 <- use_all_calibrations(input=threebirds_all, each = TRUE)
   g4 <- get_all_calibrations(input=threebirds_all, each = TRUE)
@@ -49,22 +55,15 @@ test_that("getting, mapping and using all calibrations", {
   get_all_calibrations(input=threebirds_all_nbl)
 
 
-  # TEST with a datelife query object
-
-  # TEST with a datelifeResult object
+  # 5) TEST use_all_calibrations with a datelifeResult object
   # must throw error here:
   expect_error(suppressWarnings(use_all_calibrations(input=threebirds_result)))
   # but not here:
   get_all_calibrations(input= threebirds_result)
 
+  # TODO: 6) TEST use_all_calibrations with a datelife query object
 
-
-  #TEST match_all_calibrations
-  match_all_calibrations(phy = NULL, calibrations= NULL)
-  match_all_calibrations(phy = u2$phy, calibrations= NULL)
-  match_all_calibrations(phy = u1.5$phy, calibrations = u1.4$calibrations.df)
-  match_all_calibrations(phy = u1.4$phy, calibrations = u1.5$calibrations.df)
-
+  # TEST use_all_calibrations with pathd8
 
   skip_on_cran()
   use_calibrations(phy = threebirds_median, calibrations = u2$calibrations, dating_method = "pathd8")

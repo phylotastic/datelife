@@ -13,8 +13,8 @@ summarize_datelife_result(
   datelife_query = NULL,
   summary_format = "phylo_all",
   partial = TRUE,
-  update_cache = FALSE,
-  cache = getAnywhere("opentree_chronograms"),
+  update_opentree_chronograms = FALSE,
+  cache = "opentree_chronograms",
   summary_print = c("citations", "taxa"),
   taxon_summary = c("none", "summary", "matrix"),
   verbose = FALSE,
@@ -28,11 +28,11 @@ summarize_datelife_result(
 
 \item{summary_format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
 
-\item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
+\item{partial}{Boolean; default to TRUE: use source trees even if they only match some of the desired taxa.}
 
-\item{update_cache}{default to FALSE}
+\item{update_opentree_chronograms}{default to FALSE}
 
-\item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
+\item{cache}{A character vector of length one, with the name of the data object to cache. Default to "opentree_chronograms", a data object storing Open Tree of Life's database chronograms and other associated information.}
 
 \item{summary_print}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
 

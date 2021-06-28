@@ -9,8 +9,8 @@ get_datelife_result(
   partial = TRUE,
   use_tnrs = FALSE,
   approximate_match = TRUE,
-  update_cache = FALSE,
-  cache = getAnywhere("opentree_chronograms"),
+  update_opentree_chronograms = FALSE,
+  cache = get("opentree_chronograms"),
   get_spp_from_taxon = FALSE,
   verbose = FALSE
 )
@@ -18,15 +18,15 @@ get_datelife_result(
 \arguments{
 \item{input}{A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
 
-\item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
+\item{partial}{Boolean; default to TRUE: use source trees even if they only match some of the desired taxa.}
 
-\item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
+\item{use_tnrs}{Boolean; default to FALSE. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
-\item{approximate_match}{If TRUE, use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches).}
+\item{approximate_match}{Boolean; default to TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)}
 
-\item{update_cache}{default to FALSE}
+\item{update_opentree_chronograms}{default to FALSE}
 
-\item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
+\item{cache}{A character vector of length one, with the name of the data object to cache. Default to "opentree_chronograms", a data object storing Open Tree of Life's database chronograms and other associated information.}
 
 \item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
 

@@ -6,35 +6,37 @@
 \usage{
 get_all_calibrations(
   input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-  partial = TRUE,
-  use_tnrs = FALSE,
-  approximate_match = TRUE,
-  update_cache = FALSE,
-  cache = getAnywhere("opentree_chronograms"),
-  verbose = FALSE,
+  ...,
   each = FALSE
 )
 }
 \arguments{
 \item{input}{vector of names, a newick string, a phylo or multiPhylo object with branch lengths proportional to time, a datelifeResult object}
 
-\item{partial}{Boolean; default TRUE: use source trees even if they only match some of the desired taxa}
+\item{...}{
+  Arguments passed on to \code{\link[=datelife_search]{datelife_search}}
+  \describe{
+    \item{\code{summary_format}}{The desired output format for target chronograms (chronograms of target taxa). See details.}
+    \item{\code{summary_print}}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
+    \item{\code{taxon_summary}}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on taxon_summary added to the output.}
+    \item{\code{partial}}{Boolean; default to TRUE: use source trees even if they only match some of the desired taxa.}
+    \item{\code{use_tnrs}}{Boolean; default to FALSE. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
+    \item{\code{approximate_match}}{Boolean; default to TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)}
+    \item{\code{update_opentree_chronograms}}{default to FALSE}
+    \item{\code{cache}}{A character vector of length one, with the name of the data object to cache. Default to "opentree_chronograms", a data object storing Open Tree of Life's database chronograms and other associated information.}
+    \item{\code{get_spp_from_taxon}}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
+    \item{\code{verbose}}{Boolean. If TRUE, it gives printed updates to the user.}
+    \item{\code{criterion}}{Whether to get the grove with the most trees or the most taxa}
+  }}
 
-\item{use_tnrs}{Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer}
-
-\item{approximate_match}{Boolean; default TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)}
-
-\item{update_cache}{default to FALSE}
-
-\item{cache}{The cached set of chronograms and other info from data(opentree_chronograms)}
-
-\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
-
-\item{each}{Boolean, default to FALSE all calibrations are returned in the same data frame. If TRUE, calibrations from each chronogram are returned in a separate data frame.}
+\item{each}{Boolean, default to FALSE: all calibrations are returned in the same data frame. If TRUE, calibrations from each chronogram are returned in a separate data frame.}
 }
 \value{
-A data frame (or list of data frames if each = TRUE) of calibrations, with attribute "chronograms" containing the dated trees that were used to get calibrations from.
+A data frame (or list of data frames, if each = TRUE) of calibrations, with attribute "chronograms" containing the dated trees that were used to get calibrations from.
 }
 \description{
-Get all calibrations available for a set of taxa.
+`get_all_calibrations` returns a data frame of secondary calibrations for each pair of given taxon names.
+}
+\details{
+If input is a character vector of taxon names, the function calls a `datelife_search` with `summary_format` set to `"phylo_all"`, that gets all chronograms containing at least 2 of the taxa in `input`.
 }

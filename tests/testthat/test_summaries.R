@@ -1,5 +1,7 @@
 # testing datelife functions to summarize source trees
 test_that("get_taxon_summary works", {
+	# datelife_result <- subset2_bestgrove
+	# datelife_query <- subset2_query
 	xx <- get_taxon_summary(threebirds_result, threebirds_query)
 	expect_true(inherits(xx, "datelifeTaxonSummary"))
 	expect_true(inherits(xx$matrix, "matrix"))
@@ -21,7 +23,9 @@ test_that("Summarize as newick_median works correctly", {
 })
 
 test_that("Summarize as mrca works correctly", {
-  mrca.vector <- summarize_datelife_result(datelife_result = threebirds_result, summary_format="mrca", cache=opentree_chronograms)
+  mrca.vector <- summarize_datelife_result(datelife_result = threebirds_result,
+																					 summary_format="mrca",
+																					 cache = "opentree_chronograms")
   expect_equal(class(mrca.vector), "numeric")
   expect_gte(min(mrca.vector),5)
   expect_lte(max(mrca.vector),150)
@@ -29,13 +33,17 @@ test_that("Summarize as mrca works correctly", {
 
 
 test_that("Summarize as citations works correctly", {
-  citation.results <- summarize_datelife_result(datelife_result = threebirds_result, summary_format="cit", cache=opentree_chronograms)
+  citation.results <- summarize_datelife_result(datelife_result = threebirds_result,
+																								summary_format="cit",
+																								cache = "opentree_chronograms")
   expect_equal(class(citation.results), "character")
   expect_gte(sum(grepl("Prum", citation.results)),1)
  })
 
 test_that("Summarize as newick_all works correctly", {
-  trees <- summarize_datelife_result(datelife_result = threebirds_result, summary_format="newick_all", cache=opentree_chronograms)
+  trees <- summarize_datelife_result(datelife_result = threebirds_result,
+																		 summary_format = "newick_all",
+																		 cache = "opentree_chronograms")
   expect_equal(class(trees), "character")
   expect_false(anyNA(trees))
   expect_equal(class(ape::read.tree(text=trees[1])), "phylo")

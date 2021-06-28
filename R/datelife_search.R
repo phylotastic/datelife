@@ -15,15 +15,15 @@
 
 #' Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.
 #' @aliases datelife
-#' @param input A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function. 
+#' @param input A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function.
 #' @param summary_format The desired output format for target chronograms (chronograms of target taxa). See details.
 #' @param summary_print A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
 #' @param taxon_summary A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on taxon_summary added to the output.
-#' @param partial If TRUE, use source chronograms even if they only match some of the desired taxa
-#' @param use_tnrs If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.
-#' @param approximate_match If TRUE, use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches).
-#' @param update_cache default to FALSE
-#' @param cache The cached set of chronograms and other info from data(opentree_chronograms).
+#' @param partial Boolean; default to TRUE: use source trees even if they only match some of the desired taxa.
+#' @param use_tnrs Boolean; default to FALSE. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.
+#' @param approximate_match Boolean; default to TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)
+#' @param update_opentree_chronograms default to FALSE
+#' @param cache A character vector of length one, with the name of the data object to cache. Default to "opentree_chronograms", a data object storing Open Tree of Life's database chronograms and other associated information.
 #' @param get_spp_from_taxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.
 #' @param verbose Boolean. If TRUE, it gives printed updates to the user.
 #' @param criterion Whether to get the grove with the most trees or the most taxa
@@ -69,7 +69,7 @@
 #' plot(ages.again)
 #' library(ape)
 #' ape::axisPhylo()
-#' mtext("Time (million years ago)", side = 1, line = 2, at = (max(getAnywhere("last_plot.phylo",
+#' mtext("Time (million years ago)", side = 1, line = 2, at = (max(get("last_plot.phylo",
 #' 		envir = .PlotPhyloEnv)$xx) * 0.5))
 #' write.tree(ages.again, file="some.bird.tree.again.txt") # saves phylo object in newick format
 #'
@@ -80,28 +80,39 @@
 #' write(ages.html, file="some.bird.trees.html")
 #' system("open some.bird.trees.html")
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-	summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
-	update_cache = FALSE, cache = getAnywhere("opentree_chronograms"),
-	summary_print= c("citations", "taxa"), taxon_summary = c("none", "summary", "matrix"),
-	get_spp_from_taxon = FALSE, verbose = FALSE, criterion="taxa") {
+														summary_format = "phylo_all",
+														partial = TRUE,
+														use_tnrs = FALSE,
+														approximate_match = TRUE,
+														update_opentree_chronograms = FALSE,
+														cache = "opentree_chronograms",
+														summary_print= c("citations", "taxa"),
+														taxon_summary = c("none", "summary", "matrix"),
+														get_spp_from_taxon = FALSE,
+														verbose = FALSE,
+														criterion="taxa") {
 	# find a way not to repeat partial and cache arguments, which are used in both get_datelife_result and summarize_datelife_result
-	if(update_cache){
+	if(update_opentree_chronograms){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
+	} else {
+		if("opentree_chronograms" %in% cache){
+			utils::data("opentree_chronograms")
+			cache <- get("opentree_chronograms")
+		}
 	}
-	# input <- c("Rhea americana", "Pterocnemia pennata", "Struthio camelus", "Mus musculus")
 	datelife_query <- make_datelife_query(input = input, use_tnrs = use_tnrs,
 		approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon,
 		verbose = verbose)
 	datelife_result.here <- get_datelife_result(input = datelife_query,
 		partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match,
-		update_cache = FALSE, cache = cache, verbose = verbose)
+		update_opentree_chronograms = FALSE, cache = cache, verbose = verbose)
 	# print.datelife(datelife_result = datelife_result.here)
 	# datelife <- list(datelife_query = datelife_query, datelife_result = datelife_result.here)
 	# class(datelife) <- "datelife"
 	# return(datelife)
 	return(summarize_datelife_result(datelife_result = datelife_result.here,
 		datelife_query = datelife_query, summary_format = summary_format,
-		partial = partial, update_cache = FALSE, cache = cache,
+		partial = partial, update_opentree_chronograms = FALSE, cache = cache,
 		summary_print = summary_print, taxon_summary = taxon_summary,
 		verbose = verbose, criterion = criterion))
 }
@@ -121,10 +132,14 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 #' @return A datelifeResult object - a named list of patristic matrices. You can ccess the original query with attributes(my_datelife_result)$query
 #' @export
 get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-	partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
-	cache = getAnywhere("opentree_chronograms"), get_spp_from_taxon = FALSE, verbose = FALSE) {
-	# input <- datelife_query
-	if(update_cache){
+																partial = TRUE,
+																use_tnrs = FALSE,
+																approximate_match = TRUE,
+																update_opentree_chronograms = FALSE,
+																cache = get("opentree_chronograms"),
+																get_spp_from_taxon = FALSE,
+																verbose = FALSE) {
+	if(update_opentree_chronograms){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
 	input_dq <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs,
@@ -200,6 +215,6 @@ check_datelife_result <- function(datelife_result){
 #' @details
 #' Generated with:
 #' threebirds_dr <- get_datelife_result(input=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-#' partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE, cache=getAnywhere("opentree_chronograms"))
+#' partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, cache = "opentree_chronograms")
 #' use_data(threebirds_dr)
 "threebirds_dr"

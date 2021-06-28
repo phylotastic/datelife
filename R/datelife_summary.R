@@ -2,9 +2,9 @@
 #' @inheritParams datelife_query_check
 #' @inheritParams datelife_result_check
 #' @export
-get_taxon_summary <- function(datelife_result, datelife_query = NULL){
-	# datelife_result <- subset2_bestgrove
-	# datelife_query <- subset2_query
+get_taxon_summary <- function(datelife_result = NULL,
+															datelife_query = NULL){
+
 	datelife_result <- check_datelife_result(datelife_result)
 	if(is.null(datelife_result) | !inherits(datelife_result, "datelifeResult")){
 		message("datelife_result argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
@@ -82,25 +82,41 @@ get_taxon_summary <- function(datelife_result, datelife_query = NULL){
 #' @inheritParams datelife_search
 #' @inherit datelife_search return details
 #' @export
-summarize_datelife_result <- function(datelife_result = NULL, datelife_query = NULL,
-	summary_format = "phylo_all", partial = TRUE, update_cache = FALSE, cache = getAnywhere("opentree_chronograms"),
-	summary_print = c("citations", "taxa"), taxon_summary = c("none", "summary", "matrix"),
-	verbose = FALSE, criterion = c("trees", "taxa")) {
-	# datelife_result <- birds_yellowstone_result
-	# datelife_query <- birds_yellowstone_query
-	# datelife_result <- threebirds_result
-	# datelife_query <- threebirds_query
-	# datelife_result <- birdswiki_result
-	# datelife_result <- datelife_result.here
-	if(update_cache){
+summarize_datelife_result <- function(datelife_result = NULL,
+																			datelife_query = NULL,
+																			summary_format = "phylo_all",
+																			partial = TRUE,
+																			update_opentree_chronograms = FALSE,
+																			cache = "opentree_chronograms",
+																			summary_print = c("citations", "taxa"),
+																			taxon_summary = c("none", "summary", "matrix"),
+																			verbose = FALSE,
+																			criterion = c("trees", "taxa")) {
+	if(update_opentree_chronograms){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
+	} else {
+		if("opentree_chronograms" %in% cache){
+			utils::data("opentree_chronograms")
+			cache <- get("opentree_chronograms")
+		}
 	}
-	taxon_summ <- get_taxon_summary(datelife_result, datelife_query)
+	taxon_summ <- get_taxon_summary(datelife_result = datelife_result,
+																	datelife_query = datelife_query)
 	if(length(taxon_summ) == 1){
 		message("get_taxon_summary failed.")
 		return(NA)
 	}
-	summary_format.in <- match.arg(summary_format, choices = c("citations", "mrca", "newick_all", "newick_sdm", "newick_median", "phylo_sdm", "phylo_median", "phylo_biggest", "phylo_all", "html", "data_frame"))
+	summary_format.in <- match.arg(summary_format, choices = c("citations",
+																														 "mrca",
+																														 "newick_all",
+																														 "newick_sdm",
+																														 "newick_median",
+																														 "phylo_sdm",
+																														 "phylo_median",
+																														 "phylo_biggest",
+																														 "phylo_all",
+																														 "html",
+																														 "data_frame"))
 	taxon_summary.in <- match.arg(taxon_summary, choices = c("none", "summary", "matrix"))
 	summary_print.in <- match.arg(summary_print, c("citations", "taxa", "none"), several.ok = TRUE)
 	if(summary_format.in == "citations") {

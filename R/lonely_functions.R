@@ -51,7 +51,13 @@ patristic_matrix_subset <- function(patristic_matrix, taxa, phy4 = NULL) {
 #' @param cache The cache
 #' @return A vector with counts of each author, with names equal to author names
 #' @export
-datelife_authors_tabulate <- function(results.index, cache = getAnywhere("opentree_chronograms")) {
+datelife_authors_tabulate <- function(results.index,
+                                      cache = "opentree_chronograms") {
+
+  if("opentree_chronograms" %in% cache){
+   utils::data("opentree_chronograms")
+   cache <- get("opentree_chronograms")
+  }
 	authors <- cache$authors[results.index]
 	return(table(unlist(authors)))
 }
@@ -61,8 +67,14 @@ datelife_authors_tabulate <- function(results.index, cache = getAnywhere("opentr
 #' @param cache The cache
 #' @return A vector with counts of each curator, with names equal to curator names
 #' @export
-relevant_curators_tabulate <- function(results.index, cache = getAnywhere("opentree_chronograms")) {
-	curators <- cache$curators[results.index]
+relevant_curators_tabulate <- function(results.index,
+                                       cache = "opentree_chronograms") {
+
+  if("opentree_chronograms" %in% cache){
+   utils::data("opentree_chronograms")
+   cache <- get("opentree_chronograms")
+  }
+  curators <- cache$curators[results.index]
 	return(table(unlist(curators)))
 }
 

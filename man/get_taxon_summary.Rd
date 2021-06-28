@@ -4,7 +4,7 @@
 \alias{get_taxon_summary}
 \title{Get taxon summary of a datelifeResult object}
 \usage{
-get_taxon_summary(datelife_result, datelife_query = NULL)
+get_taxon_summary(datelife_result = NULL, datelife_query = NULL)
 }
 \arguments{
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}

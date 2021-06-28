@@ -1,24 +1,22 @@
 #' Get all calibrations available for a set of taxa.
+#'
+#' `get_all_calibrations` returns a data frame of secondary calibrations for each pair of given taxon names.
+#'
 #' @param input vector of names, a newick string, a phylo or multiPhylo object with branch lengths proportional to time, a datelifeResult object
-#' @param partial Boolean; default TRUE: use source trees even if they only match some of the desired taxa
-#' @param use_tnrs Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer
-#' @param approximate_match Boolean; default TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)
-#' @param cache The cached set of chronograms and other info from data(opentree_chronograms)
-#' @inheritParams datelife_search
-#' @param each Boolean, default to FALSE all calibrations are returned in the same data frame. If TRUE, calibrations from each chronogram are returned in a separate data frame.
-#' @return A data frame (or list of data frames if each = TRUE) of calibrations, with attribute "chronograms" containing the dated trees that were used to get calibrations from.
+#' @inheritDotParams datelife_search
+#' @param each Boolean, default to FALSE: all calibrations are returned in the same data frame. If TRUE, calibrations from each chronogram are returned in a separate data frame.
+#' @return A data frame (or list of data frames, if each = TRUE) of calibrations, with attribute "chronograms" containing the dated trees that were used to get calibrations from.
+#' @details If input is a character vector of taxon names, the function calls a `datelife_search` with `summary_format` set to `"phylo_all"`, that gets all chronograms containing at least 2 of the taxa in `input`.
 #' @export
 # input <- tax_phyloallall[[1]]
-get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-		partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, update_cache = FALSE,
-		cache = getAnywhere("opentree_chronograms"), verbose = FALSE, each = FALSE) {
+get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), ...,
+																 each = FALSE) {
   # TODO: is_datelife_search_input function
   # to replace the following long conditional
   # and trap the case were input is a list
 	if(!inherits(input, "datelifeResult") & !inherits(input, "phylo") & !inherits(input, "multiPhylo")){
-		datelife_phylo <- datelife_search(input = input, partial = partial, use_tnrs = use_tnrs,
-			approximate_match = approximate_match, update_cache = update_cache, cache = cache,
-			summary_format = "phylo_all", verbose = verbose)
+		datelife_phylo <- datelife_search(input = input,
+																			summary_format = "phylo_all", ...)
 	}
 	# inherits(datelife_phylo, "datelifeResult")
 	if(inherits(input, "datelifeResult")){
@@ -44,7 +42,7 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 	    stop("input tree has no branch lengths")
 	  }
 		datelife_phylo <- list(input)
-	} 
+	}
 
 	if(each){
 		constraints.df <- vector(mode= "list") # we cannot set an empty data frame because nrow depends on the number of nodes available on each tree
@@ -54,7 +52,7 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 	for (i in seq(length(datelife_phylo))) {
 		local.df <- suppressWarnings(geiger::congruify.phylo(reference = datelife_phylo[[i]],
 			target = datelife_phylo[[i]], scale = NA, ncores = 1))$calibrations
-		# suppressedWarnings bc of warning message when running 
+		# suppressedWarnings bc of warning message when running
 		# geiger::congruify.phylo(reference = datelife_phylo[[i]], target = datelife_phylo[[i]], scale = NA)
 		# 		Warning message:
 		# In if (class(stock) == "phylo") { :

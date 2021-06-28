@@ -11,8 +11,8 @@ datelife_search(
   partial = TRUE,
   use_tnrs = FALSE,
   approximate_match = TRUE,
-  update_cache = FALSE,
-  cache = getAnywhere("opentree_chronograms"),
+  update_opentree_chronograms = FALSE,
+  cache = "opentree_chronograms",
   summary_print = c("citations", "taxa"),
   taxon_summary = c("none", "summary", "matrix"),
   get_spp_from_taxon = FALSE,
@@ -25,15 +25,15 @@ datelife_search(
 
 \item{summary_format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
 
-\item{partial}{If TRUE, use source chronograms even if they only match some of the desired taxa}
+\item{partial}{Boolean; default to TRUE: use source trees even if they only match some of the desired taxa.}
 
-\item{use_tnrs}{If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
+\item{use_tnrs}{Boolean; default to FALSE. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
 
-\item{approximate_match}{If TRUE, use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches).}
+\item{approximate_match}{Boolean; default to TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)}
 
-\item{update_cache}{default to FALSE}
+\item{update_opentree_chronograms}{default to FALSE}
 
-\item{cache}{The cached set of chronograms and other info from data(opentree_chronograms).}
+\item{cache}{A character vector of length one, with the name of the data object to cache. Default to "opentree_chronograms", a data object storing Open Tree of Life's database chronograms and other associated information.}
 
 \item{summary_print}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
 
@@ -89,7 +89,7 @@ ages.again <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struth
 plot(ages.again)
 library(ape)
 ape::axisPhylo()
-mtext("Time (million years ago)", side = 1, line = 2, at = (max(getAnywhere("last_plot.phylo",
+mtext("Time (million years ago)", side = 1, line = 2, at = (max(get("last_plot.phylo",
 		envir = .PlotPhyloEnv)$xx) * 0.5))
 write.tree(ages.again, file="some.bird.tree.again.txt") # saves phylo object in newick format
 
