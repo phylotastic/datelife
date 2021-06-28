@@ -137,13 +137,7 @@ It searches and uses all calibrations from chronograms in the DateLife database.
     <tr>
       <th>...</th>
       <td><p>Arguments passed on to <code><a href='get_all_calibrations.html'>get_all_calibrations</a></code></p><dl>
-    <dt><code>partial</code></dt><dd><p>Boolean; default TRUE: use source trees even if they only match some of the desired taxa</p></dd>
-    <dt><code>use_tnrs</code></dt><dd><p>Boolean; default False. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer</p></dd>
-    <dt><code>approximate_match</code></dt><dd><p>Boolean; default TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)</p></dd>
-    <dt><code>cache</code></dt><dd><p>The cached set of chronograms and other info from data(opentree_chronograms)</p></dd>
-    <dt><code>each</code></dt><dd><p>Boolean, default to FALSE all calibrations are returned in the same data frame. If TRUE, calibrations from each chronogram are returned in a separate data frame.</p></dd>
-    <dt><code>update_cache</code></dt><dd><p>default to FALSE</p></dd>
-    <dt><code>verbose</code></dt><dd><p>Boolean. If TRUE, it gives printed updates to the user.</p></dd>
+    <dt><code>each</code></dt><dd><p>Boolean, default to <code>FALSE</code>: all calibrations are returned in the same data frame. If <code>TRUE</code>, calibrations from each chronogram are returned in separate data frames.</p></dd>
   
 </dl></td>
     </tr>

@@ -13,7 +13,7 @@ use_all_calibrations(input = NULL, dating_method = "bladj", ...)
 \item{...}{
   Arguments passed on to \code{\link[=get_all_calibrations]{get_all_calibrations}}
   \describe{
-    \item{\code{each}}{Boolean, default to FALSE: all calibrations are returned in the same data frame. If TRUE, calibrations from each chronogram are returned in a separate data frame.}
+    \item{\code{each}}{Boolean, default to \code{FALSE}: all calibrations are returned in the same data frame. If \code{TRUE}, calibrations from each chronogram are returned in separate data frames.}
   }}
 }
 \value{

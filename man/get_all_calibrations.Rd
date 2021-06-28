@@ -11,7 +11,7 @@ get_all_calibrations(
 )
 }
 \arguments{
-\item{input}{vector of names, a newick string, a phylo or multiPhylo object with branch lengths proportional to time, a datelifeResult object}
+\item{input}{A character vector of taxon names, a newick string, a phylo or multiPhylo object with branch lengths proportional to time, OR a datelifeResult object.}
 
 \item{...}{
   Arguments passed on to \code{\link[=datelife_search]{datelife_search}}
@@ -29,14 +29,17 @@ get_all_calibrations(
     \item{\code{criterion}}{Whether to get the grove with the most trees or the most taxa}
   }}
 
-\item{each}{Boolean, default to FALSE: all calibrations are returned in the same data frame. If TRUE, calibrations from each chronogram are returned in a separate data frame.}
+\item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in the same data frame. If \code{TRUE}, calibrations from each chronogram are returned in separate data frames.}
 }
 \value{
-A data frame (or list of data frames, if each = TRUE) of calibrations, with attribute "chronograms" containing the dated trees that were used to get calibrations from.
+A data frame of secondary calibrations (or list of data frames, if \code{each = TRUE}), for each pair of given taxon names. The attribute "chronograms" contains the source chronograms from which the calibrations were obtained.
 }
 \description{
-`get_all_calibrations` returns a data frame of secondary calibrations for each pair of given taxon names.
+\code{get_all_calibrations} returns a data frame of secondary calibrations for each pair of given taxon names.
 }
 \details{
-If input is a character vector of taxon names, the function calls a `datelife_search` with `summary_format` set to `"phylo_all"`, that gets all chronograms containing at least 2 of the taxa in `input`.
+If input is a character vector of taxon names, the function calls a
+\code{\link[=datelife_search]{datelife_search}} with \code{summary_format}
+argument set to \code{"phylo_all"}, that gets all chronograms containing at
+least 2 of the taxa given in \code{input}.
 }

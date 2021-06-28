@@ -145,8 +145,8 @@ If you need a list of chronograms from your datelifeResult object, this is the f
   datelife_query <span class='op'>=</span> <span class='cn'>NULL</span>,
   summary_format <span class='op'>=</span> <span class='st'>"phylo_all"</span>,
   partial <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  update_cache <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  cache <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/utils/getAnywhere.html'>getAnywhere</a></span><span class='op'>(</span><span class='st'>"opentree_chronograms"</span><span class='op'>)</span>,
+  update_opentree_chronograms <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  cache <span class='op'>=</span> <span class='st'>"opentree_chronograms"</span>,
   summary_print <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"citations"</span>, <span class='st'>"taxa"</span><span class='op'>)</span>,
   taxon_summary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"none"</span>, <span class='st'>"summary"</span>, <span class='st'>"matrix"</span><span class='op'>)</span>,
   verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -170,15 +170,15 @@ If you need a list of chronograms from your datelifeResult object, this is the f
     </tr>
     <tr>
       <th>partial</th>
-      <td><p>If TRUE, use source chronograms even if they only match some of the desired taxa</p></td>
+      <td><p>Boolean; default to TRUE: use source trees even if they only match some of the desired taxa.</p></td>
     </tr>
     <tr>
-      <th>update_cache</th>
+      <th>update_opentree_chronograms</th>
       <td><p>default to FALSE</p></td>
     </tr>
     <tr>
       <th>cache</th>
-      <td><p>The cached set of chronograms and other info from data(opentree_chronograms).</p></td>
+      <td><p>A character vector of length one, with the name of the data object to cache. Default to "opentree_chronograms", a data object storing Open Tree of Life's database chronograms and other associated information.</p></td>
     </tr>
     <tr>
       <th>summary_print</th>
