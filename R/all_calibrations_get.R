@@ -1,12 +1,14 @@
-#' Get all calibrations available for a set of taxa.
+#' Get secondary calibrations available for a set of taxa.
 #'
 #' \code{get_all_calibrations} returns a data frame of secondary calibrations for each pair of given taxon names.
 #'
 #' @details If input is a character vector of taxon names, the function calls a
 #' \code{\link[=datelife_search]{datelife_search}} with \code{summary_format}
-#' argument set to \code{"phylo_all"}, that gets all chronograms containing at
+#' argument set to \code{"phylo_all"}, to get all chronograms containing at
 #' least 2 of the taxa given in \code{input}.
-#' @param input A character vector of taxon names, a newick string, a phylo or multiPhylo object with branch lengths proportional to time, OR a datelifeResult object.
+#' The function retrieves divergence times for each pair of taxa in any given tree with
+#' branch lengths proportional to time (chronogram).
+#' @param input A character vector of taxon names; a newick string, OR a phylo OR multiPhylo object with branch lengths proportional to time; OR a datelifeResult object.
 #' @inheritDotParams datelife_search
 #' @param each Boolean, default to \code{FALSE}: all calibrations are returned in the same data frame. If \code{TRUE}, calibrations from each chronogram are returned in separate data frames.
 #' @return A data frame of secondary calibrations (or list of data frames, if \code{each = TRUE}), for each pair of given taxon names. The attribute "chronograms" contains the source chronograms from which the calibrations were obtained.
