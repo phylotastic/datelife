@@ -4,6 +4,16 @@
 #   NA
 # })
 
+test_that("is_datelife query works", {
+  expect_false(is_datelife_query(NA))
+  expect_false(is_datelife_query(NULL))
+  expect_true(is_datelife_query(threebirds_query))
+  # remove class datelifeQuery, but format is ok:
+  class(threebirds_query) <- "random"
+  expect_true(is_datelife_query(threebirds_query))
+
+})
+
 test_that("Mus higher-taxon search is giving species back", {
   skip_on_cran()
   skip_on_travis()
@@ -16,7 +26,6 @@ test_that("make_datelife_query works from phylo object as input", {
     input.processed <- make_datelife_query(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), use_tnrs=FALSE, approximate_match=TRUE)
     expect_equal(class(input.processed$phy),"phylo")
 })
-
 
 # test_that("Processing complex newick works", {
 # 	skip_on_cran()

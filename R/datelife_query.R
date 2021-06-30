@@ -176,26 +176,32 @@ datelife_query_check <- function(datelife_query = NULL, ...){
 	return(datelife_query)
 }
 
-#' checks if input is formatted as a datelifeQuery object 
-#' @param input Any object to be tested for 'datelifeQuery' class format
+#' Check if input is a datelifeQuery object.
+#'
+#' \code{is_datelife_query} checks (1) if a given object is a list that contains the
+#' elements of a \code{datelifeQuery} object: \code{cleaned_names}: A character
+#' vector of taxon names, and \code{phy}: Either NA or a phylo object; and (2)
+#' if the object is of class \code{datelifeQuery}.
+#'
+#' @param input Any object that will be checked to have the format of a 'datelifeQuery' class.
 #' @return boolean
+#' @details If the object has the correct format but is not a \code{datelifeQuery}
+#' object, it will not be assigned the correct class.
 #' @export
 is_datelife_query <- function(input){
-	badformat <- TRUE
+	isdatelifequery <- TRUE
 	if(is.list(input) & "phy" %in% names(input) & "cleaned_names" %in% names(input)) {
-		if(!inherits(input, "datelifeQuery")) {
-		  message("input has correct 'datelifeQuery' format but is class:", class(input))
+		if(inherits(input, "datelifeQuery")) {
+			message("'input' is a 'datelifeQuery' object.")
+		} else {
+			message("'input' has the elements of a 'datelifeQuery' object but is of class '",
+							class(input),
+							"'.")
 			# class(input) <- "datelifeQuery"
 		}
-		badformat <- FALSE
+	} else {
+		isdatelifequery <- FALSE
+		message("'input' is not a 'datelifeQuery' object.")
 	}
-	if(badformat){
-	  message("input is not a 'datelifeQuery' object")
-	}
-	return(!badformat)
+	return(isdatelifequery)
 }
-
-
-
-
-
