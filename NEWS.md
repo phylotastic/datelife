@@ -1,6 +1,10 @@
+# datelife 0.3.3
+
+  - `datelife_query_check` is deprecated
+
 # datelife 0.3.1
 
-  - Now muscle or mafft can be used for alignemt of bold sequences
+  - Now muscle or mafft can be used for alignement of bold sequences
 
 # datelife 0.2.19
 
