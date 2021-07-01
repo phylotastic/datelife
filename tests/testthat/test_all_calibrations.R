@@ -1,4 +1,4 @@
-test_that("getting, mapping and using all calibrations", {
+test_that("getting, mapping and using all calibrations work", {
   # 1) TEST use_all_calibrations with a vector of names
   # tests make_bold_otol_tree and get_dated_otol_induced_subtree from use_all_calibrations
   u1 <- use_all_calibrations()
@@ -72,12 +72,6 @@ test_that("getting, mapping and using all calibrations", {
 })
 
 
-test_that("use_calibrations fails when necessary",{
-  # when phy is missing
-  expect_error(use_calibrations())
-  # when calibrations are missing
-  expect_error(use_calibrations(phy = threebirds_nbl))
-})
 
 
 test_that("get_otol_synthetic_tree works", {

@@ -33,35 +33,34 @@ use_all_calibrations <- function(input = NULL, dating_method = "bladj", ...) { #
 			if(!inherits(phy, "phylo")){
 				phy <- get_dated_otol_induced_subtree(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
 			}
-		} else {
-			# run with taxa provided by user
-		  if(inherits(input, "datelifeResult") | any(is.numeric(input))){
-		    # a datelifeResult object is a list of chronograms from OpenTree matching at least 2 queried taxa
-		    stop("Input must be any of the following: \n\t 1) a character vector of taxon names, \n\t 2) a tree as 'phylo' object or newick character string, or \n\t 3) a 'datelifeQuery' object, see 'make_datelife_query' function.")
-		  } else {
-      	if(inherits(input, "multiPhylo")) {
-      		input <- input[[1]]
-      		message("input is a multiPhylo object. Only the first 'phylo' object will be used.")
-      	}
-		    if(!is_datelife_query(input)){
-		      message("Running 'make_datelife_query'...")
-          # make_datelife_query also removes singleton nodes in phy
-		      # TODO: add extra arguments for make_datelife_query function with hasArg (phytools method)
-		      datelife_query <- make_datelife_query(input = input)
-		    } else {
-		      datelife_query <- input
-		    }
-			  # if input is not a tree, get one with bold or otol:
-			  if(!inherits(datelife_query$phy, "phylo")){
-			  	phy <- make_bold_otol_tree(datelife_query$cleaned_names, chronogram = FALSE, verbose = FALSE)
-			  	if(!inherits(phy, "phylo")){
-			  		phy <- get_dated_otol_induced_subtree(input = datelife_query$cleaned_names)
-			  	}
-			  } else {
-			  	phy <- datelife_query$phy
-			  }
-		  }
 		}
+		# run with taxa provided by user
+	  if(inherits(input, "datelifeResult") | any(is.numeric(input))){
+	    # a datelifeResult object is a list of chronograms from OpenTree matching at least 2 queried taxa
+	    stop("'input' must be any of the following: \n\t 1) a character vector of taxon names, \n\t 2) a tree as 'phylo' object or newick character string, or \n\t 3) a 'datelifeQuery' object, see 'make_datelife_query' function.")
+	  }
+  	if(inherits(input, "multiPhylo")) {
+  		input <- input[[1]]
+  		message("'input' is a multiPhylo object. Only the first 'phylo' object will be used.")
+  	}
+    if(!is_datelife_query(input)){
+      message("Running 'make_datelife_query'...")
+      # make_datelife_query also removes singleton nodes in phy
+      # TODO: add extra arguments for make_datelife_query function with hasArg (phytools method)
+      datelife_query <- make_datelife_query(input = input)
+    } else {
+      datelife_query <- input
+    }
+	  # if input is not a tree, get one with bold or otol:
+	  if(!inherits(datelife_query$phy, "phylo")){
+	  	phy <- make_bold_otol_tree(datelife_query$cleaned_names, chronogram = FALSE, verbose = FALSE)
+	  	if(!inherits(phy, "phylo")){
+	  		phy <- get_dated_otol_induced_subtree(input = datelife_query$cleaned_names)
+	  	}
+	  } else {
+	  	phy <- datelife_query$phy
+	  }
+
 
 		# perform a datelife_search through get_all_calibrations:
 		calibrations <- get_all_calibrations(input = gsub('_', ' ', phy$tip.label), each = each)
@@ -130,13 +129,25 @@ use_each_calibration <- function(phy = NULL, phylo_all = NULL, calibrations = NU
 #' If phy does not have branch lengths, dating_method is ignored and BLADJ will be used.
 use_calibrations <- function(phy = NULL, calibrations = NULL, dating_method = "bladj", type = "median", ...){
 	# check that input names are in calibrations.df: done in match_all_calibrations inside use_calibrations_bladj
+  exit <- FALSE
 	if(!inherits(phy, "phylo")){
-		stop("'phy' is not a phylo object.")
-	}
+    exit <- TRUE
+		msg1 <- "Value provided in 'phy' is NOT a phylo object. Check this."
+	} else {
+    msg1 <- "Value provided in 'phy' is a phylo object. You are good."
+  }
 	# enhance: add a check for calibrations object structure
 	if(!inherits(calibrations, "data.frame")){
-		stop("'calibrations' is not a data.frame.\n\t Provide a set of calibrations for 'phy', hint: see get_all_calibrations function.")
-	}
+    exit <- TRUE
+		msg2 <- "Value provided in 'calibrations' is NOT a data frame. Check this."
+	} else {
+    msg2 <- "Value provided in 'calibrations' is a data frame. You are good."
+  }
+  if(exit){
+    stop("This function requires valid values for both arguments `phy` and `calibrations`.\n",
+         msg1, "\n",
+         msg2, "\n")
+  }
 	dating_method <- match.arg(tolower(dating_method), c("bladj", "pathd8"))
 	if(dating_method %in% "bladj"){
 		phy$edge.length <- NULL
