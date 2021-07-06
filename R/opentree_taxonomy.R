@@ -38,7 +38,7 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
 #' Checks input for get_ott_clade,  get_ott_children functions, get_otol_synthetic_tree
 #' @param input Optional. A character vector of names or a datelifeQuery object
 #' @param ott_ids If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match
-#' @inheritDotParams datelife_query_check -datelife_query
+#' @inheritDotParams make_datelife_query
 #' @return A named numeric vector of valid ott IDs
 #' @export
 #' @details By default it uses ott_id argument if it is not NULL.
@@ -55,7 +55,7 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
     if(is.null(ott_ids) | all(is.na(ott_ids))){
           # checks that input is a datelifeQuery object, otherwise it uses make_datelife_query on input
           if(!is_datelife_query(input)){
-            input <- make_datelife_query(input)
+            input <- make_datelife_query(input, ...)
           }
           if(is.numeric(input$ott_id)){
               ott_ids <- input$ott_ids
