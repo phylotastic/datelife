@@ -8,7 +8,7 @@ test_that("is_datelife query works", {
   expect_false(is_datelife_query(NA))
   expect_false(is_datelife_query(NULL))
   expect_true(is_datelife_query(threebirds_query))
-  # remove class datelifeQuery, but format is ok:
+  # remove class datelifeQuery, but format/structure of the object is ok, it should still work:
   class(threebirds_query) <- "random"
   expect_true(is_datelife_query(threebirds_query))
 
