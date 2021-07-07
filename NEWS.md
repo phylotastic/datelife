@@ -1,6 +1,9 @@
 # datelife 0.3.3
 
   - `datelife_query_check` is deprecated
+  - `use_each_calibration` is now `use_calibrations1`
+  - `use_calibrations` is now `use_calibrations2`
+  - `use_all_calibrations` is now `use_calibrations`
 
 # datelife 0.3.1
 

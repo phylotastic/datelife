@@ -7,18 +7,16 @@
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 	use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE,
 	verbose = FALSE) {
-		# enhance: add mapped (has tnrs been performed?) and matched (was it matched successfully?) element to phylo object
-		# add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
+	# enhance: add mapped (has tnrs been performed?) and matched (was it matched successfully?) element to phylo object
+	# add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
+
+	if(is_datelife_query(input)){
+		return(input)
+	}
+
 	if(verbose) {
 		message("Processing input...")
 	}
-	# input <- "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum));"
-	# input <- rphylotastic::taxa_get_otol_tree(url_get_scientific_names(
-	# 	URL="https://www.nps.gov/yell/learn/nature/upload/BirdChecklist2014.pdf"))
-	# input <- threebirds_median
-	# input$tip.label[3] <- "ttttttt"
-	# input <- birds_yellowstone_otoltree
-	# input <- "Mus"
 	phy_new <- input_process(input = input, verbose = verbose)
 	use_tnrs_global <- FALSE
 	if(use_tnrs | any(get_spp_from_taxon)){
@@ -150,26 +148,21 @@ input_process <- function(input, verbose = FALSE){
 	return(phy_new.in)
 }
 
-#' checks if input is a datelifeQuery object, otherwise it uses make_datelife_query to process it
+#' Check that input is a datelifeQuery object. To be deprecated.
+#'
+#' Check if input is a datelifeQuery object, otherwise use make_datelife_query
+#' to process it and create a datelifeQuery object.
+#'
 #' @param datelife_query A datelifeQuery object, output of make_datelife_query function
 #' @inheritParams datelife_search
 #' @inheritDotParams make_datelife_query -input
 #' @return A datelifeQuery object
 #' @export
 datelife_query_check <- function(datelife_query = NULL, ...){
-# TODO:
-#  is_datelifeQuery <- function(input = NULL, ...){
-	if(missing(datelife_query) | is.null(datelife_query)){
-		stop("datelife_query argument is missing")
-	}
-	badformat <- TRUE
-	if(is.list(datelife_query) & "phy" %in% names(datelife_query) & "cleaned_names" %in% names(datelife_query)) {
-		if(!inherits(datelife_query, "datelifeQuery")) {
-			class(datelife_query) <- "datelifeQuery"
-		}
-		badformat <- FALSE
-	}
-	if(badformat){
+
+	isdatelifequery <- is_datelife_query(input = datelife_query)
+
+	if(!isdatelifequery){
 	  message("Running 'make_datelife_query'...")
 		datelife_query <- make_datelife_query(input = datelife_query, ...)
 	}
