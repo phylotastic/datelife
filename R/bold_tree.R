@@ -19,7 +19,9 @@
 make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus", "Gallus gallus"),
 marker = "COI", otol_version = "v3", chronogram = TRUE, doML = FALSE, verbose = FALSE, aligner = "muscle", ...) {
 	# input check (accepts newick strings too)
-	input <- datelife_query_check(input)
+	if(!is_datelife_query(input)){
+			input <- make_datelife_query(input)
+	}
 	if(inherits(input$phy, "phylo")){
 		phy <- input$phy
 	} else {

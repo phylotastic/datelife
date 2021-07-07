@@ -1,17 +1,15 @@
-#' Gets Open Tree of Life synthetic tree of a set of lineages.
+#' Get an Open Tree of Life synthetic tree of a set of lineages.
 #' @inheritParams check_ott_input
 #' @param otol_version Version of OToL to use
 #' @param resolve boolean default to TRUE. Whether to resolve the tree at random or not.
 #' @inheritDotParams check_ott_input
 #' @return A phylo object
 #' @export
-get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version = "v3", resolve = FALSE, ...){
-	# input <- birds_yellowstone
-	# input <- birds_wiki
-	# input <- c(birds_wiki, "ttttt")
-	# input <- unique(input) # if you do this and input is a datelifeQuery, it looses all structure.
-	# input <- tax_dqall[[2]]
-	# input_ott_match <- suppressMessages(check_ott_input(input))
+get_otol_synthetic_tree <- function(input = NULL,
+																		ott_ids = NULL,
+																		otol_version = "v3",
+																		resolve = FALSE, ...){
+
 	input_ott_match <- suppressMessages(check_ott_input(input, ott_ids, ...))
 	if(length(input_ott_match) < 2){
 		message("At least two valid names or numeric ott_ids are needed to get a tree.")
@@ -73,7 +71,8 @@ get_otol_synthetic_tree <- function(input = NULL, ott_ids = NULL, otol_version =
 # # ' @examples
 #' # if you want to make an ltt plot of a dated OToL tree you'll need to get rid of singleton nodes with ape::collapse.singles
 #' # and also probably do phytools::force.ultrametric
-get_dated_otol_induced_subtree <- function(input = NULL, ott_ids = NULL, ...){
+get_dated_otol_induced_subtree <- function(input = NULL,
+																					 ott_ids = NULL, ...){
 	# for debugging:
 	# utils::data(threebirds.rda)
 	# input <- threebirds_query$cleaned_names

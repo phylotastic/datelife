@@ -1,9 +1,17 @@
-#' Get taxon summary of a datelifeResult object
+#' Get a taxon summary of a datelifeResult object. To be renamed summary_taxon.
 #' @inheritParams datelife_query_check
 #' @inheritParams datelife_result_check
 #' @export
 get_taxon_summary <- function(datelife_result = NULL,
 															datelife_query = NULL){
+
+	dq <- FALSE
+	if(is_datelife_query(datelife_query)){
+		dq <- TRUE
+	}
+	if(is.null(attributes(datelife_result)$query)){
+		dq <- 
+	}
 
 	datelife_result <- check_datelife_result(datelife_result)
 	if(is.null(datelife_result) | !inherits(datelife_result, "datelifeResult")){
@@ -11,20 +19,22 @@ get_taxon_summary <- function(datelife_result = NULL,
 		return(NA)
 	}
 	if(is.null(datelife_query) & is.null(attributes(datelife_result)$query)){
-		input <- NULL
-		input.in <- unique(rapply(datelife_result, rownames))
-		# if(taxon_summary.in != "none") {
-			message("datelife_query is absent: showing taxon distribution of taxa found only in at least one chronogram. This excludes input taxa not found in any chronogram.")
-		# }
-	} else {
-		# if(!is.character(input)) stop("input must be a character vector")
-		if(!is.null(attributes(datelife_result)$query)){
-			input <- attributes(datelife_result)$query
-			input.in <- attributes(datelife_result)$query$cleaned_names
-		} else {
+	}
+
+	if(is_datelife_query(datelife_query)){
+		if(is.null(attributes(datelife_result)$query)){
 			input <- datelife_query_check(datelife_query = datelife_query)
 			input.in <- input$cleaned_names
+		} else {
+			input <- attributes(datelife_result)$query
+			input.in <- attributes(datelife_result)$query$cleaned_names
 		}
+	} else {
+		message("`datelife_query` argument is absent.")
+		message("Showing taxon distribution of taxa found only in at least one chronogram.")
+		message("Taxa absent from all chronogram are not reported.")
+		input <- NULL
+		input.in <- unique(rapply(datelife_result, rownames))
 	}
 	# results.index <- datelife_result_study_index(datelife_result, cache)
 	return.object <- NA
