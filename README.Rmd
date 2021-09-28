@@ -39,6 +39,7 @@ implemented with _geiger_ ([Harmon et al. 2008](http://bioinformatics.oxfordjour
 - [Feedback](#feedback)
 - [License](#license)
 
+
 ## Installation
 
 Get the stable version from [CRAN](https://cran.r-project.org/web/packages/datelife/index.html):
@@ -78,6 +79,11 @@ All comments, ideas and questions about `datelife` are encouraged. You are welco
 to post an issue [here](https://github.com/phylotastic/datelife/issues/new), or
 to make a [pull request](https://github.com/phylotastic/datelife/pulls) if you
 want to contribute with code directly.
+We use `lintr` to check for coding style:
+
+```{r eval = FALSE}
+lintr::lint_package()
+```
 
 ## License
 

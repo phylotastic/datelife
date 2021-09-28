@@ -59,18 +59,23 @@ function
 ## Citation
 
 If you use `datelife` for a publication, please cite the R package and
-the accompanying
-    paper:
-
-    #> Warning in citation("datelife"): no date field in DESCRIPTION file of package
-    #> 'datelife'
+the accompanying paper:
 
 <p>
 
-O’Meara B, Sanchez Reyes L, Eastman J, Heath T, Wright A, Schliep K,
-Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2019).
-<em>datelife: Underlying Code for DateLife Web Service</em>.
-<https://github.com/phylotastic/datelife>, <http://www.datelife.org>.
+O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K,
+Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2021).
+<em>datelife: Go from a List of Taxa or a Tree to a Chronogram using
+Open Scientific Data</em>. R package version 0.3.4.
+
+</p>
+
+<p>
+
+Sanchez-Reyes L, O’Meara B (2019). “datelife: Leveraging databases and
+analytical tools to reveal the dated Tree of Life.” <em>bioRxiv</em>,
+<b>782094</b>. doi:
+<a href="https://doi.org/10.1101/782094">10.1101/782094</a>.
 
 </p>
 
@@ -87,7 +92,12 @@ All comments, ideas and questions about `datelife` are encouraged. You
 are welcome to post an issue
 [here](https://github.com/phylotastic/datelife/issues/new), or to make a
 [pull request](https://github.com/phylotastic/datelife/pulls) if you
-want to contribute with code directly.
+want to contribute with code directly. We use `lintr` to check for
+coding style:
+
+``` r
+lintr::lint_package()
+```
 
 ## License
 
