@@ -5,13 +5,13 @@
 get_taxon_summary <- function(datelife_result = NULL,
 															datelife_query = NULL){
 
-	dq <- FALSE
-	if(is_datelife_query(datelife_query)){
-		dq <- TRUE
-	}
-	if(is.null(attributes(datelife_result)$query)){
-		dq <- 
-	}
+	# dq <- FALSE
+	# if(is_datelife_query(datelife_query)){
+	# 	dq <- TRUE
+	# }
+	# if(is.null(attributes(datelife_result)$query)){
+	# 	dq <- 
+	# }
 
 	datelife_result <- check_datelife_result(datelife_result)
 	if(is.null(datelife_result) | !inherits(datelife_result, "datelifeResult")){
