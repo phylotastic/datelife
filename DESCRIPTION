@@ -18,7 +18,7 @@ Maintainer: "Luna L. Sanchez-Reyes" <lunalsr@gmail.com>
 Description: Methods and workflows to date phylogenetic trees using open scientific data.
     Underlying code of the datelife website services at www.datelife.org.
 Depends:
-    R (>= 4.0.0)
+    R (>= 3.6.0)
 biocViews:
 Imports:
     ape,
