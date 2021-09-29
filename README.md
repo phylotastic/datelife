@@ -1,8 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit THIS file -->
 
+<!-- badges: start -->
+
+<!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions) -->
+
 ![GitHub R package
-version](https://img.shields.io/github/r-package/v/phylotastic/datelife)
+version](https://img.shields.io/github/r-package/v/phylotastic/datelife?color=green)
 [![Build
 Status](https://travis-ci.org/phylotastic/datelife.svg)](https://travis-ci.org/phylotastic/datelife)
 [![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://codecov.io/gh/phylotastic/datelife)
@@ -15,11 +19,13 @@ Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg
 [![NSF-0905606](https://img.shields.io/badge/NSF-0905606-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=0905606)
 [![NSF-1458572](https://img.shields.io/badge/NSF-1458572-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458572)
 
-# datelife
+<!-- badges: end -->
+
+# Welcome to DateLife’s GitHub repository\!
 
 Get a phylogenetic tree with branch lengths proportional to geologic
 time (aka a ***chronogram***) of any two or more lineages of interest to
-you: use this R package or go to
+you: use the `datelife` R package or go to
 [www.datelife.org](http://datelife.org/query/) to make a query of
 chronograms available for your lineages in the [Open Tree of
 Life](https://tree.opentreeoflife.org/curator)’s tree store.
