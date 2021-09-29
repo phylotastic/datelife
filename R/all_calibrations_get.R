@@ -1,4 +1,4 @@
-#' Get secondary calibrations available for a set of taxa.
+#' Get all secondary calibrations available for a set of taxa.
 #'
 #' \code{get_all_calibrations} returns secondary calibrations for each pair of given
 #' taxon names.
