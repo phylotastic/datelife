@@ -1,5 +1,8 @@
-#' Use calibrations to date a tree with branch lengths with PATHd8.
-#' @param phy A phylo object with branch lengths
+#' Date a tree with secondary calibrations using PATHd8
+#'
+#' \code{use_calibrations_pathd8} uses secondary calibrations to date a tree with initial branch lengths using PATHd8.
+#'
+#' @param phy A phylo object with branch lengths.
 #' @inheritParams use_calibrations_bladj
 #' @param expand How much to expand by each step to get consistent calibrations. Should be between 0 and 1.
 #' @param giveup How many expansions to try before giving up
@@ -13,21 +16,21 @@
 #' In some cases, it returns edge lengths in relative time (with maximum tree depth = 1)
 #' instead of absolute time, as given by calibrations. In this case, the function returns NA.
 #' This is an issue from PATHd8.
-# i=1
-# phy <- tax_phyloall_bold[[3]][[1]]
-# calibrations <- tax_othercalall[[3]][[1]]
-# phy$edge.length
-# calibrations$MaxAge
-# calibs <- match_all_calibrations(tax_phyloall_bold[[1]][[i]], tax_othercalall[[1]][[i]])
-# calibs$phy$edge.length
-# used_calibrations <- calibs$matched_calibrations
-# used_calibrations$MaxAge
-# chronogram <- geiger::PATHd8.phylo(calibs$phy, used_calibrations)
-# chronogram$edge.length
-# plot(chronogram, main = i)
-# ape::axisPhylo()
 use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 100){
     phy <- input_process(phy, verbose = FALSE)
+    # i=1
+    # phy <- tax_phyloall_bold[[3]][[1]]
+    # calibrations <- tax_othercalall[[3]][[1]]
+    # phy$edge.length
+    # calibrations$MaxAge
+    # calibs <- match_all_calibrations(tax_phyloall_bold[[1]][[i]], tax_othercalall[[1]][[i]])
+    # calibs$phy$edge.length
+    # used_calibrations <- calibs$matched_calibrations
+    # used_calibrations$MaxAge
+    # chronogram <- geiger::PATHd8.phylo(calibs$phy, used_calibrations)
+    # chronogram$edge.length
+    # plot(chronogram, main = i)
+    # ape::axisPhylo()
     if (!inherits(phy, "phylo")){
 		    message("'phy' is not a phylo object")
         return(NA)
