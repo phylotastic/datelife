@@ -1,30 +1,36 @@
-# library(ape)
-# library(abind)
-# library(phangorn)
-# library(compare)
-# library(geiger) #note this uses the next version of geiger, which has congruifier code. The relevant code is in auteur-congruify.R
-# library(datelife2) #Klaus Schliep's code for pruning efficiently. Eventually, this will be moved into phangorn
-# library(parallel)
-# library(doMC)
-# library(stringr)
-# library(ggplot2)
-# library(taxize)
-# library(plyr)
-# library(rotl)
-# source("/Library/WebServer/Sites/datelife.org/datelife/R/cleaning.r")
+#' Get a chronogram (dated phylogenetic tree) or published times of lineage divergence available for a set of taxa.
 
-#' Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.
+#' Core datelife function to input a vector of species, newick string, or phylo object to
+
 #' @aliases datelife
-#' @param input A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function.
-#' @param summary_format The desired output format for target chronograms (chronograms of target taxa). See details.
-#' @param summary_print A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").
-#' @param taxon_summary A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on taxon_summary added to the output.
-#' @param partial Boolean; default to TRUE: use source trees even if they only match some of the desired taxa.
-#' @param use_tnrs Boolean; default to FALSE. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.
-#' @param approximate_match Boolean; default to TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)
+#' @param input A character vector of taxon names, a tree as a 'phylo' object or
+#' a newick character string, or a 'datelifeQuery' object from make_datelife_query function.
+#' @param summary_format The desired output format for target chronograms (chronograms
+#' of target taxa). See details.
+#' @param summary_print A character vector specifying type of summary information
+#' to be printed: "citations" for the references of chronograms from cache where target
+#' taxa are found, "taxa" for a summary of the number of chronograms where each target
+#' taxon is found, or "none" if nothing should be printed. Default to display both
+#' c("citations", "taxa").
+#' @param taxon_summary A character vector specifying if data on target taxa missing
+#' in source chronograms should be added to the output as a "summary" or as a
+#' presence/absence "matrix". Default to "none", no information on taxon_summary
+#' added to the output.
+#' @param partial Boolean; default to TRUE: use source trees even if they only
+#' match some of the desired taxa.
+#' @param use_tnrs Boolean; default to FALSE. If TRUE, use OpenTree's services
+#' to resolve names. This can dramatically improve the chance of matches, but also
+#' take longer.
+#' @param approximate_match Boolean; default to TRUE: use a slower TNRS to correct
+#' misspellings, increasing the chance of matches (including false matches)
 #' @param update_opentree_chronograms default to FALSE
-#' @param cache A character vector of length one, with the name of the data object to cache. Default to "opentree_chronograms", a data object storing Open Tree of Life's database chronograms and other associated information.
-#' @param get_spp_from_taxon boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.
+#' @param cache A character vector of length one, with the name of the data object
+#' to cache. Default to "opentree_chronograms", a data object storing Open Tree of
+#' Life's database chronograms and other associated information.
+#' @param get_spp_from_taxon boolean vector, default to FALSE. If TRUE, will get
+#' all species names from taxon names given in input. Must have same length as input.
+#' If input is a newick string , with some clades it will be converted to phylo
+#' object phy, and the order of get_spp_from_taxon will match phy$tip.label.
 #' @param verbose Boolean. If TRUE, it gives printed updates to the user.
 #' @param criterion Whether to get the grove with the most trees or the most taxa
 #' @export
@@ -91,7 +97,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 														get_spp_from_taxon = FALSE,
 														verbose = FALSE,
 														criterion="taxa") {
-	# find a way not to repeat partial and cache arguments, which are used in both get_datelife_result and summarize_datelife_result
+	# TODO: find a way not to repeat partial and cache arguments, which are used in both get_datelife_result and summarize_datelife_result
 	if(update_opentree_chronograms){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	} else {
@@ -157,7 +163,7 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 	}
 	if(length(input_dq$cleaned_names) == 1){
 		message("Input has length one (even after searching spp within clades).")
-		warning("\t", "Clade contains only one lineage.")
+		warning("\t", "Input contains only one lineage.")
 		return(NA)
 	}
 	# setting phy to NULL always; it is a bad idea to congruidy subset trees,
