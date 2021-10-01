@@ -13,10 +13,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	if(is_datelife_query(input)){
 		return(input)
 	}
-
-	if(verbose) {
-		message("Processing input...")
-	}
+	message("Processing input...")
 	phy_new <- input_process(input = input, verbose = verbose)
 	use_tnrs_global <- FALSE
 	if(use_tnrs | any(get_spp_from_taxon)){
@@ -122,8 +119,8 @@ input_process <- function(input, verbose = FALSE){
 	}
 	if(inherits(input, "phylo")) {
 		input_class <- class(input) # in case it has other classes to inherit
-		ott_ids <- input$ott_ids
-		input <- ape::write.tree(input)
+		ott_ids <- input$ott_ids  # if phy already has ott ids, save them for later
+		input <- ape::write.tree(input) # converts to newick
 	}
 	if(!is.character(input)){
 		message("Input must be a character vector of names or a phylo object.")
@@ -139,11 +136,10 @@ input_process <- function(input, verbose = FALSE){
   		phy_new.in <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input[1])))
 		phy_new.in$ott_ids <- ott_ids
 		class(phy_new.in) <- input_class
-  		if(verbose){
-			message("Input is a phylogeny and it is correcly formatted.")}
+			message("Input is a phylogeny and it is correcly formatted.")
 	} else {
-		if(verbose){ #not a requirement for input to be a phylogeny at this point
-			message("Input is not a phylogeny.")} #so message instead of warning or stop
+		# not a requirement for input to be a phylogeny at this point
+		message("Input is not a phylogeny.") # so message instead of warning or stop
 	}
 	return(phy_new.in)
 }
