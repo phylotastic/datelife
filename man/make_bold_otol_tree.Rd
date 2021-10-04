@@ -2,8 +2,7 @@
 % Please edit documentation in R/bold_tree.R
 \name{make_bold_otol_tree}
 \alias{make_bold_otol_tree}
-\title{Use Barcode of Life Data (BOLD) to get branch lengths on a tree topology.
-If input is not a tree, then it gets and induced OToL subtree of the set of input taxa.}
+\title{Use genetic data from the Barcode of Life Database (BOLD) to get branch lengths on a tree.}
 \usage{
 make_bold_otol_tree(
   input = c("Rhea americana", "Struthio camelus", "Gallus gallus"),
@@ -17,7 +16,8 @@ make_bold_otol_tree(
 )
 }
 \arguments{
-\item{input}{A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
+\item{input}{A character vector of taxon names, a tree as a 'phylo' object or
+a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
 
 \item{marker}{A character vector indicating the gene from BOLD system to be used for branch length estimation.}
 
@@ -39,15 +39,16 @@ make_bold_otol_tree(
   }}
 }
 \value{
-A phylogeny with branch lengths proportional to relative substitution rate.
+A phylogeny with branch lengths poportional to relative substitution rate.
 }
 \description{
-Use Barcode of Life Data (BOLD) to get branch lengths on a tree topology.
-If input is not a tree, then it gets and induced OToL subtree of the set of input taxa.
+\code{make_bold_otol_tree} Takes taxon names from a tree topology or a vector of names
+to search for genetic markers in the Barcode of Life Database (BOLD), create an
+alignment, and reconstruct branch lengths on the tree topology with Maximum Likelihood.
 }
 \details{
 If input is a phylo object or a newick string, it is used as backbone topology.
 If input is a character vector of taxon names, an induced OToL tree is used as backbone.
 If there are not enough sequences to return a tree with branch lengths, it returns
-either the original input topology or the OToL tree obtained for the set of input taxon names.
+either the original input topology or the OpenTree subtree obtained for the input taxon names.
 }

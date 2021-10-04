@@ -24,19 +24,28 @@ summarize_datelife_result(
 \arguments{
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
 
-\item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
+\item{summary_format}{The desired output format for target chronograms (chronograms
+of target taxa). See details.}
 
-\item{summary_format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
-
-\item{partial}{Boolean; default to TRUE: use source trees even if they only match some of the desired taxa.}
+\item{partial}{Boolean; default to TRUE: use source trees even if they only
+match some of the desired taxa.}
 
 \item{update_opentree_chronograms}{default to FALSE}
 
-\item{cache}{A character vector of length one, with the name of the data object to cache. Default to "opentree_chronograms", a data object storing Open Tree of Life's database chronograms and other associated information.}
+\item{cache}{A character vector of length one, with the name of the data object
+to cache. Default to "opentree_chronograms", a data object storing Open Tree of
+Life's database chronograms and other associated information.}
 
-\item{summary_print}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
+\item{summary_print}{A character vector specifying type of summary information
+to be printed: "citations" for the references of chronograms from cache where target
+taxa are found, "taxa" for a summary of the number of chronograms where each target
+taxon is found, or "none" if nothing should be printed. Default to display both
+c("citations", "taxa").}
 
-\item{taxon_summary}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on taxon_summary added to the output.}
+\item{taxon_summary}{A character vector specifying if data on target taxa missing
+in source chronograms should be added to the output as a "summary" or as a
+presence/absence "matrix". Default to "none", no information on taxon_summary
+added to the output.}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 

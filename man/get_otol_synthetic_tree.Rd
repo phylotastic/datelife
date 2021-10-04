@@ -2,7 +2,7 @@
 % Please edit documentation in R/otol_tree.R
 \name{get_otol_synthetic_tree}
 \alias{get_otol_synthetic_tree}
-\title{Gets Open Tree of Life synthetic tree of a set of lineages.}
+\title{Get an Open Tree of Life synthetic tree of a set of lineages.}
 \usage{
 get_otol_synthetic_tree(
   input = NULL,
@@ -31,5 +31,5 @@ get_otol_synthetic_tree(
 A phylo object
 }
 \description{
-Gets Open Tree of Life synthetic tree of a set of lineages.
+Get an Open Tree of Life synthetic tree of a set of lineages.
 }

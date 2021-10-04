@@ -2,12 +2,13 @@
 % Please edit documentation in R/datelife_query.R
 \name{input_process}
 \alias{input_process}
-\title{Takes a phylo object or a character string and figure out if it's correct newick format or a list of species}
+\title{Process a phylo object or a character string to determine if it's correct newick.}
 \usage{
 input_process(input, verbose = FALSE)
 }
 \arguments{
-\item{input}{A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
+\item{input}{A character vector of taxon names, a tree as a 'phylo' object or
+a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 }
@@ -15,5 +16,5 @@ input_process(input, verbose = FALSE)
 A phylo object or NA if no tree
 }
 \description{
-Takes a phylo object or a character string and figure out if it's correct newick format or a list of species
+Process a phylo object or a character string to determine if it's correct newick.
 }

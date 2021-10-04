@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_summary.R
 \name{get_taxon_summary}
 \alias{get_taxon_summary}
-\title{Get taxon summary of a datelifeResult object}
+\title{Get a taxon summary of a datelifeResult object. To be renamed summary_taxon.}
 \usage{
 get_taxon_summary(datelife_result = NULL, datelife_query = NULL)
 }
@@ -12,5 +12,5 @@ get_taxon_summary(datelife_result = NULL, datelife_query = NULL)
 \item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
 }
 \description{
-Get taxon summary of a datelifeResult object
+Get a taxon summary of a datelifeResult object. To be renamed summary_taxon.
 }

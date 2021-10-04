@@ -34,7 +34,6 @@ datelife_result_sdm(datelife_result, weighting = "flat", verbose = TRUE, ...)
 \item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
 }}
     \item{\code{target_tree}}{A phylo object. Use this in case you want a particular backbone for the output tree.}
-    \item{\code{datelife_query}}{A datelifeQuery object, output of make_datelife_query function}
   }}
 }
 \value{

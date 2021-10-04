@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_query.R
 \name{datelife_query_check}
 \alias{datelife_query_check}
-\title{checks if input is a datelifeQuery object, otherwise it uses make_datelife_query to process it}
+\title{Check that input is a datelifeQuery object. To be deprecated.}
 \usage{
 datelife_query_check(datelife_query = NULL, ...)
 }
@@ -12,9 +12,15 @@ datelife_query_check(datelife_query = NULL, ...)
 \item{...}{
   Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}
   \describe{
-    \item{\code{use_tnrs}}{Boolean; default to FALSE. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
-    \item{\code{approximate_match}}{Boolean; default to TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)}
-    \item{\code{get_spp_from_taxon}}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
+    \item{\code{use_tnrs}}{Boolean; default to FALSE. If TRUE, use OpenTree's services
+to resolve names. This can dramatically improve the chance of matches, but also
+take longer.}
+    \item{\code{approximate_match}}{Boolean; default to TRUE: use a slower TNRS to correct
+misspellings, increasing the chance of matches (including false matches)}
+    \item{\code{get_spp_from_taxon}}{boolean vector, default to FALSE. If TRUE, will get
+all species names from taxon names given in input. Must have same length as input.
+If input is a newick string , with some clades it will be converted to phylo
+object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
     \item{\code{verbose}}{Boolean. If TRUE, it gives printed updates to the user.}
   }}
 }
@@ -22,5 +28,6 @@ datelife_query_check(datelife_query = NULL, ...)
 A datelifeQuery object
 }
 \description{
-checks if input is a datelifeQuery object, otherwise it uses make_datelife_query to process it
+Check if input is a datelifeQuery object, otherwise use make_datelife_query
+to process it and create a datelifeQuery object.
 }

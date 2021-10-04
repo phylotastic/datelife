@@ -3,7 +3,8 @@
 \name{datelife_search}
 \alias{datelife_search}
 \alias{datelife}
-\title{Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.}
+\title{Get a chronogram (dated phylogenetic tree) or published times of lineage divergence available for a set of taxa.
+Core datelife function to input a vector of species, newick string, or phylo object to}
 \usage{
 datelife_search(
   input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
@@ -21,32 +22,51 @@ datelife_search(
 )
 }
 \arguments{
-\item{input}{A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
+\item{input}{A character vector of taxon names, a tree as a 'phylo' object or
+a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
 
-\item{summary_format}{The desired output format for target chronograms (chronograms of target taxa). See details.}
+\item{summary_format}{The desired output format for target chronograms (chronograms
+of target taxa). See details.}
 
-\item{partial}{Boolean; default to TRUE: use source trees even if they only match some of the desired taxa.}
+\item{partial}{Boolean; default to TRUE: use source trees even if they only
+match some of the desired taxa.}
 
-\item{use_tnrs}{Boolean; default to FALSE. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
+\item{use_tnrs}{Boolean; default to FALSE. If TRUE, use OpenTree's services
+to resolve names. This can dramatically improve the chance of matches, but also
+take longer.}
 
-\item{approximate_match}{Boolean; default to TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)}
+\item{approximate_match}{Boolean; default to TRUE: use a slower TNRS to correct
+misspellings, increasing the chance of matches (including false matches)}
 
 \item{update_opentree_chronograms}{default to FALSE}
 
-\item{cache}{A character vector of length one, with the name of the data object to cache. Default to "opentree_chronograms", a data object storing Open Tree of Life's database chronograms and other associated information.}
+\item{cache}{A character vector of length one, with the name of the data object
+to cache. Default to "opentree_chronograms", a data object storing Open Tree of
+Life's database chronograms and other associated information.}
 
-\item{summary_print}{A character vector specifying type of summary information to be printed: "citations" for the references of chronograms from cache where target taxa are found, "taxa" for a summary of the number of chronograms where each target taxon is found, or "none" if nothing should be printed. Default to display both c("citations", "taxa").}
+\item{summary_print}{A character vector specifying type of summary information
+to be printed: "citations" for the references of chronograms from cache where target
+taxa are found, "taxa" for a summary of the number of chronograms where each target
+taxon is found, or "none" if nothing should be printed. Default to display both
+c("citations", "taxa").}
 
-\item{taxon_summary}{A character vector specifying if data on target taxa missing in source chronograms should be added to the output as a "summary" or as a presence/absence "matrix". Default to "none", no information on taxon_summary added to the output.}
+\item{taxon_summary}{A character vector specifying if data on target taxa missing
+in source chronograms should be added to the output as a "summary" or as a
+presence/absence "matrix". Default to "none", no information on taxon_summary
+added to the output.}
 
-\item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
+\item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get
+all species names from taxon names given in input. Must have same length as input.
+If input is a newick string , with some clades it will be converted to phylo
+object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
 
 \item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
 
 \item{criterion}{Whether to get the grove with the most trees or the most taxa}
 }
 \description{
-Core function to input a vector of species, newick string, or phylo object to get a chronogram or dates back.
+Get a chronogram (dated phylogenetic tree) or published times of lineage divergence available for a set of taxa.
+Core datelife function to input a vector of species, newick string, or phylo object to
 }
 \details{
 Available output formats are:

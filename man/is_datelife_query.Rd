@@ -2,16 +2,23 @@
 % Please edit documentation in R/datelife_query.R
 \name{is_datelife_query}
 \alias{is_datelife_query}
-\title{checks if input is formatted as a datelifeQuery object}
+\title{Check if input is a datelifeQuery object.}
 \usage{
 is_datelife_query(input)
 }
 \arguments{
-\item{input}{Any object to be tested for 'datelifeQuery' class format}
+\item{input}{Any object that will be checked to have the format of a 'datelifeQuery' class.}
 }
 \value{
 boolean
 }
 \description{
-checks if input is formatted as a datelifeQuery object
+\code{is_datelife_query} checks (1) if a given object is a list that contains the
+elements of a \code{datelifeQuery} object: \code{cleaned_names}: A character
+vector of taxon names, and \code{phy}: Either NA or a phylo object; and (2)
+if the object is of class \code{datelifeQuery}.
+}
+\details{
+If the object has the correct format but is not a \code{datelifeQuery}
+object, it will not be assigned the correct class.
 }
