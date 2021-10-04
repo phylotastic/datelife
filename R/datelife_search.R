@@ -148,9 +148,13 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 	if(update_opentree_chronograms){
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	}
-	input_dq <- datelife_query_check(datelife_query = input, use_tnrs = use_tnrs,
-		approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon,
-		verbose = verbose)
+	if(is_datelife_query(input)){
+		input_dq <- input
+	} else {
+		input_dq <- make_datelife_query(input = input, use_tnrs = use_tnrs,
+			approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon,
+			verbose = verbose)
+	}
 	if(length(input_dq$cleaned_names) == 1){
 			message("Cannot perform a search of divergence times with just one taxon.")
 			if(!get_spp_from_taxon) {

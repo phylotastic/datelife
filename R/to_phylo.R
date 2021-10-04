@@ -313,7 +313,7 @@ summarize_summary_matrix <- function(summ_matrix){
 }
 #' Go from a summary matrix to an ultrametric phylo object.
 #' @param summ_matrix A summary patristic distance matrix from sdm or median. See details.
-#' @inheritParams datelife_query_check
+#' @inheritParams is_datelife_query
 #' @param total_distance Boolean. If TRUE it will divide the matrix in half, if FALSE it will take it as is.
 #' @param use A character vector indicating what type of age to use for summary. One of the following
 #' \describe{
