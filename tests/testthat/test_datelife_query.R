@@ -4,6 +4,14 @@
 #   NA
 # })
 
+test_that("make_datelife_query works from comma separated names", {
+  input_processed <- make_datelife_query(input = c("Rhea americana, Pterocnemia pennata, Struthio camelus"),
+                                         use_tnrs=FALSE,
+                                         approximate_match=TRUE)
+  expect_equal(length(input_processed$cleaned_names),
+               3)
+})
+
 test_that("is_datelife query works", {
   expect_false(is_datelife_query(NA))
   expect_false(is_datelife_query(NULL))

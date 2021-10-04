@@ -34,11 +34,12 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 				cleaned_names_tnrs <- list(ott_id = phy_new$ott_ids, unique_name = phy_new$tip.label)
 			}
 		}
-	} else { # if input is NOT phylo
-		if(length(input) == 1){ # if it is a character vector of length 1 with comma separated names
-			cleaned_names <- strsplit(input, ',')[[1]]
-		} # split it by the comma
-		cleaned_names <- stringr::str_trim(input, side = "both") # cleans the input of lingering unneeded white spaces
+	} else { # if input is NOT phylo, it can be a list 
+	  input <- unlist(input) # in case input is given as a list
+	  # split elements by the commas:
+		cleaned_names <- unlist(strsplit(input, ','))
+		# clean split elements of lingering unneeded white spaces:
+		cleaned_names <- stringr::str_trim(cleaned_names, side = "both") 
 		ott_ids <- NULL
 	}
   	if (use_tnrs_global){
@@ -112,7 +113,7 @@ input_process <- function(input, verbose = FALSE){
 	message("Processing 'input'...")
 	input_class <- "phylo"
 	ott_ids <- NULL
-	#TODO remove the multiPhylo if option from here
+	#TODO remove the multiPhylo if option from here?
 	# make a method for input processing on multiPhylo objects
 	if(inherits(input, "multiPhylo")) {
 		message("'input' is a 'multiPhylo' object. Only the first element will be used.")
