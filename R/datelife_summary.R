@@ -280,7 +280,7 @@ get_biggest_phylo <- function(trees){
 	tree_citation <- names(trees)
 	return.object <- trees[which(sapply(trees, ape::Ntip) == max(sapply(trees, ape::Ntip)))]
 	tree_citation <- tree_citation[which(sapply(trees, ape::Ntip) == max(sapply(trees, ape::Ntip)))]
-	if(length(return.object) >1 ) { #there are more than one tree with same number of taxa. Rather than take the first by default, take the one with the most intermediate depth (this assumes that the root node is the same for all trees). An example is the Bininda-Emonds et al. mammal tree: there are three trees with min, max, and best guess calibrations. So, take the one in the middle.
+	if(length(return.object) >1 ) {  # there are more than one tree with same number of taxa. Rather than take the first by default, take the one with the most intermediate depth (this assumes that the root node is the same for all trees). An example is the Bininda-Emonds et al. mammal tree: there are three trees with min, max, and best guess calibrations. So, take the one in the middle.
 		max.branching.time <- function(x) {
 			return(max(ape::branching.times(x)))
 		}
