@@ -104,7 +104,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	} else {
 		if("opentree_chronograms" %in% cache){
-			utils::data("opentree_chronograms")
+			utils::data("opentree_chronograms", package = "datelife")
 			cache <- get("opentree_chronograms")
 		}
 	}
@@ -151,7 +151,7 @@ get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	} else {
 		if("opentree_chronograms" %in% cache){
-			utils::data("opentree_chronograms")
+			utils::data("opentree_chronograms", package = "datelife")
 			cache <- get("opentree_chronograms")
 		}
 	}

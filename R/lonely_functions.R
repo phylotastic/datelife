@@ -55,7 +55,7 @@ datelife_authors_tabulate <- function(results.index,
                                       cache = "opentree_chronograms") {
 
   if("opentree_chronograms" %in% cache){
-   utils::data("opentree_chronograms")
+   utils::data("opentree_chronograms", package = "datelife")
    cache <- get("opentree_chronograms")
   }
 	authors <- cache$authors[results.index]
@@ -71,7 +71,7 @@ relevant_curators_tabulate <- function(results.index,
                                        cache = "opentree_chronograms") {
 
   if("opentree_chronograms" %in% cache){
-   utils::data("opentree_chronograms")
+   utils::data("opentree_chronograms", package = "datelife")
    cache <- get("opentree_chronograms")
   }
   curators <- cache$curators[results.index]

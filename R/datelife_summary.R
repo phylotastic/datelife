@@ -106,7 +106,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	} else {
 		if("opentree_chronograms" %in% cache){
-			utils::data("opentree_chronograms")
+			utils::data("opentree_chronograms", package = "datelife")
 			cache <- get("opentree_chronograms")
 		}
 	}
