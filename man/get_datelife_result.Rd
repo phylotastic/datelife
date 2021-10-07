@@ -10,7 +10,7 @@ get_datelife_result(
   use_tnrs = FALSE,
   approximate_match = TRUE,
   update_opentree_chronograms = FALSE,
-  cache = get("opentree_chronograms"),
+  cache = "opentree_chronograms",
   get_spp_from_taxon = FALSE,
   verbose = FALSE
 )
