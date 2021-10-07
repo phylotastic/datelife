@@ -13,13 +13,13 @@ get_taxon_summary <- function(datelife_result = NULL,
 	# 	dq <-
 	# }
 
-	datelife_result <- check_datelife_result(datelife_result)
+	# datelife_result <- check_datelife_result(datelife_result)
 	if(is.null(datelife_result) | !inherits(datelife_result, "datelifeResult")){
 		message("datelife_result argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
 		return(NA)
 	}
-	if(is.null(datelife_query) & is.null(attributes(datelife_result)$query)){
-	}
+	# if(is.null(datelife_query) & is.null(attributes(datelife_result)$query)){
+	# }
 
 	if(is_datelife_query(datelife_query)){
 		if(is.null(attributes(datelife_result)$query)){
@@ -150,7 +150,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
 		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
 		return.object <- get_biggest_phylo(trees) # NAs in trees are removed in get_biggest_phylo
 	}
-	# the following chunck is to test if n_overlap = 2 is enough to summarize results with sdm and median
+	# test if n_overlap = 2 is enough to summarize results with sdm and median:
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm", "newick_median", "phylo_median")){
 		best_grove <- get_best_grove(datelife_result, criterion = "taxa", n = 2)$best_grove
 	}

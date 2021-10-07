@@ -24,7 +24,7 @@ datelife_result_median <- function(datelife_result, ...){
 #' @return A patristic distance summary matrix from a datelifeResult object.
 #' @export
 datelife_result_median_matrix <- function(datelife_result) {
-	datelife_result <- check_datelife_result(datelife_result)
+	# datelife_result <- check_datelife_result(datelife_result)
 	patristic.array <- patristic_matrix_list_to_array(datelife_result)
 	median.matrix <- summary_patristic_matrix_array(patristic.array)
 	# when matrix comes from median, upgma gives much older ages than expected
@@ -38,7 +38,7 @@ datelife_result_median_matrix <- function(datelife_result) {
 #' @return A variance matrix from a datelifeResult object.
 #' @export
 datelife_result_variance_matrix <- function(datelife_result) {
-	datelife_result <- check_datelife_result(datelife_result)
+	# datelife_result <- check_datelife_result(datelife_result)
 	patristic.array <- patristic_matrix_list_to_array(datelife_result)
 	var.matrix <- summary_patristic_matrix_array(patristic.array, fn = stats::var)
 	return(var.matrix)

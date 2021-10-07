@@ -326,6 +326,8 @@ summarize_summary_matrix <- function(summ_matrix){
 #' @return An ultrametric phylo object.
 #' @details It can take a regular patristic distance matrix, but there are simpler methods for that implemented in patristic_matrix_to_phylo.
 #' @export
+#' @example
+#' # summary_matrix_to_phylo(summ_matrix, use = "median")
 summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_distance = TRUE, use = "mean", target_tree = NULL, ...){
     # enhance: add other methods, besides bladj.
     # for debugging:
@@ -333,7 +335,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
     # summ_matrix <- median_matrix
     use <- match.arg(use, c("mean", "median", "min", "max"))
     if(!inherits(summ_matrix, "matrix") & !inherits(summ_matrix, "data.frame")){
-        message("summ_matrix argument is not a matrix")
+        message("'summ_matrix' argument is not a matrix")
         return(NA)
     }
     if(!is.null(datelife_query)){

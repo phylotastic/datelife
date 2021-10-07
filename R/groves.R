@@ -120,7 +120,7 @@ get_best_grove <- function(datelife_result, criterion = "taxa", n = 2){
     # utils::data(subset2_taxa)
     # spp_query <- make_datelife_query(subset2_taxa)
     # datelife_result <- get_datelife_result(spp_query)
-    datelife_result <- check_datelife_result(datelife_result)
+    # datelife_result <- check_datelife_result(datelife_result)
 	  median_nj <- NULL
   	while(!inherits(median_nj, "phylo")){
       message(paste0("Trying with overlap = ", n, "\n"))
@@ -138,6 +138,7 @@ get_best_grove <- function(datelife_result, criterion = "taxa", n = 2){
       # We might have solved the above issue by using our method developped for sdm matrices
   	  n <- n + 1
   	}
+    message(paste0("Success!", "\n"))
     class(best_grove) <- class(datelife_result)
 	  return(list(best_grove = best_grove, overlap = n-1))
 }
