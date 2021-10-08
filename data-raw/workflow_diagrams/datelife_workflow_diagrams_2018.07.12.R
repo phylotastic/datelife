@@ -6,11 +6,11 @@
 # install.packages("mvbutils")
 library(mvbutils)
 pdf(file="data-raw/workflow_diagrams/use_all_calibrations_foodweb1.pdf", height=10, width=25)
-foodweb(where = "package:datelife", prune = "use_all_calibrations",
+foodweb(where = "package:datelife", prune = "datelife",
         border = TRUE,
         boxcolor = "aliceblue",
         textcolor = "black", cex = 1.0, lwd=2)
-mtext("use_all_calibrations function foodweb", line = 2, font = 2, cex = 1.5)
+mtext("datelife function foodweb", line = 2, font = 2, cex = 1.5)
 grDevices::dev.off()
 
 
@@ -40,7 +40,7 @@ for (i in 1:nr){
 }
 # textellipse(elpos[1,], 0.1, 0.05, lab = c("datelife_search", "function"), box.col = "white",
 #               shadow.col = "black", shadow.size = 0.005, cex = 0.8)
-textrect (elpos[1,], 0.15, 0.025,lab = c("use_all_calibrations", "function"), box.col = "white",
+textrect (elpos[1,], 0.15, 0.025,lab = c("datelife", "function"), box.col = "white",
           shadow.col = "black", shadow.size = 0.005, cex = 0.9)
 texthexa(elpos[2,], 0.15, 0.025, lab = c("input =","taxon names"), box.col = "orange",
          shadow.col = "red", shadow.size = 0.005, cex = 0.8)

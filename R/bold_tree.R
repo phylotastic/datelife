@@ -138,7 +138,6 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	}
 	# if there are only two sequences in the alignment phangorn::acctran will throw an error
 	# this usually happens when the input/otol tree has only two tips
-	# browser()
 	if (length(alignment) <= 2) {
 		message("There are not enough sequences available in BOLD to reconstruct branch \
 						lengths. Returning tree with no branch lengths.")
@@ -147,7 +146,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	xx <- phangorn::acctran(ape::multi2di(phy), alignment)
 	pml.object <- phangorn::pml(xx, data = alignment)
 	phy <- pml.object$tree
-	if (!ape::is.binary.tree(pml.object$tree)) {
+	if (!ape::is.binary(pml.object$tree)) {
 		if (verbose) {
 			message("\t",
 							marker,

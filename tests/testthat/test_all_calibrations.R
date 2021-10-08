@@ -1,11 +1,11 @@
 test_that("getting, mapping and using all calibrations work", {
-  # 1) TEST use_all_calibrations with a vector of names
-  # tests make_bold_otol_tree and get_dated_otol_induced_subtree from use_all_calibrations
-  u1 <- use_all_calibrations()
+  # 1) TEST datelife with a vector of names
+  # tests make_bold_otol_tree and get_dated_otol_induced_subtree from datelife
+  u1 <- datelife_use(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
   expect_true(ape::is.ultrametric(u1$phy, option = 2))
   expect_s3_class(u1$phy, "phylo")
   # TODO:
-  # u1.1 <- use_all_calibrations(input = c("Felis catus", "Canis canis", "Elephas maximus"))
+  # u1.1 <- datelife_use(input = c("Felis catus", "Canis canis", "Elephas maximus"))
   # Giving error:
   # Error in convertAlnRows(result$msa, type) : There is an invalid aln file!
     # In addition: Warning message:
@@ -14,10 +14,10 @@ test_that("getting, mapping and using all calibrations work", {
 
   # TODO
   # these are taking too long to get bold tree I think? Check it out:
-  # u1.2 <- use_all_calibrations(input = c("Felis catus", "Homo sapiens", "Elephas maximus"))
-  # u1.2 <- use_all_calibrations(input = c("Delphinus delphus", "Homo sapiens", "Elephas maximus"))
-  u1.4 <- use_all_calibrations(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
-  u1.5 <- use_all_calibrations(input = c("Chen caerulescens", "Cygnus columbianus", "Anas acuta"))
+  # u1.2 <- datelife_use(input = c("Felis catus", "Homo sapiens", "Elephas maximus"))
+  # u1.2 <- datelife_use(input = c("Delphinus delphus", "Homo sapiens", "Elephas maximus"))
+  u1.4 <- datelife_use(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
+  u1.5 <- datelife_use(input = c("Chen caerulescens", "Cygnus columbianus", "Anas acuta"))
 
   #TEST match_all_calibrations
   match_all_calibrations(phy = NULL, calibrations= NULL)
@@ -26,8 +26,8 @@ test_that("getting, mapping and using all calibrations work", {
   match_all_calibrations(phy = u1.4$phy, calibrations = u1.5$calibrations.df)
 
 
-  # 2) TEST use_all_calibrations with a tree with NO branch lengths
-  u2 <- suppressWarnings(use_all_calibrations(input=threebirds_nbl))
+  # 2) TEST datelife with a tree with NO branch lengths
+  u2 <- suppressWarnings(datelife_use(input=threebirds_nbl))
   # initial branch lengths are required for pathd8 dating
   # the following will use bladj instead of pathd8 bc phy has no branch lengths:
   c1 <- use_calibrations(phy = threebirds_nbl, calibrations = u2$calibrations, dating_method = "pathd8")
@@ -35,15 +35,15 @@ test_that("getting, mapping and using all calibrations work", {
   # get all calibrations should not work with a tree with no branch lengths:
   expect_error(get_all_calibrations(input=threebirds_nbl))
 
-  # 3) TEST use_all_calibrations with a tree WITH branch lengths
-  u3 <- suppressWarnings(use_all_calibrations(input=threebirds_median))
+  # 3) TEST datelife with a tree WITH branch lengths
+  u3 <- suppressWarnings(datelife_use(input=threebirds_median))
   g3 <- get_all_calibrations(input=threebirds_median)
   g3.2 <- get_all_calibrations(input=threebirds_median, each = TRUE)
 
 
-  # 4) TEST use_all_calibrations with a multiPhylo object
-  u4.1 <- use_all_calibrations(input=threebirds_all) # tests argument each = FALSE
-  u4.2 <- use_all_calibrations(input=threebirds_all, each = TRUE)
+  # 4) TEST datelife with a multiPhylo object
+  u4.1 <- datelife_use(input=threebirds_all) # tests argument each = FALSE
+  u4.2 <- datelife_use(input=threebirds_all, each = TRUE)
   g4 <- get_all_calibrations(input=threebirds_all, each = TRUE)
 
   threebirds_all0 <- threebirds_all
@@ -55,15 +55,15 @@ test_that("getting, mapping and using all calibrations work", {
   get_all_calibrations(input=threebirds_all_nbl)
 
 
-  # 5) TEST use_all_calibrations with a datelifeResult object
+  # 5) TEST datelife with a datelifeResult object
   # must throw error here:
-  expect_error(suppressWarnings(use_all_calibrations(input=threebirds_result)))
+  expect_error(suppressWarnings(datelife_use(input=threebirds_result)))
   # but not here:
   get_all_calibrations(input= threebirds_result)
 
-  # TODO: 6) TEST use_all_calibrations with a datelife query object
+  # TODO: 6) TEST datelife with a datelife query object
 
-  # TEST use_all_calibrations with pathd8
+  # TEST datelife with pathd8
 
   skip_on_cran()
   use_calibrations(phy = threebirds_median, calibrations = u2$calibrations, dating_method = "pathd8")
@@ -95,4 +95,4 @@ test_that("get_otol_synthetic_tree works", {
 # aves_mat_samples/samp25_mat17_47.rda"))
 # data in url is not yet available :(
 # the following gives a tree with NaN as edge.length, why?
-# use_all_calibrations(phy = aves_tree_7000, all_calibrations = samp25_mat17_47)
+# datelife_use(phy = aves_tree_7000, all_calibrations = samp25_mat17_47)

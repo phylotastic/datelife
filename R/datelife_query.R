@@ -11,7 +11,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	# enhance: add mapped (has tnrs been performed?) and matched (was it matched successfully?) element to phylo object
 	# add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
 	message("Running 'make_datelife_query'...")
-	if(is_datelife_query(input)){
+	if(suppressMessages(is_datelife_query(input))){
 		return(input)
 	}
 	# input_process determines if input is newick and transforms it to phylo
@@ -34,12 +34,14 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 				cleaned_names_tnrs <- list(ott_id = phy_new$ott_ids, unique_name = phy_new$tip.label)
 			}
 		}
-	} else { # if input is NOT phylo, it can be a list 
-	  input <- unlist(input) # in case input is given as a list
+	} else { # if input is NOT phylo, it can be a list
+	  message("1", input)
+		input <- unlist(input) # in case input is given as a list
 	  # split elements by the commas:
+		message("2", input)
 		cleaned_names <- unlist(strsplit(input, ','))
 		# clean split elements of lingering unneeded white spaces:
-		cleaned_names <- stringr::str_trim(cleaned_names, side = "both") 
+		cleaned_names <- stringr::str_trim(cleaned_names, side = "both")
 		ott_ids <- NULL
 	}
   	if (use_tnrs_global){

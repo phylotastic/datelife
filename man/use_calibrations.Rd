@@ -2,7 +2,7 @@
 % Please edit documentation in R/calibrations_use.R
 \name{use_calibrations}
 \alias{use_calibrations}
-\title{Perform a dating analysis on a tree topology using a given set of calibrations.}
+\title{Use given calibrations to generate a chronogram for a given tree topology.}
 \usage{
 use_calibrations(
   phy = NULL,
@@ -17,8 +17,6 @@ use_calibrations(
 
 \item{calibrations}{A data frame of calibrations from get_all_calibrations function, or a subset of it.}
 
-\item{dating_method}{The method used for tree dating.}
-
 \item{type}{The type of age to use as calibration: "median", "mean", "min", or "max".}
 
 \item{...}{
@@ -32,7 +30,8 @@ use_calibrations(
 A phylo object with branch lengths proportional to time.
 }
 \description{
-Perform a dating analysis on a tree topology using a given set of calibrations.
+\code{use_calibrations} combines all given calibrations given and uses them as
+constraints to perform a dating analysis on a given tree topology, using BLADJ or PATHd8.
 }
 \details{
 If phy does not have branch lengths, dating_method is ignored and BLADJ will be used.
