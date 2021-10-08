@@ -1,14 +1,12 @@
-#' Get all secondary calibrations available for a set of taxa.
+#' Get secondary calibrations for a set of taxa.
 #'
-#' \code{get_all_calibrations} returns secondary calibrations for each pair of given
-#' taxon names.
+#' \code{get_all_calibrations} returns secondary calibrations (i.e., divergence times)
+#' available for each pair of given taxon names, from chronograms (phylogenetic
+#' trees with branch lengths proportional to time) in a database.
 #'
-#' @details If input is a character vector of taxon names, the function calls a
-#' \code{\link[=datelife_search]{datelife_search}} with \code{summary_format}
-#' argument set to \code{"phylo_all"}, to get all chronograms containing at
-#' least 2 of the taxa given in \code{input}.
-#' The function retrieves divergence times for each pair of taxa in any given tree with
-#' branch lengths proportional to time (chronogram).
+#' @details If \code{input} is a character vector of taxon names, the function calls
+#' \code{\link[=datelife_search]{datelife_search}} with \code{summary_format = "phylo_all"}
+#' to get all chronograms containing at least two taxa from \code{input}.
 #' @param input A character vector of taxon names; a newick string, OR a phylo OR
 #' multiPhylo object with branch lengths proportional to time; OR a datelifeResult object.
 #' @inheritDotParams datelife_search
@@ -46,15 +44,15 @@ get_all_calibrations <- function(input = c("Rhea americana", "Pterocnemia pennat
 		if (any(xx)) {
 	    ii <- which(xx)
 	    message("Some trees in 'multiPhylo' input have no branch lengths.")
-	    message("Will leave tree ",
+	    message("Will leave tree(s) ",
 	            paste(ii, collapse = " - "),
-	            " out of the analysis")
+	            " out of the analysis.")
 	    datelife_phylo <- datelife_phylo[which(!xx)]
 	  }
 	}
 	if (inherits(input, "phylo")) {
 	  if (is.null(input$edge.length)) {
-	    stop("input tree has no branch lengths")
+	    stop("'input' tree has no branch lengths.")
 	  }
 		datelife_phylo <- list(input)
 	}

@@ -1,5 +1,5 @@
 #' Get a taxon summary of a datelifeResult object. To be renamed summary_taxon.
-#' @inheritParams datelife_query_check
+#' @param datelife_query A datelifeQuery object, output of make_datelife_query function
 #' @inheritParams datelife_result_check
 #' @export
 get_taxon_summary <- function(datelife_result = NULL,
@@ -87,7 +87,7 @@ get_taxon_summary <- function(datelife_result = NULL,
 #' A datelifeResult object is a named list of patristic matrcies.
 #' This allows rapid processing of data.
 #' If you need a list of chronograms from your datelifeResult object, this is the function you are looking for.
-#' @inheritParams is_datelife_query
+#' @inheritParams get_taxon_summary
 #' @inheritParams datelife_result_check
 #' @inheritParams datelife_search
 #' @inherit datelife_search return details
