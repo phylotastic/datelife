@@ -3,35 +3,34 @@
 #' Core datelife function to input a vector of species, newick string, or phylo object to
 
 #' @aliases datelife
-#' @param input A character vector of taxon names, a tree as a 'phylo' object or
-#' a newick character string, or a 'datelifeQuery' object from make_datelife_query function.
+#' @param input
+#' \describe{
+#'	\item{Taxon names}{As a character vector.}
+#'	\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+#'				object, OR as a newick character string.}
+#'	\item{A \code{datelifeQuery} object}{From \code{\link[=make_datelife_query]{make_datelife_query}.}
+#'	}
 #' @param summary_format The desired output format for target chronograms (chronograms
 #' of target taxa). See details.
 #' @param summary_print A character vector specifying type of summary information
-#' to be printed: "citations" for the references of chronograms from cache where target
-#' taxa are found, "taxa" for a summary of the number of chronograms where each target
-#' taxon is found, or "none" if nothing should be printed. Default to display both
-#' c("citations", "taxa").
+#' to be printed to screen:
+#' \describe{
+#'	\item{"citations"}{Prints references of chronograms where target taxa are found.}
+#'	\item{"taxa"}{Prints a summary of the number of chronograms where each target taxon is found.}
+#'	\item{"none"}{Nothing is printed to screen.}
+#' }
+#' Default to \code{c("citations", "taxa")}, which displays both.
 #' @param taxon_summary A character vector specifying if data on target taxa missing
-#' in source chronograms should be added to the output as a "summary" or as a
-#' presence/absence "matrix". Default to "none", no information on taxon_summary
+#' in source chronograms should be added to the output as a \code{"summary"} or as a
+#' presence/absence \code{"matrix"}. Default to \code{"none"}, no information on taxon_summary
 #' added to the output.
-#' @param partial Boolean; default to TRUE: use source trees even if they only
+#' @param partial Boolean; default to \code{TRUE}: use source trees even if they only
 #' match some of the desired taxa.
-#' @param use_tnrs Boolean; default to FALSE. If TRUE, use OpenTree's services
-#' to resolve names. This can dramatically improve the chance of matches, but also
-#' take longer.
-#' @param approximate_match Boolean; default to TRUE: use a slower TNRS to correct
-#' misspellings, increasing the chance of matches (including false matches)
-#' @param update_opentree_chronograms default to FALSE
+#' @param update_opentree_chronograms default to \code{FALSE}
 #' @param cache A character vector of length one, with the name of the data object
-#' to cache. Default to "opentree_chronograms", a data object storing Open Tree of
+#' to cache. Default to \code{"opentree_chronograms"}, a data object storing Open Tree of
 #' Life's database chronograms and other associated information.
-#' @param get_spp_from_taxon boolean vector, default to FALSE. If TRUE, will get
-#' all species names from taxon names given in input. Must have same length as input.
-#' If input is a newick string , with some clades it will be converted to phylo
-#' object phy, and the order of get_spp_from_taxon will match phy$tip.label.
-#' @param verbose Boolean. If TRUE, it gives printed updates to the user.
+#' @param verbose Boolean. If \code{TRUE}, it gives printed updates to the user.
 #' @param criterion Whether to get the grove with the most trees or the most taxa
 #' @export
 #' @details
@@ -132,60 +131,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 # 	cat("Number of chronograms with at least two queried taxa found in database")
 # }
 
-#' Go from a vector of species, newick string, or phylo object to a list of patristic matrices
-#' @inheritParams datelife_search
-#' @inheritParams make_datelife_query
-# #' @inheritParams make_bold_otol_tree
-# #' @inheritDotParams make_bold_otol_tree
-#' @return A datelifeResult object - a named list of patristic matrices. You can ccess the original query with attributes(my_datelife_result)$query
-#' @export
-get_datelife_result <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-																partial = TRUE,
-																use_tnrs = FALSE,
-																approximate_match = TRUE,
-																update_opentree_chronograms = FALSE,
-																cache = "opentree_chronograms",
-																get_spp_from_taxon = FALSE,
-																verbose = FALSE) {
-	if(update_opentree_chronograms){
-		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
-	} else {
-		if("opentree_chronograms" %in% cache){
-			utils::data("opentree_chronograms", package = "datelife")
-			cache <- get("opentree_chronograms")
-		}
-	}
-	if(is_datelife_query(input)){
-		input_dq <- input
-	} else {
-		input_dq <- make_datelife_query(input = input, use_tnrs = use_tnrs,
-			approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon,
-			verbose = verbose)
-	}
-	if(length(input_dq$cleaned_names) == 1){
-			message("Cannot perform a search of divergence times with just one taxon.")
-			if(!get_spp_from_taxon) {
-				# message("Performing a clade search?? set get_spp_from_taxon = TRUE")
-				message("Setting up get_spp_from_taxon = TRUE")
-				input_dq <- make_datelife_query(input = input_dq$cleaned_names,
-					get_spp_from_taxon = TRUE, use_tnrs = use_tnrs,
-					approximate_match = approximate_match, verbose = verbose)
-			}
-	}
-	if(length(input_dq$cleaned_names) == 1){
-		message("Input has length one (even after searching spp within clades).")
-		warning("\t", "Input contains only one lineage.")
-		return(NA)
-	}
-	# setting phy to NULL always; it is a bad idea to congruidy subset trees,
-	# do that later in summarizing steps
-	results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input_dq$cleaned_names, phy = NULL)
-  	datelife_result <- results_list_process(results_list, input_dq$cleaned_names, partial)
-	datelife_result_check(datelife_result, use_tnrs)
-	class(datelife_result) <- c("datelifeResult")
-	attr(datelife_result, "query") <- input_dq
-	return(datelife_result)
-}
+
 
 #' checks if we obtained an empty search with the set of input taxon names
 #' @inheritParams datelife_search

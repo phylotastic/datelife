@@ -6,9 +6,7 @@
 #' object.
 #'
 #' @param input a phylo or multiPhylo object with branch lengths proportional to time.
-#' @param each Boolean, default to \code{FALSE}: all calibrations are returned in
-#' the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
-#' in separate data frames.
+#' @inheritParams get_all_calibrations
 #' @return A data frame (or list of data frames, if \code{each = TRUE}) of secondary
 #' calibrations available for each pair of taxon names in a given \code{phylo}
 #' or \code{multiPhylo} object. The attribute "chronograms" contains the \{input]
@@ -90,16 +88,46 @@ get_calibrations_phylo <- function(input = NULL,
 #' \code{\link[=get_calibrations_phylo]{get_calibrations_phylo}}.
 #'
 #' @param input A character vector of taxon names.
-#' @inheritParams get_calibrations_phylo
+#' @inheritParams get_all_calibrations
 #' @return A data frame of secondary calibrations (or list of data frames, if \code{each = TRUE}),
 #' for each pair of given taxon names. The attribute "chronograms" contains the
 #' source chronograms from which the calibrations were obtained.
 #' @export
 get_calibrations_vector <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-																        each = FALSE) {
-  # TODO: is_datelife_search_input function or any type of input format checking function
-  # to replace the following long conditional
-  # and trap the case were input is a list
+																    each = FALSE) {
+  # TODO: is_datelife_search_input function or any type of input format checking
+  # function to trap the case were input is a list
+	phyloall <- datelife_search(input = input,
+															summary_format = "phylo_all")
+
+	calibrations <- get_calibrations_phylo(input = phyloall,
+                                             each = each)
+	return(calibrations)
+}
+#' Get available secondary calibrations from a given \code{datelifeQuery} object.
+#'
+#' \code{get_calibrations_vector} mines DateLife's local database of phylogenetic
+#' trees with branch lengths proportional to time (aka, chronograms) with
+#' \code{\link[=datelife_search]{datelife_search}}, and gets divergence times
+#' (i.e., secondary calibrations) from chronograms for each pair of given taxon names.
+#'
+#' @details The function calls \code{\link[=datelife_search]{datelife_search}}
+#' with \code{summary_format = "phylo_all"} to get all chronograms in database
+#' containing at least two taxa from \code{input}, and generates a \code{phylo}
+#' or \code{multiPhylo} object object that will be passed to
+#' \code{\link[=get_calibrations_phylo]{get_calibrations_phylo}}.
+#'
+#' @param input A \code{datelifeQuery} object.
+#' @inheritParams get_all_calibrations
+#' @return A data frame of secondary calibrations (or list of data frames, if \code{each = TRUE}),
+#' for each pair of given taxon names. The attribute "chronograms" contains the
+#' source chronograms from which the calibrations were obtained.
+#' @export
+get_calibrations_datelifequery <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
+																    			 each = FALSE) {
+  if (!is_datelife_query(input)) {
+		stop("'input' must be a 'datelifeQuery' object.")
+	}
 	phyloall <- datelife_search(input = input,
 															summary_format = "phylo_all")
 
@@ -119,7 +147,7 @@ get_calibrations_vector <- function(input = c("Rhea americana", "Pterocnemia pen
 #' \code{\link[=get_calibrations_phylo]{get_calibrations_phylo}}.
 #'
 #' @param input A \code{datelifeResult} object.
-#' @inheritParams get_calibrations_phylo
+#' @inheritParams get_all_calibrations
 #' @return A data frame of secondary calibrations (or list of data frames, if \code{each = TRUE}),
 #' for each pair of given taxon names. The attribute "chronograms" contains the
 #' source chronograms from which the calibrations were obtained.
@@ -132,6 +160,6 @@ get_calibrations_dateliferesult <- function(input = NULL,
                                         summary_format = "phylo_all"))
 
   calibrations <- get_calibrations_phylo(input = phyloall,
-                                             each = each)
+                                         each = each)
 	return(calibrations)
 }

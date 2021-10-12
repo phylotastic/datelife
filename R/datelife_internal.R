@@ -288,9 +288,9 @@ phylo_get_subset_array <- function(reference_tree, taxa, phy4 = NULL, dating_met
   problem <- "none"
   patristic_matrix_array <- NA
   if (final.size < length(taxa)) {
-    problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
+    problem <- "Missing some taxa on chronogram, so this is probably an underestimate." # fewer taxa on final matrix than we asked for
     if (final.size < 2 ) {
-      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
+      problem <- "Insufficient species to get an MRCA (either 1 or 0)." # we either have one species or zero. Not enough for an MRCA
       patristic_matrix_array <- NA # to make sure no one uses the zero by mistake
     }
   }
@@ -299,7 +299,7 @@ phylo_get_subset_array <- function(reference_tree, taxa, phy4 = NULL, dating_met
   }
   if(!is.null(phy4)) {
     if (length(phylobase::descendants(phy4, phylobase::MRCA(phy4, taxa), type = "tips")) > taxa) {
-      problem <- "set of taxa not a clade, so this is probably an overestimate"
+      problem <- "'input' of taxa are not a clade, so this is probably an overestimate."
     }
   }
   return(list(patristic_matrix_array = patristic_matrix_array,problem = problem))

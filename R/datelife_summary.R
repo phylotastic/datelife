@@ -1,4 +1,7 @@
-#' Get a taxon summary of a datelifeResult object. To be renamed summary_taxon.
+#' Get a taxon summary of a \code{datelifeResult} object.
+#'
+# #' To be renamed summary_taxon.
+#'
 #' @param datelife_query A datelifeQuery object, output of make_datelife_query function
 #' @inheritParams datelife_result_check
 #' @export
@@ -82,11 +85,13 @@ get_taxon_summary <- function(datelife_result = NULL,
 # print.datelifeTaxonSummary <- function(taxon_summary){
 #
 # }
-#' Summarize an output from get_datelife_result function
-#' Get different types of summaries from a datelifeResult object.
-#' A datelifeResult object is a named list of patristic matrcies.
+#' Summarize an output from \code{\link[=get_datelife_result]{get_datelife_result}
+#'
+#' Get different types of summaries from a \code{datelifeResult} object.
+#' A \code{datelifeResult} object is a named list of patristic matrcies.
 #' This allows rapid processing of data.
-#' If you need a list of chronograms from your datelifeResult object, this is the function you are looking for.
+#' If you need a list of chronograms from your \code{datelifeResult} object, this is the function you are looking for.
+#'
 #' @inheritParams get_taxon_summary
 #' @inheritParams datelife_result_check
 #' @inheritParams datelife_search
@@ -259,19 +264,24 @@ summarize_datelife_result <- function(datelife_result = NULL,
 	}
 	return(return.object)
 }
-#' Main function to summarize a datelifeResult object
-#' @param object A "datelifeResult" object, typically an output of get_datelife_result function.
-#' @param ... further arguments passed to or from other methods
-#' @param partial Boolean for whether to include partial matches
-#' @method summary datelifeResult
-#' @export
-summary.datelifeResult <- function(object, ..., partial = TRUE){
-	mrcas <- datelife_result_MRCA(object, partial = partial)
-	res <- list(mrca = mrcas)
-	class(res) <- "datelifeResultSummary"
-	return(res)
-}
+# TODO: method to summarize a dateliferesult object
+# #' Main function to summarize a datelifeResult object
+# #' @param object A "datelifeResult" object, typically an output of \code{\link[=get_datelife_result]{get_datelife_result}.
+# #' @param ... further arguments passed to or from other methods
+# #' @param partial Boolean for whether to include partial matches
+# #' @method summary datelifeResult
+# #' @export
+# summary.datelifeResult <- function(object, ..., partial = TRUE){
+# 	mrcas <- datelife_result_MRCA(object, partial = partial)
+# 	res <- list(mrca = mrcas)
+# 	class(res) <- "datelifeResultSummary"
+# 	return(res)
+# }
+
 #' Get the tree with the most tips: the biggest tree
+#'
+#'
+#'
 #' @param trees A list of trees as multiPhylo or as a plain list object.
 #' @return A phylo object with a citation slot with the citation of the biggest tree
 #' @export

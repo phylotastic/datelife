@@ -1,8 +1,10 @@
-#' Generate one or multiple chronograms for a set of input taxa.
+#' Generate one or multiple chronograms for a set of given taxa.
 #'
-#' \code{datelife_use} generates one or multiple phylogenetic trees with branch lengths
-#' proportional to time (i.e., chronograms) for all \code{input} taxa, dated with
-#' bladj or PATHd8, using secondary calibrations available from the chronogram database.
+#' \code{datelife_use} generates one or multiple chronograms (i.e., phylogenetic
+#' trees with branch lengths proportional to time) for a set of \code{input} taxa,
+#' dated with bladj or PATHd8, using secondary calibrations available for any pair
+#' of \code{input} taxa, mined from the code{\link[=opentree_chronograms]{opentree_chronograms}} 
+#' local DateLife database.
 #'
 #' @inheritParams datelife_search
 #' @param dating_method The method used for tree dating. Options are "bladj" or "pathd8"
