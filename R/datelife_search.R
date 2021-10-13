@@ -3,12 +3,12 @@
 #' Core datelife function to input a vector of species, newick string, or phylo object to
 
 #' @aliases datelife
-#' @param input
+#' @param input One of the following:
 #' \describe{
 #'	\item{Taxon names}{As a character vector.}
 #'	\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
 #'				object, OR as a newick character string.}
-#'	\item{A \code{datelifeQuery} object}{From \code{\link[=make_datelife_query]{make_datelife_query}.}
+#'	\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query}}.}
 #'	}
 #' @param summary_format The desired output format for target chronograms (chronograms
 #' of target taxa). See details.

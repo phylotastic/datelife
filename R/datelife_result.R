@@ -1,3 +1,46 @@
+#' Get a list of patristic matrices from a given \code{datelifeQuery} object.
+#'
+#'
+#' @param input A \code{datelifeQuery} object from
+#' @return A datelifeResult object - a named list of patristic matrices. You can
+#' access the original query with attributes(object)$query
+#' @export
+get_datelife_result_datelifequery <- function(input = NULL,
+																partial = TRUE,
+																cache = "opentree_chronograms"){
+
+   if (!is_datelife_query(input)) {
+   	stop("'input' must be a 'datelifeQuery' object.")
+   }
+	 if (length(input$cleaned_names) == 1){
+		 message("Cannot get divergence times from just one taxon.")
+		 if(methods::hasArg("get_spp_from_taxon")){
+			 get_spp_from_taxon <- list(...)$get_spp_from_taxon
+			 if(!is.logical(get_spp_from_taxon)){
+				 stop("'get_spp_from_taxon' argument must be one of TRUE or FALSE")
+			 }
+		 } else {
+			 get_spp_from_taxon <- FALSE
+		 }
+
+		input <- make_datelife_query_vector(input = input$cleaned_names,
+																	 			...)
+ 	 }
+	 if("opentree_chronograms" %in% cache){
+		 utils::data("opentree_chronograms", package = "datelife")
+		 cache <- get("opentree_chronograms")
+	 }
+
+   # setting phy to NULL always; it is a bad idea to congruify subset trees,
+   # do that later in summarizing steps
+   results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input$cleaned_names, phy = NULL)
+   datelife_result <- results_list_process(results_list, input$cleaned_names, partial)
+   datelife_result_check(datelife_result, use_tnrs)
+   class(datelife_result) <- c("datelifeResult")
+   attr(datelife_result, "query") <- input
+   return(datelife_result)
+}
+
 #' Get a list of patristic matrices from a given set of taxon names.
 #'
 #'
@@ -7,9 +50,10 @@
 #' access the \code{datelifeQuery} object with attributes(object)$query
 #' @export
 get_datelife_result_vector <- function(input = NULL,
+																partial = TRUE,
 																cache = "opentree_chronograms",
 																...){
-   if (!is.character(input))) {
+   if (!is.character(input)) {
    	stop("'input' must be a character vector of taxon names.")
    }
 	 if("opentree_chronograms" %in% cache){
@@ -82,46 +126,4 @@ get_datelife_result <- function(input = NULL,
 			verbose = verbose)
 	}
 
-}
-
-#' Get a list of patristic matrices from a given \code{datelifeQuery} object.
-#'
-#'
-#' @param input A \code{datelifeQuery} object from
-#' @return A datelifeResult object - a named list of patristic matrices. You can
-#' access the original query with attributes(object)$query
-#' @export
-get_datelife_result_datelifequery <- function(input = NULL,
-																partial = TRUE,
-																cache = "opentree_chronograms"){
-
-   if (!is_datelife_query(input)) {
-   	stop("'input' must be a 'datelifeQuery' object.")
-   }
-	 if (length(input$cleaned_names) == 1){
-		 message("Cannot get divergence times from just one taxon.")
-		 if(methods::hasArg("get_spp_from_taxon")){
-			 get_spp_from_taxon <- list(...)$get_spp_from_taxon
-			 if(!is.logical(get_spp_from_taxon)){
-				 stop("'get_spp_from_taxon' argument must be one of TRUE or FALSE")
-			 }
-		 } else {
-			 get_spp_from_taxon <- FALSE
-		 }
-		input <- make_datelife_query_vector(input = input$cleaned_names,
-																	 			...)
- 	 }
-	 if("opentree_chronograms" %in% cache){
-		 utils::data("opentree_chronograms", package = "datelife")
-		 cache <- get("opentree_chronograms")
-	 }
-
-   # setting phy to NULL always; it is a bad idea to congruify subset trees,
-   # do that later in summarizing steps
-   results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input$cleaned_names, phy = NULL)
-   datelife_result <- results_list_process(results_list, input$cleaned_names, partial)
-   datelife_result_check(datelife_result, use_tnrs)
-   class(datelife_result) <- c("datelifeResult")
-   attr(datelife_result, "query") <- input
-   return(datelife_result)
 }

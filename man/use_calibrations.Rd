@@ -2,7 +2,7 @@
 % Please edit documentation in R/calibrations_use.R
 \name{use_calibrations}
 \alias{use_calibrations}
-\title{Use given calibrations to generate a chronogram for a given tree topology.}
+\title{Date a tree topology combining a set of given calibrations.}
 \usage{
 use_calibrations(
   phy = NULL,
@@ -13,11 +13,12 @@ use_calibrations(
 )
 }
 \arguments{
-\item{phy}{A phylo object with or wothput branch lengths}
+\item{phy}{A \code{phylo} object with or without branch lengths}
 
-\item{calibrations}{A data frame of calibrations from get_all_calibrations function, or a subset of it.}
+\item{calibrations}{A data frame (or list of data frames) of secondary calibrations
+for any pair of taxon names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.}
 
-\item{type}{The type of age to use as calibration: "median", "mean", "min", or "max".}
+\item{dating_method}{Tree dating method. Options are "bladj" or "pathd8"}
 
 \item{...}{
   Arguments passed on to \code{\link[=use_calibrations_pathd8]{use_calibrations_pathd8}}
@@ -27,11 +28,13 @@ use_calibrations(
   }}
 }
 \value{
-A phylo object with branch lengths proportional to time.
+A \code{phylo} object with branch lengths proportional to time.
 }
 \description{
-\code{use_calibrations} combines all given calibrations given and uses them as
-constraints to perform a dating analysis on a given tree topology, using BLADJ or PATHd8.
+\code{use_calibrations} combines all given calibrations and uses them as
+constraints to perform a dating analysis on a given tree topology, using BLADJ
+if it has no branch lengths, or PATHd8 if the given tree topology has initial
+branch lengths.
 }
 \details{
 If phy does not have branch lengths, dating_method is ignored and BLADJ will be used.

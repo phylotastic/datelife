@@ -2,15 +2,16 @@
 % Please edit documentation in R/calibrations_use.R
 \name{use_calibrations_each}
 \alias{use_calibrations_each}
-\title{Use given calibrations to generate one or multiple chronograms for a given
-tree topology.}
+\title{Date a given tree topology by using a given list of calibrations independently,
+to generate multiple hypothesis of time of divergence.}
 \usage{
 use_calibrations_each(phy = NULL, calibrations = NULL, ...)
 }
 \arguments{
-\item{phy}{A tree with or without branch lengths to be dated. Only as phylo object for now.}
+\item{phy}{A \code{phylo} object with or without branch lengths}
 
-\item{calibrations}{Can be NULL. A list of dataframes from get_all_calibrations function.}
+\item{calibrations}{A list of data frames of secondary calibrations
+for any pair of taxon names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.}
 
 \item{...}{Arguments to pass to use_calibrations}
 }
@@ -18,8 +19,9 @@ use_calibrations_each(phy = NULL, calibrations = NULL, ...)
 A list with a multiPhylo object of chronograms and a list of all calibrations used
 }
 \description{
-\code{use_calibrations_each} uses each set of calibrations given by the user
-independently as constraints for BLADJ or PATHd8 to date a given tree topology.
+\code{use_calibrations_each} wraps \code{use_calibrations} to take each set of
+given calibrations and use it independently as constraints for BLADJ or PATHd8
+to date a given tree topology.
 }
 \details{
 You can get the datelifeResult object or the list of chronograms first

@@ -2,15 +2,15 @@
 % Please edit documentation in R/datelife_summary.R
 \name{get_taxon_summary}
 \alias{get_taxon_summary}
-\title{Get a taxon summary of a datelifeResult object. To be renamed summary_taxon.}
+\title{Get a taxon summary of a \code{datelifeResult} object.}
 \usage{
 get_taxon_summary(datelife_result = NULL, datelife_query = NULL)
 }
 \arguments{
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
 
-\item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
+\item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.}
 }
 \description{
-Get a taxon summary of a datelifeResult object. To be renamed summary_taxon.
+Get a taxon summary of a \code{datelifeResult} object.
 }

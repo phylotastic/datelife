@@ -7,10 +7,15 @@
 input_process(input, verbose = FALSE)
 }
 \arguments{
-\item{input}{A character vector of taxon names, a tree as a 'phylo' object or
-a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
+\item{input}{One of the following:
+\describe{
+\item{Taxon names}{As a character vector.}
+\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+            object, OR as a newick character string.}
+\item{A \code{datelifeQuery} object}{From \code{\link[=make_datelife_query]{make_datelife_query}}.}
+}}
 
-\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \value{
 A phylo object or NA if no tree

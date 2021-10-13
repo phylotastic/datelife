@@ -16,8 +16,13 @@ make_bold_otol_tree(
 )
 }
 \arguments{
-\item{input}{A character vector of taxon names, a tree as a 'phylo' object or
-a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
+\item{input}{One of the following:
+\describe{
+\item{Taxon names}{As a character vector.}
+\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+            object, OR as a newick character string.}
+\item{A \code{datelifeQuery} object}{From \code{\link[=make_datelife_query]{make_datelife_query}}.}
+}}
 
 \item{marker}{A character vector indicating the gene from BOLD system to be used for branch length estimation.}
 
@@ -27,7 +32,7 @@ a newick character string, or a 'datelifeQuery' object from make_datelife_query 
 
 \item{doML}{Boolean; only relevant if chronogram = TRUE. If TRUE, it does ML branch length optimization with phangorn::optim.pml}
 
-\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 
 \item{aligner}{A character vector indicating whether to use MAFFT or MUSCLE to align BOLD sequences. It is not case sensitive. Default to MUSCLE.}
 

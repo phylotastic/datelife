@@ -2,7 +2,7 @@
 #'
 # #' To be renamed summary_taxon.
 #'
-#' @param datelife_query A datelifeQuery object, output of make_datelife_query function
+#' @param datelife_query A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.
 #' @inheritParams datelife_result_check
 #' @export
 get_taxon_summary <- function(datelife_result = NULL,
@@ -85,7 +85,7 @@ get_taxon_summary <- function(datelife_result = NULL,
 # print.datelifeTaxonSummary <- function(taxon_summary){
 #
 # }
-#' Summarize an output from \code{\link[=get_datelife_result]{get_datelife_result}
+#' Summarize an output from \code{\link[=get_datelife_result]{get_datelife_result}}
 #'
 #' Get different types of summaries from a \code{datelifeResult} object.
 #' A \code{datelifeResult} object is a named list of patristic matrcies.

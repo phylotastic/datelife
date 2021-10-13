@@ -21,7 +21,7 @@ datelife_result_median(datelife_result, ...)
 \item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
 }}
     \item{\code{target_tree}}{A phylo object. Use this in case you want a particular backbone for the output tree.}
-    \item{\code{datelife_query}}{A datelifeQuery object, output of make_datelife_query function}
+    \item{\code{datelife_query}}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.}
   }}
 }
 \value{

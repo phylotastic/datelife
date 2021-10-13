@@ -6,16 +6,21 @@
 # plot(use_all_calibrations_bladj(phy,calibrations, use = "Mean"))
 
 #' Use calibrations to date a topology with bladj.
-#' @param phy A phylo object with or wothput branch lengths
-#' @param calibrations A data frame of calibrations from get_all_calibrations function, or a subset of it.
+#' @param phy A \code{phylo} object with or without branch lengths
+#' @param calibrations A data frame of secondary calibrations for any pair of taxon
+#' names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.
 #' @param type The type of age to use as calibration: "median", "mean", "min", or "max".
 #' @param root_age Not implemented yet
 #' @param match_calibrations Boolean, default to TRUE. It will run match_all_calibrations function. Set to FALSE if your calibrations have already been matched.
-#' @return A phylo object with branch lengths proportional to time.
+#' @return A \code{phylo} object with branch lengths proportional to time.
 #' @details
 #' root_age Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.
 #' @export
-use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age = NULL, match_calibrations = TRUE){
+use_calibrations_bladj <- function(phy,
+																	 calibrations,
+																	 type = "median",
+																	 root_age = NULL,
+																	 match_calibrations = TRUE){
 	if(!inherits(phy, "phylo")){
 		stop("'phy' is not a phylo object.")
 	}
@@ -78,7 +83,8 @@ use_calibrations_bladj <- function(phy, calibrations, type = "median", root_age 
 #' @param phy A phylo object
 #' @param calibration_distribution is a list of node ages distributions, named with the node number from phy
 # calibration_distribution <- calibs$phy$calibration_distribution
-check_conflicting_calibrations <- function(phy, calibration_distribution){
+check_conflicting_calibrations <- function(phy,
+																					 calibration_distribution){
   if(!inherits(phy, "phylo")){
     message("'phy' is not a phylo object")
     return(NA)

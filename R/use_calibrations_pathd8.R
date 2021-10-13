@@ -2,7 +2,7 @@
 #'
 #' \code{use_calibrations_pathd8} uses secondary calibrations to date a tree with initial branch lengths using PATHd8.
 #'
-#' @param phy A phylo object with branch lengths.
+#' @param phy A \code{phylo} object with branch lengths.
 #' @inheritParams use_calibrations_bladj
 #' @param expand How much to expand by each step to get consistent calibrations. Should be between 0 and 1.
 #' @param giveup How many expansions to try before giving up
@@ -16,7 +16,10 @@
 #' In some cases, it returns edge lengths in relative time (with maximum tree depth = 1)
 #' instead of absolute time, as given by calibrations. In this case, the function returns NA.
 #' This is an issue from PATHd8.
-use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 100){
+use_calibrations_pathd8 <- function(phy,
+                                    calibrations,
+                                    expand = 0.1,
+                                    giveup = 100){
     phy <- input_process(phy, verbose = FALSE)
     # i=1
     # phy <- tax_phyloall_bold[[3]][[1]]
@@ -32,11 +35,11 @@ use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 10
     # plot(chronogram, main = i)
     # ape::axisPhylo()
     if (!inherits(phy, "phylo")){
-		    message("'phy' is not a phylo object")
+		    warning("'phy' is not a phylo object")
         return(NA)
 	  }
     if(is.null(phy$edge.length)){
-        message("'phy' does not have branch lengths, consider using a dating method that does not require data, such as BLADJ or MrBayes.")
+        warning("'phy' does not have branch lengths, consider using a dating method that does not require data, such as BLADJ or MrBayes.")
         return(NA)
     }
     # fix any negative branch lengths, otherwise pathd8 will silently not work:
@@ -44,7 +47,7 @@ use_calibrations_pathd8 <- function(phy, calibrations, expand = 0.1, giveup = 10
     # following line checks wether all calibrations are present in phy, and returns that in calibs$present_calibrations
     calibs <- match_all_calibrations(phy, calibrations)
     if(nrow(calibs$present_calibrations) < 1){
-      message("\nDating analysis is not possible with this set of calibrations.")
+      warning("\nDating analysis is not possible with this set of calibrations.")
       return(NA)
     }
     chronogram <- NA

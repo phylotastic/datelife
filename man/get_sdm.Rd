@@ -20,7 +20,7 @@ get_sdm(unpadded.matrices, weighting, verbose)
 }
 }}
 
-\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \value{
 A matrix.

@@ -48,7 +48,7 @@ phylo_generate_uncertainty(
 
 \item{rescale}{Boolean. If true, observed age will be rescaled each round.}
 
-\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \value{
 A phylo or multiPhylo object with the same topology as phy but different branch lengths

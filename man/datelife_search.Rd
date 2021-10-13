@@ -22,45 +22,41 @@ datelife_search(
 )
 }
 \arguments{
-\item{input}{A character vector of taxon names, a tree as a 'phylo' object or
-a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
+\item{input}{One of the following:
+\describe{
+\item{Taxon names}{As a character vector.}
+\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+            object, OR as a newick character string.}
+\item{A \code{datelifeQuery} object}{From \code{\link[=make_datelife_query]{make_datelife_query}}.}
+}}
 
 \item{summary_format}{The desired output format for target chronograms (chronograms
 of target taxa). See details.}
 
-\item{partial}{Boolean; default to TRUE: use source trees even if they only
+\item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only
 match some of the desired taxa.}
 
-\item{use_tnrs}{Boolean; default to FALSE. If TRUE, use OpenTree's services
-to resolve names. This can dramatically improve the chance of matches, but also
-take longer.}
-
-\item{approximate_match}{Boolean; default to TRUE: use a slower TNRS to correct
-misspellings, increasing the chance of matches (including false matches)}
-
-\item{update_opentree_chronograms}{default to FALSE}
+\item{update_opentree_chronograms}{default to \code{FALSE}}
 
 \item{cache}{A character vector of length one, with the name of the data object
-to cache. Default to "opentree_chronograms", a data object storing Open Tree of
+to cache. Default to \code{"opentree_chronograms"}, a data object storing Open Tree of
 Life's database chronograms and other associated information.}
 
 \item{summary_print}{A character vector specifying type of summary information
-to be printed: "citations" for the references of chronograms from cache where target
-taxa are found, "taxa" for a summary of the number of chronograms where each target
-taxon is found, or "none" if nothing should be printed. Default to display both
-c("citations", "taxa").}
+to be printed to screen:
+\describe{
+\item{"citations"}{Prints references of chronograms where target taxa are found.}
+\item{"taxa"}{Prints a summary of the number of chronograms where each target taxon is found.}
+\item{"none"}{Nothing is printed to screen.}
+}
+Default to \code{c("citations", "taxa")}, which displays both.}
 
 \item{taxon_summary}{A character vector specifying if data on target taxa missing
-in source chronograms should be added to the output as a "summary" or as a
-presence/absence "matrix". Default to "none", no information on taxon_summary
+in source chronograms should be added to the output as a \code{"summary"} or as a
+presence/absence \code{"matrix"}. Default to \code{"none"}, no information on taxon_summary
 added to the output.}
 
-\item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get
-all species names from taxon names given in input. Must have same length as input.
-If input is a newick string , with some clades it will be converted to phylo
-object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
-
-\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 
 \item{criterion}{Whether to get the grove with the most trees or the most taxa}
 }

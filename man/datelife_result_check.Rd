@@ -9,11 +9,7 @@ datelife_result_check(datelife_result, use_tnrs = FALSE, verbose = FALSE)
 \arguments{
 \item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
 
-\item{use_tnrs}{Boolean; default to FALSE. If TRUE, use OpenTree's services
-to resolve names. This can dramatically improve the chance of matches, but also
-take longer.}
-
-\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \description{
 checks if we obtained an empty search with the set of input taxon names

@@ -20,7 +20,7 @@ datelife_result_sdm(datelife_result, weighting = "flat", verbose = TRUE, ...)
 }
 }}
 
-\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 
 \item{...}{
   Arguments passed on to \code{\link[=summary_matrix_to_phylo]{summary_matrix_to_phylo}}
@@ -34,7 +34,7 @@ datelife_result_sdm(datelife_result, weighting = "flat", verbose = TRUE, ...)
 \item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
 }}
     \item{\code{target_tree}}{A phylo object. Use this in case you want a particular backbone for the output tree.}
-    \item{\code{datelife_query}}{A datelifeQuery object, output of make_datelife_query function}
+    \item{\code{datelife_query}}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.}
   }}
 }
 \value{
