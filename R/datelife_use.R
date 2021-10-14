@@ -1,15 +1,14 @@
-#' Generate one or multiple chronograms for a set of given taxa.
+#' Generate one or multiple chronograms for a set of given taxa
 #'
-#' \code{datelife_use} generates one or multiple chronograms (i.e., phylogenetic
+#' @description \code{datelife_use} generates one or multiple chronograms (i.e., phylogenetic
 #' trees with branch lengths proportional to time) for a set of \code{input} taxa,
 #' dated with bladj or PATHd8, using secondary calibrations available for any pair
 #' of \code{input} taxa, mined from the code{\link[=opentree_chronograms]{opentree_chronograms}}
 #' local DateLife database.
 #'
 #' @aliases use_all_calibrations
-#' @inheritParams datelife_search input
-#' @inheritParams use_all_calibrations dating_method
-#' @inheritDotParams get_all_calibrations
+#' @inheritParams datelife_search
+#' @inheritParams use_all_calibrations
 #' @return A list with a chronogram and secondary calibrations used for dating.
 #' @export
 #' @details
@@ -19,37 +18,20 @@
 #' to get a topology with branch lengths. If it can't, it will get an Open Tree
 #' of Life synthetic tree topology and will date it with bladj.
 datelife_use <- function(input = NULL,
-                         dating_method = "bladj",
-                         ...) {
+                         each = FALSE,
+                         dating_method = "bladj") {
 		# use congruification to expand calibrations: already implemented in match_all_calibrations
 		# and pathd8 still does not work sometimes
 		# calibrations.df <- eachcal[[2]]
 		# calibrations.df <- calibs$calibration
 		# phy <- tax_phyloallall[[2]][[3]]
 
-    # get_all_calibrations arguments
-    if (methods::hasArg("each")) {
-      each <- list(...)$each
-      if(!is.logical(each)){
-        stop("'each' argument must be one of TRUE or FALSE")
-      }
-    } else {
-      each <- FALSE
-    }
-		# run with an example of three birds when input is NULL
-		if(is.null(input)){
-      stop("'input' is NULL")
-		}
 		# run with taxa provided by user
 	  # if(inherits(input, "datelifeResult") | any(is.numeric(input))){
 	  #   # a datelifeResult object is a list of chronograms from OpenTree matching at least 2 queried taxa
 	  #   stop("'input' must be any of the following: \n\t 1) a character vector of taxon names, \n\t 2) a tree as 'phylo' object or newick character string, or \n\t 3) a 'datelifeQuery' object, see 'make_datelife_query' function.")
 	  # }
-  	if(inherits(input, "multiPhylo")) {
-  		input <- input[[1]]
-  		message("'input' is a multiPhylo object. Only the first 'phylo' object will be used.")
-  	}
-    datelife_query <- input
+
 
     if(!is_datelife_query(datelife_query)){
       # make_datelife_query also removes singleton nodes in phy
@@ -67,40 +49,74 @@ datelife_use <- function(input = NULL,
 	  	phy <- datelife_query$phy
 	  }
 
-    # perform a datelife_search through get_all_calibrations:
-    calibrations <- get_all_calibrations(input = input, each = each)
+    # call datelife_search, get_all_calibrations and use_all_calibrations:
+    res <- datelife_use_phylo(phy = phy,
+                              each = each,
+                              dating_method = dating_method)
 
-		res <- use_all_calibrations(phy = phy,
-                                calibrations = calibrations,
-                                dating_method = dating_method)
     return(res)
 }
 
-#' Generate one or multiple chronograms for a set of given taxon names.
+#' Generate one or multiple chronograms for a set of given taxon names
 #'
-#' \code{datelife_use_vector} generates one or multiple chronograms (i.e., phylogenetic
+#' \code{datelife_use_basic} generates one or multiple chronograms (i.e., phylogenetic
 #' trees with branch lengths proportional to time) for a set of \code{input} taxa,
 #' dated with bladj or PATHd8, using secondary calibrations available for any pair
 #' of \code{input} taxa, mined from the code{\link[=opentree_chronograms]{opentree_chronograms}}
 #' local DateLife database.
 #'
-#' @aliases use_all_calibrations_vector
-#' @param input A character vector of taxon names
-#' @inheritParams datelife_search
-#' @param dating_method The method used for tree dating. Options are "bladj" or "pathd8"
+#' @param input A \code{datelifeQuery} object.
 #' @inheritDotParams get_all_calibrations
-#' @return A list with a chronogram and secondary calibrations used
+#' @inheritDotParams use_all_calibrations
+#' @return A list with a chronogram and secondary calibrations used.
 #' @export
-#' @details
-#' If input is a tree, it will use secondary calibrations to (1) date the tree with bladj
-#' if it has no branch lengths, or (2) date the tree with PATHd8 if it has branch lengths.
-#' If input is a vector of taxon names, it will attempt to reconstruct a BOLD tree first
-#' to get a topology with branch lengths. If it can't, it will get an Open Tree
-#' of Life synthetic tree topology and will date it with bladj.
-datelife_use_vector <- function(input = NULL,
-                         dating_method = "bladj",
-                         ...) {
+datelife_use_datelifequery <- function(input = NULL,
+                                       dating_method = "bladj",
+                                       each = FALSE) {
+#
+    if (!is_datelife_query(input)) {
+      warning("'input' is not a 'datelifeQuery' object.")
+      return(NA)
+    }
+    if (!inherits(input$phy, phylo)) {
+      warning("'input$phy' is not a 'phylo' object.")
+      return(NA)
+    }
+    # get calibrations by performing a datelife_search with get_all_calibrations:
+    calibrations <- get_calibrations_datelifequery(input = input,
+                                                   each = each)
 
-#
-#
+    # date the topology with obtained calibrations
+    res <- use_all_calibrations(phy = input$phy,
+                                calibrations = calibrations,
+                                dating_method = dating_method)
+    return(res)
+}
+#'
+#' @param phy a \code{phylo} object with or without branch lengths.
+#' @inheritParams get_all_calibrations
+#' @inherit datelife_use return
+#' @export
+datelife_use_phylo <- function(phy = NULL,
+                               each = FALSE,
+                               dating_method = "bladj") {
+    #
+    if(inherits(phy, "multiPhylo")) {
+      message(message_multiphylo())
+      phy <- phy[[1]]
+    }
+    if(!inherits(phy, "phylo")) {
+      warning("'phy' must be a 'phylo' object.")
+      return(NA)
+    }
+    # get_all_calibrations uses phy$tip.label to do a datelife_search, make a
+    # datelifeQuery, and extract calibrations:
+    calibrations <- get_all_calibrations(input = phy,
+                                         each = each)
+
+    # date the given tree topology with calibrations obtained in previous step
+    res <- use_all_calibrations(phy = phy,
+                                calibrations = calibrations,
+                                dating_method = dating_method)
+    return(res)
 }

@@ -8,7 +8,8 @@
 #'	\item{Taxon names}{As a character vector.}
 #'	\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
 #'				object, OR as a newick character string.}
-#'	\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query}}.}
+#'	\item{A \code{datelifeQuery} object}{An output from [make_datelife_query_vector()]
+#' 				\code{\link[=make_datelife_query]{make_datelife_query}}.}
 #'	}
 #' @param summary_format The desired output format for target chronograms (chronograms
 #' of target taxa). See details.
@@ -107,10 +108,14 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 			cache <- get("opentree_chronograms")
 		}
 	}
-	datelife_query <- make_datelife_query(input = input, use_tnrs = use_tnrs,
-		approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon,
-		verbose = verbose)
-	datelife_result.here <- get_datelife_result(input = datelife_query,
+	if (is_datelife_query(input)){
+		datelife_query <- input
+	} else {
+		datelife_query <- make_datelife_query(input = input, use_tnrs = use_tnrs,
+			approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon,
+			verbose = verbose)
+	}
+	datelife_result.here <- get_datelife_result_datelifequery(input = datelife_query,
 		partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match,
 		update_opentree_chronograms = FALSE, cache = cache, verbose = verbose)
 	# print.datelife(datelife_result = datelife_result.here)

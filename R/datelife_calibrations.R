@@ -15,23 +15,22 @@
 #' @export
 get_all_calibrations <- function(input = NULL,
 																 each = FALSE) {
+#
+  if (inherits(input, "datelifeQuery")) {
+  	res <- get_calibrations_datelifequery(input = input,
+  																				each = each)
+  }
   if (inherits(input, "phylo") | inherits(input, "multiPhylo")) {
 		if (inherits(input, "multiPhylo")) {
-			tip_labels <- unname(unlist(lapply(input, "[", "tip.label")))
+			input <- unname(unlist(lapply(input, "[", "tip.label")))
 		} else {
-			tip_labels <- input$tip.label
+			input <- input$tip.label
 		}
-		tip_labels <- unique(gsub(" ", "_", tip_labels))
-    res <- get_calibrations_vector(input = tip_labels,
-                                   each = each)
   }
   if (inherits(input, "character")) {
+		input <- unique(gsub(" ", "_", input))
     res <- get_calibrations_vector(input = input,
                                    each = each)
-  }
-  if (inherits(input, "datelifeQuery")) {
-    res <- get_calibrations_datelifequery(input = input,
-                                   				 each = each)
   }
   return(res)
 }

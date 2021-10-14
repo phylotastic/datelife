@@ -5,7 +5,7 @@
 #' calibrations) for each taxon pair in a given \code{phylo} or \code{multiPhylo}
 #' object.
 #'
-#' @param input a \code{phylo} or \code{multiPhylo} object with branch lengths proportional to time.
+#' @param phy a \code{phylo} or \code{multiPhylo} object with branch lengths proportional to time.
 #' @inheritParams get_all_calibrations
 #' @return A \code{data frame} (or list of data frames if \code{each = TRUE}) of secondary
 #' calibrations available for each pair of taxon names given as tip labels in an
@@ -14,10 +14,10 @@
 #' chronograms from which the secondary calibrations were extracted.
 #'
 #' @export
-extract_calibrations_phylo <- function(input = NULL,
+extract_calibrations_phylo <- function(phy = NULL,
 																       each = FALSE) {
-	if (inherits(input, "multiPhylo")) {
-		chronograms <- input
+	if (inherits(phy, "multiPhylo")) {
+		chronograms <- phy
 		xx <- sapply(chronograms, "[", "edge.length")
 		xx <- unname(sapply(xx, is.null))
 	  if (all(xx)) {
@@ -104,7 +104,7 @@ get_calibrations_vector <- function(input = c("Rhea americana", "Pterocnemia pen
 	phyloall <- datelife_search(input = input,
 															summary_format = "phylo_all")
 
-	return(extract_calibrations_phylo(input = phyloall,
+	return(extract_calibrations_phylo(phy = phyloall,
                                     each = each))
 }
 #' Search and extract available secondary calibrations from a given \code{datelifeQuery} object.
@@ -134,7 +134,7 @@ get_calibrations_datelifequery <- function(input = c("Rhea americana", "Pterocne
 	phyloall <- datelife_search(input = input,
 															summary_format = "phylo_all")
 
-	return(extract_calibrations_phylo(input = phyloall,
+	return(extract_calibrations_phylo(phy = phyloall,
                                     each = each))
 }
 #' Extract secondary calibrations from a given \code{datelifeResult} object.
@@ -161,6 +161,6 @@ extract_calibrations_dateliferesult <- function(input = NULL,
               summarize_datelife_result(datelife_result = input,
                                         summary_format = "phylo_all"))
 
-  return(extract_calibrations_phylo(input = phyloall,
+  return(extract_calibrations_phylo(phy = phyloall,
                                     each = each))
 }

@@ -1,6 +1,12 @@
 #' Gets taxon names from a character vector, a phylo object or a newick character string.
 #'
 #' Process the two latter with input_process first.
+#' @param input One of the following:
+#' \describe{
+#'	\item{Taxon names}{As a character vector.}
+#'	\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+#'				object, OR as a newick character string.}
+#' }
 #' @inheritParams datelife_search
 #' @return A datelifeQuery object, a list of three elements: $phy a phylo object or NA, if input is not a tree; a cleaned vector of taxon names; and $ott_ids a numeric vector of OTT ids if use_tnrs = TRUE, or NULL if use_tnrs = FALSE.
 #' @details If input has length 1, get_spp_from_taxon is always set to TRUE (in datelife_search, not in here, because of function dependencies)
@@ -112,13 +118,13 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 #' @return A phylo object or NA if no tree
 #' @export
 input_process <- function(input, verbose = FALSE){
-	message("Processing 'input'...")
+	message("Phylo-processing 'input'...")
 	input_class <- "phylo"
 	ott_ids <- NULL
 	#TODO remove the multiPhylo if option from here?
 	# make a method for input processing on multiPhylo objects
 	if(inherits(input, "multiPhylo")) {
-		message("'input' is a 'multiPhylo' object. Only the first element will be used.")
+		message(message_multiphylo())
 		input <- input[[1]]
 	}
 	if(inherits(input, "phylo")) {
