@@ -21,7 +21,8 @@ get_datelife_result(
 \item{Taxon names}{As a character vector.}
 \item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
             object, OR as a newick character string.}
-\item{A \code{datelifeQuery} object}{From \code{\link[=make_datelife_query]{make_datelife_query}}.}
+\item{A \code{datelifeQuery} object}{An output from [make_datelife_query_vector()]
+                \code{\link[=make_datelife_query]{make_datelife_query}}.}
 }}
 
 \item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only

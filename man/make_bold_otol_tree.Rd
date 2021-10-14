@@ -21,7 +21,8 @@ make_bold_otol_tree(
 \item{Taxon names}{As a character vector.}
 \item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
             object, OR as a newick character string.}
-\item{A \code{datelifeQuery} object}{From \code{\link[=make_datelife_query]{make_datelife_query}}.}
+\item{A \code{datelifeQuery} object}{An output from [make_datelife_query_vector()]
+                \code{\link[=make_datelife_query]{make_datelife_query}}.}
 }}
 
 \item{marker}{A character vector indicating the gene from BOLD system to be used for branch length estimation.}

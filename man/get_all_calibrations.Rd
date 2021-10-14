@@ -7,10 +7,13 @@
 get_all_calibrations(input = NULL, each = FALSE)
 }
 \arguments{
-\item{input}{\describe{
+\item{input}{One of the following:
+\describe{
 \item{Taxon names}{As a character vector.}
-\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo} object, OR as a newick character string.}
-\item{A \code{datelifeResult} object}{From \code{\link[=get_datelife_result]{get_datelife_result}}.}
+\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+            object, OR as a newick character string.}
+\item{A \code{datelifeQuery} object}{An output from [make_datelife_query_vector()]
+                \code{\link[=make_datelife_query]{make_datelife_query}}.}
 }}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
@@ -23,6 +26,7 @@ for each pair of given taxon names. The attribute "chronograms" contains the
 source chronograms from which the calibrations were obtained.
 }
 \description{
-\code{get_all_calibrations} gets divergence times (i.e., secondary
-calibrations) for each taxon name pair given in \code{input}.
+\code{get_all_calibrations} performs a \code{\link[=datelife_search]{datelife_search}}
+and gets divergence times (i.e., secondary calibrations) for each taxon name
+pair given in \code{input}.
 }

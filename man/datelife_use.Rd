@@ -3,23 +3,21 @@
 \name{datelife_use}
 \alias{datelife_use}
 \alias{use_all_calibrations}
-\title{Generate one or multiple chronograms for a set of given taxa.}
+\title{Generate one or multiple chronograms for a set of given taxa}
 \usage{
-datelife_use(input = NULL, dating_method = "bladj", ...)
+datelife_use(input = NULL, each = FALSE, dating_method = "bladj")
 }
 \arguments{
-\item{...}{
-  Arguments passed on to \code{\link[=get_all_calibrations]{get_all_calibrations}}
-  \describe{
-    \item{\code{input}}{\describe{
+\item{input}{One of the following:
+\describe{
 \item{Taxon names}{As a character vector.}
-\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo} object, OR as a newick character string.}
-\item{A \code{datelifeResult} object}{From \code{\link[=get_datelife_result]{get_datelife_result}}.}
+\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+            object, OR as a newick character string.}
+\item{A \code{datelifeQuery} object}{An output from [make_datelife_query_vector()]
+                \code{\link[=make_datelife_query]{make_datelife_query}}.}
 }}
-    \item{\code{each}}{Boolean, default to \code{FALSE}: all calibrations are returned in
-the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
-in separate data frames.}
-  }}
+
+\item{dating_method}{Tree dating method. Options are "bladj" or "pathd8"}
 }
 \value{
 A list with a chronogram and secondary calibrations used for dating.

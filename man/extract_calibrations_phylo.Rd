@@ -5,10 +5,10 @@
 \title{Extract secondary calibrations from a \code{phylo} or \code{multiPhylo} object with
 branch lengths proportional to time.}
 \usage{
-extract_calibrations_phylo(input = NULL, each = FALSE)
+extract_calibrations_phylo(phy = NULL, each = FALSE)
 }
 \arguments{
-\item{input}{a \code{phylo} or \code{multiPhylo} object with branch lengths proportional to time.}
+\item{phy}{a \code{phylo} or \code{multiPhylo} object with branch lengths proportional to time.}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
 the same data frame. If \code{TRUE}, calibrations from each chronogram are returned

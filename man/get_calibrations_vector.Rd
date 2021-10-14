@@ -2,7 +2,7 @@
 % Please edit documentation in R/all_calibrations_get.R
 \name{get_calibrations_vector}
 \alias{get_calibrations_vector}
-\title{Get available secondary calibrations for a given character vector of taxon names.}
+\title{Search and extract available secondary calibrations for a given character vector of taxon names.}
 \usage{
 get_calibrations_vector(
   input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
@@ -22,9 +22,9 @@ for each pair of given taxon names. The attribute "chronograms" contains the
 source chronograms from which the calibrations were obtained.
 }
 \description{
-\code{get_calibrations_vector} mines DateLife's local database of phylogenetic
+\code{get_calibrations_vector} searches DateLife's local database of phylogenetic
 trees with branch lengths proportional to time (aka, chronograms) with
-\code{\link[=datelife_search]{datelife_search}}, and gets divergence times
+\code{\link[=datelife_search]{datelife_search}}, and extracts divergence times
 (i.e., secondary calibrations) from chronograms for each pair of given taxon names.
 }
 \details{
