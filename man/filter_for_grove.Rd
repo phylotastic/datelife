@@ -2,7 +2,7 @@
 % Please edit documentation in R/groves.R
 \name{filter_for_grove}
 \alias{filter_for_grove}
-\title{Filter a datelifeResult object to find the largest grove}
+\title{Filter a \code{datelifeResult} object to find the largest grove}
 \usage{
 filter_for_grove(datelife_result, criterion = "taxa", n = 2)
 }
@@ -17,5 +17,5 @@ filter_for_grove(datelife_result, criterion = "taxa", n = 2)
 A datelifeResult object filtered to only include one grove of trees
 }
 \description{
-Filter a datelifeResult object to find the largest grove
+Filter a \code{datelifeResult} object to find the largest grove
 }

@@ -1,4 +1,4 @@
-#' Get a taxon summary of a \code{datelifeResult} object.
+#' Get a taxon summary of a \code{datelifeResult} object
 #'
 # #' To be renamed summary_taxon.
 #'
@@ -87,10 +87,11 @@ get_taxon_summary <- function(datelife_result = NULL,
 # }
 #' Summarize an output from \code{\link[=get_datelife_result]{get_datelife_result}}
 #'
-#' Get different types of summaries from a \code{datelifeResult} object.
+#' @description Get different types of summaries from a \code{datelifeResult} object.
 #' A \code{datelifeResult} object is a named list of patristic matrcies.
 #' This allows rapid processing of data.
-#' If you need a list of chronograms from your \code{datelifeResult} object, this is the function you are looking for.
+#' If you need a list of chronograms from your \code{datelifeResult} object, this
+#' is the function you are looking for.
 #'
 #' @inheritParams get_taxon_summary
 #' @inheritParams datelife_result_check

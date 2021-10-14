@@ -2,7 +2,7 @@
 % Please edit documentation in R/messages.R
 \name{message_multiphylo}
 \alias{message_multiphylo}
-\title{Message for \code{multiPhylo} input}
+\title{Message for a \code{multiPhylo} input}
 \usage{
 message_multiphylo()
 }
@@ -10,5 +10,5 @@ message_multiphylo()
 A relevant message as a character string.
 }
 \description{
-Message for \code{multiPhylo} input
+Message for a \code{multiPhylo} input
 }

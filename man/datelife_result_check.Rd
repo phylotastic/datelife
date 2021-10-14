@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_search.R
 \name{datelife_result_check}
 \alias{datelife_result_check}
-\title{checks if we obtained an empty search with the set of input taxon names}
+\title{Check if we obtained an empty search with the set of input taxon names}
 \usage{
 datelife_result_check(datelife_result, use_tnrs = FALSE, verbose = FALSE)
 }
@@ -12,5 +12,5 @@ datelife_result_check(datelife_result, use_tnrs = FALSE, verbose = FALSE)
 \item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \description{
-checks if we obtained an empty search with the set of input taxon names
+Check if we obtained an empty search with the set of input taxon names
 }

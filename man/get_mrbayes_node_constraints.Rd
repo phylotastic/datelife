@@ -2,7 +2,8 @@
 % Please edit documentation in R/make_mrbayes_tree.R
 \name{get_mrbayes_node_constraints}
 \alias{get_mrbayes_node_constraints}
-\title{Makes a node constraints and node calibrations block for a MrBayes run file from a list of taxa and ages or from a dated tree}
+\title{Makes a block of node constraints and node calibrations for a MrBayes run file
+from a list of taxa and ages, or from a dated tree}
 \usage{
 get_mrbayes_node_constraints(
   constraint = NULL,
@@ -62,5 +63,6 @@ get_mrbayes_node_constraints(
 A set of MrBayes constraints and/or calibration commands printed in console as character strings or as a text file specified in mrbayes_constraints_file.
 }
 \description{
-Makes a node constraints and node calibrations block for a MrBayes run file from a list of taxa and ages or from a dated tree
+Makes a block of node constraints and node calibrations for a MrBayes run file
+from a list of taxa and ages, or from a dated tree
 }

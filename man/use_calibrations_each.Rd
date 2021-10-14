@@ -3,7 +3,7 @@
 \name{use_calibrations_each}
 \alias{use_calibrations_each}
 \title{Date a given tree topology by using a given list of calibrations independently,
-to generate multiple hypothesis of time of divergence.}
+to generate multiple hypothesis of time of divergence}
 \usage{
 use_calibrations_each(phy = NULL, calibrations = NULL, ...)
 }

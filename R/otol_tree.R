@@ -1,7 +1,7 @@
-#' Get an Open Tree of Life synthetic tree of a set of lineages.
+#' Get an Open Tree of Life synthetic subtree of a set of given taxon names.
 #' @inheritParams check_ott_input
-#' @param otol_version Version of OToL to use
-#' @param resolve boolean default to TRUE. Whether to resolve the tree at random or not.
+#' @param otol_version Version of Open Tree of Life to use
+#' @param resolve boolean; default to TRUE. Whether to resolve the tree at random or not.
 #' @inheritDotParams check_ott_input
 #' @return A phylo object
 #' @export
@@ -9,7 +9,8 @@ get_otol_synthetic_tree <- function(input = NULL,
 																		ott_ids = NULL,
 																		otol_version = "v3",
 																		resolve = FALSE, ...){
-
+  #
+	message("Getting an OpenTree induced synthetic subtree.")
 	input_ott_match <- suppressMessages(check_ott_input(input, ott_ids, ...))
 	if(length(input_ott_match) < 2){
 		message("At least two valid names or numeric ott_ids are needed to get a tree.")
@@ -31,14 +32,14 @@ get_otol_synthetic_tree <- function(input = NULL,
 		return(phy)
 	}
 	if(!ape::is.binary(phy)){
-		message(paste0("OToL synthetic tree of input taxa is not fully resolved (",
+		message(paste0("OpenTree synthetic tree of input taxa is not fully resolved (",
 		phy$Nnode, " nodes/", length(phy$tip.label), " tips)."))
 		if(resolve){
 			message("Resolving at random...")
 			phy <- ape::multi2di(phy)
 		}
 	} else {
-		message("OToL synthetic tree of input taxa is fully resolved.")
+		message("OpenTree synthetic tree of input taxa is fully resolved.")
 	}
 	# example of weird behaviour on tip labeling from otol:
 	# tnrs <- rotl::tnrs_match_names(c("Staphylococcus aureus", "Bacillus subtilis", "Neisseria meningitidis"))
@@ -61,25 +62,26 @@ get_otol_synthetic_tree <- function(input = NULL,
 	return(phy)
 }
 
-#' Get an otol induced dated subtree from your set of queried taxa
+#' Get a dated OpenTree induced synthetic subtree from a set of given taxon names, from blackrim's FePhyFoFum service.
 #' @inheritParams check_ott_input
 #' @inheritDotParams check_ott_input
 ##' @param ... Arguments to pass to check_ott_input
 #' @return A phylo object with edge length proportional to time in Myrs. It will return NA if any ott_id is invalid.
 #' @export
-#' @details otol dated tree from Stephen Smith's otol scaling service.
-# # ' @examples
-#' # if you want to make an ltt plot of a dated OToL tree you'll need to get rid of singleton nodes with ape::collapse.singles
-#' # and also probably do phytools::force.ultrametric
+#' @details OpenTree dated tree from Stephen Smith's OpenTree scaling service at
+#' [https://github.com/FePhyFoFum/gophy] if you want to make an LTT plot of
+#' a dated OpenTree tree you'll need to get rid of singleton nodes with
+#' [ape::collapse.singles()] and also probably do [phytools::force.ultrametric()]
 get_dated_otol_induced_subtree <- function(input = NULL,
 																					 ott_ids = NULL, ...){
 	# for debugging:
 	# utils::data(threebirds.rda)
 	# input <- threebirds_query$cleaned_names
 	# ott_ids <- threebirds_query$ott_ids
+	message("Getting a dated OpenTree induced synthetic subtree (from blackrim's FePhyFoFum).")
 	input_ott_match <- suppressMessages(check_ott_input(input, ott_ids, ...))
 	if(length(input_ott_match) < 2){
-		message("At least two valid names or numeric ott_ids are needed to get a tree")
+		message("At least two valid names or numeric ott_ids are needed to get a tree from OpenTree.")
 		return(NA)
 	}
     pp <- tryCatch(httr::POST("http://141.211.236.35:10999/induced_subtree",
@@ -95,7 +97,7 @@ get_dated_otol_induced_subtree <- function(input = NULL,
 		rr$ott_ids <- ape::read.tree(text = pp$newick)$tip.label
 	  return(rr)
 	}	else { # this means it errored and we return NA
-		message("There was probably a connection error with OToL's tree-dating service; try again later.")
+		message("There was probably a connection error with dated OpenTree service (blackrim's FePhyFoFum); you should try again later.")
 		return(NA)
 	}
 }

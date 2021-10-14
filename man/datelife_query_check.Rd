@@ -19,6 +19,6 @@ datelife_query_check(datelife_query = NULL, ...)
 A datelifeQuery object
 }
 \description{
-Check if input is a datelifeQuery object, otherwise use make_datelife_query
-to process it and create a datelifeQuery object.
+Check if input is a datelifeQuery object, otherwise use
+[make_datelife_query()] to process it and create a \code{datelifeQuery} object.
 }

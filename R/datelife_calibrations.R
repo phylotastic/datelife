@@ -1,6 +1,6 @@
 #' Get secondary calibrations from a set of given taxon names
 #'
-#' \code{get_all_calibrations} performs a \code{\link[=datelife_search]{datelife_search}}
+#' @description \code{get_all_calibrations} performs a \code{\link[=datelife_search]{datelife_search}}
 #' and gets divergence times (i.e., secondary calibrations) for each taxon name
 #' pair given in \code{input}.
 #'

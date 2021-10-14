@@ -1,18 +1,22 @@
-#' Get a chronogram (dated phylogenetic tree) or published times of lineage divergence available for a set of taxa.
-
-#' Core datelife function to input a vector of species, newick string, or phylo object to
-
+#' Get scientific, peer-reviewed information on time of lineage
+#' divergence openly available for a given set of taxon names
+#'
+#' @description \code{datelife_search} is the core DateLife function to find and
+#' get all openly available, peer-reviewed scientific information on time of
+#' lineage divergence for a set \code{input} taxon names given as a character
+#' vector, a newick character string, or a \code{phylo} or \code{multiPhylo} object.
+#'
 #' @aliases datelife
 #' @param input One of the following:
 #' \describe{
 #'	\item{Taxon names}{As a character vector.}
-#'	\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+#'	\item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
 #'				object, OR as a newick character string.}
 #'	\item{A \code{datelifeQuery} object}{An output from [make_datelife_query_vector()]
 #' 				\code{\link[=make_datelife_query]{make_datelife_query}}.}
 #'	}
-#' @param summary_format The desired output format for target chronograms (chronograms
-#' of target taxa). See details.
+#' @param summary_format The desired output format for source chronograms (chronograms
+#' with two or more input taxa). See details.
 #' @param summary_print A character vector specifying type of summary information
 #' to be printed to screen:
 #' \describe{
@@ -138,17 +142,17 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 
 
 
-#' checks if we obtained an empty search with the set of input taxon names
+#' Check if we obtained an empty search with the set of input taxon names
 #' @inheritParams datelife_search
 #' @param datelife_result An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.
 #' @export
 datelife_result_check <- function(datelife_result, use_tnrs = FALSE, verbose = FALSE){
 	if(length(datelife_result) < 1) {
-		warning("Datelife Result object is empty.", call. = FALSE)
+		warning("'datelife_result' is empty.", call. = FALSE)
 		# if(verbose) {
-			message("Input taxa were not found across available chronograms.")
+			message("'input' taxon names were not found in the local chronogram database.")
 			if(!use_tnrs) {
-				message("Setting use_tnrs = TRUE might change this, but it is time consuming.")
+				message("setting 'use_tnrs = TRUE' might change this, but it is time consuming.")
 			}
 		# }
 	}
@@ -164,16 +168,16 @@ check_datelife_result <- function(datelife_result){
 			if(all(grepl("matrix", class_dl))){
 				class(datelife_result) <- "datelifeResult"
 			} else {
-				message("datelife_result has some elements that are not matrices; check it out.")
+				message("'datelife_result' has some elements that are not matrices; check it out.")
 			}
 		} else {
-			message("datelife_result is not a list; check it out")
+			message("'datelife_result' is not a list; check it out.")
 		}
 	}
 	return(datelife_result)
 }
 
-#' datelifeResult object of three birds "Rhea americana", "Pterocnemia pennata", and "Struthio camelus"
+#' \code{datelifeResult} object of three birds "Rhea americana", "Pterocnemia pennata", and "Struthio camelus"
 #'
 #' @name threebirds_dr
 #' @docType data

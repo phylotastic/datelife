@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_use.R
 \name{datelife_use_datelifequery}
 \alias{datelife_use_datelifequery}
-\title{Generate one or multiple chronograms for a set of given taxon names}
+\title{Generate one or multiple chronograms from a \code{datelifeQuery} object.}
 \usage{
 datelife_use_datelifequery(input = NULL, dating_method = "bladj", each = FALSE)
 }
@@ -25,7 +25,7 @@ for any pair of taxon names in \code{phy}. See \code{\link[=get_all_calibrations
 A list with a chronogram and secondary calibrations used.
 }
 \description{
-\code{datelife_use_basic} generates one or multiple chronograms (i.e., phylogenetic
+\code{datelife_use_datelifequery} generates one or multiple chronograms (i.e., phylogenetic
 trees with branch lengths proportional to time) for a set of \code{input} taxa,
 dated with bladj or PATHd8, using secondary calibrations available for any pair
 of \code{input} taxa, mined from the code{\link[=opentree_chronograms]{opentree_chronograms}}

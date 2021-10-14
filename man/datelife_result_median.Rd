@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_median.R
 \name{datelife_result_median}
 \alias{datelife_result_median}
-\title{Get a median summary chronogram from a datelifeResult object.}
+\title{Get a median summary chronogram from a datelifeResult object}
 \usage{
 datelife_result_median(datelife_result, ...)
 }
@@ -28,5 +28,5 @@ datelife_result_median(datelife_result, ...)
 A phylo object
 }
 \description{
-Get a median summary chronogram from a datelifeResult object.
+Get a median summary chronogram from a datelifeResult object
 }

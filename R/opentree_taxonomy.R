@@ -1,8 +1,8 @@
 # functions (from phunding package) to deal with open tree Taxonomy rotl functions, namely:
 # rotl::taxonomy_taxon_info
 
-#' Identifies, extracts and cleans children names from a taxonomy_taxon_info() output
-#' @param taxon_info An output of rotl::taxonomy_taxon_info()
+#' Identifies, extracts and cleans children names from a [taxonomy_taxon_info()] output
+#' @param taxon_info An output of [rotl::taxonomy_taxon_info()]
 #' @param invalid A character vector of flags used by Open Tree Taxonomy to detect invalid taxon names
 #' @return a list with valid children unique OTT names, ott_ids and ranks
 #' @details eliminates all taxa that will give problems when trying to retrieve an induced subtree from otol.
@@ -35,7 +35,7 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
     return(taxon_info)
 }
 
-#' Checks input for get_ott_clade,  get_ott_children functions, get_otol_synthetic_tree
+#' Checks input for get_ott_clade, get_ott_children functions, get_otol_synthetic_tree
 #' @param input Optional. A character vector of names or a datelifeQuery object
 #' @param ott_ids If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match
 #' @inheritDotParams make_datelife_query
@@ -101,7 +101,7 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...){
     }
     return(ott_ids)
 }
-#' Gets the ott id and name of all lineages from one or more input taxa
+#' Get the ott id and name of all lineages from one or more input taxa
 #' @inheritParams check_ott_input
 #' @return a list of named numeric vectors of ott ids from input and all the clades it belongs to.
 #' @examples
@@ -138,7 +138,7 @@ get_ott_lineage <- function(input = NULL, ott_ids = NULL){
   # stats::setNames(ott_ids, names(input_ott_match))
   return(res)
 }
-#' Gets the lineage of a set of taxa using rotl:taxonomy_taxon_info(include_lineage = TRUE)
+#' Get the lineage of a set of taxa using rotl:taxonomy_taxon_info(include_lineage = TRUE)
 #' @param input_ott_match An Output of check_ott_input function.
 #' @return A taxonomy_taxon_info object
 .get_ott_lineage <- function(input_ott_match){
@@ -154,7 +154,8 @@ get_ott_lineage <- function(input = NULL, ott_ids = NULL){
 }
 
 
-#' Gets the ott id and name of one or several given taxonomic ranks from one or more input taxa
+#' Get the ott id and name of one or several given taxonomic ranks from one or
+#' more input taxa
 #' @inheritParams check_ott_input
 #' @inheritParams get_ott_children
 #' @return a list of named numeric vectors with ott ids from input and all requested ranks
@@ -231,7 +232,8 @@ get_ott_clade <- function(input = NULL, ott_ids = NULL, ott_rank = "family"){
 # }
 
 #'
-#' Extracts valid children from a set of input names or ott ids (not from a taxonomy taxon info object)
+#' Extract valid children from a set of input names or ott ids (not from a taxonomy
+#' taxon info object)
 #' @inheritParams check_ott_input
 #' @param taxonomic_source A character vector with the desired taxonomic sources. One of "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources. NCBI by default.
 #' @export
@@ -297,7 +299,8 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
     return(all_children)
 }
 
-#' Use this instead of rotl::tol_subtree when taxa are not in synthesis tree and you still need to get all species or an induced otol subtree
+#' Use this instead of rotl::tol_subtree when taxa are not in synthesis tree and
+#' you still need to get all species or an induced OpenTree subtree
 #' @inheritParams check_ott_input
 #' @param ott_rank A character vector with the ranks you wanna get lineage children from.
 #' @param ... Other arguments to pass to get_valid_children()
@@ -380,7 +383,7 @@ get_ott_children <- function(input = NULL, ott_ids = NULL, ott_rank = "species",
     return(all_children)
 }
 
-#' Gets an mrcaott tag from an open tree of life tree and gets its name and ott id
+#' Get an mrcaott tag from an OpenTree induced synthetic tree and get its name and ott id
 #' @param tag A character vector with the mrca tag
 #' @return A numeric vector with ott id from original taxon named with the corresponding ott name
 #' @export
@@ -403,7 +406,7 @@ recover_mrcaott <- function(tag){
   return(stats::setNames(mrca_lin[[2]][mm[1],"ott_ids"], rownames(mrca_lin[[2]])[mm[1]]))
 }
 
-# enhance: all these functions could be wrapped up into two or three single ones
+# TODO: all these functions could be wrapped up into two or three single ones
 # one to get one or all the lineages above a taxon
 # another one to get some or all lineages below a taxon
 # one to get everything: all_upper, all_lower, all (both upper and lower), or th eones specified by the users

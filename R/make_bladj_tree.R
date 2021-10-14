@@ -1,5 +1,6 @@
 
-#' Takes a tree and uses bladj to estimate node ages and branch lengths given a set of fixed node ages and respective node names
+#' Takes a tree and uses bladj to estimate node ages and branch lengths given a
+#' set of fixed node ages and respective node names
 #' @param nodenames A character vector with names of nodes in tree with known ages
 #' @param nodeages A numeric vector with the actual ages of named nodes
 #' @inheritParams tree_fix_brlen

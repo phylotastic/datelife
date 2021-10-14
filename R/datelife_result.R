@@ -1,4 +1,4 @@
-#' Get a list of patristic matrices from a given \code{datelifeQuery} object.
+#' Get a list of patristic matrices from a given \code{datelifeQuery} object
 #'
 #'
 #' @param input A \code{datelifeQuery} object from
@@ -41,7 +41,7 @@ get_datelife_result_datelifequery <- function(input = NULL,
    return(datelife_result)
 }
 
-#' Get a list of patristic matrices from a given set of taxon names.
+#' Get a list of patristic matrices from a given set of taxon names
 #'
 #'
 #'
@@ -95,13 +95,13 @@ get_datelife_result_vector <- function(input = NULL,
 
 #' Get a list of patristic matrices from a given set of taxon names
 #'
-#' Go from a vector of species, newick string, or phylo object.
+#' @description Go from a vector of species, newick string, or phylo object
 #'
 #' @inheritParams datelife_search
 #' @inheritParams make_datelife_query
 # #' @inheritParams make_bold_otol_tree
 # #' @inheritDotParams make_bold_otol_tree
-
+#' @export
 get_datelife_result <- function(input = NULL,
 																partial = TRUE,
 																use_tnrs = FALSE,

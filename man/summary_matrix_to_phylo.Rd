@@ -32,8 +32,8 @@ summary_matrix_to_phylo(
 \item{...}{
   Arguments passed on to \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree}}
   \describe{
-    \item{\code{otol_version}}{Version of OToL to use}
-    \item{\code{resolve}}{boolean default to TRUE. Whether to resolve the tree at random or not.}
+    \item{\code{otol_version}}{Version of Open Tree of Life to use}
+    \item{\code{resolve}}{boolean; default to TRUE. Whether to resolve the tree at random or not.}
     \item{\code{input}}{Optional. A character vector of names or a datelifeQuery object}
     \item{\code{ott_ids}}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
   }}

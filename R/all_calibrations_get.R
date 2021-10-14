@@ -1,7 +1,7 @@
 #' Extract secondary calibrations from a \code{phylo} or \code{multiPhylo} object with
 #' branch lengths proportional to time.
 #'
-#' \code{extract_calibrations_phylo} extracts divergence times (i.e., secondary
+#' @description \code{extract_calibrations_phylo} extracts divergence times (i.e., secondary
 #' calibrations) for each taxon pair in a given \code{phylo} or \code{multiPhylo}
 #' object.
 #'
@@ -80,7 +80,7 @@ extract_calibrations_phylo <- function(phy = NULL,
 
 #' Search and extract available secondary calibrations for a given character vector of taxon names.
 #'
-#' \code{get_calibrations_vector} searches DateLife's local database of phylogenetic
+#' @description \code{get_calibrations_vector} searches DateLife's local database of phylogenetic
 #' trees with branch lengths proportional to time (aka, chronograms) with
 #' \code{\link[=datelife_search]{datelife_search}}, and extracts divergence times
 #' (i.e., secondary calibrations) from chronograms for each pair of given taxon names.
@@ -109,7 +109,7 @@ get_calibrations_vector <- function(input = c("Rhea americana", "Pterocnemia pen
 }
 #' Search and extract available secondary calibrations from a given \code{datelifeQuery} object.
 #'
-#' \code{get_calibrations_vector} searches DateLife's local database of phylogenetic
+#' @description \code{get_calibrations_vector} searches DateLife's local database of phylogenetic
 #' trees with branch lengths proportional to time (aka, chronograms) with
 #' \code{\link[=datelife_search]{datelife_search}}, and extracts divergence times
 #' (i.e., secondary calibrations) from chronograms for each pair of given taxon names.
@@ -139,7 +139,7 @@ get_calibrations_datelifequery <- function(input = c("Rhea americana", "Pterocne
 }
 #' Extract secondary calibrations from a given \code{datelifeResult} object.
 #'
-#' \code{extract_calibrations_dateliferesult} extracts divergence times (i.e., secondary
+#' @description \code{extract_calibrations_dateliferesult} extracts divergence times (i.e., secondary
 #' calibrations) for each taxon pair in a given \code{datelifeResult} object.
 #'
 #' @details The function calls

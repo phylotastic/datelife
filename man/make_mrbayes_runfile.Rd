@@ -2,7 +2,8 @@
 % Please edit documentation in R/make_mrbayes_tree.R
 \name{make_mrbayes_runfile}
 \alias{make_mrbayes_runfile}
-\title{Makes a mrBayes run block file with a constraint topology and a set of node calibrations and missing taxa.}
+\title{Make a mrBayes run block file with a constraint topology and a set of node
+calibrations and missing taxa}
 \usage{
 make_mrbayes_runfile(
   constraint = NULL,
@@ -59,5 +60,6 @@ make_mrbayes_runfile(
 A MrBayes block run file in nexus format.
 }
 \description{
-Makes a mrBayes run block file with a constraint topology and a set of node calibrations and missing taxa.
+Make a mrBayes run block file with a constraint topology and a set of node
+calibrations and missing taxa
 }

@@ -22,8 +22,8 @@ summarize_datelife_result(
 
 \item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.}
 
-\item{summary_format}{The desired output format for target chronograms (chronograms
-of target taxa). See details.}
+\item{summary_format}{The desired output format for source chronograms (chronograms
+with two or more input taxa). See details.}
 
 \item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only
 match some of the desired taxa.}
@@ -56,7 +56,8 @@ added to the output.}
 Get different types of summaries from a \code{datelifeResult} object.
 A \code{datelifeResult} object is a named list of patristic matrcies.
 This allows rapid processing of data.
-If you need a list of chronograms from your \code{datelifeResult} object, this is the function you are looking for.
+If you need a list of chronograms from your \code{datelifeResult} object, this
+is the function you are looking for.
 }
 \details{
 Available output formats are:

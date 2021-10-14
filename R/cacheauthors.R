@@ -142,7 +142,7 @@ make_treebase_associations <- function() {
   return(author.lumped)
 }
 
-#' Associate OToL authors with studies
+#' Associate Open Tree of Life authors with studies
 #' @return data.frame with author last name, author first and other names, and comma delimited URLs for OToL studies
 make_otol_associations <- function() {
   #.res <- system("curl -X POST https://api.opentreeoflife.org/v3/studies/find_studies -H 'content-type:application/json'", intern=TRUE)

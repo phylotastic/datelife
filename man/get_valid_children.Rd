@@ -2,7 +2,8 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{get_valid_children}
 \alias{get_valid_children}
-\title{Extracts valid children from a set of input names or ott ids (not from a taxonomy taxon info object)}
+\title{Extract valid children from a set of input names or ott ids (not from a taxonomy
+taxon info object)}
 \usage{
 get_valid_children(input = NULL, ott_ids = NULL, taxonomic_source = "ncbi")
 }
@@ -14,7 +15,8 @@ get_valid_children(input = NULL, ott_ids = NULL, taxonomic_source = "ncbi")
 \item{taxonomic_source}{A character vector with the desired taxonomic sources. One of "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources. NCBI by default.}
 }
 \description{
-Extracts valid children from a set of input names or ott ids (not from a taxonomy taxon info object)
+Extract valid children from a set of input names or ott ids (not from a taxonomy
+taxon info object)
 }
 \details{
 Gbif and other taxonomies contain deprecated taxa that are not marked as such in the Open Tree Taxonomy.

@@ -2,7 +2,8 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{get_ott_children}
 \alias{get_ott_children}
-\title{Use this instead of rotl::tol_subtree when taxa are not in synthesis tree and you still need to get all species or an induced otol subtree}
+\title{Use this instead of rotl::tol_subtree when taxa are not in synthesis tree and
+you still need to get all species or an induced OpenTree subtree}
 \usage{
 get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species", ...)
 }
@@ -19,7 +20,8 @@ get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species", ...)
 A data frame
 }
 \description{
-Use this instead of rotl::tol_subtree when taxa are not in synthesis tree and you still need to get all species or an induced otol subtree
+Use this instead of rotl::tol_subtree when taxa are not in synthesis tree and
+you still need to get all species or an induced OpenTree subtree
 }
 \examples{
 # try getting an otol tree of a taxon missing from the synthetic tree

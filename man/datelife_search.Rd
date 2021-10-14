@@ -3,8 +3,8 @@
 \name{datelife_search}
 \alias{datelife_search}
 \alias{datelife}
-\title{Get a chronogram (dated phylogenetic tree) or published times of lineage divergence available for a set of taxa.
-Core datelife function to input a vector of species, newick string, or phylo object to}
+\title{Get scientific, peer-reviewed information on time of lineage
+divergence openly available for a given set of taxon names}
 \usage{
 datelife_search(
   input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
@@ -25,14 +25,14 @@ datelife_search(
 \item{input}{One of the following:
 \describe{
 \item{Taxon names}{As a character vector.}
-\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+\item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
             object, OR as a newick character string.}
 \item{A \code{datelifeQuery} object}{An output from [make_datelife_query_vector()]
                 \code{\link[=make_datelife_query]{make_datelife_query}}.}
 }}
 
-\item{summary_format}{The desired output format for target chronograms (chronograms
-of target taxa). See details.}
+\item{summary_format}{The desired output format for source chronograms (chronograms
+with two or more input taxa). See details.}
 
 \item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only
 match some of the desired taxa.}
@@ -62,8 +62,10 @@ added to the output.}
 \item{criterion}{Whether to get the grove with the most trees or the most taxa}
 }
 \description{
-Get a chronogram (dated phylogenetic tree) or published times of lineage divergence available for a set of taxa.
-Core datelife function to input a vector of species, newick string, or phylo object to
+\code{datelife_search} is the core DateLife function to find and
+get all openly available, peer-reviewed scientific information on time of
+lineage divergence for a set \code{input} taxon names given as a character
+vector, a newick character string, or a \code{phylo} or \code{multiPhylo} object.
 }
 \details{
 Available output formats are:

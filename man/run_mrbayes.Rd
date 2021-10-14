@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_mrbayes_tree.R
 \name{run_mrbayes}
 \alias{run_mrbayes}
-\title{Runs MrBayes from R.}
+\title{Runs MrBayes from R}
 \usage{
 run_mrbayes(mrbayes_output_file = NULL)
 }
@@ -13,5 +13,5 @@ run_mrbayes(mrbayes_output_file = NULL)
 A phylo object with the consensus tree. MrBayes output files are stored in the working directory.
 }
 \description{
-Runs MrBayes from R.
+Runs MrBayes from R
 }

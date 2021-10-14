@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_result.R
 \name{get_datelife_result_vector}
 \alias{get_datelife_result_vector}
-\title{Get a list of patristic matrices from a given set of taxon names.}
+\title{Get a list of patristic matrices from a given set of taxon names}
 \usage{
 get_datelife_result_vector(
   input = NULL,
@@ -19,5 +19,5 @@ A datelifeResult object - a named list of patristic matrices. You can
 access the \code{datelifeQuery} object with attributes(object)$query
 }
 \description{
-Get a list of patristic matrices from a given set of taxon names.
+Get a list of patristic matrices from a given set of taxon names
 }

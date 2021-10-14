@@ -2,7 +2,8 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{get_ott_clade}
 \alias{get_ott_clade}
-\title{Gets the ott id and name of one or several given taxonomic ranks from one or more input taxa}
+\title{Get the ott id and name of one or several given taxonomic ranks from one or
+more input taxa}
 \usage{
 get_ott_clade(input = NULL, ott_ids = NULL, ott_rank = "family")
 }
@@ -17,5 +18,6 @@ get_ott_clade(input = NULL, ott_ids = NULL, ott_rank = "family")
 a list of named numeric vectors with ott ids from input and all requested ranks
 }
 \description{
-Gets the ott id and name of one or several given taxonomic ranks from one or more input taxa
+Get the ott id and name of one or several given taxonomic ranks from one or
+more input taxa
 }

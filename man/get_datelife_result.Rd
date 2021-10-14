@@ -19,7 +19,7 @@ get_datelife_result(
 \item{input}{One of the following:
 \describe{
 \item{Taxon names}{As a character vector.}
-\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+\item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
             object, OR as a newick character string.}
 \item{A \code{datelifeQuery} object}{An output from [make_datelife_query_vector()]
                 \code{\link[=make_datelife_query]{make_datelife_query}}.}
@@ -37,5 +37,5 @@ Life's database chronograms and other associated information.}
 \item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \description{
-Go from a vector of species, newick string, or phylo object.
+Go from a vector of species, newick string, or phylo object
 }

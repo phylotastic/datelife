@@ -1,4 +1,4 @@
-#' Get a median summary chronogram from a datelifeResult object.
+#' Get a median summary chronogram from a datelifeResult object
 #' @inheritParams datelife_result_check
 #' @inheritDotParams summary_matrix_to_phylo
 #' @return A phylo object
@@ -19,7 +19,7 @@ datelife_result_median <- function(datelife_result, ...){
 	return(phy)
 }
 
-#' Function to compute median matrix of a datelifeResult object.
+#' Function to compute median matrix of a datelifeResult object
 #' @inheritParams datelife_result_check
 #' @return A patristic distance summary matrix from a datelifeResult object.
 #' @export
@@ -33,7 +33,7 @@ datelife_result_median_matrix <- function(datelife_result) {
 	return(median.matrix)
 }
 
-#' Function to compute variance matrix of a datelifeResult object.
+#' Function to compute variance matrix of a datelifeResult object
 #' @inheritParams datelife_result_check
 #' @return A variance matrix from a datelifeResult object.
 #' @export

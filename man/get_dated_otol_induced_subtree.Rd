@@ -2,7 +2,7 @@
 % Please edit documentation in R/otol_tree.R
 \name{get_dated_otol_induced_subtree}
 \alias{get_dated_otol_induced_subtree}
-\title{Get an otol induced dated subtree from your set of queried taxa}
+\title{Get a dated OpenTree induced synthetic subtree from a set of given taxon names, from blackrim's FePhyFoFum service.}
 \usage{
 get_dated_otol_induced_subtree(input = NULL, ott_ids = NULL, ...)
 }
@@ -21,10 +21,11 @@ get_dated_otol_induced_subtree(input = NULL, ott_ids = NULL, ...)
 A phylo object with edge length proportional to time in Myrs. It will return NA if any ott_id is invalid.
 }
 \description{
-Get an otol induced dated subtree from your set of queried taxa
+Get a dated OpenTree induced synthetic subtree from a set of given taxon names, from blackrim's FePhyFoFum service.
 }
 \details{
-otol dated tree from Stephen Smith's otol scaling service.
-# if you want to make an ltt plot of a dated OToL tree you'll need to get rid of singleton nodes with ape::collapse.singles
-# and also probably do phytools::force.ultrametric
+OpenTree dated tree from Stephen Smith's OpenTree scaling service at
+[https://github.com/FePhyFoFum/gophy] if you want to make an LTT plot of
+a dated OpenTree tree you'll need to get rid of singleton nodes with
+[ape::collapse.singles()] and also probably do [phytools::force.ultrametric()]
 }

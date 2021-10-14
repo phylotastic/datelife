@@ -1,6 +1,6 @@
-#' Date a given tree topology using a given set of calibrations.
+#' Date a given tree topology using a given set of calibrations
 #'
-#' \code{use_all_calibrations} generates one or multiple chronograms (i.e., phylogenetic
+#' @description \code{use_all_calibrations} generates one or multiple chronograms (i.e., phylogenetic
 #' trees with branch lengths proportional to time) by dating a tree topology given
 #' in \code{phy}, and secondary calibrations given in \code{calibrations},
 #' using bladj or PATHd8.
@@ -51,9 +51,9 @@ use_all_calibrations <- function(phy = NULL,
     return(list(phy = chronogram, calibrations.df = calibrations))
 }
 #' Date a given tree topology by using a given list of calibrations independently,
-#' to generate multiple hypothesis of time of divergence.
+#' to generate multiple hypothesis of time of divergence
 #'
-#' \code{use_calibrations_each} wraps \code{use_calibrations} to take each set of
+#' @description \code{use_calibrations_each} wraps \code{use_calibrations} to take each set of
 #' given calibrations and use it independently as constraints for BLADJ or PATHd8
 #' to date a given tree topology.
 #'
@@ -86,9 +86,9 @@ use_calibrations_each <- function(phy = NULL,
 		names(chronograms) <- names(calibrations)
 		return(list(chronograms = chronograms, calibrations = calibrations))
 }
-#' Date a given tree topology using a combined set of given calibrations.
+#' Date a given tree topology using a combined set of given calibrations
 #'
-#' \code{use_calibrations} combines all given calibrations and uses them as
+#' @description \code{use_calibrations} combines all given calibrations and uses them as
 #' constraints to perform a dating analysis on a given tree topology, using BLADJ
 #' if it has no branch lengths, or PATHd8 if the given tree topology has initial
 #' branch lengths.

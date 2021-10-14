@@ -1,6 +1,6 @@
 #' Match calibrations to nodes of a tree
 #'
-#' \code{match_all_calibrations} summarizes nodes in tree that match to any pair of given
+#' @description \code{match_all_calibrations} summarizes nodes in tree that match to any pair of given
 #' taxon names in a data frame of secondary calibrations.
 #'
 #' @param phy A phylo object. Nodes can be named or not.

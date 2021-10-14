@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_query.R
 \name{is_datelife_query}
 \alias{is_datelife_query}
-\title{Check if input is a datelifeQuery object.}
+\title{Check if input is a \code{datelifeQuery} object}
 \usage{
 is_datelife_query(input)
 }

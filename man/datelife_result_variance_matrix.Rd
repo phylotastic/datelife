@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_median.R
 \name{datelife_result_variance_matrix}
 \alias{datelife_result_variance_matrix}
-\title{Function to compute variance matrix of a datelifeResult object.}
+\title{Function to compute variance matrix of a datelifeResult object}
 \usage{
 datelife_result_variance_matrix(datelife_result)
 }
@@ -13,5 +13,5 @@ datelife_result_variance_matrix(datelife_result)
 A variance matrix from a datelifeResult object.
 }
 \description{
-Function to compute variance matrix of a datelifeResult object.
+Function to compute variance matrix of a datelifeResult object
 }

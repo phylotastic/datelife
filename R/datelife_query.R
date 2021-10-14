@@ -1,6 +1,9 @@
-#' Gets taxon names from a character vector, a phylo object or a newick character string.
+#' Gets taxon names from a character vector, a phylo object or a newick character
+#' string
 #'
-#' Process the two latter with input_process first.
+#' @description It processes \code{phylo} and \code{newick character} string inputs
+#' with [input_process()].
+#'
 #' @param input One of the following:
 #' \describe{
 #'	\item{Taxon names}{As a character vector.}
@@ -111,7 +114,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 		phy = phy_new)
 	return(structure(datelife_query.return, class = "datelifeQuery"))
 }
-#' Process a phylo object or a character string to determine if it's correct newick.
+#' Process a phylo object or a character string to determine if it's correct newick
 #'
 #' @inheritParams datelife_search
 #' @inheritParams make_datelife_query
@@ -157,8 +160,8 @@ input_process <- function(input, verbose = FALSE){
 
 #' Check that input is a datelifeQuery object. To be deprecated.
 #'
-#' Check if input is a datelifeQuery object, otherwise use make_datelife_query
-#' to process it and create a datelifeQuery object.
+#' @description Check if input is a datelifeQuery object, otherwise use
+#' [make_datelife_query()] to process it and create a \code{datelifeQuery} object.
 #'
 #' @param datelife_query A datelifeQuery object, output of make_datelife_query function
 #' @inheritParams datelife_search
@@ -175,9 +178,9 @@ datelife_query_check <- function(datelife_query = NULL, ...){
 	return(datelife_query)
 }
 
-#' Check if input is a datelifeQuery object.
+#' Check if input is a \code{datelifeQuery} object
 #'
-#' \code{is_datelife_query} checks (1) if a given object is a list that contains the
+#' @description \code{is_datelife_query} checks (1) if a given object is a list that contains the
 #' elements of a \code{datelifeQuery} object: \code{cleaned_names}: A character
 #' vector of taxon names, and \code{phy}: Either NA or a phylo object; and (2)
 #' if the object is of class \code{datelifeQuery}.

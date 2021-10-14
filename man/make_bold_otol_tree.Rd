@@ -19,7 +19,7 @@ make_bold_otol_tree(
 \item{input}{One of the following:
 \describe{
 \item{Taxon names}{As a character vector.}
-\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+\item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
             object, OR as a newick character string.}
 \item{A \code{datelifeQuery} object}{An output from [make_datelife_query_vector()]
                 \code{\link[=make_datelife_query]{make_datelife_query}}.}
@@ -27,7 +27,7 @@ make_bold_otol_tree(
 
 \item{marker}{A character vector indicating the gene from BOLD system to be used for branch length estimation.}
 
-\item{otol_version}{Version of OToL to use}
+\item{otol_version}{Version of Open Tree of Life to use}
 
 \item{chronogram}{Boolean. If TRUE (default), branch lengths returned are estimated with ape::chronoMPL. If FALSE, branch lengths returned are estimated with phangorn::acctran and represent relative substitution rates .}
 
@@ -40,7 +40,7 @@ make_bold_otol_tree(
 \item{...}{
   Arguments passed on to \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree}}
   \describe{
-    \item{\code{resolve}}{boolean default to TRUE. Whether to resolve the tree at random or not.}
+    \item{\code{resolve}}{boolean; default to TRUE. Whether to resolve the tree at random or not.}
     \item{\code{ott_ids}}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
   }}
 }

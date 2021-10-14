@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_query.R
 \name{input_process}
 \alias{input_process}
-\title{Process a phylo object or a character string to determine if it's correct newick.}
+\title{Process a phylo object or a character string to determine if it's correct newick}
 \usage{
 input_process(input, verbose = FALSE)
 }
@@ -10,7 +10,7 @@ input_process(input, verbose = FALSE)
 \item{input}{One of the following:
 \describe{
 \item{Taxon names}{As a character vector.}
-\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+\item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
             object, OR as a newick character string.}
 \item{A \code{datelifeQuery} object}{An output from [make_datelife_query_vector()]
                 \code{\link[=make_datelife_query]{make_datelife_query}}.}
@@ -22,5 +22,5 @@ input_process(input, verbose = FALSE)
 A phylo object or NA if no tree
 }
 \description{
-Process a phylo object or a character string to determine if it's correct newick.
+Process a phylo object or a character string to determine if it's correct newick
 }

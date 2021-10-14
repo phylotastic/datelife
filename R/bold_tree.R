@@ -1,6 +1,6 @@
 #' Use genetic data from the Barcode of Life Database (BOLD) to get branch lengths on a tree.
 #'
-#' \code{make_bold_otol_tree} Takes taxon names from a tree topology or a vector of names
+#' @description \code{make_bold_otol_tree} Takes taxon names from a tree topology or a vector of names
 #' to search for genetic markers in the Barcode of Life Database (BOLD), create an
 #' alignment, and reconstruct branch lengths on the tree topology with Maximum Likelihood.
 #'
@@ -32,12 +32,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	if (!is_datelife_query(input)) {
 			input <- make_datelife_query(input)
 	}
-	if (inherits(input$phy, "phylo")) {
-		phy <- input$phy
-	} else {
-		if (verbose) {
-			message("No tree was provided; getting induced subtree from OpenTree ...")
-		}
+	phy <- input$phy
+	if (!inherits(input$phy, "phylo")) {
+		message("No tree was provided as 'input'.")
 		phy <- get_otol_synthetic_tree(input = input, otol_version = otol_version, ...)
 		#otol returns error with missing taxa in v3 of rotl
 	}

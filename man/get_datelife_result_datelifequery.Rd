@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_result.R
 \name{get_datelife_result_datelifequery}
 \alias{get_datelife_result_datelifequery}
-\title{Get a list of patristic matrices from a given \code{datelifeQuery} object.}
+\title{Get a list of patristic matrices from a given \code{datelifeQuery} object}
 \usage{
 get_datelife_result_datelifequery(
   input = NULL,
@@ -18,5 +18,5 @@ A datelifeResult object - a named list of patristic matrices. You can
 access the original query with attributes(object)$query
 }
 \description{
-Get a list of patristic matrices from a given \code{datelifeQuery} object.
+Get a list of patristic matrices from a given \code{datelifeQuery} object
 }
