@@ -2,7 +2,8 @@
 % Please edit documentation in R/all_calibrations_get.R
 \name{get_calibrations_vector}
 \alias{get_calibrations_vector}
-\title{Search and extract available secondary calibrations for a given character vector of taxon names.}
+\title{Search and extract available secondary calibrations for a given character
+vector of taxon names}
 \usage{
 get_calibrations_vector(input = NULL, each = FALSE)
 }
@@ -14,20 +15,22 @@ the same data frame. If \code{TRUE}, calibrations from each chronogram are retur
 in separate data frames.}
 }
 \value{
-A data frame of secondary calibrations (or list of data frames, if \code{each = TRUE}),
-for each pair of given taxon names. The attribute "chronograms" contains the
-source chronograms from which the calibrations were obtained.
+An object of class \code{datelifeCalibrations} -- a \code{data frame}
+of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
+for each pair of taxon names in \{input]. The attribute "chronograms" stores
+the source data from which the calibrations were extracted.
 }
 \description{
-\code{get_calibrations_vector} searches DateLife's local database of phylogenetic
-trees with branch lengths proportional to time (aka, chronograms) with
-\code{\link[=datelife_search]{datelife_search}}, and extracts divergence times
-(i.e., secondary calibrations) from chronograms for each pair of given taxon names.
+The function searches DateLife's local
+database of phylogenetic trees with branch lengths proportional to time (aka,
+chronograms) with [datelife_search()], and extracts divergence times
+(i.e., secondary calibrations) from chronograms for each pair of given
+taxon names with [extract_calibrations_phylo()].
 }
 \details{
-The function calls \code{\link[=datelife_search]{datelife_search}}
+The function calls [datelife_search()]
 with \code{summary_format = "phylo_all"} to get all chronograms in database
 containing at least two taxa from \code{input}, and generates a \code{phylo}
 or \code{multiPhylo} object object that will be passed to
-\code{\link[=get_calibrations_phylo]{get_calibrations_phylo}}.
+[extract_calibrations_phylo()].
 }

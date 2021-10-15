@@ -2,7 +2,7 @@
 % Please edit documentation in R/all_calibrations_get.R
 \name{extract_calibrations_dateliferesult}
 \alias{extract_calibrations_dateliferesult}
-\title{Extract secondary calibrations from a given \code{datelifeResult} object.}
+\title{Extract secondary calibrations from a given \code{datelifeResult} object}
 \usage{
 extract_calibrations_dateliferesult(input = NULL, each = FALSE)
 }
@@ -14,18 +14,19 @@ the same data frame. If \code{TRUE}, calibrations from each chronogram are retur
 in separate data frames.}
 }
 \value{
-A data frame of secondary calibrations (or list of data frames, if \code{each = TRUE}),
-for each pair of given taxon names. The attribute "chronograms" contains the
-source chronograms from which the calibrations were obtained.
+An object of class \code{datelifeCalibrations} -- a \code{data frame}
+of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
+for each pair of taxon names in \{input]. The attribute "chronograms" stores
+the source data from which the calibrations were extracted.
 }
 \description{
-\code{extract_calibrations_dateliferesult} extracts divergence times (i.e., secondary
-calibrations) for each taxon pair in a given \code{datelifeResult} object.
+\code{extract_calibrations_dateliferesult} extracts divergence
+times (i.e., secondary calibrations) for each taxon pair in a given
+'\code{datelifeResult} object.
 }
 \details{
-The function calls
-\code{\link[=summarize_datelife_result]{summarize_datelife_result}} with
+The function calls summarize_datelife_result()] with
 \code{summary_format = "phylo_all"} to go from a \code{datelifeResult} object
 to a \code{phylo} or \code{multiPhylo} object that will be passed to
-\code{\link[=get_calibrations_phylo]{get_calibrations_phylo}}.
+[extract_calibrations_phylo()].
 }

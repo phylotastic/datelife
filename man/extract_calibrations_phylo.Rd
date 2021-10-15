@@ -2,27 +2,27 @@
 % Please edit documentation in R/all_calibrations_get.R
 \name{extract_calibrations_phylo}
 \alias{extract_calibrations_phylo}
-\title{Extract secondary calibrations from a \code{phylo} or \code{multiPhylo} object with
-branch lengths proportional to time.}
+\title{Extract secondary calibrations from a \code{phylo} or \code{multiPhylo}
+object with branch lengths proportional to time}
 \usage{
-extract_calibrations_phylo(phy = NULL, each = FALSE)
+extract_calibrations_phylo(input = NULL, each = FALSE)
 }
 \arguments{
-\item{phy}{a \code{phylo} or \code{multiPhylo} object with branch lengths proportional to time.}
+\item{input}{a \code{phylo} or \code{multiPhylo} object with branch lengths
+proportional to time.}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
 the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 }
 \value{
-A \code{data frame} (or list of data frames if \code{each = TRUE}) of secondary
-calibrations available for each pair of taxon names given as tip labels in an
-\code{input} \code{phylo}
-or \code{multiPhylo} object. The attribute "chronograms" contains the \{input]
-chronograms from which the secondary calibrations were extracted.
+An object of class \code{datelifeCalibrations} -- a \code{data frame}
+of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
+for each pair of taxon names in \{input]. The attribute "chronograms" stores
+the source data from which the calibrations were extracted.
 }
 \description{
-\code{extract_calibrations_phylo} extracts divergence times (i.e., secondary
-calibrations) for each taxon pair in a given \code{phylo} or \code{multiPhylo}
-object.
+\code{extract_calibrations_phylo} extracts divergence times
+(i.e., secondary calibrations) for each taxon pair in a given
+\code{phylo} or \code{multiPhylo} object.
 }

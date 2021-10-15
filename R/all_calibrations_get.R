@@ -1,23 +1,22 @@
-#' Extract secondary calibrations from a \code{phylo} or \code{multiPhylo} object with
-#' branch lengths proportional to time.
+#' Extract secondary calibrations from a \code{phylo} or \code{multiPhylo}
+#' object with branch lengths proportional to time
 #'
-#' @description \code{extract_calibrations_phylo} extracts divergence times (i.e., secondary
-#' calibrations) for each taxon pair in a given \code{phylo} or \code{multiPhylo}
-#' object.
+#' @description \code{extract_calibrations_phylo} extracts divergence times
+#' (i.e., secondary calibrations) for each taxon pair in a given
+#' \code{phylo} or \code{multiPhylo} object.
 #'
-#' @param phy a \code{phylo} or \code{multiPhylo} object with branch lengths proportional to time.
+#' @param input a \code{phylo} or \code{multiPhylo} object with branch lengths
+#' proportional to time.
 #' @inheritParams get_all_calibrations
-#' @return A \code{data frame} (or list of data frames if \code{each = TRUE}) of secondary
-#' calibrations available for each pair of taxon names given as tip labels in an
-#' \code{input} \code{phylo}
-#' or \code{multiPhylo} object. The attribute "chronograms" contains the \{input]
-#' chronograms from which the secondary calibrations were extracted.
-#'
+#' @return An object of class \code{datelifeCalibrations} -- a \code{data frame}
+#' of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
+#' for each pair of taxon names in \{input]. The attribute "chronograms" stores
+#' the source data from which the calibrations were extracted.
 #' @export
-extract_calibrations_phylo <- function(phy = NULL,
+extract_calibrations_phylo <- function(input = NULL,
 																       each = FALSE) {
-	if (inherits(phy, "multiPhylo")) {
-		chronograms <- phy
+	if (inherits(input, "multiPhylo")) {
+		chronograms <- input
 		xx <- sapply(chronograms, "[", "edge.length")
 		xx <- unname(sapply(xx, is.null))
 	  if (all(xx)) {
@@ -33,11 +32,11 @@ extract_calibrations_phylo <- function(phy = NULL,
 	    chronograms <- chronograms[which(!xx)]
 	  }
 	}
-	if (inherits(phy, "phylo")) {
+	if (inherits(input, "phylo")) {
 	  if (is.null(input$edge.length)) {
 	    stop("'input' tree has no branch lengths.")
 	  }
-		chronograms <- list(phy)
+		chronograms <- list(input)
 	}
 
 	if (each) {
@@ -79,81 +78,20 @@ extract_calibrations_phylo <- function(phy = NULL,
 	return(calibrations)
 }
 
-#' Search and extract available secondary calibrations for a given character vector of taxon names.
+#' Extract secondary calibrations from a given \code{datelifeResult} object
 #'
-#' @description \code{get_calibrations_vector} searches DateLife's local database of phylogenetic
-#' trees with branch lengths proportional to time (aka, chronograms) with
-#' \code{\link[=datelife_search]{datelife_search}}, and extracts divergence times
-#' (i.e., secondary calibrations) from chronograms for each pair of given taxon names.
+#' @description \code{extract_calibrations_dateliferesult} extracts divergence
+#' times (i.e., secondary calibrations) for each taxon pair in a given
+#' '\code{datelifeResult} object.
 #'
-#' @details The function calls \code{\link[=datelife_search]{datelife_search}}
-#' with \code{summary_format = "phylo_all"} to get all chronograms in database
-#' containing at least two taxa from \code{input}, and generates a \code{phylo}
-#' or \code{multiPhylo} object object that will be passed to
-#' \code{\link[=get_calibrations_phylo]{get_calibrations_phylo}}.
-#'
-#' @param input A character vector of taxon names.
-#' @inheritParams get_all_calibrations
-#' @return A data frame of secondary calibrations (or list of data frames, if \code{each = TRUE}),
-#' for each pair of given taxon names. The attribute "chronograms" contains the
-#' source chronograms from which the calibrations were obtained.
-#' @export
-get_calibrations_vector <- function(input = NULL,
-																    each = FALSE) {
-  # TODO: is_datelife_search_input function or any type of input format checking
-  # function to trap the case were input is a list
-	phyloall <- datelife_search(input = input,
-															summary_format = "phylo_all")
-
-	return(extract_calibrations_phylo(phy = phyloall,
-                                    each = each))
-}
-#' Search and extract available secondary calibrations from a given \code{datelifeQuery} object.
-#'
-#' @description \code{get_calibrations_vector} searches DateLife's local database of phylogenetic
-#' trees with branch lengths proportional to time (aka, chronograms) with
-#' \code{\link[=datelife_search]{datelife_search}}, and extracts divergence times
-#' (i.e., secondary calibrations) from chronograms for each pair of given taxon names.
-#'
-#' @details The function calls \code{\link[=datelife_search]{datelife_search}}
-#' with \code{summary_format = "phylo_all"} to get all chronograms in database
-#' containing at least two taxa from \code{input}, and generates a \code{phylo}
-#' or \code{multiPhylo} object object that will be passed to
-#' \code{\link[=get_calibrations_phylo]{get_calibrations_phylo}}.
-#'
-#' @param input A \code{datelifeQuery} object.
-#' @inheritParams get_all_calibrations
-#' @return A data frame of secondary calibrations (or list of data frames, if \code{each = TRUE}),
-#' for each pair of given taxon names. The attribute "chronograms" contains the
-#' source chronograms from which the calibrations were obtained.
-#' @export
-get_calibrations_datelifequery <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-																    			 each = FALSE) {
-  if (suppressMessages(!is_datelife_query(input))) {
-		stop("'input' is not a 'datelifeQuery' object.")
-	}
-	phyloall <- datelife_search(input = input,
-															summary_format = "phylo_all")
-
-	return(extract_calibrations_phylo(phy = phyloall,
-                                    each = each))
-}
-#' Extract secondary calibrations from a given \code{datelifeResult} object.
-#'
-#' @description \code{extract_calibrations_dateliferesult} extracts divergence times (i.e., secondary
-#' calibrations) for each taxon pair in a given \code{datelifeResult} object.
-#'
-#' @details The function calls
-#' \code{\link[=summarize_datelife_result]{summarize_datelife_result}} with
+#' @details The function calls summarize_datelife_result()] with
 #' \code{summary_format = "phylo_all"} to go from a \code{datelifeResult} object
 #' to a \code{phylo} or \code{multiPhylo} object that will be passed to
-#' \code{\link[=get_calibrations_phylo]{get_calibrations_phylo}}.
+#' [extract_calibrations_phylo()].
 #'
 #' @param input A \code{datelifeResult} object.
 #' @inheritParams get_all_calibrations
-#' @return A data frame of secondary calibrations (or list of data frames, if \code{each = TRUE}),
-#' for each pair of given taxon names. The attribute "chronograms" contains the
-#' source chronograms from which the calibrations were obtained.
+#' @inherit extract_calibrations_phylo return
 #' @export
 extract_calibrations_dateliferesult <- function(input = NULL,
 																                each = FALSE) {
@@ -162,6 +100,55 @@ extract_calibrations_dateliferesult <- function(input = NULL,
               summarize_datelife_result(datelife_result = input,
                                         summary_format = "phylo_all"))
 
-  return(extract_calibrations_phylo(phy = phyloall,
+  return(extract_calibrations_phylo(input = phyloall,
+                                    each = each))
+}
+
+#' Search and extract available secondary calibrations for a given character
+#' vector of taxon names
+#'
+#' @description The function searches DateLife's local
+#' database of phylogenetic trees with branch lengths proportional to time (aka,
+#' chronograms) with [datelife_search()], and extracts divergence times
+#' (i.e., secondary calibrations) from chronograms for each pair of given
+#' taxon names with [extract_calibrations_phylo()].
+#'
+#' @details The function calls [datelife_search()]
+#' with \code{summary_format = "phylo_all"} to get all chronograms in database
+#' containing at least two taxa from \code{input}, and generates a \code{phylo}
+#' or \code{multiPhylo} object object that will be passed to
+#' [extract_calibrations_phylo()].
+#'
+#' @param input A character vector of taxon names.
+#' @inheritParams get_all_calibrations
+#' @inherit extract_calibrations_phylo return
+#' @export
+get_calibrations_vector <- function(input = NULL,
+																    each = FALSE) {
+  # TODO: is_datelife_search_input function or any type of input format checking
+  # function to trap the case were input is a list
+	phyloall <- datelife_search(input = input,
+															summary_format = "phylo_all")
+
+	return(extract_calibrations_phylo(input = phyloall,
+                                    each = each))
+}
+#' Search and extract available secondary calibrations from a given
+#' '\code{datelifeQuery} object
+#'
+#' @param input A \code{datelifeQuery} object.
+#' @inheritParams get_all_calibrations
+#' @inherit get_calibrations_vector description details
+#' @inherit extract_calibrations_phylo return
+#' @export
+get_calibrations_datelifequery <- function(input = NULL,
+																    			 each = FALSE) {
+  if (suppressMessages(!is_datelife_query(input))) {
+		stop("'input' is not a 'datelifeQuery' object.")
+	}
+	phyloall <- datelife_search(input = input,
+															summary_format = "phylo_all")
+
+	return(extract_calibrations_phylo(input = phyloall,
                                     each = each))
 }

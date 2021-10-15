@@ -2,6 +2,7 @@
 % Please edit documentation in R/datelife_calibrations.R
 \name{get_all_calibrations}
 \alias{get_all_calibrations}
+\alias{datelife_calibrations}
 \title{Get secondary calibrations from a set of given taxon names}
 \usage{
 get_all_calibrations(input = NULL, each = FALSE)
@@ -26,7 +27,7 @@ for each pair of given taxon names. The attribute "chronograms" contains the
 source chronograms from which the calibrations were obtained.
 }
 \description{
-\code{get_all_calibrations} performs a \code{\link[=datelife_search]{datelife_search}}
+\code{get_all_calibrations} performs a [datelife_search()]
 and gets divergence times (i.e., secondary calibrations) for each taxon name
 pair given in \code{input}.
 }
