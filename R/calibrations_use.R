@@ -21,15 +21,7 @@ use_all_calibrations <- function(phy = NULL,
                                  each = FALSE,
                                  calibrations = NULL,
                                  dating_method = "bladj") {
-#
-    if (inherits(phy, "multiPhylo")) {
-      message("'phy' is a 'multiPhylo' object. First element will be used as tree topology.")
-      phy <- phy[[1]]
-    }
-    if (!inherits(phy, "phylo")) {
-      warning("'phy' must be a phylo object.")
-      return(NA)
-    }
+    #
     # date the tree with bladj, pathd8 if branch lengths:
     # TODO
     # find a way to inherit params for use_calibrations_pathd8 and use_calibrations_bladj
@@ -82,7 +74,7 @@ use_calibrations_each <- function(phy = NULL,
                                  ...) {
 
 		# date the tree with bladj, or pathd8 if branch lengths:
-		chronograms <- lapply(calibrations, function(x) use_calibrations(phy, x, ...))
+		chronograms <- lapply(calibrations, function(x) suppressMessages(use_calibrations(phy, x, ...)))
 		class(chronograms) <- "multiPhylo"
 		names(chronograms) <- names(calibrations)
 		return(list(chronograms = chronograms, calibrations = calibrations))
@@ -106,22 +98,27 @@ use_calibrations <- function(phy = NULL,
                              type = "median",
                              ...){
 	# check that phy names are in calibrations.df: done in match_all_calibrations inside use_calibrations_bladj
+  message("... Using calibrations to date a tree topology.")
   exit <- FALSE
+  if (inherits(phy, "multiPhylo")) {
+    message(message_multiphylo())
+    phy <- phy[[1]]
+  }
 	if(!inherits(phy, "phylo")){
     exit <- TRUE
-		msg1 <- "Value provided in 'phy' is NOT a phylo object. Check this."
+		msg1 <- "'phy' is NOT a phylo object. Check this."
 	} else {
-    msg1 <- "Value provided in 'phy' is a phylo object. You are good."
+    msg1 <- "'phy' is a phylo object. You are good."
   }
 	# enhance: add a check for calibrations object structure
 	if(!inherits(calibrations, "data.frame")){
     exit <- TRUE
-		msg2 <- "Value provided in 'calibrations' is NOT a data frame. Check this."
+		msg2 <- "'calibrations' is NOT a data frame. Check this."
 	} else {
-    msg2 <- "Value provided in 'calibrations' is a data frame. You are good."
+    msg2 <- "'calibrations' is a data frame. You are good."
   }
   if(exit){
-    stop("This function requires valid values for both arguments `phy` and `calibrations`.\n",
+    stop("This function requires valid values for both arguments 'phy' and 'calibrations'.\n",
          msg1, "\n",
          msg2, "\n")
   }
@@ -141,5 +138,6 @@ use_calibrations <- function(phy = NULL,
 	}
 	# TODO
 	# add dating_method attribute to chronogram
+  message("Success!")
 	return(chronogram)
 }

@@ -7,6 +7,7 @@ datelife_result_median <- function(datelife_result, ...){
 	# for debugging here:
 	# datelife_result <- get_best_grove(subset2_result)$best_grove
 	# datelife_result <- best_grove
+	message("... Calculating a median summary chronogram.")
 	median_matrix <- datelife_result_median_matrix(datelife_result)
 	# tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(median.matrix,
 	# 		  clustering_method = "nj", fix_negative_brlen = TRUE)))

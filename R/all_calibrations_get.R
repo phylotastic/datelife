@@ -47,6 +47,7 @@ extract_calibrations_phylo <- function(phy = NULL,
 		calibrations <- data.frame()
 	}
 	for (i in seq(length(chronograms))) {
+		chronograms[[i]]$tip.label <- gsub(" ", "_", chronograms[[i]]$tip.label) # the battle will never end!
 		local_df <- suppressWarnings(
 			          geiger::congruify.phylo(reference = chronograms[[i]],
 				                                target = chronograms[[i]],
@@ -97,7 +98,7 @@ extract_calibrations_phylo <- function(phy = NULL,
 #' for each pair of given taxon names. The attribute "chronograms" contains the
 #' source chronograms from which the calibrations were obtained.
 #' @export
-get_calibrations_vector <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
+get_calibrations_vector <- function(input = NULL,
 																    each = FALSE) {
   # TODO: is_datelife_search_input function or any type of input format checking
   # function to trap the case were input is a list

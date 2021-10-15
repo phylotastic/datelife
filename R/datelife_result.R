@@ -14,6 +14,7 @@ get_datelife_result_datelifequery <- function(input = NULL,
 																cache = "opentree_chronograms",
 																...){
    #
+	 message("... Getting a DateLife result.")
 	 if("opentree_chronograms" %in% cache){
 		 utils::data("opentree_chronograms", package = "datelife")
 		 cache <- get("opentree_chronograms")
@@ -37,8 +38,9 @@ get_datelife_result_datelifequery <- function(input = NULL,
    datelife_result <- results_list_process(results_list,
 		 																			 input$cleaned_names,
 																					 partial = partial)
-   datelife_result_check(datelife_result,
+   # datelife_result_check(datelife_result,
 		 										 use_tnrs)
+	 message("DateLife result obtained!")
    class(datelife_result) <- c("datelifeResult")
    attr(datelife_result, "query") <- input
    return(datelife_result)
@@ -115,9 +117,8 @@ get_datelife_result <- function(input = NULL,
 		utils::data("opentree_chronograms", package = "datelife")
 		cache <- get("opentree_chronograms")
 	}
-	if(is_datelife_query(input)){
-		input_dq <- input
-	} else {
+	input_dq <- input
+	if(suppressMessages(!is_datelife_query(input))){
 		input_dq <- make_datelife_query(input = input,
 																		...)
 	}

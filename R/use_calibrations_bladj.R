@@ -21,6 +21,8 @@ use_calibrations_bladj <- function(phy,
 																	 type = "median",
 																	 root_age = NULL,
 																	 match_calibrations = TRUE){
+	#
+	message("... Using secondary calibrations with BLADJ.")
 	if(!inherits(phy, "phylo")){
 		stop("'phy' is not a phylo object.")
 	}
@@ -79,13 +81,15 @@ use_calibrations_bladj <- function(phy,
 
 #' function to check for conflicting calibrations
 #' if calibrations are younger or older relative to descendants and ancestors, respectively
-#' @details it removes them if needed, but bladj works as long as it has an age for the root
+#' @details it removes them if needed, but BLADJ works as long as it has an age for the root
 #' @param phy A phylo object
 #' @param calibration_distribution is a list of node ages distributions, named with the node number from phy
 # calibration_distribution <- calibs$phy$calibration_distribution
 check_conflicting_calibrations <- function(phy,
 																					 calibration_distribution){
-  if(!inherits(phy, "phylo")){
+  #
+	message("... Checking for conflicting calibrations.")
+	if(!inherits(phy, "phylo")){
     message("'phy' is not a phylo object")
     return(NA)
   }

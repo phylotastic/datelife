@@ -22,7 +22,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 																verbose = FALSE) {
 	# enhance: add mapped (has tnrs been performed?) and matched (was it matched successfully?) element to phylo object
 	# add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
-	message("Making a DateLife query...")
+	message("... Making a DateLife query.")
 	if(suppressMessages(is_datelife_query(input))){
 		return(input)
 	}
@@ -123,7 +123,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 #' @return A phylo object or NA if no tree
 #' @export
 input_process <- function(input){
-	message("Phylo-processing 'input'...")
+	message("... Phylo-processing 'input'.")
 	input_class <- "phylo"
 	ott_ids <- NULL
 	#TODO remove the multiPhylo if option from here?

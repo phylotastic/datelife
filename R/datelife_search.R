@@ -124,6 +124,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 		utils::data("opentree_chronograms", package = "datelife")
 		cache <- get("opentree_chronograms")
 	}
+	message("... Making a DateLife search.")
 	datelife_query <- input
 	if (suppressMessages(!is_datelife_query(input))){
 		datelife_query <- make_datelife_query(input = input,
@@ -142,7 +143,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 	# datelife <- list(datelife_query = datelife_query, datelife_result = datelife_result.here)
 	# class(datelife) <- "datelife"
 	# return(datelife)
-	return(summarize_datelife_result(datelife_result = datelife_result.here,
+	res <- summarize_datelife_result(datelife_result = datelife_result.here,
 																	 datelife_query = datelife_query,
 																	 summary_format = summary_format,
 																	 partial = partial,
@@ -150,7 +151,9 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 																	 summary_print = summary_print,
 																	 taxon_summary = taxon_summary,
 																	 verbose = verbose,
-																	 criterion = criterion))
+																	 criterion = criterion)
+	message("DateLife search done!")
+	return(res)
 }
 
 # print.datelife <- function(datelife){

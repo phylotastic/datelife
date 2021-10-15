@@ -20,6 +20,7 @@ use_calibrations_pathd8 <- function(phy,
                                     calibrations,
                                     expand = 0.1,
                                     giveup = 100){
+    message("... Using secondary calibrations with PATHd8")
     phy <- input_process(phy)
     # i=1
     # phy <- tax_phyloall_bold[[3]][[1]]
@@ -35,7 +36,7 @@ use_calibrations_pathd8 <- function(phy,
     # plot(chronogram, main = i)
     # ape::axisPhylo()
     if (!inherits(phy, "phylo")){
-		    warning("'phy' is not a phylo object")
+		    warning("'phy' is not a phylo object.")
         return(NA)
 	  }
     if(is.null(phy$edge.length)){

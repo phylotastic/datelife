@@ -4,10 +4,7 @@
 \alias{get_calibrations_vector}
 \title{Search and extract available secondary calibrations for a given character vector of taxon names.}
 \usage{
-get_calibrations_vector(
-  input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-  each = FALSE
-)
+get_calibrations_vector(input = NULL, each = FALSE)
 }
 \arguments{
 \item{input}{A character vector of taxon names.}

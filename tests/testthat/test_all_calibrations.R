@@ -57,15 +57,15 @@ test_that("getting, mapping and using all calibrations work", {
   # must throw error here:
   expect_error(suppressWarnings(datelife_use(input=threebirds_result)))
   # but not here:
-  get_all_calibrations(input= threebirds_result)
+  extract_calibrations_dateliferesult(input= threebirds_result)
 
   # TODO: 6) TEST datelife with a datelife query object
 
   # TEST datelife with pathd8
 
   skip_on_cran()
-  use_calibrations(phy = threebirds_median, calibrations = u2$calibrations, dating_method = "pathd8")
-  use_calibrations(phy = threebirds_median, calibrations = u2$calibrations, dating_method = "PATHd8")
+  x <- use_calibrations(phy = threebirds_median, calibrations = u2$calibrations, dating_method = "pathd8")
+  # use_calibrations(phy = threebirds_median, calibrations = u2$calibrations, dating_method = "PATHd8")
 
 })
 
