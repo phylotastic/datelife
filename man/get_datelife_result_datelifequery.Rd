@@ -7,16 +7,34 @@
 get_datelife_result_datelifequery(
   input = NULL,
   partial = TRUE,
-  cache = "opentree_chronograms"
+  cache = "opentree_chronograms",
+  ...
 )
 }
 \arguments{
-\item{input}{A \code{datelifeQuery} object from}
+\item{input}{A \code{datelifeQuery} object from [make_datelife_query()].}
+
+\item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only
+match some of the desired taxa.}
+
+\item{cache}{A character vector of length one, with the name of the data object
+to cache. Default to \code{"opentree_chronograms"}, a data object storing Open Tree of
+Life's database chronograms and other associated information.}
+
+\item{...}{
+  Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}
+  \describe{
+    \item{\code{verbose}}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
+  }}
 }
 \value{
-A datelifeResult object - a named list of patristic matrices. You can
-access the original query with attributes(object)$query
+A \code{datelifeResult} object - a named list of patristic matrices.
 }
 \description{
 Get a list of patristic matrices from a given \code{datelifeQuery} object
+}
+\details{
+If there is just one taxon name in \code{input$cleaned_names}, the
+function will run [make_datelife_query()] setting \code{get_spp_from_taxon = TRUE}.
+The \code{datelifeQuery} used as input can be accessed with \code{attributes(datelifeResult)$query}.
 }

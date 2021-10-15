@@ -1,5 +1,5 @@
-#' Gets taxon names from a character vector, a phylo object or a newick character
-#' string
+#' Go from taxon names from a character vector, a phylo object or a newick character
+#' string to a \code{datelifeQuery} object
 #'
 #' @description It processes \code{phylo} and \code{newick character} string inputs
 #' with [input_process()].
@@ -12,14 +12,17 @@
 #' }
 #' @inheritParams datelife_search
 #' @return A datelifeQuery object, a list of three elements: $phy a phylo object or NA, if input is not a tree; a cleaned vector of taxon names; and $ott_ids a numeric vector of OTT ids if use_tnrs = TRUE, or NULL if use_tnrs = FALSE.
-#' @details If input has length 1, get_spp_from_taxon is always set to TRUE (in datelife_search, not in here, because of function dependencies)
+#' @details If \code{input} is a \code{multiPhylo} object, only the first \code{phylo}
+#' element will be used.
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-	use_tnrs = FALSE, approximate_match = TRUE, get_spp_from_taxon = FALSE,
-	verbose = FALSE) {
+																use_tnrs = FALSE,
+																approximate_match = TRUE,
+																get_spp_from_taxon = FALSE,
+																verbose = FALSE) {
 	# enhance: add mapped (has tnrs been performed?) and matched (was it matched successfully?) element to phylo object
 	# add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
-	message("Running 'make_datelife_query'...")
+	message("Making a DateLife query...")
 	if(suppressMessages(is_datelife_query(input))){
 		return(input)
 	}
@@ -44,10 +47,8 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 			}
 		}
 	} else { # if input is NOT phylo, it can be a list
-	  message("1", input)
 		input <- unlist(input) # in case input is given as a list
 	  # split elements by the commas:
-		message("2", input)
 		cleaned_names <- unlist(strsplit(input, ','))
 		# clean split elements of lingering unneeded white spaces:
 		cleaned_names <- stringr::str_trim(cleaned_names, side = "both")
@@ -112,6 +113,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	# enhance: add original_taxa vector (from get_spp_from_taxon) to output here:
 	datelife_query.return <- list(cleaned_names = cleaned_names, ott_ids = ott_ids,
 		phy = phy_new)
+	message("DateLife query done!")
 	return(structure(datelife_query.return, class = "datelifeQuery"))
 }
 #' Process a phylo object or a character string to determine if it's correct newick

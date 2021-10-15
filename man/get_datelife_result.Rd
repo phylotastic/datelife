@@ -7,12 +7,8 @@
 get_datelife_result(
   input = NULL,
   partial = TRUE,
-  use_tnrs = FALSE,
-  approximate_match = TRUE,
-  update_opentree_chronograms = FALSE,
   cache = "opentree_chronograms",
-  get_spp_from_taxon = FALSE,
-  verbose = FALSE
+  ...
 )
 }
 \arguments{
@@ -21,20 +17,22 @@ get_datelife_result(
 \item{Taxon names}{As a character vector.}
 \item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
             object, OR as a newick character string.}
-\item{A \code{datelifeQuery} object}{An output from [make_datelife_query_vector()]
+\item{A \code{datelifeQuery} object}{An output from [make_datelife_query()]
                 \code{\link[=make_datelife_query]{make_datelife_query}}.}
 }}
 
 \item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only
 match some of the desired taxa.}
 
-\item{update_opentree_chronograms}{default to \code{FALSE}}
-
 \item{cache}{A character vector of length one, with the name of the data object
 to cache. Default to \code{"opentree_chronograms"}, a data object storing Open Tree of
 Life's database chronograms and other associated information.}
 
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
+\item{...}{
+  Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}
+  \describe{
+    \item{\code{verbose}}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
+  }}
 }
 \description{
 Go from a vector of species, newick string, or phylo object

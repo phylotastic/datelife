@@ -2,8 +2,8 @@
 % Please edit documentation in R/datelife_query.R
 \name{make_datelife_query}
 \alias{make_datelife_query}
-\title{Gets taxon names from a character vector, a phylo object or a newick character
-string}
+\title{Go from taxon names from a character vector, a phylo object or a newick character
+string to a \code{datelifeQuery} object}
 \usage{
 make_datelife_query(
   input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
@@ -31,5 +31,6 @@ It processes \code{phylo} and \code{newick character} string inputs
 with [input_process()].
 }
 \details{
-If input has length 1, get_spp_from_taxon is always set to TRUE (in datelife_search, not in here, because of function dependencies)
+If \code{input} is a \code{multiPhylo} object, only the first \code{phylo}
+element will be used.
 }

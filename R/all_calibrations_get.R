@@ -33,11 +33,11 @@ extract_calibrations_phylo <- function(phy = NULL,
 	    chronograms <- chronograms[which(!xx)]
 	  }
 	}
-	if (inherits(input, "phylo")) {
+	if (inherits(phy, "phylo")) {
 	  if (is.null(input$edge.length)) {
 	    stop("'input' tree has no branch lengths.")
 	  }
-		chronograms <- list(input)
+		chronograms <- list(phy)
 	}
 
 	if (each) {
@@ -128,8 +128,8 @@ get_calibrations_vector <- function(input = c("Rhea americana", "Pterocnemia pen
 #' @export
 get_calibrations_datelifequery <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 																    			 each = FALSE) {
-  if (!is_datelife_query(input)) {
-		stop("'input' must be a 'datelifeQuery' object.")
+  if (suppressMessages(!is_datelife_query(input))) {
+		stop("'input' is not a 'datelifeQuery' object.")
 	}
 	phyloall <- datelife_search(input = input,
 															summary_format = "phylo_all")
@@ -155,7 +155,7 @@ get_calibrations_datelifequery <- function(input = c("Rhea americana", "Pterocne
 #' source chronograms from which the calibrations were obtained.
 #' @export
 extract_calibrations_dateliferesult <- function(input = NULL,
-																            each = FALSE) {
+																                each = FALSE) {
 
   phyloall <- suppressMessages(
               summarize_datelife_result(datelife_result = input,

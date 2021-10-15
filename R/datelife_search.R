@@ -12,17 +12,52 @@
 #'	\item{Taxon names}{As a character vector.}
 #'	\item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
 #'				object, OR as a newick character string.}
-#'	\item{A \code{datelifeQuery} object}{An output from [make_datelife_query_vector()]
+#'	\item{A \code{datelifeQuery} object}{An output from [make_datelife_query()]
 #' 				\code{\link[=make_datelife_query]{make_datelife_query}}.}
 #'	}
-#' @param summary_format The desired output format for source chronograms (chronograms
-#' with two or more input taxa). See details.
+#' @param summary_format A character vector of length one, indicating the output
+#' format for results of the DateLife search. Available output formats are:
+#' \describe{
+#'	 \item{"citations"}{A character vector of references where chronograms with
+#'	 				some or all of the target taxa are published (source chronograms).}
+#'	 \item{"mrca"}{A named numeric vector of most recent common ancestor (mrca)
+#'	 				ages of target taxa defined in input, obtained from the source chronograms.
+#'	 				Names of mrca vector are equal to citations.}
+#'	 \item{"newick_all"}{A named character vector of newick strings corresponding
+#'	 				to target chronograms derived from source chronograms. Names of newick_all
+#'	 				vector are equal to citations.}
+#'	 \item{"newick_sdm"}{Only if multiple source chronograms are available. A
+#'	 				character vector with a single newick string corresponding to a target
+#'	 				chronogram obtained with SDM supertree method (Criscuolo et al. 2006).}
+#'	 \item{"newick_median"}{Only if multiple source chronograms are available.
+#'	 				A character vector with a single newick string corresponding to a target
+#'	 				chronogram from the median of all source chronograms.}
+#'	 \item{"phylo_sdm"}{Only if multiple source chronograms are available. A
+#'	 				phylo object with a single target chronogram obtained with SDM supertree
+#'	 				method (Criscuolo et al. 2006).}
+#'	 \item{"phylo_median"}{Only if multiple source chronograms are available. A
+#'	 				phylo object with a single target chronogram obtained from source
+#'	 				chronograms with median method.}
+#'	 \item{"phylo_all"}{A named list of phylo objects corresponding to each target
+#'	 				chronogram obtained from available source chronograms. Names of
+#'	 				phylo_all list correspond to citations.}
+#'	 \item{"phylo_biggest"}{The chronogram with the most taxa. In the case of a
+#'	 				tie, the chronogram with clade age closest to the median age of the
+#'	 				equally large trees is returned.}
+#'	 \item{"html"}{A character vector with an html string that can be saved and
+#'	 				then opened in any web browser. It contains a 4 column table with data on
+#'	 				target taxa: mrca, number of taxa, citations of source chronogram and
+#'	 				newick target chronogram.}
+#'	 \item{"data_frame"}{A data frame with data on target taxa: mrca, number of
+#'	 				taxa, citations of source chronograms and newick string.}
+#' }
 #' @param summary_print A character vector specifying type of summary information
 #' to be printed to screen:
 #' \describe{
-#'	\item{"citations"}{Prints references of chronograms where target taxa are found.}
-#'	\item{"taxa"}{Prints a summary of the number of chronograms where each target taxon is found.}
-#'	\item{"none"}{Nothing is printed to screen.}
+#'	 \item{"citations"}{Prints references of chronograms where target taxa are found.}
+#'	 \item{"taxa"}{Prints a summary of the number of chronograms where each target
+#'	 				taxon is found.}
+#'	 \item{"none"}{Nothing is printed to screen.}
 #' }
 #' Default to \code{c("citations", "taxa")}, which displays both.
 #' @param taxon_summary A character vector specifying if data on target taxa missing
@@ -39,31 +74,13 @@
 #' @param criterion Whether to get the grove with the most trees or the most taxa
 #' @export
 #' @details
-#' Available output formats are:
-#'
-#' citations: A character vector of references where chronograms with some or all of the target taxa are published (source chronograms).
-#'
-#' mrca: A named numeric vector of most recent common ancestor (mrca) ages of target taxa defined in input, obtained from the source chronograms. Names of mrca vector are equal to citations.
-#'
-#' newick_all: A named character vector of newick strings corresponding to target chronograms derived from source chronograms. Names of newick_all vector are equal to citations.
-#'
-#' newick_sdm: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
-#'
-#' newick_median: Only if multiple source chronograms are available. A character vector with a single newick string corresponding to a target chronogram from the median of all source chronograms.
-#'
-#' phylo_sdm: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained with SDM supertree method (Criscuolo et al. 2006).
-#'
-#' phylo_median: Only if multiple source chronograms are available. A phylo object with a single target chronogram obtained from source chronograms with median method.
-#'
-#' phylo_all: A named list of phylo objects corresponding to each target chronogram obtained from available source chronograms. Names of phylo_all list correspond to citations.
-#'
-#' phylo_biggest: The chronogram with the most taxa. In the case of a tie, the chronogram with clade age closest to the median age of the equally large trees is returned.
-#'
-#' html: A character vector with an html string that can be saved and then opened in any web browser. It contains a 4 column table with data on target taxa: mrca, number of taxa, citations of source chronogram and newick target chronogram.
-#'
-#' data_frame A data frame with data on target taxa: mrca, number of taxa, citations of source chronograms and newick string.
-#'
-#' For approaches that return a single synthetic tree, it is important that the trees leading to it form a grove (roughly, a sufficiently overlapping set of taxa between trees: see Ané et al. 2005, 10.1007/s00026-009-0017-x). In the rare case of multiple groves, should we take the one with the most trees or the most taxa?
+#' If only one taxon names is given as \code{input}, \code{get_spp_from_taxon} is
+#' always set to \code{TRUE}.
+#' For approaches that return a single synthetic tree, it is important that the
+#' trees leading to it form a grove (roughly, a sufficiently overlapping set of
+#' taxa between trees: see Ané et al. 2005, 10.1007/s00026-009-0017-x). In the
+#' rare case of multiple groves, should we take the one with the most trees or
+#' the most taxa?
 #'
 #' @examples
 #' # obtain median ages from a set of source chronograms in newick format:
@@ -94,7 +111,6 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 														partial = TRUE,
 														use_tnrs = FALSE,
 														approximate_match = TRUE,
-														update_opentree_chronograms = FALSE,
 														cache = "opentree_chronograms",
 														summary_print= c("citations", "taxa"),
 														taxon_summary = c("none", "summary", "matrix"),
@@ -104,33 +120,37 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 	# TODO: find a way not to repeat partial and cache arguments, they are used in
 	# datelife_search,  get_datelife_result and summarize_datelife_result
 	# maybe take out option to update cache and work with versions of cache for reproducibility
-	if(update_opentree_chronograms){
-		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
-	} else {
-		if("opentree_chronograms" %in% cache){
-			utils::data("opentree_chronograms", package = "datelife")
-			cache <- get("opentree_chronograms")
-		}
+	if("opentree_chronograms" %in% cache){
+		utils::data("opentree_chronograms", package = "datelife")
+		cache <- get("opentree_chronograms")
 	}
-	if (is_datelife_query(input)){
-		datelife_query <- input
-	} else {
-		datelife_query <- make_datelife_query(input = input, use_tnrs = use_tnrs,
-			approximate_match = approximate_match, get_spp_from_taxon = get_spp_from_taxon,
-			verbose = verbose)
+	datelife_query <- input
+	if (suppressMessages(!is_datelife_query(input))){
+		datelife_query <- make_datelife_query(input = input,
+																					use_tnrs = use_tnrs,
+																					approximate_match = approximate_match,
+																					get_spp_from_taxon = get_spp_from_taxon,
+																					verbose = verbose)
 	}
 	datelife_result.here <- get_datelife_result_datelifequery(input = datelife_query,
-		partial = partial, use_tnrs = use_tnrs, approximate_match = approximate_match,
-		update_opentree_chronograms = FALSE, cache = cache, verbose = verbose)
+																														partial = partial,
+																														use_tnrs = use_tnrs,
+																														approximate_match = approximate_match,
+																														cache = cache,
+																														verbose = verbose)
 	# print.datelife(datelife_result = datelife_result.here)
 	# datelife <- list(datelife_query = datelife_query, datelife_result = datelife_result.here)
 	# class(datelife) <- "datelife"
 	# return(datelife)
 	return(summarize_datelife_result(datelife_result = datelife_result.here,
-		datelife_query = datelife_query, summary_format = summary_format,
-		partial = partial, update_opentree_chronograms = FALSE, cache = cache,
-		summary_print = summary_print, taxon_summary = taxon_summary,
-		verbose = verbose, criterion = criterion))
+																	 datelife_query = datelife_query,
+																	 summary_format = summary_format,
+																	 partial = partial,
+																	 cache = cache,
+																	 summary_print = summary_print,
+																	 taxon_summary = taxon_summary,
+																	 verbose = verbose,
+																	 criterion = criterion))
 }
 
 # print.datelife <- function(datelife){

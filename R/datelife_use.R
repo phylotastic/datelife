@@ -31,7 +31,7 @@ datelife_use <- function(input = NULL,
 
     datelife_query <- input
 
-    if(!is_datelife_query(datelife_query)){
+    if(suppressMessages(!is_datelife_query(datelife_query))){
       # make_datelife_query also removes singleton nodes in phy
       # should we add extra arguments for make_datelife_query function
       # with hasArg (phytools method)???
@@ -41,7 +41,9 @@ datelife_use <- function(input = NULL,
 	  # if datelife_query$phy is not a tree, get one with bold or otol:
 	  if(!inherits(phy, "phylo")){
       # make_bold_otol_tree can take a datelifeQuery object, otherwise, it will make one again!
-	  	phy <- make_bold_otol_tree(datelife_query, chronogram = FALSE, verbose = FALSE)
+	  	phy <- make_bold_otol_tree(datelife_query,
+                                 chronogram = FALSE,
+                                 verbose = FALSE)
 	  }
     if(!inherits(phy, "phylo")){
       message("BOLD tree reconstruction failed for the given set of taxon names.")
@@ -79,11 +81,11 @@ datelife_use_datelifequery <- function(input = NULL,
                                        dating_method = "bladj",
                                        each = FALSE) {
 #
-    if (!is_datelife_query(input)) {
+    if (suppressMessages(!is_datelife_query(input))) {
       warning("'input' is not a 'datelifeQuery' object.")
       return(NA)
     }
-    if (!inherits(input$phy, phylo)) {
+    if (!inherits(input$phy, "phylo")) {
       warning("'input$phy' is not a 'phylo' object.")
       return(NA)
     }
