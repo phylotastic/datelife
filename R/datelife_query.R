@@ -29,7 +29,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	# input_process determines if input is newick and transforms it to phylo
 	# if input is phylo or multiphylo it will also check if it is a good tree
 	# if input is anything else, it will return NA:
-	phy_new <- input_process(input = input, verbose = verbose)
+	phy_new <- input_process(input = input)
 	use_tnrs_global <- FALSE
 	if(use_tnrs | any(get_spp_from_taxon)){
 		use_tnrs_global <- TRUE
@@ -122,7 +122,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 #' @inheritParams make_datelife_query
 #' @return A phylo object or NA if no tree
 #' @export
-input_process <- function(input, verbose = FALSE){
+input_process <- function(input){
 	message("Phylo-processing 'input'...")
 	input_class <- "phylo"
 	ott_ids <- NULL
@@ -147,8 +147,12 @@ input_process <- function(input, verbose = FALSE){
 	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
 		input <- input[grepl("\\(.*\\).*;", input)] # leave only the elements that are newick strings
 		if(length(input)>1){
-			message("'input' has several newick strings. Only the first one will be used.")}
-  		phy_out <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input[1])))
+			message("'input' has several newick strings. Only the first one will be used.")
+		}
+		# phytools read.newick is not working
+  	# phy_out <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input[1])))
+		phy_out <- ape::collapse.singles(ape::read.tree(text = gsub(" ", "_", input[1])))
+
 		phy_out$ott_ids <- ott_ids
 		class(phy_out) <- input_class
 		message("'input' is a phylogeny and it is correcly formatted.")

@@ -4,7 +4,7 @@
 \alias{input_process}
 \title{Process a phylo object or a character string to determine if it's correct newick}
 \usage{
-input_process(input, verbose = FALSE)
+input_process(input)
 }
 \arguments{
 \item{input}{One of the following:
@@ -15,8 +15,6 @@ input_process(input, verbose = FALSE)
 \item{A \code{datelifeQuery} object}{An output from [make_datelife_query()]
                 \code{\link[=make_datelife_query]{make_datelife_query}}.}
 }}
-
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \value{
 A phylo object or NA if no tree

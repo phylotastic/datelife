@@ -20,7 +20,7 @@ use_calibrations_pathd8 <- function(phy,
                                     calibrations,
                                     expand = 0.1,
                                     giveup = 100){
-    phy <- input_process(phy, verbose = FALSE)
+    phy <- input_process(phy)
     # i=1
     # phy <- tax_phyloall_bold[[3]][[1]]
     # calibrations <- tax_othercalall[[3]][[1]]

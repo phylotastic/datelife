@@ -16,24 +16,22 @@ test_that("getting, mapping and using all calibrations work", {
   # these are taking too long to get bold tree I think? Check it out:
   # u1.2 <- datelife_use(input = c("Felis catus", "Homo sapiens", "Elephas maximus"))
   # u1.2 <- datelife_use(input = c("Delphinus delphus", "Homo sapiens", "Elephas maximus"))
-  u1.4 <- datelife_use(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
   u1.5 <- datelife_use(input = c("Chen caerulescens", "Cygnus columbianus", "Anas acuta"))
 
   #TEST match_all_calibrations
-  match_all_calibrations(phy = NULL, calibrations= NULL)
-  match_all_calibrations(phy = u2$phy, calibrations= NULL)
-  match_all_calibrations(phy = u1.5$phy, calibrations = u1.4$calibrations.df)
-  match_all_calibrations(phy = u1.4$phy, calibrations = u1.5$calibrations.df)
-
+  expect_equal(match_all_calibrations(phy = NULL, calibrations= NULL), NA)
+  # match_all_calibrations(phy = u1.2$phy, calibrations= NULL)
+  expect_equal(match_all_calibrations(phy = u1.5$phy, calibrations = u1$calibrations.df), NA)
+  expect_equal(match_all_calibrations(phy = u1$phy, calibrations = u1.5$calibrations.df), NA)
 
   # 2) TEST datelife with a tree with NO branch lengths
-  u2 <- suppressWarnings(datelife_use(input=threebirds_nbl))
+  u2 <- datelife_use(input=threebirds_nbl)
   # initial branch lengths are required for pathd8 dating
   # the following will use bladj instead of pathd8 bc phy has no branch lengths:
   c1 <- use_calibrations(phy = threebirds_nbl, calibrations = u2$calibrations, dating_method = "pathd8")
   # test dating_method attribute is "bladj"
-  # get all calibrations should not work with a tree with no branch lengths:
-  expect_error(get_all_calibrations(input=threebirds_nbl))
+  # get all calibrations works with a tree with branch lengths too!
+  c2 <- get_all_calibrations(input=threebirds_nbl)
 
   # 3) TEST datelife with a tree WITH branch lengths
   u3 <- suppressWarnings(datelife_use(input=threebirds_median))

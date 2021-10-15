@@ -104,7 +104,8 @@ tree_add_outgroup <- function(tree = NULL, outgroup = "outgroup"){
     }
 	phy <- gsub(";", "", ape::write.tree(phy))
 	phy <- paste("(", phy, ingroup_edge, ",", outgroup[1], outgroup_edge, ")", root_edge, ";", sep="")
-	phy <-  phytools::read.newick(text = phy)  # tree looses its root length anyways when read by read.tree or read.newick
+	# phy <-  phytools::read.newick(text = phy)
+	phy <-  ape::read.tree(text = phy)  # tree looses its root length anyways when read by read.tree or read.newick
 
 	return(phy)
 }
@@ -139,7 +140,7 @@ phylo_check <- function(phy = NULL, brlen = FALSE, dated = FALSE){
 #' @export
 tree_check <- function(tree = NULL, ...){
 	if (!inherits(tree, "phylo")){
-		tree <- input_process(input = tree, verbose = FALSE)
+		tree <- input_process(input = tree)
 	}
 	phylo_check(phy = tree, ...)
 	return(tree)
