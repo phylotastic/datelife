@@ -39,7 +39,7 @@ get_datelife_result_datelifequery <- function(input = NULL,
 		 																			 input$cleaned_names,
 																					 partial = partial)
    # datelife_result_check(datelife_result,
-		 										 use_tnrs)
+		 										 # use_tnrs)
 	 message("DateLife result obtained!")
    class(datelife_result) <- c("datelifeResult")
    attr(datelife_result, "query") <- input

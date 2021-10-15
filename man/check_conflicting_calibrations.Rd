@@ -17,5 +17,5 @@ function to check for conflicting calibrations
 if calibrations are younger or older relative to descendants and ancestors, respectively
 }
 \details{
-it removes them if needed, but bladj works as long as it has an age for the root
+it removes them if needed, but BLADJ works as long as it has an age for the root
 }
