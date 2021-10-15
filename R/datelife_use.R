@@ -30,7 +30,6 @@ datelife_use <- function(input = NULL,
 
 
     datelife_query <- input
-
     if(suppressMessages(!is_datelife_query(datelife_query))){
       # make_datelife_query also removes singleton nodes in phy
       # should we add extra arguments for make_datelife_query function

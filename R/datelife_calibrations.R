@@ -6,13 +6,8 @@
 #' pair given in \code{input}.
 #'
 #' @inheritParams datelife_search
-# #'	\item{A \code{datelifeResult} object}{From \code{\link[=get_datelife_result]{get_datelife_result}}.}
-#' @param each Boolean, default to \code{FALSE}: all calibrations are returned in
-#' the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
-#' in separate data frames.
-#' @return A data frame of secondary calibrations (or list of data frames, if \code{each = TRUE}),
-#' for each pair of given taxon names. The attribute "chronograms" contains the
-#' source chronograms from which the calibrations were obtained.
+#' @inheritParams extract_calibrations_phylo
+#' @inherit extract_calibrations_phylo return
 #' @export
 get_all_calibrations <- function(input = NULL,
 																 each = FALSE) {
@@ -20,6 +15,7 @@ get_all_calibrations <- function(input = NULL,
   if (inherits(input, "datelifeQuery")) {
   	res <- get_calibrations_datelifequery(input = input,
   																				each = each)
+		return(res)
   }
   if (inherits(input, "phylo") | inherits(input, "multiPhylo")) {
 		if (inherits(input, "multiPhylo")) {

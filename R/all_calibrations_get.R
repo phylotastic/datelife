@@ -7,7 +7,9 @@
 #'
 #' @param input a \code{phylo} or \code{multiPhylo} object with branch lengths
 #' proportional to time.
-#' @inheritParams get_all_calibrations
+#' @param each Boolean, default to \code{FALSE}: all calibrations are returned in
+#' the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
+#' in separate data frames.
 #' @return An object of class \code{datelifeCalibrations} -- a \code{data frame}
 #' of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
 #' for each pair of taxon names in \{input]. The attribute "chronograms" stores

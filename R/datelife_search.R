@@ -124,7 +124,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 		utils::data("opentree_chronograms", package = "datelife")
 		cache <- get("opentree_chronograms")
 	}
-	message("... Making a DateLife search.")
+	message("... Running a DateLife search.")
 	datelife_query <- input
 	if (suppressMessages(!is_datelife_query(input))){
 		datelife_query <- make_datelife_query(input = input,

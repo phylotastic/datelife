@@ -1,12 +1,12 @@
 #' Match calibrations to nodes of a tree
 #'
-#' @description \code{match_all_calibrations} summarizes nodes in tree that match to any pair of given
-#' taxon names in a data frame of secondary calibrations.
+#' @description \code{match_all_calibrations} summarizes nodes in tree that match
+#' to any pair of given taxon names in a data frame of secondary calibrations.
 #'
-#' @param phy A phylo object. Nodes can be named or not.
+#' @param phy A \code{phylo} object. Nodes can be named or not.
 # #' or a vector of taxon names (see details).
-#' @param calibrations A data frame of secondary calibrations. Usually an output
-#' from get_all_calibrations function (see this function for format).
+#' @param calibrations An object of class \code{datelifeCalibrations}, that is,
+#' an output of [get_all_calibrations()].
 #' @return A list with:
 #' \describe{
 #'	\item{phy}{A phylo object with additional data of calibration distributions per node.}
