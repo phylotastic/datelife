@@ -4,7 +4,12 @@
 \alias{use_all_calibrations}
 \title{Date a given tree topology using a given set of calibrations}
 \usage{
-use_all_calibrations(phy = NULL, calibrations = NULL, dating_method = "bladj")
+use_all_calibrations(
+  phy = NULL,
+  each = FALSE,
+  calibrations = NULL,
+  dating_method = "bladj"
+)
 }
 \arguments{
 \item{phy}{A \code{phylo} object with or without branch lengths}

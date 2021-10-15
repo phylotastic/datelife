@@ -168,7 +168,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	}
 	phy$tip.label <- gsub(' ', '_', phy$tip.label)
 	if (verbose) {
-		message("Done!")
+		message("BOLD branch lengths reconstructed!")
 	}
 	return(phy)
 }

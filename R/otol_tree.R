@@ -10,11 +10,11 @@ get_otol_synthetic_tree <- function(input = NULL,
 																		otol_version = "v3",
 																		resolve = FALSE, ...){
   #
-	message("Getting an OpenTree induced synthetic subtree.")
+	message("... Getting an OpenTree induced synthetic subtree.")
 	input_ott_match <- suppressMessages(check_ott_input(input, ott_ids, ...))
 	if(length(input_ott_match) < 2){
-		message("At least two valid names or numeric ott_ids are needed to get a tree.")
-		message(paste0("Input is ", input, "and ott_ids is", ott_ids, "."))
+		message("At least two valid taxon names or numeric OTT ids are needed to get an OpenTree tree.")
+		message(paste0("'input' is ", input, "and 'ott_ids' is", ott_ids, "."))
 		return(NA)
 	}
 	# enhance: we might need a check of ott_id elements, are they all numeric, are there no NAs, etc.
@@ -24,7 +24,7 @@ get_otol_synthetic_tree <- function(input = NULL,
 	# system.time({tnrs_match(rownames(df))}) # this one is faster
 	phy <- tryCatch(suppressWarnings(rotl::tol_induced_subtree(ott_ids = input_ott_match, label_format = "name",  otl_v = otol_version)),
 					error = function(e){
-						message("Some or all input taxa are absent from OToL synthetic tree, look for invalid taxa and clean them from input")
+						message("Some or all input taxa are absent from OpenTree synthetic tree, look for invalid taxa and clean them from 'input'.")
 						# this will happen if there are some extinct taxa, barren or any invalid taxa in taxonomy
 						# enhance: to avoid it, clean invalid taxa at the beginning
 						NA })
@@ -35,7 +35,7 @@ get_otol_synthetic_tree <- function(input = NULL,
 		message(paste0("OpenTree synthetic tree of input taxa is not fully resolved (",
 		phy$Nnode, " nodes/", length(phy$tip.label), " tips)."))
 		if(resolve){
-			message("Resolving at random...")
+			message("... Resolving nodes at random with 'multi2di()'")
 			phy <- ape::multi2di(phy)
 		}
 	} else {
@@ -59,6 +59,7 @@ get_otol_synthetic_tree <- function(input = NULL,
 		phy$ott_ids[mrca_index] <- mrcaott_names
 	}
 	phy$ott_ids <- as.numeric(phy$ott_ids)
+	message("Success!")
 	return(phy)
 }
 
@@ -78,10 +79,10 @@ get_dated_otol_induced_subtree <- function(input = NULL,
 	# utils::data(threebirds.rda)
 	# input <- threebirds_query$cleaned_names
 	# ott_ids <- threebirds_query$ott_ids
-	message("Getting a dated OpenTree induced synthetic subtree (from blackrim's FePhyFoFum).")
+	message("... Getting a dated OpenTree induced synthetic subtree (from blackrim's FePhyFoFum).")
 	input_ott_match <- suppressMessages(check_ott_input(input, ott_ids, ...))
 	if(length(input_ott_match) < 2){
-		message("At least two valid names or numeric ott_ids are needed to get a tree from OpenTree.")
+		message("At least two valid taxon names or numeric OTT ids are needed to get an OpenTree tree.")
 		return(NA)
 	}
     pp <- tryCatch(httr::POST("http://141.211.236.35:10999/induced_subtree",
@@ -95,6 +96,7 @@ get_dated_otol_induced_subtree <- function(input = NULL,
 		rr <- httr::content(rr)
 		rr <- ape::read.tree(text = rr$newick)
 		rr$ott_ids <- ape::read.tree(text = pp$newick)$tip.label
+		message("Success!")
 	  return(rr)
 	}	else { # this means it errored and we return NA
 		message("There was probably a connection error with dated OpenTree service (blackrim's FePhyFoFum); you should try again later.")

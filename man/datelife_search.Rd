@@ -12,7 +12,6 @@ datelife_search(
   partial = TRUE,
   use_tnrs = FALSE,
   approximate_match = TRUE,
-  update_opentree_chronograms = FALSE,
   cache = "opentree_chronograms",
   summary_print = c("citations", "taxa"),
   taxon_summary = c("none", "summary", "matrix"),
@@ -71,8 +70,6 @@ format for results of the DateLife search. Available output formats are:
 \item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only
 match some of the desired taxa.}
 
-\item{update_opentree_chronograms}{default to \code{FALSE}}
-
 \item{cache}{A character vector of length one, with the name of the data object
 to cache. Default to \code{"opentree_chronograms"}, a data object storing Open Tree of
 Life's database chronograms and other associated information.}
@@ -95,6 +92,8 @@ added to the output.}
 \item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 
 \item{criterion}{Whether to get the grove with the most trees or the most taxa}
+
+\item{update_opentree_chronograms}{default to \code{FALSE}}
 }
 \description{
 \code{datelife_search} is the core DateLife function to find and

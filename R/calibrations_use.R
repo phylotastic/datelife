@@ -18,6 +18,7 @@
 #' to get a topology with branch lengths. If it can't, it will get an Open Tree
 #' of Life synthetic tree topology and will date it with bladj.
 use_all_calibrations <- function(phy = NULL,
+                                 each = FALSE,
                                  calibrations = NULL,
                                  dating_method = "bladj") {
 #
@@ -39,8 +40,8 @@ use_all_calibrations <- function(phy = NULL,
     # if (methods::hasArg("root_age"))
     # if (methods::hasArg("match_calibrations"))
     if (each) {  # if calibrations is a list of data frames:
-      chronogram <- use_calibrations_each(phy=phy,
-                                          calibrations=calibrations,
+      chronogram <- use_calibrations_each(phy = phy,
+                                          calibrations = calibrations,
                                           dating_method = dating_method)$chronograms
     } else {
       chronogram <- use_calibrations(phy,

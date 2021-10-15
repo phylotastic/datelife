@@ -73,9 +73,9 @@ extract_calibrations_phylo <- function(phy = NULL,
 	}
 	attr(calibrations, "chronograms") <- chronograms
 	# TODO check that class data frame is also preserved. Might wanna do:
-	# class(calibrations) <- c(class(calibrations), "datelifeCalibrations")
+	class(calibrations) <- c(class(calibrations), "datelifeCalibrations")
 	# instead of using structure()
-	return(structure(calibrations, class = "datelifeCalibrations"))
+	return(calibrations)
 }
 
 #' Search and extract available secondary calibrations for a given character vector of taxon names.
