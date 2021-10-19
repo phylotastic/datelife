@@ -14,9 +14,11 @@
 #' @return A phylogeny with branch lengths poportional to relative substitution rate.
 #' @details
 #' If input is a phylo object or a newick string, it is used as backbone topology.
-#' If input is a character vector of taxon names, an induced OToL tree is used as backbone.
+#' If input is a character vector of taxon names, an induced synthetic OpenTree
+#' subtree is used as backbone.
 #' If there are not enough sequences to return a tree with branch lengths, it returns
-#' either the original input topology or the OpenTree subtree obtained for the input taxon names.
+#' either the original input topology or the synthetic OpenTree subtree obtained
+#' for the input taxon names.
 #' @export
 # input <- phyloall[[1]]
 # input <- tax_phyloallall[[3]][[13]] # it is now working with this input
@@ -29,6 +31,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 																aligner = "muscle",
 																...) {
 	# input check (accepts newick strings too)
+	datelife_query <- input
 	if (suppressMessages(!is_datelife_query(input))) {
 			datelife_query <- make_datelife_query(input)
 	}
@@ -58,20 +61,25 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	}
 	cat("\n") # just to make the progress bar look better
 	sequences <- sequences[grepl(marker, sequences$markercode), ] # filter other markers
-	if (length(sequences) == 1) {  # it is length == 80 when there is at least 1 sequence available; if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
-		# if (!use_tnrs) cat("Setting use_tnrs = TRUE might change this, but it can be slowish.", "\n")
-		message("Names in input do not match BOLD specimen records; no sequences
+	if (length(sequences) == 1) {
+		# it is length == 80 when there is at least 1 sequence available;
+		# if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
+		# if (!use_tnrs) message("Setting 'use_tnrs = TRUE' might change this, but it can be slow.\n")
+		warning("Names in input do not match BOLD specimen records; no sequences
 			were found in BOLD for the set of input taxa.\nReturning tree with no branch lengths!")
 		return(phy)
 	}
 	message("BOLD sequence search done!")
 	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides)  # preserve good nucleotide data, i.e., only A,T,G,C
 	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
-	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
-	final.sequences.names <- rep(NA, length(input))
+	col_number <- max(sapply(strsplit(sequences$nucleotides, ""), length))
+	final.sequences <- matrix("-",
+	                          nrow = length(bold_input),
+	                          ncol = col_number)
+	final.sequences.names <- rep(NA, length(bold_input))
 	row.index <- 0
 	taxa.to.drop <- c()
-	for (i in input) {
+	for (i in bold_input) {
 		row.index <- row.index + 1
 		taxon.index <- which(grepl(i, sequences$species_name))
 		# if there are no sequences from any taxon, taxon.index is empty

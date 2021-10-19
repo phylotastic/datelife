@@ -6,16 +6,20 @@
 \usage{
 use_all_calibrations(
   phy = NULL,
-  each = FALSE,
   calibrations = NULL,
+  each = FALSE,
   dating_method = "bladj"
 )
 }
 \arguments{
 \item{phy}{A \code{phylo} object with or without branch lengths}
 
-\item{calibrations}{A data frame (or list of data frames) of secondary calibrations
-for any pair of taxon names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.}
+\item{calibrations}{An object of class \code{datelifeCalibrations},
+typically an output of [get_all_calibrations()].}
+
+\item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
+the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
+in separate data frames.}
 
 \item{dating_method}{Tree dating method. Options are "bladj" or "pathd8"}
 }
@@ -29,9 +33,11 @@ in \code{phy}, and secondary calibrations given in \code{calibrations},
 using bladj or PATHd8.
 }
 \details{
-If input is a tree, it will use secondary calibrations to (1) date the tree with bladj
-if it has no branch lengths, or (2) date the tree with PATHd8 if it has branch lengths.
-If input is a vector of taxon names, it will attempt to reconstruct a BOLD tree first
-to get a topology with branch lengths. If it can't, it will get an Open Tree
-of Life synthetic tree topology and will date it with bladj.
+If \code{input} tree does not have branch lengths, \code{dating_method} is
+ignored and the function will use secondary calibrations to date the \code{input}
+tree with [BLADJ](http://phylodiversity.net/bladj/)
+using [phylocomr::ph_bladj()] (via [use_calibrations_bladj()]). If \code{input}
+tree has have branch lengths it can be dated
+with [PATHd8](https://www2.math.su.se/PATHd8/) using [geiger::PATHd8.phylo()]
+(via [use_calibrations_pathd8()]).
 }

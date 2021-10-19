@@ -6,20 +6,16 @@
 #' using bladj or PATHd8.
 #'
 #' @inheritParams use_calibrations_bladj
-#' @param calibrations A data frame (or list of data frames) of secondary calibrations
-#' for any pair of taxon names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.
+#' @param calibrations An object of class \code{datelifeCalibrations},
+#' typically an output of [get_all_calibrations()].
+#' @inheritParams extract_calibrations_phylo
 #' @param dating_method Tree dating method. Options are "bladj" or "pathd8"
 #' @return A list with a chronogram and secondary calibrations used.
+#' @inherit use_calibrations details
 #' @export
-#' @details
-#' If input is a tree, it will use secondary calibrations to (1) date the tree with bladj
-#' if it has no branch lengths, or (2) date the tree with PATHd8 if it has branch lengths.
-#' If input is a vector of taxon names, it will attempt to reconstruct a BOLD tree first
-#' to get a topology with branch lengths. If it can't, it will get an Open Tree
-#' of Life synthetic tree topology and will date it with bladj.
 use_all_calibrations <- function(phy = NULL,
-                                 each = FALSE,
                                  calibrations = NULL,
+                                 each = FALSE,
                                  dating_method = "bladj") {
     #
     # date the tree with bladj, pathd8 if branch lengths:
@@ -51,22 +47,20 @@ use_all_calibrations <- function(phy = NULL,
 #' to date a given tree topology.
 #'
 #' @inheritParams use_all_calibrations
-#' @param calibrations A list of data frames of secondary calibrations
-#' for any pair of taxon names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.
 #' @param ... Arguments to pass to use_calibrations
 #' @return A list with a multiPhylo object of chronograms and a list of all calibrations used
+#' @inherit use_calibrations details
 #' @export
-#' @details
-#' You can get the datelifeResult object or the list of chronograms first
-#' phylo_all1 <- get_datelife_result(input = my_phy)
-#' phylo_all2 <- summarize_datelife_result(phylo_all1)
-#' Either will work the same:
-#' use_calibrations_each(phy = my_phy, phylo_all = phylo_all1)
-#' use_calibrations_each(phy = my_phy, phylo_all = phylo_all2)
-#' You can also get the list of calibrations outside
-#' my_calibrations <- get_all_calibrations(input = phylo_all1, each = TRUE)
-#' use_calibrations_each(phy = my_phy, calibrations = my_calibrations)
-#' All this means that you can use your own set of calibrations, not necessarily the ones found only in datelife.
+# You can get the datelifeResult object or the list of chronograms first
+# phylo_all1 <- get_datelife_result(input = my_phy)
+# phylo_all2 <- summarize_datelife_result(phylo_all1)
+# Either will work the same:
+# use_calibrations_each(phy = my_phy, phylo_all = phylo_all1)
+# use_calibrations_each(phy = my_phy, phylo_all = phylo_all2)
+# You can also get the list of calibrations outside
+# my_calibrations <- get_all_calibrations(input = phylo_all1, each = TRUE)
+# use_calibrations_each(phy = my_phy, calibrations = my_calibrations)
+# All this means that you can use your own set of calibrations, not necessarily the ones found only in datelife.
 # phy <- tax_otolall[[1]]
 # calibrations <- tax_eachcalall[[1]]
 use_calibrations_each <- function(phy = NULL,
@@ -74,7 +68,13 @@ use_calibrations_each <- function(phy = NULL,
                                  ...) {
 
 		# date the tree with bladj, or pathd8 if branch lengths:
-		chronograms <- lapply(calibrations, function(x) suppressMessages(use_calibrations(phy, x, ...)))
+    if (inherits(calibrations, "data.frame")) {
+      calibrations <- structure(list(calibrations), class = c("list", "datelifeCalibrations"))
+    }
+		chronograms <- lapply(calibrations, function(x)
+                                        use_calibrations(phy = phy,
+                                                         calibrations = x,
+                                                         ...))
 		class(chronograms) <- "multiPhylo"
 		names(chronograms) <- names(calibrations)
 		return(list(chronograms = chronograms, calibrations = calibrations))
@@ -91,7 +91,13 @@ use_calibrations_each <- function(phy = NULL,
 #' @return A \code{phylo} object with branch lengths proportional to time.
 #' @export
 #' @details
-#' If phy does not have branch lengths, dating_method is ignored and BLADJ will be used.
+#' If \code{input} tree does not have branch lengths, \code{dating_method} is
+#' ignored and the function will use secondary calibrations to date the \code{input}
+#' tree with [BLADJ](http://phylodiversity.net/bladj/)
+#' using [phylocomr::ph_bladj()] (via [use_calibrations_bladj()]). If \code{input}
+#' tree has have branch lengths it can be dated
+#' with [PATHd8](https://www2.math.su.se/PATHd8/) using [geiger::PATHd8.phylo()]
+#' (via [use_calibrations_pathd8()]).
 use_calibrations <- function(phy = NULL,
                              calibrations = NULL,
                              dating_method = "bladj",

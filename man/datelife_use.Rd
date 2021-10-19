@@ -17,6 +17,10 @@ datelife_use(input = NULL, each = FALSE, dating_method = "bladj", ...)
                 \code{\link[=make_datelife_query]{make_datelife_query}}.}
 }}
 
+\item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
+the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
+in separate data frames.}
+
 \item{dating_method}{Tree dating method. Options are "bladj" or "pathd8"}
 
 \item{...}{

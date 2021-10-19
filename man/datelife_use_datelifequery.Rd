@@ -15,8 +15,8 @@ datelife_use_datelifequery(input = NULL, dating_method = "bladj", each = FALSE)
     \item{\code{each}}{Boolean, default to \code{FALSE}: all calibrations are returned in
 the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
-    \item{\code{calibrations}}{A data frame (or list of data frames) of secondary calibrations
-for any pair of taxon names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.}
+    \item{\code{calibrations}}{An object of class \code{datelifeCalibrations},
+typically an output of [get_all_calibrations()].}
     \item{\code{dating_method}}{Tree dating method. Options are "bladj" or "pathd8"}
     \item{\code{phy}}{A \code{phylo} object with or without branch lengths}
   }}

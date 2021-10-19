@@ -54,7 +54,9 @@ alignment, and reconstruct branch lengths on a tree topology with Maximum Likeli
 }
 \details{
 If input is a phylo object or a newick string, it is used as backbone topology.
-If input is a character vector of taxon names, an induced OToL tree is used as backbone.
+If input is a character vector of taxon names, an induced synthetic OpenTree
+subtree is used as backbone.
 If there are not enough sequences to return a tree with branch lengths, it returns
-either the original input topology or the OpenTree subtree obtained for the input taxon names.
+either the original input topology or the synthetic OpenTree subtree obtained
+for the input taxon names.
 }

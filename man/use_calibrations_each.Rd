@@ -10,8 +10,8 @@ use_calibrations_each(phy = NULL, calibrations = NULL, ...)
 \arguments{
 \item{phy}{A \code{phylo} object with or without branch lengths}
 
-\item{calibrations}{A list of data frames of secondary calibrations
-for any pair of taxon names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.}
+\item{calibrations}{An object of class \code{datelifeCalibrations},
+typically an output of [get_all_calibrations()].}
 
 \item{...}{Arguments to pass to use_calibrations}
 }
@@ -24,14 +24,11 @@ given calibrations and use it independently as constraints for BLADJ or PATHd8
 to date a given tree topology.
 }
 \details{
-You can get the datelifeResult object or the list of chronograms first
-phylo_all1 <- get_datelife_result(input = my_phy)
-phylo_all2 <- summarize_datelife_result(phylo_all1)
-Either will work the same:
-use_calibrations_each(phy = my_phy, phylo_all = phylo_all1)
-use_calibrations_each(phy = my_phy, phylo_all = phylo_all2)
-You can also get the list of calibrations outside
-my_calibrations <- get_all_calibrations(input = phylo_all1, each = TRUE)
-use_calibrations_each(phy = my_phy, calibrations = my_calibrations)
-All this means that you can use your own set of calibrations, not necessarily the ones found only in datelife.
+If \code{input} tree does not have branch lengths, \code{dating_method} is
+ignored and the function will use secondary calibrations to date the \code{input}
+tree with [BLADJ](http://phylodiversity.net/bladj/)
+using [phylocomr::ph_bladj()] (via [use_calibrations_bladj()]). If \code{input}
+tree has have branch lengths it can be dated
+with [PATHd8](https://www2.math.su.se/PATHd8/) using [geiger::PATHd8.phylo()]
+(via [use_calibrations_pathd8()]).
 }

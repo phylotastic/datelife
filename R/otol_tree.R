@@ -24,7 +24,7 @@ get_otol_synthetic_tree <- function(input = NULL,
 	# system.time({tnrs_match(rownames(df))}) # this one is faster
 	phy <- tryCatch(suppressWarnings(rotl::tol_induced_subtree(ott_ids = input_ott_match, label_format = "name",  otl_v = otol_version)),
 					error = function(e){
-						message("Some or all input taxa are absent from OpenTree synthetic tree, look for invalid taxa and clean them from 'input'.")
+						message("Some or all 'input' taxa are absent from OpenTree synthetic tree, look for invalid taxa and clean them from 'input'.")
 						# this will happen if there are some extinct taxa, barren or any invalid taxa in taxonomy
 						# enhance: to avoid it, clean invalid taxa at the beginning
 						NA })
@@ -32,14 +32,14 @@ get_otol_synthetic_tree <- function(input = NULL,
 		return(phy)
 	}
 	if(!ape::is.binary(phy)){
-		message(paste0("OpenTree synthetic tree of input taxa is not fully resolved (",
+		message(paste0("OpenTree synthetic tree of 'input' taxa is not fully resolved (",
 		phy$Nnode, " nodes/", length(phy$tip.label), " tips)."))
 		if(resolve){
 			message("... Resolving nodes at random with 'multi2di()'")
 			phy <- ape::multi2di(phy)
 		}
 	} else {
-		message("OpenTree synthetic tree of input taxa is fully resolved.")
+		message("OpenTree synthetic tree of 'input' taxa is fully resolved.")
 	}
 	# example of weird behaviour on tip labeling from otol:
 	# tnrs <- rotl::tnrs_match_names(c("Staphylococcus aureus", "Bacillus subtilis", "Neisseria meningitidis"))

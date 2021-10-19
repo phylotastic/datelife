@@ -27,8 +27,8 @@ extract_calibrations_phylo <- function(input = NULL,
 	  }
 		if (any(xx)) {
 	    ii <- which(xx)
-	    message("Some trees in 'multiPhylo' input have no branch lengths.")
-	    message("Will leave tree(s) ",
+	    warning("Some trees in 'multiPhylo' input have no branch lengths.")
+	    message("Dropping tree(s) ",
 	            paste(ii, collapse = " - "),
 	            " out of the analysis.")
 	    chronograms <- chronograms[which(!xx)]
