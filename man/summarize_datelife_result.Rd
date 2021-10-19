@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_summary.R
 \name{summarize_datelife_result}
 \alias{summarize_datelife_result}
-\title{Summarize an output from \code{\link[=get_datelife_result]{get_datelife_result}}}
+\title{Summarize a \code{datelifeResult} object}
 \usage{
 summarize_datelife_result(
   datelife_result = NULL,
@@ -18,7 +18,8 @@ summarize_datelife_result(
 )
 }
 \arguments{
-\item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
+\item{datelife_result}{A \code{datelifeResult} object, an output
+of [get_datelife_result()].}
 
 \item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.}
 
@@ -88,8 +89,8 @@ added to the output.}
 \item{criterion}{Whether to get the grove with the most trees or the most taxa}
 }
 \description{
-Get different types of summaries from a \code{datelifeResult} object.
-A \code{datelifeResult} object is a named list of patristic matrcies.
+Get different types of summaries from a \code{datelifeResult}
+object, an output from [get_datelife_result()].
 This allows rapid processing of data.
 If you need a list of chronograms from your \code{datelifeResult} object, this
 is the function you are looking for.

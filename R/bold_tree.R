@@ -30,23 +30,24 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 																...) {
 	# input check (accepts newick strings too)
 	if (suppressMessages(!is_datelife_query(input))) {
-			input <- make_datelife_query(input)
+			datelife_query <- make_datelife_query(input)
 	}
-	phy <- input$phy
-	if (!inherits(input$phy, "phylo")) {
+	phy <- datelife_query$phy
+	if (!inherits(phy, "phylo")) {
 		message("A tree topology is needed as 'input' to reconstruct branch lengths with BOLD data.")
-		phy <- get_otol_synthetic_tree(input = input, otol_version = otol_version, ...)
+		phy <- get_otol_synthetic_tree(input = datelife_query, otol_version = otol_version, ...)
 		#otol returns error with missing taxa in v3 of rotl
 	}
-	message("... Searching ", marker, " sequences for 'input' taxa in BOLD.")
+	attr(phy, "query") <- datelife_query
+	message("... Searching for ", marker, " sequences from 'input' taxa available in BOLD.")
 	aligner = match.arg(arg = tolower(aligner), choices = c("muscle", "mafft"), several.ok = FALSE)
 	phy$edge.length <- NULL # making sure there are no branch lengths in phy
 	phy$tip.label <- gsub(" ", "_", phy$tip.label) # so phangorn::acctran works
-	input <- gsub("_", " ", phy$tip.label) # so bold search works
+	bold_input <- gsub("_", " ", phy$tip.label) # so bold search works
 	sequences <- c()
-	progression <- utils::txtProgressBar(min = 0, max = length(input), style = 3)
-	for (i in seq(length(input))) {
-		ss <- bold::bold_seqspec(taxon = input[i])
+	progression <- utils::txtProgressBar(min = 0, max = length(bold_input), style = 3)
+	for (i in seq(length(bold_input))) {
+		ss <- bold::bold_seqspec(taxon = bold_input[i])
 		if (inherits(ss, "data.frame")) {
 			sequences <- rbind(sequences, ss)
 		}
@@ -63,7 +64,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 			were found in BOLD for the set of input taxa.\nReturning tree with no branch lengths!")
 		return(phy)
 	}
-	message("... BOLD sequence search done!")
+	message("BOLD sequence search done!")
 	sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides)  # preserve good nucleotide data, i.e., only A,T,G,C
 	sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar))  # add a column in data frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
 	final.sequences <- matrix("-", nrow = length(input), ncol = max(sapply(strsplit(sequences$nucleotides, ""), length)))
@@ -90,9 +91,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 	# taxa.to.drop <- phy$tip.label[which(!phy$tip.label %in% rownames(final.sequences))]
 	# if there are only two sequences in the alignment phangorn::acctran will throw an error
 	# this usually happens when the input/otol tree has only two tips
-	if (length(input)-length(taxa.to.drop) <= 2) {
+	if (length(bold_input)-length(taxa.to.drop) <= 2) {
     message("BOLD sequences found only for: ",
-            input[which(!input %in% taxa.to.drop)])
+            bold_input[which(!bold_input %in% taxa.to.drop)])
 		warning("There are not enough sequences available in BOLD to reconstruct
 						branch lengths. \nReturning a tree topology only!")
 		return(phy)
@@ -108,7 +109,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 		message("... Aligning BOLD sequences with MAFFT.")
 		alignment <- ape::as.DNAbin(final.sequences)
 		alignment <- phangorn::as.phyDat(ips::mafft(alignment))
-		message("... MAFFT alignment done!")
+		message("MAFFT alignment done!")
 	}
 	if ("muscle" %in% aligner) {
 		message("... Aligning BOLD sequences with MUSCLE.")
@@ -119,7 +120,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 		msa.sequences <- msa.sequences[in_bold]
 		alignment <- msa::msaMuscle(msa.sequences, type = "dna")
 		alignment <- phangorn::as.phyDat(alignment)
-		message("... MUSCLE alignment done!")
+		message("MUSCLE alignment done!")
 		# alignment MUST BE OF CLASS phyDat TO BE READ BY ACCTRAN on next step
 	}
 
@@ -132,13 +133,13 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 		pml.object$tree <- ape::multi2di(pml.object$tree)
 		phy <- pml.object$tree
 	}
-	message("... PML tree obtained!")
+	message("PML tree obtained!")
 	if (chronogram) {
 		message("... Dating PML tree with chronoMPL.")
 		pml.object$tree <- ape::chronoMPL(pml.object$tree, se = FALSE, test = FALSE)
 		phy <- pml.object$tree
-		message("... chronoPML chronogram obtained!")
-		if (any(phy < 0)) {
+		message("chronoPML chronogram obtained!")
+		if (any(phy$edge.length < 0)) {
 			warning("There are negative branch lengths in chronoMPL chronogram.\n")
 	    if(doML){
 			warning("Can't do ML branch length optimization.\n")}
@@ -150,11 +151,12 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 																	 rearrangement = "none",
 																	 optRooted = TRUE,
 																	 optQ = TRUE)$tree
-				message("... chronoPML chornogram optimized!")
+				message("chronoPML chornogram optimized!")
 			}
 		}
 	}
 	phy$tip.label <- gsub(' ', '_', phy$tip.label)
-	message("... Tree branch lengths reconstructed!")
+	attr(phy, "query") <- datelife_query
+	message("Tree branch lengths reconstructed!")
 	return(phy)
 }

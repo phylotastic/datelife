@@ -7,7 +7,8 @@
 datelife_result_median_matrix(datelife_result)
 }
 \arguments{
-\item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
+\item{datelife_result}{A \code{datelifeResult} object, an output
+of [get_datelife_result()].}
 }
 \value{
 A patristic distance summary matrix from a datelifeResult object.

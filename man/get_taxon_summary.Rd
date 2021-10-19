@@ -7,7 +7,8 @@
 get_taxon_summary(datelife_result = NULL, datelife_query = NULL)
 }
 \arguments{
-\item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
+\item{datelife_result}{A \code{datelifeResult} object, an output
+of [get_datelife_result()].}
 
 \item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.}
 }

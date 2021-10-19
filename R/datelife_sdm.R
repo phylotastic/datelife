@@ -2,7 +2,7 @@
 #' \code{datelifeResult} object
 #'
 #'
-#' @inheritParams datelife_result_check
+#' @inheritParams summarize_datelife_result
 #' @inheritParams get_sdm
 #' @inheritDotParams summary_matrix_to_phylo
 #' @return A \code{phylo} object from SDM with an extra element:
@@ -114,7 +114,7 @@ get_goodmatrices <- function(unpadded.matrices, verbose){
 	return(good.matrix.indices)
 }
 #' Get good matrices for SDM
-#' @inheritParams datelife_result_check
+#' @inheritParams summarize_datelife_result
 #' @return A numeric matrix.
 #' @export
 get_sdm_matrix <- function(datelife_result){

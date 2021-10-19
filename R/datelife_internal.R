@@ -11,7 +11,7 @@ summary_patristic_matrix_array <- function(patristic_matrix_array, fn = stats::m
 
 
 #' Find the index of relevant studies in a opentree_chronograms object. Used inside: summarize_datelife_result.
-#' @inheritParams datelife_result_check
+#' @inheritParams summarize_datelife_result
 #' @param cache The cache of studies
 #' @return A vector with the indices of studies that have relevant info
 datelife_result_study_index <- function(datelife_result,
@@ -34,7 +34,7 @@ patristic_matrix_MRCA <- function(patristic_matrix, partial = TRUE) {
 }
 
 #' Get vector of MRCAs from a datelifeResult object. Used in: summarize_datelife_result.
-#' @inheritParams datelife_result_check
+#' @inheritParams summarize_datelife_result
 #' @param partial If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries
 #' @return Vector of MRCA ages with names same as in datelife_result
 datelife_result_MRCA <- function(datelife_result, partial = TRUE) {

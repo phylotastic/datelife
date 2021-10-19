@@ -157,7 +157,6 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 }
 
 # print.datelife <- function(datelife){
-# 	datelife_result_check(datelife$datelife_result)
 # 	cat("Number and which queried taxa found in chronogram database")
 # 	cat("Number of queried taxa not found")
 # 	cat("Number of chronograms with at least two queried taxa found in database")
@@ -166,38 +165,19 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 
 
 #' Check if we obtained an empty search with the set of input taxon names
+#' @inheritParams summarize_datelife_result
 #' @inheritParams datelife_search
-#' @param datelife_result An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.
 #' @export
-datelife_result_check <- function(datelife_result, use_tnrs = FALSE, verbose = FALSE){
+is_datelife_result_empty <- function(datelife_result,
+                                     use_tnrs = FALSE){
 	if(length(datelife_result) < 1) {
-		warning("'datelife_result' is empty.", call. = FALSE)
-		# if(verbose) {
-			message("'input' taxon names were not found in the local chronogram database.")
-			if(!use_tnrs) {
-				message("setting 'use_tnrs = TRUE' might change this, but it is time consuming.")
-			}
-		# }
+		warning("'datelife_result' object is empty.", call. = FALSE)
+		message("'input' taxon names were not found in the local chronogram database.")
+		if(!use_tnrs) {
+			message("setting 'use_tnrs = TRUE' might change this, but it is time consuming.")}
+		return(TRUE)
 	}
-}
-#' checks if we obtained an empty search with the set of input taxon names
-#' @inheritParams datelife_result_check
-#' @return a datelifeResult object or a message explaining why it is not a datelifeResult object
-check_datelife_result <- function(datelife_result){
-	# datelife_result <- subset2_result
-	if(!inherits(datelife_result, "datelifeResult")){
-		if(is.list(datelife_result)){
-			class_dl <- unname(sapply(datelife_result, class))
-			if(all(grepl("matrix", class_dl))){
-				class(datelife_result) <- "datelifeResult"
-			} else {
-				message("'datelife_result' has some elements that are not matrices; check it out.")
-			}
-		} else {
-			message("'datelife_result' is not a list; check it out.")
-		}
-	}
-	return(datelife_result)
+	return(FALSE)
 }
 
 #' \code{datelifeResult} object of three birds "Rhea americana", "Pterocnemia pennata", and "Struthio camelus"

@@ -27,14 +27,14 @@ match_all_calibrations <- function(phy, calibrations) {
   # get the coincident node numbers:
   # ape::is.binary(target_tree)
   if (!inherits(phy, "phylo")) {
-	   message("'phy' is not a 'phylo' object.")
+	   warning("'phy' is not a 'phylo' object.\nCalibrations can't be matched.")
      return(NA)
 	}
   if (!inherits(calibrations, "data.frame")) {
-     message("'calibrations' is not a 'data.frame'.")
+     warning("'calibrations' is not a 'data.frame'.\nCalibrations can't be matched.")
      return(NA)
 	}
-  phy$tip.label <- gsub(" ", "_", phy$tip.label) #underscores vs spaces: the battle will never end.
+  phy$tip.label <- gsub(" ", "_", phy$tip.label) # underscores vs spaces: the battle will never end.
   calibrations$taxonA <- gsub(" ", "_", calibrations$taxonA)
   calibrations$taxonB <- gsub(" ", "_", calibrations$taxonB)
   calibrations <- calibrations[which(calibrations$taxonA %in% phy$tip.label), ]

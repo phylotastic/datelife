@@ -3,7 +3,7 @@
 # #' To be renamed summary_taxon.
 #'
 #' @param datelife_query A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.
-#' @inheritParams datelife_result_check
+#' @inheritParams summarize_datelife_result
 #' @export
 get_taxon_summary <- function(datelife_result = NULL,
 															datelife_query = NULL){
@@ -33,9 +33,8 @@ get_taxon_summary <- function(datelife_result = NULL,
 			input.in <- attributes(datelife_result)$query$cleaned_names
 		}
 	} else {
-		message("'datelife_query' argument is absent.")
-		message("Showing taxon distribution of taxa found only in at least one chronogram.")
-		message("Taxa absent from all chronogram are not reported.")
+		message("'datelife_query' argument was not provided.")
+		message("Taxa absent in all chronograms are not reported.")
 		input <- NULL
 		input.in <- unique(rapply(datelife_result, rownames))
 	}
@@ -85,16 +84,17 @@ get_taxon_summary <- function(datelife_result = NULL,
 # print.datelifeTaxonSummary <- function(taxon_summary){
 #
 # }
-#' Summarize an output from \code{\link[=get_datelife_result]{get_datelife_result}}
+#' Summarize a \code{datelifeResult} object
 #'
-#' @description Get different types of summaries from a \code{datelifeResult} object.
-#' A \code{datelifeResult} object is a named list of patristic matrcies.
+#' @description Get different types of summaries from a \code{datelifeResult}
+#' object, an output from [get_datelife_result()].
 #' This allows rapid processing of data.
 #' If you need a list of chronograms from your \code{datelifeResult} object, this
 #' is the function you are looking for.
 #'
+#' @param datelife_result A \code{datelifeResult} object, an output
+#' of [get_datelife_result()].
 #' @inheritParams get_taxon_summary
-#' @inheritParams datelife_result_check
 #' @inheritParams datelife_search
 #' @inherit datelife_search return details
 #' @export
