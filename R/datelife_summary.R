@@ -18,22 +18,22 @@ get_taxon_summary <- function(datelife_result = NULL,
 
 	# datelife_result <- check_datelife_result(datelife_result)
 	if(is.null(datelife_result) | !inherits(datelife_result, "datelifeResult")){
-		message("datelife_result argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
+		warning("'datelife_result' argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
 		return(NA)
 	}
-	# if(is.null(datelife_query) & is.null(attributes(datelife_result)$query)){
+	# dq <- FALSE
+	# if(!is.null(datelife_query) | is.null(attributes(datelife_result)$query)){
 	# }
 
-	if(is_datelife_query(datelife_query)){
+	if(suppressMessages(is_datelife_query(datelife_query))){
 		if(is.null(attributes(datelife_result)$query)){
-			input <- datelife_query_check(datelife_query = datelife_query)
 			input.in <- input$cleaned_names
 		} else {
 			input <- attributes(datelife_result)$query
 			input.in <- attributes(datelife_result)$query$cleaned_names
 		}
 	} else {
-		message("`datelife_query` argument is absent.")
+		message("'datelife_query' argument is absent.")
 		message("Showing taxon distribution of taxa found only in at least one chronogram.")
 		message("Taxa absent from all chronogram are not reported.")
 		input <- NULL

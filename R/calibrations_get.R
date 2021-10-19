@@ -22,7 +22,7 @@ extract_calibrations_phylo <- function(input = NULL,
 		xx <- sapply(chronograms, "[", "edge.length")
 		xx <- unname(sapply(xx, is.null))
 	  if (all(xx)) {
-	    message("trees in 'multiPhylo' input have no branch lengths. \n There are no calibrations to return.")
+	    warning("trees in 'multiPhylo' input have no branch lengths. \n There are no calibrations to return!")
 	    return(NA)
 	  }
 		if (any(xx)) {
@@ -36,7 +36,8 @@ extract_calibrations_phylo <- function(input = NULL,
 	}
 	if (inherits(input, "phylo")) {
 	  if (is.null(input$edge.length)) {
-	    stop("'input' tree has no branch lengths.")
+			warning("'input' tree has no branch lengths. \n There are no calibrations to return!")
+	    return(NA)
 	  }
 		chronograms <- list(input)
 	}

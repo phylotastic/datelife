@@ -22,9 +22,10 @@ the same data frame. If \code{TRUE}, calibrations from each chronogram are retur
 in separate data frames.}
 }
 \value{
-A data frame of secondary calibrations (or list of data frames, if \code{each = TRUE}),
-for each pair of given taxon names. The attribute "chronograms" contains the
-source chronograms from which the calibrations were obtained.
+An object of class \code{datelifeCalibrations} -- a \code{data frame}
+of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
+for each pair of taxon names in \{input]. The attribute "chronograms" stores
+the source data from which the calibrations were extracted.
 }
 \description{
 \code{get_all_calibrations} performs a [datelife_search()]

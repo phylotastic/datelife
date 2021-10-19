@@ -85,6 +85,7 @@ datelife_use_datelifequery <- function(input = NULL,
       return(NA)
     }
     if (!inherits(input$phy, "phylo")) {
+      message("A tree topology is needed for a dating analysis.")
       warning("'input$phy' is not a 'phylo' object.")
       return(NA)
     }

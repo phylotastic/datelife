@@ -2,7 +2,7 @@
 % Please edit documentation in R/bold_tree.R
 \name{make_bold_otol_tree}
 \alias{make_bold_otol_tree}
-\title{Use genetic data from the Barcode of Life Database (BOLD) to get branch lengths on a tree.}
+\title{Use genetic data from the Barcode of Life Database (BOLD) to reconstruct branch lengths on a tree.}
 \usage{
 make_bold_otol_tree(
   input = c("Rhea americana", "Struthio camelus", "Gallus gallus"),
@@ -48,9 +48,9 @@ make_bold_otol_tree(
 A phylogeny with branch lengths poportional to relative substitution rate.
 }
 \description{
-\code{make_bold_otol_tree} Takes taxon names from a tree topology or a vector of names
+\code{make_bold_otol_tree} takes taxon names from a tree topology or a vector of names
 to search for genetic markers in the Barcode of Life Database (BOLD), create an
-alignment, and reconstruct branch lengths on the tree topology with Maximum Likelihood.
+alignment, and reconstruct branch lengths on a tree topology with Maximum Likelihood.
 }
 \details{
 If input is a phylo object or a newick string, it is used as backbone topology.

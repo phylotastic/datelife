@@ -164,26 +164,6 @@ input_process <- function(input){
 	return(phy_out)
 }
 
-#' Check that input is a datelifeQuery object. To be deprecated.
-#'
-#' @description Check if input is a datelifeQuery object, otherwise use
-#' [make_datelife_query()] to process it and create a \code{datelifeQuery} object.
-#'
-#' @param datelife_query A datelifeQuery object, output of make_datelife_query function
-#' @inheritParams datelife_search
-#' @inheritDotParams make_datelife_query -input
-#' @return A datelifeQuery object
-#' @export
-datelife_query_check <- function(datelife_query = NULL, ...){
-
-	isdatelifequery <- is_datelife_query(input = datelife_query)
-
-	if(!isdatelifequery){
-		datelife_query <- make_datelife_query(input = datelife_query, ...)
-	}
-	return(datelife_query)
-}
-
 #' Check if input is a \code{datelifeQuery} object
 #'
 #' @description \code{is_datelife_query} checks (1) if a given object is a list that contains the

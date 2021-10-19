@@ -86,25 +86,37 @@ citation("datelife")
 toBibtex(citation("datelife"))
 ```
 
-## Feedback
+## Feedback and Dev
 
 All comments, ideas and questions about `datelife` are encouraged. You are welcome
 to post an issue [here](https://github.com/phylotastic/datelife/issues/new), or
 to make a [pull request](https://github.com/phylotastic/datelife/pulls) if you
 want to contribute with code directly.
 
-We use `lintr` to check for coding style:
+Package and function documentation was generated with [roxygen2](https://CRAN.R-project.org/package=roxygen2):
+
+```{r}
+roxygen2::roxygenise()
+```
+
+We used [lintr]() to check for coding style:
 
 ```{r eval = FALSE}
 lintr::lint_package()
 ```
 
-Code coverage is tested with teh package [covr](https://cran.r-project.org/web/packages/covr/index.html):
+Code coverage was tested with the package [covr](https://CRAN.R-project.org/package=covr):
 
 ```{r}
 cov <- covr::package_coverage()
 
 usethis::use_data(cov, overwrite = TRUE)
+
+# see n interactive report of testing coverage:
+covr::report(cov)
+
+# find code with zero coverage:
+covr::zero_coverage(cov)
 ```
 
 ## License
