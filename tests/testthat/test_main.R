@@ -15,7 +15,7 @@ test_that("phylo workflows work", {
   expect_warning(extract_calibrations_phylo(input = tree))
   # test a datelifeQuery input with NA as phy:
   expect_warning(datelife_use_datelifequery(input = attributes(tree)$query))
-  expect_warning(make_datelife_query(input = attributes(tree)$query))
+  make_datelife_query(input = attributes(tree)$query)
 })
 
 test_that("input processing a newick string and multiPhylo workflows work", {
@@ -28,9 +28,10 @@ test_that("input processing a newick string and multiPhylo workflows work", {
   multiphyBL <- structure(list(phylo, phyloBL), class = "multiPhylo")
   expect_warning(calibs <- extract_calibrations_phylo(input = multiphyBL))
   expect_error(use_calibrations(phy = multiphyBL, calibrations = NULL))
-  # use_calibrations(phy = multiphyBL, calibrations = calibs)
+  use_calibrations(phy = multiphyBL, calibrations = calibs)
   use_all_calibrations(phy = multiphyBL, calibrations = calibs, each = TRUE)
-  match_all_calibration(taxon names in phy are not in calibratiosn data frame)
+  phylo$tip.label <- c("rooster", "nandu", "ostrich")
+  expect_warning(match_all_calibrations(phy = phylo, calibrations  = calibs))
 
 })
 

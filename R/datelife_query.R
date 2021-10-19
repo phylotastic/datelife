@@ -22,10 +22,11 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 																verbose = FALSE) {
 	# enhance: add mapped (has tnrs been performed?) and matched (was it matched successfully?) element to phylo object
 	# add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
-	message("... Making a DateLife query.")
 	if(suppressMessages(is_datelife_query(input))){
+    message("'input' is a 'datelifeQuery' object.")
 		return(input)
 	}
+	message("... Making a DateLife query.")
 	# input_process determines if input is newick and transforms it to phylo
 	# if input is phylo or multiphylo it will also check if it is a good tree
 	# if input is anything else, it will return NA:

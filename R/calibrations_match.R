@@ -40,7 +40,7 @@ match_all_calibrations <- function(phy, calibrations) {
   calibrations <- calibrations[which(calibrations$taxonA %in% phy$tip.label), ]
   calibrations <- calibrations[which(calibrations$taxonB %in% phy$tip.label), ]
   if (nrow(calibrations) == 0) {
-      message("Taxon name pairs in calibrations do not match phy tip labels.")
+      warning("Taxon name pairs in 'calibrations' do not match 'phy' tip labels.")
       return(NA)
   }
   age_column <- grep("age", tolower(names(calibrations))) # get columns with "age" in their names
