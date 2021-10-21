@@ -4,7 +4,7 @@
 \alias{tnrs_match}
 \alias{tnrs_match.default}
 \alias{tnrs_match.phylo}
-\title{Taxon name resolution service (tnrs) applied to a vector of names by batches.}
+\title{Taxon name resolution service (tnrs) applied to a vector of names by batches}
 \usage{
 tnrs_match(input, reference_taxonomy, tip, ...)
 
@@ -22,20 +22,19 @@ tnrs_match(input, reference_taxonomy, tip, ...)
 \item{...}{
   Arguments passed on to \code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names}}
   \describe{
-    \item{\code{context_name}}{name of the taxonomic context to be searched
-(length-one character vector). Must match (case sensitive) one
-of the values returned by \code{\link[rotl]{tnrs_contexts}}.}
-    \item{\code{do_approximate_matching}}{A logical indicating whether or not
-to perform approximate string (a.k.a. \dQuote{fuzzy})
-matching. Using \code{FALSE} will greatly improve
-speed. Default, however, is \code{TRUE}.}
-    \item{\code{ids}}{A vector of ids to use for identifying names. These
-will be assigned to each name in the names array. If ids is
-provided, then ids and names must be identical in length.}
-    \item{\code{include_suppressed}}{Ordinarily, some quasi-taxa, such as
-incertae sedis buckets and other non-OTUs, are suppressed from
-TNRS results. If this parameter is true, these quasi-taxa are
-allowed as possible TNRS results.}
+    \item{\code{context_name}}{name of the taxonomic context to be searched (length-one
+character vector or \code{NULL}). Must match (case sensitive) one of the
+values returned by \code{\link[rotl]{tnrs_contexts}}. Default to "All life".}
+    \item{\code{do_approximate_matching}}{A logical indicating whether or not to
+perform approximate string (a.k.a. \dQuote{fuzzy}) matching. Using
+\code{FALSE} will greatly improve speed. Default, however, is \code{TRUE}.}
+    \item{\code{ids}}{A vector of ids to use for identifying names. These will be
+assigned to each name in the names array. If ids is provided, then ids and
+names must be identical in length.}
+    \item{\code{include_suppressed}}{Ordinarily, some quasi-taxa, such as incertae
+sedis buckets and other non-OTUs, are suppressed from TNRS results. If
+this parameter is true, these quasi-taxa are allowed as possible TNRS
+results.}
   }}
 }
 \value{
@@ -46,7 +45,7 @@ An object of class  data frame or phylo, with the added class match_names.
 \code{NULL}
 }
 \description{
-Taxon name resolution service (tnrs) applied to a vector of names by batches.
+Taxon name resolution service (tnrs) applied to a vector of names by batches
 }
 \details{
 There is no limit to the number of names that can be queried and matched.

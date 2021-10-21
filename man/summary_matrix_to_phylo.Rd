@@ -16,7 +16,7 @@ summary_matrix_to_phylo(
 \arguments{
 \item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
 
-\item{datelife_query}{A datelifeQuery object, output of make_datelife_query function}
+\item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.}
 
 \item{total_distance}{Boolean. If TRUE it will divide the matrix in half, if FALSE it will take it as is.}
 
@@ -32,8 +32,8 @@ summary_matrix_to_phylo(
 \item{...}{
   Arguments passed on to \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree}}
   \describe{
-    \item{\code{otol_version}}{Version of OToL to use}
-    \item{\code{resolve}}{boolean default to TRUE. Whether to resolve the tree at random or not.}
+    \item{\code{otol_version}}{Version of Open Tree of Life to use}
+    \item{\code{resolve}}{boolean; default to TRUE. Whether to resolve the tree at random or not.}
     \item{\code{input}}{Optional. A character vector of names or a datelifeQuery object}
     \item{\code{ott_ids}}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
   }}

@@ -1,4 +1,4 @@
-#' Taxon name resolution service (tnrs) applied to a vector of names by batches.
+#' Taxon name resolution service (tnrs) applied to a vector of names by batches
 #' @param input A character vector of taxon names, or a phylo object with tip names, to be matched to taxonomy.
 #' @param reference_taxonomy A character vector specifying the reference taxonomy to use for tnrs.
 #' @inheritDotParams rotl::tnrs_match_names -names

@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{check_ott_input}
 \alias{check_ott_input}
-\title{Checks input for get_ott_clade,  get_ott_children functions, get_otol_synthetic_tree}
+\title{Checks input for get_ott_clade, get_ott_children functions, get_otol_synthetic_tree}
 \usage{
 check_ott_input(input = NULL, ott_ids = NULL, ...)
 }
@@ -12,16 +12,16 @@ check_ott_input(input = NULL, ott_ids = NULL, ...)
 \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 
 \item{...}{
-  Arguments passed on to \code{\link[=datelife_query_check]{datelife_query_check}}
+  Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}
   \describe{
-    \item{\code{}}{}
+    \item{\code{verbose}}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
   }}
 }
 \value{
 A named numeric vector of valid ott IDs
 }
 \description{
-Checks input for get_ott_clade,  get_ott_children functions, get_otol_synthetic_tree
+Checks input for get_ott_clade, get_ott_children functions, get_otol_synthetic_tree
 }
 \details{
 By default it uses ott_id argument if it is not NULL.

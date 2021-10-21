@@ -21,7 +21,7 @@ summary_matrix_to_phylo_all(summ_matrix, target_tree = NULL, ...)
 \item{min}{It will use the minimum age from the node age distributions.}
 \item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
 }}
-    \item{\code{datelife_query}}{A datelifeQuery object, output of make_datelife_query function}
+    \item{\code{datelife_query}}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.}
   }}
 }
 \description{

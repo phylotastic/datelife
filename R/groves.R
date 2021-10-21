@@ -1,6 +1,7 @@
 #' Function for computing n overlap for two vectors of names (ie., phy1$tip.label, phy2$tip.label) and seeing if they have n overlap
 #'
-#' n-overlap comes from Definition 2.8 of Ané et al. 10.1007/s00026-009-0017-x Groves of Phylogenetic Trees
+#' @description n-overlap comes from Definition 2.8 of Ané et al.
+#' 10.1007/s00026-009-0017-x Groves of Phylogenetic Trees
 #' @param names_1 First vector of names
 #' @param names_2 Second vector of names
 #' @param n Degree of overlap required
@@ -12,7 +13,8 @@ is_n_overlap <- function(names_1, names_2, n=2) {
 
 #' Build grove matrix
 #'
-#' Using theorem 1.1 of Ané et al. 10.1007/s00026-009-0017-x Groves of Phylogenetic Trees
+#' @description Using theorem 1.1 of Ané et al. 10.1007/s00026-009-0017-x Groves
+#' of Phylogenetic Trees
 #' @param datelife_result datelifeResult object (named list of patristic matrices)
 #' @param n Degree of overlap required
 #' @return matrix; each cell shows whether n-overlap exists between that pair of inputs
@@ -30,7 +32,8 @@ build_grove_matrix <- function(datelife_result, n=2) {
 
 #' Build grove list
 #'
-#' Using theorem 1.1 of Ané et al. 10.1007/s00026-009-0017-x Groves of Phylogenetic Trees
+#' @description Using theorem 1.1 of Ané et al. 10.1007/s00026-009-0017-x Groves
+#' of Phylogenetic Trees.
 #' @param datelife_result datelifeResult object (named list of patristic matrices)
 #' @param n Degree of overlap required
 #' @return list of vectors; each list element is a grove
@@ -91,7 +94,7 @@ pick_grove <- function(grove_list, criterion = "taxa", datelife_result) {
   }
 }
 
-#' Filter a datelifeResult object to find the largest grove
+#' Filter a \code{datelifeResult} object to find the largest grove
 #' @param datelife_result datelifeResult object (named list of patristic matrices). Only needed for "taxa" criterion
 #' @param criterion Whether to get the grove with the most trees or the most taxa
 #' @param n Degree of overlap required
@@ -104,7 +107,8 @@ filter_for_grove <- function(datelife_result, criterion= "taxa", n = 2) {
   return(datelife_result[final_trees])
 }
 
-#' Get grove from a datelifeResult object that can be converted to phylo from a median summary matrix.
+#' Get grove from a \code{datelifeResult} object that can be converted to phylo
+#' from a median summary matrix
 #' @inheritParams filter_for_grove
 #' @return A list of two elements:
 #' \describe{
@@ -120,7 +124,7 @@ get_best_grove <- function(datelife_result, criterion = "taxa", n = 2){
     # utils::data(subset2_taxa)
     # spp_query <- make_datelife_query(subset2_taxa)
     # datelife_result <- get_datelife_result(spp_query)
-    datelife_result <- check_datelife_result(datelife_result)
+    # datelife_result <- check_datelife_result(datelife_result)
 	  median_nj <- NULL
   	while(!inherits(median_nj, "phylo")){
       message(paste0("Trying with overlap = ", n, "\n"))
@@ -138,6 +142,7 @@ get_best_grove <- function(datelife_result, criterion = "taxa", n = 2){
       # We might have solved the above issue by using our method developped for sdm matrices
   	  n <- n + 1
   	}
+    message(paste0("Success!", "\n"))
     class(best_grove) <- class(datelife_result)
 	  return(list(best_grove = best_grove, overlap = n-1))
 }

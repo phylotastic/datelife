@@ -2,12 +2,13 @@
 % Please edit documentation in R/datelife_median.R
 \name{datelife_result_median}
 \alias{datelife_result_median}
-\title{Get a median summary chronogram from a datelifeResult object.}
+\title{Get a median summary chronogram from a datelifeResult object}
 \usage{
 datelife_result_median(datelife_result, ...)
 }
 \arguments{
-\item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
+\item{datelife_result}{A \code{datelifeResult} object, an output
+of [get_datelife_result()].}
 
 \item{...}{
   Arguments passed on to \code{\link[=summary_matrix_to_phylo]{summary_matrix_to_phylo}}
@@ -21,12 +22,12 @@ datelife_result_median(datelife_result, ...)
 \item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
 }}
     \item{\code{target_tree}}{A phylo object. Use this in case you want a particular backbone for the output tree.}
-    \item{\code{datelife_query}}{A datelifeQuery object, output of make_datelife_query function}
+    \item{\code{datelife_query}}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.}
   }}
 }
 \value{
 A phylo object
 }
 \description{
-Get a median summary chronogram from a datelifeResult object.
+Get a median summary chronogram from a datelifeResult object
 }

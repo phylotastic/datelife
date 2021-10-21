@@ -17,5 +17,6 @@ is_n_overlap(names_1, names_2, n = 2)
 Boolean for whether the degree of overlap was met
 }
 \description{
-n-overlap comes from Definition 2.8 of Ané et al. 10.1007/s00026-009-0017-x Groves of Phylogenetic Trees
+n-overlap comes from Definition 2.8 of Ané et al.
+10.1007/s00026-009-0017-x Groves of Phylogenetic Trees
 }

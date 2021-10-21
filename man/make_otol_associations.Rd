@@ -2,7 +2,7 @@
 % Please edit documentation in R/cacheauthors.R
 \name{make_otol_associations}
 \alias{make_otol_associations}
-\title{Associate OToL authors with studies}
+\title{Associate Open Tree of Life authors with studies}
 \usage{
 make_otol_associations()
 }
@@ -10,5 +10,5 @@ make_otol_associations()
 data.frame with author last name, author first and other names, and comma delimited URLs for OToL studies
 }
 \description{
-Associate OToL authors with studies
+Associate Open Tree of Life authors with studies
 }

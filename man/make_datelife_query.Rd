@@ -2,7 +2,8 @@
 % Please edit documentation in R/datelife_query.R
 \name{make_datelife_query}
 \alias{make_datelife_query}
-\title{Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with input_process first.}
+\title{Go from taxon names from a character vector, a phylo object or a newick character
+string to a \code{datelifeQuery} object}
 \usage{
 make_datelife_query(
   input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
@@ -13,22 +14,23 @@ make_datelife_query(
 )
 }
 \arguments{
-\item{input}{A character vector of taxon names, a tree as a 'phylo' object or a newick character string, or a 'datelifeQuery' object from make_datelife_query function.}
+\item{input}{One of the following:
+\describe{
+\item{Taxon names}{As a character vector.}
+\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+            object, OR as a newick character string.}
+}}
 
-\item{use_tnrs}{Boolean; default to FALSE. If TRUE, use OpenTree's services to resolve names. This can dramatically improve the chance of matches, but also take much longer.}
-
-\item{approximate_match}{Boolean; default to TRUE: use a slower TNRS to correct misspellings, increasing the chance of matches (including false matches)}
-
-\item{get_spp_from_taxon}{boolean vector, default to FALSE. If TRUE, will get all species names from taxon names given in input. Must have same length as input. If input is a newick string , with some clades it will be converted to phylo object phy, and the order of get_spp_from_taxon will match phy$tip.label.}
-
-\item{verbose}{Boolean. If TRUE, it gives printed updates to the user.}
+\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \value{
 A datelifeQuery object, a list of three elements: $phy a phylo object or NA, if input is not a tree; a cleaned vector of taxon names; and $ott_ids a numeric vector of OTT ids if use_tnrs = TRUE, or NULL if use_tnrs = FALSE.
 }
 \description{
-Cleans taxon names from input character vector, phylo object or newick character string. Process the two latter with input_process first.
+It processes \code{phylo} and \code{newick character} string inputs
+with [input_process()].
 }
 \details{
-If input has length 1, get_spp_from_taxon is always set to TRUE (in datelife_search, not in here, because of function dependencies)
+If \code{input} is a \code{multiPhylo} object, only the first \code{phylo}
+element will be used.
 }

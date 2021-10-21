@@ -2,14 +2,15 @@
 % Please edit documentation in R/use_calibrations_pathd8.R
 \name{use_calibrations_pathd8}
 \alias{use_calibrations_pathd8}
-\title{Use calibrations to date a tree with branch lengths with PATHd8.}
+\title{Date a tree with secondary calibrations using PATHd8}
 \usage{
 use_calibrations_pathd8(phy, calibrations, expand = 0.1, giveup = 100)
 }
 \arguments{
-\item{phy}{A phylo object with branch lengths}
+\item{phy}{A \code{phylo} object with branch lengths.}
 
-\item{calibrations}{A data frame of calibrations from get_all_calibrations function, or a subset of it.}
+\item{calibrations}{A data frame of secondary calibrations for any pair of taxon
+names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.}
 
 \item{expand}{How much to expand by each step to get consistent calibrations. Should be between 0 and 1.}
 
@@ -19,7 +20,7 @@ use_calibrations_pathd8(phy, calibrations, expand = 0.1, giveup = 100)
 A phylo object with branch length proportional to time.
 }
 \description{
-Use calibrations to date a tree with branch lengths with PATHd8.
+\code{use_calibrations_pathd8} uses secondary calibrations to date a tree with initial branch lengths using PATHd8.
 }
 \details{
 This function will try to use the calibrations as fixed ages.

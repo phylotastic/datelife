@@ -1,6 +1,7 @@
 
-#' Takes a constraint tree and uses mrBayes to get node ages and branch lengths given a set of node calibrations without any data.
-# we can add the option to use data and no constraint tree.
+#' Takes a constraint tree and uses mrBayes to get node ages and branch lengths
+#' given a set of node calibrations without any data
+# we can add the option to use data and no constraint tree
 #' @inheritParams make_mrbayes_runfile
 #' @return A phylo tree with branch lengths proportional to time. It will save all mrBayes outputs in the working directory.
 #' @export
@@ -18,7 +19,8 @@ make_mrbayes_tree <- function(constraint = NULL, taxa = NULL, ncalibration = NUL
 	return(mrbayes_contre)
 }
 
-#' Makes a mrBayes run block file with a constraint topology and a set of node calibrations and missing taxa.
+#' Make a mrBayes run block file with a constraint topology and a set of node
+#' calibrations and missing taxa
 #' @inheritParams get_mrbayes_node_constraints
 # add #' @param outgroup = NULL argument
 #' @param mrbayes_output_file A character vector specifying the name of mrBayes run file and outputs (can specify directory too).
@@ -62,7 +64,7 @@ make_mrbayes_runfile <- function(constraint = NULL, taxa = NULL, ncalibration = 
 	return(all)
 }
 
-#' Runs MrBayes from R.
+#' Runs MrBayes from R
 #' @inheritParams make_mrbayes_tree
 #' @return A phylo object with the consensus tree. MrBayes output files are stored in the working directory.
 #' @export
@@ -124,7 +126,8 @@ run_mrbayes <- function(mrbayes_output_file = NULL){
 #     }
 # }
 
-#' Makes a node constraints and node calibrations block for a MrBayes run file from a list of taxa and ages or from a dated tree
+#' Makes a block of node constraints and node calibrations for a MrBayes run file
+#' from a list of taxa and ages, or from a dated tree
 #' @param constraint The constraint tree: a phylo object or a newick character string, with or without branch lengths.
 #' @param taxa A character vector with taxon names to be maintained in tree
 #' @inheritParams missing_taxa_check
@@ -309,7 +312,7 @@ get_mrbayes_node_constraints <- function(constraint = NULL, taxa = NULL, missing
   return(node_constraints)
 }
 
-#' Identifies the presence of a single lineage outgroup in a phylogeny.
+#' Identifies the presence of a single lineage outgroup in a phylogeny
 #' @inheritParams make_mrbayes_tree
 #' @inheritParams tree_fix_brlen
 #' @return A character vector with the name of the single lineage outgroup. Returns NA if there is none.

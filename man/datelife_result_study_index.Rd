@@ -7,7 +7,8 @@
 datelife_result_study_index(datelife_result, cache = "opentree_chronograms")
 }
 \arguments{
-\item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
+\item{datelife_result}{A \code{datelifeResult} object, an output
+of [get_datelife_result()].}
 
 \item{cache}{The cache of studies}
 }

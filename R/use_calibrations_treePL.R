@@ -28,7 +28,8 @@
 # chr <- use_calibrations_treePL(phy = catsanddogs_phyloall[[1]], calibrations = catsanddogs_calibrations)
 
 use_calibrations_treePL <- function(phy, calibrations){
-    phy <- input_process(phy, verbose = FALSE)
+    message("... Using secondary calibrations with treePL")
+    phy <- input_process(phy)
     if (!inherits(phy, "phylo")){
 		    message("phy is not a phylo object")
         return(NA)

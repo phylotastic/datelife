@@ -2,7 +2,8 @@
 % Please edit documentation in R/make_bladj_tree.R
 \name{make_bladj_tree}
 \alias{make_bladj_tree}
-\title{Takes a tree and uses bladj to estimate node ages and branch lengths given a set of fixed node ages and respective node names}
+\title{Takes a tree and uses bladj to estimate node ages and branch lengths given a
+set of fixed node ages and respective node names}
 \usage{
 make_bladj_tree(tree = NULL, nodenames = NULL, nodeages = NULL)
 }
@@ -17,7 +18,8 @@ make_bladj_tree(tree = NULL, nodenames = NULL, nodeages = NULL)
 A phylo tree
 }
 \description{
-Takes a tree and uses bladj to estimate node ages and branch lengths given a set of fixed node ages and respective node names
+Takes a tree and uses bladj to estimate node ages and branch lengths given a
+set of fixed node ages and respective node names
 }
 \details{
 tree can or cannot be dated, edge.lengths in it will be ignored anyways;

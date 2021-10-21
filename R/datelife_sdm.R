@@ -1,10 +1,14 @@
-#' Function to compute the SDM supertree (Criscuolo et al. 2006) from a datelifeResult object.
-#' @inheritParams datelife_result_check
+#' Function to compute the SDM supertree (Criscuolo et al. 2006) from a
+#' \code{datelifeResult} object
+#'
+#'
+#' @inheritParams summarize_datelife_result
 #' @inheritParams get_sdm
 #' @inheritDotParams summary_matrix_to_phylo
-#' @return A phylo object from SDM with an extra element:
+#' @return A \code{phylo} object from SDM with an extra element:
 #' \describe{
-#'	\item{data}{A datelifeResult object with the chronograms that were used to construct the SDM tree.
+#'	\item{data}{A \code{datelifeResult} object with the chronograms that were used
+#'  	          to construct the SDM tree.
 #'	}
 #' }
 #' @export
@@ -42,7 +46,8 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
 	class(phy) <- c(class(phy), "datelifeSDM")
 	return(phy)
 }
-#' Function to remove missing taxa from a datelifeResult object. Used in: datelife_result_sdm.
+#' Function to remove missing taxa from a \code{datelifeResult} object.
+#' @description Used in [datelife_result_sdm()].
 #' @param patristic_matrix A patristic matrix with row and column names for taxa
 #' @return patristic_matrix for all_taxa
 #' @export
@@ -54,17 +59,14 @@ patristic_matrix_unpad <- function(patristic_matrix) {
 	return(patristic_matrix)
 }
 
-#' Get SDM result for list of working matrices.
+#' Get SDM result for list of working matrices
 #' @param unpadded.matrices A list of patristic matrices, a datelifeResult object.
-#' @param weighting A character vector indicating how much weight to give to each input tree in the SDM analysis.
-#' 	 Choose one of:
+#' @param weighting A character vector indicating how much weight to give to each
+#' tree in \code{input} during the SDM analysis. Choose one of:
 #' \describe{
-#'	\item{weighting = "flat"}{All trees have equal weighting.
-#'	}
-#'	\item{weighting = "taxa"}{Weight is proportional to number of taxa.
-#'	}
-#'	\item{weighting = "inverse"}{Weight is proportional to 1 / number of taxa.
-#'	}
+#'	\item{weighting = "flat"}{All trees have equal weighting.}
+#'	\item{weighting = "taxa"}{Weight is proportional to number of taxa.}
+#'	\item{weighting = "inverse"}{Weight is proportional to 1 / number of taxa.}
 #' }
 #' @inheritParams datelife_search
 #' @return A matrix.
@@ -112,7 +114,7 @@ get_goodmatrices <- function(unpadded.matrices, verbose){
 	return(good.matrix.indices)
 }
 #' Get good matrices for SDM
-#' @inheritParams datelife_result_check
+#' @inheritParams summarize_datelife_result
 #' @return A numeric matrix.
 #' @export
 get_sdm_matrix <- function(datelife_result){

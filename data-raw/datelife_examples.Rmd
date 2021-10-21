@@ -45,17 +45,17 @@ cet_boldtree <- make_bold_otol_tree(input = cet_syntree)
 # there are no sequences to construct a bold tree for cetacea
 cet_allcal <- get_all_calibrations(input = cet_phyloall)
 head(cet_allcal)
-cet_cal <- use_all_calibrations(phy = cet_syntree, all_calibrations = cet_allcal)
+cet_cal <- datelife_use(phy = cet_syntree, all_calibrations = cet_allcal)
 cet_cal$phy
 # will try using each phylo object to calibrate:
 cet_allcallist <- lapply(cet_phyloall, get_all_calibrations)
 length(cet_allcallist)
 cet_allcallist[[1]]
-cet_chronos <- lapply(cet_allcallist, function(x) use_all_calibrations(phy = cet_syntree, all_calibrations = x))
+cet_chronos <- lapply(cet_allcallist, function(x) datelife_use(phy = cet_syntree, all_calibrations = x))
 names(cet_chronos)
 cet_chronos[1]
 lapply(cet_chronos, "[", "phy") # they are all null
-cet_chronos2 <- lapply(seq(cet_allcallist), function(i) use_all_calibrations(phy = cet_phyloall[[i]], all_calibrations = cet_allcallist[[i]]))
+cet_chronos2 <- lapply(seq(cet_allcallist), function(i) datelife_use(phy = cet_phyloall[[i]], all_calibrations = cet_allcallist[[i]]))
 sapply(cet_chronos2, "[", "phy") # the bininda emmonds and hedges are NULL
 
 

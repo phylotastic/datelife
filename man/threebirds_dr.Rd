@@ -3,7 +3,7 @@
 \docType{data}
 \name{threebirds_dr}
 \alias{threebirds_dr}
-\title{datelifeResult object of three birds "Rhea americana", "Pterocnemia pennata", and "Struthio camelus"}
+\title{\code{datelifeResult} object of three birds "Rhea americana", "Pterocnemia pennata", and "Struthio camelus"}
 \format{
 A list of 9 named patristic matrix
 }
@@ -14,7 +14,7 @@ A list of 9 named patristic matrix
 threebirds_dr
 }
 \description{
-datelifeResult object of three birds "Rhea americana", "Pterocnemia pennata", and "Struthio camelus"
+\code{datelifeResult} object of three birds "Rhea americana", "Pterocnemia pennata", and "Struthio camelus"
 }
 \details{
 Generated with:

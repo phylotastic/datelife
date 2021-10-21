@@ -2,7 +2,7 @@
 % Please edit documentation in R/otol_tree.R
 \name{get_otol_synthetic_tree}
 \alias{get_otol_synthetic_tree}
-\title{Gets Open Tree of Life synthetic tree of a set of lineages.}
+\title{Get an Open Tree of Life synthetic subtree of a set of given taxon names.}
 \usage{
 get_otol_synthetic_tree(
   input = NULL,
@@ -17,9 +17,9 @@ get_otol_synthetic_tree(
 
 \item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
 
-\item{otol_version}{Version of OToL to use}
+\item{otol_version}{Version of Open Tree of Life to use}
 
-\item{resolve}{boolean default to TRUE. Whether to resolve the tree at random or not.}
+\item{resolve}{boolean; default to TRUE. Whether to resolve the tree at random or not.}
 
 \item{...}{
   Arguments passed on to \code{\link[=check_ott_input]{check_ott_input}}
@@ -31,5 +31,5 @@ get_otol_synthetic_tree(
 A phylo object
 }
 \description{
-Gets Open Tree of Life synthetic tree of a set of lineages.
+Get an Open Tree of Life synthetic subtree of a set of given taxon names.
 }

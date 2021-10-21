@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_sdm.R
 \name{patristic_matrix_unpad}
 \alias{patristic_matrix_unpad}
-\title{Function to remove missing taxa from a datelifeResult object. Used in: datelife_result_sdm.}
+\title{Function to remove missing taxa from a \code{datelifeResult} object.}
 \usage{
 patristic_matrix_unpad(patristic_matrix)
 }
@@ -13,5 +13,5 @@ patristic_matrix_unpad(patristic_matrix)
 patristic_matrix for all_taxa
 }
 \description{
-Function to remove missing taxa from a datelifeResult object. Used in: datelife_result_sdm.
+Used in [datelife_result_sdm()].
 }

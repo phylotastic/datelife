@@ -11,7 +11,7 @@ summary_patristic_matrix_array <- function(patristic_matrix_array, fn = stats::m
 
 
 #' Find the index of relevant studies in a opentree_chronograms object. Used inside: summarize_datelife_result.
-#' @inheritParams datelife_result_check
+#' @inheritParams summarize_datelife_result
 #' @param cache The cache of studies
 #' @return A vector with the indices of studies that have relevant info
 datelife_result_study_index <- function(datelife_result,
@@ -34,7 +34,7 @@ patristic_matrix_MRCA <- function(patristic_matrix, partial = TRUE) {
 }
 
 #' Get vector of MRCAs from a datelifeResult object. Used in: summarize_datelife_result.
-#' @inheritParams datelife_result_check
+#' @inheritParams summarize_datelife_result
 #' @param partial If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries
 #' @return Vector of MRCA ages with names same as in datelife_result
 datelife_result_MRCA <- function(datelife_result, partial = TRUE) {
@@ -288,9 +288,9 @@ phylo_get_subset_array <- function(reference_tree, taxa, phy4 = NULL, dating_met
   problem <- "none"
   patristic_matrix_array <- NA
   if (final.size < length(taxa)) {
-    problem <- "missing some taxa on chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
+    problem <- "Missing some taxa on chronogram, so this is probably an underestimate." # fewer taxa on final matrix than we asked for
     if (final.size < 2 ) {
-      problem <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
+      problem <- "Insufficient species to get an MRCA (either 1 or 0)." # we either have one species or zero. Not enough for an MRCA
       patristic_matrix_array <- NA # to make sure no one uses the zero by mistake
     }
   }
@@ -299,7 +299,7 @@ phylo_get_subset_array <- function(reference_tree, taxa, phy4 = NULL, dating_met
   }
   if(!is.null(phy4)) {
     if (length(phylobase::descendants(phy4, phylobase::MRCA(phy4, taxa), type = "tips")) > taxa) {
-      problem <- "set of taxa not a clade, so this is probably an overestimate"
+      problem <- "'input' of taxa are not a clade, so this is probably an overestimate."
     }
   }
   return(list(patristic_matrix_array = patristic_matrix_array,problem = problem))

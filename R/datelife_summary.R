@@ -1,30 +1,42 @@
-#' Get taxon summary of a datelifeResult object
-#' @inheritParams datelife_query_check
-#' @inheritParams datelife_result_check
+#' Get a taxon summary of a \code{datelifeResult} object
+#'
+# #' To be renamed summary_taxon.
+#'
+#' @param datelife_query A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.
+#' @inheritParams summarize_datelife_result
 #' @export
 get_taxon_summary <- function(datelife_result = NULL,
 															datelife_query = NULL){
 
-	datelife_result <- check_datelife_result(datelife_result)
+	# dq <- FALSE
+	# if(is_datelife_query(datelife_query)){
+	# 	dq <- TRUE
+	# }
+	# if(is.null(attributes(datelife_result)$query)){
+	# 	dq <-
+	# }
+
+	# datelife_result <- check_datelife_result(datelife_result)
 	if(is.null(datelife_result) | !inherits(datelife_result, "datelifeResult")){
-		message("datelife_result argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
+		warning("'datelife_result' argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
 		return(NA)
 	}
-	if(is.null(datelife_query) & is.null(attributes(datelife_result)$query)){
-		input <- NULL
-		input.in <- unique(rapply(datelife_result, rownames))
-		# if(taxon_summary.in != "none") {
-			message("datelife_query is absent: showing taxon distribution of taxa found only in at least one chronogram. This excludes input taxa not found in any chronogram.")
-		# }
-	} else {
-		# if(!is.character(input)) stop("input must be a character vector")
-		if(!is.null(attributes(datelife_result)$query)){
+	# dq <- FALSE
+	# if(!is.null(datelife_query) | is.null(attributes(datelife_result)$query)){
+	# }
+
+	if(suppressMessages(is_datelife_query(datelife_query))){
+		if(is.null(attributes(datelife_result)$query)){
+			input.in <- input$cleaned_names
+		} else {
 			input <- attributes(datelife_result)$query
 			input.in <- attributes(datelife_result)$query$cleaned_names
-		} else {
-			input <- datelife_query_check(datelife_query = datelife_query)
-			input.in <- input$cleaned_names
 		}
+	} else {
+		message("'datelife_query' argument was not provided.")
+		message("Taxa absent in all chronograms are not reported.")
+		input <- NULL
+		input.in <- unique(rapply(datelife_result, rownames))
 	}
 	# results.index <- datelife_result_study_index(datelife_result, cache)
 	return.object <- NA
@@ -72,13 +84,17 @@ get_taxon_summary <- function(datelife_result = NULL,
 # print.datelifeTaxonSummary <- function(taxon_summary){
 #
 # }
-#' Summarize an output from get_datelife_result function
-#' Get different types of summaries from a datelifeResult object.
-#' A datelifeResult object is a named list of patristic matrcies.
+#' Summarize a \code{datelifeResult} object
+#'
+#' @description Get different types of summaries from a \code{datelifeResult}
+#' object, an output from [get_datelife_result()].
 #' This allows rapid processing of data.
-#' If you need a list of chronograms from your datelifeResult object, this is the function you are looking for.
-#' @inheritParams datelife_query_check
-#' @inheritParams datelife_result_check
+#' If you need a list of chronograms from your \code{datelifeResult} object, this
+#' is the function you are looking for.
+#'
+#' @param datelife_result A \code{datelifeResult} object, an output
+#' of [get_datelife_result()].
+#' @inheritParams get_taxon_summary
 #' @inheritParams datelife_search
 #' @inherit datelife_search return details
 #' @export
@@ -96,7 +112,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
 		cache <- update_datelife_cache(save = TRUE, verbose = verbose)
 	} else {
 		if("opentree_chronograms" %in% cache){
-			utils::data("opentree_chronograms")
+			utils::data("opentree_chronograms", package = "datelife")
 			cache <- get("opentree_chronograms")
 		}
 	}
@@ -140,7 +156,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
 		trees <- lapply(datelife_result, patristic_matrix_to_phylo)
 		return.object <- get_biggest_phylo(trees) # NAs in trees are removed in get_biggest_phylo
 	}
-	# the following chunck is to test if n_overlap = 2 is enough to summarize results with sdm and median
+	# test if n_overlap = 2 is enough to summarize results with sdm and median:
 	if(summary_format.in %in% c("newick_sdm", "phylo_sdm", "newick_median", "phylo_median")){
 		best_grove <- get_best_grove(datelife_result, criterion = "taxa", n = 2)$best_grove
 	}
@@ -249,19 +265,24 @@ summarize_datelife_result <- function(datelife_result = NULL,
 	}
 	return(return.object)
 }
-#' Main function to summarize a datelifeResult object
-#' @param object A "datelifeResult" object, typically an output of get_datelife_result function.
-#' @param ... further arguments passed to or from other methods
-#' @param partial Boolean for whether to include partial matches
-#' @method summary datelifeResult
-#' @export
-summary.datelifeResult <- function(object, ..., partial = TRUE){
-	mrcas <- datelife_result_MRCA(object, partial = partial)
-	res <- list(mrca = mrcas)
-	class(res) <- "datelifeResultSummary"
-	return(res)
-}
+# TODO: method to summarize a dateliferesult object
+# #' Main function to summarize a datelifeResult object
+# #' @param object A "datelifeResult" object, typically an output of \code{\link[=get_datelife_result]{get_datelife_result}.
+# #' @param ... further arguments passed to or from other methods
+# #' @param partial Boolean for whether to include partial matches
+# #' @method summary datelifeResult
+# #' @export
+# summary.datelifeResult <- function(object, ..., partial = TRUE){
+# 	mrcas <- datelife_result_MRCA(object, partial = partial)
+# 	res <- list(mrca = mrcas)
+# 	class(res) <- "datelifeResultSummary"
+# 	return(res)
+# }
+
 #' Get the tree with the most tips: the biggest tree
+#'
+#'
+#'
 #' @param trees A list of trees as multiPhylo or as a plain list object.
 #' @return A phylo object with a citation slot with the citation of the biggest tree
 #' @export
@@ -270,7 +291,7 @@ get_biggest_phylo <- function(trees){
 	tree_citation <- names(trees)
 	return.object <- trees[which(sapply(trees, ape::Ntip) == max(sapply(trees, ape::Ntip)))]
 	tree_citation <- tree_citation[which(sapply(trees, ape::Ntip) == max(sapply(trees, ape::Ntip)))]
-	if(length(return.object) >1 ) { #there are more than one tree with same number of taxa. Rather than take the first by default, take the one with the most intermediate depth (this assumes that the root node is the same for all trees). An example is the Bininda-Emonds et al. mammal tree: there are three trees with min, max, and best guess calibrations. So, take the one in the middle.
+	if(length(return.object) >1 ) {  # there are more than one tree with same number of taxa. Rather than take the first by default, take the one with the most intermediate depth (this assumes that the root node is the same for all trees). An example is the Bininda-Emonds et al. mammal tree: there are three trees with min, max, and best guess calibrations. So, take the one in the middle.
 		max.branching.time <- function(x) {
 			return(max(ape::branching.times(x)))
 		}

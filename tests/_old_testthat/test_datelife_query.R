@@ -4,6 +4,24 @@
 #   NA
 # })
 
+test_that("make_datelife_query works from comma separated names", {
+  input_processed <- make_datelife_query(input = c("Rhea americana, Pterocnemia pennata, Struthio camelus"),
+                                         use_tnrs=FALSE,
+                                         approximate_match=TRUE)
+  expect_equal(length(input_processed$cleaned_names),
+               3)
+})
+
+test_that("is_datelife query works", {
+  expect_false(is_datelife_query(NA))
+  expect_false(is_datelife_query(NULL))
+  expect_true(is_datelife_query(threebirds_query))
+  # remove class datelifeQuery, but format/structure of the object is ok, it should still work:
+  class(threebirds_query) <- "random"
+  expect_true(is_datelife_query(threebirds_query))
+
+})
+
 test_that("Mus higher-taxon search is giving species back", {
   skip_on_cran()
   skip_on_travis()
@@ -16,7 +34,6 @@ test_that("make_datelife_query works from phylo object as input", {
     input.processed <- make_datelife_query(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), use_tnrs=FALSE, approximate_match=TRUE)
     expect_equal(class(input.processed$phy),"phylo")
 })
-
 
 # test_that("Processing complex newick works", {
 # 	skip_on_cran()
@@ -42,17 +59,14 @@ test_that("input_process works", {
 	new <- "(((((Pterois miles,Pterois volitans)Pteroinae)Teleostei)Chordata,Lymnaea))Metazoa;"
 	phy <- ape::read.tree(text="((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);")
 	notnew <- "a,b;"
-	expect_s3_class(input_process(c(new, new), verbose=TRUE), "phylo") #trying to process two phylogenies will give a message
+	expect_s3_class(input_process(c(new, new)), "phylo") #trying to process two phylogenies will give a message
 	input <- c(new, new)
-	expect_s3_class(input_process(c(phy, phy), verbose=TRUE), "phylo") #trying to process two phylogenies will give a message
-	expect_message(x <- input_process(new, verbose=TRUE)) # when verbose=TRUE it will give a printed message
-	expect_message(x <- input_process(phy, verbose=TRUE)) # idem
-	expect_message(x <- input_process(notnew, verbose=TRUE)) # idem
-	expect_output(x <- input_process(new, verbose=FALSE), NA) # when verbose=FALSE there is no printed message, but it will work with expect_message too
-	expect_output(x <- input_process(notnew, verbose=FALSE), NA) # idem
-	expect_output(x <- input_process("purrr", verbose=FALSE), NA) # idem
-	expect_s3_class(x <- input_process(new, verbose=FALSE), "phylo") # output is phylo
-	expect_s3_class(x <- input_process(phy, verbose=FALSE), "phylo") # output is phylo
+	expect_s3_class(input_process(c(phy, phy)), "phylo") #trying to process two phylogenies will give a message
+	expect_output(x <- input_process(new), NA)
+	expect_output(x <- input_process(notnew), NA)
+	expect_output(x <- input_process("purrr"), NA)
+	expect_s3_class(x <- input_process(new), "phylo") # output is phylo
+	expect_s3_class(x <- input_process(phy), "phylo") # output is phylo
 })
 
 test_that("datelife_query_check works with phylo as input", {

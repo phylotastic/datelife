@@ -2,16 +2,17 @@
 % Please edit documentation in R/datelife_median.R
 \name{datelife_result_median_matrix}
 \alias{datelife_result_median_matrix}
-\title{Function to compute median matrix of a datelifeResult object.}
+\title{Function to compute median matrix of a datelifeResult object}
 \usage{
 datelife_result_median_matrix(datelife_result)
 }
 \arguments{
-\item{datelife_result}{An output of get_datelife_result function: A list of patristic matrices with names corresponding to original study citations.}
+\item{datelife_result}{A \code{datelifeResult} object, an output
+of [get_datelife_result()].}
 }
 \value{
 A patristic distance summary matrix from a datelifeResult object.
 }
 \description{
-Function to compute median matrix of a datelifeResult object.
+Function to compute median matrix of a datelifeResult object
 }

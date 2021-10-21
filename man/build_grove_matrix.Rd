@@ -15,5 +15,6 @@ build_grove_matrix(datelife_result, n = 2)
 matrix; each cell shows whether n-overlap exists between that pair of inputs
 }
 \description{
-Using theorem 1.1 of Ané et al. 10.1007/s00026-009-0017-x Groves of Phylogenetic Trees
+Using theorem 1.1 of Ané et al. 10.1007/s00026-009-0017-x Groves
+of Phylogenetic Trees
 }
