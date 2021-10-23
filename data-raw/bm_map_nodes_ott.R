@@ -71,14 +71,14 @@ library(ggplot2)
 #' @param file
 #' @examples
 # plot_runtime(file = "data-raw/benchmark/opentree_chronograms/bm_map_nodes_ott-mbm.pdf", benchmark = mbm,
-xlabel = "Number of tips in chronogram", ylabel = "Time (milliseconds)",
-xticks_angle = 90, xticks_breaks = , xticks_labels = ,
-yticks_breaks = c(1e+03, 1e+04, 3e+04, 6e+04), yticks_labels = )
-levels(mbm$expr)
-class(mbm$time)
-attributes(mbm)
-is.numeric(NULL)
-microbenchmark:::autoplot.microbenchmark(mbm)
+# xlabel = "Number of tips in chronogram", ylabel = "Time (milliseconds)",
+# xticks_angle = 90, xticks_breaks = , xticks_labels = ,
+# yticks_breaks = c(1e+03, 1e+04, 3e+04, 6e+04), yticks_labels = )
+# levels(mbm$expr)
+# class(mbm$time)
+# attributes(mbm)
+# is.numeric(NULL)
+# microbenchmark:::autoplot.microbenchmark(mbm)
 plot_runtime <- function(file = NULL, width = 6, height = 3, benchmark = NULL,
                             ymin = 0, ymax = 2000,
                             xlabel = "Independent var", ylabel = "Dependent var",
