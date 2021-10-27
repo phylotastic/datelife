@@ -10,7 +10,7 @@
 #' typically an output of [get_all_calibrations()].
 #' @inheritParams extract_calibrations_phylo
 #' @param dating_method Tree dating method. Options are "bladj" or "pathd8"
-#' @return A list with a chronogram and secondary calibrations used.
+#' @inherit datelife_use return
 #' @inherit use_calibrations details
 #' @export
 use_all_calibrations <- function(phy = NULL,
@@ -28,16 +28,16 @@ use_all_calibrations <- function(phy = NULL,
     # if (methods::hasArg("root_age"))
     # if (methods::hasArg("match_calibrations"))
     if (each) {  # if calibrations is a list of data frames:
-      chronogram <- use_calibrations_each(phy = phy,
-                                          calibrations = calibrations,
-                                          dating_method = dating_method)$chronograms
+      res <- use_calibrations_each(phy = phy,
+                                   calibrations = calibrations,
+                                   dating_method = dating_method)
     } else {
-      chronogram <- use_calibrations(phy,
-                                     calibrations,
-                                     dating_method = dating_method)
+      res <- use_calibrations(phy,
+                              calibrations,
+                              dating_method = dating_method)
     }
     # TODO: make a 'datelife' class for chronograms with calibrations data.frame attached, produced by datelife
-    return(list(phy = chronogram, calibrations.df = calibrations))
+    return(res)
 }
 #' Date a given tree topology by using a given list of calibrations independently,
 #' to generate multiple hypothesis of time of divergence
@@ -48,7 +48,8 @@ use_all_calibrations <- function(phy = NULL,
 #'
 #' @inheritParams use_all_calibrations
 #' @param ... Arguments to pass to use_calibrations
-#' @return A list with a multiPhylo object of chronograms and a list of all calibrations used
+#' @return A \code{multiPhylo} object of trees with branch lengths proportional
+#' to time.
 #' @inherit use_calibrations details
 #' @export
 # You can get the datelifeResult object or the list of chronograms first
@@ -75,9 +76,9 @@ use_calibrations_each <- function(phy = NULL,
                                         use_calibrations(phy = phy,
                                                          calibrations = x,
                                                          ...))
-		class(chronograms) <- "multiPhylo"
+		class(chronograms) <- c("multiPhylo", "datelife")
 		names(chronograms) <- names(calibrations)
-		return(list(chronograms = chronograms, calibrations = calibrations))
+		return(chronograms = chronograms)
 }
 #' Date a given tree topology using a combined set of given calibrations
 #'
@@ -91,13 +92,17 @@ use_calibrations_each <- function(phy = NULL,
 #' @return A \code{phylo} object with branch lengths proportional to time.
 #' @export
 #' @details
+#' \code{calibrations} and \code{dating method} are stored as attributes.
+#' They can be accessed with \code{attributes(return)$datelife_calibrations} and
+#' \code{attributes(return)$dating_method}, respectively.
+#' \n
 #' If \code{input} tree does not have branch lengths, \code{dating_method} is
-#' ignored and the function will use secondary calibrations to date the \code{input}
-#' tree with [BLADJ](http://phylodiversity.net/bladj/)
-#' using [phylocomr::ph_bladj()] (via [use_calibrations_bladj()]). If \code{input}
-#' tree has have branch lengths it can be dated
-#' with [PATHd8](https://www2.math.su.se/PATHd8/) using [geiger::PATHd8.phylo()]
-#' (via [use_calibrations_pathd8()]).
+#' ignored and the function will use secondary calibrations to date the
+#' \code{input} tree with [BLADJ](http://phylodiversity.net/bladj/),
+#' using [phylocomr::ph_bladj()], via [use_calibrations_bladj()]. If
+#' \code{input} tree has have branch lengths it can be dated
+#' with [PATHd8](https://www2.math.su.se/PATHd8/), using [geiger::PATHd8.phylo()],
+#' via [use_calibrations_pathd8()].
 use_calibrations <- function(phy = NULL,
                              calibrations = NULL,
                              dating_method = "bladj",
@@ -144,6 +149,9 @@ use_calibrations <- function(phy = NULL,
 	}
 	# TODO
 	# add dating_method attribute to chronogram
+  attr(chronogram, "datelife_calibrations") <- calibrations
+  attr(chronogram, "dating_method") <- dating_method
+  class(chronogram) <- c(class(chronogram), "datelife")
   message("Success!")
 	return(chronogram)
 }

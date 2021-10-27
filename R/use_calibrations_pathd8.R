@@ -112,6 +112,7 @@ use_calibrations_pathd8 <- function(phy,
         if(!is.null(problem)){
             message(paste(problem, "\nThis is an issue from PATHd8; returning tree with a $problem."))
         }
+        # TODO: something about these extra list elements, set up as attributes??
         chronogram$problem <- problem
         chronogram$dating_method <- "pathd8"
     	  chronogram$calibration_distribution <- calibs$phy$calibration_distribution

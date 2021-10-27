@@ -189,12 +189,12 @@ write.treePL=function(phy, calibrations, nsites=10000, min=0.0001, base="", opts
 	}
 
 # correct small branch lengths
-	z=phy$edge.length[which(phy$edge.length>0)]
-	if(any(z<min)){
-		scl=min/min(z)
+	z = phy$edge.length[which(phy$edge.length>0)]
+	if (any(z < min)) {
+		scl = min/min(z)
 		phy$edge.length=phy$edge.length*scl
 	}
-	ape::write.tree(phy, file=int)
+	ape::write.tree(phy, file = int)
 
 ##	check appropriateness of constraints ##
 #	check for 'calibrations' and 'phy' congruence
@@ -210,28 +210,28 @@ write.treePL=function(phy, calibrations, nsites=10000, min=0.0001, base="", opts
 #	calibrations$fixage=ifelse(calibrations$MinAge==calibrations$MaxAge, TRUE, FALSE)
 	constraints<-constraintnames<-character(nrow(calibrations))
 	for(i in 1:nrow(calibrations)){
-		cal=calibrations[i,]
-		taxon=cal$MRCA
-		desc=c(cal$taxonA, cal$taxonB)
+		cal = calibrations[i,]
+		taxon = cal$MRCA
+		desc = c(cal$taxonA, cal$taxonB)
 
 		txt1=ifelse(!is.na(cal$MinAge), paste("min =", taxon, cal$MinAge, sep=" "), "")
 		txt2=ifelse(!is.na(cal$MaxAge), paste("max =", taxon, cal$MaxAge, sep=" "), "")
-		txt=paste(txt1,txt2,sep="\n")
+		txt = paste(txt1,txt2,sep="\n")
 
-		constraints[i]=txt
-		constraintnames[i]=paste("mrca =", taxon, desc[1], desc[2], sep=" ")
+		constraints[i] = txt
+		constraintnames[i] = paste("mrca =", taxon, desc[1], desc[2], sep=" ")
 	}
-	infile=list(
-				tree=paste("treefile = ", int, sep=""),
-				ns=paste("numsites = ", nsites, sep=""),
-				names=paste(unlist(constraintnames), collapse="\n"),
-				mrca=paste(unlist(constraints), collapse="\n"),
+	infile = list(
+				tree=paste("treefile = ", int, sep = ""),
+				ns=paste("numsites = ", nsites, sep = ""),
+				names=paste(unlist(constraintnames), collapse = "\n"),
+				mrca=paste(unlist(constraints), collapse = "\n"),
 				out=paste("outfile = ", paste(base, "dated", "tre", sep="."), sep=""),
-				opt=paste(names(opts), opts, sep="=", collapse="\n")
+				opt=paste(names(opts), opts, sep = "=", collapse = "\n")
 				)
 
 	inp=paste(base,"infile",sep=".")
 	writeLines(paste(infile,collapse="\n\n"), con=inp)
-	attr(inp, "method")="treePL"
+	attr(inp, "dating_method") = "treePL"
 	return(inp)
 }

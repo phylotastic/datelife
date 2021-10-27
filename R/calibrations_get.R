@@ -12,7 +12,7 @@
 #' in separate data frames.
 #' @return An object of class \code{datelifeCalibrations} -- a \code{data frame}
 #' of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
-#' for each pair of taxon names in \{input]. The attribute "chronograms" stores
+#' for each pair of taxon names in \code{input}. The attribute \code{chronograms} stores
 #' the source data from which the calibrations were extracted.
 #' @export
 extract_calibrations_phylo <- function(input = NULL,
@@ -76,7 +76,7 @@ extract_calibrations_phylo <- function(input = NULL,
 	}
 	attr(calibrations, "chronograms") <- chronograms
 	# TODO check that class data frame is also preserved. Might wanna do:
-	class(calibrations) <- c(class(calibrations), "datelifeCalibrations")
+	class(calibrations) <- c(class(calibrations), "calibrations")
 	# instead of using structure()
 	return(calibrations)
 }
@@ -102,9 +102,11 @@ extract_calibrations_dateliferesult <- function(input = NULL,
   phyloall <- suppressMessages(
               summarize_datelife_result(datelife_result = input,
                                         summary_format = "phylo_all"))
-
-  return(extract_calibrations_phylo(input = phyloall,
-                                    each = each))
+	res <- extract_calibrations_phylo(input = phyloall,
+																		each = each)
+	attr(res, "datelife_result") <- input
+	class(res) <- c("data.frame", "datelifeCalibrations")
+  return(res)
 }
 
 #' Search and extract available secondary calibrations for a given character
@@ -133,8 +135,11 @@ get_calibrations_vector <- function(input = NULL,
 	phyloall <- datelife_search(input = input,
 															summary_format = "phylo_all")
 
-	return(extract_calibrations_phylo(input = phyloall,
-                                    each = each))
+	res <- extract_calibrations_phylo(input = phyloall,
+                                    each = each)
+  attr(res, "datelife_result") <- attributes(phyloall)$datelife_result
+	class(res) <- c("data.frame", "datelifeCalibrations")
+	return(res)
 }
 #' Search and extract available secondary calibrations from a given
 #' '\code{datelifeQuery} object
@@ -151,7 +156,10 @@ get_calibrations_datelifequery <- function(input = NULL,
 	}
 	phyloall <- datelife_search(input = input,
 															summary_format = "phylo_all")
-
+	res <- extract_calibrations_phylo(input = phyloall,
+																		each = each)
+	attr(res, "datelife_result") <- attributes(phyloall)$datelife_result
+	class(res) <- c("data.frame", "datelifeCalibrations")
 	return(extract_calibrations_phylo(input = phyloall,
                                     each = each))
 }

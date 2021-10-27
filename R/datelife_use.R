@@ -10,7 +10,8 @@
 #' @inheritParams datelife_search
 #' @inheritParams use_all_calibrations
 #' @inheritDotParams make_datelife_query
-#' @return A list with one or multiple chronograms and secondary calibrations used for dating.
+#' @return A \code{datelife} object, which is a \code{phylo} or \code{multiPhylo}
+#' object with secondary calibrations used for dating stored in attributes.
 #' @export
 #' @details
 #' If input is a tree, it will use secondary calibrations to (1) date the tree with bladj
@@ -97,5 +98,7 @@ datelife_use_datelifequery <- function(input = NULL,
     res <- use_all_calibrations(phy = input$phy,
                                 calibrations = calibrations,
                                 dating_method = dating_method)
+    # attributes(calibrations)
+    attr(res, "datelife_query") <- input
     return(res)
 }

@@ -152,6 +152,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 																	 taxon_summary = taxon_summary,
 																	 verbose = verbose,
 																	 criterion = criterion)
+  attr(res, "datelife_result") <- datelife_result.here
 	message("DateLife search done!")
 	return(res)
 }

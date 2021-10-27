@@ -40,7 +40,7 @@ get_datelife_result_datelifequery <- function(input = NULL,
 																					 partial = partial)
 	 message("DateLife result obtained!")
    class(datelife_result) <- c("datelifeResult")
-   attr(datelife_result, "query") <- input
+   attr(datelife_result, "datelife_query") <- input
    return(datelife_result)
 }
 
@@ -94,7 +94,7 @@ get_datelife_result_datelifequery <- function(input = NULL,
 #    results_list <- lapply(cache$trees, get_subset_array_dispatch, taxa = input$cleaned_names, phy = NULL)
 #    datelife_result <- results_list_process(results_list, input$cleaned_names, partial)
 #    class(datelife_result) <- c("datelifeResult")
-#    attr(datelife_result, "query") <- input
+#    attr(datelife_result, "datelife_query") <- input
 #    return(datelife_result)
 # }
 

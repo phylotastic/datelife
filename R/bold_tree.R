@@ -41,7 +41,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 		phy <- get_otol_synthetic_tree(input = datelife_query, otol_version = otol_version, ...)
 		#otol returns error with missing taxa in v3 of rotl
 	}
-	attr(phy, "query") <- datelife_query
+	attr(phy, "datelife_query") <- datelife_query
 	message("... Searching for ", marker, " sequences from 'input' taxa available in BOLD.")
 	aligner = match.arg(arg = tolower(aligner), choices = c("muscle", "mafft"), several.ok = FALSE)
 	phy$edge.length <- NULL # making sure there are no branch lengths in phy
@@ -164,7 +164,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana",  "Struthio camelus",
 		}
 	}
 	phy$tip.label <- gsub(' ', '_', phy$tip.label)
-	attr(phy, "query") <- datelife_query
+	attr(phy, "datelife_query") <- datelife_query
 	message("Tree branch lengths reconstructed!")
 	return(phy)
 }

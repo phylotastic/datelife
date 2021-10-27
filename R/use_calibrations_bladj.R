@@ -71,6 +71,7 @@ use_calibrations_bladj <- function(phy,
   }
 	new_phy <- make_bladj_tree(tree = calibs$phy, nodeages = node_ages,
 	  nodenames = node_names)
+	# TODO: something about these extra list elements, set up as attributes??
 	new_phy$dating_method <- "bladj"
 	new_phy$calibration_distribution <- calibs$phy$calibration_distribution
   new_phy$calibrations <- calibs$matched_calibrations
