@@ -7,9 +7,9 @@
 \format{
 A list of three elements, containing the summary of a datelifeResult object
 \describe{
-  \item{phylo_all}{List of subset chronograms in phylo format}
-  \item{taxon_distribution}{A data frame with taxon presence across subset chronograms}
-  \item{absent_taxa}{A dataframe with names of taxon not found in any chronogram}
+\item{phylo_all}{List of subset chronograms in phylo format}
+\item{taxon_distribution}{A data frame with taxon presence across subset chronograms}
+\item{absent_taxa}{A dataframe with names of taxon not found in any chronogram}
 }
 }
 \source{

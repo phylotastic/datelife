@@ -17,20 +17,20 @@ in separate data frames.}
 \value{
 An object of class \code{datelifeCalibrations} -- a \code{data frame}
 of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
-for each pair of taxon names in \{input]. The attribute "chronograms" stores
+for each pair of taxon names in \code{input}. The attribute \code{chronograms} stores
 the source data from which the calibrations were extracted.
 }
 \description{
 The function searches DateLife's local
 database of phylogenetic trees with branch lengths proportional to time (aka,
-chronograms) with [datelife_search()], and extracts divergence times
+chronograms) with \code{\link[=datelife_search]{datelife_search()}}, and extracts divergence times
 (i.e., secondary calibrations) from chronograms for each pair of given
-taxon names with [extract_calibrations_phylo()].
+taxon names with \code{\link[=extract_calibrations_phylo]{extract_calibrations_phylo()}}.
 }
 \details{
-The function calls [datelife_search()]
+The function calls \code{\link[=datelife_search]{datelife_search()}}
 with \code{summary_format = "phylo_all"} to get all chronograms in database
 containing at least two taxa from \code{input}, and generates a \code{phylo}
 or \code{multiPhylo} object object that will be passed to
-[extract_calibrations_phylo()].
+\code{\link[=extract_calibrations_phylo]{extract_calibrations_phylo()}}.
 }

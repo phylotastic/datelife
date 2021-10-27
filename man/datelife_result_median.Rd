@@ -8,7 +8,7 @@ datelife_result_median(datelife_result, ...)
 }
 \arguments{
 \item{datelife_result}{A \code{datelifeResult} object, an output
-of [get_datelife_result()].}
+of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
 
 \item{...}{
   Arguments passed on to \code{\link[=summary_matrix_to_phylo]{summary_matrix_to_phylo}}

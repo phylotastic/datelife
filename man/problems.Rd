@@ -24,6 +24,8 @@ Generated with
 problems <- opentree_chronograms$trees[sapply(sapply(opentree_chronograms$trees, "[", "tip.label"), function(x) any(grepl("not.mapped", x)))]
 usethis::use_data(problems)
 opentree_chronograms object from commit https://github.com/phylotastic/datelife/tree/be894448f6fc437241cd0916fab45e84ac3e09c6
+
+[", "tip.label"), function(x) any(grepl("not.mapped", x)))]: R:\%22,\%20\%22tip.label\%22),\%20function(x)\%20any(grepl(\%22not.mapped\%22,\%20x)))
 }
 \keyword{chronogram}
 \keyword{otol}

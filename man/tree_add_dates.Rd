@@ -16,25 +16,25 @@ tree_add_dates(
 \item{dated_tree}{a tree (newick or phylo) with branch lengths proportional to absolute time}
 
 \item{missing_taxa}{A tree, a data frame or a vector enlisting all missing taxa you want to include.
-\describe{
+\describe{\preformatted{\\item\{A tree.\}\{Either as a phylo object or as a newick character string.
+It contains all taxa that you want at the end, both missing and non missing.
+This tree will be used as a hard constraint.
+}
 
-    \item{A tree.}{Either as a phylo object or as a newick character string.
-    It contains all taxa that you want at the end, both missing and non missing.
-    This tree will be used as a hard constraint.
 }
-    \item{A data frame.}{It contains two columns.
-    taxon. A character vector of missing taxon names.
-    clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
+\item{A data frame.}{It contains two columns.
+taxon. A character vector of missing taxon names.
+clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
 }
-    \item{A character vector.}{It contains the names of the missing taxa.
-    They will be added at random to the constraint tree.
+\item{A character vector.}{It contains the names of the missing taxa.
+They will be added at random to the constraint tree.
 }
 }}
 
 \item{dating_method}{The method used for tree dating.}
 
 \item{adding_criterion}{Only valid when dating_method = "mrbayes". A character vector to specify how missing_taxa should be added to dated_tree.
-     Choose one of:
+Choose one of:
 \describe{
 \item{adding_method = "random"}{missing_taxa will be added at random to dated_tree.
 }

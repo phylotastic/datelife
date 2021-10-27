@@ -25,46 +25,46 @@ datelife_search(
 \describe{
 \item{Taxon names}{As a character vector.}
 \item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
-            object, OR as a newick character string.}
-\item{A \code{datelifeQuery} object}{An output from [make_datelife_query()]
-                \code{\link[=make_datelife_query]{make_datelife_query}}.}
+object, OR as a newick character string.}
+\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}
+\code{\link[=make_datelife_query]{make_datelife_query}}.}
 }}
 
 \item{summary_format}{A character vector of length one, indicating the output
 format for results of the DateLife search. Available output formats are:
 \describe{
- \item{"citations"}{A character vector of references where chronograms with
-                 some or all of the target taxa are published (source chronograms).}
- \item{"mrca"}{A named numeric vector of most recent common ancestor (mrca)
-                 ages of target taxa defined in input, obtained from the source chronograms.
-                 Names of mrca vector are equal to citations.}
- \item{"newick_all"}{A named character vector of newick strings corresponding
-                 to target chronograms derived from source chronograms. Names of newick_all
-                 vector are equal to citations.}
- \item{"newick_sdm"}{Only if multiple source chronograms are available. A
-                 character vector with a single newick string corresponding to a target
-                 chronogram obtained with SDM supertree method (Criscuolo et al. 2006).}
- \item{"newick_median"}{Only if multiple source chronograms are available.
-                 A character vector with a single newick string corresponding to a target
-                 chronogram from the median of all source chronograms.}
- \item{"phylo_sdm"}{Only if multiple source chronograms are available. A
-                 phylo object with a single target chronogram obtained with SDM supertree
-                 method (Criscuolo et al. 2006).}
- \item{"phylo_median"}{Only if multiple source chronograms are available. A
-                 phylo object with a single target chronogram obtained from source
-                 chronograms with median method.}
- \item{"phylo_all"}{A named list of phylo objects corresponding to each target
-                 chronogram obtained from available source chronograms. Names of
-                 phylo_all list correspond to citations.}
- \item{"phylo_biggest"}{The chronogram with the most taxa. In the case of a
-                 tie, the chronogram with clade age closest to the median age of the
-                 equally large trees is returned.}
- \item{"html"}{A character vector with an html string that can be saved and
-                 then opened in any web browser. It contains a 4 column table with data on
-                 target taxa: mrca, number of taxa, citations of source chronogram and
-                 newick target chronogram.}
- \item{"data_frame"}{A data frame with data on target taxa: mrca, number of
-                 taxa, citations of source chronograms and newick string.}
+\item{"citations"}{A character vector of references where chronograms with
+some or all of the target taxa are published (source chronograms).}
+\item{"mrca"}{A named numeric vector of most recent common ancestor (mrca)
+ages of target taxa defined in input, obtained from the source chronograms.
+Names of mrca vector are equal to citations.}
+\item{"newick_all"}{A named character vector of newick strings corresponding
+to target chronograms derived from source chronograms. Names of newick_all
+vector are equal to citations.}
+\item{"newick_sdm"}{Only if multiple source chronograms are available. A
+character vector with a single newick string corresponding to a target
+chronogram obtained with SDM supertree method (Criscuolo et al. 2006).}
+\item{"newick_median"}{Only if multiple source chronograms are available.
+A character vector with a single newick string corresponding to a target
+chronogram from the median of all source chronograms.}
+\item{"phylo_sdm"}{Only if multiple source chronograms are available. A
+phylo object with a single target chronogram obtained with SDM supertree
+method (Criscuolo et al. 2006).}
+\item{"phylo_median"}{Only if multiple source chronograms are available. A
+phylo object with a single target chronogram obtained from source
+chronograms with median method.}
+\item{"phylo_all"}{A named list of phylo objects corresponding to each target
+chronogram obtained from available source chronograms. Names of
+phylo_all list correspond to citations.}
+\item{"phylo_biggest"}{The chronogram with the most taxa. In the case of a
+tie, the chronogram with clade age closest to the median age of the
+equally large trees is returned.}
+\item{"html"}{A character vector with an html string that can be saved and
+then opened in any web browser. It contains a 4 column table with data on
+target taxa: mrca, number of taxa, citations of source chronogram and
+newick target chronogram.}
+\item{"data_frame"}{A data frame with data on target taxa: mrca, number of
+taxa, citations of source chronograms and newick string.}
 }}
 
 \item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only
@@ -77,10 +77,10 @@ Life's database chronograms and other associated information.}
 \item{summary_print}{A character vector specifying type of summary information
 to be printed to screen:
 \describe{
- \item{"citations"}{Prints references of chronograms where target taxa are found.}
- \item{"taxa"}{Prints a summary of the number of chronograms where each target
-                 taxon is found.}
- \item{"none"}{Nothing is printed to screen.}
+\item{"citations"}{Prints references of chronograms where target taxa are found.}
+\item{"taxa"}{Prints a summary of the number of chronograms where each target
+taxon is found.}
+\item{"none"}{Nothing is printed to screen.}
 }
 Default to \code{c("citations", "taxa")}, which displays both.}
 

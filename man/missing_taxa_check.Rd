@@ -8,18 +8,18 @@ missing_taxa_check(missing_taxa = NULL, dated_tree = NULL)
 }
 \arguments{
 \item{missing_taxa}{A tree, a data frame or a vector enlisting all missing taxa you want to include.
-\describe{
+\describe{\preformatted{\\item\{A tree.\}\{Either as a phylo object or as a newick character string.
+It contains all taxa that you want at the end, both missing and non missing.
+This tree will be used as a hard constraint.
+}
 
-    \item{A tree.}{Either as a phylo object or as a newick character string.
-    It contains all taxa that you want at the end, both missing and non missing.
-    This tree will be used as a hard constraint.
 }
-    \item{A data frame.}{It contains two columns.
-    taxon. A character vector of missing taxon names.
-    clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
+\item{A data frame.}{It contains two columns.
+taxon. A character vector of missing taxon names.
+clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
 }
-    \item{A character vector.}{It contains the names of the missing taxa.
-    They will be added at random to the constraint tree.
+\item{A character vector.}{It contains the names of the missing taxa.
+They will be added at random to the constraint tree.
 }
 }}
 

@@ -18,7 +18,7 @@ in separate data frames.}
 \value{
 An object of class \code{datelifeCalibrations} -- a \code{data frame}
 of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
-for each pair of taxon names in \{input]. The attribute "chronograms" stores
+for each pair of taxon names in \code{input}. The attribute \code{chronograms} stores
 the source data from which the calibrations were extracted.
 }
 \description{

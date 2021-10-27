@@ -9,7 +9,7 @@ datelife_result_sdm(datelife_result, weighting = "flat", verbose = TRUE, ...)
 }
 \arguments{
 \item{datelife_result}{A \code{datelifeResult} object, an output
-of [get_datelife_result()].}
+of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
 
 \item{weighting}{A character vector indicating how much weight to give to each
 tree in \code{input} during the SDM analysis. Choose one of:
@@ -40,7 +40,7 @@ tree in \code{input} during the SDM analysis. Choose one of:
 A \code{phylo} object from SDM with an extra element:
 \describe{
 \item{data}{A \code{datelifeResult} object with the chronograms that were used
- 	          to construct the SDM tree.
+to construct the SDM tree.
 }
 }
 }

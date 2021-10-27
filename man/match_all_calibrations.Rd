@@ -10,7 +10,7 @@ match_all_calibrations(phy, calibrations)
 \item{phy}{A \code{phylo} object. Nodes can be named or not.}
 
 \item{calibrations}{An object of class \code{datelifeCalibrations}, that is,
-an output of [get_all_calibrations()].}
+an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 }
 \value{
 A list with:

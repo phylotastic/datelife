@@ -23,32 +23,32 @@ make_mrbayes_tree(
 \item{ncalibration}{The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.}
 
 \item{missing_taxa}{A tree, a data frame or a vector enlisting all missing taxa you want to include.
-\describe{
+\describe{\preformatted{\\item\{A tree.\}\{Either as a phylo object or as a newick character string.
+It contains all taxa that you want at the end, both missing and non missing.
+This tree will be used as a hard constraint.
+}
 
-    \item{A tree.}{Either as a phylo object or as a newick character string.
-    It contains all taxa that you want at the end, both missing and non missing.
-    This tree will be used as a hard constraint.
 }
-    \item{A data frame.}{It contains two columns.
-    taxon. A character vector of missing taxon names.
-    clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
+\item{A data frame.}{It contains two columns.
+taxon. A character vector of missing taxon names.
+clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
 }
-    \item{A character vector.}{It contains the names of the missing taxa.
-    They will be added at random to the constraint tree.
+\item{A character vector.}{It contains the names of the missing taxa.
+They will be added at random to the constraint tree.
 }
 }}
 
 \item{age_distribution}{A character string specifying the type of calibration. Only "fixed" and "uniform" are implemented for now.
-\describe{
+\describe{\preformatted{\\item\{fixed\}\{ The age given in ncalibration will be used as fixed age.
+}
 
-    \item{fixed}{ The age given in ncalibration will be used as fixed age.
 }
-    \item{lognormal}{The age given in ncalibration will be used as mean age.
-        The standard deviation can be provided. # still need to add this option.
-        By default, a 95 CI sd is used.
+\item{lognormal}{The age given in ncalibration will be used as mean age.
+The standard deviation can be provided. # still need to add this option.
+By default, a 95 CI sd is used.
 }
-    \item{uniform}{The age given in ncalibration will be used as mean age.
-        Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.
+\item{uniform}{The age given in ncalibration will be used as mean age.
+Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.
 }
 }}
 

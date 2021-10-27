@@ -12,7 +12,7 @@ get_datelife_result_datelifequery(
 )
 }
 \arguments{
-\item{input}{A \code{datelifeQuery} object from [make_datelife_query()].}
+\item{input}{A \code{datelifeQuery} object from \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 
 \item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only
 match some of the desired taxa.}
@@ -35,6 +35,6 @@ Get a list of patristic matrices from a given \code{datelifeQuery} object
 }
 \details{
 If there is just one taxon name in \code{input$cleaned_names}, the
-function will run [make_datelife_query()] setting \code{get_spp_from_taxon = TRUE}.
+function will run \code{\link[=make_datelife_query]{make_datelife_query()}} setting \code{get_spp_from_taxon = TRUE}.
 The \code{datelifeQuery} used as input can be accessed with \code{attributes(datelifeResult)$query}.
 }

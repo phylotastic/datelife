@@ -12,9 +12,9 @@ datelife_use(input = NULL, each = FALSE, dating_method = "bladj", ...)
 \describe{
 \item{Taxon names}{As a character vector.}
 \item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
-            object, OR as a newick character string.}
-\item{A \code{datelifeQuery} object}{An output from [make_datelife_query()]
-                \code{\link[=make_datelife_query]{make_datelife_query}}.}
+object, OR as a newick character string.}
+\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}
+\code{\link[=make_datelife_query]{make_datelife_query}}.}
 }}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
@@ -30,14 +30,15 @@ in separate data frames.}
   }}
 }
 \value{
-A list with one or multiple chronograms and secondary calibrations used for dating.
+A \code{datelife} object, which is a \code{phylo} or \code{multiPhylo}
+object with secondary calibrations used for dating stored in attributes.
 }
 \description{
 \code{datelife_use} gets secondary calibrations available for any
 pair of \code{input} taxon names, mined from code{\link[=opentree_chronograms]{opentree_chronograms}}
 local DateLife database, and uses them to date a given tree topology with BLADJ
 or PATHd8. If no tree topology is provided, it will attempt to generate one with
-BOLD-OpenTree through [make_bold_otol_tree()].
+BOLD-OpenTree through \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}}.
 }
 \details{
 If input is a tree, it will use secondary calibrations to (1) date the tree with bladj

@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{clean_taxon_info_children}
 \alias{clean_taxon_info_children}
-\title{Identifies, extracts and cleans children names from a [taxonomy_taxon_info()] output}
+\title{Identifies, extracts and cleans children names from a \code{\link[=taxonomy_taxon_info]{taxonomy_taxon_info()}} output}
 \usage{
 clean_taxon_info_children(
   taxon_info,
@@ -12,7 +12,7 @@ clean_taxon_info_children(
 )
 }
 \arguments{
-\item{taxon_info}{An output of [rotl::taxonomy_taxon_info()]}
+\item{taxon_info}{An output of \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}}}
 
 \item{invalid}{A character vector of flags used by Open Tree Taxonomy to detect invalid taxon names}
 }
@@ -20,7 +20,7 @@ clean_taxon_info_children(
 a list with valid children unique OTT names, ott_ids and ranks
 }
 \description{
-Identifies, extracts and cleans children names from a [taxonomy_taxon_info()] output
+Identifies, extracts and cleans children names from a \code{\link[=taxonomy_taxon_info]{taxonomy_taxon_info()}} output
 }
 \details{
 eliminates all taxa that will give problems when trying to retrieve an induced subtree from otol.

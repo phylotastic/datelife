@@ -25,7 +25,7 @@ Get a dated OpenTree induced synthetic subtree from a set of given taxon names, 
 }
 \details{
 OpenTree dated tree from Stephen Smith's OpenTree scaling service at
-[https://github.com/FePhyFoFum/gophy] if you want to make an LTT plot of
+\link{https://github.com/FePhyFoFum/gophy} if you want to make an LTT plot of
 a dated OpenTree tree you'll need to get rid of singleton nodes with
-[ape::collapse.singles()] and also probably do [phytools::force.ultrametric()]
+\code{\link[ape:collapse.singles]{ape::collapse.singles()}} and also probably do \code{\link[phytools:force.ultrametric]{phytools::force.ultrametric()}}
 }

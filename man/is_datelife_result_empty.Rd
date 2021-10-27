@@ -8,7 +8,7 @@ is_datelife_result_empty(datelife_result, use_tnrs = FALSE)
 }
 \arguments{
 \item{datelife_result}{A \code{datelifeResult} object, an output
-of [get_datelife_result()].}
+of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
 }
 \description{
 Check if we obtained an empty search with the set of input taxon names

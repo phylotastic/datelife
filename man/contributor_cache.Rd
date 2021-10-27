@@ -7,11 +7,11 @@
 \format{
 A list of five data sets
 \describe{
-  \item{author.pretty}{A character vector with the author names from studies with chronograms that are in OToL}
-  \item{author.results}{A dataframe with three variables: authors, study ids and clades}
-  \item{curator.pretty}{A character vector with the names of curators of chronograms that are in OToL}
-  \item{curator.results}{A dataframe with three variables: curators, study ids and clades}
-  \item{missed_doi}{A character vector with study ids whose doi could not be retrieved}
+\item{author.pretty}{A character vector with the author names from studies with chronograms that are in OToL}
+\item{author.results}{A dataframe with three variables: authors, study ids and clades}
+\item{curator.pretty}{A character vector with the names of curators of chronograms that are in OToL}
+\item{curator.results}{A dataframe with three variables: curators, study ids and clades}
+\item{missed_doi}{A character vector with study ids whose doi could not be retrieved}
 }
 }
 \source{

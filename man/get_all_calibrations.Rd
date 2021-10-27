@@ -12,9 +12,9 @@ get_all_calibrations(input = NULL, each = FALSE)
 \describe{
 \item{Taxon names}{As a character vector.}
 \item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
-            object, OR as a newick character string.}
-\item{A \code{datelifeQuery} object}{An output from [make_datelife_query()]
-                \code{\link[=make_datelife_query]{make_datelife_query}}.}
+object, OR as a newick character string.}
+\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}
+\code{\link[=make_datelife_query]{make_datelife_query}}.}
 }}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
@@ -24,11 +24,11 @@ in separate data frames.}
 \value{
 An object of class \code{datelifeCalibrations} -- a \code{data frame}
 of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
-for each pair of taxon names in \{input]. The attribute "chronograms" stores
+for each pair of taxon names in \code{input}. The attribute \code{chronograms} stores
 the source data from which the calibrations were extracted.
 }
 \description{
-\code{get_all_calibrations} performs a [datelife_search()]
+\code{get_all_calibrations} performs a \code{\link[=datelife_search]{datelife_search()}}
 and gets divergence times (i.e., secondary calibrations) for each taxon name
 pair given in \code{input}.
 }

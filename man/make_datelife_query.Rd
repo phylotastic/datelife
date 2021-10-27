@@ -18,7 +18,7 @@ make_datelife_query(
 \describe{
 \item{Taxon names}{As a character vector.}
 \item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
-            object, OR as a newick character string.}
+object, OR as a newick character string.}
 }}
 
 \item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
@@ -28,7 +28,7 @@ A datelifeQuery object, a list of three elements: $phy a phylo object or NA, if 
 }
 \description{
 It processes \code{phylo} and \code{newick character} string inputs
-with [input_process()].
+with \code{\link[=input_process]{input_process()}}.
 }
 \details{
 If \code{input} is a \code{multiPhylo} object, only the first \code{phylo}
