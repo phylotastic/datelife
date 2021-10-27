@@ -1,21 +1,30 @@
-test_that("datelife_use works", {
-  datelife_use(input = "Rhea americana, Struthio camelus, Gallus gallus",
+test_that("datelife_use workflows work", {
+  du <- datelife_use(input = "Rhea americana, Struthio camelus, Gallus gallus",
                each = FALSE,
                dating_method = "bladj")
-  #
+  class(du)
+  attributes(du)
   expect_warning(datelife_use_datelifequery())
-})
-
-test_that("phylo workflows work", {
-  # make a tee with branch lengths:
-  tree <- make_bold_otol_tree(c("Rhea americana",  "Struthio camelus", "Gallus gallus"))
-  datelife_search(input = tree)
+  # testing that phylo workflows work
+  tree <- du$phy
+  datelife_search(input = tree, summary_format = "citations")
   expect_warning(match_all_calibrations(phy = tree, calibrations = NULL))
   tree$edge.length <- NULL
   expect_warning(extract_calibrations_phylo(input = tree))
   # test a datelifeQuery input with NA as phy:
   expect_warning(datelife_use_datelifequery(input = attributes(tree)$query))
-  make_datelife_query(input = attributes(tree)$query)
+  # input is a datelifeQuery:
+  make_datelife_query(input = attributes(du)$datelifeQuery)
+  # test that pathd8 workflow works:
+  use_calibrations(dating_method = "pathd8", phy = du$phy, calibrations = du$calibrations.df)
+  # test get calibrations from a vector (calls datelife_search and extract_calibrations_phylo)
+  gc <- get_calibrations_vector(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
+  # testing that you can get a datelife result from a tree work:
+  dr <- get_datelife_result(input = du$phy)
+  is_datelife_result_empty(dr)
+  extract_calibrations_dateliferesult(input = dr)
+  # test an empty datelifeResult object
+  
 })
 
 test_that("input processing a newick string and multiPhylo workflows work", {
@@ -40,12 +49,10 @@ test_that("object checks work",{
   expect_error(use_calibrations(phy = NULL))
   expect_error(get_calibrations_datelifequery(input = NULL))
 })
-#
-# test_that("pathd8 workflow works"),{
-#   use_calibrations(dating_method = "pathd8")
-# })
-#
-# test_that("datelifeResult workflow works"),{
-#   extract_calibrations_dateliferesult(input = a datelifeResult object)
-#   get_calibrations_vector()
-# })
+
+
+
+# test match_all_calibrations when all(all_nodes < ape::Ntip(phy)) is not TRUE
+
+# test make_bold_otol_tree that does not get a phylo object
+
