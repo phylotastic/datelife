@@ -19,9 +19,16 @@ test_that("datelife_use workflows work", {
   make_datelife_query(input = attributes(du)$datelife_query)
   # test that pathd8 workflow works:
   uc <- use_calibrations(dating_method = "pathd8", phy = du, calibrations = attributes(du)$datelife_calibrations)
+  # test that other bladj workflows work:
+  sapply(c("mean", "min", "max"), function(x) {
+                         use_calibrations_bladj(phy = du0, 
+                         calibrations = attributes(du)$datelife_calibrations,
+                         type = x)})
   # test that absence of phylogeny or no branch lengths returns warning
   expect_warning(use_calibrations_pathd8(phy = NA))
+  expect_error(use_calibrations_bladj(phy = NA))
   expect_warning(use_calibrations_pathd8(phy = du0, calibrations = NULL))
+  expect_error(use_calibrations_bladj(phy = du0, calibrations = NULL))
   du00$edge.length <- c(NaN, NaN, NaN, NaN)
   expect_warning(use_calibrations_pathd8(phy = du00))
   # test get calibrations from a vector (calls datelife_search and extract_calibrations_phylo)
@@ -62,4 +69,6 @@ test_that("object checks work",{
 # test match_all_calibrations when all(all_nodes < ape::Ntip(phy)) is not TRUE
 
 # test make_bold_otol_tree that does not get a phylo object
+
+# test all function check_conflicting_calibrations in use_calibrations_bladj.R
 
