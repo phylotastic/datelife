@@ -16,8 +16,8 @@
 #' In some cases, it returns edge lengths in relative time (with maximum tree depth = 1)
 #' instead of absolute time, as given by calibrations. In this case, the function returns NA.
 #' This is an issue from PATHd8.
-use_calibrations_pathd8 <- function(phy,
-                                    calibrations,
+use_calibrations_pathd8 <- function(phy = NULL,
+                                    calibrations = NULL,
                                     expand = 0.1,
                                     giveup = 100){
     message("... Using secondary calibrations with PATHd8")
@@ -39,9 +39,13 @@ use_calibrations_pathd8 <- function(phy,
 		    warning("'phy' is not a phylo object.")
         return(NA)
 	  }
-    if(is.null(phy$edge.length)){
+    if (is.null(phy$edge.length)) {
         warning("'phy' does not have branch lengths, consider using a dating method that does not require data, such as BLADJ or MrBayes.")
         return(NA)
+    }
+    if (any(is.na(phy$edge.length))) {
+      warning("'phy' has NA or NaN branch lengths, consider using a dating method that does not require data, such as BLADJ or MrBayes.")
+      return(NA)
     }
     # fix any negative branch lengths, otherwise pathd8 will silently not work:
     phy <- tree_fix_brlen(phy, fixing_criterion = "negative", fixing_method = 0, ultrametric = FALSE)

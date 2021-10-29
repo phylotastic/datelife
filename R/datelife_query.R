@@ -1,8 +1,7 @@
 #' Go from taxon names from a character vector, a phylo object or a newick character
 #' string to a \code{datelifeQuery} object
 #'
-#' @description It processes \code{phylo} and \code{newick character} string inputs
-#' with [input_process()].
+# #' @description
 #'
 #' @param input One of the following:
 #' \describe{
@@ -12,8 +11,9 @@
 #' }
 #' @inheritParams datelife_search
 #' @return A datelifeQuery object, a list of three elements: $phy a phylo object or NA, if input is not a tree; a cleaned vector of taxon names; and $ott_ids a numeric vector of OTT ids if use_tnrs = TRUE, or NULL if use_tnrs = FALSE.
-#' @details If \code{input} is a \code{multiPhylo} object, only the first \code{phylo}
-#' element will be used.
+#' @details It processes \code{phylo} and \code{newick character} string inputs
+#' with [input_process()]. If \code{input} is a \code{multiPhylo} object, only the first \code{phylo}
+#' element will be used. Equally, if the newich character string has mutiple trees, only the first one will be used.
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
 																use_tnrs = FALSE,
@@ -22,7 +22,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 																verbose = FALSE) {
 	# enhance: add mapped (has tnrs been performed?) and matched (was it matched successfully?) element to phylo object
 	# add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
-	if(suppressMessages(is_datelife_query(input))){
+	if (suppressMessages(is_datelife_query(input))) {
     message("'input' is a 'datelifeQuery' object.")
 		return(input)
 	}
@@ -32,14 +32,14 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 	# if input is anything else, it will return NA:
 	phy_new <- input_process(input = input)
 	use_tnrs_global <- FALSE
-	if(use_tnrs | any(get_spp_from_taxon)){
+	if (use_tnrs | any(get_spp_from_taxon)){
 		use_tnrs_global <- TRUE
 	}
-	if(inherits(phy_new, "phylo")) { # if input IS phylo
+	if (inherits(phy_new, "phylo")) { # if input IS phylo
 	  cleaned_names <- phy_new$tip.label
 		ott_ids <- NULL
 		# if we have ott_ids in phy, don't use_tnrs again:
-		if(inherits(phy_new$ott_ids, "numeric") | inherits(phy_new$ott_ids, "integer")){
+		if (inherits(phy_new$ott_ids, "numeric") | inherits(phy_new$ott_ids, "integer")) {
 			# if(!any(is.na(phy_new$ott_ids))){ #if there are no NAs
 			use_tnrs_global <- FALSE
 			ott_ids <- phy_new$ott_ids
@@ -55,15 +55,15 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 		cleaned_names <- stringr::str_trim(cleaned_names, side = "both")
 		ott_ids <- NULL
 	}
-  	if (use_tnrs_global){
+  	if (use_tnrs_global) {
 		# process names even if it's a "higher" taxon name:
 		cleaned_names_tnrs <- clean_tnrs(tnrs_match(input = cleaned_names),
 			remove_nonmatches = TRUE)
 		# recover original names of invalid taxa and unmatched:
 		ii <- !tolower(cleaned_names)%in%cleaned_names_tnrs$search_string
 		cleaned_names <- c(cleaned_names_tnrs$unique_name, cleaned_names[ii])
-		if(inherits(phy_new, "phylo")){
-			if(is.null(phy_new$ott_ids)){
+		if (inherits(phy_new, "phylo")) {
+			if (is.null(phy_new$ott_ids)) {
 				cleaned_names <- gsub(" ", "_", cleaned_names)
 				ii <- match(cleaned_names_tnrs$search_string, tolower(phy_new$tip.label))
 				# after some tests, decided to use rotl's method instead of taxize::gnr_resolve, and just output the original input and the actual query for users to check out.
@@ -76,12 +76,12 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 			}
 		}
   	}
-	if(any(get_spp_from_taxon)){
-		if(length(get_spp_from_taxon) == 1) {
+	if (any(get_spp_from_taxon)) {
+		if (length(get_spp_from_taxon) == 1) {
 				get_spp_from_taxon <- rep(get_spp_from_taxon, length(cleaned_names))
 			}
-		if(length(cleaned_names)!= length(get_spp_from_taxon)){
-			if(verbose) {
+		if (length(cleaned_names)!= length(get_spp_from_taxon)) {
+			if (verbose) {
 					message("Specify all taxa in input to get species names from.")
 				}
 			message("'input' and 'get_spp_from_taxon' arguments must have same length.")
@@ -104,12 +104,12 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 		ott_ids <- unlist(ott_ids)
 	}
 	cleaned_names <- gsub("_", " ", cleaned_names)
-    if(verbose) {
+    if (verbose) {
 		message("OK.")}
     cleaned_names.print <- paste(cleaned_names, collapse = " | ")
-    if(verbose) {
+    if (verbose) {
 		message("Working with the following taxa: ", "\n", "\t", cleaned_names.print)}
-	if(inherits(ott_ids, "numeric") | inherits(ott_ids, "integer")){
+	if (inherits(ott_ids, "numeric") | inherits(ott_ids, "integer")) {
 		names(ott_ids) <- cleaned_names	}
 	# enhance: add original_taxa vector (from get_spp_from_taxon) to output here:
 	datelife_query.return <- list(cleaned_names = cleaned_names, ott_ids = ott_ids,
@@ -145,18 +145,25 @@ input_process <- function(input){
  	input <- gsub("\\+"," ",input) # clean the string
   input <- stringr::str_trim(input, side = "both") # clean the string
   phy_out <- NA
-	if(any(grepl("\\(.*\\).*;", input))) { #our test for newick
+	if (any(grepl("\\(.*\\).*;", input))) { #our test for newick
 		input <- input[grepl("\\(.*\\).*;", input)] # leave only the elements that are newick strings
-		if(length(input)>1){
+		if (length(input)>1) {
 			message("'input' has several newick strings. Only the first one will be used.")
 		}
 		# phytools read.newick is not working
   	# phy_out <- ape::collapse.singles(phytools::read.newick(text = gsub(" ", "_", input[1])))
 		phy_out <- ape::collapse.singles(ape::read.tree(text = gsub(" ", "_", input[1])))
-
 		phy_out$ott_ids <- ott_ids
 		class(phy_out) <- input_class
 		message("'input' is a phylogeny and it is correcly formatted.")
+		# ape::read.tree creates NaN edge lengths for tree without branch lengths
+		# clean it up:
+    if (!is.null(phy_out$edge.length)) {
+			if (any(is.na(phy_out$edge.length))) {
+				warning("'input' has NA or NaN as branch lengths.")
+				# phy_out$edge.length <- NULL
+			}
+		}
 	} else {
 		# not a requirement for input to be a phylogeny at this point
 		message("'input' is not a phylogeny.") # so message instead of warning or stop
@@ -177,10 +184,9 @@ input_process <- function(input){
 #' @details If the object has the correct format but is not a \code{datelifeQuery}
 #' object, it will not be assigned the correct class.
 #' @export
-is_datelife_query <- function(input){
-	isdatelifequery <- TRUE
-	if(is.list(input) & "phy" %in% names(input) & "cleaned_names" %in% names(input)) {
-		if(inherits(input, "datelifeQuery")) {
+is_datelife_query <- function(input) {
+	if (is.list(input) & "phy" %in% names(input) & "cleaned_names" %in% names(input)) {
+		if (inherits(input, "datelifeQuery")) {
 			message("'input' is a 'datelifeQuery' object.")
 		} else {
 			message("'input' has the elements of a 'datelifeQuery' object but is of class '",
@@ -188,9 +194,10 @@ is_datelife_query <- function(input){
 							"'.")
 			# class(input) <- "datelifeQuery"
 		}
+		return(TRUE)
 	} else {
 		isdatelifequery <- FALSE
 		message("'input' is not a 'datelifeQuery' object.")
+		return(FALSE)
 	}
-	return(isdatelifequery)
 }

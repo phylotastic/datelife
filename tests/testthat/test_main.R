@@ -7,7 +7,7 @@ test_that("datelife_use workflows work", {
   # testing that phylo workflows work
   ds <- datelife_search(input = du, summary_format = "citations")
   expect_warning(match_all_calibrations(phy = du, calibrations = NULL))
-  du0 <- du
+  du00 <- du0 <- du
   du0$edge.length <- NULL
   expect_warning(extract_calibrations_phylo(input = du0))
   expect_error(extract_calibrations_phylo(input = attributes(du)$datelife_query))
@@ -19,6 +19,11 @@ test_that("datelife_use workflows work", {
   make_datelife_query(input = attributes(du)$datelife_query)
   # test that pathd8 workflow works:
   uc <- use_calibrations(dating_method = "pathd8", phy = du, calibrations = attributes(du)$datelife_calibrations)
+  # test that absence of phylogeny or no branch lengths returns warning
+  expect_warning(use_calibrations_pathd8(phy = NA))
+  expect_warning(use_calibrations_pathd8(phy = du0, calibrations = NULL))
+  du00$edge.length <- c(NaN, NaN, NaN, NaN)
+  expect_warning(use_calibrations_pathd8(phy = du00))
   # test get calibrations from a vector (calls datelife_search and extract_calibrations_phylo)
   gc <- get_calibrations_vector(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
   # testing that you can get a datelife result from a tree:
@@ -26,7 +31,7 @@ test_that("datelife_use workflows work", {
   is_datelife_result_empty(dr)
   extract_calibrations_dateliferesult(input = dr)
   # test an empty datelifeResult object
-  
+  input_process(input = du0)
 })
 
 test_that("input processing a newick string and multiPhylo workflows work", {

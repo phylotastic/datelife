@@ -27,10 +27,11 @@ object, OR as a newick character string.}
 A datelifeQuery object, a list of three elements: $phy a phylo object or NA, if input is not a tree; a cleaned vector of taxon names; and $ott_ids a numeric vector of OTT ids if use_tnrs = TRUE, or NULL if use_tnrs = FALSE.
 }
 \description{
-It processes \code{phylo} and \code{newick character} string inputs
-with \code{\link[=input_process]{input_process()}}.
+Go from taxon names from a character vector, a phylo object or a newick character
+string to a \code{datelifeQuery} object
 }
 \details{
-If \code{input} is a \code{multiPhylo} object, only the first \code{phylo}
-element will be used.
+It processes \code{phylo} and \code{newick character} string inputs
+with \code{\link[=input_process]{input_process()}}. If \code{input} is a \code{multiPhylo} object, only the first \code{phylo}
+element will be used. Equally, if the newich character string has mutiple trees, only the first one will be used.
 }
