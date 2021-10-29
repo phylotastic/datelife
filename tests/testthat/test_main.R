@@ -2,25 +2,27 @@ test_that("datelife_use workflows work", {
   du <- datelife_use(input = "Rhea americana, Struthio camelus, Gallus gallus",
                each = FALSE,
                dating_method = "bladj")
-  class(du)
-  attributes(du)
-  expect_warning(datelife_use_datelifequery())
+  expect_true("phylo" %in% class(du))
+  expect_error(datelife_use_datelifequery())
   # testing that phylo workflows work
-  tree <- du$phy
-  datelife_search(input = tree, summary_format = "citations")
-  expect_warning(match_all_calibrations(phy = tree, calibrations = NULL))
-  tree$edge.length <- NULL
-  expect_warning(extract_calibrations_phylo(input = tree))
+  ds <- datelife_search(input = du, summary_format = "citations")
+  expect_warning(match_all_calibrations(phy = du, calibrations = NULL))
+  du0 <- du
+  du0$edge.length <- NULL
+  expect_warning(extract_calibrations_phylo(input = du0))
+  expect_error(extract_calibrations_phylo(input = attributes(du)$datelife_query))
   # test a datelifeQuery input with NA as phy:
-  expect_warning(datelife_use_datelifequery(input = attributes(tree)$query))
-  # input is a datelifeQuery:
-  make_datelife_query(input = attributes(du)$datelifeQuery)
+  dq <- attributes(du)$datelife_query
+  dq$phy <- NA
+  expect_warning(datelife_use_datelifequery(input = dq))
+  # when input is a datelifeQuery it returns it:
+  make_datelife_query(input = attributes(du)$datelife_query)
   # test that pathd8 workflow works:
-  use_calibrations(dating_method = "pathd8", phy = du$phy, calibrations = du$calibrations.df)
+  uc <- use_calibrations(dating_method = "pathd8", phy = du, calibrations = attributes(du)$datelife_calibrations)
   # test get calibrations from a vector (calls datelife_search and extract_calibrations_phylo)
   gc <- get_calibrations_vector(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"))
-  # testing that you can get a datelife result from a tree work:
-  dr <- get_datelife_result(input = du$phy)
+  # testing that you can get a datelife result from a tree:
+  dr <- get_datelife_result(input = du)
   is_datelife_result_empty(dr)
   extract_calibrations_dateliferesult(input = dr)
   # test an empty datelifeResult object

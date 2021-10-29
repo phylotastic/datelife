@@ -17,6 +17,7 @@
 #' @export
 extract_calibrations_phylo <- function(input = NULL,
 																       each = FALSE) {
+  chronograms <- NULL
 	if (inherits(input, "multiPhylo")) {
 		chronograms <- input
 		xx <- sapply(chronograms, "[", "edge.length")
@@ -41,7 +42,9 @@ extract_calibrations_phylo <- function(input = NULL,
 	  }
 		chronograms <- list(input)
 	}
-
+  if (is.null(chronograms)) {
+		stop("'input' must be a 'phylo' or 'multiPhylo' object with branch length sproportional to time.")
+	}
 	if (each) {
 	  calibrations <- vector(mode = "list")
 	} else {
