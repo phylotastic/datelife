@@ -8,51 +8,39 @@
 get_taxon_summary <- function(datelife_result = NULL,
 															datelife_query = NULL){
 
-	# dq <- FALSE
-	# if(is_datelife_query(datelife_query)){
-	# 	dq <- TRUE
-	# }
-	# if(is.null(attributes(datelife_result)$query)){
-	# 	dq <-
-	# }
-
 	# datelife_result <- check_datelife_result(datelife_result)
-	if(is.null(datelife_result) | !inherits(datelife_result, "datelifeResult")){
+	if (is.null(datelife_result) | !inherits(datelife_result, "datelifeResult")) {
 		warning("'datelife_result' argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
 		return(NA)
 	}
-	# dq <- FALSE
-	# if(!is.null(datelife_query) | is.null(attributes(datelife_result)$query)){
-	# }
 
-	if(suppressMessages(is_datelife_query(datelife_query))){
-		if(is.null(attributes(datelife_result)$query)){
-			input.in <- input$cleaned_names
+	if (suppressMessages(is_datelife_query(datelife_query))) {
+		if (is.null(attributes(datelife_result)$datelife_query)) {
+			cleaned_names <- datelife_query$cleaned_names
 		} else {
-			input <- attributes(datelife_result)$query
-			input.in <- attributes(datelife_result)$query$cleaned_names
+			input <- attributes(datelife_result)$datelife_query
+			cleaned_names <- attributes(datelife_result)$datelife_query$cleaned_names
 		}
 	} else {
 		message("'datelife_query' argument was not provided.")
 		message("Taxa absent in all chronograms are not reported.")
-		input <- NULL
-		input.in <- unique(rapply(datelife_result, rownames))
+		cleaned_names <- unique(rapply(datelife_result, rownames))
 	}
 	# results.index <- datelife_result_study_index(datelife_result, cache)
 	return.object <- NA
 	input.match <- unique(rapply(datelife_result, rownames))
 	# if(any(!input.match %in% input)) warning("input does not contain all or any taxa from filteredresults object")
-	absent.input <- input.in[!input.in %in% input.match]
-	if(length(absent.input) <= 0) {
-		if(is.null(input)){
-			absent.input <- NA # we cannot know if there are complete absent taxa because original query was not provided
+	absent.input <- cleaned_names[!cleaned_names %in% input.match]
+	if (length(absent.input) <= 0) {
+		if (is.null(datelife_query)) {
+			absent.input <- NA # we cannot know if there are any taxa that are completely absent, because original query was not provided
 		} else {
 			absent.input <- "None" # we know there are no absent taxa
 		}
 	}
 	taxon_list <- vector(mode = "list")
 	# tax <- unique(rapply(datelife_result, rownames)) #rownames(datelife_result[[1]])
-	for(result.index in sequence(length(datelife_result))){
+	for (result.index in sequence(length(datelife_result))) {
 		n <- rownames(datelife_result[[result.index]])
 		m <- match(input.match,n)
 		taxon_list[[result.index]] <- n[m]
@@ -67,7 +55,7 @@ get_taxon_summary <- function(datelife_result = NULL,
 	# tax <- unique(rapply(datelife_result, rownames)) #rownames(datelife_result[[1]])
 	x <- rapply(datelife_result, rownames)
 	prop <- c()
-	for (taxon in input.match){
+	for (taxon in input.match) {
 		prop <- c(prop, paste0(length(which(taxon == x)), "/", length(datelife_result)))
 	}
 	taxon_summary <- data.frame(taxon = input.match, chronograms = prop)

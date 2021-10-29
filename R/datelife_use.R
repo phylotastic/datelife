@@ -31,7 +31,7 @@ datelife_use <- function(input = NULL,
 
 
     datelife_query <- input
-    if(suppressMessages(!is_datelife_query(datelife_query))){
+    if(suppressMessages(!is_datelife_query(input))){
       # make_datelife_query also removes singleton nodes in phy
       # should we add extra arguments for make_datelife_query function
       # with hasArg (phytools method)???
@@ -39,18 +39,20 @@ datelife_use <- function(input = NULL,
     }
     phy <- datelife_query$phy
 	  # if datelife_query$phy is not a tree, get one with bold or otol:
-	  if(!inherits(phy, "phylo")){
+	  if(!inherits(datelife_query$phy, "phylo")){
       # make_bold_otol_tree can take a datelifeQuery object, otherwise, it will make one again!
 	  	phy <- make_bold_otol_tree(datelife_query,
                                  chronogram = FALSE,
                                  verbose = FALSE)
 	  }
+    # if(!inherits(phy, "phylo")){
+    #   message("BOLD tree reconstruction failed for the given set of taxon names.")
+    #   phy <- get_dated_otol_induced_subtree(ott_ids = datelife_query$ott_ids)
+    #   if (!inherits(phy, "phylo")) {
+    #     message("Getting a dated subtree failed for the given set of taxon names.")}
+    # } # unnecessary bc get_dated_otol_induced_subtree does not work
+    # also, make_bold_otol_tree will at least return the OpenTree synthetic tree with no bl
     if(!inherits(phy, "phylo")){
-      message("BOLD tree reconstruction failed for the given set of taxon names.")
-      phy <- get_dated_otol_induced_subtree(ott_ids = datelife_query$ott_ids)
-    }
-    if(!inherits(phy, "phylo")){
-      message("Getting a dated subtree failed for the given set of taxon names.")
       warning("We could not retrieve a tree topology for the given set of taxon names. \
               Please provide a tree topology as 'input'.")
       return(NA)
@@ -82,8 +84,7 @@ datelife_use_datelifequery <- function(input = NULL,
                                        each = FALSE) {
 #
     if (suppressMessages(!is_datelife_query(input))) {
-      warning("'input' is not a 'datelifeQuery' object.")
-      return(NA)
+      stop("'input' is not a 'datelifeQuery' object.")
     }
     if (!inherits(input$phy, "phylo")) {
       message("A tree topology is needed for a dating analysis.")
