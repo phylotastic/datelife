@@ -49,7 +49,7 @@ implemented with _geiger_ ([Harmon et al. 2008](http://bioinformatics.oxfordjour
 - [Installation](#installation)
 - [Quick intro](#quick-intro)
 - [Citation](#citation)
-- [Feedback](#feedback)
+- [Feedback and info for developers](#feedback)
 - [License](#license)
 
 
@@ -86,7 +86,7 @@ citation("datelife")
 toBibtex(citation("datelife"))
 ```
 
-## Feedback and Dev
+## Feedback and Information for Developers
 
 All comments, ideas and questions about `datelife` are encouraged. You are welcome
 to post an issue [here](https://github.com/phylotastic/datelife/issues/new), or
@@ -95,11 +95,11 @@ want to contribute with code directly.
 
 Package and function documentation was generated with [roxygen2](https://CRAN.R-project.org/package=roxygen2):
 
-```{r}
+```{r eval = FALSE}
 roxygen2::roxygenise()
 ```
 
-We used [lintr]() to check for coding style:
+We used the package [lintr]() to check for coding style:
 
 ```{r eval = FALSE}
 lintr::lint_package()
@@ -107,17 +107,43 @@ lintr::lint_package()
 
 Code coverage was tested with the package [covr](https://CRAN.R-project.org/package=covr):
 
-```{r}
+```{r eval = FALSE}
 cov <- covr::package_coverage()
 
 usethis::use_data(cov, overwrite = TRUE)
+```
 
-# see n interactive report of testing coverage:
+You can see an interactive report of testing coverage:
+
+```{r eval = FALSE}
 covr::report(cov)
+```
 
-# find code with zero coverage:
+And, find code with zero coverage:
+
+```{r eval = FALSE}
 covr::zero_coverage(cov)
 ```
+
+To create the CRAN release, first run a `R CMD check` from your terminal.
+For that, change directories to the one above your package:
+
+```{bash, eval = FALSE}
+cd ../
+```
+
+Generate a tar ball for your package by running `R CMD build`:
+
+```{bash, eval = FALSE}
+R CMD build datelife
+```
+
+Finally, run `R CMD check` on the tar ball that you just generated:
+
+```{bash, eval = FALSE}
+R CMD check datelife_0.5.0.tar.gz
+```
+
 
 ## License
 

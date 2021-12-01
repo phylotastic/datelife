@@ -44,7 +44,7 @@ still under rapid development.
   - [Installation](#installation)
   - [Quick intro](#quick-intro)
   - [Citation](#citation)
-  - [Feedback](#feedback)
+  - [Feedback and info for developers](#feedback)
   - [License](#license)
 
 ## Installation
@@ -77,7 +77,7 @@ the accompanying paper:
 O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K,
 Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2021).
 <em>datelife: Go from a List of Taxa or a Tree to a Chronogram using
-Open Scientific Data</em>. R package version 0.3.4.
+Open Scientific Data</em>. R package version 0.5.0.
 
 </p>
 
@@ -97,17 +97,65 @@ citation("datelife")
 toBibtex(citation("datelife"))
 ```
 
-## Feedback
+## Feedback and Information for Developers
 
 All comments, ideas and questions about `datelife` are encouraged. You
 are welcome to post an issue
 [here](https://github.com/phylotastic/datelife/issues/new), or to make a
 [pull request](https://github.com/phylotastic/datelife/pulls) if you
-want to contribute with code directly. We use `lintr` to check for
-coding style:
+want to contribute with code directly.
+
+Package and function documentation was generated with
+[roxygen2](https://CRAN.R-project.org/package=roxygen2):
+
+``` r
+roxygen2::roxygenise()
+```
+
+We used the package [lintr]() to check for coding style:
 
 ``` r
 lintr::lint_package()
+```
+
+Code coverage was tested with the package
+[covr](https://CRAN.R-project.org/package=covr):
+
+``` r
+cov <- covr::package_coverage()
+
+usethis::use_data(cov, overwrite = TRUE)
+```
+
+You can see an interactive report of testing coverage:
+
+``` r
+covr::report(cov)
+```
+
+And, find code with zero coverage:
+
+``` r
+covr::zero_coverage(cov)
+```
+
+To create the CRAN release, first run a `R CMD check` from your
+terminal. For that, change directories to the one above your package:
+
+``` bash
+cd ../
+```
+
+Generate a tar ball for your package by running `R CMD build`:
+
+``` bash
+R CMD build datelife
+```
+
+Finally, run `R CMD check` on the tar ball that you just generated:
+
+``` bash
+R CMD check datelife_0.5.0.tar.gz
 ```
 
 ## License

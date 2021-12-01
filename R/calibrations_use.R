@@ -4,7 +4,6 @@
 #' trees with branch lengths proportional to time) by dating a tree topology given
 #' in \code{phy}, and secondary calibrations given in \code{calibrations},
 #' using bladj or PATHd8.
-#'
 #' @inheritParams use_calibrations_bladj
 #' @param calibrations An object of class \code{datelifeCalibrations},
 #' typically an output of [get_all_calibrations()].
@@ -45,9 +44,8 @@ use_all_calibrations <- function(phy = NULL,
 #' @description \code{use_calibrations_each} wraps \code{use_calibrations} to take each set of
 #' given calibrations and use it independently as constraints for BLADJ or PATHd8
 #' to date a given tree topology.
-#'
 #' @inheritParams use_all_calibrations
-#' @param ... Arguments to pass to use_calibrations
+#' @param ... Arguments to pass to \code{use_calibrations}.
 #' @return A \code{multiPhylo} object of trees with branch lengths proportional
 #' to time.
 #' @inherit use_calibrations details
@@ -94,8 +92,7 @@ use_calibrations_each <- function(phy = NULL,
 #' @details
 #' \code{calibrations} and \code{dating method} are stored as attributes.
 #' They can be accessed with \code{attributes(return)$datelife_calibrations} and
-#' \code{attributes(return)$dating_method}, respectively.
-#' \n
+#' \code{attributes(return)$dating_method}, respectively. <br>
 #' If \code{input} tree does not have branch lengths, \code{dating_method} is
 #' ignored and the function will use secondary calibrations to date the
 #' \code{input} tree with [BLADJ](http://phylodiversity.net/bladj/),

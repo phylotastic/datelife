@@ -3,7 +3,7 @@ This is a resubmission. In this version I have:
 
 * Fixed packages not on CRAN.
 
-* Removed system requirement of mafft software, it was replaced with an R function
+* Removed system requirement of mafft software, it was replaced with an R function.
 
 ## Test environments
 * local OS X install, R 3.6.0

@@ -10,7 +10,8 @@ tree_get_singleton_outgroup(tree = NULL)
 \item{tree}{A tree either as a newick character string or as a phylo object}
 }
 \value{
-A character vector with the name of the single lineage outgroup. Returns NA if there is none.
+A character vector with the name of the single lineage outgroup.
+Returns NA if there is none.
 }
 \description{
 Identifies the presence of a single lineage outgroup in a phylogeny

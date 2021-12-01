@@ -13,7 +13,7 @@ use_calibrations_each(phy = NULL, calibrations = NULL, ...)
 \item{calibrations}{An object of class \code{datelifeCalibrations},
 typically an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 
-\item{...}{Arguments to pass to use_calibrations}
+\item{...}{Arguments to pass to \code{use_calibrations}.}
 }
 \value{
 A \code{multiPhylo} object of trees with branch lengths proportional
@@ -27,8 +27,7 @@ to date a given tree topology.
 \details{
 \code{calibrations} and \code{dating method} are stored as attributes.
 They can be accessed with \code{attributes(return)$datelife_calibrations} and
-\code{attributes(return)$dating_method}, respectively.
-\n
+\code{attributes(return)$dating_method}, respectively. <br>
 If \code{input} tree does not have branch lengths, \code{dating_method} is
 ignored and the function will use secondary calibrations to date the
 \code{input} tree with \href{http://phylodiversity.net/bladj/}{BLADJ},

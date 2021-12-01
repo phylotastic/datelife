@@ -1,9 +1,9 @@
 Package: datelife
-Title: Go from a List of Taxa or a Tree to a Chronogram using Open Scientific Data
+Title: Go from a List of Taxa or a Tree to a Chronogram using Open Scientific Data on Time of Lineage Divergence
 Version: 0.5.0
 Date: 2021-09-25
-Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="bomeara@gmail.com"),
-  person("Luna L.", "Sanchez Reyes", role=c("aut")),
+Authors@R: c(
+  person("Brian", "O'Meara", email = "bomeara@gmail.com", role=c("aut")),
   person("Jonathan", "Eastman", role=c("aut")),
   person("Tracy", "Heath", role=c("aut")),
   person("April", "Wright", role=c("aut")),
@@ -13,10 +13,13 @@ Authors@R: c(person("Brian", "O'Meara", role=c("aut", "cre"), email="bomeara@gma
   person("Luke", "Harmon", role=c("aut")),
   person("Joseph", "Brown", role=c("aut")),
   person("Matt", "Pennell", role=c("aut")),
-  person("Mike", "Alfaro", role=c("aut")))
-Maintainer: "Luna L. Sanchez Reyes" <sanchez.reyes.luna@gmail.com>
-Description: Methods and workflows to date phylogenetic trees using open scientific data.
-    Underlying code of the DateLife web services at www.datelife.org.
+  person("Mike", "Alfaro", role=c("aut")),
+  person("Luna L.", "Sanchez Reyes", email = "sanchez.reyes.luna@gmail.com", role=c("aut", "cre")),
+  person("Emily Jane", "McTavish", role=c("ctb")))
+Description: Methods and workflows to get dated phylogenetic trees, aka chronograms,
+    using open scientific data on time of lineage divergence.
+    This package constitutes the main underlying code of the DateLife web services
+    at www.datelife.org.
 Depends:
     R (>= 3.6.0)
 biocViews:
@@ -60,7 +63,7 @@ SystemRequirements: PATHd8
 URL: https://github.com/phylotastic/datelife
 License: GPL (>=2)
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 VignetteBuilder: knitr

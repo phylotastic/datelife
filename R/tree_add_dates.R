@@ -74,20 +74,16 @@ adding_criterion = "random", mrbayes_output_file = "mrbayes_tree_add_dates.nexus
 #' Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile inside tree_add_dates functions.
 #' @param  missing_taxa A tree, a data frame or a vector enlisting all missing taxa you want to include.
 #' \describe{
-#'
-#' 	\item{A tree.}{Either as a phylo object or as a newick character string.
+#' 	\item{A tree}{Either as a phylo object or as a newick character string.
 #'		It contains all taxa that you want at the end, both missing and non missing.
-#'		This tree will be used as a hard constraint.
-#'	}
-#' 	\item{A data frame.}{It contains two columns.
-#'		taxon. A character vector of missing taxon names.
-#'		clade. A character or numeric vector of nodes from a constraint tree to which each taxon will be assigned.
-#'	}
-#' 	\item{A character vector.}{It contains the names of the missing taxa.
-#'		They will be added at random to the constraint tree.
-#'	}
+#'		This tree will be used as a hard constraint.}
+#' 	\item{A data frame}{It contains two columns named "taxon" and "clade".
+#'		The first one contains a character vector of missing taxon names.
+#'		The second one contains a character or numeric vector of nodes from a
+#'    constraint tree to which each taxon will be assigned.}
+#' 	\item{A character vector}{It contains the names of the missing taxa.
+#'		They will be added at random to the constraint tree.}
 #' }
-#'
 #' @inheritParams tree_add_dates
 #' @return A phylo object, a newick character string or a dataframe with taxonomic assignations
 #' @export
