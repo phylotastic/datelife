@@ -16,3 +16,4 @@ codecov.yml
 ^Meta$
 ^\.travis\.yml$
 ^CRAN-RELEASE$
+R/.lintr

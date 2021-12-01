@@ -39,7 +39,7 @@ branch lengths.
 \details{
 \code{calibrations} and \code{dating method} are stored as attributes.
 They can be accessed with \code{attributes(return)$datelife_calibrations} and
-\code{attributes(return)$dating_method}, respectively. <br>
+\code{attributes(return)$dating_method}, respectively. \cr
 If \code{input} tree does not have branch lengths, \code{dating_method} is
 ignored and the function will use secondary calibrations to date the
 \code{input} tree with \href{http://phylodiversity.net/bladj/}{BLADJ},
