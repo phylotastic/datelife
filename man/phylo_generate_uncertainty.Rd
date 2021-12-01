@@ -67,7 +67,7 @@ length(unc)
 # ltt plot:
 max_age <- max(sapply(unc, ape::branching.times))
 ape::ltt.plot(phy = unc[[1]], xlim = c(-max_age, 0), col = "#cce5ff50")
-for (i in 2:100){
+for (i in 2:100) {
   ape::ltt.lines(phy = unc[[i]], col = "#cce5ff50")
 }
 ape::ltt.lines(felid_sdm$phy, col = "red")

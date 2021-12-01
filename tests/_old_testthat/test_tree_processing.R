@@ -1,4 +1,4 @@
-test_that("tree_add_nodelabels works",{
+test_that("tree_add_nodelabels works", {
   expect_error(tree_add_nodelabels())
   expect_true(is.null(felid_gdr_phylo_all$phylo_all[[1]]$node.label))
   x <- tree_add_nodelabels(felid_gdr_phylo_all$phylo_all[[1]], node_index = "node_number")

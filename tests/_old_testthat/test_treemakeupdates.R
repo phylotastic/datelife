@@ -1,33 +1,33 @@
 test_that("tree_fix_brlen works", {
-    x1 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = 0)
-    expect_true(ape::is.ultrametric(x1, option = 2))
-    skip_on_cran()
-    skip_on_travis()
-    skip_on_os("linux") #b/c no mrbayes on travis linux
-    #install.packages("phylocomr", repos = "https://cloud.r-project.org")
-    #devtools::install_github("ropensci/phylocomr")
-    x2 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
-    expect_true(ape::is.ultrametric(x2, option = 2))
-    # mrbayes fix brlen test. It takes a while:
-    wwdd <- getwd()
-    setwd(tempdir())
-    x3 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "mrbayes")
-    setwd(wwdd)
-    expect_true(ape::is.ultrametric(x3, option = 2))
-    # prefer option = 2, using the variance to test ultrametricity, cf. E, Paradis'
-    # comments on this post http://blog.phytools.org/2017/03/forceultrametric-method-for-ultrametric.html
-    # fixing_criterion = "negative", fixing_method = 0
-    x4 <- summarize_datelife_result(datelife_result = subset2_search$result, summary_format = "phylo_sdm")
-    skip("we need to debug tree_fix_brlen for this example")
-    expect_true(ape::is.ultrametric(x4, option = 2))
+  x1 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = 0)
+  expect_true(ape::is.ultrametric(x1, option = 2))
+  skip_on_cran()
+  skip_on_travis()
+  skip_on_os("linux") # b/c no mrbayes on travis linux
+  # install.packages("phylocomr", repos = "https://cloud.r-project.org")
+  # devtools::install_github("ropensci/phylocomr")
+  x2 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "bladj")
+  expect_true(ape::is.ultrametric(x2, option = 2))
+  # mrbayes fix brlen test. It takes a while:
+  wwdd <- getwd()
+  setwd(tempdir())
+  x3 <- tree_fix_brlen(tree = plant_bold_otol_tree, fixing_criterion = "negative", fixing_method = "mrbayes")
+  setwd(wwdd)
+  expect_true(ape::is.ultrametric(x3, option = 2))
+  # prefer option = 2, using the variance to test ultrametricity, cf. E, Paradis'
+  # comments on this post http://blog.phytools.org/2017/03/forceultrametric-method-for-ultrametric.html
+  # fixing_criterion = "negative", fixing_method = 0
+  x4 <- summarize_datelife_result(datelife_result = subset2_search$result, summary_format = "phylo_sdm")
+  skip("we need to debug tree_fix_brlen for this example")
+  expect_true(ape::is.ultrametric(x4, option = 2))
 })
 
 
 test_that("missing_taxa_check works", {
   mt1 <- missing_taxa_check(missing_taxa = felid_gdr_phylo_all$absent_taxa, dated_tree = felid_sdm$phy)
-  mt2 <- missing_taxa_check(missing_taxa = NA, dated_tree = felid_sdm$phy)  # returns "NA"
-  mt3 <- missing_taxa_check(missing_taxa = FALSE, dated_tree = felid_sdm$phy)  # returns "FALSE"
-  mt4 <- missing_taxa_check(missing_taxa = NULL, dated_tree = felid_sdm$phy)  # does not return error, bc missing_taxa can be NULL
+  mt2 <- missing_taxa_check(missing_taxa = NA, dated_tree = felid_sdm$phy) # returns "NA"
+  mt3 <- missing_taxa_check(missing_taxa = FALSE, dated_tree = felid_sdm$phy) # returns "FALSE"
+  mt4 <- missing_taxa_check(missing_taxa = NULL, dated_tree = felid_sdm$phy) # does not return error, bc missing_taxa can be NULL
   expect_s3_class(mt1, "data.frame") # output is data.frame
   expect_equal(mt2, "NA") # output is a character vector
   expect_equal(mt3, "FALSE") # output is a character vector
@@ -99,13 +99,13 @@ test_that("tree_add_outgroup and tree_get_singleton_outgroup work", {
 })
 
 test_that("tree_add_dates works", {
-    skip_on_cran()
-    skip_on_travis()
-    skip_on_os("linux") #b/c no mrbayes on travis linux
-    y <- tree_add_dates(dated_tree = felid_sdm$phy, missing_taxa = letters[1:5])
-    # missing_taxa <- felid_sdm$phy
-    # dated_tree <- ape::drop.tip(felid_sdm$phy, c(1,5,9,10,20))
-    # missing_taxa$edge.length <- NULL
-    # constraint_tree <- suppressWarnings(geiger::congruify.phylo(reference = phylo_tiplabel_space_to_underscore(dated_tree), target = phylo_tiplabel_space_to_underscore(missing_taxa), scale = NA))
-    # names(constraint_tree$calibrations)
+  skip_on_cran()
+  skip_on_travis()
+  skip_on_os("linux") # b/c no mrbayes on travis linux
+  y <- tree_add_dates(dated_tree = felid_sdm$phy, missing_taxa = letters[1:5])
+  # missing_taxa <- felid_sdm$phy
+  # dated_tree <- ape::drop.tip(felid_sdm$phy, c(1,5,9,10,20))
+  # missing_taxa$edge.length <- NULL
+  # constraint_tree <- suppressWarnings(geiger::congruify.phylo(reference = phylo_tiplabel_space_to_underscore(dated_tree), target = phylo_tiplabel_space_to_underscore(missing_taxa), scale = NA))
+  # names(constraint_tree$calibrations)
 })

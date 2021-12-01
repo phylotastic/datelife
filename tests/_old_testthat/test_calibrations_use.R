@@ -1,4 +1,4 @@
-test_that("use_calibrations errors when necessary",{
+test_that("use_calibrations errors when necessary", {
   # error when phy is not provided by user:
   expect_error(use_calibrations())
   phy <- "((Pterocnemia_pennata,Rhea_americana),Struthio_camelus);"
@@ -10,5 +10,5 @@ test_that("use_calibrations errors when necessary",{
 })
 
 # test_that("use_calibrations works",{
-# 
+#
 # })

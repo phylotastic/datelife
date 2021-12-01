@@ -16,72 +16,77 @@
 #' the source data from which the calibrations were extracted.
 #' @export
 extract_calibrations_phylo <- function(input = NULL,
-																       each = FALSE) {
+                                       each = FALSE) {
   chronograms <- NULL
-	if (inherits(input, "multiPhylo")) {
-		chronograms <- input
-		xx <- sapply(chronograms, "[", "edge.length")
-		xx <- unname(sapply(xx, is.null))
-	  if (all(xx)) {
-	    warning("trees in 'multiPhylo' input have no branch lengths. \n There are no calibrations to return!")
-	    return(NA)
-	  }
-		if (any(xx)) {
-	    ii <- which(xx)
-	    warning("Some trees in 'multiPhylo' input have no branch lengths.")
-	    message("Dropping tree(s) ",
-	            paste(ii, collapse = " - "),
-	            " out of the analysis.")
-	    chronograms <- chronograms[which(!xx)]
-	  }
-	}
-	if (inherits(input, "phylo")) {
-	  if (is.null(input$edge.length)) {
-			warning("'input' tree has no branch lengths. \n There are no calibrations to return!")
-	    return(NA)
-	  }
-		chronograms <- list(input)
-	}
+  if (inherits(input, "multiPhylo")) {
+    chronograms <- input
+    xx <- sapply(chronograms, "[", "edge.length")
+    xx <- unname(sapply(xx, is.null))
+    if (all(xx)) {
+      warning("trees in 'multiPhylo' input have no branch lengths. \n There are no calibrations to return!")
+      return(NA)
+    }
+    if (any(xx)) {
+      ii <- which(xx)
+      warning("Some trees in 'multiPhylo' input have no branch lengths.")
+      message(
+        "Dropping tree(s) ",
+        paste(ii, collapse = " - "),
+        " out of the analysis."
+      )
+      chronograms <- chronograms[which(!xx)]
+    }
+  }
+  if (inherits(input, "phylo")) {
+    if (is.null(input$edge.length)) {
+      warning("'input' tree has no branch lengths. \n There are no calibrations to return!")
+      return(NA)
+    }
+    chronograms <- list(input)
+  }
   if (is.null(chronograms)) {
-		stop("'input' must be a 'phylo' or 'multiPhylo' object with branch length sproportional to time.")
-	}
-	if (each) {
-	  calibrations <- vector(mode = "list")
-	} else {
-	  # we cannot set an empty data frame because nrow depends on the number of nodes available on each tree
-		calibrations <- data.frame()
-	}
-	for (i in seq(length(chronograms))) {
-		chronograms[[i]]$tip.label <- gsub(" ", "_", chronograms[[i]]$tip.label) # the battle will never end!
-		local_df <- suppressWarnings(
-			          geiger::congruify.phylo(reference = chronograms[[i]],
-				                                target = chronograms[[i]],
-															          scale = NA,
-															          ncores = 1))$calibrations
-		# suppressedWarnings bc of warning message when running
-		# geiger::congruify.phylo(reference = chronograms[[i]], target = chronograms[[i]], scale = NA)
-		# 		Warning message:
-		# In if (class(stock) == "phylo") { :
-		# the condition has length > 1 and only the first element will be used
-		local_df$reference <- names(chronograms)[i]
-		if (each) {
-			calibrations <- c(calibrations, list(local_df))
-			} else {
-				if (i == 1) {
-					calibrations <- local_df
-				} else {
-					calibrations <- rbind(calibrations, local_df)
-				}
-		 }
-	}
-	if (each) {
-		names(calibrations) <- names(chronograms)
-	}
-	attr(calibrations, "chronograms") <- chronograms
-	# TODO check that class data frame is also preserved. Might wanna do:
-	class(calibrations) <- c(class(calibrations), "calibrations")
-	# instead of using structure()
-	return(calibrations)
+    stop("'input' must be a 'phylo' or 'multiPhylo' object with branch length sproportional to time.")
+  }
+  if (each) {
+    calibrations <- vector(mode = "list")
+  } else {
+    # we cannot set an empty data frame because nrow depends on the number of nodes available on each tree
+    calibrations <- data.frame()
+  }
+  for (i in seq(length(chronograms))) {
+    chronograms[[i]]$tip.label <- gsub(" ", "_", chronograms[[i]]$tip.label) # the battle will never end!
+    local_df <- suppressWarnings(
+      geiger::congruify.phylo(
+        reference = chronograms[[i]],
+        target = chronograms[[i]],
+        scale = NA,
+        ncores = 1
+      )
+    )$calibrations
+    # suppressedWarnings bc of warning message when running
+    # geiger::congruify.phylo(reference = chronograms[[i]], target = chronograms[[i]], scale = NA)
+    # 		Warning message:
+    # In if (class(stock) == "phylo") { :
+    # the condition has length > 1 and only the first element will be used
+    local_df$reference <- names(chronograms)[i]
+    if (each) {
+      calibrations <- c(calibrations, list(local_df))
+    } else {
+      if (i == 1) {
+        calibrations <- local_df
+      } else {
+        calibrations <- rbind(calibrations, local_df)
+      }
+    }
+  }
+  if (each) {
+    names(calibrations) <- names(chronograms)
+  }
+  attr(calibrations, "chronograms") <- chronograms
+  # TODO check that class data frame is also preserved. Might wanna do:
+  class(calibrations) <- c(class(calibrations), "calibrations")
+  # instead of using structure()
+  return(calibrations)
 }
 
 #' Extract secondary calibrations from a given \code{datelifeResult} object
@@ -100,15 +105,19 @@ extract_calibrations_phylo <- function(input = NULL,
 #' @inherit extract_calibrations_phylo return
 #' @export
 extract_calibrations_dateliferesult <- function(input = NULL,
-																                each = FALSE) {
-
+                                                each = FALSE) {
   phyloall <- suppressMessages(
-              summarize_datelife_result(datelife_result = input,
-                                        summary_format = "phylo_all"))
-	res <- extract_calibrations_phylo(input = phyloall,
-																		each = each)
-	attr(res, "datelife_result") <- input
-	class(res) <- c("data.frame", "datelifeCalibrations")
+    summarize_datelife_result(
+      datelife_result = input,
+      summary_format = "phylo_all"
+    )
+  )
+  res <- extract_calibrations_phylo(
+    input = phyloall,
+    each = each
+  )
+  attr(res, "datelife_result") <- input
+  class(res) <- c("data.frame", "datelifeCalibrations")
   return(res)
 }
 
@@ -132,17 +141,21 @@ extract_calibrations_dateliferesult <- function(input = NULL,
 #' @inherit extract_calibrations_phylo return
 #' @export
 get_calibrations_vector <- function(input = NULL,
-																    each = FALSE) {
+                                    each = FALSE) {
   # TODO: is_datelife_search_input function or any type of input format checking
   # function to trap the case were input is a list
-	phyloall <- datelife_search(input = input,
-															summary_format = "phylo_all")
+  phyloall <- datelife_search(
+    input = input,
+    summary_format = "phylo_all"
+  )
 
-	res <- extract_calibrations_phylo(input = phyloall,
-                                    each = each)
+  res <- extract_calibrations_phylo(
+    input = phyloall,
+    each = each
+  )
   attr(res, "datelife_result") <- attributes(phyloall)$datelife_result
-	class(res) <- c("data.frame", "datelifeCalibrations")
-	return(res)
+  class(res) <- c("data.frame", "datelifeCalibrations")
+  return(res)
 }
 #' Search and extract available secondary calibrations from a given
 #' '\code{datelifeQuery} object
@@ -153,16 +166,22 @@ get_calibrations_vector <- function(input = NULL,
 #' @inherit extract_calibrations_phylo return
 #' @export
 get_calibrations_datelifequery <- function(input = NULL,
-																    			 each = FALSE) {
+                                           each = FALSE) {
   if (suppressMessages(!is_datelife_query(input))) {
-		stop("'input' is not a 'datelifeQuery' object.")
-	}
-	phyloall <- datelife_search(input = input,
-															summary_format = "phylo_all")
-	res <- extract_calibrations_phylo(input = phyloall,
-																		each = each)
-	attr(res, "datelife_result") <- attributes(phyloall)$datelife_result
-	class(res) <- c("data.frame", "datelifeCalibrations")
-	return(extract_calibrations_phylo(input = phyloall,
-                                    each = each))
+    stop("'input' is not a 'datelifeQuery' object.")
+  }
+  phyloall <- datelife_search(
+    input = input,
+    summary_format = "phylo_all"
+  )
+  res <- extract_calibrations_phylo(
+    input = phyloall,
+    each = each
+  )
+  attr(res, "datelife_result") <- attributes(phyloall)$datelife_result
+  class(res) <- c("data.frame", "datelifeCalibrations")
+  return(extract_calibrations_phylo(
+    input = phyloall,
+    each = each
+  ))
 }

@@ -16,27 +16,30 @@ use_all_calibrations <- function(phy = NULL,
                                  calibrations = NULL,
                                  each = FALSE,
                                  dating_method = "bladj") {
-    #
-    # date the tree with bladj, pathd8 if branch lengths:
-    # TODO
-    # find a way to inherit params for use_calibrations_pathd8 and use_calibrations_bladj
-    # phytools method for argument assignation should work, for example:
-    # if (methods::hasArg("expand"))
-    # if (methods::hasArg("giveup"))
-    # if (methods::hasArg("type"))
-    # if (methods::hasArg("root_age"))
-    # if (methods::hasArg("match_calibrations"))
-    if (each) {  # if calibrations is a list of data frames:
-      res <- use_calibrations_each(phy = phy,
-                                   calibrations = calibrations,
-                                   dating_method = dating_method)
-    } else {
-      res <- use_calibrations(phy,
-                              calibrations,
-                              dating_method = dating_method)
-    }
-    # TODO: make a 'datelife' class for chronograms with calibrations data.frame attached, produced by datelife
-    return(res)
+  #
+  # date the tree with bladj, pathd8 if branch lengths:
+  # TODO
+  # find a way to inherit params for use_calibrations_pathd8 and use_calibrations_bladj
+  # phytools method for argument assignation should work, for example:
+  # if (methods::hasArg("expand"))
+  # if (methods::hasArg("giveup"))
+  # if (methods::hasArg("type"))
+  # if (methods::hasArg("root_age"))
+  # if (methods::hasArg("match_calibrations"))
+  if (each) { # if calibrations is a list of data frames:
+    res <- use_calibrations_each(
+      phy = phy,
+      calibrations = calibrations,
+      dating_method = dating_method
+    )
+  } else {
+    res <- use_calibrations(phy,
+      calibrations,
+      dating_method = dating_method
+    )
+  }
+  # TODO: make a 'datelife' class for chronograms with calibrations data.frame attached, produced by datelife
+  return(res)
 }
 #' Date a given tree topology by using a given list of calibrations independently,
 #' to generate multiple hypothesis of time of divergence
@@ -63,20 +66,23 @@ use_all_calibrations <- function(phy = NULL,
 # phy <- tax_otolall[[1]]
 # calibrations <- tax_eachcalall[[1]]
 use_calibrations_each <- function(phy = NULL,
-                                 calibrations = NULL,
-                                 ...) {
+                                  calibrations = NULL,
+                                  ...) {
 
-		# date the tree with bladj, or pathd8 if branch lengths:
-    if (inherits(calibrations, "data.frame")) {
-      calibrations <- structure(list(calibrations), class = c("list", "datelifeCalibrations"))
-    }
-		chronograms <- lapply(calibrations, function(x)
-                                        use_calibrations(phy = phy,
-                                                         calibrations = x,
-                                                         ...))
-		class(chronograms) <- c("multiPhylo", "datelife")
-		names(chronograms) <- names(calibrations)
-		return(chronograms = chronograms)
+  # date the tree with bladj, or pathd8 if branch lengths:
+  if (inherits(calibrations, "data.frame")) {
+    calibrations <- structure(list(calibrations), class = c("list", "datelifeCalibrations"))
+  }
+  chronograms <- lapply(calibrations, function(x) {
+    use_calibrations(
+      phy = phy,
+      calibrations = x,
+      ...
+    )
+  })
+  class(chronograms) <- c("multiPhylo", "datelife")
+  names(chronograms) <- names(calibrations)
+  return(chronograms = chronograms)
 }
 #' Date a given tree topology using a combined set of given calibrations
 #'
@@ -104,51 +110,53 @@ use_calibrations <- function(phy = NULL,
                              calibrations = NULL,
                              dating_method = "bladj",
                              type = "median",
-                             ...){
-	# check that phy names are in calibrations.df: done in match_all_calibrations inside use_calibrations_bladj
+                             ...) {
+  # check that phy names are in calibrations.df: done in match_all_calibrations inside use_calibrations_bladj
   message("... Using calibrations to date a tree topology.")
   exit <- FALSE
   if (inherits(phy, "multiPhylo")) {
     message(message_multiphylo())
     phy <- phy[[1]]
   }
-	if(!inherits(phy, "phylo")){
+  if (!inherits(phy, "phylo")) {
     exit <- TRUE
-		msg1 <- "'phy' is NOT a phylo object. Check this."
-	} else {
+    msg1 <- "'phy' is NOT a phylo object. Check this."
+  } else {
     msg1 <- "'phy' is a phylo object. You are good."
   }
-	# enhance: add a check for calibrations object structure
-	if(!inherits(calibrations, "data.frame")){
+  # enhance: add a check for calibrations object structure
+  if (!inherits(calibrations, "data.frame")) {
     exit <- TRUE
-		msg2 <- "'calibrations' is NOT a data frame. Check this."
-	} else {
+    msg2 <- "'calibrations' is NOT a data frame. Check this."
+  } else {
     msg2 <- "'calibrations' is a data frame. You are good."
   }
-  if(exit){
-    stop("This function requires valid values for both arguments 'phy' and 'calibrations'.\n",
-         msg1, "\n",
-         msg2, "\n")
+  if (exit) {
+    stop(
+      "This function requires valid values for both arguments 'phy' and 'calibrations'.\n",
+      msg1, "\n",
+      msg2, "\n"
+    )
   }
-	dating_method <- match.arg(tolower(dating_method), c("bladj", "pathd8"))
-	if(dating_method %in% "bladj"){
-		phy$edge.length <- NULL
-		chronogram <- use_calibrations_bladj(phy, calibrations, type)
-	}
-	if(dating_method %in% "pathd8"){
-		if(is.null(phy$edge.length)){
-			message("\nPATHd8 requires initial branch lengths and 'phy' has no branch lengths, using dating_method = bladj instead.\n")
-			chronogram <- use_calibrations_bladj(phy, calibrations, type)
-			dating_method <- "bladj"
-		} else {
-			chronogram <- use_calibrations_pathd8(phy, calibrations, ...)
-		}
-	}
-	# TODO
-	# add dating_method attribute to chronogram
+  dating_method <- match.arg(tolower(dating_method), c("bladj", "pathd8"))
+  if (dating_method %in% "bladj") {
+    phy$edge.length <- NULL
+    chronogram <- use_calibrations_bladj(phy, calibrations, type)
+  }
+  if (dating_method %in% "pathd8") {
+    if (is.null(phy$edge.length)) {
+      message("\nPATHd8 requires initial branch lengths and 'phy' has no branch lengths, using dating_method = bladj instead.\n")
+      chronogram <- use_calibrations_bladj(phy, calibrations, type)
+      dating_method <- "bladj"
+    } else {
+      chronogram <- use_calibrations_pathd8(phy, calibrations, ...)
+    }
+  }
+  # TODO
+  # add dating_method attribute to chronogram
   attr(chronogram, "datelife_calibrations") <- calibrations
   attr(chronogram, "dating_method") <- dating_method
   class(chronogram) <- c(class(chronogram), "datelife")
   message("Success!")
-	return(chronogram)
+  return(chronogram)
 }

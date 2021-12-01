@@ -25,16 +25,20 @@ ape::is.ultrametric(yy, 2)
 vv[is.na(vv)] <- 0
 yy <- ape::mvr(subset2_sdm_matrix_filled1, vv)
 xx <- cluster_patristicmatrix(subset2_sdm_matrix_filled2)
-lapply(xx, function(x) {if(!inherits(x, "phylo")) return(NA)
-    ape::is.ultrametric(x)})
-for (i in seq(xx)){
-    if(!inherits(xx[[i]], "phylo")) next
-    plot(ape::ladderize(xx[[i]]), cex = 0.8)
-    ape::axisPhylo()
-    mtext(names(xx)[i])
+lapply(xx, function(x) {
+  if (!inherits(x, "phylo")) {
+    return(NA)
+  }
+  ape::is.ultrametric(x)
+})
+for (i in seq(xx)) {
+  if (!inherits(xx[[i]], "phylo")) next
+  plot(ape::ladderize(xx[[i]]), cex = 0.8)
+  ape::axisPhylo()
+  mtext(names(xx)[i])
 }
-plot(ape::ladderize(xx$upgma), cex =0.8)
-plot(ape::ladderize(xx$nj), cex =0.8)
+plot(ape::ladderize(xx$upgma), cex = 0.8)
+plot(ape::ladderize(xx$nj), cex = 0.8)
 ape::axisPhylo()
 ape::is.ultrametric(xx$nj)
 xx3 <- ape::bionj(subset2_sdm_matrix_filled1)

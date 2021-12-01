@@ -25,7 +25,7 @@
 #' # ltt plot:
 #' max_age <- max(sapply(unc, ape::branching.times))
 #' ape::ltt.plot(phy = unc[[1]], xlim = c(-max_age, 0), col = "#cce5ff50")
-#' for (i in 2:100){
+#' for (i in 2:100) {
 #'   ape::ltt.lines(phy = unc[[i]], col = "#cce5ff50")
 #' }
 #' ape::ltt.lines(felid_sdm$phy, col = "red")
@@ -52,21 +52,21 @@ phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "ot
   #   }
   #   return(list(consensus_tree = phycontre, trees = phycloud))
   # }
-  if(uncertainty_method == "other"){
+  if (uncertainty_method == "other") {
     phy.new <- phy <- ape::reorder.phylo(phy, "postorder")
     phy_depths <- max(ape::branching.times(phy)) - phytools::nodeHeights(phy)
     # phy_depths.new <- phy_depths
-    if(is.numeric(age_sd[1])){ # n is number of random deviates, age_mu is the observed age
+    if (is.numeric(age_sd[1])) { # n is number of random deviates, age_mu is the observed age
       # my_rlnorm <- function(n, age_mu, variance = age_sd^2){
       #   res <- stats::rlnorm(n = n, meanlog = log(age_mu / sqrt(1 + (variance / age_mu^2))), sdlog = sqrt(log(1 + variance / age_mu^2)))
       #   return(res)
       # }
-      my_rlnorm <- function(n, age_mu){
+      my_rlnorm <- function(n, age_mu) {
         res <- stats::rlnorm(n = n, meanlog = log(age_mu / sqrt(1 + (age_sd^2 / age_mu^2))), sdlog = age_sd)
         return(res)
       }
-    } else if(is.numeric(age_var[1])){
-      my_rlnorm <- function(n, age_mu){
+    } else if (is.numeric(age_var[1])) {
+      my_rlnorm <- function(n, age_mu) {
         res <- stats::rlnorm(n = n, meanlog = log(age_mu / sqrt(1 + (age_var / age_mu^2))), sdlog = sqrt(log(1 + age_var / age_mu^2)))
         return(res)
       }
@@ -80,19 +80,19 @@ phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "ot
     # }
     nn <- sort(phylo_get_node_numbers(phy))
     res <- c()
-    while (length(res) < size){
-      if (verbose){
+    while (length(res) < size) {
+      if (verbose) {
         message("Uncertainty sample number ", length(res) + 1)
       }
       phy_depths.final <- phy_depths.original <- phy_depths
       tot_age <- my_rlnorm(1, age_mu = ape::branching.times(phy)[as.character(nn[1])]) # variance is determined by the function above, depending on sd or var
       phy_depths.final[phy$edge == nn[1]] <- tot_age
-      for (i in nn[-1]){
-        max_age <- nn_age <- phy_depths.final[phy$edge[,2] == i, 1]
-        tries <- 0  # by chance, sampled age can be older than that of parent node; resample 50 times to try to get a younger age.
-        while(max_age - nn_age <= 0 & tries < 50){
-          if(rescale){
-            mu <- ape::branching.times(phy)[as.character(i)] * max_age / phy_depths.original[phy$edge[,2] == i, 1]
+      for (i in nn[-1]) {
+        max_age <- nn_age <- phy_depths.final[phy$edge[, 2] == i, 1]
+        tries <- 0 # by chance, sampled age can be older than that of parent node; resample 50 times to try to get a younger age.
+        while (max_age - nn_age <= 0 & tries < 50) {
+          if (rescale) {
+            mu <- ape::branching.times(phy)[as.character(i)] * max_age / phy_depths.original[phy$edge[, 2] == i, 1]
             nn_age <- my_rlnorm(1, age_mu = mu)
             nn_age <- nn_age * ape::branching.times(phy)[as.character(i)] / mu
           } else {
@@ -101,9 +101,9 @@ phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "ot
           }
           tries <- tries + 1
         }
-        phy_depths.final[phy$edge == i] <- nn_age  # if sampled age is younger than parent node age, use it
+        phy_depths.final[phy$edge == i] <- nn_age # if sampled age is younger than parent node age, use it
       }
-      phy.new$edge.length <- phy_depths.final[,1] - phy_depths.final[,2]
+      phy.new$edge.length <- phy_depths.final[, 1] - phy_depths.final[, 2]
       if (all(phy.new$edge.length > 0)) {
         res <- c(res, list(phy.new))
       }
@@ -111,7 +111,7 @@ phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "ot
     # if (uncertainty_method=="poisson") {
     #   # internal.variances <- rep(NA,asd)
     # }
-    if (length(res) == 1){
+    if (length(res) == 1) {
       res <- res[[1]]
       class(res) <- "phylo"
     } else {
@@ -129,15 +129,15 @@ phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "ot
 #' @return A multiPhylo object with a random sample of trees.
 #' @export
 
-sample_trees <- function(trees_file, trees_object = NULL, burnin = 0.25, size = 100){
-  if(!inherits(trees_object, "list")){
-    phycloud <-	ape::read.nexus(trees_file)
+sample_trees <- function(trees_file, trees_object = NULL, burnin = 0.25, size = 100) {
+  if (!inherits(trees_object, "list")) {
+    phycloud <- ape::read.nexus(trees_file)
   } else {
     phycloud <- trees_object
   }
   # use ceiling instead of round to make sure 0 is never among the values to sample:
-  phycloud <- phycloud[sample(ceiling(burnin * length(phycloud)):length(phycloud), size)]  # sample size number of trees from the cloud of trees, after discarding 25% as burnin
-  if (length(phycloud) == 1){
+  phycloud <- phycloud[sample(ceiling(burnin * length(phycloud)):length(phycloud), size)] # sample size number of trees from the cloud of trees, after discarding 25% as burnin
+  if (length(phycloud) == 1) {
     phycloud <- phycloud[[1]]
     class(phycloud) <- "phylo"
   } else {

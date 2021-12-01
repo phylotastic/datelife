@@ -1,7 +1,9 @@
 test_that("datelife_use workflows work", {
-  du <- datelife_use(input = "Rhea americana, Struthio camelus, Gallus gallus",
-               each = FALSE,
-               dating_method = "bladj")
+  du <- datelife_use(
+    input = "Rhea americana, Struthio camelus, Gallus gallus",
+    each = FALSE,
+    dating_method = "bladj"
+  )
   expect_true("phylo" %in% class(du))
   expect_error(datelife_use_datelifequery())
   # testing that phylo workflows work
@@ -21,9 +23,12 @@ test_that("datelife_use workflows work", {
   uc <- use_calibrations(dating_method = "pathd8", phy = du, calibrations = attributes(du)$datelife_calibrations)
   # test that other bladj workflows work:
   sapply(c("mean", "min", "max"), function(x) {
-                         use_calibrations_bladj(phy = du0, 
-                         calibrations = attributes(du)$datelife_calibrations,
-                         type = x)})
+    use_calibrations_bladj(
+      phy = du0,
+      calibrations = attributes(du)$datelife_calibrations,
+      type = x
+    )
+  })
   # test that absence of phylogeny or no branch lengths returns warning
   expect_warning(use_calibrations_pathd8(phy = NA))
   expect_error(use_calibrations_bladj(phy = NA))
@@ -54,11 +59,10 @@ test_that("input processing a newick string and multiPhylo workflows work", {
   use_calibrations(phy = multiphyBL, calibrations = calibs)
   use_all_calibrations(phy = multiphyBL, calibrations = calibs, each = TRUE)
   phylo$tip.label <- c("rooster", "nandu", "ostrich")
-  expect_warning(match_all_calibrations(phy = phylo, calibrations  = calibs))
-
+  expect_warning(match_all_calibrations(phy = phylo, calibrations = calibs))
 })
 
-test_that("object checks work",{
+test_that("object checks work", {
   expect_warning(match_all_calibrations(phy = NULL))
   expect_error(use_calibrations(phy = NULL))
   expect_error(get_calibrations_datelifequery(input = NULL))
@@ -71,4 +75,3 @@ test_that("object checks work",{
 # test make_bold_otol_tree that does not get a phylo object
 
 # test all function check_conflicting_calibrations in use_calibrations_bladj.R
-

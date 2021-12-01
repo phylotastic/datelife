@@ -1,4 +1,5 @@
-birds_wiki <- c("Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",
+birds_wiki <- c(
+  "Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",
   "Amphibia", "Sauropsida", "Bucerotiformes", "Struthioniformes",
   "Forpus passerinus", "Anhimidae", "Deinonychus", "Vorona", "Vegavis",
   "Meleagris gallopavo", "Coenocorypha", "Megapodius", "Podargidae",
@@ -52,9 +53,11 @@ birds_wiki <- c("Yixianornis grabaui", "Amphibia", "Amphibia", "Amphibia",
   "Callipepla", "Callipepla", "Tetraoninae", "Cyrtonyx", "Colinus",
   "Colinus", "Dactylortyx", "Basa", "Perdicinae", "Columbea", "Odontophorus",
   "Odontophorus", "Dendrortyx", "Europaea", "Guttera", "Philortyx",
-  "Numida", "Meleagridinae")
+  "Numida", "Meleagridinae"
+)
 
-birds_yellowstone <- c("Caracara", "Chen caerulescens", "Gavia immer", "Chen rossii",
+birds_yellowstone <- c(
+  "Caracara", "Chen caerulescens", "Gavia immer", "Chen rossii",
   "Branta canadensis", "Cygnus columbianus", "Aix sponsa", "Podiceps grisegena",
   "Anas strepera", "Podiceps nigricollis", "Anas americana", "Anas platyrhynchos",
   "Cygnus buccinator", "Anas discors", "Podilymbus podiceps", "Podiceps auritus",
@@ -109,4 +112,5 @@ birds_yellowstone <- c("Caracara", "Chen caerulescens", "Gavia immer", "Chen ros
   "Cinclus mexicanus", "Sphyrapicus nuchalis", "Sphyrapicus thyroideus", "Seiurus noveboracensis",
   "Melanerpes erythrocephalus", "Ceryle alcyon", "Melanerpes lewis", "Plectrophenax nivalis",
   "Oreothlypis celata", "Larus philadelphia", "Coccothraustes vespertinus",
-  "Bombycilla", "Bombycilla cedrorum")
+  "Bombycilla", "Bombycilla cedrorum"
+)

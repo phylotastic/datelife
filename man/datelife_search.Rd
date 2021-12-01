@@ -112,26 +112,33 @@ the most taxa?
 }
 \examples{
 # obtain median ages from a set of source chronograms in newick format:
-ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-		"Mus musculus"), summary_format="newick_median")
+ages <- datelife_search(c(
+  "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
+  "Mus musculus"
+), summary_format = "newick_median")
 # save the tree in newick format
-write(ages, file="some.bird.ages.txt")
+write(ages, file = "some.bird.ages.txt")
 
 # obtain median ages from a set of source chronograms in phylo format
 # will produce same tree as above but in r phylo format:
-ages.again <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-		"Mus musculus"), summary_format="phylo_median")
+ages.again <- datelife_search(c(
+  "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
+  "Mus musculus"
+), summary_format = "phylo_median")
 plot(ages.again)
 library(ape)
 ape::axisPhylo()
 mtext("Time (million years ago)", side = 1, line = 2, at = (max(get("last_plot.phylo",
-		envir = .PlotPhyloEnv)$xx) * 0.5))
-write.tree(ages.again, file="some.bird.tree.again.txt") # saves phylo object in newick format
+  envir = .PlotPhyloEnv
+)$xx) * 0.5))
+write.tree(ages.again, file = "some.bird.tree.again.txt") # saves phylo object in newick format
 
 # obtain mrca ages and target chronograms from all source chronograms
 # generate an html  output readable in any web browser:
-ages.html <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-		"Mus musculus"), summary_format="html")
-write(ages.html, file="some.bird.trees.html")
+ages.html <- datelife_search(c(
+  "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
+  "Mus musculus"
+), summary_format = "html")
+write(ages.html, file = "some.bird.trees.html")
 system("open some.bird.trees.html")
 }
