@@ -1,0 +1,56 @@
+---
+title: "Getting started with `datelife`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with `datelife`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(datelife)
+```
+
+## What can you do with `datelife`?
+
+The aim of the `datelife` R package is to allow researchers and the general audience to obtain data on ages for their organisms of interest. This age data is extracted from dated phylogenetic trees (chronograms) that have been published and peer-reviewed in association with a scientific article in an indexed journal. As such, the age data provided by `datelife` constitutes state-of-the-art, peer-reviewed, public scientific knowledge, that can be accessed by experts and non-experts in the field alike. 
+
+Users can get age data for their organisms of interest in several forms:
+
+- *MRCA*: They can get the age of the most recent common ancestor (MRCA) of their organisms.
+
+- *Original chronogram*: They can get the chronograms from the original publications, pruned to contain their organisms only.
+
+- *Biggest chronogram*: They can get the original chronogram with the most organisms of interest present as tips.
+
+- *Summary chronogram*: They can obtain a single chronogram, summarized using data from the original chronograms. The summary chronogram can be calculated using different methods.
+
+Users can also apply the obtained age data to date a phylogenetic tree topology of their organisms of interest.
+
+## Getting a `datelifeQuery`
+
+The function `make_datelife_query` processes the scientific names of your organisms of interest so they can be used to perform a search across the `datelife` database. You can provide the scientific names as a character vector or as a single comma separated string of names.
+For example, running the following:
+
+```{r}
+
+datelife::make_datelife_query(input = c("Delphinus delphus", "Gallus gallus", "elephas Maximus", "felis_catus"))
+```
+
+Gives the same result as running:
+
+```{r}
+
+datelife::make_datelife_query(input = "Delphinus delphus, Gallus gallus, elephas Maximus, felis_catus")
+```
+
+Note that
+
+
