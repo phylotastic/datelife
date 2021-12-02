@@ -44,14 +44,9 @@ Imports:
     httr,
     usethis,
     plyr,
-    grDevices,
-    graphics,
     phylocomr,
-    strap,
-    BiocManager,
     msa,
-    Biostrings,
-    methods
+    Biostrings
 Suggests:
     testthat,
     knitr,

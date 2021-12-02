@@ -16,7 +16,7 @@
 #' element will be used. Equally, if the newich character string has mutiple trees, only the first one will be used.
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-                                use_tnrs = FALSE,
+                                use_tnrs = TRUE,
                                 approximate_match = TRUE,
                                 get_spp_from_taxon = FALSE,
                                 verbose = FALSE) {
