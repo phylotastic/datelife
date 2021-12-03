@@ -34,23 +34,92 @@ Users can get age data for their organisms of interest in several forms:
 
 Users can also apply the obtained age data to date a phylogenetic tree topology of their organisms of interest.
 
-## Getting a `datelifeQuery`
+## 1. Preparing your organism names
 
-The function `make_datelife_query` processes the scientific names of your organisms of interest so they can be used to perform a search across the `datelife` database. You can provide the scientific names as a character vector or as a single comma separated string of names.
+The function `make_datelife_query` processes the scientific names of your organisms of interest and saves them as a `datelifeQuery` object.
+This allows you to easily use them later to perform a search for ages across the `datelife` chronogram database. You have two general ways of providing organism names:
+
+### a) From a set of organism names
+You can provide the scientific names as a character vector or as a single comma separated string of names.
 For example, running the following:
 
 ```{r}
 
-datelife::make_datelife_query(input = c("Delphinus delphus", "Gallus gallus", "elephas Maximus", "felis_catus"))
+datelife::make_datelife_query(input = c("Delphinus_delphus", "Gallus gallus", "elephas Maximus", "felis_catus"))
 ```
 
 Gives the same result as running:
 
 ```{r}
 
-datelife::make_datelife_query(input = "Delphinus delphus, Gallus gallus, elephas Maximus, felis_catus")
+datelife::make_datelife_query(input = "Delphinus_delphus, Gallus gallus, elephas Maximus, felis_catus")
 ```
 
-Note that
+Note that you can use underscores or spaces to separate binomial scientific names and `datelife` will process them.
+
+### b) From a tree with organism names on its tips
+
+You can also provide the scientific names of your organisms of interest as labels on the tips of any phylogenetic tree.
+You can provide the tree as a newick string:
+
+```{r}
+newick <- "((Elephas_maximus,(Delphinus_delphus, Felis_silvestris)), Gallus_gallus);"
+datelife::make_datelife_query(input = newick)
+```
+
+You can also provide the tree as a phylo object:
+
+```{r}
+phylo <- ape::read.tree(text = newick)
+datelife::make_datelife_query(input = phylo)
+```
+
+Let's save our `datelifeQuery`:
+
+```{r}
+
+my_datelife_query <- datelife::make_datelife_query(input = phylo)
+
+```
+
+## 2. Searching the chronogram database
+
+The `datelife_search` function takes a `datelifeQuery` object and goes through the `datelife` chronogram database to find all chronograms matching at least two organism names. 
+
+```{r}
+
+datelife::datelife_search(input = my_datelife_query)
+```
+
+The function will also summarize the results from the search for you.
+By default, it will get all original chronograms matching the search. You can specify the output with the argument `summary_format`.
+There are different summary outputs to choose from:
+
+- `"citations"`
+
+- `"mrca"`
+
+- `"newick_all"`
+
+- `"newick_sdm"`
+
+- `"newick_median"`
+
+- `"phylo_sdm"`
+
+- `"phylo_median"`
+
+- `"phylo_all"`
+
+- `"phylo_biggest"`
+
+- `"html"`
+
+- `"data_frame"`
+
+
+
+
+
 
 
