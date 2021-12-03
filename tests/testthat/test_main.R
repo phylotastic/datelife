@@ -69,6 +69,11 @@ test_that("object checks work", {
 })
 
 
+test_that("you can load opentree_chronograms",{
+  data(opentree_chronograms, package = "datelife")
+  expect_equal(ls(opentree_chronograms), c("authors","curators","dois","studies","trees"))
+})
+
 
 # test match_all_calibrations when all(all_nodes < ape::Ntip(phy)) is not TRUE
 
