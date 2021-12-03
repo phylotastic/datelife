@@ -74,7 +74,7 @@ phylo <- ape::read.tree(text = newick)
 datelife::make_datelife_query(input = phylo)
 ```
 
-Let's save our `datelifeQuery`:
+Let's save our `datelifeQuery` for the next section:
 
 ```{r}
 
@@ -91,31 +91,98 @@ The `datelife_search` function takes a `datelifeQuery` object and goes through t
 datelife::datelife_search(input = my_datelife_query)
 ```
 
-The function will also summarize the results from the search for you.
-By default, it will get all original chronograms matching the search. You can specify the output with the argument `summary_format`.
-There are different summary outputs to choose from:
+`datelife_search` will also summarize the results from the chronogram database search for you.
+By default, it will give you all original chronograms matching the search, as a `phylo` or `multiPhylo` object. You can specify the format you desire for the summary of results with the argument `summary_format`.
+There are different summary formats to choose from:
 
-- `"citations"`
+`summary_format = "citations"` will give back study citations from all  original chronograms matching your search:
 
-- `"mrca"`
+```{r}
 
-- `"newick_all"`
+datelife::datelife_search(input = my_datelife_query,
+                          summary_format = "citations")
+```
 
-- `"newick_sdm"`
+`summary_format = "mrca"`
 
-- `"newick_median"`
+```{r}
 
-- `"phylo_sdm"`
+datelife::datelife_search(input = my_datelife_query,
+                          summary_format = "mrca")
+```
 
-- `"phylo_median"`
+`summary_format = "newick_all"`
 
-- `"phylo_all"`
+```{r}
 
-- `"phylo_biggest"`
+datelife::datelife_search(input = my_datelife_query,
+                          summary_format = "newick_all")
+```
 
-- `"html"`
+`summary_format = "newick_sdm"`
 
-- `"data_frame"`
+```{r}
+
+datelife::datelife_search(input = my_datelife_query,
+                          summary_format = "newick_sdm")
+```
+
+`summary_format = "newick_median"`
+
+```{r}
+
+datelife::datelife_search(input = my_datelife_query,
+                          summary_format = "newick_median")
+```
+
+`summary_format = "phylo_sdm"`
+
+```{r}
+
+datelife::datelife_search(input = my_datelife_query,
+                          summary_format = "phylo_sdm")
+```
+
+`summary_format = "phylo_median"`
+
+```{r}
+
+datelife::datelife_search(input = my_datelife_query,
+                          summary_format = "phylo_median")
+```
+
+`summary_format = "phylo_all"`
+
+```{r}
+
+datelife::datelife_search(input = my_datelife_query,
+                          summary_format = "phylo_all")
+```
+
+`summary_format = "phylo_biggest"`
+
+```{r}
+
+datelife::datelife_search(input = my_datelife_query,
+                          summary_format = "phylo_biggest")
+```
+
+`summary_format = "html"`
+
+```{r}
+
+datelife::datelife_search(input = my_datelife_query,
+                          summary_format = "html")
+```
+
+`summary_format = "data_frame"`
+
+```{r}
+
+datelife::datelife_search(input = my_datelife_query,
+                          summary_format = "data_frame")
+```
+
 
 
 
