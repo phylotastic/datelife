@@ -122,7 +122,7 @@ Code coverage was tested with the package
 [covr](https://CRAN.R-project.org/package=covr):
 
 ``` r
-cov <- covr::package_coverage()
+cov <- covr::package_coverage(exclusions = "R/cacheauthors.R")
 
 usethis::use_data(cov, overwrite = TRUE)
 ```
