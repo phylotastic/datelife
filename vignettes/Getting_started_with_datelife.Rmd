@@ -1,6 +1,8 @@
 ---
 title: "Getting started with `datelife`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    keep_md: true
 vignette: >
   %\VignetteIndexEntry{Getting started with `datelife`}
   %\VignetteEngine{knitr::rmarkdown}
@@ -24,13 +26,13 @@ The aim of the `datelife` R package is to allow researchers and the general audi
 
 Users can get age data for their organisms of interest in several forms:
 
-- *MRCA*: They can get the age of the most recent common ancestor (MRCA) of their organisms.
+- **MRCA**: They can get the age of the most recent common ancestor (MRCA) of their organisms.
 
-- *Original chronogram*: They can get the chronograms from the original publications, pruned to contain their organisms only.
+- **Original chronogram**: They can get the chronograms from the original publications, pruned to contain their organisms only.
 
-- *Biggest chronogram*: They can get the original chronogram with the most organisms of interest present as tips.
+- **Biggest chronogram**: They can get the original chronogram with the most organisms of interest present as tips.
 
-- *Summary chronogram*: They can obtain a single chronogram, summarized using data from the original chronograms. The summary chronogram can be calculated using different methods.
+- **Summary chronogram**: They can obtain a single chronogram, summarized using data from the original chronograms. The summary chronogram can be calculated using different methods.
 
 Users can also apply the obtained age data to date a phylogenetic tree topology of their organisms of interest.
 
@@ -44,15 +46,21 @@ You can provide the scientific names as a character vector or as a single comma 
 For example, running the following:
 
 ```{r}
-
-datelife::make_datelife_query(input = c("Delphinus_delphus", "Gallus gallus", "elephas Maximus", "felis_catus"))
+datelife::make_datelife_query(input = c("Delphinus_delphis", 
+                                        "Gallus gallus", 
+                                        "elephas Maximus",
+                                        "felis_catus",
+                                        "homo-sapiens"))
 ```
 
 Gives the same result as running:
 
 ```{r}
-
-datelife::make_datelife_query(input = "Delphinus_delphus, Gallus gallus, elephas Maximus, felis_catus")
+datelife::make_datelife_query(input = "Delphinus_delphis, 
+                                       Gallus gallus, 
+                                       elephas Maximus, 
+                                       felis_catus,
+                                       homo-sapiens")
 ```
 
 Note that you can use underscores or spaces to separate binomial scientific names and `datelife` will process them.
@@ -63,23 +71,21 @@ You can also provide the scientific names of your organisms of interest as label
 You can provide the tree as a newick string:
 
 ```{r}
-newick <- "((Elephas_maximus,(Delphinus_delphus, Felis_silvestris)), Gallus_gallus);"
+newick <- "((Elephas_maximus,(Homo_sapiens,(Delphinus_delphis, Felis_silvestris))), Gallus_gallus);"
 datelife::make_datelife_query(input = newick)
 ```
 
-You can also provide the tree as a phylo object:
+You can also provide the tree as a `phylo` object. In this example, you have to first convert your newick string to `phylo`. You can do this with the function `read.tree` from the `ape` package. If you already have a tree as a `phylo` object, you can use that directly:
 
 ```{r}
 phylo <- ape::read.tree(text = newick)
 datelife::make_datelife_query(input = phylo)
 ```
 
-Let's save our `datelifeQuery` for the next section:
+Now save your `datelifeQuery` object for the next section:
 
 ```{r}
-
 my_datelife_query <- datelife::make_datelife_query(input = phylo)
-
 ```
 
 ## 2. Searching the chronogram database
@@ -87,7 +93,6 @@ my_datelife_query <- datelife::make_datelife_query(input = phylo)
 The `datelife_search` function takes a `datelifeQuery` object and goes through the `datelife` chronogram database to find all chronograms matching at least two organism names. 
 
 ```{r}
-
 datelife::datelife_search(input = my_datelife_query)
 ```
 
@@ -95,59 +100,52 @@ datelife::datelife_search(input = my_datelife_query)
 By default, it will give you all original chronograms matching the search, as a `phylo` or `multiPhylo` object. You can specify the format you desire for the summary of results with the argument `summary_format`.
 There are different summary formats to choose from:
 
-`summary_format = "citations"` will give back study citations from all  original chronograms matching your search:
+`summary_format = "citations"` gives back the study citations from all  original chronograms matching your search:
 
 ```{r}
-
-datelife::datelife_search(input = my_datelife_query,
+citations <- datelife::datelife_search(input = my_datelife_query,
                           summary_format = "citations")
 ```
 
-`summary_format = "mrca"`
+`summary_format = "mrca"` gives back the age of the MRCA of your organisms of interest:
 
 ```{r}
-
-datelife::datelife_search(input = my_datelife_query,
+mrca <- datelife::datelife_search(input = my_datelife_query,
                           summary_format = "mrca")
 ```
 
 `summary_format = "newick_all"`
 
 ```{r}
-
-datelife::datelife_search(input = my_datelife_query,
+newick_all <- datelife::datelife_search(input = my_datelife_query,
                           summary_format = "newick_all")
 ```
 
 `summary_format = "newick_sdm"`
 
-```{r}
-
-datelife::datelife_search(input = my_datelife_query,
+```{r, eval = FALSE}
+newick_sdm <- datelife::datelife_search(input = my_datelife_query,
                           summary_format = "newick_sdm")
 ```
 
 `summary_format = "newick_median"`
 
 ```{r}
-
-datelife::datelife_search(input = my_datelife_query,
+newick_median <- datelife::datelife_search(input = my_datelife_query,
                           summary_format = "newick_median")
 ```
 
 `summary_format = "phylo_sdm"`
 
-```{r}
-
-datelife::datelife_search(input = my_datelife_query,
+```{r, eval = FALSE}
+phylo_sdm <- datelife::datelife_search(input = my_datelife_query,
                           summary_format = "phylo_sdm")
 ```
 
 `summary_format = "phylo_median"`
 
 ```{r}
-
-datelife::datelife_search(input = my_datelife_query,
+phylo_median <- datelife::datelife_search(input = my_datelife_query,
                           summary_format = "phylo_median")
 ```
 
@@ -155,7 +153,7 @@ datelife::datelife_search(input = my_datelife_query,
 
 ```{r}
 
-datelife::datelife_search(input = my_datelife_query,
+phylo_all <- datelife::datelife_search(input = my_datelife_query,
                           summary_format = "phylo_all")
 ```
 
@@ -163,7 +161,7 @@ datelife::datelife_search(input = my_datelife_query,
 
 ```{r}
 
-datelife::datelife_search(input = my_datelife_query,
+phylo_biggest <- datelife::datelife_search(input = my_datelife_query,
                           summary_format = "phylo_biggest")
 ```
 
@@ -171,7 +169,7 @@ datelife::datelife_search(input = my_datelife_query,
 
 ```{r}
 
-datelife::datelife_search(input = my_datelife_query,
+html <- datelife::datelife_search(input = my_datelife_query,
                           summary_format = "html")
 ```
 
@@ -179,7 +177,7 @@ datelife::datelife_search(input = my_datelife_query,
 
 ```{r}
 
-datelife::datelife_search(input = my_datelife_query,
+data_frame <- datelife::datelife_search(input = my_datelife_query,
                           summary_format = "data_frame")
 ```
 

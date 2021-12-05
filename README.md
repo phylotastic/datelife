@@ -158,6 +158,24 @@ Finally, run `R CMD check` on the tar ball that you just generated:
 R CMD check datelife_0.5.0.tar.gz
 ```
 
+### `datelife`s hexsticker
+
+We used the package `hexSticker`:
+
+```
+library(hexSticker)
+s <- sticker(~plot(cars, cex=.5, cex.axis=.5, mgp=c(0,.3,0), xlab="", ylab=""),
+          package="datelife", p_size=20, s_x=.8, s_y=.6, s_width=1.4, s_height=1.2,
+          filename="inst/figures/baseplot.png")
+          
+```
+
+### Rendering the vignettes
+
+```
+knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
+```
+
 ## License
 
 This package is free and open source software, licensed under GPL.

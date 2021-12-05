@@ -145,6 +145,49 @@ R CMD check datelife_0.5.0.tar.gz
 ```
 
 
+### Generating `datelife`s hexsticker
+
+The chronogram was generated with:
+
+```{r eval = FALSE}
+phylo_sdm <- datelife::datelife_search(input = c("Delphinus_delphis", "Gallus gallus", "elephas Maximus", "felis_catus", "homo-sapiens"),
+                                       summary_format = "phylo_sdm")
+phylo_sdm$tip.label_original <- phylo_sdm$tip.label
+phylo_sdm$tip.label <- c("elephant", "woman_cartwheeling", "dolphin", "cat", "rooster")
+class(phylo_sdm) <- "phylo"
+```
+
+And plotted with:
+
+```{r eval = FALSE}
+BiocManager::install("ggtree")
+install.packages("emojifont")
+library(emojifont)
+library(ggimage)
+p <- ggtree::ggtree(phylo_sdm, size=0.5, color='black') +  
+  ggtree::geom_tiplab(parse="emoji", size=8, vjust=0.01) +
+  ggtree::theme_tree(bgcolor = "#00640050")
+svglite::svglite("inst/figures/phylo-sdm-emoji.svg", width = 10, height = 7)
+print(p)
+dev.off()
+```
+
+
+```{r eval = FALSE}
+install.packages("hexSticker")
+
+s <- hexSticker::sticker(~print(p),
+          package="datelife", p_size=20, s_x=.8, s_y=1, s_width=1.4, s_height=1.2,
+          filename="inst/figures/datelife-hex.png")
+          
+```
+
+### Rendering the vignettes
+
+```{r eval = FALSE}
+knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
+```
+
 ## License
 
 This package is free and open source software, licensed under GPL.
