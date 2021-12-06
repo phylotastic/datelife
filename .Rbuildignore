@@ -18,3 +18,4 @@ codecov.yml
 ^CRAN-RELEASE$
 R/.lintr
 data/cov.rda
+tests/testthat/.infile
