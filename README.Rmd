@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 IS_README <- TRUE
 library(datelife)
 ```
+<img src='inst/figures/datelife-hex-upwards.png' align="right" height="250" />
+
 <!-- badges: start -->
 
 <!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions) -->
@@ -93,17 +95,23 @@ to post an issue [here](https://github.com/phylotastic/datelife/issues/new), or
 to make a [pull request](https://github.com/phylotastic/datelife/pulls) if you
 want to contribute with code directly.
 
+#### Function documentation:
+
 Package and function documentation was generated with [roxygen2](https://CRAN.R-project.org/package=roxygen2):
 
 ```{r eval = FALSE}
 roxygen2::roxygenise()
 ```
 
+#### Styling code:
+
 We used the package [lintr]() to check for coding style:
 
 ```{r eval = FALSE}
 lintr::lint_package()
 ```
+
+#### Calculating test coverage:
 
 Code coverage was tested with the package [covr](https://CRAN.R-project.org/package=covr):
 
@@ -125,6 +133,8 @@ And, find code with zero coverage:
 covr::zero_coverage(cov)
 ```
 
+#### Releasing to CRAN:
+
 To create the CRAN release, first run a `R CMD check` from your terminal.
 For that, change directories to the one above your package:
 
@@ -144,6 +154,16 @@ Finally, run `R CMD check` on the tar ball that you just generated:
 R CMD check datelife_0.5.0.tar.gz
 ```
 
+
+#### Generating `datelife`'s hexsticker:
+
+Code used to generate current `datelife`'s hexsticker is in [data-raw/hexsticker-current.R](data-raw/hexsticker-current.R)
+
+#### Rendering the vignettes:
+
+```{r eval = FALSE}
+knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
+```
 
 ## License
 

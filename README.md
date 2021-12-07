@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit THIS file -->
 
+<img src='inst/figures/datelife-hex-upwards.png' align="right" height="250" />
+
 <!-- badges: start -->
 
 <!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions) -->
@@ -77,7 +79,8 @@ the accompanying paper:
 O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K,
 Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2021).
 <em>datelife: Go from a List of Taxa or a Tree to a Chronogram using
-Open Scientific Data</em>. R package version 0.5.0.
+Open Scientific Data on Time of Lineage Divergence</em>. R package
+version 0.5.0.
 
 </p>
 
@@ -105,6 +108,8 @@ are welcome to post an issue
 [pull request](https://github.com/phylotastic/datelife/pulls) if you
 want to contribute with code directly.
 
+#### Function documentation:
+
 Package and function documentation was generated with
 [roxygen2](https://CRAN.R-project.org/package=roxygen2):
 
@@ -112,11 +117,15 @@ Package and function documentation was generated with
 roxygen2::roxygenise()
 ```
 
+#### Styling code:
+
 We used the package [lintr]() to check for coding style:
 
 ``` r
 lintr::lint_package()
 ```
+
+#### Calculating test coverage:
 
 Code coverage was tested with the package
 [covr](https://CRAN.R-project.org/package=covr):
@@ -139,6 +148,8 @@ And, find code with zero coverage:
 covr::zero_coverage(cov)
 ```
 
+#### Releasing to CRAN:
+
 To create the CRAN release, first run a `R CMD check` from your
 terminal. For that, change directories to the one above your package:
 
@@ -156,6 +167,17 @@ Finally, run `R CMD check` on the tar ball that you just generated:
 
 ``` bash
 R CMD check datelife_0.5.0.tar.gz
+```
+
+#### Generating `datelife`’s hexsticker:
+
+Code used to generate current `datelife`’s hexsticker is in
+[data-raw/hexsticker-current.R](data-raw/hexsticker-current.R)
+
+#### Rendering the vignettes:
+
+``` r
+knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
 ```
 
 ## License
