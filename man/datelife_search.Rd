@@ -8,13 +8,14 @@ divergence openly available for a given set of taxon names}
 \usage{
 datelife_search(
   input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-  summary_format = "phylo_all",
-  partial = TRUE,
   use_tnrs = FALSE,
+  get_spp_from_taxon = FALSE,
+  partial = TRUE,
   cache = "opentree_chronograms",
+  summary_format = "phylo_all",
+  na.rm = FALSE,
   summary_print = c("citations", "taxa"),
   taxon_summary = c("none", "summary", "matrix"),
-  get_spp_from_taxon = FALSE,
   criterion = "taxa"
 )
 }
@@ -26,6 +27,24 @@ datelife_search(
 object, OR as a newick character string.}
 \item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 }}
+
+\item{use_tnrs}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
+taxonomic name variations.}
+
+\item{get_spp_from_taxon}{Wether to search ages for all species belonging to a
+given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
+If input is a newick string with some clades it will be converted to a \code{phylo}
+object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.label}.}
+
+\item{partial}{Whether to return or exclude partially matching source chronograms,
+i.e, those that match some and not all of taxa given in \code{datelife_query}.
+Options are \code{TRUE} or \code{FALSE}. Defaults to \code{TRUE}: return all matching source
+chronograms.}
+
+\item{cache}{A character vector of length one, with the name of the data object
+to cache. Default to \code{"opentree_chronograms"}, a data object storing Open Tree of
+Life's database chronograms and other associated information.}
 
 \item{summary_format}{A character vector of length one, indicating the output
 format for results of the DateLife search. Available output formats are:
@@ -64,15 +83,11 @@ newick target chronogram.}
 taxa, citations of source chronograms and newick string.}
 }}
 
-\item{partial}{Whether to include matching source trees even if they only
-match some of the desired taxa. Default to \code{TRUE}.}
+\item{na.rm}{If \code{TRUE}, it drops rows containing \code{NA}s from the \code{datelifeResult}
+patristic matrix; if \code{FALSE}, it returns \code{NA} where there are missing entries.}
 
-\item{use_tnrs}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
-to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
-taxonomic name variations.}
-
-\item{summary_print}{A character vector specifying type of summary information
-to be printed to screen:
+\item{summary_print}{A character vector specifying the type of summary information
+to be printed to screen. Options are:
 \describe{
 \item{"citations"}{Prints references of chronograms where target taxa are found.}
 \item{"taxa"}{Prints a summary of the number of chronograms where each target
@@ -85,11 +100,6 @@ Defaults to \code{c("citations", "taxa")}, which displays both.}
 in source chronograms should be added to the output as a \code{"summary"} or as a
 presence/absence \code{"matrix"}. Default to \code{"none"}, no information on taxon_summary
 added to the output.}
-
-\item{get_spp_from_taxon}{Wether to search ages for all species belonging to a
-given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
-If input is a newick string with some clades it will be converted to a \code{phylo}
-object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.label}.}
 
 \item{criterion}{A character vector of one element indicating whether to get the
 grove with the most trees or the most taxa, \code{"trees"} and \code{"taxa"}.

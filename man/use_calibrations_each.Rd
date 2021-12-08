@@ -8,12 +8,16 @@ to generate multiple hypothesis of time of divergence}
 use_calibrations_each(phy = NULL, calibrations = NULL, ...)
 }
 \arguments{
-\item{phy}{A \code{phylo} object with or without branch lengths}
+\item{phy}{A \code{phylo} object to use as tree topology.}
 
-\item{calibrations}{An object of class \code{datelifeCalibrations},
-typically an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
+\item{calibrations}{A \code{datelifeCalibrations} object, an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 
-\item{...}{Arguments to pass to \code{use_calibrations}.}
+\item{...}{
+  Arguments passed on to \code{\link[=use_calibrations]{use_calibrations}}
+  \describe{
+    \item{\code{dating_method}}{Tree dating method to use. Options are "bladj" or "pathd8".}
+    \item{\code{type}}{The type of age to use as calibration: "median", "mean", "min", or "max".}
+  }}
 }
 \value{
 A \code{multiPhylo} object of trees with branch lengths proportional
@@ -25,14 +29,14 @@ given calibrations and use it independently as constraints for BLADJ or PATHd8
 to date a given tree topology.
 }
 \details{
-\code{calibrations} and \code{dating method} are stored as attributes.
+\code{calibrations} and \code{dating_method} are stored as attributes.
 They can be accessed with \code{attributes(return)$datelife_calibrations} and
 \code{attributes(return)$dating_method}, respectively. \cr
 If \code{input} tree does not have branch lengths, \code{dating_method} is
 ignored and the function will use secondary calibrations to date the
 \code{input} tree with \href{http://phylodiversity.net/bladj/}{BLADJ},
 using \code{\link[phylocomr:ph_bladj]{phylocomr::ph_bladj()}}, via \code{\link[=use_calibrations_bladj]{use_calibrations_bladj()}}. If
-\code{input} tree has have branch lengths it can be dated
+\code{input} tree has branch lengths it can be dated
 with \href{https://www2.math.su.se/PATHd8/}{PATHd8}, using \code{\link[geiger:geiger-internal]{geiger::PATHd8.phylo()}},
 via \code{\link[=use_calibrations_pathd8]{use_calibrations_pathd8()}}.
 }

@@ -13,7 +13,7 @@ datelife_use_datelifequery(
 \arguments{
 \item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 
-\item{dating_method}{Tree dating method. Options are "bladj" or "pathd8"}
+\item{dating_method}{Tree dating method to use. Options are "bladj" or "pathd8".}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
 the same data frame. If \code{TRUE}, calibrations from each chronogram are returned

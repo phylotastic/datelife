@@ -1,11 +1,15 @@
 #' Get a list of patristic matrices from a given `datelifeQuery` object
 #'
 #' @inheritParams get_taxon_summary
+#' @param partial Whether to return or exclude partially matching source chronograms,
+#'   i.e, those that match some and not all of taxa given in `datelife_query`.
+#'   Options are `TRUE` or `FALSE`. Defaults to `TRUE`: return all matching source
+#'   chronograms.
 #' @param cache A character vector of length one, with the name of the data object
 #'   to cache. Default to `"opentree_chronograms"`, a data object storing Open Tree of
 #'   Life's database chronograms and other associated information.
 #' @param update_opentree_chronograms Whether to update the chronogram database or not.
-#'   Default to `FALSE`.
+#'   Defaults to `FALSE`.
 #' @inheritDotParams make_datelife_query
 #' @return A `datelifeResult` object -- a named list of patristic matrices.
 #' @details If there is just one taxon name in `input$cleaned_names`, the

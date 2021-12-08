@@ -121,10 +121,9 @@ get_taxon_summary <- function(datelife_result = NULL,
 #' 	 \item{"data_frame"}{A data frame with data on target taxa: mrca, number of
 #' 	 				taxa, citations of source chronograms and newick string.}
 #' }
-#' @param partial Whether to include matching source trees even if they only
-#'   match some of the desired taxa. Default to `TRUE`.
-#' @param summary_print A character vector specifying type of summary information
-#'   to be printed to screen:
+#' @inheritParams datelife_result_MRCA
+#' @param summary_print A character vector specifying the type of summary information
+#'   to be printed to screen. Options are:
 #'   \describe{
 #'   	 \item{"citations"}{Prints references of chronograms where target taxa are found.}
 #'   	 \item{"taxa"}{Prints a summary of the number of chronograms where each target
@@ -148,7 +147,7 @@ get_taxon_summary <- function(datelife_result = NULL,
 summarize_datelife_result <- function(datelife_result = NULL,
                                       datelife_query = NULL,
                                       summary_format = "phylo_all",
-                                      partial = TRUE,
+                                      na.rm = TRUE,
                                       summary_print = c("citations", "taxa"),
                                       taxon_summary = c("none", "summary", "matrix"),
                                       criterion = "taxa") {
@@ -178,7 +177,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
   if (summary_format.in == "citations") {
     return.object <- names(datelife_result)
   }
-  mrcas <- datelife_result_MRCA(datelife_result, partial = partial) # this is later used for median and sdm
+  mrcas <- datelife_result_MRCA(datelife_result, na.rm = partial) # this is later used for median and sdm
   if (summary_format.in == "mrca") {
     return.object <- mrcas
   }
@@ -223,7 +222,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
       out.vector1 <- paste(out.vector1, paste("</th><th>", colnames(taxon_summ$matrix), sep = "", collapse = ""), sep = "")
     }
     out.vector1 <- paste(out.vector1, "</th></tr>", sep = "")
-    ages <- datelife_result_MRCA(datelife_result, partial = partial)
+    ages <- datelife_result_MRCA(datelife_result, na.rm = partial)
     trees <- sapply(datelife_result, patristic_matrix_to_newick)
     out.vector2 <- c()
     for (result.index in sequence(length(datelife_result))) {
@@ -254,7 +253,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
   }
   if (summary_format.in == "data_frame") {
     out.df <- data.frame()
-    ages <- datelife_result_MRCA(datelife_result, partial = partial)
+    ages <- datelife_result_MRCA(datelife_result, na.rm = partial)
     trees <- sapply(datelife_result, patristic_matrix_to_newick)
     for (result.index in sequence(length(datelife_result))) {
       out.line <- data.frame(Age = ages[result.index], Ntax = sum(!is.na(diag(datelife_result[[result.index]]))), Citation = names(datelife_result)[result.index], Newick = trees[result.index])
@@ -315,7 +314,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
 # #' @method summary datelifeResult
 # #' @export
 # summary.datelifeResult <- function(object, ..., partial = TRUE){
-# 	mrcas <- datelife_result_MRCA(object, partial = partial)
+# 	mrcas <- datelife_result_MRCA(object, na.rm = partial)
 # 	res <- list(mrca = mrcas)
 # 	class(res) <- "datelifeResultSummary"
 # 	return(res)

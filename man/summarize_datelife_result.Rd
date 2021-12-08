@@ -8,7 +8,7 @@ summarize_datelife_result(
   datelife_result = NULL,
   datelife_query = NULL,
   summary_format = "phylo_all",
-  partial = TRUE,
+  na.rm = TRUE,
   summary_print = c("citations", "taxa"),
   taxon_summary = c("none", "summary", "matrix"),
   criterion = "taxa"
@@ -56,11 +56,11 @@ newick target chronogram.}
 taxa, citations of source chronograms and newick string.}
 }}
 
-\item{partial}{Whether to include matching source trees even if they only
-match some of the desired taxa. Default to \code{TRUE}.}
+\item{na.rm}{If \code{TRUE}, it drops rows containing \code{NA}s from the \code{datelifeResult}
+patristic matrix; if \code{FALSE}, it returns \code{NA} where there are missing entries.}
 
-\item{summary_print}{A character vector specifying type of summary information
-to be printed to screen:
+\item{summary_print}{A character vector specifying the type of summary information
+to be printed to screen. Options are:
 \describe{
 \item{"citations"}{Prints references of chronograms where target taxa are found.}
 \item{"taxa"}{Prints a summary of the number of chronograms where each target

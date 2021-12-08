@@ -6,7 +6,7 @@
 # plot(use_all_calibrations_bladj(phy,calibrations, use = "Mean"))
 
 #' Use calibrations to date a topology with bladj.
-#' @param phy A \code{phylo} object with or without branch lengths
+#' @param phy A `phylo` object with or without branch lengths.
 #' @param calibrations A data frame of secondary calibrations for any pair of taxon
 #' names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.
 #' @param type The type of age to use as calibration: "median", "mean", "min", or "max".
@@ -85,7 +85,7 @@ use_calibrations_bladj <- function(phy,
 #' function to check for conflicting calibrations
 #' if calibrations are younger or older relative to descendants and ancestors, respectively
 #' @details it removes them if needed, but BLADJ works as long as it has an age for the root
-#' @param phy A phylo object
+#' @param phy A `phylo` object.
 #' @param calibration_distribution is a list of node ages distributions, named with the node number from phy
 # calibration_distribution <- calibs$phy$calibration_distribution
 check_conflicting_calibrations <- function(phy,

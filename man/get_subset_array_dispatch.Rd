@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_internal.R
 \name{get_subset_array_dispatch}
 \alias{get_subset_array_dispatch}
-\title{Figure out which subset function to use. Used inside: get_datelife_result}
+\title{Figure out which subset function to use. Used inside \code{\link[=get_datelife_result]{get_datelife_result()}}}
 \usage{
 get_subset_array_dispatch(
   study_element,
@@ -27,5 +27,5 @@ get_subset_array_dispatch(
 A patristic matrix with ages for the target taxa.
 }
 \description{
-Figure out which subset function to use. Used inside: get_datelife_result
+Figure out which subset function to use. Used inside \code{\link[=get_datelife_result]{get_datelife_result()}}
 }

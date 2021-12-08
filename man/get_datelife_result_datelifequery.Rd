@@ -15,12 +15,17 @@ get_datelife_result_datelifequery(
 \arguments{
 \item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 
+\item{partial}{Whether to return or exclude partially matching source chronograms,
+i.e, those that match some and not all of taxa given in \code{datelife_query}.
+Options are \code{TRUE} or \code{FALSE}. Defaults to \code{TRUE}: return all matching source
+chronograms.}
+
 \item{cache}{A character vector of length one, with the name of the data object
 to cache. Default to \code{"opentree_chronograms"}, a data object storing Open Tree of
 Life's database chronograms and other associated information.}
 
 \item{update_opentree_chronograms}{Whether to update the chronogram database or not.
-Default to \code{FALSE}.}
+Defaults to \code{FALSE}.}
 
 \item{...}{
   Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}

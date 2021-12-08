@@ -19,7 +19,7 @@ object, OR as a newick character string.}
 the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 
-\item{dating_method}{Tree dating method. Options are "bladj" or "pathd8"}
+\item{dating_method}{Tree dating method to use. Options are "bladj" or "pathd8".}
 
 \item{...}{
   Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}

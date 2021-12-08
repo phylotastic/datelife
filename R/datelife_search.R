@@ -16,6 +16,7 @@
 #' 	\item{A `datelifeQuery` object}{An output from [make_datelife_query()].}
 #' 	}
 #' @inheritParams make_datelife_query
+#' @inheritParams get_datelife_result_datelifequery
 #' @inheritParams summarize_datelife_result
 #' @export
 #' @details
@@ -54,14 +55,15 @@
 #' write(ages.html, file = "some.bird.trees.html")
 #' system("open some.bird.trees.html")
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-                            summary_format = "phylo_all",
-                            partial = TRUE,
                             use_tnrs = FALSE,
                             # approximate_match = TRUE,
+                            get_spp_from_taxon = FALSE,
+                            partial = TRUE,
                             cache = "opentree_chronograms",
+                            summary_format = "phylo_all",
+                            na.rm = FALSE,
                             summary_print = c("citations", "taxa"),
                             taxon_summary = c("none", "summary", "matrix"),
-                            get_spp_from_taxon = FALSE,
                             criterion = "taxa") {
   # TODO: find a way not to repeat partial and cache arguments, they are used in
   # datelife_search,  get_datelife_result and summarize_datelife_result
@@ -89,7 +91,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
     datelife_result = datelife_result.here,
     datelife_query = datelife_query,
     summary_format = summary_format,
-    partial = partial,
+    na.rm = na.rm,
     summary_print = summary_print,
     taxon_summary = taxon_summary,
     criterion = criterion
