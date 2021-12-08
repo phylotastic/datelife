@@ -4,12 +4,10 @@
 \alias{make_contributor_cache}
 \title{Create a cache  from Open Tree of Life}
 \usage{
-make_contributor_cache(outputfile = "contributorcache.RData", verbose = TRUE)
+make_contributor_cache(outputfile = "contributorcache.RData")
 }
 \arguments{
 \item{outputfile}{Path including file name}
-
-\item{verbose}{If TRUE, give status updates to the user}
 }
 \value{
 List containing author and curator results

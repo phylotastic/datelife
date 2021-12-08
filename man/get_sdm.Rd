@@ -4,7 +4,7 @@
 \alias{get_sdm}
 \title{Get SDM result for list of working matrices}
 \usage{
-get_sdm(unpadded.matrices, weighting, verbose)
+get_sdm(unpadded.matrices, weighting)
 }
 \arguments{
 \item{unpadded.matrices}{A list of patristic matrices, a datelifeResult object.}

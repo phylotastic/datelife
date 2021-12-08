@@ -13,8 +13,7 @@ phylo_generate_uncertainty(
   age_var = 0.1,
   age_scale = 0,
   alpha = 0.025,
-  rescale = TRUE,
-  verbose = FALSE
+  rescale = TRUE
 )
 }
 \arguments{

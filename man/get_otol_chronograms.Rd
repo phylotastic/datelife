@@ -4,11 +4,9 @@
 \alias{get_otol_chronograms}
 \title{Get all chronograms from Open Tree of Life database}
 \usage{
-get_otol_chronograms(verbose = FALSE, max_tree_count = 500)
+get_otol_chronograms(max_tree_count = 500)
 }
 \arguments{
-\item{verbose}{If TRUE, give updates to the user}
-
 \item{max_tree_count}{Numeric indicating the max number of trees to be cached. For testing purposes only.}
 }
 \value{

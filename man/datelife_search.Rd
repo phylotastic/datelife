@@ -15,7 +15,6 @@ datelife_search(
   summary_print = c("citations", "taxa"),
   taxon_summary = c("none", "summary", "matrix"),
   get_spp_from_taxon = FALSE,
-  verbose = FALSE,
   criterion = "taxa"
 )
 }

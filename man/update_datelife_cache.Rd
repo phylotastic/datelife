@@ -4,18 +4,12 @@
 \alias{update_datelife_cache}
 \title{Update chronogram database cache}
 \usage{
-update_datelife_cache(
-  save = TRUE,
-  file = "opentree_chronograms.RData",
-  verbose = TRUE
-)
+update_datelife_cache(save = TRUE, file = "opentree_chronograms.RData")
 }
 \arguments{
 \item{save}{Boolean; default TRUE: save all chronograms from Open Tree of Life to an RData file (default to opentree_chronograms.RData)}
 
 \item{file}{Path including file name}
-
-\item{verbose}{If TRUE, give status updates to the user}
 }
 \value{
 None

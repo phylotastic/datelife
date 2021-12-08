@@ -28,12 +28,12 @@
 #' @inherit get_otol_chronograms return
 #' @inherit save_otol_chronograms return
 #' @export
-update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RData", verbose = TRUE) { # , new_studies_only = TRUE
+update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RData") { # , new_studies_only = TRUE
   # enhance: I think we can change the name to update_chronograms_cache
   if (save) {
-    cache_updated <- save_otol_chronograms(file = file, verbose = verbose)
+    cache_updated <- save_otol_chronograms(file = file)
   } else {
-    cache_updated <- get_otol_chronograms(verbose = verbose)
+    cache_updated <- get_otol_chronograms()
   }
   return(cache_updated)
 }
@@ -41,11 +41,10 @@ update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RDat
 # enhance: I think we can remove this function and just add one line into save of update_datelife_cache
 #' Save all chronograms from Open Tree of Life
 #' @param file Path including file name
-#' @param verbose If TRUE, give status updates to the user
 #' @return None
 #' @export
-save_otol_chronograms <- function(file = "opentree_chronograms.RData", verbose = FALSE) {
-  opentree_chronograms <- get_otol_chronograms(verbose = verbose)
+save_otol_chronograms <- function(file = "opentree_chronograms.RData") {
+  opentree_chronograms <- get_otol_chronograms()
   save(opentree_chronograms, file = file, compress = "xz")
 }
 
@@ -99,16 +98,16 @@ phylo_has_brlen <- function(phy) {
 # }
 
 #' Get all chronograms from Open Tree of Life database
-#' @param verbose If TRUE, give updates to the user
 #' @param max_tree_count Numeric indicating the max number of trees to be cached. For testing purposes only.
 #' @return A list with elements for the trees, authors, curators, and study ids
 #' @export
-get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
-  if (verbose) {
-    options(warn = 1)
-  }
+get_otol_chronograms <- function(max_tree_count = 500) {
+  options(warn = 1)
   start_time <- Sys.time() # to register run time
-  chronogram.matches <- rotl::studies_find_trees(property = "ot:branchLengthMode", value = "ot:time", verbose = TRUE, detailed = TRUE)
+  chronogram.matches <- rotl::studies_find_trees(property = "ot:branchLengthMode",
+                                                 value = "ot:time",
+                                                 detailed = TRUE,
+                                                 verbose = FALSE)
   trees <- list()
   authors <- list()
   curators <- list()
@@ -123,9 +122,8 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
     if (tree.count > max_tree_count) {
       break
     }
-    if (verbose) {
-      message("Downloading tree(s) from study ", study.index, " of ", dim(chronogram.matches)[1])
-    }
+    message("Downloading tree(s) from study ", study.index, " of ", dim(chronogram.matches)[1])
+
     for (chrono.index in sequence((chronogram.matches$n_matched_trees[study.index]))) {
       study.id <- chronogram.matches$study_ids[study.index]
       # study.id <- "ot_409" # largest tree in Hedges et al. 2015
@@ -138,9 +136,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
       potential.bad <- paste("tree_id='", tree.id, "', study_id='", study.id, "'", sep = "")
 
       if (!grepl("\\.\\.\\.", tree.id) & !is.na(tree.id)) { # to deal with ellipsis bug
-        if (verbose) {
-          message("tree_id = '", tree.id, "', study_id = '", study.id, "'")
-        }
+        message("tree_id = '", tree.id, "', study_id = '", study.id, "'")
         new.tree <- tryCatch(rotl::get_study_tree(
           study_id = study.id, tree_id = tree.id,
           tip_label = "ott_taxon_name", deduplicate = TRUE
@@ -172,9 +168,7 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
             new.tree <- try.tree
             if (is_good_chronogram(new.tree)) {
               new.tree$tip.label <- gsub("_", " ", new.tree$tip.label)
-              if (verbose) {
-                message("\t", "has tree with branch lengths")
-              }
+              message("\t", "has tree with branch lengths")
               doi <- NULL
               try(doi <- gsub("https?://(dx\\.)?doi.org/", "", attr(rotl::get_publication(rotl::get_study_meta(study.id)), "DOI")))
               authors <- append(authors, NA)
@@ -206,10 +200,8 @@ get_otol_chronograms <- function(verbose = FALSE, max_tree_count = 500) {
       }
     }
   }
-  if (verbose) {
-    message("Problematic combos:")
-    message(paste0(utils::capture.output(bad.ones), collapse = "\n"))
-  }
+  message("Problematic combos:")
+  message(paste0(utils::capture.output(bad.ones), collapse = "\n"))
   for (i in sequence(length(authors))) {
     if (!any(is.na(authors[[i]])) & length(authors[[i]]) > 0) {
       Encoding(authors[[i]]) <- "latin1"

@@ -10,7 +10,6 @@ make_bold_otol_tree(
   otol_version = "v3",
   chronogram = TRUE,
   doML = FALSE,
-  verbose = FALSE,
   aligner = "muscle",
   ...
 )

@@ -62,15 +62,10 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
                             summary_print = c("citations", "taxa"),
                             taxon_summary = c("none", "summary", "matrix"),
                             get_spp_from_taxon = FALSE,
-                            verbose = FALSE,
                             criterion = "taxa") {
   # TODO: find a way not to repeat partial and cache arguments, they are used in
   # datelife_search,  get_datelife_result and summarize_datelife_result
   # maybe take out option to update cache and work with versions of cache for reproducibility
-  if ("opentree_chronograms" %in% cache) {
-    utils::data("opentree_chronograms", package = "datelife")
-    cache <- get("opentree_chronograms")
-  }
   message("... Running a DateLife search.")
   datelife_query <- input
   if (suppressMessages(!is_datelife_query(input))) {
@@ -82,7 +77,7 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
     )
   }
   datelife_result.here <- get_datelife_result_datelifequery(
-    input = datelife_query,
+    datelife_query = datelife_query,
     partial = partial,
     # approximate_match = approximate_match,
     cache = cache)
@@ -95,7 +90,6 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
     datelife_query = datelife_query,
     summary_format = summary_format,
     partial = partial,
-    cache = cache,
     summary_print = summary_print,
     taxon_summary = taxon_summary,
     criterion = criterion

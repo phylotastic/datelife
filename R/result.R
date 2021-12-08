@@ -19,7 +19,7 @@ run <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio cam
                 opentree_chronograms = NULL) {
   if (is.null(opentree_chronograms)) {
     utils::data(opentree_chronograms)
-    opentree_chronograms <- getAnywhere("opentree_chronograms")
+    opentree_chronograms <- utils::getAnywhere("opentree_chronograms")
   }
   # convert from HTML input to Boolean
   partial <- ifelse(partial == "yes", TRUE, FALSE)
@@ -30,5 +30,8 @@ run <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio cam
                                          use_tnrs,
                                          # approximate_match,
                                          opentree_chronograms)
-  summarize_datelife_result(datelife_result = datelife_result, summary_format = format, partial, opentree_chronograms, verbose = "none")
+  summarize_datelife_result(datelife_result = datelife_result,
+    summary_format = format,
+    partial,
+    opentree_chronograms)
 }

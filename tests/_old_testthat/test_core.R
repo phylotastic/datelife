@@ -1,7 +1,7 @@
 # test_that("update_datelife_cache works", {
 #     skip_on_cran()
 # 	  skip_on_travis() #b/c super time consuming
-#     xx <- update_datelife_cache(save = TRUE, file = "/tmp/opentree_chronograms_tmp.RData", verbose = TRUE)  # this works, opentree_chronograms_tmp is saved in tmp
+#     xx <- update_datelife_cache(save = TRUE, file = "/tmp/opentree_chronograms_tmp.RData")  # this works, opentree_chronograms_tmp is saved in tmp
 #     expect_true(all(lapply(opentree_chronograms, length) == length(opentree_chronograms$trees)))  # all elements have the same length
 # })  # this test takes around 20 min
 
@@ -81,7 +81,7 @@ test_that("get_datelife_result works", {
 test_that("Making OToL and BOLD tree works", {
   skip_on_cran()
   skip_on_travis() # b/c no pathd8
-  phy.pars <- make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus", "Gallus gallus", "Pterocnemia pennata"), marker = "COI", otol_version = "v3", doML = FALSE, verbose = TRUE)
+  phy.pars <- make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus", "Gallus gallus", "Pterocnemia pennata"), marker = "COI", otol_version = "v3", doML = FALSE)
   phy.ml <- make_bold_otol_tree(input = c("Rhea americana", "Struthio camelus", "Gallus gallus", "Pterocnemia pennata"), marker = "COI", otol_version = "v3", doML = TRUE)
   expect_equal(class(phy.pars), "phylo")
   expect_equal(class(phy.ml), "phylo")

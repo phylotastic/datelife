@@ -12,7 +12,7 @@ phyloall <- datelife_search(
 )
 
 dr <- get_datelife_result_datelifequery(
-  input = dq,
+  datelife_query = dq,
   partial = TRUE,
   use_tnrs = FALSE,
   approximate_match = FALSE,

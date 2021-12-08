@@ -30,7 +30,7 @@
 #' }
 #' ape::ltt.lines(felid_sdm$phy, col = "red")
 #' title(c("fake uncertainty", "in Felidae SDM chronogram"))
-phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "other", age_distribution = "uniform", age_sd = NULL, age_var = 0.1, age_scale = 0, alpha = 0.025, rescale = TRUE, verbose = FALSE) {
+phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "other", age_distribution = "uniform", age_sd = NULL, age_var = 0.1, age_scale = 0, alpha = 0.025, rescale = TRUE) {
   phylo_check(phy)
   size <- round(as.numeric(size), digits = 0)
   uncertainty_method <- match.arg(uncertainty_method, c("mrbayes", "other"))
@@ -81,9 +81,8 @@ phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "ot
     nn <- sort(phylo_get_node_numbers(phy))
     res <- c()
     while (length(res) < size) {
-      if (verbose) {
-        message("Uncertainty sample number ", length(res) + 1)
-      }
+      message("Uncertainty sample number ", length(res) + 1)
+
       phy_depths.final <- phy_depths.original <- phy_depths
       tot_age <- my_rlnorm(1, age_mu = ape::branching.times(phy)[as.character(nn[1])]) # variance is determined by the function above, depending on sd or var
       phy_depths.final[phy$edge == nn[1]] <- tot_age

@@ -14,7 +14,9 @@
 #' @export
 #' @details
 #' Criscuolo A, Berry V, Douzery EJ, Gascuel O. SDM: a fast distance-based approach for (super) tree building in phylogenomics. Syst Biol. 2006. 55(5):740. doi: 10.1080/10635150600969872.
-datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = TRUE, ...) {
+datelife_result_sdm <- function(datelife_result,
+                                weighting = "flat",
+                                ...) {
   # add check datelife_result
   phy <- NA
   # used.studies <- names(datelife_result)
@@ -24,10 +26,10 @@ datelife_result_sdm <- function(datelife_result, weighting = "flat", verbose = T
   } else {
     # datelife_result <- best_grove
     unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
-    good.matrix.indices <- get_goodmatrices(unpadded.matrices, verbose)
+    good.matrix.indices <- get_goodmatrices(unpadded.matrices)
     if (length(good.matrix.indices) > 1) {
       unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-      SDM.result <- get_sdm(unpadded.matrices, weighting, verbose)
+      SDM.result <- get_sdm(unpadded.matrices, weighting)
       # it is important to use upgma as clustering method; nj produces much younger ages when the matrix comes from sdm
       # phy <- patristic_matrix_to_phylo(SDM.result, clustering_method = clustering_method, fix_negative_brlen = TRUE)
       phy <- summary_matrix_to_phylo(SDM.result, ...) # this also contains the age distributions and calibrations used
@@ -68,10 +70,9 @@ patristic_matrix_unpad <- function(patristic_matrix) {
 #' 	\item{weighting = "taxa"}{Weight is proportional to number of taxa.}
 #' 	\item{weighting = "inverse"}{Weight is proportional to 1 / number of taxa.}
 #' }
-#' @inheritParams datelife_search
 #' @return A matrix.
 #' @export
-get_sdm <- function(unpadded.matrices, weighting, verbose) {
+get_sdm <- function(unpadded.matrices, weighting) {
   # used.studies <- used.studies[good.matrix.indices]
   weights <- rep(1, length(unpadded.matrices))
   if (weighting == "taxa") {
@@ -80,9 +81,7 @@ get_sdm <- function(unpadded.matrices, weighting, verbose) {
   if (weighting == "inverse") {
     weights <- 1 / unname(sapply(unpadded.matrices, dim)[1, ])
   }
-  if (verbose) {
-    message(cat("\n", "Synthesizing", length(unpadded.matrices), "chronograms with SDM"))
-  }
+  message(cat("\n", "Synthesizing", length(unpadded.matrices), "chronograms with SDM"))
   SDM.result <- do.call(ape::SDM, c(unpadded.matrices, weights))[[1]]
   return(SDM.result)
 }
@@ -90,25 +89,19 @@ get_sdm <- function(unpadded.matrices, weighting, verbose) {
 #' @inheritParams get_sdm
 #' @return A numeric vector of good matrix indices in unpadded.matrices.
 #' @export
-get_goodmatrices <- function(unpadded.matrices, verbose) {
+get_goodmatrices <- function(unpadded.matrices) {
   good.matrix.indices <- c()
   for (i in sequence(length(unpadded.matrices))) {
     test.result <- NA
     # Rationale here: some chronograms always cause errors with SDM, even when trying to get a consensus of them
     # with themselves. For now, throw out of synthesis.
     try(test.result <- mean(do.call(ape::SDM, c(unpadded.matrices[i], unpadded.matrices[i], rep(1, 2)))[[1]]), silent = TRUE)
-    if (verbose) {
-      message(cat(i, "out of", length(unpadded.matrices), "chronograms tried: "), appendLF = FALSE)
-    }
+    message(cat(i, "out of", length(unpadded.matrices), "chronograms tried: "), appendLF = FALSE)
     if (is.finite(test.result)) {
       good.matrix.indices <- append(good.matrix.indices, i)
-      if (verbose) {
-        message(cat(" Ok."))
-      }
+      message(cat(" Ok."))
     } else {
-      if (verbose) {
-        message(cat(" Failed."))
-      }
+      message(cat(" Failed."))
     }
   }
   return(good.matrix.indices)
@@ -119,10 +112,10 @@ get_goodmatrices <- function(unpadded.matrices, verbose) {
 #' @export
 get_sdm_matrix <- function(datelife_result) {
   unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
-  good.matrix.indices <- get_goodmatrices(unpadded.matrices, verbose = TRUE)
+  good.matrix.indices <- get_goodmatrices(unpadded.matrices)
   if (length(good.matrix.indices) > 1) {
     unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-    sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat", verbose = TRUE)
+    sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat")
   }
   return(sdm_matrix)
 }

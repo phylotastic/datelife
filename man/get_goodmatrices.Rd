@@ -4,7 +4,7 @@
 \alias{get_goodmatrices}
 \title{Get good matrices for SDM}
 \usage{
-get_goodmatrices(unpadded.matrices, verbose)
+get_goodmatrices(unpadded.matrices)
 }
 \arguments{
 \item{unpadded.matrices}{A list of patristic matrices, a datelifeResult object.}

@@ -4,22 +4,20 @@
 \alias{datelife_use_datelifequery}
 \title{Generate one or multiple chronograms from a \code{datelifeQuery} object.}
 \usage{
-datelife_use_datelifequery(input = NULL, dating_method = "bladj", each = FALSE)
+datelife_use_datelifequery(
+  datelife_query = NULL,
+  dating_method = "bladj",
+  each = FALSE
+)
 }
 \arguments{
-\item{input}{A \code{datelifeQuery} object.}
+\item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=get_all_calibrations]{get_all_calibrations}}, \code{\link[=use_all_calibrations]{use_all_calibrations}}
-  \describe{
-    \item{\code{each}}{Boolean, default to \code{FALSE}: all calibrations are returned in
+\item{dating_method}{Tree dating method. Options are "bladj" or "pathd8"}
+
+\item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
 the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
-    \item{\code{calibrations}}{An object of class \code{datelifeCalibrations},
-typically an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
-    \item{\code{dating_method}}{Tree dating method. Options are "bladj" or "pathd8"}
-    \item{\code{phy}}{A \code{phylo} object with or without branch lengths}
-  }}
 }
 \value{
 A list with a chronogram and secondary calibrations used.

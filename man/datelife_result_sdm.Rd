@@ -5,7 +5,7 @@
 \title{Function to compute the SDM supertree (Criscuolo et al. 2006) from a
 \code{datelifeResult} object}
 \usage{
-datelife_result_sdm(datelife_result, weighting = "flat", verbose = TRUE, ...)
+datelife_result_sdm(datelife_result, weighting = "flat", ...)
 }
 \arguments{
 \item{datelife_result}{A \code{datelifeResult} object, output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}

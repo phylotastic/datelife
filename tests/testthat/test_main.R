@@ -16,7 +16,7 @@ test_that("datelife_use workflows work", {
   # test a datelifeQuery input with NA as phy:
   dq <- attributes(du)$datelife_query
   dq$phy <- NA
-  expect_warning(datelife_use_datelifequery(input = dq))
+  expect_warning(datelife_use_datelifequery(datelife_query = dq))
   # when input is a datelifeQuery it returns it:
   make_datelife_query(input = attributes(du)$datelife_query)
   # test that pathd8 workflow works:

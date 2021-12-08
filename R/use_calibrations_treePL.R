@@ -12,7 +12,7 @@
 #' This is an issue from PATHd8.
 # i=1
 # phy <- tax_phyloall_bold[[3]][[1]]
-# phy <- make_bold_otol_tree(tax_phyloallall[[3]][[1]], chronogram = FALSE, verbose = TRUE)
+# phy <- make_bold_otol_tree(tax_phyloallall[[3]][[1]], chronogram = FALSE)
 # phy <- tax_phyloall_bold2[[3]][[1]] # is NA
 # calibrations <- tax_othercalall[[3]][[1]]
 # phy$edge.length

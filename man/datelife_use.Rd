@@ -2,7 +2,6 @@
 % Please edit documentation in R/datelife_use.R
 \name{datelife_use}
 \alias{datelife_use}
-\alias{use_all_calibrations}
 \title{Generate one or multiple chronograms for a set of given taxon names}
 \usage{
 datelife_use(input = NULL, each = FALSE, dating_method = "bladj", ...)

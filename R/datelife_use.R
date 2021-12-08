@@ -6,7 +6,6 @@
 #' or PATHd8. If no tree topology is provided, it will attempt to generate one with
 #' BOLD-OpenTree through [make_bold_otol_tree()].
 #'
-#' @aliases use_all_calibrations
 #' @inheritParams datelife_search
 #' @inheritParams use_all_calibrations
 #' @inheritDotParams make_datelife_query
@@ -42,8 +41,7 @@ datelife_use <- function(input = NULL,
   if (!inherits(datelife_query$phy, "phylo")) {
     # make_bold_otol_tree can take a datelifeQuery object, otherwise, it will make one again!
     phy <- make_bold_otol_tree(datelife_query,
-      chronogram = FALSE,
-      verbose = FALSE
+                               chronogram = FALSE
     )
   }
   # if(!inherits(phy, "phylo")){
@@ -61,7 +59,7 @@ datelife_use <- function(input = NULL,
   datelife_query$phy <- phy
   # Finally, call datelife_search, get_all_calibrations and use_all_calibrations:
   res <- datelife_use_datelifequery(
-    input = datelife_query,
+    datelife_query = datelife_query,
     each = each,
     dating_method = dating_method
   )
@@ -69,20 +67,20 @@ datelife_use <- function(input = NULL,
   return(res)
 }
 
-#' Generate one or multiple chronograms from a \code{datelifeQuery} object.
+#' Generate one or multiple chronograms from a `datelifeQuery` object.
 #'
-#' @description \code{datelife_use_datelifequery} generates one or multiple chronograms (i.e., phylogenetic
+#' @description `datelife_use_datelifequery` generates one or multiple chronograms (i.e., phylogenetic
 #' trees with branch lengths proportional to time) for a set of \code{input} taxa,
 #' dated with bladj or PATHd8, using secondary calibrations available for any pair
 #' of \code{input} taxa, mined from the code{\link[=opentree_chronograms]{opentree_chronograms}}
 #' local DateLife database.
 #'
-#' @param input A \code{datelifeQuery} object.
-#' @inheritDotParams get_all_calibrations
-#' @inheritDotParams use_all_calibrations
+#' @inheritParams get_taxon_summary
+#' @inheritParams use_all_calibrations
+#' @inheritParams get_all_calibrations
 #' @return A list with a chronogram and secondary calibrations used.
 #' @export
-datelife_use_datelifequery <- function(input = NULL,
+datelife_use_datelifequery <- function(datelife_query = NULL,
                                        dating_method = "bladj",
                                        each = FALSE) {
   #
@@ -96,17 +94,17 @@ datelife_use_datelifequery <- function(input = NULL,
   }
   # get calibrations by performing a datelife_search with get_all_calibrations:
   calibrations <- get_calibrations_datelifequery(
-    input = input,
+    input = datelife_query,
     each = each
   )
 
   # date the topology with obtained calibrations
   res <- use_all_calibrations(
-    phy = input$phy,
+    phy = datelife_query$phy,
     calibrations = calibrations,
     dating_method = dating_method
   )
   # attributes(calibrations)
-  attr(res, "datelife_query") <- input
+  attr(res, "datelife_query") <- datelife_query
   return(res)
 }

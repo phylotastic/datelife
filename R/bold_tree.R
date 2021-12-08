@@ -27,7 +27,6 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
                                 otol_version = "v3",
                                 chronogram = TRUE,
                                 doML = FALSE,
-                                verbose = FALSE,
                                 aligner = "muscle",
                                 ...) {
   # input check (accepts newick strings too)

@@ -20,7 +20,7 @@ get_datelife_result_datelifequery <- function(datelife_query = NULL,
   #
   message("... Searching the chronogram database.")
   if (update_opentree_chronograms) {
-    cache <- update_datelife_cache(save = TRUE, verbose = verbose)
+    cache <- update_datelife_cache(save = TRUE)
   } else {
     if ("opentree_chronograms" %in% cache) {
       utils::data("opentree_chronograms", package = "datelife")
@@ -41,16 +41,16 @@ get_datelife_result_datelifequery <- function(datelife_query = NULL,
   # do that later in summarizing steps
   results_list <- lapply(cache$trees,
     get_subset_array_dispatch,
-    taxa = input$cleaned_names,
+    taxa = datelife_query$cleaned_names,
     phy = NULL
   )
   datelife_result <- results_list_process(results_list,
-    input$cleaned_names,
+    datelife_query$cleaned_names,
     partial = partial
   )
   message("Search done!")
   class(datelife_result) <- c("datelifeResult")
-  attr(datelife_result, "datelife_query") <- input
+  attr(datelife_result, "datelife_query") <- datelife_query
   return(datelife_result)
 }
 
@@ -126,7 +126,7 @@ get_datelife_result <- function(input = NULL,
     input_dq <- make_datelife_query(input = input,
                                     ...)
   }
-  res <- get_datelife_result_datelifequery(input = input_dq,
+  res <- get_datelife_result_datelifequery(datelife_query = input_dq,
                     partial = partial,
                     cache = cache,
                     update_opentree_chronograms = update_opentree_chronograms)

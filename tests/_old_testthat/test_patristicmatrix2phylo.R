@@ -26,10 +26,10 @@ test_that("felis/canidae divergence is accurate", {
 
 test_that("patristic_matrix_to_phylo works: cetaceae", {
   unpadded.matrices <- lapply(cetacea_result, patristic_matrix_unpad)
-  good.matrix.indices <- get_goodmatrices(unpadded.matrices, verbose = TRUE)
+  good.matrix.indices <- get_goodmatrices(unpadded.matrices)
   if (length(good.matrix.indices) > 1) {
     unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-    sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat", verbose = TRUE)
+    sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat")
   }
   # max(sdm_matrix, na.rm = TRUE)/2
   t0 <- summarize_datelife_result(datelife_result = cetacea_result, summary_format = "phylo_sdm")
@@ -70,10 +70,10 @@ test_that("cluster_patristicmatrix works", {
 
 test_that("summary_matrix_to_phylo works: threebirds", {
   unpadded.matrices <- lapply(threebirds_result, patristic_matrix_unpad)
-  good.matrix.indices <- get_goodmatrices(unpadded.matrices, verbose = TRUE)
+  good.matrix.indices <- get_goodmatrices(unpadded.matrices)
   if (length(good.matrix.indices) > 1) {
     unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-    sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat", verbose = TRUE)
+    sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat")
   }
   # max(sdm_matrix, na.rm = TRUE)/2
   sdm_phylo <- summary_matrix_to_phylo(summ_matrix = sdm_matrix)

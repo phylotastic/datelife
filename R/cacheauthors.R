@@ -1,10 +1,9 @@
 
 #' Create a cache  from Open Tree of Life
 #' @param outputfile Path including file name
-#' @param verbose If TRUE, give status updates to the user
 #' @return List containing author and curator results
 #' @export
-make_contributor_cache <- function(outputfile = "contributorcache.RData", verbose = TRUE) {
+make_contributor_cache <- function(outputfile = "contributorcache.RData") {
   all.sources <- rotl::tol_about(include_source_list = TRUE)
   all.studies <- as.list(rep(NA, length(all.sources$source_list)))
   author.results <- data.frame()
@@ -40,15 +39,11 @@ make_contributor_cache <- function(outputfile = "contributorcache.RData", verbos
       # author.results <- rbind(author.results, expand.grid(author=authors, study=study.id, clade=clade.name, publication=get_publication(all.studies[[i]])[1], doi=attr(get_publication(all.studies[[i]]),"DOI")))
       curator.results <- rbind(curator.results, expand.grid(person = curators, study = study.id, clade = clade.name, stringsAsFactors = FALSE))
     }
-    if (verbose) {
-      message(i, " of ", length(all.studies), " done ")
-    }
+    message(i, " of ", length(all.studies), " done ")
   }
-  if (verbose) {
-    message("Authors from studies with the following id's could not be retrieved:")
-    for (i in 1:length(missed_doi)) {
-      message("\t", missed_doi[i])
-    }
+  message("Authors from studies with the following id's could not be retrieved:")
+  for (i in seq_len(missed_doi)) {
+    message("\t", missed_doi[i])
   }
   author.pretty <- make_overlap_table(author.results)
   try(Encoding(author.pretty$person) <- "latin1")
@@ -63,10 +58,8 @@ make_contributor_cache <- function(outputfile = "contributorcache.RData", verbos
 
 #' Create a cache from TreeBase
 #' @param outputfile Path including file name
-#' @param verbose If TRUE, give status updates to the user
 #' @return List containing author and curator results
-#' @export
-make_treebase_cache <- function(outputfile = "treebasecache.RData", verbose = TRUE) {
+make_treebase_cache <- function(outputfile = "treebasecache.RData") { # nocov start
   InvertNames <- function(author) {
     return(paste(sapply(strsplit(author, ", "), rev), collapse = " "))
   }
@@ -81,15 +74,13 @@ make_treebase_cache <- function(outputfile = "treebasecache.RData", verbose = TR
       authors <- sapply(authors, InvertNames)
       author.results <- rbind(author.results, expand.grid(person = authors, study = study.id, stringsAsFactors = FALSE))
     }
-    if (verbose) {
-      message(paste(i, "of", length(all.studies), "done."))
-    }
+    message(paste(i, "of", length(all.studies), "done."))
   }
   tb.author.pretty <- make_overlap_table(author.results)[, -3]
   tb.author.results <- author.results
   save(tb.author.results, tb.author.pretty, file = outputfile)
   return(list(tb.author.results = tb.author.results, tb.author.pretty = tb.author.pretty))
-}
+} # nocov end
 
 #' Create an overlap table
 #' @param results_table An author.results or curator.results data frame
@@ -116,7 +107,6 @@ make_overlap_table <- function(results_table) {
 #' @return data.frame with author last name, author first and other names, and comma delimited URLs for TreeBase studies
 #'
 make_treebase_associations <- function() {
-  verbose <- TRUE
   all.studies <- treebase::download_metadata("", by = "all")
   unlist(all.studies[[1]])[which(names(unlist(all.studies[[1]])) == "creator")]
   author.results <- data.frame()
@@ -132,9 +122,7 @@ make_treebase_associations <- function() {
     if (!is.null(authors)) {
       author.results <- rbind(author.results, expand.grid(person = authors, url = paste0('<a href="', study.url, '">', year, " ", publisher, " (TreeBase)</a>"), stringsAsFactors = FALSE))
     }
-    if (verbose) {
-      message(paste(i, "of", length(all.studies), "done."))
-    }
+    message(paste(i, "of", length(all.studies), "done."))
   }
 
   author.lumped <- stats::aggregate(author.results$url, by = list(author = author.results$person), FUN = paste, collapse = ", ")
@@ -149,8 +137,16 @@ make_otol_associations <- function() {
   # .res <- httr::POST("https://api.opentreeoflife.org/v3/studies/find_studies")
   #  res <- vapply(.res[["matched_studies"]], function(x) x[["ot:studyId"]],character(1))
 
-  all.trees <- rbind(rotl::studies_find_trees(property = "is_deprecated", value = "false", verbose = TRUE, detailed = TRUE), rotl::studies_find_trees(property = "is_deprecated", value = "true", verbose = TRUE, detailed = TRUE))
-  trees <- list()
+  all.trees <- rbind(rotl::studies_find_trees(property = "is_deprecated",
+                                              value = "false",
+                                              verbose = TRUE,
+                                              detailed = TRUE),
+                     rotl::studies_find_trees(property = "is_deprecated",
+                                              value = "true",
+                                              verbose = TRUE,
+                                              detailed = TRUE)
+  )
+  # trees <- list()
   authors <- list()
   curators <- list()
   studies <- list()
@@ -159,7 +155,6 @@ make_otol_associations <- function() {
   tree.count <- 0
   bad.ones <- c()
   studyids <- list()
-  # utils::opentree_chronograms
 
   for (study.index in sequence(dim(all.trees)[1])) {
     study.id <- all.trees$study_ids[study.index]
