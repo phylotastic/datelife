@@ -1,9 +1,9 @@
-#' Get a taxon summary of a \code{datelifeResult} object
+#' Get a taxon summary of a `datelifeResult` object
 #'
-# #' To be renamed summary_taxon.
+# #' To be renamed `summary_taxon`.
 #'
-#' @param datelife_query A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.
-#' @inheritParams summarize_datelife_result
+#' @param datelife_result A `datelifeResult` object, output of [get_datelife_result()].
+#' @param datelife_query A `datelifeQuery` object, output of [make_datelife_query()].
 #' @export
 get_taxon_summary <- function(datelife_result = NULL,
                               datelife_query = NULL) {
@@ -76,38 +76,82 @@ get_taxon_summary <- function(datelife_result = NULL,
 # print.datelifeTaxonSummary <- function(taxon_summary){
 #
 # }
-#' Summarize a \code{datelifeResult} object
+#' Summarize a `datelifeResult` object
 #'
-#' @description Get different types of summaries from a \code{datelifeResult}
+#' @description Get different types of summaries from a `datelifeResult`
 #' object, an output from [get_datelife_result()].
 #' This allows rapid processing of data.
-#' If you need a list of chronograms from your \code{datelifeResult} object, this
+#' If you need a list of chronograms from your `datelifeResult` object, this
 #' is the function you are looking for.
 #'
-#' @param datelife_result A \code{datelifeResult} object, an output
-#' of [get_datelife_result()].
 #' @inheritParams get_taxon_summary
-#' @inheritParams datelife_search
+#' @param summary_format A character vector of length one, indicating the output
+#' format for results of the DateLife search. Available output formats are:
+#' \describe{
+#' 	 \item{"citations"}{A character vector of references where chronograms with
+#' 	 				some or all of the target taxa are published (source chronograms).}
+#' 	 \item{"mrca"}{A named numeric vector of most recent common ancestor (mrca)
+#' 	 				ages of target taxa defined in input, obtained from the source chronograms.
+#' 	 				Names of mrca vector are equal to citations.}
+#' 	 \item{"newick_all"}{A named character vector of newick strings corresponding
+#' 	 				to target chronograms derived from source chronograms. Names of newick_all
+#' 	 				vector are equal to citations.}
+#' 	 \item{"newick_sdm"}{Only if multiple source chronograms are available. A
+#' 	 				character vector with a single newick string corresponding to a target
+#' 	 				chronogram obtained with SDM supertree method (Criscuolo et al. 2006).}
+#' 	 \item{"newick_median"}{Only if multiple source chronograms are available.
+#' 	 				A character vector with a single newick string corresponding to a target
+#' 	 				chronogram from the median of all source chronograms.}
+#' 	 \item{"phylo_sdm"}{Only if multiple source chronograms are available. A
+#' 	 				phylo object with a single target chronogram obtained with SDM supertree
+#' 	 				method (Criscuolo et al. 2006).}
+#' 	 \item{"phylo_median"}{Only if multiple source chronograms are available. A
+#' 	 				phylo object with a single target chronogram obtained from source
+#' 	 				chronograms with median method.}
+#' 	 \item{"phylo_all"}{A named list of phylo objects corresponding to each target
+#' 	 				chronogram obtained from available source chronograms. Names of
+#' 	 				phylo_all list correspond to citations.}
+#' 	 \item{"phylo_biggest"}{The chronogram with the most taxa. In the case of a
+#' 	 				tie, the chronogram with clade age closest to the median age of the
+#' 	 				equally large trees is returned.}
+#' 	 \item{"html"}{A character vector with an html string that can be saved and
+#' 	 				then opened in any web browser. It contains a 4 column table with data on
+#' 	 				target taxa: mrca, number of taxa, citations of source chronogram and
+#' 	 				newick target chronogram.}
+#' 	 \item{"data_frame"}{A data frame with data on target taxa: mrca, number of
+#' 	 				taxa, citations of source chronograms and newick string.}
+#' }
+#' @param partial Whether to include matching source trees even if they only
+#'   match some of the desired taxa. Default to `TRUE`.
+#' @param summary_print A character vector specifying type of summary information
+#'   to be printed to screen:
+#'   \describe{
+#'   	 \item{"citations"}{Prints references of chronograms where target taxa are found.}
+#'   	 \item{"taxa"}{Prints a summary of the number of chronograms where each target
+#'   	 				taxon is found.}
+#'   	 \item{"none"}{Nothing is printed to screen.}
+#'   }
+#'   Defaults to `c("citations", "taxa")`, which displays both.
+#' @param taxon_summary A character vector specifying if data on target taxa missing
+#'   in source chronograms should be added to the output as a `"summary"` or as a
+#'   presence/absence `"matrix"`. Default to `"none"`, no information on taxon_summary
+#'   added to the output.
+#' @param criterion A character vector of one element indicating whether to get the
+#'   grove with the most trees or the most taxa, `"trees"` and `"taxa"`.
+#'   For summarizing approaches that return a single synthetic tree from a group of
+#'   chronograms, it is important that the trees leading to it form a grove (roughly,
+#'   a sufficiently overlapping set of taxa between trees (see Ané et al. 2005,
+#'   10.1007/s00026-009-0017-x). In the rare case of multiple groves, should we take
+#'   the one with the most trees or the most taxa? Default to `"taxa"`.
 #' @inherit datelife_search return details
 #' @export
 summarize_datelife_result <- function(datelife_result = NULL,
                                       datelife_query = NULL,
                                       summary_format = "phylo_all",
                                       partial = TRUE,
-                                      update_opentree_chronograms = FALSE,
-                                      cache = "opentree_chronograms",
                                       summary_print = c("citations", "taxa"),
                                       taxon_summary = c("none", "summary", "matrix"),
-                                      verbose = FALSE,
-                                      criterion = c("trees", "taxa")) {
-  if (update_opentree_chronograms) {
-    cache <- update_datelife_cache(save = TRUE, verbose = verbose)
-  } else {
-    if ("opentree_chronograms" %in% cache) {
-      utils::data("opentree_chronograms", package = "datelife")
-      cache <- get("opentree_chronograms")
-    }
-  }
+                                      criterion = "taxa") {
   taxon_summ <- get_taxon_summary(
     datelife_result = datelife_result,
     datelife_query = datelife_query
@@ -154,7 +198,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
   }
   # test if n_overlap = 2 is enough to summarize results with sdm and median:
   if (summary_format.in %in% c("newick_sdm", "phylo_sdm", "newick_median", "phylo_median")) {
-    best_grove <- get_best_grove(datelife_result, criterion = "taxa", n = 2)$best_grove
+    best_grove <- get_best_grove(datelife_result, criterion = criterion, n = 2)$best_grove
   }
   if (inherits(datelife_query, "datelifeQuery")) {
     target_tree <- datelife_query$phy

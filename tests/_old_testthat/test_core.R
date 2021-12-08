@@ -29,7 +29,7 @@ test_that("datelife_search returns phylo_all: Crop plants, vector input", {
 test_that("datelife_search returns phylo_all: Crop plants, newick input", {
   trees <- datelife_search(
     input = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);",
-    summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE,
+    summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE,
     cache = "opentree_chronograms"
   )
   # expect_s3_class(trees[[1]], "phylo")
@@ -70,7 +70,7 @@ test_that("datelife_search returns mrca", {
 test_that("get_datelife_result works", {
   # skip_on_cran()
   # skip_on_os("linux") #b/c no pathd8 on travis linux
-  datelife_result.in <- get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, cache = getAnywhere("opentree_chronograms"))
+  datelife_result.in <- get_datelife_result(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), partial = TRUE, use_tnrs = FALSE, cache = getAnywhere("opentree_chronograms"))
   expect_equal(typeof(datelife_result.in), "list")
   expect_s3_class(datelife_result.in, "datelifeResult")
   # expect_gte(length(datelife_result.in), 4) #as of Nov 4, 2016, had length 8
@@ -95,7 +95,7 @@ test_that("Making OToL and BOLD tree works", {
 #   skip_on_os("linux") #b/c no pathd8 on travis linux
 # it does not work anymmore from get_datelife_result, only from summarize with congruify = TRUE
 # change this test acordingly ^
-#   datelife_result <- get_datelife_result(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, use_tnrs=FALSE, approximate_match=TRUE)
+#   datelife_result <- get_datelife_result(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), partial=TRUE, use_tnrs=FALSE)
 #   # expect_gte(length(datelife_result), 2)
 #   # length(datelife_result) is equal 6
 #   #TODO add a different test here, testing length is not efficient
@@ -106,7 +106,7 @@ test_that("Making OToL and BOLD tree works", {
 test_that("That we don't get negative brlen from pathd8", {
   skip_on_cran()
   skip_on_os("linux") # b/c no pathd8 on travis linux
-  tree <- datelife_search(input = "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);", summary_format = "phylo_median", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE)
+  tree <- datelife_search(input = "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);", summary_format = "phylo_median", partial = TRUE, use_tnrs = FALSE)
   expect_true(min(tree$edge.length) >= 0)
 })
 
@@ -130,14 +130,14 @@ test_that("We can get trees of two taxa back", {
 # 	other <- "(((((((Homo sapiens,(Ara ararauna,Alligator mississippiensis)Archosauria)Amniota,Salamandra atra)Tetrapoda,Katsuwonus pelamis)Euteleostomi,Carcharodon carcharias)Gnathostomata,Asymmetron lucayanum)Chordata,(Echinus esculentus,Linckia columbiae)Eleutherozoa)Deuterostomia,(((((Procambarus alleni,Homarus americanus)Astacidea,Callinectes sapidus),(Bombus balteatus,Periplaneta americana)Neoptera)Pancrustacea,Latrodectus mactans)Arthropoda,((Lineus longissimus,(Octopus vulgaris,Helix aspersa)),Lumbricus terrestris))Protostomia);"
 # 	b1 <- make_bold_otol_tree(input = other)
 # 	# nb1 <- length(b1$tiplabel)
-# 	ed1 <- datelife_search(input = other, summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, method = "PATHd8", bold = TRUE)
+# 	ed1 <- datelife_search(input = other, summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, method = "PATHd8", bold = TRUE)
 # 	# ned1 <- length(ed1[[length(ed1)]]$tip.label)
 # 	# expect_equal(nb1, ned1)
 # 	expect_equal(b1$tiplabel, ed1[[length(ed1)]]$tip.label) # tests both trees have the same taxa, in the same number and order. It's ok, cause it should be the same tree
 # 	# expect_identical(b1$tiplabel, ed1[[length(ed1)]]$tip.label)
 # 	b2 <- make_bold_otol_tree(input = tax2)
 # 	# nb1 <- length(b1$tiplabel)
-# 	ed2 <- datelife_search(input = tax2, summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, approximate_match = TRUE, method = "PATHd8", bold = TRUE)
+# 	ed2 <- datelife_search(input = tax2, summary_format = "phylo_all", partial = TRUE, use_tnrs = FALSE, method = "PATHd8", bold = TRUE)
 # 	# ned1 <- length(ed1[[length(ed1)]]$tip.label)
 # 	# expect_equal(nb1, ned1)
 # 	expect_equal(b2$tip.label, ed2[[length(ed2)]]$tip.label)
@@ -145,13 +145,13 @@ test_that("We can get trees of two taxa back", {
 
 # test_that("TNRS with approximate match works", {
 # taxa <- c("Rhea_americana", "Pterocnemia pennato", "Strutho camelus")
-# input.processed <- make_datelife_query(taxa, use_tnrs=TRUE, approximate_match=TRUE)
+# input.processed <- make_datelife_query(taxa, use_tnrs=TRUE)
 # expect_true(all.equal(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), input.processed$cleaned_names))
 # })
 
 
 # test_that("TNRS with unmatchable taxa works", {
 # taxa <- c("Rhea_americana", "Pterocnemia pennato", "Oscar the grouch", "Strutho camelus")
-# input.processed <- make_datelife_query(taxa, use_tnrs=TRUE, approximate_match=TRUE)
+# input.processed <- make_datelife_query(taxa, use_tnrs=TRUE)
 # expect_true(all.equal(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), input.processed$cleaned_names))
 # })

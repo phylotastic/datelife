@@ -7,8 +7,7 @@
 datelife_result_MRCA(datelife_result, partial = TRUE)
 }
 \arguments{
-\item{datelife_result}{A \code{datelifeResult} object, an output
-of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
+\item{datelife_result}{A \code{datelifeResult} object, output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
 
 \item{partial}{If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries}
 }

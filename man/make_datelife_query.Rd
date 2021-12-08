@@ -7,31 +7,42 @@ string to a \code{datelifeQuery} object}
 \usage{
 make_datelife_query(
   input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-  use_tnrs = FALSE,
-  approximate_match = TRUE,
-  get_spp_from_taxon = FALSE,
-  verbose = FALSE
+  use_tnrs = TRUE,
+  get_spp_from_taxon = FALSE
 )
 }
 \arguments{
-\item{input}{One of the following:
+\item{input}{Taxon names as one of the following:
 \describe{
-\item{Taxon names}{As a character vector.}
-\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+\item{A character vector}{With taxon names as a single comma separated strting or concatenated with \code{\link[=c]{c()}}.}
+\item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
 object, OR as a newick character string.}
 }}
 
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
+\item{use_tnrs}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
+taxonomic name variations.}
+
+\item{get_spp_from_taxon}{Wether to search ages for all species belonging to a
+given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
+If input is a newick string with some clades it will be converted to a \code{phylo}
+object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.label}.}
 }
 \value{
-A datelifeQuery object, a list of three elements: $phy a phylo object or NA, if input is not a tree; a cleaned vector of taxon names; and $ott_ids a numeric vector of OTT ids if use_tnrs = TRUE, or NULL if use_tnrs = FALSE.
+A \code{datelifeQuery} object, which is a list of three elements:
+\describe{
+\item{$phy}{A \code{phylo} object or \code{NA}, if input is not a tree.}
+\item{$cleaned_names}{A character vector of cleaned taxon names.}
+\item{$ott_ids}{A numeric vector of OTT ids if \code{use_tnrs = TRUE}, or \code{NULL} if \code{use_tnrs = FALSE}.}
+}
 }
 \description{
 Go from taxon names from a character vector, a phylo object or a newick character
 string to a \code{datelifeQuery} object
 }
 \details{
-It processes \code{phylo} and \code{newick character} string inputs
+It processes \code{phylo} objects and newick character string inputs
 with \code{\link[=input_process]{input_process()}}. If \code{input} is a \code{multiPhylo} object, only the first \code{phylo}
-element will be used. Equally, if the newich character string has mutiple trees, only the first one will be used.
+element will be used. Similarly, if an \code{input} newick character string has mutiple trees,
+only the first one will be used.
 }

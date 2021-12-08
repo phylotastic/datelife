@@ -1,29 +1,45 @@
 #' Go from taxon names from a character vector, a phylo object or a newick character
-#' string to a \code{datelifeQuery} object
+#' string to a `datelifeQuery` object
 #'
 # #' @description
 #'
-#' @param input One of the following:
+#' @param input Taxon names as one of the following:
 #' \describe{
-#' 	\item{Taxon names}{As a character vector.}
-#' 	\item{A tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
-#' 				object, OR as a newick character string.}
+#' 	 \item{A character vector}{With taxon names as a single comma separated strting or concatenated with [c()].}
+#' 	 \item{A phylogenetic tree with taxon names as tip labels}{As a `phylo` or `multiPhylo`
+#' 	 			object, OR as a newick character string.}
 #' }
-#' @inheritParams datelife_search
-#' @return A datelifeQuery object, a list of three elements: $phy a phylo object or NA, if input is not a tree; a cleaned vector of taxon names; and $ott_ids a numeric vector of OTT ids if use_tnrs = TRUE, or NULL if use_tnrs = FALSE.
-#' @details It processes \code{phylo} and \code{newick character} string inputs
-#' with [input_process()]. If \code{input} is a \code{multiPhylo} object, only the first \code{phylo}
-#' element will be used. Equally, if the newich character string has mutiple trees, only the first one will be used.
+#' @param use_tnrs Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+#'   to process input taxon names. Default to `TRUE`, it corrects misspellings and
+#'   taxonomic name variations.
+# #' @param use_tnrs Boolean; default to `FALSE`. If `TRUE`, use OpenTree's services
+# #'   to resolve names. This can dramatically improve the chance of matches, but also
+# #'   take much longer.
+# #' @param approximate_match Boolean; default to `TRUE`: use a slower TNRS to
+# #'   correct misspellings, increasing the chance of matches (including false matches).
+#' @param get_spp_from_taxon Wether to search ages for all species belonging to a
+#'   given taxon or not. Default to `FALSE`. If `TRUE`, it must have same length as input.
+#'   If input is a newick string with some clades it will be converted to a `phylo`
+#'   object, and the order of `get_spp_from_taxon` will match `phy$tip.label`.
+#' @return A `datelifeQuery` object, which is a list of three elements:
+#' \describe{
+#' 	 \item{$phy}{A `phylo` object or `NA`, if input is not a tree.}
+#' 	 \item{$cleaned_names}{A character vector of cleaned taxon names.}
+#' 	 \item{$ott_ids}{A numeric vector of OTT ids if `use_tnrs = TRUE`, or `NULL` if `use_tnrs = FALSE`.}
+#' }
+#' @details It processes `phylo` objects and newick character string inputs
+#'   with [input_process()]. If `input` is a `multiPhylo` object, only the first `phylo`
+#'   element will be used. Similarly, if an `input` newick character string has mutiple trees,
+#'   only the first one will be used.
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
                                 use_tnrs = TRUE,
-                                approximate_match = TRUE,
-                                get_spp_from_taxon = FALSE,
-                                verbose = FALSE) {
+                                # approximate_match = TRUE,
+                                get_spp_from_taxon = FALSE) {
   # enhance: add mapped (has tnrs been performed?) and matched (was it matched successfully?) element to phylo object
   # add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
   if (suppressMessages(is_datelife_query(input))) {
-    message("'input' is a 'datelifeQuery' object.")
+    message("'input' is already a 'datelifeQuery' object.")
     return(input)
   }
   message("... Making a DateLife query.")
@@ -82,9 +98,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
       get_spp_from_taxon <- rep(get_spp_from_taxon, length(cleaned_names))
     }
     if (length(cleaned_names) != length(get_spp_from_taxon)) {
-      if (verbose) {
-        message("Specify all taxa in input to get species names from.")
-      }
+      message("Specify all taxa in input to get species names from.")
       message("'input' and 'get_spp_from_taxon' arguments must have same length.")
       return(NA)
     }
@@ -106,13 +120,8 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
     ott_ids <- unlist(ott_ids)
   }
   cleaned_names <- gsub("_", " ", cleaned_names)
-  if (verbose) {
-    message("OK.")
-  }
   cleaned_names.print <- paste(cleaned_names, collapse = " | ")
-  if (verbose) {
-    message("Working with the following taxa: ", "\n", "\t", cleaned_names.print)
-  }
+  message("Working with the following taxa: ", "\n", "\t", cleaned_names.print)
   if (inherits(ott_ids, "numeric") | inherits(ott_ids, "integer")) {
     names(ott_ids) <- cleaned_names
   }
@@ -126,9 +135,8 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 }
 #' Process a phylo object or a character string to determine if it's correct newick
 #'
-#' @inheritParams datelife_search
 #' @inheritParams make_datelife_query
-#' @return A phylo object or NA if no tree
+#' @return A `phylo` object or `NA` if input is not a tree .
 #' @export
 input_process <- function(input) {
   message("... Phylo-processing 'input'.")

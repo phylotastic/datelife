@@ -7,8 +7,7 @@
 test_that("make_datelife_query works from comma separated names", {
   input_processed <- make_datelife_query(
     input = c("Rhea americana, Pterocnemia pennata, Struthio camelus"),
-    use_tnrs = FALSE,
-    approximate_match = TRUE
+    use_tnrs = FALSE
   )
   expect_equal(
     length(input_processed$cleaned_names),
@@ -34,7 +33,7 @@ test_that("Mus higher-taxon search is giving species back", {
 })
 
 test_that("make_datelife_query works from phylo object as input", {
-  input.processed <- make_datelife_query(ape::write.tree(ape::rcoal(3, tip.label = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), use_tnrs = FALSE, approximate_match = TRUE)
+  input.processed <- make_datelife_query(ape::write.tree(ape::rcoal(3, tip.label = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), use_tnrs = FALSE)
   expect_equal(class(input.processed$phy), "phylo")
 })
 
@@ -46,7 +45,7 @@ test_that("make_datelife_query works from phylo object as input", {
 # })
 
 test_that("make_datelife_query works from vector of taxa", {
-  input.processed <- make_datelife_query(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), use_tnrs = FALSE, approximate_match = TRUE)
+  input.processed <- make_datelife_query(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), use_tnrs = FALSE)
   expect_equal(length(input.processed$cleaned_names), 3)
 })
 

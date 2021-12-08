@@ -17,7 +17,13 @@ numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{ro
 \item{...}{
   Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}
   \describe{
-    \item{\code{verbose}}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
+    \item{\code{use_tnrs}}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
+taxonomic name variations.}
+    \item{\code{get_spp_from_taxon}}{Wether to search ages for all species belonging to a
+given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
+If input is a newick string with some clades it will be converted to a \code{phylo}
+object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.label}.}
   }}
 }
 \value{

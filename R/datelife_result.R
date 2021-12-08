@@ -1,35 +1,41 @@
-#' Get a list of patristic matrices from a given \code{datelifeQuery} object
+#' Get a list of patristic matrices from a given `datelifeQuery` object
 #'
-#'
-#' @param input A \code{datelifeQuery} object from [make_datelife_query()].
-#' @inheritParams get_datelife_result
+#' @inheritParams get_taxon_summary
+#' @param cache A character vector of length one, with the name of the data object
+#'   to cache. Default to `"opentree_chronograms"`, a data object storing Open Tree of
+#'   Life's database chronograms and other associated information.
+#' @param update_opentree_chronograms Whether to update the chronogram database or not.
+#'   Default to `FALSE`.
 #' @inheritDotParams make_datelife_query
-#' @return A \code{datelifeResult} object - a named list of patristic matrices.
-#' @details If there is just one taxon name in \code{input$cleaned_names}, the
-#' function will run [make_datelife_query()] setting \code{get_spp_from_taxon = TRUE}.
-#' The \code{datelifeQuery} used as input can be accessed with \code{attributes(datelifeResult)$query}.
+#' @return A `datelifeResult` object -- a named list of patristic matrices.
+#' @details If there is just one taxon name in `input$cleaned_names`, the
+#' function will run [make_datelife_query()] setting `get_spp_from_taxon = TRUE`.
+#' The `datelifeQuery` used as input can be accessed with `attributes(datelifeResult)$query`.
 #' @export
-get_datelife_result_datelifequery <- function(input = NULL,
+get_datelife_result_datelifequery <- function(datelife_query = NULL,
                                               partial = TRUE,
                                               cache = "opentree_chronograms",
+                                              update_opentree_chronograms = FALSE,
                                               ...) {
   #
-  message("... Getting a DateLife result.")
-  if ("opentree_chronograms" %in% cache) {
-    utils::data("opentree_chronograms", package = "datelife")
-    cache <- get("opentree_chronograms")
+  message("... Searching the chronogram database.")
+  if (update_opentree_chronograms) {
+    cache <- update_datelife_cache(save = TRUE, verbose = verbose)
+  } else {
+    if ("opentree_chronograms" %in% cache) {
+      utils::data("opentree_chronograms", package = "datelife")
+      cache <- get("opentree_chronograms")
+    }
   }
-  if (suppressMessages(!is_datelife_query(input))) {
-    stop("'input' must be a 'datelifeQuery' object.")
+  if (suppressMessages(!is_datelife_query(datelife_query))) {
+    stop("'datelife_query' must be a 'datelifeQuery' object.")
   }
-  if (length(input$cleaned_names) == 1) {
-    message("Can't get divergence times from just one taxon in 'input$cleaned_names'.")
-    message("Making a DateLife Query again, with 'get_spp_from_taxon = TRUE'.")
-    input <- make_datelife_query(
-      input = input$cleaned_names,
-      get_spp_from_taxon = TRUE,
-      ...
-    )
+  if (length(datelife_query$cleaned_names) == 1) {
+    message("Can't get divergence times from just one taxon in 'datelife_query$cleaned_names'.")
+    message("Making a 'datelifeQuery' again, setting 'get_spp_from_taxon = TRUE'.")
+    datelife_query <- make_datelife_query(input = datelife_query$cleaned_names,
+                                          get_spp_from_taxon = TRUE,
+                                          ...)
   }
   # setting phy to NULL always; it is a bad idea to congruify subset trees,
   # do that later in summarizing steps
@@ -42,7 +48,7 @@ get_datelife_result_datelifequery <- function(input = NULL,
     input$cleaned_names,
     partial = partial
   )
-  message("DateLife result obtained!")
+  message("Search done!")
   class(datelife_result) <- c("datelifeResult")
   attr(datelife_result, "datelife_query") <- input
   return(datelife_result)
@@ -106,29 +112,22 @@ get_datelife_result_datelifequery <- function(input = NULL,
 #'
 #' @description Go from a vector of species, newick string, or phylo object
 #'
-#' @inheritParams datelife_search
+#' @inheritParams get_datelife_result_datelifequery
 #' @inheritDotParams make_datelife_query
 #' @export
 get_datelife_result <- function(input = NULL,
                                 partial = TRUE,
                                 cache = "opentree_chronograms",
+                                update_opentree_chronograms = FALSE,
                                 ...) {
   #
-  if ("opentree_chronograms" %in% cache) {
-    utils::data("opentree_chronograms", package = "datelife")
-    cache <- get("opentree_chronograms")
-  }
   input_dq <- input
   if (suppressMessages(!is_datelife_query(input))) {
-    input_dq <- make_datelife_query(
-      input = input,
-      ...
-    )
+    input_dq <- make_datelife_query(input = input,
+                                    ...)
   }
-  res <- get_datelife_result_datelifequery(
-    input = input_dq,
-    partial = partial,
-    cache = "opentree_chronograms",
-    ...
-  )
+  res <- get_datelife_result_datelifequery(input = input_dq,
+                    partial = partial,
+                    cache = cache,
+                    update_opentree_chronograms = update_opentree_chronograms)
 }

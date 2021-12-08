@@ -9,19 +9,15 @@ summarize_datelife_result(
   datelife_query = NULL,
   summary_format = "phylo_all",
   partial = TRUE,
-  update_opentree_chronograms = FALSE,
-  cache = "opentree_chronograms",
   summary_print = c("citations", "taxa"),
   taxon_summary = c("none", "summary", "matrix"),
-  verbose = FALSE,
-  criterion = c("trees", "taxa")
+  criterion = "taxa"
 )
 }
 \arguments{
-\item{datelife_result}{A \code{datelifeResult} object, an output
-of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
+\item{datelife_result}{A \code{datelifeResult} object, output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
 
-\item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query}}.}
+\item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 
 \item{summary_format}{A character vector of length one, indicating the output
 format for results of the DateLife search. Available output formats are:
@@ -60,14 +56,8 @@ newick target chronogram.}
 taxa, citations of source chronograms and newick string.}
 }}
 
-\item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only
-match some of the desired taxa.}
-
-\item{update_opentree_chronograms}{default to \code{FALSE}}
-
-\item{cache}{A character vector of length one, with the name of the data object
-to cache. Default to \code{"opentree_chronograms"}, a data object storing Open Tree of
-Life's database chronograms and other associated information.}
+\item{partial}{Whether to include matching source trees even if they only
+match some of the desired taxa. Default to \code{TRUE}.}
 
 \item{summary_print}{A character vector specifying type of summary information
 to be printed to screen:
@@ -77,16 +67,20 @@ to be printed to screen:
 taxon is found.}
 \item{"none"}{Nothing is printed to screen.}
 }
-Default to \code{c("citations", "taxa")}, which displays both.}
+Defaults to \code{c("citations", "taxa")}, which displays both.}
 
 \item{taxon_summary}{A character vector specifying if data on target taxa missing
 in source chronograms should be added to the output as a \code{"summary"} or as a
 presence/absence \code{"matrix"}. Default to \code{"none"}, no information on taxon_summary
 added to the output.}
 
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
-
-\item{criterion}{Whether to get the grove with the most trees or the most taxa}
+\item{criterion}{A character vector of one element indicating whether to get the
+grove with the most trees or the most taxa, \code{"trees"} and \code{"taxa"}.
+For summarizing approaches that return a single synthetic tree from a group of
+chronograms, it is important that the trees leading to it form a grove (roughly,
+a sufficiently overlapping set of taxa between trees (see Ané et al. 2005,
+10.1007/s00026-009-0017-x). In the rare case of multiple groves, should we take
+the one with the most trees or the most taxa? Default to \code{"taxa"}.}
 }
 \description{
 Get different types of summaries from a \code{datelifeResult}
@@ -96,11 +90,6 @@ If you need a list of chronograms from your \code{datelifeResult} object, this
 is the function you are looking for.
 }
 \details{
-If only one taxon names is given as \code{input}, \code{get_spp_from_taxon} is
+If only one taxon name is given as \code{input}, \code{get_spp_from_taxon} is
 always set to \code{TRUE}.
-For approaches that return a single synthetic tree, it is important that the
-trees leading to it form a grove (roughly, a sufficiently overlapping set of
-taxa between trees: see Ané et al. 2005, 10.1007/s00026-009-0017-x). In the
-rare case of multiple groves, should we take the one with the most trees or
-the most taxa?
 }

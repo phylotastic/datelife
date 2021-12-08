@@ -44,8 +44,6 @@ Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.}
 \item{alpha}{The significance level on uncertainty to generate. By default 0.025}
 
 \item{rescale}{Boolean. If true, observed age will be rescaled each round.}
-
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \value{
 A phylo or multiPhylo object with the same topology as phy but different branch lengths

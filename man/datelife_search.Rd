@@ -11,7 +11,6 @@ datelife_search(
   summary_format = "phylo_all",
   partial = TRUE,
   use_tnrs = FALSE,
-  approximate_match = TRUE,
   cache = "opentree_chronograms",
   summary_print = c("citations", "taxa"),
   taxon_summary = c("none", "summary", "matrix"),
@@ -23,11 +22,10 @@ datelife_search(
 \arguments{
 \item{input}{One of the following:
 \describe{
-\item{Taxon names}{As a character vector.}
-\item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+\item{A character vector}{With taxon names as a single comma separated strting or concatenated with \code{\link[=c]{c()}}.}
+\item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
 object, OR as a newick character string.}
-\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}
-\code{\link[=make_datelife_query]{make_datelife_query}}.}
+\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 }}
 
 \item{summary_format}{A character vector of length one, indicating the output
@@ -67,12 +65,12 @@ newick target chronogram.}
 taxa, citations of source chronograms and newick string.}
 }}
 
-\item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only
-match some of the desired taxa.}
+\item{partial}{Whether to include matching source trees even if they only
+match some of the desired taxa. Default to \code{TRUE}.}
 
-\item{cache}{A character vector of length one, with the name of the data object
-to cache. Default to \code{"opentree_chronograms"}, a data object storing Open Tree of
-Life's database chronograms and other associated information.}
+\item{use_tnrs}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
+taxonomic name variations.}
 
 \item{summary_print}{A character vector specifying type of summary information
 to be printed to screen:
@@ -82,33 +80,36 @@ to be printed to screen:
 taxon is found.}
 \item{"none"}{Nothing is printed to screen.}
 }
-Default to \code{c("citations", "taxa")}, which displays both.}
+Defaults to \code{c("citations", "taxa")}, which displays both.}
 
 \item{taxon_summary}{A character vector specifying if data on target taxa missing
 in source chronograms should be added to the output as a \code{"summary"} or as a
 presence/absence \code{"matrix"}. Default to \code{"none"}, no information on taxon_summary
 added to the output.}
 
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
+\item{get_spp_from_taxon}{Wether to search ages for all species belonging to a
+given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
+If input is a newick string with some clades it will be converted to a \code{phylo}
+object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.label}.}
 
-\item{criterion}{Whether to get the grove with the most trees or the most taxa}
-
-\item{update_opentree_chronograms}{default to \code{FALSE}}
+\item{criterion}{A character vector of one element indicating whether to get the
+grove with the most trees or the most taxa, \code{"trees"} and \code{"taxa"}.
+For summarizing approaches that return a single synthetic tree from a group of
+chronograms, it is important that the trees leading to it form a grove (roughly,
+a sufficiently overlapping set of taxa between trees (see Ané et al. 2005,
+10.1007/s00026-009-0017-x). In the rare case of multiple groves, should we take
+the one with the most trees or the most taxa? Default to \code{"taxa"}.}
 }
 \description{
 \code{datelife_search} is the core DateLife function to find and
 get all openly available, peer-reviewed scientific information on time of
-lineage divergence for a set \code{input} taxon names given as a character
-vector, a newick character string, or a \code{phylo} or \code{multiPhylo} object.
+lineage divergence for a set of \code{input} taxon names given as a character
+vector, a newick character string, a \code{phylo} or \code{multiPhylo} object or as a
+al already processed \code{datelifeQuery} object obtained with \code{\link[=make_datelife_query]{make_datelife_query()}}.
 }
 \details{
-If only one taxon names is given as \code{input}, \code{get_spp_from_taxon} is
+If only one taxon name is given as \code{input}, \code{get_spp_from_taxon} is
 always set to \code{TRUE}.
-For approaches that return a single synthetic tree, it is important that the
-trees leading to it form a grove (roughly, a sufficiently overlapping set of
-taxa between trees: see Ané et al. 2005, 10.1007/s00026-009-0017-x). In the
-rare case of multiple groves, should we take the one with the most trees or
-the most taxa?
 }
 \examples{
 # obtain median ages from a set of source chronograms in newick format:

@@ -8,8 +8,6 @@ get_goodmatrices(unpadded.matrices, verbose)
 }
 \arguments{
 \item{unpadded.matrices}{A list of patristic matrices, a datelifeResult object.}
-
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \value{
 A numeric vector of good matrix indices in unpadded.matrices.

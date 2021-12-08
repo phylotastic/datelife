@@ -18,11 +18,10 @@ make_bold_otol_tree(
 \arguments{
 \item{input}{One of the following:
 \describe{
-\item{Taxon names}{As a character vector.}
-\item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+\item{A character vector}{With taxon names as a single comma separated strting or concatenated with \code{\link[=c]{c()}}.}
+\item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
 object, OR as a newick character string.}
-\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}
-\code{\link[=make_datelife_query]{make_datelife_query}}.}
+\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 }}
 
 \item{marker}{A character vector indicating the gene from BOLD system to be used for branch length estimation.}
@@ -32,8 +31,6 @@ object, OR as a newick character string.}
 \item{chronogram}{Boolean. If TRUE (default), branch lengths returned are estimated with ape::chronoMPL. If FALSE, branch lengths returned are estimated with phangorn::acctran and represent relative substitution rates .}
 
 \item{doML}{Boolean; only relevant if chronogram = TRUE. If TRUE, it does ML branch length optimization with phangorn::optim.pml}
-
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 
 \item{aligner}{A character vector indicating whether to use MAFFT or MUSCLE to align BOLD sequences. It is not case sensitive. Default to MUSCLE.}
 

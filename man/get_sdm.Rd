@@ -16,8 +16,6 @@ tree in \code{input} during the SDM analysis. Choose one of:
 \item{weighting = "taxa"}{Weight is proportional to number of taxa.}
 \item{weighting = "inverse"}{Weight is proportional to 1 / number of taxa.}
 }}
-
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \value{
 A matrix.
