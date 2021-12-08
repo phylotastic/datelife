@@ -39,8 +39,8 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
   return(taxon_info)
 }
 
-#' Checks input for [get_ott_clade()], [get_ott_children functions()], and
-#' [get_otol_synthetic_tree()]
+#' Checks input for [get_ott_clade()], [get_ott_children()], and
+#' [get_otol_synthetic_tree()] functions
 #'
 #' @param input Optional. A character vector of names or a `datelifeQuery` object
 #' @param ott_ids If not NULL, it takes this argument and ignores input. A

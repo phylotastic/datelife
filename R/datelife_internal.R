@@ -34,8 +34,10 @@ patristic_matrix_MRCA <- function(patristic_matrix, na.rm = TRUE) {
 }
 
 #' Get a numeric vector of MRCAs from a `datelifeResult` object. Used in [summarize_datelife_result()].
-#' @inheritParams summarize_datelife_result
+#' @inheritParams get_taxon_summary
+# get_taxon_summary has param datelife_result
 #' @inheritParams patristic_matrix_MRCA
+# patristic_matrix_MRCA has param na.rm
 #' @return A named numeric vector of MRCA ages for each element given in `datelife_result`.
 datelife_result_MRCA <- function(datelife_result, na.rm = TRUE) {
   ages <- sapply(datelife_result, patristic_matrix_MRCA, na.rm = na.rm)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_result.R
 \name{get_datelife_result}
 \alias{get_datelife_result}
-\title{Get a list of patristic matrices from a given set of taxon names}
+\title{Get a patristic matrix of time of lineage divergence data for a given set of taxon names}
 \usage{
 get_datelife_result(
   input = NULL,
@@ -13,6 +13,14 @@ get_datelife_result(
 )
 }
 \arguments{
+\item{input}{One of the following:
+\describe{
+\item{A character vector}{With taxon names as a single comma separated strting or concatenated with \code{\link[=c]{c()}}.}
+\item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+object, OR as a newick character string.}
+\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}.}
+}}
+
 \item{partial}{Whether to return or exclude partially matching source chronograms,
 i.e, those that match some and not all of taxa given in \code{datelife_query}.
 Options are \code{TRUE} or \code{FALSE}. Defaults to \code{TRUE}: return all matching source
@@ -28,12 +36,6 @@ Defaults to \code{FALSE}.}
 \item{...}{
   Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}
   \describe{
-    \item{\code{input}}{Taxon names as one of the following:
-\describe{
-\item{A character vector}{With taxon names as a single comma separated strting or concatenated with \code{\link[=c]{c()}}.}
-\item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
-object, OR as a newick character string.}
-}}
     \item{\code{use_tnrs}}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
 to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
 taxonomic name variations.}
@@ -43,6 +45,15 @@ If input is a newick string with some clades it will be converted to a \code{phy
 object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.label}.}
   }}
 }
+\value{
+A \code{datelifeResult} object -- a named list of patristic matrices.
+}
 \description{
-Go from a vector of species, newick string, or phylo object
+\code{get_datelife_result} takes as input a vector of taxon names, a newick string,
+a \code{phylo} object, or a\code{datelifeQuery} object. It searches the chronogram
+database specified in \code{cache} for chronograms matching two or more given
+taxon names. For each matching chronogram, it extracts time of lineage
+divergence data and stores it as a patristic matrix. It then lists all
+resulting patristic matrices. Each list element is named with the study
+citation of the source chronogram.
 }

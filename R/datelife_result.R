@@ -112,12 +112,21 @@ get_datelife_result_datelifequery <- function(datelife_query = NULL,
 #    return(datelife_result)
 # }
 
-#' Get a list of patristic matrices from a given set of taxon names
+#' Get a patristic matrix of time of lineage divergence data for a given set of taxon names
 #'
-#' @description Go from a vector of species, newick string, or phylo object
+#' `get_datelife_result` takes as input a vector of taxon names, a newick string,
+#' a `phylo` object, or a`datelifeQuery` object. It searches the chronogram
+#' database specified in `cache` for chronograms matching two or more given
+#' taxon names. For each matching chronogram, it extracts time of lineage
+#' divergence data and stores it as a patristic matrix. It then lists all
+#' resulting patristic matrices. Each list element is named with the study
+#' citation of the source chronogram.
 #'
+#' @inheritParams datelife_search
+# datelife_search has param input
 #' @inheritParams get_datelife_result_datelifequery
 #' @inheritDotParams make_datelife_query
+#' @inherit get_datelife_result_datelifequery return
 #' @export
 get_datelife_result <- function(input = NULL,
                                 partial = TRUE,

@@ -3,7 +3,7 @@ dq <- make_datelife_query(i)
 mbot <- make_bold_otol_tree(dq)
 dq$phy <- mbot
 gcdq <- get_calibrations_datelifequery(
-  input = dq,
+  datelife_query = dq,
   each = FALSE
 )
 phyloall <- datelife_search(

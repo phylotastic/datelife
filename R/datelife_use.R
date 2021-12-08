@@ -84,17 +84,17 @@ datelife_use_datelifequery <- function(datelife_query = NULL,
                                        dating_method = "bladj",
                                        each = FALSE) {
   #
-  if (suppressMessages(!is_datelife_query(input))) {
-    stop("'input' is not a 'datelifeQuery' object.")
+  if (suppressMessages(!is_datelife_query(datelife_query))) {
+    stop("'datelife_query' is not a 'datelifeQuery' object.")
   }
-  if (!inherits(input$phy, "phylo")) {
+  if (!inherits(datelife_query$phy, "phylo")) {
     message("A tree topology is needed for a dating analysis.")
-    warning("'input$phy' is not a 'phylo' object.")
+    warning("'datelife_query$phy' is not a 'phylo' object.")
     return(NA)
   }
   # get calibrations by performing a datelife_search with get_all_calibrations:
   calibrations <- get_calibrations_datelifequery(
-    input = datelife_query,
+    datelife_query = datelife_query,
     each = each
   )
 

@@ -122,6 +122,7 @@ get_taxon_summary <- function(datelife_result = NULL,
 #' 	 				taxa, citations of source chronograms and newick string.}
 #' }
 #' @inheritParams datelife_result_MRCA
+# datelife_result_MRCA has param na.rm
 #' @param summary_print A character vector specifying the type of summary information
 #'   to be printed to screen. Options are:
 #'   \describe{
@@ -177,7 +178,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
   if (summary_format.in == "citations") {
     return.object <- names(datelife_result)
   }
-  mrcas <- datelife_result_MRCA(datelife_result, na.rm = partial) # this is later used for median and sdm
+  mrcas <- datelife_result_MRCA(datelife_result, na.rm = na.rm) # this is later used for median and sdm
   if (summary_format.in == "mrca") {
     return.object <- mrcas
   }
@@ -222,7 +223,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
       out.vector1 <- paste(out.vector1, paste("</th><th>", colnames(taxon_summ$matrix), sep = "", collapse = ""), sep = "")
     }
     out.vector1 <- paste(out.vector1, "</th></tr>", sep = "")
-    ages <- datelife_result_MRCA(datelife_result, na.rm = partial)
+    ages <- datelife_result_MRCA(datelife_result, na.rm = na.rm)
     trees <- sapply(datelife_result, patristic_matrix_to_newick)
     out.vector2 <- c()
     for (result.index in sequence(length(datelife_result))) {
@@ -253,7 +254,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
   }
   if (summary_format.in == "data_frame") {
     out.df <- data.frame()
-    ages <- datelife_result_MRCA(datelife_result, na.rm = partial)
+    ages <- datelife_result_MRCA(datelife_result, na.rm = na.rm)
     trees <- sapply(datelife_result, patristic_matrix_to_newick)
     for (result.index in sequence(length(datelife_result))) {
       out.line <- data.frame(Age = ages[result.index], Ntax = sum(!is.na(diag(datelife_result[[result.index]]))), Citation = names(datelife_result)[result.index], Newick = trees[result.index])
@@ -310,11 +311,11 @@ summarize_datelife_result <- function(datelife_result = NULL,
 # #' Main function to summarize a datelifeResult object
 # #' @param object A "datelifeResult" object, typically an output of \code{\link[=get_datelife_result]{get_datelife_result}.
 # #' @param ... further arguments passed to or from other methods
-# #' @param partial Boolean for whether to include partial matches
+# #' @param na.rm Boolean for whether to include partial matches
 # #' @method summary datelifeResult
 # #' @export
-# summary.datelifeResult <- function(object, ..., partial = TRUE){
-# 	mrcas <- datelife_result_MRCA(object, na.rm = partial)
+# summary.datelifeResult <- function(object, ..., na.rm = TRUE) {
+# 	mrcas <- datelife_result_MRCA(object, na.rm = na.rm)
 # 	res <- list(mrca = mrcas)
 # 	class(res) <- "datelifeResultSummary"
 # 	return(res)

@@ -7,6 +7,8 @@
 datelife_result_MRCA(datelife_result, na.rm = TRUE)
 }
 \arguments{
+\item{datelife_result}{A \code{datelifeResult} object, output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
+
 \item{na.rm}{If \code{TRUE}, it drops rows containing \code{NA}s from the \code{datelifeResult}
 patristic matrix; if \code{FALSE}, it returns \code{NA} where there are missing entries.}
 }

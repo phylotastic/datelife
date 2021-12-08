@@ -2,8 +2,8 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{check_ott_input}
 \alias{check_ott_input}
-\title{Checks input for \code{\link[=get_ott_clade]{get_ott_clade()}}, \code{\link[=get_ott_children functions]{get_ott_children functions()}}, and
-\code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree()}}}
+\title{Checks input for \code{\link[=get_ott_clade]{get_ott_clade()}}, \code{\link[=get_ott_children]{get_ott_children()}}, and
+\code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree()}} functions}
 \usage{
 check_ott_input(input = NULL, ott_ids = NULL, ...)
 }
@@ -30,8 +30,8 @@ object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.labe
 A named numeric vector of valid Open Tree Taxonomy (OTT) ids.
 }
 \description{
-Checks input for \code{\link[=get_ott_clade]{get_ott_clade()}}, \code{\link[=get_ott_children functions]{get_ott_children functions()}}, and
-\code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree()}}
+Checks input for \code{\link[=get_ott_clade]{get_ott_clade()}}, \code{\link[=get_ott_children]{get_ott_children()}}, and
+\code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree()}} functions
 }
 \details{
 By default, it uses the \code{ott_id} argument if it is not NULL.

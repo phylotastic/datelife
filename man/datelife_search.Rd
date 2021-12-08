@@ -114,7 +114,7 @@ the one with the most trees or the most taxa? Default to \code{"taxa"}.}
 get all openly available, peer-reviewed scientific information on time of
 lineage divergence for a set of \code{input} taxon names given as a character
 vector, a newick character string, a \code{phylo} or \code{multiPhylo} object or as a
-al already processed \code{datelifeQuery} object obtained with \code{\link[=make_datelife_query]{make_datelife_query()}}.
+an already processed \code{datelifeQuery} object obtained with \code{\link[=make_datelife_query]{make_datelife_query()}}.
 }
 \details{
 If only one taxon name is given as \code{input}, \code{get_spp_from_taxon} is

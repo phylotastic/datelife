@@ -65,7 +65,7 @@ test_that("input processing a newick string and multiPhylo workflows work", {
 test_that("object checks work", {
   expect_warning(match_all_calibrations(phy = NULL))
   expect_error(use_calibrations(phy = NULL))
-  expect_error(get_calibrations_datelifequery(input = NULL))
+  expect_error(get_calibrations_datelifequery(datelife_query = NULL))
 })
 
 

@@ -14,7 +14,7 @@ get_all_calibrations <- function(input = NULL,
   #
   if (inherits(input, "datelifeQuery")) {
     res <- get_calibrations_datelifequery(
-      input = input,
+      datelife_query = input,
       each = each
     )
     return(res)

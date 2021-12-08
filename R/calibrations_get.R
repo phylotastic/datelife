@@ -160,18 +160,18 @@ get_calibrations_vector <- function(input = NULL,
 #' Search and extract available secondary calibrations from a given
 #' '\code{datelifeQuery} object
 #'
-#' @param input A \code{datelifeQuery} object.
+#' @param datelife_query A `datelifeQuery` object.
 #' @inheritParams get_all_calibrations
 #' @inherit get_calibrations_vector description details
 #' @inherit extract_calibrations_phylo return
 #' @export
-get_calibrations_datelifequery <- function(input = NULL,
+get_calibrations_datelifequery <- function(datelife_query = NULL,
                                            each = FALSE) {
-  if (suppressMessages(!is_datelife_query(input))) {
-    stop("'input' is not a 'datelifeQuery' object.")
+  if (suppressMessages(!is_datelife_query(datelife_query))) {
+    stop("'datelife_query' is not a 'datelifeQuery' object.")
   }
   phyloall <- datelife_search(
-    input = input,
+    input = datelife_query,
     summary_format = "phylo_all"
   )
   res <- extract_calibrations_phylo(

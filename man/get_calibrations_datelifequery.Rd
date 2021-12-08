@@ -5,10 +5,10 @@
 \title{Search and extract available secondary calibrations from a given
 '\code{datelifeQuery} object}
 \usage{
-get_calibrations_datelifequery(input = NULL, each = FALSE)
+get_calibrations_datelifequery(datelife_query = NULL, each = FALSE)
 }
 \arguments{
-\item{input}{A \code{datelifeQuery} object.}
+\item{datelife_query}{A \code{datelifeQuery} object.}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
 the same data frame. If \code{TRUE}, calibrations from each chronogram are returned

@@ -2,10 +2,10 @@
 #' divergence openly available for a given set of taxon names
 #'
 #' @description `datelife_search` is the core DateLife function to find and
-#' get all openly available, peer-reviewed scientific information on time of
-#' lineage divergence for a set of `input` taxon names given as a character
-#' vector, a newick character string, a `phylo` or `multiPhylo` object or as a
-#' al already processed `datelifeQuery` object obtained with [make_datelife_query()].
+#'   get all openly available, peer-reviewed scientific information on time of
+#'   lineage divergence for a set of `input` taxon names given as a character
+#'   vector, a newick character string, a `phylo` or `multiPhylo` object or as a
+#'   an already processed `datelifeQuery` object obtained with [make_datelife_query()].
 #'
 #' @aliases datelife
 #' @param input One of the following:

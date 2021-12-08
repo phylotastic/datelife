@@ -76,9 +76,9 @@ get_otol_synthetic_tree <- function(input = NULL,
 #' @return A phylo object with edge length proportional to time in Myrs. It will return NA if any ott_id is invalid.
 #' @export
 #' @details OpenTree dated tree from Stephen Smith's OpenTree scaling service at
-#' [https://github.com/FePhyFoFum/gophy] if you want to make an LTT plot of
-#' a dated OpenTree tree you'll need to get rid of singleton nodes with
-#' [ape::collapse.singles()] and also probably do [phytools::force.ultrametric()]
+#'   https://github.com/FePhyFoFum/gophy if you want to make an LTT plot of
+#'   a dated OpenTree tree you'll need to get rid of singleton nodes with
+#'   [ape::collapse.singles()] and also probably do [phytools::force.ultrametric()].
 get_dated_otol_induced_subtree <- function(input = NULL,
                                            ott_ids = NULL, ...) {
   # for debugging:
