@@ -5,36 +5,54 @@
 \title{Get a list of patristic matrices from a given \code{datelifeQuery} object}
 \usage{
 get_datelife_result_datelifequery(
-  input = NULL,
+  datelife_query = NULL,
   partial = TRUE,
   cache = "opentree_chronograms",
+  update_opentree_chronograms = FALSE,
   ...
 )
 }
 \arguments{
-\item{input}{A \code{datelifeQuery} object from [make_datelife_query()].}
+\item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 
-\item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only
-match some of the desired taxa.}
+\item{partial}{Whether to return or exclude partially matching source chronograms,
+i.e, those that match some and not all of taxa given in \code{datelife_query}.
+Options are \code{TRUE} or \code{FALSE}. Defaults to \code{TRUE}: return all matching source
+chronograms.}
 
 \item{cache}{A character vector of length one, with the name of the data object
 to cache. Default to \code{"opentree_chronograms"}, a data object storing Open Tree of
 Life's database chronograms and other associated information.}
 
+\item{update_opentree_chronograms}{Whether to update the chronogram database or not.
+Defaults to \code{FALSE}.}
+
 \item{...}{
   Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}
   \describe{
-    \item{\code{verbose}}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
+    \item{\code{input}}{Taxon names as one of the following:
+\describe{
+\item{A character vector}{With taxon names as a single comma separated strting or concatenated with \code{\link[=c]{c()}}.}
+\item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+object, OR as a newick character string.}
+}}
+    \item{\code{use_tnrs}}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
+taxonomic name variations.}
+    \item{\code{get_spp_from_taxon}}{Wether to search ages for all species belonging to a
+given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
+If input is a newick string with some clades it will be converted to a \code{phylo}
+object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.label}.}
   }}
 }
 \value{
-A \code{datelifeResult} object - a named list of patristic matrices.
+A \code{datelifeResult} object -- a named list of patristic matrices.
 }
 \description{
 Get a list of patristic matrices from a given \code{datelifeQuery} object
 }
 \details{
 If there is just one taxon name in \code{input$cleaned_names}, the
-function will run [make_datelife_query()] setting \code{get_spp_from_taxon = TRUE}.
+function will run \code{\link[=make_datelife_query]{make_datelife_query()}} setting \code{get_spp_from_taxon = TRUE}.
 The \code{datelifeQuery} used as input can be accessed with \code{attributes(datelifeResult)$query}.
 }

@@ -1,15 +1,18 @@
-#testing functions that process or check datelife inputs
+# testing functions that process or check datelife inputs
 # test_that("We get species names back from subspecies and var names",{
 #   # rotl::tnrs_match_names("Ceratopogon slossonae")
 #   NA
 # })
 
 test_that("make_datelife_query works from comma separated names", {
-  input_processed <- make_datelife_query(input = c("Rhea americana, Pterocnemia pennata, Struthio camelus"),
-                                         use_tnrs=FALSE,
-                                         approximate_match=TRUE)
-  expect_equal(length(input_processed$cleaned_names),
-               3)
+  input_processed <- make_datelife_query(
+    input = c("Rhea americana, Pterocnemia pennata, Struthio camelus"),
+    use_tnrs = FALSE
+  )
+  expect_equal(
+    length(input_processed$cleaned_names),
+    3
+  )
 })
 
 test_that("is_datelife query works", {
@@ -19,7 +22,6 @@ test_that("is_datelife query works", {
   # remove class datelifeQuery, but format/structure of the object is ok, it should still work:
   class(threebirds_query) <- "random"
   expect_true(is_datelife_query(threebirds_query))
-
 })
 
 test_that("Mus higher-taxon search is giving species back", {
@@ -31,8 +33,8 @@ test_that("Mus higher-taxon search is giving species back", {
 })
 
 test_that("make_datelife_query works from phylo object as input", {
-    input.processed <- make_datelife_query(ape::write.tree(ape::rcoal(3, tip.label=c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), use_tnrs=FALSE, approximate_match=TRUE)
-    expect_equal(class(input.processed$phy),"phylo")
+  input.processed <- make_datelife_query(ape::write.tree(ape::rcoal(3, tip.label = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))), use_tnrs = FALSE)
+  expect_equal(class(input.processed$phy), "phylo")
 })
 
 # test_that("Processing complex newick works", {
@@ -43,8 +45,8 @@ test_that("make_datelife_query works from phylo object as input", {
 # })
 
 test_that("make_datelife_query works from vector of taxa", {
-  input.processed <- make_datelife_query(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), use_tnrs=FALSE, approximate_match=TRUE)
-  expect_equal(length(input.processed$cleaned_names),3)
+  input.processed <- make_datelife_query(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"), use_tnrs = FALSE)
+  expect_equal(length(input.processed$cleaned_names), 3)
 })
 
 test_that("make_datelife_query works from newick input", {
@@ -56,20 +58,20 @@ test_that("make_datelife_query works from newick input", {
 })
 
 test_that("input_process works", {
-	new <- "(((((Pterois miles,Pterois volitans)Pteroinae)Teleostei)Chordata,Lymnaea))Metazoa;"
-	phy <- ape::read.tree(text="((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);")
-	notnew <- "a,b;"
-	expect_s3_class(input_process(c(new, new)), "phylo") #trying to process two phylogenies will give a message
-	input <- c(new, new)
-	expect_s3_class(input_process(c(phy, phy)), "phylo") #trying to process two phylogenies will give a message
-	expect_output(x <- input_process(new), NA)
-	expect_output(x <- input_process(notnew), NA)
-	expect_output(x <- input_process("purrr"), NA)
-	expect_s3_class(x <- input_process(new), "phylo") # output is phylo
-	expect_s3_class(x <- input_process(phy), "phylo") # output is phylo
+  new <- "(((((Pterois miles,Pterois volitans)Pteroinae)Teleostei)Chordata,Lymnaea))Metazoa;"
+  phy <- ape::read.tree(text = "((Zea mays,Oryza sativa),((Arabidopsis thaliana,(Glycine max,Medicago sativa)),Solanum lycopersicum)Pentapetalae);")
+  notnew <- "a,b;"
+  expect_s3_class(input_process(c(new, new)), "phylo") # trying to process two phylogenies will give a message
+  input <- c(new, new)
+  expect_s3_class(input_process(c(phy, phy)), "phylo") # trying to process two phylogenies will give a message
+  expect_output(x <- input_process(new), NA)
+  expect_output(x <- input_process(notnew), NA)
+  expect_output(x <- input_process("purrr"), NA)
+  expect_s3_class(x <- input_process(new), "phylo") # output is phylo
+  expect_s3_class(x <- input_process(phy), "phylo") # output is phylo
 })
 
 test_that("datelife_query_check works with phylo as input", {
-    datelife_query_check(datelife_query = felid_sdm$phy)
-    datelife_query_check(datelife_query = threebirds_median)
+  datelife_query_check(datelife_query = felid_sdm$phy)
+  datelife_query_check(datelife_query = threebirds_median)
 })

@@ -4,8 +4,8 @@
 #' @export
 patristic_matrix_to_newick <- function(patristic_matrix) {
   tree <- patristic_matrix_to_phylo(patristic_matrix)
-  if(inherits(tree, "phylo")){
-  	return(ape::write.tree(tree))
+  if (inherits(tree, "phylo")) {
+    return(ape::write.tree(tree))
   }
   return(NA)
 }

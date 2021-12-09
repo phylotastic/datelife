@@ -13,7 +13,7 @@ use_calibrations_bladj(
 )
 }
 \arguments{
-\item{phy}{A \code{phylo} object with or without branch lengths}
+\item{phy}{A \code{phylo} object with or without branch lengths.}
 
 \item{calibrations}{A data frame of secondary calibrations for any pair of taxon
 names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.}
@@ -31,5 +31,5 @@ A \code{phylo} object with branch lengths proportional to time.
 Use calibrations to date a topology with bladj.
 }
 \details{
-root_age Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.
+root_age Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10\% more than the age of the calibration.
 }

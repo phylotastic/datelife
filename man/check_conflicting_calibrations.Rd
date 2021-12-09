@@ -8,7 +8,7 @@ if calibrations are younger or older relative to descendants and ancestors, resp
 check_conflicting_calibrations(phy, calibration_distribution)
 }
 \arguments{
-\item{phy}{A phylo object}
+\item{phy}{A \code{phylo} object.}
 
 \item{calibration_distribution}{is a list of node ages distributions, named with the node number from phy}
 }

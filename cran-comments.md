@@ -1,19 +1,17 @@
 ## Resubmission
-This is a resubmission. In this version I have:
+This is a resubmission where I have:
 
 * Fixed packages not on CRAN.
+* Removed system requirement of mafft software. It was replaced with an R function.
 
-* Removed system requirement of mafft software, it was replaced with an R function
+Results for check_for_cran():
 
-## Test environments
-* local OS X install, R 3.6.0
-* ubuntu 16.04.6 (on travis-ci), R 3.6.1
-* win-builder (devel and release)
+Results for check_win_release()
 
 ## R CMD check results
-There were no ERRORs, and no WARNINGs
+There are no ERRORs, and no WARNINGs
 
-There was 1 NOTE:
+There are 4 NOTEs:
 
 * checking installed package size ... NOTE
     installed size is 10.2Mb
@@ -21,9 +19,17 @@ There was 1 NOTE:
       R      5.0Mb
       data   4.7Mb
 
+Justification:
     The package is hosting a database (data/opentree_chronograms.rda), increasing the size of the data dir. This database is needed to run main functions.
-    The R dir appears of a much smaller size locally (351Kb).
+
+* checking data for non-ASCII characters ... NOTE
+  Note: found 2575 marked UTF-8 strings
+
+Justification:
+    We ran tools::showNonASCIIfile() on our data objects. The culprit is our
+    opentree_chronograms.rda object. We then ran tools::showNonASCII() on each element of the object. non-ASCII characters are found on the opentree_chronograms$authors list, which contains names of authors of our study
+    database.
 
 ## Downstream dependencies
 
-This is the first release of this package.
+This will be the first release of this package.

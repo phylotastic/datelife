@@ -8,8 +8,8 @@ test_that("getting, mapping and using all calibrations work", {
   # u1.1 <- datelife_use(input = c("Felis catus", "Canis canis", "Elephas maximus"))
   # Giving error:
   # Error in convertAlnRows(result$msa, type) : There is an invalid aln file!
-    # In addition: Warning message:
-    # In scan(file = file, what = what, sep = sep, quote = quote, dec = dec,  :
+  # In addition: Warning message:
+  # In scan(file = file, what = what, sep = sep, quote = quote, dec = dec,  :
   # EOF within quoted string
 
   # TODO
@@ -18,46 +18,46 @@ test_that("getting, mapping and using all calibrations work", {
   # u1.2 <- datelife_use(input = c("Delphinus delphus", "Homo sapiens", "Elephas maximus"))
   u1.5 <- datelife_use(input = c("Chen caerulescens", "Cygnus columbianus", "Anas acuta"))
 
-  #TEST match_all_calibrations
-  expect_equal(match_all_calibrations(phy = NULL, calibrations= NULL), NA)
+  # TEST match_all_calibrations
+  expect_equal(match_all_calibrations(phy = NULL, calibrations = NULL), NA)
   # match_all_calibrations(phy = u1.2$phy, calibrations= NULL)
   expect_equal(match_all_calibrations(phy = u1.5$phy, calibrations = u1$calibrations.df), NA)
   expect_equal(match_all_calibrations(phy = u1$phy, calibrations = u1.5$calibrations.df), NA)
 
   # 2) TEST datelife with a tree with NO branch lengths
-  u2 <- datelife_use(input=threebirds_nbl)
+  u2 <- datelife_use(input = threebirds_nbl)
   # initial branch lengths are required for pathd8 dating
   # the following will use bladj instead of pathd8 bc phy has no branch lengths:
   c1 <- use_calibrations(phy = threebirds_nbl, calibrations = u2$calibrations, dating_method = "pathd8")
   # test dating_method attribute is "bladj"
   # get all calibrations works with a tree with branch lengths too!
-  c2 <- get_all_calibrations(input=threebirds_nbl)
+  c2 <- get_all_calibrations(input = threebirds_nbl)
 
   # 3) TEST datelife with a tree WITH branch lengths
-  u3 <- suppressWarnings(datelife_use(input=threebirds_median))
-  g3 <- get_all_calibrations(input=threebirds_median)
-  g3.2 <- get_all_calibrations(input=threebirds_median, each = TRUE)
+  u3 <- suppressWarnings(datelife_use(input = threebirds_median))
+  g3 <- get_all_calibrations(input = threebirds_median)
+  g3.2 <- get_all_calibrations(input = threebirds_median, each = TRUE)
 
 
   # 4) TEST datelife with a multiPhylo object
-  u4.1 <- datelife_use(input=threebirds_all) # tests argument each = FALSE
-  u4.2 <- datelife_use(input=threebirds_all, each = TRUE)
-  g4 <- get_all_calibrations(input=threebirds_all, each = TRUE)
+  u4.1 <- datelife_use(input = threebirds_all) # tests argument each = FALSE
+  u4.2 <- datelife_use(input = threebirds_all, each = TRUE)
+  g4 <- get_all_calibrations(input = threebirds_all, each = TRUE)
 
   threebirds_all0 <- threebirds_all
   threebirds_all0[[1]]$edge.length <- NULL
-  get_all_calibrations(input=threebirds_all0)
+  get_all_calibrations(input = threebirds_all0)
 
   threebirds_all_nbl <- c(threebirds_nbl, threebirds_all0[[1]])
-  class(threebirds_all_nbl) <- 'multiPhylo'
-  get_all_calibrations(input=threebirds_all_nbl)
+  class(threebirds_all_nbl) <- "multiPhylo"
+  get_all_calibrations(input = threebirds_all_nbl)
 
 
   # 5) TEST datelife with a datelifeResult object
   # must throw error here:
-  expect_error(suppressWarnings(datelife_use(input=threebirds_result)))
+  expect_error(suppressWarnings(datelife_use(input = threebirds_result)))
   # but not here:
-  extract_calibrations_dateliferesult(input= threebirds_result)
+  extract_calibrations_dateliferesult(input = threebirds_result)
 
   # TODO: 6) TEST datelife with a datelife query object
 
@@ -66,7 +66,6 @@ test_that("getting, mapping and using all calibrations work", {
   skip_on_cran()
   x <- use_calibrations(phy = threebirds_median, calibrations = u2$calibrations, dating_method = "pathd8")
   # use_calibrations(phy = threebirds_median, calibrations = u2$calibrations, dating_method = "PATHd8")
-
 })
 
 
@@ -75,7 +74,7 @@ test_that("getting, mapping and using all calibrations work", {
 test_that("get_otol_synthetic_tree works", {
   otol_tree <- get_otol_synthetic_tree(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"))
   expect_s3_class(otol_tree, "phylo") # output is phylo
-  expect_gte(length(otol_tree), 4)  # it has no branch lengths
+  expect_gte(length(otol_tree), 4) # it has no branch lengths
   # otol_tree <- get_otol_synthetic_tree(input = c("Struthio camelus"))
   # should it return all names always?
   # it should return the same number of names matched by tnrs_match

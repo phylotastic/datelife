@@ -4,12 +4,10 @@
 \alias{make_treebase_cache}
 \title{Create a cache from TreeBase}
 \usage{
-make_treebase_cache(outputfile = "treebasecache.RData", verbose = TRUE)
+make_treebase_cache(outputfile = "treebasecache.RData")
 }
 \arguments{
 \item{outputfile}{Path including file name}
-
-\item{verbose}{If TRUE, give status updates to the user}
 }
 \value{
 List containing author and curator results

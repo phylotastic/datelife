@@ -2,18 +2,19 @@
 % Please edit documentation in R/datelife_internal.R
 \name{patristic_matrix_MRCA}
 \alias{patristic_matrix_MRCA}
-\title{Get time of MRCA from patristic matrix. Used in: datelife_result_MRCA.}
+\title{Get time of MRCA from patristic matrix. Used in \code{\link[=datelife_result_MRCA]{datelife_result_MRCA()}}.}
 \usage{
-patristic_matrix_MRCA(patristic_matrix, partial = TRUE)
+patristic_matrix_MRCA(patristic_matrix, na.rm = TRUE)
 }
 \arguments{
-\item{patristic_matrix}{A patristic matrix}
+\item{patristic_matrix}{A patristic matrix (aka a \code{datelifeResult} object of length 1)}
 
-\item{partial}{If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries}
+\item{na.rm}{If \code{TRUE}, it drops rows containing \code{NA}s from the \code{datelifeResult}
+patristic matrix; if \code{FALSE}, it returns \code{NA} where there are missing entries.}
 }
 \value{
-The depth of the MRCA
+The depth of the MRCA as a numeric vector.
 }
 \description{
-Get time of MRCA from patristic matrix. Used in: datelife_result_MRCA.
+Get time of MRCA from patristic matrix. Used in \code{\link[=datelife_result_MRCA]{datelife_result_MRCA()}}.
 }

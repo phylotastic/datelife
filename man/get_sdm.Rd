@@ -4,7 +4,7 @@
 \alias{get_sdm}
 \title{Get SDM result for list of working matrices}
 \usage{
-get_sdm(unpadded.matrices, weighting, verbose)
+get_sdm(unpadded.matrices, weighting)
 }
 \arguments{
 \item{unpadded.matrices}{A list of patristic matrices, a datelifeResult object.}
@@ -16,8 +16,6 @@ tree in \code{input} during the SDM analysis. Choose one of:
 \item{weighting = "taxa"}{Weight is proportional to number of taxa.}
 \item{weighting = "inverse"}{Weight is proportional to 1 / number of taxa.}
 }}
-
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \value{
 A matrix.

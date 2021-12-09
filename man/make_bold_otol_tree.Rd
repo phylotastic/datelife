@@ -10,7 +10,6 @@ make_bold_otol_tree(
   otol_version = "v3",
   chronogram = TRUE,
   doML = FALSE,
-  verbose = FALSE,
   aligner = "muscle",
   ...
 )
@@ -18,11 +17,10 @@ make_bold_otol_tree(
 \arguments{
 \item{input}{One of the following:
 \describe{
-\item{Taxon names}{As a character vector.}
-\item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
-            object, OR as a newick character string.}
-\item{A \code{datelifeQuery} object}{An output from [make_datelife_query()]
-                \code{\link[=make_datelife_query]{make_datelife_query}}.}
+\item{A character vector}{With taxon names as a single comma separated strting or concatenated with \code{\link[=c]{c()}}.}
+\item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+object, OR as a newick character string.}
+\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 }}
 
 \item{marker}{A character vector indicating the gene from BOLD system to be used for branch length estimation.}
@@ -33,15 +31,15 @@ make_bold_otol_tree(
 
 \item{doML}{Boolean; only relevant if chronogram = TRUE. If TRUE, it does ML branch length optimization with phangorn::optim.pml}
 
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
-
 \item{aligner}{A character vector indicating whether to use MAFFT or MUSCLE to align BOLD sequences. It is not case sensitive. Default to MUSCLE.}
 
 \item{...}{
   Arguments passed on to \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree}}
   \describe{
     \item{\code{resolve}}{boolean; default to TRUE. Whether to resolve the tree at random or not.}
-    \item{\code{ott_ids}}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+    \item{\code{ott_ids}}{If not NULL, it takes this argument and ignores input. A
+numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} or
+\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}}
   }}
 }
 \value{

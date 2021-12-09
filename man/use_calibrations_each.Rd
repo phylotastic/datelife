@@ -8,15 +8,20 @@ to generate multiple hypothesis of time of divergence}
 use_calibrations_each(phy = NULL, calibrations = NULL, ...)
 }
 \arguments{
-\item{phy}{A \code{phylo} object with or without branch lengths}
+\item{phy}{A \code{phylo} object to use as tree topology.}
 
-\item{calibrations}{An object of class \code{datelifeCalibrations},
-typically an output of [get_all_calibrations()].}
+\item{calibrations}{A \code{datelifeCalibrations} object, an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 
-\item{...}{Arguments to pass to use_calibrations}
+\item{...}{
+  Arguments passed on to \code{\link[=use_calibrations]{use_calibrations}}
+  \describe{
+    \item{\code{dating_method}}{Tree dating method to use. Options are "bladj" or "pathd8".}
+    \item{\code{type}}{The type of age to use as calibration: "median", "mean", "min", or "max".}
+  }}
 }
 \value{
-A list with a multiPhylo object of chronograms and a list of all calibrations used
+A \code{multiPhylo} object of trees with branch lengths proportional
+to time.
 }
 \description{
 \code{use_calibrations_each} wraps \code{use_calibrations} to take each set of
@@ -24,11 +29,14 @@ given calibrations and use it independently as constraints for BLADJ or PATHd8
 to date a given tree topology.
 }
 \details{
+\code{calibrations} and \code{dating_method} are stored as attributes.
+They can be accessed with \code{attributes(return)$datelife_calibrations} and
+\code{attributes(return)$dating_method}, respectively. \cr
 If \code{input} tree does not have branch lengths, \code{dating_method} is
-ignored and the function will use secondary calibrations to date the \code{input}
-tree with [BLADJ](http://phylodiversity.net/bladj/)
-using [phylocomr::ph_bladj()] (via [use_calibrations_bladj()]). If \code{input}
-tree has have branch lengths it can be dated
-with [PATHd8](https://www2.math.su.se/PATHd8/) using [geiger::PATHd8.phylo()]
-(via [use_calibrations_pathd8()]).
+ignored and the function will use secondary calibrations to date the
+\code{input} tree with \href{http://phylodiversity.net/bladj/}{BLADJ},
+using \code{\link[phylocomr:ph_bladj]{phylocomr::ph_bladj()}}, via \code{\link[=use_calibrations_bladj]{use_calibrations_bladj()}}. If
+\code{input} tree has branch lengths it can be dated
+with \href{https://www2.math.su.se/PATHd8/}{PATHd8}, using \code{\link[geiger:geiger-internal]{geiger::PATHd8.phylo()}},
+via \code{\link[=use_calibrations_pathd8]{use_calibrations_pathd8()}}.
 }

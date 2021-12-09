@@ -1,6 +1,6 @@
-relevant_age_quantiles <- function(ages, probs = c(0.5,0,0.025,0.975,1) ) {
+relevant_age_quantiles <- function(ages, probs = c(0.5, 0, 0.025, 0.975, 1)) {
   # just utility wrapper function with different defaults
-  return(stats::quantile(ages,probs))
+  return(stats::quantile(ages, probs))
 }
 
 numeric_vector_to_html_row <- function(x, digits = 2) {
@@ -8,42 +8,42 @@ numeric_vector_to_html_row <- function(x, digits = 2) {
 }
 
 patristic_matrix_sample <- function(patristic_matrix_array, uncertainty) {
- # if (dim(patristic_matrix_array)[3] == 1) {
- # 	patristic_matrix<-patristic_matrix_array[,,1]
- # 	#need order of node depths, from just the upper triangular and diagonal part of the matrix
- # 	element.order<-order(patristic_matrix[upper.tri(patristic_matrix,diag = FALSE)],decreasing = TRUE)
- # 	new.patristic_matrix<-patristic_matrix*0
- # 	cur.val<-patristic_matrix[upper.tri(patristic_matrix,diag = FALSE)][element.order[1]]
- #   new.patristic_matrix[upper.tri(new.patristic_matrix,diag = FALSE)][element.order[1]] <- cur.val + runif(1, -cur.val*uncertainty/100, cur.val*uncertainty/100)
-#	element.order<-element.order[-1]
-#  	for (i in sequence(length(element.order))) {
-#  		cur.val<-patristic_matrix[upper.tri(patristic_matrix,diag = FALSE)][element.order[i]]
-#  		new.patristic_matrix[upper.tri(new.patristic_matrix,diag = FALSE)][element.order[i]] <- cur.val + runif(1, -cur.val*uncertainty/100, min(cur.val*uncertainty/100, min( ))
-#  	}
-#  }
-#  else {
-  	return(patristic_matrix <- patristic_matrix_array[,,sample.int(1, size = dim(patristic_matrix_array)[3], replace = TRUE)] )
- # }
+  # if (dim(patristic_matrix_array)[3] == 1) {
+  # 	patristic_matrix<-patristic_matrix_array[,,1]
+  # 	#need order of node depths, from just the upper triangular and diagonal part of the matrix
+  # 	element.order<-order(patristic_matrix[upper.tri(patristic_matrix,diag = FALSE)],decreasing = TRUE)
+  # 	new.patristic_matrix<-patristic_matrix*0
+  # 	cur.val<-patristic_matrix[upper.tri(patristic_matrix,diag = FALSE)][element.order[1]]
+  #   new.patristic_matrix[upper.tri(new.patristic_matrix,diag = FALSE)][element.order[1]] <- cur.val + runif(1, -cur.val*uncertainty/100, cur.val*uncertainty/100)
+  # 	element.order<-element.order[-1]
+  #  	for (i in sequence(length(element.order))) {
+  #  		cur.val<-patristic_matrix[upper.tri(patristic_matrix,diag = FALSE)][element.order[i]]
+  #  		new.patristic_matrix[upper.tri(new.patristic_matrix,diag = FALSE)][element.order[i]] <- cur.val + runif(1, -cur.val*uncertainty/100, min(cur.val*uncertainty/100, min( ))
+  #  	}
+  #  }
+  #  else {
+  return(patristic_matrix <- patristic_matrix_array[, , sample.int(1, size = dim(patristic_matrix_array)[3], replace = TRUE)])
+  # }
 }
 
 patristic_matrix_subset <- function(patristic_matrix, taxa, phy4 = NULL) {
-  #gets a subset of the patristic_matrix. If you give it a phylo4 object, it can check to see if taxa are a clade
-  patristic_matrix.new <- patristic_matrix[ rownames(patristic_matrix) %in% taxa,colnames(patristic_matrix) %in% taxa ]
+  # gets a subset of the patristic_matrix. If you give it a phylo4 object, it can check to see if taxa are a clade
+  patristic_matrix.new <- patristic_matrix[rownames(patristic_matrix) %in% taxa, colnames(patristic_matrix) %in% taxa]
   problem.new <- "none"
   final.size <- sum(rownames(patristic_matrix.new) %in% taxa) # returns number of matches
   if (final.size < length(taxa)) {
     problem.new <- "some of the queried taxa are not on this chronogram, so this is probably an underestimate" # fewer taxa on final matrix than we asked for
-    if (final.size < 2 ) {
+    if (final.size < 2) {
       problem.new <- "insufficient coverage" # we either have one species or zero. Not enough for an MRCA
       patristic_matrix.new <- NA # to make sure no one uses the zero by mistake
     }
   }
-  if(!is.null(phy4)) {
+  if (!is.null(phy4)) {
     if (length(phylobase::descendants(phy4, phylobase::MRCA(phy4, taxa), type = "tips")) > taxa) {
-       problem <- "set of taxa not a clade, so this is probably an overestimate"
+      problem <- "set of taxa not a clade, so this is probably an overestimate"
     }
   }
-  return(list(patristic_matrix= patristic_matrix.new,problem= problem.new))
+  return(list(patristic_matrix = patristic_matrix.new, problem = problem.new))
 }
 
 #' Return the relevant authors for a set of studies
@@ -53,13 +53,12 @@ patristic_matrix_subset <- function(patristic_matrix, taxa, phy4 = NULL) {
 #' @export
 datelife_authors_tabulate <- function(results.index,
                                       cache = "opentree_chronograms") {
-
-  if("opentree_chronograms" %in% cache){
-   utils::data("opentree_chronograms", package = "datelife")
-   cache <- get("opentree_chronograms")
+  if ("opentree_chronograms" %in% cache) {
+    utils::data("opentree_chronograms", package = "datelife")
+    cache <- get("opentree_chronograms")
   }
-	authors <- cache$authors[results.index]
-	return(table(unlist(authors)))
+  authors <- cache$authors[results.index]
+  return(table(unlist(authors)))
 }
 
 #' Return the relevant curators for a set of studies
@@ -69,13 +68,12 @@ datelife_authors_tabulate <- function(results.index,
 #' @export
 relevant_curators_tabulate <- function(results.index,
                                        cache = "opentree_chronograms") {
-
-  if("opentree_chronograms" %in% cache){
-   utils::data("opentree_chronograms", package = "datelife")
-   cache <- get("opentree_chronograms")
+  if ("opentree_chronograms" %in% cache) {
+    utils::data("opentree_chronograms", package = "datelife")
+    cache <- get("opentree_chronograms")
   }
   curators <- cache$curators[results.index]
-	return(table(unlist(curators)))
+  return(table(unlist(curators)))
 }
 
 #

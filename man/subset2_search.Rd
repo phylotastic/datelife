@@ -7,8 +7,8 @@
 \format{
 A list with two named elements. datelifeResult object with 24 patristic matrices
 \describe{
-  \item{datelife_query}{A datelifeQuery object using names_subset 2 as input.}
-  \item{datelife_result}{A datelifeResult object resulting from a search of names in datelifeQuery}
+\item{datelife_query}{A datelifeQuery object using names_subset 2 as input.}
+\item{datelife_result}{A datelifeResult object resulting from a search of names in datelifeQuery}
 }
 }
 \usage{

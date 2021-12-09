@@ -8,130 +8,147 @@ divergence openly available for a given set of taxon names}
 \usage{
 datelife_search(
   input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
-  summary_format = "phylo_all",
-  partial = TRUE,
   use_tnrs = FALSE,
-  approximate_match = TRUE,
+  get_spp_from_taxon = FALSE,
+  partial = TRUE,
   cache = "opentree_chronograms",
+  summary_format = "phylo_all",
+  na.rm = FALSE,
   summary_print = c("citations", "taxa"),
   taxon_summary = c("none", "summary", "matrix"),
-  get_spp_from_taxon = FALSE,
-  verbose = FALSE,
   criterion = "taxa"
 )
 }
 \arguments{
 \item{input}{One of the following:
 \describe{
-\item{Taxon names}{As a character vector.}
-\item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
-            object, OR as a newick character string.}
-\item{A \code{datelifeQuery} object}{An output from [make_datelife_query()]
-                \code{\link[=make_datelife_query]{make_datelife_query}}.}
+\item{A character vector}{With taxon names as a single comma separated strting or concatenated with \code{\link[=c]{c()}}.}
+\item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+object, OR as a newick character string.}
+\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 }}
 
-\item{summary_format}{A character vector of length one, indicating the output
-format for results of the DateLife search. Available output formats are:
-\describe{
- \item{"citations"}{A character vector of references where chronograms with
-                 some or all of the target taxa are published (source chronograms).}
- \item{"mrca"}{A named numeric vector of most recent common ancestor (mrca)
-                 ages of target taxa defined in input, obtained from the source chronograms.
-                 Names of mrca vector are equal to citations.}
- \item{"newick_all"}{A named character vector of newick strings corresponding
-                 to target chronograms derived from source chronograms. Names of newick_all
-                 vector are equal to citations.}
- \item{"newick_sdm"}{Only if multiple source chronograms are available. A
-                 character vector with a single newick string corresponding to a target
-                 chronogram obtained with SDM supertree method (Criscuolo et al. 2006).}
- \item{"newick_median"}{Only if multiple source chronograms are available.
-                 A character vector with a single newick string corresponding to a target
-                 chronogram from the median of all source chronograms.}
- \item{"phylo_sdm"}{Only if multiple source chronograms are available. A
-                 phylo object with a single target chronogram obtained with SDM supertree
-                 method (Criscuolo et al. 2006).}
- \item{"phylo_median"}{Only if multiple source chronograms are available. A
-                 phylo object with a single target chronogram obtained from source
-                 chronograms with median method.}
- \item{"phylo_all"}{A named list of phylo objects corresponding to each target
-                 chronogram obtained from available source chronograms. Names of
-                 phylo_all list correspond to citations.}
- \item{"phylo_biggest"}{The chronogram with the most taxa. In the case of a
-                 tie, the chronogram with clade age closest to the median age of the
-                 equally large trees is returned.}
- \item{"html"}{A character vector with an html string that can be saved and
-                 then opened in any web browser. It contains a 4 column table with data on
-                 target taxa: mrca, number of taxa, citations of source chronogram and
-                 newick target chronogram.}
- \item{"data_frame"}{A data frame with data on target taxa: mrca, number of
-                 taxa, citations of source chronograms and newick string.}
-}}
+\item{use_tnrs}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
+taxonomic name variations.}
 
-\item{partial}{Boolean; default to \code{TRUE}: use source trees even if they only
-match some of the desired taxa.}
+\item{get_spp_from_taxon}{Wether to search ages for all species belonging to a
+given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
+If input is a newick string with some clades it will be converted to a \code{phylo}
+object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.label}.}
+
+\item{partial}{Whether to return or exclude partially matching source chronograms,
+i.e, those that match some and not all of taxa given in \code{datelife_query}.
+Options are \code{TRUE} or \code{FALSE}. Defaults to \code{TRUE}: return all matching source
+chronograms.}
 
 \item{cache}{A character vector of length one, with the name of the data object
 to cache. Default to \code{"opentree_chronograms"}, a data object storing Open Tree of
 Life's database chronograms and other associated information.}
 
-\item{summary_print}{A character vector specifying type of summary information
-to be printed to screen:
+\item{summary_format}{A character vector of length one, indicating the output
+format for results of the DateLife search. Available output formats are:
 \describe{
- \item{"citations"}{Prints references of chronograms where target taxa are found.}
- \item{"taxa"}{Prints a summary of the number of chronograms where each target
-                 taxon is found.}
- \item{"none"}{Nothing is printed to screen.}
+\item{"citations"}{A character vector of references where chronograms with
+some or all of the target taxa are published (source chronograms).}
+\item{"mrca"}{A named numeric vector of most recent common ancestor (mrca)
+ages of target taxa defined in input, obtained from the source chronograms.
+Names of mrca vector are equal to citations.}
+\item{"newick_all"}{A named character vector of newick strings corresponding
+to target chronograms derived from source chronograms. Names of newick_all
+vector are equal to citations.}
+\item{"newick_sdm"}{Only if multiple source chronograms are available. A
+character vector with a single newick string corresponding to a target
+chronogram obtained with SDM supertree method (Criscuolo et al. 2006).}
+\item{"newick_median"}{Only if multiple source chronograms are available.
+A character vector with a single newick string corresponding to a target
+chronogram from the median of all source chronograms.}
+\item{"phylo_sdm"}{Only if multiple source chronograms are available. A
+phylo object with a single target chronogram obtained with SDM supertree
+method (Criscuolo et al. 2006).}
+\item{"phylo_median"}{Only if multiple source chronograms are available. A
+phylo object with a single target chronogram obtained from source
+chronograms with median method.}
+\item{"phylo_all"}{A named list of phylo objects corresponding to each target
+chronogram obtained from available source chronograms. Names of
+phylo_all list correspond to citations.}
+\item{"phylo_biggest"}{The chronogram with the most taxa. In the case of a
+tie, the chronogram with clade age closest to the median age of the
+equally large trees is returned.}
+\item{"html"}{A character vector with an html string that can be saved and
+then opened in any web browser. It contains a 4 column table with data on
+target taxa: mrca, number of taxa, citations of source chronogram and
+newick target chronogram.}
+\item{"data_frame"}{A data frame with data on target taxa: mrca, number of
+taxa, citations of source chronograms and newick string.}
+}}
+
+\item{na.rm}{If \code{TRUE}, it drops rows containing \code{NA}s from the \code{datelifeResult}
+patristic matrix; if \code{FALSE}, it returns \code{NA} where there are missing entries.}
+
+\item{summary_print}{A character vector specifying the type of summary information
+to be printed to screen. Options are:
+\describe{
+\item{"citations"}{Prints references of chronograms where target taxa are found.}
+\item{"taxa"}{Prints a summary of the number of chronograms where each target
+taxon is found.}
+\item{"none"}{Nothing is printed to screen.}
 }
-Default to \code{c("citations", "taxa")}, which displays both.}
+Defaults to \code{c("citations", "taxa")}, which displays both.}
 
 \item{taxon_summary}{A character vector specifying if data on target taxa missing
 in source chronograms should be added to the output as a \code{"summary"} or as a
 presence/absence \code{"matrix"}. Default to \code{"none"}, no information on taxon_summary
 added to the output.}
 
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
-
-\item{criterion}{Whether to get the grove with the most trees or the most taxa}
-
-\item{update_opentree_chronograms}{default to \code{FALSE}}
+\item{criterion}{A character vector of one element indicating whether to get the
+grove with the most trees or the most taxa, \code{"trees"} and \code{"taxa"}.
+For summarizing approaches that return a single synthetic tree from a group of
+chronograms, it is important that the trees leading to it form a grove (roughly,
+a sufficiently overlapping set of taxa between trees (see Ané et al. 2005,
+10.1007/s00026-009-0017-x). In the rare case of multiple groves, should we take
+the one with the most trees or the most taxa? Default to \code{"taxa"}.}
 }
 \description{
 \code{datelife_search} is the core DateLife function to find and
 get all openly available, peer-reviewed scientific information on time of
-lineage divergence for a set \code{input} taxon names given as a character
-vector, a newick character string, or a \code{phylo} or \code{multiPhylo} object.
+lineage divergence for a set of \code{input} taxon names given as a character
+vector, a newick character string, a \code{phylo} or \code{multiPhylo} object or as a
+an already processed \code{datelifeQuery} object obtained with \code{\link[=make_datelife_query]{make_datelife_query()}}.
 }
 \details{
-If only one taxon names is given as \code{input}, \code{get_spp_from_taxon} is
+If only one taxon name is given as \code{input}, \code{get_spp_from_taxon} is
 always set to \code{TRUE}.
-For approaches that return a single synthetic tree, it is important that the
-trees leading to it form a grove (roughly, a sufficiently overlapping set of
-taxa between trees: see Ané et al. 2005, 10.1007/s00026-009-0017-x). In the
-rare case of multiple groves, should we take the one with the most trees or
-the most taxa?
 }
 \examples{
 # obtain median ages from a set of source chronograms in newick format:
-ages <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-		"Mus musculus"), summary_format="newick_median")
+ages <- datelife_search(c(
+  "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
+  "Mus musculus"
+), summary_format = "newick_median")
 # save the tree in newick format
-write(ages, file="some.bird.ages.txt")
+write(ages, file = "some.bird.ages.txt")
 
 # obtain median ages from a set of source chronograms in phylo format
 # will produce same tree as above but in r phylo format:
-ages.again <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-		"Mus musculus"), summary_format="phylo_median")
+ages.again <- datelife_search(c(
+  "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
+  "Mus musculus"
+), summary_format = "phylo_median")
 plot(ages.again)
 library(ape)
 ape::axisPhylo()
 mtext("Time (million years ago)", side = 1, line = 2, at = (max(get("last_plot.phylo",
-		envir = .PlotPhyloEnv)$xx) * 0.5))
-write.tree(ages.again, file="some.bird.tree.again.txt") # saves phylo object in newick format
+  envir = .PlotPhyloEnv
+)$xx) * 0.5))
+write.tree(ages.again, file = "some.bird.tree.again.txt") # saves phylo object in newick format
 
 # obtain mrca ages and target chronograms from all source chronograms
 # generate an html  output readable in any web browser:
-ages.html <- datelife_search(c("Rhea americana", "Pterocnemia pennata", "Struthio camelus",
-		"Mus musculus"), summary_format="html")
-write(ages.html, file="some.bird.trees.html")
+ages.html <- datelife_search(c(
+  "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
+  "Mus musculus"
+), summary_format = "html")
+write(ages.html, file = "some.bird.trees.html")
 system("open some.bird.trees.html")
 }

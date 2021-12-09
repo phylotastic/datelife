@@ -16,3 +16,8 @@ codecov.yml
 ^Meta$
 ^\.travis\.yml$
 ^CRAN-RELEASE$
+R/.lintr
+data/cov.rda
+tests/testthat/.infile
+README.Rmd
+Getting_started_with_datelife.md

@@ -4,7 +4,12 @@
 \alias{use_calibrations_pathd8}
 \title{Date a tree with secondary calibrations using PATHd8}
 \usage{
-use_calibrations_pathd8(phy, calibrations, expand = 0.1, giveup = 100)
+use_calibrations_pathd8(
+  phy = NULL,
+  calibrations = NULL,
+  expand = 0.1,
+  giveup = 100
+)
 }
 \arguments{
 \item{phy}{A \code{phylo} object with branch lengths.}

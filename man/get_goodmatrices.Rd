@@ -4,12 +4,10 @@
 \alias{get_goodmatrices}
 \title{Get good matrices for SDM}
 \usage{
-get_goodmatrices(unpadded.matrices, verbose)
+get_goodmatrices(unpadded.matrices)
 }
 \arguments{
 \item{unpadded.matrices}{A list of patristic matrices, a datelifeResult object.}
-
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \value{
 A numeric vector of good matrix indices in unpadded.matrices.

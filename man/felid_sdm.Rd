@@ -7,8 +7,8 @@
 \format{
 A list of two elements, containing the summary of a datelifeResult object
 \describe{
-  \item{phy}{An ultrametric phylo object with the SDM tree.}
-  \item{data}{A datelifeResult object with data used to construct phy}
+\item{phy}{An ultrametric phylo object with the SDM tree.}
+\item{data}{A datelifeResult object with data used to construct phy}
 }
 }
 \source{

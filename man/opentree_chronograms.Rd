@@ -7,10 +7,10 @@
 \format{
 A list of four elements, containing data from OpenTree of Life chronograms
 \describe{
-  \item{authors}{List of lists of authors of the included studies}
-  \item{curators}{List of lists of curators of the included studies}
-  \item{studies}{List of study identifiers}
-  \item{trees}{List storing the chronograms from OpenTree}
+\item{authors}{List of lists of authors of the included studies}
+\item{curators}{List of lists of curators of the included studies}
+\item{studies}{List of study identifiers}
+\item{trees}{List storing the chronograms from OpenTree}
 }
 }
 \source{

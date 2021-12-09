@@ -10,24 +10,28 @@
 #' @inherit extract_calibrations_phylo return
 #' @export
 get_all_calibrations <- function(input = NULL,
-																 each = FALSE) {
-#
+                                 each = FALSE) {
+  #
   if (inherits(input, "datelifeQuery")) {
-  	res <- get_calibrations_datelifequery(input = input,
-  																				each = each)
-		return(res)
+    res <- get_calibrations_datelifequery(
+      datelife_query = input,
+      each = each
+    )
+    return(res)
   }
   if (inherits(input, "phylo") | inherits(input, "multiPhylo")) {
-		if (inherits(input, "multiPhylo")) {
-			input <- unname(unlist(lapply(input, "[", "tip.label")))
-		} else {
-			input <- input$tip.label
-		}
+    if (inherits(input, "multiPhylo")) {
+      input <- unname(unlist(lapply(input, "[", "tip.label")))
+    } else {
+      input <- input$tip.label
+    }
   }
   if (inherits(input, "character")) {
-		input <- unique(gsub(" ", "_", input))
-    res <- get_calibrations_vector(input = input,
-                                   each = each)
+    input <- unique(gsub(" ", "_", input))
+    res <- get_calibrations_vector(
+      input = input,
+      each = each
+    )
   }
   return(res)
 }

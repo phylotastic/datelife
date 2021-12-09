@@ -4,12 +4,10 @@
 \alias{save_otol_chronograms}
 \title{Save all chronograms from Open Tree of Life}
 \usage{
-save_otol_chronograms(file = "opentree_chronograms.RData", verbose = FALSE)
+save_otol_chronograms(file = "opentree_chronograms.RData")
 }
 \arguments{
 \item{file}{Path including file name}
-
-\item{verbose}{If TRUE, give status updates to the user}
 }
 \value{
 None

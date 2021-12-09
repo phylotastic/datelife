@@ -20,105 +20,105 @@ This uses the taxize package's wrapper of the Global Names Resolver to get taxon
 \details{
 Taxonomies supported by taxize::gnr_datasources()
 \enumerate{
-	\item Catalogue of Life
-	\item Wikispecies
-	\item ITIS
-	\item NCBI
-	\item Index Fungorum
-	\item GRIN Taxonomy for Plants
-	\item Union 4
-	\item The Interim Register of Marine and Nonmarine Genera
-	\item World Register of Marine Species
-	\item Freebase
-	\item GBIF Backbone Taxonomy
-	\item EOL
-	\item Passiflora vernacular names
-	\item Inventory of Fish Species in the Wami River Basin
-	\item Pheasant Diversity and Conservation in the Mt. Gaoligonshan Region
-	\item Finding Species
-	\item Birds of Lindi Forests Plantation
-	\item Nemertea
-	\item Kihansi Gorge Amphibian Species Checklist
-	\item Mushroom Observer
-	\item TaxonConcept
-	\item Amphibia and Reptilia of Yunnan
-	\item Common names of Chilean Plants
-	\item Invasive Species of Belgium
-	\item ZooKeys
-	\item COA Wildlife Conservation List
-	\item AskNature
-	\item China: Yunnan, Southern Gaoligongshan, Rapid Biological Inventories Report No. 04
-	\item Native Orchids from Gaoligongshan Mountains, China
-	\item Illinois Wildflowers
-	\item Coleorrhyncha Species File
-	\item /home/dimus/files/dwca/zoological names.zip
-	\item Peces de la zona hidrogeográfica de la Amazonia, Colombia (Spreadsheet)
-	\item Eastern Mediterranean Syllidae
-	\item Gaoligong Shan Medicinal Plants Checklist
-	\item birds_of_tanzania
-	\item AmphibiaWeb
-	\item tanzania_plant_sepecimens
-	\item Papahanaumokuakea Marine National Monument
-	\item Taiwanese IUCN species list
-	\item BioPedia
-	\item AnAge
-	\item Embioptera Species File
-	\item Global Invasive Species Database
-	\item Sendoya S., Fernández F. AAT de hormigas (Hymenoptera: Formicidae) del Neotrópico 1.0 2004 (Spreadsheet)
-	\item Flora of Gaoligong Mountains
-	\item ARKive
-	\item True Fruit Flies (Diptera, Tephritidae) of the Afrotropical Region
-	\item 3i - Typhlocybinae Database
-	\item CATE Sphingidae
-	\item ZooBank
-	\item Diatoms
-	\item AntWeb
-	\item Endemic species in Taiwan
-	\item Dermaptera Species File
-	\item Mantodea Species File
-	\item Birds of the World: Recommended English Names
-	\item New Zealand Animalia
-	\item Blattodea Species File
-	\item Plecoptera Species File
-	\item /home/dimus/files/dwca/clemens.zip
-	\item Coreoidea Species File
-	\item Freshwater Animal Diversity Assessment - Normalized export
-	\item Catalogue of Vascular Plant Species of Central and Northeastern Brazil
-	\item Wikipedia in EOL
-	\item Database of Vascular Plants of Canada (VASCAN)
-	\item Phasmida Species File
-	\item OBIS
-	\item USDA NRCS PLANTS Database
-	\item Catalog of Fishes
-	\item Aphid Species File
-	\item The National Checklist of Taiwan
-	\item Psocodea Species File
-	\item FishBase
-	\item 3i - Typhlocybinae Database
-	\item Belgian Species List
-	\item EUNIS
-	\item CU*STAR
-	\item Orthoptera Species File
-	\item Bishop Museum
-	\item IUCN Red List of Threatened Species
-	\item BioLib.cz
-	\item Tropicos - Missouri Botanical Garden
-	\item nlbif
-	\item The International Plant Names Index
-	\item Index to Organism Names
-	\item uBio NameBank
-	\item Arctos
-	\item Checklist of Beetles (Coleoptera) of Canada and Alaska. Second Edition.
-	\item The Paleobiology Database
-	\item The Reptile Database
-	\item The Mammal Species of The World
-	\item BirdLife International
-	\item Checklist da Flora de Portugal (Continental, Açores e Madeira)
-	\item FishBase Cache
-	\item Silva
-	\item Open Tree of Life Reference Taxonomy
-	\item iNaturalist
-	\item The Interim Register of Marine and Nonmarine Genera
-	\item Gymno
+\item Catalogue of Life
+\item Wikispecies
+\item ITIS
+\item NCBI
+\item Index Fungorum
+\item GRIN Taxonomy for Plants
+\item Union 4
+\item The Interim Register of Marine and Nonmarine Genera
+\item World Register of Marine Species
+\item Freebase
+\item GBIF Backbone Taxonomy
+\item EOL
+\item Passiflora vernacular names
+\item Inventory of Fish Species in the Wami River Basin
+\item Pheasant Diversity and Conservation in the Mt. Gaoligonshan Region
+\item Finding Species
+\item Birds of Lindi Forests Plantation
+\item Nemertea
+\item Kihansi Gorge Amphibian Species Checklist
+\item Mushroom Observer
+\item TaxonConcept
+\item Amphibia and Reptilia of Yunnan
+\item Common names of Chilean Plants
+\item Invasive Species of Belgium
+\item ZooKeys
+\item COA Wildlife Conservation List
+\item AskNature
+\item China: Yunnan, Southern Gaoligongshan, Rapid Biological Inventories Report No. 04
+\item Native Orchids from Gaoligongshan Mountains, China
+\item Illinois Wildflowers
+\item Coleorrhyncha Species File
+\item /home/dimus/files/dwca/zoological names.zip
+\item Peces de la zona hidrogeográfica de la Amazonia, Colombia (Spreadsheet)
+\item Eastern Mediterranean Syllidae
+\item Gaoligong Shan Medicinal Plants Checklist
+\item birds_of_tanzania
+\item AmphibiaWeb
+\item tanzania_plant_sepecimens
+\item Papahanaumokuakea Marine National Monument
+\item Taiwanese IUCN species list
+\item BioPedia
+\item AnAge
+\item Embioptera Species File
+\item Global Invasive Species Database
+\item Sendoya S., Fernández F. AAT de hormigas (Hymenoptera: Formicidae) del Neotrópico 1.0 2004 (Spreadsheet)
+\item Flora of Gaoligong Mountains
+\item ARKive
+\item True Fruit Flies (Diptera, Tephritidae) of the Afrotropical Region
+\item 3i - Typhlocybinae Database
+\item CATE Sphingidae
+\item ZooBank
+\item Diatoms
+\item AntWeb
+\item Endemic species in Taiwan
+\item Dermaptera Species File
+\item Mantodea Species File
+\item Birds of the World: Recommended English Names
+\item New Zealand Animalia
+\item Blattodea Species File
+\item Plecoptera Species File
+\item /home/dimus/files/dwca/clemens.zip
+\item Coreoidea Species File
+\item Freshwater Animal Diversity Assessment - Normalized export
+\item Catalogue of Vascular Plant Species of Central and Northeastern Brazil
+\item Wikipedia in EOL
+\item Database of Vascular Plants of Canada (VASCAN)
+\item Phasmida Species File
+\item OBIS
+\item USDA NRCS PLANTS Database
+\item Catalog of Fishes
+\item Aphid Species File
+\item The National Checklist of Taiwan
+\item Psocodea Species File
+\item FishBase
+\item 3i - Typhlocybinae Database
+\item Belgian Species List
+\item EUNIS
+\item CU*STAR
+\item Orthoptera Species File
+\item Bishop Museum
+\item IUCN Red List of Threatened Species
+\item BioLib.cz
+\item Tropicos - Missouri Botanical Garden
+\item nlbif
+\item The International Plant Names Index
+\item Index to Organism Names
+\item uBio NameBank
+\item Arctos
+\item Checklist of Beetles (Coleoptera) of Canada and Alaska. Second Edition.
+\item The Paleobiology Database
+\item The Reptile Database
+\item The Mammal Species of The World
+\item BirdLife International
+\item Checklist da Flora de Portugal (Continental, Açores e Madeira)
+\item FishBase Cache
+\item Silva
+\item Open Tree of Life Reference Taxonomy
+\item iNaturalist
+\item The Interim Register of Marine and Nonmarine Genera
+\item Gymno
 }
 }

@@ -16,7 +16,7 @@ in separate data frames.}
 \value{
 An object of class \code{datelifeCalibrations} -- a \code{data frame}
 of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
-for each pair of taxon names in \{input]. The attribute "chronograms" stores
+for each pair of taxon names in \code{input}. The attribute \code{chronograms} stores
 the source data from which the calibrations were extracted.
 }
 \description{
@@ -28,5 +28,5 @@ times (i.e., secondary calibrations) for each taxon pair in a given
 The function calls summarize_datelife_result()] with
 \code{summary_format = "phylo_all"} to go from a \code{datelifeResult} object
 to a \code{phylo} or \code{multiPhylo} object that will be passed to
-[extract_calibrations_phylo()].
+\code{\link[=extract_calibrations_phylo]{extract_calibrations_phylo()}}.
 }

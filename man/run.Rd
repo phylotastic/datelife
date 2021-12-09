@@ -11,7 +11,6 @@ run(
   plot.width = 600,
   plot.height = 600,
   use_tnrs = "no",
-  approximate_match = "yes",
   opentree_chronograms = NULL
 )
 }
@@ -27,8 +26,6 @@ run(
 \item{plot.height}{Height in pixels for output plot}
 
 \item{use_tnrs}{Whether to use OpenTree's TNRS for the input}
-
-\item{approximate_match}{If using TNRS, use approximate matching}
 
 \item{opentree_chronograms}{The list of lists containing the input trees and other info}
 }

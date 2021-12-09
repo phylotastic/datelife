@@ -8,36 +8,46 @@ use_all_calibrations(
   phy = NULL,
   calibrations = NULL,
   each = FALSE,
-  dating_method = "bladj"
+  dating_method = "bladj",
+  ...
 )
 }
 \arguments{
-\item{phy}{A \code{phylo} object with or without branch lengths}
+\item{phy}{A \code{phylo} object to use as tree topology.}
 
-\item{calibrations}{An object of class \code{datelifeCalibrations},
-typically an output of [get_all_calibrations()].}
+\item{calibrations}{A \code{datelifeCalibrations} object, an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
 the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 
-\item{dating_method}{Tree dating method. Options are "bladj" or "pathd8"}
+\item{dating_method}{Tree dating method to use. Options are "bladj" or "pathd8".}
+
+\item{...}{
+  Arguments passed on to \code{\link[=use_calibrations]{use_calibrations}}
+  \describe{
+    \item{\code{type}}{The type of age to use as calibration: "median", "mean", "min", or "max".}
+  }}
 }
 \value{
-A list with a chronogram and secondary calibrations used.
+A \code{datelife} object, which is a \code{phylo} or \code{multiPhylo}
+object with secondary calibrations used for dating stored in attributes.
 }
 \description{
-\code{use_all_calibrations} generates one or multiple chronograms (i.e., phylogenetic
-trees with branch lengths proportional to time) by dating a tree topology given
-in \code{phy}, and secondary calibrations given in \code{calibrations},
-using bladj or PATHd8.
+\code{use_all_calibrations} generates one or multiple chronograms
+(i.e., phylogenetic trees with branch lengths proportional to time) by dating
+a tree topology given in \code{phy}, and secondary calibrations given in
+\code{calibrations}, using bladj or PATHd8 specified in \code{dating_method}.
 }
 \details{
+\code{calibrations} and \code{dating_method} are stored as attributes.
+They can be accessed with \code{attributes(return)$datelife_calibrations} and
+\code{attributes(return)$dating_method}, respectively. \cr
 If \code{input} tree does not have branch lengths, \code{dating_method} is
-ignored and the function will use secondary calibrations to date the \code{input}
-tree with [BLADJ](http://phylodiversity.net/bladj/)
-using [phylocomr::ph_bladj()] (via [use_calibrations_bladj()]). If \code{input}
-tree has have branch lengths it can be dated
-with [PATHd8](https://www2.math.su.se/PATHd8/) using [geiger::PATHd8.phylo()]
-(via [use_calibrations_pathd8()]).
+ignored and the function will use secondary calibrations to date the
+\code{input} tree with \href{http://phylodiversity.net/bladj/}{BLADJ},
+using \code{\link[phylocomr:ph_bladj]{phylocomr::ph_bladj()}}, via \code{\link[=use_calibrations_bladj]{use_calibrations_bladj()}}. If
+\code{input} tree has branch lengths it can be dated
+with \href{https://www2.math.su.se/PATHd8/}{PATHd8}, using \code{\link[geiger:geiger-internal]{geiger::PATHd8.phylo()}},
+via \code{\link[=use_calibrations_pathd8]{use_calibrations_pathd8()}}.
 }

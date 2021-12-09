@@ -2,7 +2,6 @@
 % Please edit documentation in R/datelife_use.R
 \name{datelife_use}
 \alias{datelife_use}
-\alias{use_all_calibrations}
 \title{Generate one or multiple chronograms for a set of given taxon names}
 \usage{
 datelife_use(input = NULL, each = FALSE, dating_method = "bladj", ...)
@@ -10,34 +9,40 @@ datelife_use(input = NULL, each = FALSE, dating_method = "bladj", ...)
 \arguments{
 \item{input}{One of the following:
 \describe{
-\item{Taxon names}{As a character vector.}
-\item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
-            object, OR as a newick character string.}
-\item{A \code{datelifeQuery} object}{An output from [make_datelife_query()]
-                \code{\link[=make_datelife_query]{make_datelife_query}}.}
+\item{A character vector}{With taxon names as a single comma separated strting or concatenated with \code{\link[=c]{c()}}.}
+\item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+object, OR as a newick character string.}
+\item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 }}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
 the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 
-\item{dating_method}{Tree dating method. Options are "bladj" or "pathd8"}
+\item{dating_method}{Tree dating method to use. Options are "bladj" or "pathd8".}
 
 \item{...}{
   Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}
   \describe{
-    \item{\code{verbose}}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
+    \item{\code{use_tnrs}}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
+taxonomic name variations.}
+    \item{\code{get_spp_from_taxon}}{Wether to search ages for all species belonging to a
+given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
+If input is a newick string with some clades it will be converted to a \code{phylo}
+object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.label}.}
   }}
 }
 \value{
-A list with one or multiple chronograms and secondary calibrations used for dating.
+A \code{datelife} object, which is a \code{phylo} or \code{multiPhylo}
+object with secondary calibrations used for dating stored in attributes.
 }
 \description{
 \code{datelife_use} gets secondary calibrations available for any
 pair of \code{input} taxon names, mined from code{\link[=opentree_chronograms]{opentree_chronograms}}
 local DateLife database, and uses them to date a given tree topology with BLADJ
 or PATHd8. If no tree topology is provided, it will attempt to generate one with
-BOLD-OpenTree through [make_bold_otol_tree()].
+BOLD-OpenTree through \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}}.
 }
 \details{
 If input is a tree, it will use secondary calibrations to (1) date the tree with bladj

@@ -13,9 +13,11 @@ get_otol_synthetic_tree(
 )
 }
 \arguments{
-\item{input}{Optional. A character vector of names or a datelifeQuery object}
+\item{input}{Optional. A character vector of names or a \code{datelifeQuery} object}
 
-\item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+\item{ott_ids}{If not NULL, it takes this argument and ignores input. A
+numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} or
+\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}}
 
 \item{otol_version}{Version of Open Tree of Life to use}
 

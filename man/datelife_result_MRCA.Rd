@@ -2,19 +2,19 @@
 % Please edit documentation in R/datelife_internal.R
 \name{datelife_result_MRCA}
 \alias{datelife_result_MRCA}
-\title{Get vector of MRCAs from a datelifeResult object. Used in: summarize_datelife_result.}
+\title{Get a numeric vector of MRCAs from a \code{datelifeResult} object. Used in \code{\link[=summarize_datelife_result]{summarize_datelife_result()}}.}
 \usage{
-datelife_result_MRCA(datelife_result, partial = TRUE)
+datelife_result_MRCA(datelife_result, na.rm = TRUE)
 }
 \arguments{
-\item{datelife_result}{A \code{datelifeResult} object, an output
-of [get_datelife_result()].}
+\item{datelife_result}{A \code{datelifeResult} object, output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
 
-\item{partial}{If TRUE, drop NA from the patristic matrix; if FALSE, will return NA if there are missing entries}
+\item{na.rm}{If \code{TRUE}, it drops rows containing \code{NA}s from the \code{datelifeResult}
+patristic matrix; if \code{FALSE}, it returns \code{NA} where there are missing entries.}
 }
 \value{
-Vector of MRCA ages with names same as in datelife_result
+A named numeric vector of MRCA ages for each element given in \code{datelife_result}.
 }
 \description{
-Get vector of MRCAs from a datelifeResult object. Used in: summarize_datelife_result.
+Get a numeric vector of MRCAs from a \code{datelifeResult} object. Used in \code{\link[=summarize_datelife_result]{summarize_datelife_result()}}.
 }

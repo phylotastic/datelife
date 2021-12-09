@@ -13,8 +13,7 @@ phylo_generate_uncertainty(
   age_var = 0.1,
   age_scale = 0,
   alpha = 0.025,
-  rescale = TRUE,
-  verbose = FALSE
+  rescale = TRUE
 )
 }
 \arguments{
@@ -24,18 +23,15 @@ phylo_generate_uncertainty(
 
 \item{uncertainty_method}{A character vector specifying the method to generate uncertainty. mrbayes is default.}
 
-\item{age_distribution}{A character string specifying the type of calibration. Only "fixed" and "uniform" are implemented for now.
+\item{age_distribution}{A character string specifying the type of calibration.
+Only "fixed" and "uniform" are implemented for now.
 \describe{
-
-    \item{fixed}{ The age given in ncalibration will be used as fixed age.
-}
-    \item{lognormal}{The age given in ncalibration will be used as mean age.
-        The standard deviation can be provided. # still need to add this option.
-        By default, a 95 CI sd is used.
-}
-    \item{uniform}{The age given in ncalibration will be used as mean age.
-        Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.
-}
+\item{fixed}{The age given in ncalibration will be used as fixed age.}
+\item{lognormal}{The age given in ncalibration will be used as mean age.
+The standard deviation can be provided. # still need to add this option.
+By default, a 95 CI sd is used.}
+\item{uniform}{The age given in ncalibration will be used as mean age.
+Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.}
 }}
 
 \item{age_sd}{The standard deviation around the age to use for generating the uncertainty. If not a numeric value, var will be used to calculate it.}
@@ -47,8 +43,6 @@ phylo_generate_uncertainty(
 \item{alpha}{The significance level on uncertainty to generate. By default 0.025}
 
 \item{rescale}{Boolean. If true, observed age will be rescaled each round.}
-
-\item{verbose}{Boolean. If \code{TRUE}, it gives printed updates to the user.}
 }
 \value{
 A phylo or multiPhylo object with the same topology as phy but different branch lengths
@@ -70,7 +64,7 @@ length(unc)
 # ltt plot:
 max_age <- max(sapply(unc, ape::branching.times))
 ape::ltt.plot(phy = unc[[1]], xlim = c(-max_age, 0), col = "#cce5ff50")
-for (i in 2:100){
+for (i in 2:100) {
   ape::ltt.lines(phy = unc[[i]], col = "#cce5ff50")
 }
 ape::ltt.lines(felid_sdm$phy, col = "red")

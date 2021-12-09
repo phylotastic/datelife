@@ -2,25 +2,27 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{get_ott_children}
 \alias{get_ott_children}
-\title{Use this instead of rotl::tol_subtree when taxa are not in synthesis tree and
+\title{Use this instead of \code{\link[rotl:tol_subtree]{rotl::tol_subtree()}} when taxa are not in synthesis tree and
 you still need to get all species or an induced OpenTree subtree}
 \usage{
 get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species", ...)
 }
 \arguments{
-\item{input}{Optional. A character vector of names or a datelifeQuery object}
+\item{input}{Optional. A character vector of names or a \code{datelifeQuery} object}
 
-\item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+\item{ott_ids}{If not NULL, it takes this argument and ignores input. A
+numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} or
+\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}}
 
 \item{ott_rank}{A character vector with the ranks you wanna get lineage children from.}
 
-\item{...}{Other arguments to pass to get_valid_children()}
+\item{...}{Other arguments to pass to \code{\link[=get_valid_children]{get_valid_children()}}.}
 }
 \value{
-A data frame
+A \code{data.frame} object.
 }
 \description{
-Use this instead of rotl::tol_subtree when taxa are not in synthesis tree and
+Use this instead of \code{\link[rotl:tol_subtree]{rotl::tol_subtree()}} when taxa are not in synthesis tree and
 you still need to get all species or an induced OpenTree subtree
 }
 \examples{
@@ -29,9 +31,9 @@ you still need to get all species or an induced OpenTree subtree
 tnrs <- tnrs_match("Canis")
 # Mus, Gleicheniales, Polypodiales, etc., are missing in synth tree too
 \dontrun{
-  rotl::tol_subtree(tnrs$ott_id[1])
-  Error: HTTP failure: 400
-  [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
+rotl::tol_subtree(tnrs$ott_id[1])
+# Error: HTTP failure: 400
+# [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
 }
 ids <- tnrs$ott_id[1]
 names(ids) <- tnrs$unique_name
@@ -43,6 +45,6 @@ names(ids) <- rownames(children$Canis)
 tree_children <- datelife::get_otol_synthetic_tree(ott_ids = ids)
 plot(tree_children, cex = 0.3)
 # Other examples:
-oo <- get_ott_children(input= "magnoliophyta", ott_rank = "order")
+oo <- get_ott_children(input = "magnoliophyta", ott_rank = "order")
 sum(oo$Magnoliophyta$rank == "order") # to know how many orders of flowering plants we have
 }

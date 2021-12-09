@@ -7,9 +7,11 @@
 get_dated_otol_induced_subtree(input = NULL, ott_ids = NULL, ...)
 }
 \arguments{
-\item{input}{Optional. A character vector of names or a datelifeQuery object}
+\item{input}{Optional. A character vector of names or a \code{datelifeQuery} object}
 
-\item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+\item{ott_ids}{If not NULL, it takes this argument and ignores input. A
+numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} or
+\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}}
 
 \item{...}{
   Arguments passed on to \code{\link[=check_ott_input]{check_ott_input}}
@@ -25,7 +27,7 @@ Get a dated OpenTree induced synthetic subtree from a set of given taxon names, 
 }
 \details{
 OpenTree dated tree from Stephen Smith's OpenTree scaling service at
-[https://github.com/FePhyFoFum/gophy] if you want to make an LTT plot of
+https://github.com/FePhyFoFum/gophy if you want to make an LTT plot of
 a dated OpenTree tree you'll need to get rid of singleton nodes with
-[ape::collapse.singles()] and also probably do [phytools::force.ultrametric()]
+\code{\link[ape:collapse.singles]{ape::collapse.singles()}} and also probably do \code{\link[phytools:force.ultrametric]{phytools::force.ultrametric()}}.
 }

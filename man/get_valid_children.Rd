@@ -8,9 +8,11 @@ taxon info object)}
 get_valid_children(input = NULL, ott_ids = NULL, taxonomic_source = "ncbi")
 }
 \arguments{
-\item{input}{Optional. A character vector of names or a datelifeQuery object}
+\item{input}{Optional. A character vector of names or a \code{datelifeQuery} object}
 
-\item{ott_ids}{If not NULL, it takes this argument and ignores input. A numeric vector of ott ids obtained with rotl::taxonomy_taxon_info or rolt::tnrs_match_names or datelife::tnrs_match}
+\item{ott_ids}{If not NULL, it takes this argument and ignores input. A
+numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} or
+\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}}
 
 \item{taxonomic_source}{A character vector with the desired taxonomic sources. One of "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources. NCBI by default.}
 }
@@ -29,5 +31,5 @@ tti <- rotl::taxonomy_taxon_info(6003921, include_children = TRUE)
 gvc <- get_valid_children(ott_ids = 6003921)
 # More examples:
 get_valid_children(ott_ids = 769681) # Psilotopsida
-get_valid_children(ott_ids = 56601)  # Marchantiophyta
+get_valid_children(ott_ids = 56601) # Marchantiophyta
 }

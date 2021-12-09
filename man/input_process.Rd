@@ -7,17 +7,15 @@
 input_process(input)
 }
 \arguments{
-\item{input}{One of the following:
+\item{input}{Taxon names as one of the following:
 \describe{
-\item{Taxon names}{As a character vector.}
-\item{One or more trees with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
-            object, OR as a newick character string.}
-\item{A \code{datelifeQuery} object}{An output from [make_datelife_query()]
-                \code{\link[=make_datelife_query]{make_datelife_query}}.}
+\item{A character vector}{With taxon names as a single comma separated strting or concatenated with \code{\link[=c]{c()}}.}
+\item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
+object, OR as a newick character string.}
 }}
 }
 \value{
-A phylo object or NA if no tree
+A \code{phylo} object or \code{NA} if input is not a tree .
 }
 \description{
 Process a phylo object or a character string to determine if it's correct newick

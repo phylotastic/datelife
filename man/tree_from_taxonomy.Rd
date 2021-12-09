@@ -24,11 +24,13 @@ A list containing a phylo object with resolved names and a vector with unresolve
 This uses the taxize package's wrapper of the Global Names Resolver to get taxonomic paths for the vector of taxa you pass in. Sources is a vector of source labels in order (though it works best if everything uses the same taxonomy, so we recommend doing just one source). You can see options by doing taxize::gnr_datasources(). Our default is Catalogue of Life. The output is a phylo object (typically with many singleton nodes if collapse_singles is FALSE: nodes with only one descendant (like "Homo" having "Homo sapiens" as its only descendant) but these singletons typically have node.labels
 }
 \examples{
-taxa <- c("Homo sapiens", "Ursus arctos", "Pan paniscus", "Tyrannosaurus rex",
-         "Ginkgo biloba", "Vulcan", "Klingon")
+taxa <- c(
+  "Homo sapiens", "Ursus arctos", "Pan paniscus", "Tyrannosaurus rex",
+  "Ginkgo biloba", "Vulcan", "Klingon"
+)
 results <- tree_from_taxonomy(taxa)
 print(results$unresolved) # The taxa that do not match
 ape::plot.phylo(results$phy) # may generate warnings due to problems with singletons
-ape::plot.phylo(ape::collapse.singles(results$phy), show.node.label=TRUE)
+ape::plot.phylo(ape::collapse.singles(results$phy), show.node.label = TRUE)
 # got rid of singles, but this also removes a lot of the node.labels
 }
