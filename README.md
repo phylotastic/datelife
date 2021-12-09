@@ -148,32 +148,35 @@ covr::zero_coverage(cov)
 
 #### Releasing to CRAN:
 
-To create the CRAN release, first run a `R CMD check` from your
-terminal. For that, change directories to the one above your package:
+To be able to release to CRAN, the first step is to pass a check. To run
+a local check, you can use the command `R CMD check` from your terminal.
+For that, change directories to the one above your working clone of the
+`datelife` repo:
 
 ``` bash
 cd ../
 ```
 
-Generate a tar ball for your package by running `R CMD build`:
+Generate a tar ball for your package by running `R CMD build
+package-name`:
 
 ``` bash
 R CMD build datelife
 ```
 
-Finally, run `R CMD check` on the tar ball that you just generated:
+Finally, run `R CMD check package-tar-ball` on the tar ball that you
+just generated:
 
 ``` bash
-R CMD check datelife_0.5.0.tar.gz
+R CMD check datelife_0.6.0.tar.gz
 ```
 
-If you work on a Linux or Mac OS, you can check datelife on a Windows OS
-with:
+The best option to document your checks currently is the
+[rhub](https://cloud.r-project.org/web/packages/rhub/vignettes/rhub.html)
+package, which allows remote testing on several OS with:
 
-``` r
-devtools::check_win_release()
-
-devtools::check_for_cran()
+``` bash
+rhub::check_for_cran()
 ```
 
 #### Generating `datelife`’s hexsticker:

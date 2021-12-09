@@ -1,11 +1,15 @@
 ## Resubmission
 This is a resubmission where I have:
 
-* Fixed packages not on CRAN.
+* Removed dependencies of packages not on CRAN.
 * Removed system requirement of mafft software. It was replaced with an R function.
 
 Results for check_for_cran():
 
+ https://builder.r-hub.io/status/datelife_0.6.0.tar.gz-8fab33ce882d4b32923fef62ae7c08d2
+   https://builder.r-hub.io/status/datelife_0.6.0.tar.gz-3d42cf7809e4496fa7acbd46f258170f
+   https://builder.r-hub.io/status/datelife_0.6.0.tar.gz-52ef3d5bc64f4e1eb7778bfafd4d7226
+   
 Results for check_win_release()
 
 ## R CMD check results

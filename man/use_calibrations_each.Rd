@@ -34,7 +34,7 @@ They can be accessed with \code{attributes(return)$datelife_calibrations} and
 \code{attributes(return)$dating_method}, respectively. \cr
 If \code{input} tree does not have branch lengths, \code{dating_method} is
 ignored and the function will use secondary calibrations to date the
-\code{input} tree with \href{http://phylodiversity.net/bladj/}{BLADJ},
+\code{input} tree with \href{https://doi.org/10.1093/bioinformatics/btn358}{BLADJ},
 using \code{\link[phylocomr:ph_bladj]{phylocomr::ph_bladj()}}, via \code{\link[=use_calibrations_bladj]{use_calibrations_bladj()}}. If
 \code{input} tree has branch lengths it can be dated
 with \href{https://www2.math.su.se/PATHd8/}{PATHd8}, using \code{\link[geiger:geiger-internal]{geiger::PATHd8.phylo()}},
