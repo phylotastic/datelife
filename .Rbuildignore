@@ -19,6 +19,5 @@ codecov.yml
 R/.lintr
 data/cov.rda
 tests/testthat/.infile
-*.Rproj
 README.Rmd
 Getting_started_with_datelife.md
