@@ -1,20 +1,17 @@
 ## Resubmission
-This is a resubmission. In this version I have:
+This is a resubmission where I have:
 
 * Fixed packages not on CRAN.
+* Removed system requirement of mafft software. It was replaced with an R function.
 
-* Removed system requirement of mafft software, which was replaced with an R function.
+Results for check_for_cran():
 
-## Test environments
-* local OS X install, R 4.1.0
-* local ubuntu 16.04.6, R 3.6.1
-* local windows, R 4.1.0
-* win-builder (devel and release)
+Results for check_win_release()
 
 ## R CMD check results
 There are no ERRORs, and no WARNINGs
 
-There are 2 NOTEs:
+There are 4 NOTEs:
 
 * checking installed package size ... NOTE
     installed size is 10.2Mb

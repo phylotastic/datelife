@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit THIS file -->
 
-<img src='inst/figures/datelife-hex-upwards.png' align="right" height="250" />
+<img src='inst/figures/datelife-hex-upwards-gray.png' align="right" height="150" />
 
 <!-- badges: start -->
 
@@ -9,9 +9,7 @@
 
 ![GitHub R package
 version](https://img.shields.io/github/r-package/v/phylotastic/datelife?color=green)
-[![Build
-Status](https://travis-ci.org/phylotastic/datelife.svg)](https://travis-ci.org/phylotastic/datelife)
-[![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://codecov.io/gh/phylotastic/datelife)
+[![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://app.codecov.io/gh/phylotastic/datelife)
 [![Github Open
 Issues](https://img.shields.io/github/issues-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues)
 [![Github Closed
@@ -23,53 +21,50 @@ Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg
 
 <!-- badges: end -->
 
-# Welcome to DateLife’s GitHub repository\!
+# Welcome to DateLife’s R package GitHub repository\!
 
 Get a phylogenetic tree with branch lengths proportional to geologic
 time (aka a ***chronogram***) of any two or more lineages of interest to
-you: use the `datelife` R package or go to
-[www.datelife.org](http://datelife.org/query/) to make a query of
-chronograms available for your lineages in the [Open Tree of
-Life](https://tree.opentreeoflife.org/curator)’s tree store.
+you.
+
+Use the `datelife` R package locally, or through [DateLife’s
+website](http://datelife.org/query/) to search for chronograms available
+for your lineages in [Open Tree of Life’s tree
+store](https://tree.opentreeoflife.org/curator).
 
 You can also date a phylogenetic tree of your own making (or choosing
-one from the literature), using node ages from chronograms queried with
-`datelife` and the congruification method ([Eastman et
-al. 2013](http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12051/abstract))
-implemented with *geiger* ([Harmon et
-al. 2008](http://bioinformatics.oxfordjournals.org/content/24/1/129.short)).
+one from the literature), using node ages from chronograms found with
+`datelife`, using the congruification method ([Eastman et
+al. 2013](https://doi.org/10.1111/2041-210X.12051)) implemented with
+*geiger* ([Harmon et
+al. 2008](https://doi.org/10.1093/bioinformatics/btm538)).
 
 `datelife` has been developed as part of the
 [phylotastic](http://phylotastic.org/) (NSF-funded) project, and is
-still under rapid development.
+still under development.
 
-  - [Installation](#installation)
-  - [Quick intro](#quick-intro)
-  - [Citation](#citation)
-  - [Feedback and info for developers](#feedback)
-  - [License](#license)
+1.  [Installation](#installation)
+2.  [Citation](#citation)
+3.  [Feedback and info for developers](#feedback)
+4.  [License](#license)
 
-## Installation
+## 1\. Installation
 
-Get the stable version from
-[CRAN](https://cran.r-project.org/web/packages/datelife/index.html):
+Once accepted on CRAN, `datelife`s stable version will be available for
+installation with:
 
 ``` r
 install.packages("datelife")
 ```
 
-Or, install the development version from the GitHub repository:
+For now, you can install the development version from the GitHub
+repository:
 
 ``` r
 devtools::install_github("phylotastic/datelife")
 ```
 
-## Quick intro
-
-You can update the cached objects with the `update_all_cached()`
-function.
-
-## Citation
+## 2\. Citation
 
 If you use `datelife` for a publication, please cite the R package and
 the accompanying paper:
@@ -100,13 +95,15 @@ citation("datelife")
 toBibtex(citation("datelife"))
 ```
 
-## Feedback and Information for Developers
+.bibtex files are available
 
-All comments, ideas and questions about `datelife` are encouraged. You
-are welcome to post an issue
-[here](https://github.com/phylotastic/datelife/issues/new), or to make a
-[pull request](https://github.com/phylotastic/datelife/pulls) if you
-want to contribute with code directly.
+## 3\. Feedback and Information for Developers
+
+We welcome and encourage to post a [GitHub
+issue](https://github.com/phylotastic/datelife/issues/new) with any
+comments, ideas and questions about `datelife`’s software and website.
+If you want to contribute with code directly, we welcome and encourage
+[pull requests](https://github.com/phylotastic/datelife/pulls).
 
 #### Function documentation:
 
@@ -119,7 +116,8 @@ roxygen2::roxygenise()
 
 #### Styling code:
 
-We used the package [lintr]() to check for coding style:
+We used the package [lintr](https://CRAN.R-project.org/package=lintr) to
+check for coding style:
 
 ``` r
 lintr::lint_package()
@@ -127,7 +125,7 @@ lintr::lint_package()
 
 #### Calculating test coverage:
 
-Code coverage was tested with the package
+Code coverage was calculated with the package
 [covr](https://CRAN.R-project.org/package=covr):
 
 ``` r
@@ -169,9 +167,18 @@ Finally, run `R CMD check` on the tar ball that you just generated:
 R CMD check datelife_0.5.0.tar.gz
 ```
 
+If you work on a Linux or Mac OS, you can check datelife on a Windows OS
+with:
+
+``` r
+devtools::check_win_release()
+
+devtools::check_for_cran()
+```
+
 #### Generating `datelife`’s hexsticker:
 
-Code used to generate current `datelife`’s hexsticker is in
+Code used to generate current `datelife`’s logo hexsticker is in
 [data-raw/hexsticker-current.R](data-raw/hexsticker-current.R)
 
 #### Rendering the vignettes:
@@ -180,6 +187,6 @@ Code used to generate current `datelife`’s hexsticker is in
 knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
 ```
 
-## License
+## 4\. License
 
 This package is free and open source software, licensed under GPL.

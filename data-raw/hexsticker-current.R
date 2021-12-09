@@ -60,22 +60,24 @@ showtext::showtext_auto()
 # Generate the sticker:
 install.packages("hexSticker")
 green <- "#79c843" # datelife green color obtained with https://imagecolorpicker.com/
-imgurl <- "~/pj_datelife/datelife/inst/figures/phylo-sdm-strap-upwards.pdf"
+imgurl <- "~/pj_datelife/datelife/inst/figures/phylo-sdm-strap-upwards-gray.pdf"
+background <- "#e5e5e5" #gray "white" # 
 
 s <- hexSticker::sticker(imgurl,
           package = c("date", "life"), 
           p_color = c("black", green),
-          p_x = c(0.8, 1.25),
+          p_x = c(1, 1.5),
           p_family = c("Aller_Rg", "gochi"),
-          p_y = c(0.5,0.465),
-          p_size = 20, 
-          s_x = 1, 
-          s_y = 1.1, 
-          s_width = 0.75, 
-          s_height= 0.5,
-          h_fill = "white", 
+          p_y = c(1,0.75),
+          p_size = c(135,140), 
+          s_x = 0.98, 
+          s_y = 1, 
+          s_width = 0.96, 
+          s_height= 0.4,
+          h_fill = background, 
           h_color = green, 
           h_size = 2.5,
-          filename = "inst/figures/datelife-hex-upwards.png")
+          filename = "inst/figures/datelife-hex-upwards-gray.png",
+          dpi = 1600)
           
 ```
