@@ -37,7 +37,7 @@ citEntry(entry="Article",
   	year = "2019",
 	volume = "782094",
 	doi = "https://doi.org/10.1101/782094",
-  textVersion = paste0(authors2_format, ". 2019. datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life. bioRxiv 782094; doi: https://doi.org/10.1101/782094.")
+  textVersion = paste0(authors2_format, ". 2019. datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life. bioRxiv 782094; doi: https://doi.org/10.1101/782094")
   )
 
 citFooter("As datelife is continually evolving, you may want to cite its version number. Find it with 'help(package=datelife)'.")

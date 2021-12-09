@@ -16,14 +16,14 @@ knitr::opts_chunk$set(
 IS_README <- TRUE
 library(datelife)
 ```
-<img src='inst/figures/datelife-hex-upwards.png' align="right" height="250" />
+<img src='inst/figures/datelife-hex-upwards.png' align="right" height="150" />
 
 <!-- badges: start -->
 
 <!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions) -->
 ![GitHub R package version](https://img.shields.io/github/r-package/v/phylotastic/datelife?color=green)
 [![Build Status](https://travis-ci.org/phylotastic/datelife.svg)](https://travis-ci.org/phylotastic/datelife)
-[![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://codecov.io/gh/phylotastic/datelife)
+[![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://app.codecov.io/gh/phylotastic/datelife)
 [![Github Open Issues](https://img.shields.io/github/issues-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues)
 [![Github Closed Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues?q=is%3Aissue+is%3Aclosed)
 [![DOI](https://zenodo.org/badge/23036/phylotastic/datelife.svg)](https://zenodo.org/badge/latestdoi/23036/phylotastic/datelife)
@@ -42,14 +42,13 @@ a query of chronograms available for your lineages in the [Open Tree of Life](ht
 tree store.
 
 You can also date a phylogenetic tree of your own making (or choosing one from the literature), using node ages from chronograms queried with `datelife`
-and the congruification method ([Eastman et al. 2013](http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12051/abstract))
-implemented with _geiger_ ([Harmon et al. 2008](http://bioinformatics.oxfordjournals.org/content/24/1/129.short)).
+and the congruification method ([Eastman et al. 2013](https://doi.org/10.1111/2041-210X.12051))
+implemented with _geiger_ ([Harmon et al. 2008](https://doi.org/10.1093/bioinformatics/btm538)).
 
 
 `datelife` has been developed as part of the [phylotastic](http://phylotastic.org/) (NSF-funded) project, and is still under rapid development.
 
 - [Installation](#installation)
-- [Quick intro](#quick-intro)
 - [Citation](#citation)
 - [Feedback and info for developers](#feedback)
 - [License](#license)
@@ -57,22 +56,17 @@ implemented with _geiger_ ([Harmon et al. 2008](http://bioinformatics.oxfordjour
 
 ## Installation
 
-Get the stable version from [CRAN](https://cran.r-project.org/web/packages/datelife/index.html):
+Once accepted on CRAN, `datelife`s stable version will be available for installation with:
 
 ```{r eval = FALSE}
 install.packages("datelife")
 ```
 
-Or, install the development version from the GitHub repository:
+For now, you can install the development version from the GitHub repository:
 
 ```{r eval = FALSE}
 devtools::install_github("phylotastic/datelife")
 ```
-
-## Quick intro
-
-You can update the cached objects with the `update_all_cached()` function.
-
 
 ## Citation
 
@@ -88,12 +82,13 @@ citation("datelife")
 toBibtex(citation("datelife"))
 ```
 
+.bibtex files are available
+
 ## Feedback and Information for Developers
 
-All comments, ideas and questions about `datelife` are encouraged. You are welcome
-to post an issue [here](https://github.com/phylotastic/datelife/issues/new), or
-to make a [pull request](https://github.com/phylotastic/datelife/pulls) if you
-want to contribute with code directly.
+We welcome and encourage to post a [GitHub issue](https://github.com/phylotastic/datelife/issues/new)
+with any comments, ideas and questions about `datelife`'s software and website.
+If you want to contribute with code directly, we welcome and encourage [pull requests](https://github.com/phylotastic/datelife/pulls).
 
 #### Function documentation:
 
@@ -105,7 +100,7 @@ roxygen2::roxygenise()
 
 #### Styling code:
 
-We used the package [lintr]() to check for coding style:
+We used the package [lintr](https://CRAN.R-project.org/package=lintr) to check for coding style:
 
 ```{r eval = FALSE}
 lintr::lint_package()
@@ -113,7 +108,7 @@ lintr::lint_package()
 
 #### Calculating test coverage:
 
-Code coverage was tested with the package [covr](https://CRAN.R-project.org/package=covr):
+Code coverage was calculated with the package [covr](https://CRAN.R-project.org/package=covr):
 
 ```{r eval = FALSE}
 cov <- covr::package_coverage()
@@ -154,10 +149,15 @@ Finally, run `R CMD check` on the tar ball that you just generated:
 R CMD check datelife_0.5.0.tar.gz
 ```
 
+If you work on a Linux or Mac OS, you can check datelife on a Windows OS with:
+
+```r
+devtools::check_win_release()
+```
 
 #### Generating `datelife`'s hexsticker:
 
-Code used to generate current `datelife`'s hexsticker is in [data-raw/hexsticker-current.R](data-raw/hexsticker-current.R)
+Code used to generate current `datelife`'s logo hexsticker is in [data-raw/hexsticker-current.R](data-raw/hexsticker-current.R)
 
 #### Rendering the vignettes:
 

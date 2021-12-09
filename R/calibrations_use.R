@@ -109,7 +109,7 @@ use_calibrations_each <- function(phy = NULL,
 #' `attributes(return)$dating_method`, respectively. \cr
 #' If `input` tree does not have branch lengths, `dating_method` is
 #' ignored and the function will use secondary calibrations to date the
-#' `input` tree with [BLADJ](http://phylodiversity.net/bladj/),
+#' `input` tree with [BLADJ](https://doi.org/10.1093/bioinformatics/btn358),
 #' using [phylocomr::ph_bladj()], via [use_calibrations_bladj()]. If
 #' `input` tree has branch lengths it can be dated
 #' with [PATHd8](https://www2.math.su.se/PATHd8/), using [geiger::PATHd8.phylo()],
