@@ -23,15 +23,22 @@ object, OR as a newick character string.}
 \item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 }}
 
-\item{marker}{A character vector indicating the gene from BOLD system to be used for branch length estimation.}
+\item{marker}{A character vector indicating the gene from BOLD system to be
+used for branch length estimation.}
 
 \item{otol_version}{Version of Open Tree of Life to use}
 
-\item{chronogram}{Boolean. If TRUE (default), branch lengths returned are estimated with ape::chronoMPL. If FALSE, branch lengths returned are estimated with phangorn::acctran and represent relative substitution rates .}
+\item{chronogram}{Default to \code{TRUE}, branch lengths returned are estimated with
+\code{\link[ape:chronoMPL]{ape::chronoMPL()}}. If \code{FALSE}, branch lengths returned are estimated with
+\code{\link[phangorn:parsimony]{phangorn::acctran()}} and represent relative substitution rates.}
 
-\item{doML}{Boolean; only relevant if chronogram = TRUE. If TRUE, it does ML branch length optimization with phangorn::optim.pml}
+\item{doML}{Default to \code{FALSE}. If \code{TRUE}, it does ML branch length optimization
+with \code{\link[phangorn:pml]{phangorn::optim.pml()}}. Only relevant if chronogram = \code{TRUE}.}
 
-\item{aligner}{A character vector indicating whether to use MAFFT or MUSCLE to align BOLD sequences. It is not case sensitive. Default to MUSCLE.}
+\item{aligner}{A character vector indicating whether to use MAFFT or MUSCLE
+to align BOLD sequences. It is not case sensitive. Default to MUSCLE,
+supported using the \href{https://bioconductor.org/packages/release/bioc/html/msa.html}{msa}
+package from Bioconductor. Needs to be installed using \code{\link[BiocManager:install]{BiocManager::install()}}.}
 
 \item{...}{
   Arguments passed on to \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree}}
@@ -46,9 +53,10 @@ numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{ro
 A phylogeny with branch lengths poportional to relative substitution rate.
 }
 \description{
-\code{make_bold_otol_tree} takes taxon names from a tree topology or a vector of names
-to search for genetic markers in the Barcode of Life Database (BOLD), create an
-alignment, and reconstruct branch lengths on a tree topology with Maximum Likelihood.
+\code{make_bold_otol_tree} takes taxon names from a tree topology or
+a vector of names to search for genetic markers in the Barcode of Life Database
+(BOLD), create an alignment, and reconstruct branch lengths on a tree topology
+with Maximum Likelihood.
 }
 \details{
 If input is a phylo object or a newick string, it is used as backbone topology.

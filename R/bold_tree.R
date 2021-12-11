@@ -12,7 +12,7 @@
 #' [ape::chronoMPL()]. If `FALSE`, branch lengths returned are estimated with
 #' [phangorn::acctran()] and represent relative substitution rates.
 #' @param doML Default to `FALSE`. If `TRUE`, it does ML branch length optimization
-#' [with phangorn::optim.pml()]. Only relevant if chronogram = `TRUE`.
+#' with [phangorn::optim.pml()]. Only relevant if chronogram = `TRUE`.
 #' @param aligner A character vector indicating whether to use MAFFT or MUSCLE
 #' to align BOLD sequences. It is not case sensitive. Default to MUSCLE,
 #' supported using the [msa](https://bioconductor.org/packages/release/bioc/html/msa.html)

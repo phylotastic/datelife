@@ -21,3 +21,9 @@ data/cov.rda
 tests/testthat/.infile
 README.Rmd
 Getting_started_with_datelife.md
+some.bird.ages.txt
+some.bird.tree.again.txt
+some.bird.trees.html
+cran-comments.md
+datelife.Rproj
+dev.txt
