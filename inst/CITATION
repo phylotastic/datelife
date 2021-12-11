@@ -18,7 +18,7 @@ authors <- personList(person("Brian", "O'Meara", email = "omeara.brian@gmail.com
 authors_format <- paste(format(authors, include = c("given", "family")), collapse = ", ")
 pkg_title <- paste0(meta$Package, ": ", meta$Title)
 
-citEntry(entry="Software",
+citEntry(entry="Manual",
  		  title = pkg_title,
  		  author =  authors,
  		  year = year,

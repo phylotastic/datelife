@@ -1,0 +1,56 @@
+---
+title: "Tools for package development"
+output:
+  rmarkdown::html_vignette:
+    keep_md: true
+vignette: >
+  %\VignetteIndexEntry{Tools for package development}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(datelife)
+```
+
+# Tools for package development
+And other tips that I used to get `datelife` on CRAN
+
+## Dependencies on packages outside of CRAN
+
+### Bioconductor packages:
+
+I was having trouble declaring Bioconductor packages.
+
+Most people suggested that adding "BiocViews:" to the Description file would solve
+the issue. But it did not, and I kept on finding unanswered posts about packages
+being rejected fromx CRAN because of dependencies from Bioconductor using the "biocviews"
+trick.
+So I did a reverse dependencie search on Bioconductor packages. Surely at least
+one package in CRAN must have a dependency from Bioconductor. Indeed, the
+[msa](https://bioconductor.org/packages/release/bioc/html/msa.html) package has
+[bio3d](https://CRAN.R-project.org/package=bio3d) as a reverse dependency:
+
+```r
+devtools::revdep("msa")
+
+#> [1] "bio3d"
+```
+
+Going into the CRAN mirror of the package, I found their solution:
+
+```r
+if (!requireNamespace("msa", quietly=TRUE)) {
+  stop("msa package missing: Please install it from Bioconductor, see: ?BiocManager::install")
+```
+
+
+Calling Bioconductor packages like this allows to move them into "suggests"
+on the Description file.

@@ -145,7 +145,7 @@ Finally, run `R CMD check package-tar-ball` on the tar ball that you just genera
 R CMD check datelife_0.6.0.tar.gz
 ```
 
-The best option to document your checks currently is the [rhub](https://cloud.r-project.org/web/packages/rhub/vignettes/rhub.html) package, which allows remote testing on several OS with:
+The best option to document your checks currently is the [rhub](https://CRAN.R-project.org/package=rhub) package, which allows remote testing on several OS with:
 
 
 ```bash

@@ -1,14 +1,22 @@
 #' Use genetic data from the Barcode of Life Database (BOLD) to reconstruct branch lengths on a tree.
 #'
-#' @description \code{make_bold_otol_tree} takes taxon names from a tree topology or a vector of names
-#' to search for genetic markers in the Barcode of Life Database (BOLD), create an
-#' alignment, and reconstruct branch lengths on a tree topology with Maximum Likelihood.
+#' @description `make_bold_otol_tree` takes taxon names from a tree topology or
+#' a vector of names to search for genetic markers in the Barcode of Life Database
+#' (BOLD), create an alignment, and reconstruct branch lengths on a tree topology
+#' with Maximum Likelihood.
 #'
 #' @inheritParams datelife_search
-#' @param marker A character vector indicating the gene from BOLD system to be used for branch length estimation.
-#' @param chronogram Boolean. If TRUE (default), branch lengths returned are estimated with ape::chronoMPL. If FALSE, branch lengths returned are estimated with phangorn::acctran and represent relative substitution rates .
-#' @param doML Boolean; only relevant if chronogram = TRUE. If TRUE, it does ML branch length optimization with phangorn::optim.pml
-#' @param aligner A character vector indicating whether to use MAFFT or MUSCLE to align BOLD sequences. It is not case sensitive. Default to MUSCLE.
+#' @param marker A character vector indicating the gene from BOLD system to be
+#' used for branch length estimation.
+#' @param chronogram Default to `TRUE`, branch lengths returned are estimated with
+#' [ape::chronoMPL()]. If `FALSE`, branch lengths returned are estimated with
+#' [phangorn::acctran()] and represent relative substitution rates.
+#' @param doML Default to `FALSE`. If `TRUE`, it does ML branch length optimization
+#' [with phangorn::optim.pml()]. Only relevant if chronogram = `TRUE`.
+#' @param aligner A character vector indicating whether to use MAFFT or MUSCLE
+#' to align BOLD sequences. It is not case sensitive. Default to MUSCLE,
+#' supported using the [msa](https://bioconductor.org/packages/release/bioc/html/msa.html)
+#' package from Bioconductor. Needs to be installed using [BiocManager::install()].
 #' @inheritParams get_otol_synthetic_tree
 #' @inheritDotParams get_otol_synthetic_tree
 #' @return A phylogeny with branch lengths poportional to relative substitution rate.
@@ -123,9 +131,21 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
   }
   if ("muscle" %in% aligner) {
     message("... Aligning BOLD sequences with MUSCLE.")
+    if (!requireNamespace("msa", quietly=TRUE)) {
+      stop("'msa' package is missing. Please install it from Bioconductor with",
+           " BiocManager::install('msa', dependencies = TRUE)")
+    }
     in_bold <- sapply(1:nrow(final.sequences), function(x) !"-" %in% final.sequences[x, ])
     vector.sequences <- sapply(1:nrow(final.sequences), function(x) paste0(final.sequences[x, ], collapse = ""))
-    msa.sequences <- Biostrings::DNAStringSet(vector.sequences)
+    if (!requireNamespace("msa", quietly=TRUE)) {
+      stop("'msa' package is missing. Please install it from Bioconductor with",
+           " BiocManager::install('msa', dependencies = TRUE)")
+    }
+    if (!requireNamespace("Biostrings", quietly=TRUE)) {
+      stop("'Biostring' package is missing. Please install it from Bioconductor with",
+           " BiocManager::install('Biostrings', dependencies = TRUE)")
+    }
+msa.sequences <- Biostrings::DNAStringSet(vector.sequences)
     names(msa.sequences) <- rownames(final.sequences)
     msa.sequences <- msa.sequences[in_bold]
     alignment <- msa::msaMuscle(msa.sequences, type = "dna")

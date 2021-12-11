@@ -172,8 +172,8 @@ R CMD check datelife_0.6.0.tar.gz
 ```
 
 The best option to document your checks currently is the
-[rhub](https://cloud.r-project.org/web/packages/rhub/vignettes/rhub.html)
-package, which allows remote testing on several OS with:
+[rhub](https://CRAN.R-project.org/package=rhub) package, which allows
+remote testing on several OS with:
 
 ``` bash
 rhub::check_for_cran()
