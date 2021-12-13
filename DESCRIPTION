@@ -22,7 +22,7 @@ Description: Methods and workflows to get dated phylogenetic trees, aka chronogr
     at www.datelife.org.
 Depends:
     R (>= 3.6.0)
-biocViews:
+biocViews: Software
 Imports:
     ape,
     abind,
@@ -42,20 +42,18 @@ Imports:
     taxize,
     treebase,
     httr,
-    usethis,
     plyr,
-    phylocomr,
-    msa,
-    Biostrings
+    phylocomr
 Suggests:
     testthat,
     knitr,
     rmarkdown,
     utils,
+    usethis,
     devtools,
-    covr
-Additional_repositories:
-    https://bioconductor.org/packages/3.14/bioc
+    covr,
+    msa,
+    Biostrings
 SystemRequirements: PATHd8
 URL: https://github.com/phylotastic/datelife
 License: GPL (>=2)

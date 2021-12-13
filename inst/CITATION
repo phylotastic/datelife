@@ -23,7 +23,7 @@ citEntry(entry="Manual",
  		  author =  authors,
  		  year = year,
  		  note = vers,
-      doi = "https://doi.org/10.5281/zenodo.593938",
+      doi = "doi.org/10.5281/zenodo.593938",
  		  textVersion = paste(authors_format, year, pkg_title, vers, sep=". "))
 
 authors2 <- personList(person("Luna L.", "Sanchez-Reyes", email = "sanchez.reyes.luna@gmail.com"),
@@ -36,7 +36,7 @@ citEntry(entry="Article",
 	journal = "bioRxiv",
   	year = "2019",
 	volume = "782094",
-	doi = "https://doi.org/10.1101/782094",
+	doi = "doi.org/10.1101/782094",
   textVersion = paste0(authors2_format, ". 2019. datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life. bioRxiv 782094; doi: https://doi.org/10.1101/782094")
   )
 

@@ -44,13 +44,24 @@ devtools::revdep("msa")
 #> [1] "bio3d"
 ```
 
-Going into the CRAN mirror of the package, I found their solution:
+Going into the [CRAN mirror of the bio3d package on GitHib](https://github.com/cran/bio3d),
+I found their solution:
 
 ```r
 if (!requireNamespace("msa", quietly=TRUE)) {
   stop("msa package missing: Please install it from Bioconductor, see: ?BiocManager::install")
+}
 ```
 
 
-Calling Bioconductor packages like this allows to move them into "suggests"
-on the Description file.
+Calling Bioconductor packages conditionally allows us to move them into "Suggests"
+on the DESCRIPTION file. I found out you also have to add them to "Remotes":
+
+```
+Suggests:
+    msa,
+    Biostrings
+Remotes:
+    bioc::release/msa,
+    bioc::release/Biostrings
+```
