@@ -27,3 +27,4 @@ some.bird.trees.html
 cran-comments.md
 datelife.Rproj
 dev.txt
+^\.github$
