@@ -65,3 +65,8 @@ Remotes:
     bioc::release/msa,
     bioc::release/Biostrings
 ```
+
+Note `checking CRAN incoming feasibility   Maintainer:`
+
+It is safe to ignore this note:
+https://stackoverflow.com/questions/23829978/checking-cran-incoming-feasibility-note-maintainer

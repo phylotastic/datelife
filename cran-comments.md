@@ -29,11 +29,9 @@ Justification:
 #### R 4.1.0, Platform: , devtools::check_win_release()
 
 
-Results for rhub::check_for_cran():
+Results for rhub::check_for_cran(platforms = "windows-x86_64-release"):
 
-https://builder.r-hub.io/status/datelife_0.6.0.tar.gz-54f3cbcfda7b44c488b2402364b19949
-https://builder.r-hub.io/status/datelife_0.6.0.tar.gz-f4ec0e8a04c84a828fd2986e4f925141
-https://builder.r-hub.io/status/datelife_0.6.0.tar.gz-5dc6c3acd693475ab5b4130f96eabaa2
+  Platform: Windows Server 2008 R2 SP1, R-release, 32/64 bit
 
  Possibly misspelled words in DESCRIPTION:
   Chronogram (2:46)
