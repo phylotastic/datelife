@@ -94,3 +94,11 @@ new token, and you will be all set.
 
 usethis::use_github_actions()
 ```
+
+Building package website
+
+```
+pkgdown::build_site()
+
+pkgdown::build_home_index(); pkgdown::init_site()
+```

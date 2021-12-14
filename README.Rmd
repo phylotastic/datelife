@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 IS_README <- TRUE
 library(datelife)
 ```
-<img src='inst/figures/datelife-hex-upwards-gray.png' align="right" height="150" />
+<img src='man/figures/datelife-hex-upwards-gray.png' align='right' style='width:150px' />
 
 <!-- badges: start -->
 
