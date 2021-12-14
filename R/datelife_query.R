@@ -5,7 +5,7 @@
 #'
 #' @param input Taxon names as one of the following:
 #' \describe{
-#' 	 \item{A character vector}{With taxon names as a single comma separated strting or concatenated with [c()].}
+#' 	 \item{A character vector}{With taxon names as a single comma separated starting or concatenated with [c()].}
 #' 	 \item{A phylogenetic tree with taxon names as tip labels}{As a `phylo` or `multiPhylo`
 #' 	 			object, OR as a newick character string.}
 #' }
@@ -17,7 +17,7 @@
 # #'   take much longer.
 # #' @param approximate_match Boolean; default to `TRUE`: use a slower TNRS to
 # #'   correct misspellings, increasing the chance of matches (including false matches).
-#' @param get_spp_from_taxon Wether to search ages for all species belonging to a
+#' @param get_spp_from_taxon Whether to search ages for all species belonging to a
 #'   given taxon or not. Default to `FALSE`. If `TRUE`, it must have same length as input.
 #'   If input is a newick string with some clades it will be converted to a `phylo`
 #'   object, and the order of `get_spp_from_taxon` will match `phy$tip.label`.
@@ -29,7 +29,7 @@
 #' }
 #' @details It processes `phylo` objects and newick character string inputs
 #'   with [input_process()]. If `input` is a `multiPhylo` object, only the first `phylo`
-#'   element will be used. Similarly, if an `input` newick character string has mutiple trees,
+#'   element will be used. Similarly, if an `input` newick character string has multiple trees,
 #'   only the first one will be used.
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),

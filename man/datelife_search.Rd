@@ -22,7 +22,7 @@ datelife_search(
 \arguments{
 \item{input}{One of the following:
 \describe{
-\item{A character vector}{With taxon names as a single comma separated strting or concatenated with \code{\link[=c]{c()}}.}
+\item{A character vector}{With taxon names as a single comma separated starting or concatenated with \code{\link[=c]{c()}}.}
 \item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
 object, OR as a newick character string.}
 \item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}.}
@@ -32,7 +32,7 @@ object, OR as a newick character string.}
 to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
 taxonomic name variations.}
 
-\item{get_spp_from_taxon}{Wether to search ages for all species belonging to a
+\item{get_spp_from_taxon}{Whether to search ages for all species belonging to a
 given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
 If input is a newick string with some clades it will be converted to a \code{phylo}
 object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.label}.}

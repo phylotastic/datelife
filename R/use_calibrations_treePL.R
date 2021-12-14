@@ -44,7 +44,7 @@ use_calibrations_treePL <- function(phy, calibrations) {
   }
   # fix any negative branch lengths?
   # phy <- tree_fix_brlen(phy, fixing_criterion = "negative", fixing_method = 0, ultrametric = FALSE)
-  # following line checks wether all calibrations are present in phy, and returns that in calibs$present_calibrations
+  # following line checks whether all calibrations are present in phy, and returns that in calibs$present_calibrations
   calibs <- match_all_calibrations(phy, calibrations)
   if (nrow(calibs$present_calibrations) < 1) {
     message("Nodes in calibrations (determined by taxon pairs) do not match any nodes in phy.")

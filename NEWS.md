@@ -17,4 +17,4 @@
   - MrBayes and TreePL as dating methods
   - Fully ultrametric summary chronograms and datelife() outputs
   - Overlay and lineage through time plots of source chronograms
-  - Groves to sumarize trees
+  - Groves to summarize trees

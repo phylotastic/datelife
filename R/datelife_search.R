@@ -10,7 +10,7 @@
 #' @aliases datelife
 #' @param input One of the following:
 #' \describe{
-#' 	 \item{A character vector}{With taxon names as a single comma separated strting or concatenated with [c()].}
+#' 	 \item{A character vector}{With taxon names as a single comma separated starting or concatenated with [c()].}
 #' 	 \item{A phylogenetic tree with taxon names as tip labels}{As a `phylo` or `multiPhylo`
 #' 	 			object, OR as a newick character string.}
 #' 	\item{A `datelifeQuery` object}{An output from [make_datelife_query()].}

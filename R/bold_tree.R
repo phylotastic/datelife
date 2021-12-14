@@ -19,7 +19,7 @@
 #' package from Bioconductor. Needs to be installed using [BiocManager::install()].
 #' @inheritParams get_otol_synthetic_tree
 #' @inheritDotParams get_otol_synthetic_tree
-#' @return A phylogeny with branch lengths poportional to relative substitution rate.
+#' @return A phylogeny with branch lengths proportional to relative substitution rate.
 #' @details
 #' If input is a phylo object or a newick string, it is used as backbone topology.
 #' If input is a character vector of taxon names, an induced synthetic OpenTree

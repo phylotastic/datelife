@@ -17,7 +17,7 @@ make_bold_otol_tree(
 \arguments{
 \item{input}{One of the following:
 \describe{
-\item{A character vector}{With taxon names as a single comma separated strting or concatenated with \code{\link[=c]{c()}}.}
+\item{A character vector}{With taxon names as a single comma separated starting or concatenated with \code{\link[=c]{c()}}.}
 \item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
 object, OR as a newick character string.}
 \item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}.}
@@ -50,7 +50,7 @@ numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{ro
   }}
 }
 \value{
-A phylogeny with branch lengths poportional to relative substitution rate.
+A phylogeny with branch lengths proportional to relative substitution rate.
 }
 \description{
 \code{make_bold_otol_tree} takes taxon names from a tree topology or

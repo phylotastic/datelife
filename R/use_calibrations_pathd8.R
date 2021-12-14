@@ -49,7 +49,7 @@ use_calibrations_pathd8 <- function(phy = NULL,
   }
   # fix any negative branch lengths, otherwise pathd8 will silently not work:
   phy <- tree_fix_brlen(phy, fixing_criterion = "negative", fixing_method = 0, ultrametric = FALSE)
-  # following line checks wether all calibrations are present in phy, and returns that in calibs$present_calibrations
+  # following line checks whether all calibrations are present in phy, and returns that in calibs$present_calibrations
   calibs <- match_all_calibrations(phy, calibrations)
   if (nrow(calibs$present_calibrations) < 1) {
     warning("\nDating analysis is not possible with this set of calibrations.")
