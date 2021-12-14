@@ -30,3 +30,4 @@ dev.txt
 ^\.github$
 ^README\.Rmd$
 _pkgdown.yml
+^CRAN-SUBMISSION$
