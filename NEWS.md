@@ -1,8 +1,12 @@
+# datelife 0.6.0
+
+  - Bioconductor packages are used conditionally
+
 # datelife 0.5.0
 
   - `datelife_query_check` is deprecated
   - `use_each_calibration` is now `use_calibrations_each`
-  - `datelife` is now `datelife`
+  - Plotting functions have been moved to datelifeplot package
 
 # datelife 0.3.1
 
