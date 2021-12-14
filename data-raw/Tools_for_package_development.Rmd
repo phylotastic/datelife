@@ -23,6 +23,8 @@ library(datelife)
 # Tools for package development
 And other tips that I used to get `datelife` on CRAN
 
+https://www.r-bloggers.com/2020/12/top-10-tips-to-make-your-r-package-even-more-awesome/
+
 ## Dependencies on packages outside of CRAN
 
 ### Bioconductor packages:
@@ -66,7 +68,29 @@ Remotes:
     bioc::release/Biostrings
 ```
 
+The Remotes part had to be removed for CRAN submission. Because some of my tests
+depend on these packages being installed, I added  helper file with a call to
+package installation of msa and Biostrings if they are not already installed.
+
+
+
+
 Note `checking CRAN incoming feasibility   Maintainer:`
 
 It is safe to ignore this note:
 https://stackoverflow.com/questions/23829978/checking-cran-incoming-feasibility-note-maintainer
+
+Automated R CMD checks with GitHub actions:
+
+```
+remotes::install_github("aaronpeikert/repro")
+
+repro::check_git()
+repro::check_github_ssh()
+usethis::create_github_token()
+
+gitcreds_set() Choose option 2) Replace credentials. It will prompt your for the
+new token, and you will be all set.
+
+usethis::use_github_actions()
+```

@@ -55,8 +55,8 @@ If you want to change the size of sampled trees you do not need to run mrbayes a
 Just use sample_trees("mrbayes_trees_file_directory", size = new_size) and you will get a multiPhylo object with a new tree sample.
 }
 \examples{
-# generate uncertainty over feline species SDM chronogram
-# load data
+# Generate uncertainty over feline species SDM chronogram
+# Load data
 data(felid_sdm)
 # by default, generates a sample of 100 trees with var = 0.1
 unc <- phylo_generate_uncertainty(felid_sdm$phy)

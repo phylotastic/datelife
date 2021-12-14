@@ -24,16 +24,19 @@
 #' always set to `TRUE`.
 #'
 #' @examples
-#' # obtain median ages from a set of source chronograms in newick format:
+#' # Obtain median ages from a set of source chronograms in newick format:
+#'
+#' \dontrun{
 #' ages <- datelife_search(c(
 #'   "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
 #'   "Mus musculus"
 #' ), summary_format = "newick_median")
-#' # save the tree in newick format
+#'
+#' # Save the tree in newick format:
 #' write(ages, file = "some.bird.ages.txt")
 #'
-#' # obtain median ages from a set of source chronograms in phylo format
-#' # will produce same tree as above but in r phylo format:
+#' # Obtain median ages from a set of source chronograms in phylo format
+#' # Will produce same tree as above but in `phylo` format:
 #' ages.again <- datelife_search(c(
 #'   "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
 #'   "Mus musculus"
@@ -44,16 +47,18 @@
 #' mtext("Time (million years ago)", side = 1, line = 2, at = (max(get("last_plot.phylo",
 #'   envir = .PlotPhyloEnv
 #' )$xx) * 0.5))
-#' write.tree(ages.again, file = "some.bird.tree.again.txt") # saves phylo object in newick format
+#' # Save phylo object in newick format
+#' write.tree(ages.again, file = "some.bird.tree.again.txt")
 #'
-#' # obtain mrca ages and target chronograms from all source chronograms
-#' # generate an html  output readable in any web browser:
+#' # Obtain MRCA ages and target chronograms from all source chronograms
+#' # Generate an html  output readable in any web browser:
 #' ages.html <- datelife_search(c(
 #'   "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
 #'   "Mus musculus"
 #' ), summary_format = "html")
 #' write(ages.html, file = "some.bird.trees.html")
 #' system("open some.bird.trees.html")
+#' }
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
                             use_tnrs = FALSE,
                             # approximate_match = TRUE,

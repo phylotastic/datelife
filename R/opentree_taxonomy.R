@@ -329,8 +329,8 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
 #' # Mus, Gleicheniales, Polypodiales, etc., are missing in synth tree too
 #' \dontrun{
 #' rotl::tol_subtree(tnrs$ott_id[1])
-#' # Error: HTTP failure: 400
-#' # [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
+#' #> Error: HTTP failure: 400
+#' #> [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
 #' }
 #' ids <- tnrs$ott_id[1]
 #' names(ids) <- tnrs$unique_name
@@ -341,9 +341,13 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
 #' names(ids) <- rownames(children$Canis)
 #' tree_children <- datelife::get_otol_synthetic_tree(ott_ids = ids)
 #' plot(tree_children, cex = 0.3)
+#'
 #' # Other examples:
+#'
+#' \dontrun{
 #' oo <- get_ott_children(input = "magnoliophyta", ott_rank = "order")
 #' sum(oo$Magnoliophyta$rank == "order") # to know how many orders of flowering plants we have
+#' }
 #' @export
 # children <- get_ott_children(input = "Fringillidae")
 # rotl::tol_subtree(ott_id = 839319) #broken taxa
