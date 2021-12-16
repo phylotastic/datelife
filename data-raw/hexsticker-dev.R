@@ -1,36 +1,42 @@
 ######### HEXSTICKER DEVELOPMENT
 # https://imagecolorpicker.com/
 
+
+
 BiocManager::install("ggtree")
 install.packages("emojifont")
 library(emojifont)
 library(ggimage)
 
+
+
+# Emoji hexsticker
 phylo_sdm <- datelife::datelife_search(input = c("Delphinus_delphis", "Gallus gallus", "elephas Maximus", "felis_catus", "homo-sapiens"),
                                        use_tnrs = TRUE,
                                        summary_format = "phylo_sdm")
 class(phylo_sdm) <- "phylo"
 
 phylo_sdm$tip.label_original <- phylo_sdm$tip.label
-phylo_sdm$tip.label <- c("elephant", 
-                         "woman_cartwheeling", 
-                         "dolphin", 
-                         "cat", 
+phylo_sdm$tip.label <- c("elephant",
+                         "woman_cartwheeling",
+                         "dolphin",
+                         "cat",
                          "rooster")
 
-p <- ggtree::ggtree(phylo_sdm, size=0.5, color='black') +  
+p <- ggtree::ggtree(phylo_sdm, size=0.5, color='black') +
   ggtree::geom_tiplab(parse = "emoji", size=15, vjust=0.01) +
   ggtree::theme_tree(bgcolor = "#00640010") +
   coord_cartesian(clip = 'off') +
   ggtree::xlim_tree(c(0, 350))
 
-pdf("inst/figures/phylo-sdm-emoji0.pdf", 
-    width = 10, 
-    height = 5, 
+pdf("inst/figures/phylo-sdm-emoji0.pdf",
+    width = 10,
+    height = 5,
     bg = "transparent")
 print(p)
 dev.off()
-############# STRAP: 
+
+############# STRAP:
 ########## UPWARDS phlyogeny:
 tree <- phylo_sdm
 phylo_length <- max(ape::branching.times(tree))
@@ -39,8 +45,8 @@ tree$root.time <- phylo_length
 library(strap)
 
 pdf("inst/figures/phylo-sdm-strap-upwards-gray.pdf",
-    width = 3, 
-    height = 1.8, 
+    width = 3,
+    height = 1.8,
     bg = "transparent")
 unit = c("Era", "Period", "Epoch")
 strap::geoscalePhylo(tree = tree,
@@ -62,8 +68,8 @@ dev.off()
 unit = c("Era", "Period")
 
 pdf("inst/figures/phylo-sdm-strap-rightwards-black.pdf",
-    width = 3, 
-    height = 2, 
+    width = 3,
+    height = 2,
     bg = "transparent")
 strap::geoscalePhylo(tree =  ape::rotate(tree, node=6),
                      direction = "rightwards",
@@ -87,21 +93,39 @@ imgurl <- "~/pj_datelife/datelife/inst/figures/phylo-sdm-strap-upwards.pdf"
 ###
 imgurl <- "~/pj_datelife/datelife/inst/figures/phylo-sdm-strap-rightwards-black.pdf"
 green <- "#79c843" # datelife green color obtained with https://imagecolorpicker.com/
-background <- "white" # "#e5e5e5" #gray 
+background <- "white" # "#e5e5e5" #gray
 s <- hexSticker::sticker(imgurl,
-          package = c("date", "life"), 
+          package = c("date", "life"),
           p_color = c("black", green),
           p_x = c(0.6, 1.2),
           p_y = c(1,0.975),
           p_family = c("Aller_Rg", "gochi"),
-          p_size = c(135,170), 
-          s_x = 1, 
-          s_y = 0.95,  
-          s_width = 0.93, 
+          p_size = c(135,170),
+          s_x = 1,
+          s_y = 0.95,
+          s_width = 0.93,
           s_height= 0.55,
-          h_fill = background, 
-          h_color = green, 
+          h_fill = background,
+          h_color = green,
           h_size = 2.5,
           filename = "inst/figures/datelife-hex-rightward-black.png",
           dpi = 1600)
 
+
+# Background with empty plot
+green <- "#79c843" # datelife green color obtained with https://imagecolorpicker.com/
+background <- "white" # "#e5e5e5" #gray
+pdf("inst/figures/empty.pdf",
+    width = 2,
+    height = 2,
+    bg = "transparent")
+plot.new() # creates an empty plot
+dev.off()
+imgurl <- "inst/figures/empty.pdf"
+s <- hexSticker::sticker(subplot = imgurl,
+          package = "",
+          h_fill = background,
+          h_color = green,
+          h_size = 2.5,
+          filename = "inst/figures/datelife-hex-empty.png",
+          dpi = 1600)
