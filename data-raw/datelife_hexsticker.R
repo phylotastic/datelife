@@ -1,20 +1,4 @@
-if (!requireNamespace("hexSticker")) {
-  install.packages("hexSticker")
-}
-# https://www.pngwing.com/en/search?q=phylogenetic+Tree
-# https://www.pngwing.com/en/free-png-nndso
-# Load text types
-if(!requireNamespace("showtext")){
-  install.packages(showtext)
-}
-## Loading Google fonts (http://www.google.com/fonts):
-sysfonts::font_add_google("Gochi Hand", "gochi")
-## Automatically use showtext to render text for future devices:
-showtext::showtext_auto()
-
-if (!requireNamespace("strap")) {
-  install.packages("strap")
-}
+source("data-raw/hextsicker_env.R")
 
 datelife_hexsticker <- function(subplot,
                                 p_x = c(0.6, 1.2),

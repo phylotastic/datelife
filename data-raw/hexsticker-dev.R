@@ -1,16 +1,11 @@
 ######### HEXSTICKER DEVELOPMENT
-# https://imagecolorpicker.com/
+# https://imagecolorpicker.com/ to find hex color codes from an image
+
+# checks that required packages are installed; installs them if not:
+source("data-raw/hexsicker_env.R")
 
 
-
-BiocManager::install("ggtree")
-install.packages("emojifont")
-library(emojifont)
-library(ggimage)
-
-
-
-# Emoji hexsticker
+# An `emojifont` tree with `ggtree` and `ggimage`:
 phylo_sdm <- datelife::datelife_search(input = c("Delphinus_delphis", "Gallus gallus", "elephas Maximus", "felis_catus", "homo-sapiens"),
                                        use_tnrs = TRUE,
                                        summary_format = "phylo_sdm")
@@ -36,7 +31,7 @@ pdf("inst/figures/phylo-sdm-emoji0.pdf",
 print(p)
 dev.off()
 
-############# STRAP:
+############# A `strap` tree:
 ########## UPWARDS phlyogeny:
 tree <- phylo_sdm
 phylo_length <- max(ape::branching.times(tree))
@@ -112,15 +107,18 @@ s <- hexSticker::sticker(imgurl,
           dpi = 1600)
 
 
-# Background with empty plot
+# A hexsticker with an empty background, using an empty plot:
+# 1) Choose a background and rim color:
 green <- "#79c843" # datelife green color obtained with https://imagecolorpicker.com/
 background <- "white" # "#e5e5e5" #gray
+# 2) Create an empty image:
 pdf("inst/figures/empty.pdf",
     width = 2,
     height = 2,
     bg = "transparent")
 plot.new() # creates an empty plot
 dev.off()
+# 3) Create the hexSticker:
 imgurl <- "inst/figures/empty.pdf"
 s <- hexSticker::sticker(subplot = imgurl,
           package = "",
