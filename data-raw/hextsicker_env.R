@@ -16,8 +16,8 @@ if (!requireNamespace("strap")) {
   install.packages("strap")
 }
 
-if (!requireNamespace("Biocmanager")) {
-  install.packages("Biocmanager")
+if (!requireNamespace("BiocManager")) {
+  install.packages("BiocManager")
 }
 
 if (!requireNamespace("ggtree")) {
