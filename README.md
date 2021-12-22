@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit THIS file -->
 
-<img src='man/figures/datelife-hex-upwards-gray.png' align='right' style='width:150px' />
+<img src='man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
 
 <!-- badges: start -->
 
