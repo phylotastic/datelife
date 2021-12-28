@@ -123,7 +123,7 @@ always set to \code{TRUE}.
 \examples{
 # Obtain median ages from a set of source chronograms in newick format:
 
-\dontrun{
+\dontrun{ # This is a flag for package development. As a user, you can run this example.
 ages <- datelife_search(c(
   "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
   "Mus musculus"

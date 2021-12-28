@@ -366,9 +366,10 @@ clean_ott_chronogram <- function(phy) {
 #' @inheritParams tree_fix_brlen
 #' @return A phylo object with nodelabels
 #' @examples
-#' # load the Open Tree chronograms cached in datelife:
+#' \dontrun{ # This is a flag for package development. As a user, you can run this example.
+#' # Load the Open Tree chronograms cached in datelife:
 #' utils::data(opentree_chronograms)
-#' # get the small chronograms (those with less that ten tips) to generate a pretty plot :
+#' # Get the small chronograms (i.e., chronograms with less that ten tips) to generate a pretty plot:
 #' small <- opentree_chronograms$trees[unlist(sapply(opentree_chronograms$trees, ape::Ntip)) < 10]
 #' # now map the Open Tree taxonomy to the nodes of the first tree
 #' phy <- map_nodes_ott(tree = small[[1]])
@@ -377,6 +378,7 @@ clean_ott_chronogram <- function(phy) {
 #' library(ape)
 #' plot(phy)
 #' nodelabels(phy$node.label)
+#' }
 #' @export
 map_nodes_ott <- function(tree) {
   # utils::data(opentree_chronograms)

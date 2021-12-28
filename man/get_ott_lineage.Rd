@@ -20,9 +20,11 @@ a list of named numeric vectors of ott ids from input and all the clades it belo
 Get the ott id and name of all lineages from one or more input taxa
 }
 \examples{
+\notrun{
 taxa <- c("Homo", "Bacillus anthracis", "Apis", "Salvia")
 lin <- get_ott_lineage(taxa)
 lin
-# look up an unknown ott id:
+# Look up an unknown ott id:
 get_ott_lineage(ott_id = 454749)
+}
 }

@@ -154,7 +154,7 @@ rhub::check_for_cran()
 
 #### Generating `datelife`'s hexsticker:
 
-Code used to generate current `datelife`'s logo hexsticker is in [data-raw/hexsticker-current.R](data-raw/hexsticker-current.R)
+Code used to generate current `datelife`'s logo hexsticker is in [data-raw/hexsticker-current.R](https://github.com/phylotastic/datelife/blob/master/data-raw/hexsticker-current.R)
 
 #### Rendering the vignettes:
 

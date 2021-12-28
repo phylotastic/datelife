@@ -27,7 +27,7 @@
 # #' @rdname file_handling
 # #' @export
 # #' @examples
-# #' \dontrun{
+# #' \dontrun{  # This is a flag for package development. As a user, you can run this example.
 # #' (x <- folder("DELETE.ME"))
 # #' which(dir() == "DELETE.ME")
 # #' delete("DELETE.ME")

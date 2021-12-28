@@ -30,7 +30,7 @@ you still need to get all species or an induced OpenTree subtree
 # tnrs <- rotl::tnrs_match_names("Mus")
 tnrs <- tnrs_match("Canis")
 # Mus, Gleicheniales, Polypodiales, etc., are missing in synth tree too
-\dontrun{
+\dontrun{ # This is a flag for package development. As a user, you can run this example.
 rotl::tol_subtree(tnrs$ott_id[1])
 #> Error: HTTP failure: 400
 #> [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
@@ -45,9 +45,9 @@ names(ids) <- rownames(children$Canis)
 tree_children <- datelife::get_otol_synthetic_tree(ott_ids = ids)
 plot(tree_children, cex = 0.3)
 
-# Other examples:
+# Other example:
 
-\dontrun{
+\dontrun{ # This is a flag for package development. As a user, you can run this example.
 oo <- get_ott_children(input = "magnoliophyta", ott_rank = "order")
 sum(oo$Magnoliophyta$rank == "order") # to know how many orders of flowering plants we have
 }

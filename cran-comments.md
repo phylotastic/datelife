@@ -1,8 +1,12 @@
 ## Resubmission
 This is a resubmission where I have:
 
-* Refactored code to remove dependencies of packages not on CRAN.
-* Removed system requirement of mafft software. It was replaced with an R function.
+* Fixed a (possibly) invalid file URI: data-raw/hexsticker-current.R From: README.md
+Fixed to https://github.com/phylotastic/datelife/blob/master/data-raw/hexsticker-current.R
+
+* Added donrun to examples with CPU (user + system) or elapsed time > 5s
+
+* Checked possibly misspelled words in DESCRIPTION and determined they are not misspellings.
 
 ### Test environments:
 
@@ -49,6 +53,7 @@ Possibly misspelled words in DESCRIPTION:
   DateLife (22:62)
   chronograms (20:73)
   workflows (20:26)
+  phylogenetic (20:49)
 ```
 
 **Comments**: <br/>

@@ -16,9 +16,10 @@ A phylo object with nodelabels
 Add Open Tree of Life Taxonomy to tree nodes.
 }
 \examples{
-# load the Open Tree chronograms cached in datelife:
+\dontrun{ # This is a flag for package development. As a user, you can run this example.
+# Load the Open Tree chronograms cached in datelife:
 utils::data(opentree_chronograms)
-# get the small chronograms (those with less that ten tips) to generate a pretty plot :
+# Get the small chronograms (i.e., chronograms with less that ten tips) to generate a pretty plot:
 small <- opentree_chronograms$trees[unlist(sapply(opentree_chronograms$trees, ape::Ntip)) < 10]
 # now map the Open Tree taxonomy to the nodes of the first tree
 phy <- map_nodes_ott(tree = small[[1]])
@@ -27,4 +28,5 @@ phy <- map_nodes_ott(tree = small[[1]])
 library(ape)
 plot(phy)
 nodelabels(phy$node.label)
+}
 }

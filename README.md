@@ -72,7 +72,7 @@ the accompanying paper:
 <p>
 
 O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K,
-Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2021).
+Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022).
 <em>datelife: Go from a List of Taxa or a Tree to a Chronogram using
 Open Scientific Data on Time of Lineage Divergence</em>. R package
 version 0.5.0.
@@ -182,7 +182,7 @@ rhub::check_for_cran()
 #### Generating `datelife`’s hexsticker:
 
 Code used to generate current `datelife`’s logo hexsticker is in
-[data-raw/hexsticker-current.R](data-raw/hexsticker-current.R)
+[data-raw/hexsticker-current.R](https://github.com/phylotastic/datelife/blob/master/data-raw/hexsticker-current.R)
 
 #### Rendering the vignettes:
 
