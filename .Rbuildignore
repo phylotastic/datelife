@@ -31,3 +31,4 @@ dev.txt
 ^README\.Rmd$
 _pkgdown.yml
 ^CRAN-SUBMISSION$
+tests/_*
