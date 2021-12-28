@@ -116,7 +116,7 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...) {
 #' @inheritParams check_ott_input
 #' @return a list of named numeric vectors of ott ids from input and all the clades it belongs to.
 #' @examples
-#' \notrun{
+#' \dontrun{ # This is a flag for package development. You are welcome to run the example.
 #' taxa <- c("Homo", "Bacillus anthracis", "Apis", "Salvia")
 #' lin <- get_ott_lineage(taxa)
 #' lin
@@ -328,7 +328,7 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
 #' # tnrs <- rotl::tnrs_match_names("Mus")
 #' tnrs <- tnrs_match("Canis")
 #' # Mus, Gleicheniales, Polypodiales, etc., are missing in synth tree too
-#' \dontrun{ # This is a flag for package development. As a user, you can run this example.
+#' \dontrun{ # This is a flag for package development. You are welcome to run the example.
 #' rotl::tol_subtree(tnrs$ott_id[1])
 #' #> Error: HTTP failure: 400
 #' #> [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
@@ -345,7 +345,7 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
 #'
 #' # Other example:
 #'
-#' \dontrun{ # This is a flag for package development. As a user, you can run this example.
+#' \dontrun{ # This is a flag for package development. You are welcome to run the example.
 #' oo <- get_ott_children(input = "magnoliophyta", ott_rank = "order")
 #' sum(oo$Magnoliophyta$rank == "order") # to know how many orders of flowering plants we have
 #' }

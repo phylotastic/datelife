@@ -16,7 +16,7 @@ A phylo object with nodelabels
 Add Open Tree of Life Taxonomy to tree nodes.
 }
 \examples{
-\dontrun{ # This is a flag for package development. As a user, you can run this example.
+\dontrun{ # This is a flag for package development. You are welcome to run the example.
 # Load the Open Tree chronograms cached in datelife:
 utils::data(opentree_chronograms)
 # Get the small chronograms (i.e., chronograms with less that ten tips) to generate a pretty plot:

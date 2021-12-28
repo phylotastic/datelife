@@ -27,10 +27,9 @@ Fixed to https://github.com/phylotastic/datelife/blob/master/data-raw/hexsticker
 
 ```
 checking installed package size ... NOTE
-    installed size is 7.8Mb
+    installed size is 6.1Mb
     sub-directories of 1Mb or more:
       data         4.7Mb
-      figures      2.3Mb
 ```
 **Comments**: <br/>
 The package is hosting a database (`data/opentree_chronograms.rda`), increasing the size of the data dir. This database is needed to run main functions.
