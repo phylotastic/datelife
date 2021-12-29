@@ -34,7 +34,7 @@ an already processed datelifeQuery object obtained with make_datelife_query().">
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started with `datelife`</a>
+    <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started with &lt;code&gt;datelife&lt;/code&gt;</a>
   </div>
 </li>
 <li class="nav-item">
@@ -90,7 +90,7 @@ an already processed <code>datelifeQuery</code> object obtained with <code><a hr
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>input</dt>
 <dd><p>One of the following:</p><dl><dt>A character vector</dt>
-<dd><p>With taxon names as a single comma separated strting or concatenated with <code><a href="https://rdrr.io/r/base/c.html" class="external-link">c()</a></code>.</p></dd>
+<dd><p>With taxon names as a single comma separated starting or concatenated with <code><a href="https://rdrr.io/r/base/c.html" class="external-link">c()</a></code>.</p></dd>
 
 <dt>A phylogenetic tree with taxon names as tip labels</dt>
 <dd><p>As a <code>phylo</code> or <code>multiPhylo</code>
@@ -106,7 +106,7 @@ object, OR as a newick character string.</p></dd>
 to process input taxon names. Default to <code>TRUE</code>, it corrects misspellings and
 taxonomic name variations.</p></dd>
 <dt>get_spp_from_taxon</dt>
-<dd><p>Wether to search ages for all species belonging to a
+<dd><p>Whether to search ages for all species belonging to a
 given taxon or not. Default to <code>FALSE</code>. If <code>TRUE</code>, it must have same length as input.
 If input is a newick string with some clades it will be converted to a <code>phylo</code>
 object, and the order of <code>get_spp_from_taxon</code> will match <code>phy$tip.label</code>.</p></dd>
@@ -218,7 +218,7 @@ always set to <code>TRUE</code>.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Obtain median ages from a set of source chronograms in newick format:</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># This is a flag for package development. You are welcome to run the example.</span></span>
 <span class="r-in"><span class="va">ages</span> <span class="op">&lt;-</span> <span class="fu">datelife_search</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="st">"Rhea americana"</span>, <span class="st">"Pterocnemia pennata"</span>, <span class="st">"Struthio camelus"</span>,</span>
 <span class="r-in">  <span class="st">"Mus musculus"</span></span>
@@ -226,6 +226,7 @@ always set to <code>TRUE</code>.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Save the tree in newick format:</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/write.html" class="external-link">write</a></span><span class="op">(</span><span class="va">ages</span>, file <span class="op">=</span> <span class="st">"some.bird.ages.txt"</span><span class="op">)</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in cat(x, file = file, sep = c(rep.int(sep, ncolumns - 1), "\n"),     append = append):</span> object 'ages' not found</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Obtain median ages from a set of source chronograms in phylo format</span></span>
 <span class="r-in"><span class="co"># Will produce same tree as above but in `phylo` format:</span></span>
@@ -233,12 +234,47 @@ always set to <code>TRUE</code>.</p>
 <span class="r-in">  <span class="st">"Rhea americana"</span>, <span class="st">"Pterocnemia pennata"</span>, <span class="st">"Struthio camelus"</span>,</span>
 <span class="r-in">  <span class="st">"Mus musculus"</span></span>
 <span class="r-in"><span class="op">)</span>, summary_format <span class="op">=</span> <span class="st">"phylo_median"</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Running a DateLife search.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Making a DateLife query.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Phylo-processing 'input'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 'input' is not a phylogeny.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Working with the following taxa: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 	Rhea americana | Pterocnemia pennata | Struthio camelus | Mus musculus</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife query done!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Searching the chronogram database.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Search done!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Trying with overlap = 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Success!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Calculating a median summary chronogram.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Source chronograms from:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1: Grealy, Alicia, Matthew Phillips, Gifford Miller, M. Thomas P. Gilbert, Jean-Marie Rouillard, David Lambert, Michael Bunce, James Haile. 2017. Eggshell palaeogenomics: Palaeognath evolutionary history revealed through ancient nuclear and mitochondrial DNA from Madagascan elephant bird (Aepyornis sp.) eggshell. Molecular Phylogenetics and Evolution 109: 151-163</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2: Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 3: Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 4: Prum, Richard O., Jacob S. Berv, Alex Dornburg, Daniel J. Field, Jeffrey P. Townsend, Emily Moriarty Lemmon, Alan R. Lemmon. 2015. A comprehensive phylogeny of birds (Aves) using targeted next-generation DNA sequencing. Nature 526, (7574): 569-573</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 5: Prum, Richard O., Jacob S. Berv, Alex Dornburg, Daniel J. Field, Jeffrey P. Townsend, Emily Moriarty Lemmon, Alan R. Lemmon. 2015. A comprehensive phylogeny of birds (Aves) using targeted next-generation DNA sequencing. Nature 526, (7574): 569-573</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 6: Claramunt, Santiago, Joel Cracraft. 2015. A new time tree reveals Earth historys imprint on the evolution of modern birds. Science Advances 1 (11): e1501005-e1501005</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 7: Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 8: Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 9: Mitchell, K. J., B. Llamas, J. Soubrier, N. J. Rawlence, T. H. Worthy, J. Wood, M. S. Y. Lee, A. Cooper. 2014. Ancient DNA reveals elephant birds and kiwi are sister taxa and clarifies ratite bird evolution. Science 344 (6186): 898-900.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Input taxa presence across source chronograms:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>                 taxon chronograms</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1 Pterocnemia pennata         6/9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2      Rhea americana         9/9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 3    Struthio camelus         9/9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 4        Mus musculus         1/9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Input taxa completely absent from source chronograms:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   taxon</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1  None</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife search done!</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ages.again</span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/" class="external-link">ape</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/axisPhylo.html" class="external-link">axisPhylo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Time (million years ago)"</span>, side <span class="op">=</span> <span class="fl">1</span>, line <span class="op">=</span> <span class="fl">2</span>, at <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="st">"last_plot.phylo"</span>,</span>
 <span class="r-in">  envir <span class="op">=</span> <span class="va">.PlotPhyloEnv</span></span>
 <span class="r-in"><span class="op">)</span><span class="op">$</span><span class="va">xx</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-plt img"><img src="datelife_search-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span class="co"># Save phylo object in newick format</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/ape/man/write.tree.html" class="external-link">write.tree</a></span><span class="op">(</span><span class="va">ages.again</span>, file <span class="op">=</span> <span class="st">"some.bird.tree.again.txt"</span><span class="op">)</span></span>
 <span class="r-in"></span>
@@ -248,9 +284,28 @@ always set to <code>TRUE</code>.</p>
 <span class="r-in">  <span class="st">"Rhea americana"</span>, <span class="st">"Pterocnemia pennata"</span>, <span class="st">"Struthio camelus"</span>,</span>
 <span class="r-in">  <span class="st">"Mus musculus"</span></span>
 <span class="r-in"><span class="op">)</span>, summary_format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Running a DateLife search.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Making a DateLife query.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Phylo-processing 'input'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 'input' is not a phylogeny.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Working with the following taxa: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 	Rhea americana | Pterocnemia pennata | Struthio camelus | Mus musculus</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife query done!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Searching the chronogram database.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Search done!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Input taxa presence across source chronograms:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>                 taxon chronograms</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1 Pterocnemia pennata         6/9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2      Rhea americana         9/9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 3    Struthio camelus         9/9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 4        Mus musculus         1/9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Input taxa completely absent from source chronograms:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   taxon</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1  None</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife search done!</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/write.html" class="external-link">write</a></span><span class="op">(</span><span class="va">ages.html</span>, file <span class="op">=</span> <span class="st">"some.bird.trees.html"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/system.html" class="external-link">system</a></span><span class="op">(</span><span class="st">"open some.bird.trees.html"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

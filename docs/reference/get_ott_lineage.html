@@ -24,7 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started with `datelife`</a>
+    <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started with &lt;code&gt;datelife&lt;/code&gt;</a>
   </div>
 </li>
 <li class="nav-item">
@@ -76,121 +76,13 @@ numeric vector of ott ids obtained with <code><a href="https://docs.ropensci.org
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Homo"</span>, <span class="st">"Bacillus anthracis"</span>, <span class="st">"Apis"</span>, <span class="st">"Salvia"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># This is a flag for package development. You are welcome to run the example.</span></span>
+<span class="r-in"><span class="va">taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Homo"</span>, <span class="st">"Bacillus anthracis"</span>, <span class="st">"Apis"</span>, <span class="st">"Salvia"</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">lin</span> <span class="op">&lt;-</span> <span class="fu">get_ott_lineage</span><span class="op">(</span><span class="va">taxa</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'input' is not a 'datelifeQuery' object.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Making a DateLife query.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Phylo-processing 'input'.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'input' is not a phylogeny.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Working with the following taxa: </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 	Homo | Bacillus anthracis | Apis | Salvia</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife query done!</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in check_ott_input(input, ott_ids):</span> object 'taxa' not found</span>
 <span class="r-in"><span class="va">lin</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $Homo</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                               ott_ids   ott_ranks    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Homininae                                     "312031"  "subfamily"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Hominidae                                     "770311"  "family"     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Hominoidea                                    "386191"  "superfamily"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Catarrhini                                    "842867"  "parvorder"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simiiformes                                   "386195"  "infraorder" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Haplorrhini                                   "702152"  "suborder"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Primates                                      "913935"  "order"      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Euarchontoglires                              "392222"  "superorder" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Boreoeutheria                                 "5334778" "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Eutheria (in Deuterostomia)                   "683263"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Theria (subclass in Deuterostomia)            "229558"  "subclass"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mammalia                                      "244265"  "class"      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Amniota                                       "229560"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tetrapoda                                     "229562"  "superclass" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dipnotetrapodomorpha                          "4940726" "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sarcopterygii                                 "458402"  "superclass" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Euteleostomi                                  "114654"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Teleostomi                                    "114656"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gnathostomata (superclass in phylum Chordata) "278114"  "superclass" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vertebrata (subphylum in Deuterostomia)       "801601"  "subphylum"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Craniata (subphylum in Deuterostomia)         "947318"  "subphylum"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chordata                                      "125642"  "phylum"     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Deuterostomia                                 "147604"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bilateria                                     "117569"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Eumetazoa                                     "641038"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Metazoa                                       "691846"  "kingdom"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Holozoa                                       "5246131" "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Opisthokonta                                  "332573"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Eukaryota                                     "304358"  "domain"     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cellular organisms                            "93302"   "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> life                                          "805080"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`Bacillus anthracis`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                     ott_ids   ott_ranks</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bacillus (genus in domain Bacteria) "1068896" "genus"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bacillaceae                         "589414"  "family" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bacillales                          "1068893" "order"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bacilli                             "634420"  "class"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Firmicutes                          "822769"  "phylum" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bacteria                            "844192"  "domain" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cellular organisms                  "93302"   "no rank"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> life                                "805080"  "no rank"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $Apis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                      ott_ids   ott_ranks    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Apini                                "806703"  "tribe"      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Apinae                               "849856"  "subfamily"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Apidae                               "52848"   "family"     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Apoidea                              "419526"  "superfamily"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Aculeata (infraorder in Protostomia) "206138"  "infraorder" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Apocrita                             "678075"  "suborder"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Hymenoptera                          "753726"  "order"      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Holometabola                         "1082885" "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Neoptera                             "815350"  "infraclass" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pterygota (subclass in Opisthokonta) "1048707" "subclass"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dicondylia                           "983656"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Insecta                              "1062253" "class"      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Hexapoda                             "568991"  "subphylum"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pancrustacea                         "985906"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mandibulata                          "985907"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Arthropoda                           "632179"  "phylum"     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Panarthropoda                        "816442"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Ecdysozoa                            "611099"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Protostomia                          "189832"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bilateria                            "117569"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Eumetazoa                            "641038"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Metazoa                              "691846"  "kingdom"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Holozoa                              "5246131" "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Opisthokonta                         "332573"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Eukaryota                            "304358"  "domain"     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cellular organisms                   "93302"   "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> life                                 "805080"  "no rank"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $Salvia</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      ott_ids   ott_ranks  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mentheae             "498490"  "tribe"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Nepetoideae          "394658"  "subfamily"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lamiaceae            "544714"  "family"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> higher_core_Lamiales "5264061" "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Core_Lamiales        "5263556" "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lamiales             "23736"   "order"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lamiids              "596112"  "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> asterids             "1008294" "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pentapetalae         "5316182" "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gunneridae           "853757"  "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eudicotyledons       "431495"  "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mesangiospermae      "5298374" "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Magnoliopsida        "99252"   "class"    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Spermatophyta        "10218"   "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Euphyllophyta        "1007992" "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tracheophyta         "10210"   "phylum"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Embryophyta          "56610"   "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Streptophyta         "916750"  "phylum"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chloroplastida       "361838"  "kingdom"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Archaeplastida       "5268475" "kingdom"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Eukaryota            "304358"  "domain"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cellular organisms   "93302"   "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> life                 "805080"  "no rank"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="co"># look up an unknown ott id:</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'lin' not found</span>
+<span class="r-in"><span class="co"># Look up an unknown ott id:</span></span>
 <span class="r-in"><span class="fu">get_ott_lineage</span><span class="op">(</span>ott_id <span class="op">=</span> <span class="fl">454749</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`Discelium nudum`</span>
@@ -210,6 +102,7 @@ numeric vector of ott ids obtained with <code><a href="https://docs.ropensci.org
 <span class="r-out co"><span class="r-pr">#&gt;</span> cellular organisms "93302"   "no rank" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> life               "805080"  "no rank" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

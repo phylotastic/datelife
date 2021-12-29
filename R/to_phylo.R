@@ -3,11 +3,11 @@
 #' @param patristic_matrix A patristic matrix
 #' @param clustering_method A character vector indicating the method to construct the tree. Options are
 #' \describe{
-#' 	\item{nj}{Neighbor-Joining method applied with ape::nj function.}
-#' 	\item{upgma}{Unweighted Pair Group Method with Arithmetic Mean method applied with phangorn::upgma function.}
-#' 	\item{bionj}{An improved version of the Neighbor-Joining method applied with ape::bionj function.}
-#' 	\item{triangle}{Riangles method applied with ape::triangMtd function.}
-#' 	\item{mvr}{Minimum Variance Reduction method applied with ape::mvr function.}
+#' 	\item{nj}{Neighbor-Joining method applied with [ape::nj()].}
+#' 	\item{upgma}{Unweighted Pair Group Method with Arithmetic Mean method applied with [phangorn::upgma()].}
+#' 	\item{bionj}{An improved version of the Neighbor-Joining method applied with [ape::bionj()].}
+#' 	\item{triangle}{Triangles method applied with [ape::triangMtd()]}
+#' 	\item{mvr}{Minimum Variance Reduction method applied with [ape::mvr()].}
 #' }
 # We might add the option to insert a function as clustering_method.
 # Before, we hard coded it to try Neighbor-Joining first; if it errors, it will try UPGMA.
@@ -103,15 +103,8 @@ force_ultrametric <- function(phy) {
 #' Cluster a patristic matrix into a tree with various methods.
 #'
 #' @inheritParams patristic_matrix_to_phylo
-#' @return A list of trees (with potential NAs if a method was unsuccessful) from clustering with NJ, UPGMA, BIONJ, triangle method and MVR.
-#' @details Methods include the following and their variants to handle missing values:
-#' \describe{
-#' 	\item{nj}{Neighbor-Joining method applied with ape::nj function.}
-#' 	\item{upgma}{Unweighted Pair Group Method with Arithmetic Mean method applied with phangorn::upgma function.}
-#' 	\item{bionj}{An improved version of the Neighbor-Joining method applied with ape::bionj function.}
-#' 	\item{triangle}{Riangles method applied with ape::triangMtd function.}
-#' 	\item{mvr}{Minimum Variance Reduction method applied with ape::mvr function.}
-#' }
+#' @return A list of trees obtained with clustering methods detailed in [patristic_matrix_to_phylo()].
+#' @details If clustering method fails, NA is returned.
 #' @export
 cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL) {
   if (!inherits(patristic_matrix, "matrix") & !inherits(patristic_matrix, "data.frame")) {

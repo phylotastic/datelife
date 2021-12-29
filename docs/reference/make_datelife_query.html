@@ -28,7 +28,7 @@ string to a datelifeQuery object"><!-- mathjax --><script src="https://cdnjs.clo
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started with `datelife`</a>
+    <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started with &lt;code&gt;datelife&lt;/code&gt;</a>
   </div>
 </li>
 <li class="nav-item">
@@ -74,7 +74,7 @@ string to a <code>datelifeQuery</code> object</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>input</dt>
 <dd><p>Taxon names as one of the following:</p><dl><dt>A character vector</dt>
-<dd><p>With taxon names as a single comma separated strting or concatenated with <code><a href="https://rdrr.io/r/base/c.html" class="external-link">c()</a></code>.</p></dd>
+<dd><p>With taxon names as a single comma separated starting or concatenated with <code><a href="https://rdrr.io/r/base/c.html" class="external-link">c()</a></code>.</p></dd>
 
 <dt>A phylogenetic tree with taxon names as tip labels</dt>
 <dd><p>As a <code>phylo</code> or <code>multiPhylo</code>
@@ -87,7 +87,7 @@ object, OR as a newick character string.</p></dd>
 to process input taxon names. Default to <code>TRUE</code>, it corrects misspellings and
 taxonomic name variations.</p></dd>
 <dt>get_spp_from_taxon</dt>
-<dd><p>Wether to search ages for all species belonging to a
+<dd><p>Whether to search ages for all species belonging to a
 given taxon or not. Default to <code>FALSE</code>. If <code>TRUE</code>, it must have same length as input.
 If input is a newick string with some clades it will be converted to a <code>phylo</code>
 object, and the order of <code>get_spp_from_taxon</code> will match <code>phy$tip.label</code>.</p></dd>
@@ -109,7 +109,7 @@ object, and the order of <code>get_spp_from_taxon</code> will match <code>phy$ti
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>It processes <code>phylo</code> objects and newick character string inputs
 with <code><a href="input_process.html">input_process()</a></code>. If <code>input</code> is a <code>multiPhylo</code> object, only the first <code>phylo</code>
-element will be used. Similarly, if an <code>input</code> newick character string has mutiple trees,
+element will be used. Similarly, if an <code>input</code> newick character string has multiple trees,
 only the first one will be used.</p>
     </div>
 

@@ -35,9 +35,9 @@ Choose one of:
 \describe{
 \item{adding_method = "random"}{missing_taxa will be added at random to dated_tree.
 }
-\item{adding_method = "taxonomy"}{taxa will be added to dated_tree following a dataframe with taxonomic assignations given in missing_taxa argument. If no dataframe is given, OToLs reference taxonomy will be used.
+\item{adding_method = "taxonomy"}{taxa will be added to dated_tree following a dataframe with taxonomic assignations given in missing_taxa argument. If no dataframe is given, OpenTree's reference taxonomy will be used.
 }
-\item{adding_method = "tree"}{taxa will be added to dated_tree following a tree given in missing_taxa argument. If no tree is given, OToL synthetic tree will be used.
+\item{adding_method = "tree"}{taxa will be added to dated_tree following a tree given in missing_taxa argument. If no tree is given, OpenTree's synthetic tree will be used.
 }
 }}
 

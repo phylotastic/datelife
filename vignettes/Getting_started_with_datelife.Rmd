@@ -1,10 +1,10 @@
 ---
-title: "Getting started with `datelife`"
+title: "Getting started with <code>datelife</code>"
 output:
   rmarkdown::html_vignette:
     keep_md: true
 vignette: >
-  %\VignetteIndexEntry{Getting started with `datelife`}
+  %\VignetteIndexEntry{Getting started with datelife}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -152,7 +152,7 @@ phylo <- ape::read.tree(text = newick)
 datelife::make_datelife_query(input = phylo)
 ```
 <details>
-<summary>make_datelife_query output 3</summary>
+<summary>make_datelife_query output 4</summary>
 ```r
 #> ... Making a DateLife query.
 #> ... Phylo-processing 'input'.

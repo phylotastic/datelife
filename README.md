@@ -28,9 +28,9 @@ time (aka a ***chronogram***) of any two or more lineages of interest to
 you.
 
 Use the `datelife` R package locally, or through [DateLife’s
-website](http://datelife.org/query/) to search for chronograms available
-for your lineages in [Open Tree of Life’s tree
-store](https://tree.opentreeoflife.org/curator).
+website](http://datelife.opentreeoflife.org/query/) to search for
+chronograms available for your lineages of interest in [Open Tree of
+Life’s tree store](https://tree.opentreeoflife.org/curator).
 
 You can also date a phylogenetic tree of your own making (or choosing
 one from the literature), using node ages from chronograms found with
@@ -146,12 +146,39 @@ And, find code with zero coverage:
 covr::zero_coverage(cov)
 ```
 
-#### Releasing to CRAN:
+#### Generating `datelife`’s hexsticker:
 
-To be able to release to CRAN, the first step is to pass a check. To run
-a local check, you can use the command `R CMD check` from your terminal.
-For that, change directories to the one above your working clone of the
-`datelife` repo:
+Code used to generate current `datelife`’s logo hexsticker is in
+[data-raw/hexsticker-current.R](https://github.com/phylotastic/datelife/blob/master/data-raw/hexsticker-current.R)
+
+#### Rendering the vignettes:
+
+Vignettes are rendered automatically upon built. However, if you wish to
+see how they look rendered before releasing the package, you can do this
+with `knitr::knit()`. The following command renders the vignette
+`Getting_started_with_datelife` as html:
+
+``` r
+knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
+```
+
+#### Creating a webiste for the package
+
+Using `pkgdown` for this is quite straightforward and fun:
+
+``` r
+usethis::use_pkgdown()
+pkgdown::build_site()
+```
+
+#### Releasing to CRAN
+
+##### Local checks
+
+To be able to release to CRAN, the first step is to pass the checks
+locally. To run a local check, you can use the command `R CMD check`
+from your terminal. For that, change directories to the one above your
+working clone of the `datelife` repo:
 
 ``` bash
 cd ../
@@ -171,24 +198,19 @@ just generated:
 R CMD check datelife_0.6.0.tar.gz
 ```
 
-The best option to document your checks currently is the
-[rhub](https://CRAN.R-project.org/package=rhub) package, which allows
-remote testing on several OS with:
+##### Remote checks
 
-``` bash
+If you do not have access to different OS to test your package on, the
+[rhub](https://CRAN.R-project.org/package=rhub) package allows remote
+testing on a variety of OS with the command:
+
+``` r
 rhub::check_for_cran()
 ```
 
-#### Generating `datelife`’s hexsticker:
-
-Code used to generate current `datelife`’s logo hexsticker is in
-[data-raw/hexsticker-current.R](https://github.com/phylotastic/datelife/blob/master/data-raw/hexsticker-current.R)
-
-#### Rendering the vignettes:
-
-``` r
-knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
-```
+To submit to CRAN call `devtools::release()` and answer the prompted
+questions. If the answer to all of these is *yes*, the package will be
+submitted to CRAN :rocket:
 
 ## 4\. License
 

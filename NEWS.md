@@ -1,6 +1,7 @@
 # datelife 0.6.0
 
   - Bioconductor packages are used conditionally
+  - Package website with `pkgdown`
 
 # datelife 0.5.0
 
