@@ -204,12 +204,13 @@ cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL) {
     return(phyclust)
   }
 }
-#' Choose an ultrametric phylo object from cluster_patristicmatrix obtained with a particular clustering method, or the next best tree.
-#' If there are not any ultrametric trees, it does not force them.
+#' Choose an ultrametric phylo object from [cluster_patristicmatrix()] obtained
+#' with a particular clustering method, or the next best tree.
+#' If there are no ultrametric trees, it does not force them to be ultrametric.
 #'
 #' @inheritParams patristic_matrix_to_phylo
-#' @param phycluster An output from cluster_patristicmatrix
-#' @return A phylo object or NA
+#' @param phycluster An output from [cluster_patristicmatrix()]
+#' @return A `phylo` object or `NA`.
 #' @export
 choose_cluster <- function(phycluster, clustering_method = "nj") {
   if (!mode(phycluster) %in% "list") {
@@ -287,7 +288,7 @@ choose_cluster <- function(phycluster, clustering_method = "nj") {
     }
   }
 }
-#' Internal for summary_matrix_to_phylo().
+#' Internal function used in summary_matrix_to_phylo().
 #' @inheritParams summary_matrix_to_phylo
 summarize_summary_matrix <- function(summ_matrix) {
   ages <- tA <- tB <- c()
@@ -324,10 +325,10 @@ summarize_summary_matrix <- function(summ_matrix) {
 #' 	\item{min}{It will use the minimum age from the node age distributions.}
 #' 	\item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
 #' }
-#' @param target_tree A phylo object. Use this in case you want a particular backbone for the output tree.
+#' @param target_tree A `phylo` object. Use this in case you want a particular backbone for the output tree.
 #' @inheritDotParams get_otol_synthetic_tree
 #' @return An ultrametric phylo object.
-#' @details It can take a regular patristic distance matrix, but there are simpler methods for that implemented in patristic_matrix_to_phylo.
+#' @details It can take a regular patristic distance matrix, but there are simpler methods for that implemented in [patristic_matrix_to_phylo()].
 #' @export
 # #' @example
 # #' summary_matrix_to_phylo(summ_matrix, use = "median")

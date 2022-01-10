@@ -9,7 +9,7 @@ summary_matrix_to_phylo_all(summ_matrix, target_tree = NULL, ...)
 \arguments{
 \item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
 
-\item{target_tree}{A phylo object. Use this in case you want a particular backbone for the output tree.}
+\item{target_tree}{A \code{phylo} object. Use this in case you want a particular backbone for the output tree.}
 
 \item{...}{
   Arguments passed on to \code{\link[=summary_matrix_to_phylo]{summary_matrix_to_phylo}}

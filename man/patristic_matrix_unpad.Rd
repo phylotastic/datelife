@@ -13,5 +13,5 @@ patristic_matrix_unpad(patristic_matrix)
 patristic_matrix for all_taxa
 }
 \description{
-Used in \code{\link[=datelife_result_sdm]{datelife_result_sdm()}}.
+Used in \code{\link[=datelife_result_sdm_phylo]{datelife_result_sdm_phylo()}}.
 }

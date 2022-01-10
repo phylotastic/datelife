@@ -209,7 +209,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
     return.object <- datelife_result_median(best_grove, target_tree = target_tree)
   }
   if (grepl("sdm", summary_format.in)) {
-    return.object <- datelife_result_sdm(best_grove, target_tree = target_tree)
+    return.object <- datelife_result_sdm_phylo(best_grove, target_tree = target_tree)
   }
   if (summary_format.in %in% c("newick_sdm", "newick_median")) {
     return.object <- ape::write.tree(return.object)

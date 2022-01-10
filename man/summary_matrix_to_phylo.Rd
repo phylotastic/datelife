@@ -27,7 +27,7 @@ summary_matrix_to_phylo(
 \item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
 }}
 
-\item{target_tree}{A phylo object. Use this in case you want a particular backbone for the output tree.}
+\item{target_tree}{A \code{phylo} object. Use this in case you want a particular backbone for the output tree.}
 
 \item{...}{
   Arguments passed on to \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree}}
@@ -47,5 +47,5 @@ An ultrametric phylo object.
 Go from a summary matrix to an ultrametric phylo object.
 }
 \details{
-It can take a regular patristic distance matrix, but there are simpler methods for that implemented in patristic_matrix_to_phylo.
+It can take a regular patristic distance matrix, but there are simpler methods for that implemented in \code{\link[=patristic_matrix_to_phylo]{patristic_matrix_to_phylo()}}.
 }

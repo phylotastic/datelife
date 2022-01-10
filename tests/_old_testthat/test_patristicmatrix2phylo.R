@@ -29,7 +29,7 @@ test_that("patristic_matrix_to_phylo works: cetaceae", {
   good.matrix.indices <- get_goodmatrices(unpadded.matrices)
   if (length(good.matrix.indices) > 1) {
     unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-    sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat")
+    sdm_phylo <- get_sdm_phylo(unpadded.matrices, weighting = "flat")
   }
   # max(sdm_matrix, na.rm = TRUE)/2
   t0 <- summarize_datelife_result(datelife_result = cetacea_result, summary_format = "phylo_sdm")
@@ -73,7 +73,7 @@ test_that("summary_matrix_to_phylo works: threebirds", {
   good.matrix.indices <- get_goodmatrices(unpadded.matrices)
   if (length(good.matrix.indices) > 1) {
     unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-    sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat")
+    sdm_phylo <- get_sdm_phylo(unpadded.matrices, weighting = "flat")
   }
   # max(sdm_matrix, na.rm = TRUE)/2
   sdm_phylo <- summary_matrix_to_phylo(summ_matrix = sdm_matrix)

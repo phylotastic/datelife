@@ -1,5 +1,5 @@
 Package: datelife
-Title: Go from a List of Taxa or a Tree to a Chronogram using Open Scientific Data on Time of Lineage Divergence
+Title: Scientific Data on Time of Lineage Divergence for Your Taxa
 Version: 0.6.0
 Maintainer: Luna L. Sanchez Reyes <sanchez.reyes.luna@gmail.com>
 Authors@R: c(
@@ -19,7 +19,8 @@ Authors@R: c(
 Description: Methods and workflows to get dated phylogenetic trees, aka chronograms,
     using open scientific data on time of lineage divergence.
     This package constitutes the main underlying code of the DateLife web services
-    at www.datelife.org.
+    at www.datelife.org. It summarizes chronograms with the Super Distance Matrix (SDM) method
+    described in Criscuolo et al. (2006) <doi:10.1080/10635150600969872>.
 Depends:
     R (>= 3.6.0)
 biocViews: Software

@@ -18,7 +18,7 @@ subset2_result <- datelife::get_datelife_result(subset2_query)
 # utils::data(subset2_search)
 # subset2_result <- subset2_search$result
 subset2_bestgrove <- datelife::get_best_grove(subset2_result, n = 2)$best_grove
-subset2_sdm_matrix <- datelife::get_sdm_matrix(subset2_bestgrove)
+subset2_sdm_phylo <- datelife::get_sdm_phylo(subset2_bestgrove)
 
 birds_yellowstone_otoltree <- datelife::get_otol_synthetic_tree(birds_yellowstone)
 # names(birds_yellowstone_otoltree)

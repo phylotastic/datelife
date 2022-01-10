@@ -7,7 +7,7 @@
 make_treebase_associations()
 }
 \value{
-data.frame with author last name, author first and other names, and comma delimited URLs for TreeBase studies
+\code{data.frame} with author last name, author first and other names, and comma delimited URLs for TreeBase studies
 }
 \description{
 Associate TreeBase authors with studies

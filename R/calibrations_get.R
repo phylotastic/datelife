@@ -158,7 +158,7 @@ get_calibrations_vector <- function(input = NULL,
   return(res)
 }
 #' Search and extract available secondary calibrations from a given
-#' '\code{datelifeQuery} object
+#' \code{datelifeQuery} object
 #'
 #' @param datelife_query A `datelifeQuery` object.
 #' @inheritParams get_all_calibrations

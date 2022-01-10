@@ -7,10 +7,10 @@
 make_all_associations(outputfile = "depositorcache.RData")
 }
 \arguments{
-\item{outputfile}{Path including file name. NULL to prevent saving}
+\item{outputfile}{Path including file name. NULL to prevent saving.}
 }
 \value{
-a data.frame of person and urls
+a \code{data.frame} of "person" and "urls"
 }
 \description{
 Find all authors and where they have deposited their trees

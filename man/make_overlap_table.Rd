@@ -7,10 +7,10 @@
 make_overlap_table(results_table)
 }
 \arguments{
-\item{results_table}{An author.results or curator.results data frame}
+\item{results_table}{An "author.results" or "curator.results" \code{data.frame}}
 }
 \value{
-A data frame with info on people and what clades they've worked on
+A \code{data.frame} with information on curators and what clades they've worked on
 }
 \description{
 Create an overlap table

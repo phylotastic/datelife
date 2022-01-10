@@ -3,7 +3,7 @@
 \name{get_calibrations_datelifequery}
 \alias{get_calibrations_datelifequery}
 \title{Search and extract available secondary calibrations from a given
-'\code{datelifeQuery} object}
+\code{datelifeQuery} object}
 \usage{
 get_calibrations_datelifequery(datelife_query = NULL, each = FALSE)
 }

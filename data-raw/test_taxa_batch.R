@@ -197,7 +197,7 @@ for (taxa in taxa_list) {
     error = function(e) "none"
   )
 
-  sdm.result_upgma <- tryCatch(datelife_result_sdm(best_grove,
+  sdm.result_upgma <- tryCatch(datelife_result_sdm_phylo(best_grove,
     clustering_method = "upgma",
     fix_negative_brlen = FALSE
   ),

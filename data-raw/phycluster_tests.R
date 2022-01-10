@@ -5,7 +5,7 @@ subset2_result <- get_datelife_result(subset2_query)
 # subset2_result <- subset2_search$result
 subset2_bestgrove <- get_best_grove(subset2_result)$best_grove
 # subset2_bestgrove_phyloall <- summarize_datelife_result(subset2_bestgrove, summary_format = "phylo_all")
-subset2_sdm_matrix <- get_sdm_matrix(subset2_bestgrove)
+subset2_sdm_matrix <- get_sdm(subset2_bestgrove)
 
 
 class(subset2_sdm_matrix) <- c("matrix", "datelifeSummaryMatrix")

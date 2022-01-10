@@ -14,7 +14,7 @@ make_datelife_query(
 \arguments{
 \item{input}{Taxon names as one of the following:
 \describe{
-\item{A character vector}{With taxon names as a single comma separated starting or concatenated with \code{\link[=c]{c()}}.}
+\item{A character vector of taxon names}{With taxon names as a single comma separated starting or concatenated with \code{\link[=c]{c()}}.}
 \item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
 object, OR as a newick character string.}
 }}

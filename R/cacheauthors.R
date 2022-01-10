@@ -83,8 +83,8 @@ make_treebase_cache <- function(outputfile = "treebasecache.RData") { # nocov st
 } # nocov end
 
 #' Create an overlap table
-#' @param results_table An author.results or curator.results data frame
-#' @return A data frame with info on people and what clades they've worked on
+#' @param results_table An "author.results" or "curator.results" `data.frame`
+#' @return A `data.frame` with information on curators and what clades they've worked on
 #' @export
 make_overlap_table <- function(results_table) {
   unique.person <- unique(results_table$person)
@@ -104,7 +104,7 @@ make_overlap_table <- function(results_table) {
 }
 
 #' Associate TreeBase authors with studies
-#' @return data.frame with author last name, author first and other names, and comma delimited URLs for TreeBase studies
+#' @return `data.frame` with author last name, author first and other names, and comma delimited URLs for TreeBase studies
 #'
 make_treebase_associations <- function() {
   all.studies <- treebase::download_metadata("", by = "all")
@@ -131,7 +131,7 @@ make_treebase_associations <- function() {
 }
 
 #' Associate Open Tree of Life authors with studies
-#' @return data.frame with author last name, author first and other names, and comma delimited URLs for OToL studies
+#' @return `data.frame` with author last name, author first and other names, and comma delimited URLs for OToL studies
 make_otol_associations <- function() {
   # .res <- system("curl -X POST https://api.opentreeoflife.org/v3/studies/find_studies -H 'content-type:application/json'", intern=TRUE)
   # .res <- httr::POST("https://api.opentreeoflife.org/v3/studies/find_studies")
@@ -199,8 +199,8 @@ make_otol_associations <- function() {
 }
 
 #' Find all authors and where they have deposited their trees
-#' @param outputfile Path including file name. NULL to prevent saving
-#' @return a data.frame of person and urls
+#' @param outputfile Path including file name. NULL to prevent saving.
+#' @return a `data.frame` of "person" and "urls"
 #' @export
 make_all_associations <- function(outputfile = "depositorcache.RData") {
   tb <- make_treebase_associations()

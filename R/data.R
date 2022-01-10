@@ -222,7 +222,7 @@
 #' Generated with:
 #' felid_spp <- make_datelife_query(input = "felidae", get_spp_from_taxon = TRUE)
 #' felid_gdr <- get_datelife_result(input = felid_spp, get_spp_from_taxon = TRUE)
-#' felid_sdm <- datelife_result_sdm(felid_gdr)
+#' felid_sdm <- datelife_result_sdm_phylo(felid_gdr)
 #' usethis::use_data(felid_sdm)
 "felid_sdm"
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_phylo.R
 \name{summarize_summary_matrix}
 \alias{summarize_summary_matrix}
-\title{Internal for summary_matrix_to_phylo().}
+\title{Internal function used in summary_matrix_to_phylo().}
 \usage{
 summarize_summary_matrix(summ_matrix)
 }
@@ -10,5 +10,5 @@ summarize_summary_matrix(summ_matrix)
 \item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
 }
 \description{
-Internal for summary_matrix_to_phylo().
+Internal function used in summary_matrix_to_phylo().
 }

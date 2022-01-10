@@ -2,16 +2,16 @@
 % Please edit documentation in R/datelife_sdm.R
 \name{get_goodmatrices}
 \alias{get_goodmatrices}
-\title{Get good matrices for SDM}
+\title{Get indices of good matrices to apply Super Distance Matrix (SDM) method with \code{\link[=get_sdm]{get_sdm()}}.}
 \usage{
 get_goodmatrices(unpadded.matrices)
 }
 \arguments{
-\item{unpadded.matrices}{A list of patristic matrices, a datelifeResult object.}
+\item{unpadded.matrices}{A list of patristic matrices, a \code{datelifeResult} object.}
 }
 \value{
 A numeric vector of good matrix indices in unpadded.matrices.
 }
 \description{
-Get good matrices for SDM
+Get indices of good matrices to apply Super Distance Matrix (SDM) method with \code{\link[=get_sdm]{get_sdm()}}.
 }

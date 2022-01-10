@@ -2,13 +2,14 @@
 % Please edit documentation in R/to_phylo.R
 \name{choose_cluster}
 \alias{choose_cluster}
-\title{Choose an ultrametric phylo object from cluster_patristicmatrix obtained with a particular clustering method, or the next best tree.
-If there are not any ultrametric trees, it does not force them.}
+\title{Choose an ultrametric phylo object from \code{\link[=cluster_patristicmatrix]{cluster_patristicmatrix()}} obtained
+with a particular clustering method, or the next best tree.
+If there are no ultrametric trees, it does not force them to be ultrametric.}
 \usage{
 choose_cluster(phycluster, clustering_method = "nj")
 }
 \arguments{
-\item{phycluster}{An output from cluster_patristicmatrix}
+\item{phycluster}{An output from \code{\link[=cluster_patristicmatrix]{cluster_patristicmatrix()}}}
 
 \item{clustering_method}{A character vector indicating the method to construct the tree. Options are
 \describe{
@@ -20,9 +21,10 @@ choose_cluster(phycluster, clustering_method = "nj")
 }}
 }
 \value{
-A phylo object or NA
+A \code{phylo} object or \code{NA}.
 }
 \description{
-Choose an ultrametric phylo object from cluster_patristicmatrix obtained with a particular clustering method, or the next best tree.
-If there are not any ultrametric trees, it does not force them.
+Choose an ultrametric phylo object from \code{\link[=cluster_patristicmatrix]{cluster_patristicmatrix()}} obtained
+with a particular clustering method, or the next best tree.
+If there are no ultrametric trees, it does not force them to be ultrametric.
 }
