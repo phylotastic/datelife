@@ -156,11 +156,16 @@ get_taxon_summary <- function(datelife_result = NULL,
 #'   most taxa (`criterion = "taxa"`). Defaults to `criterion = "taxa"`.
 #' @return The output is determined by the argument `summary_format`:
 #' \describe{
-#'   \item{If `summary_format = "citations"`}{The function returns a character vector of references.}
-#'   \item{If `summary_format = "mrca"`}{The function returns a named numeric vector of most recent common ancestor (mrca) ages.
-#'   \item{If `summary_format = "newick_{all, sdm, or median}"`}{The function returns output chronograms as newick strings.
-#'   \item{If `summary_format = "phylo_{all, sdm, median, or biggest}"`}{The function returns output chronograms as `phylo` or `multiPhylo` objects.
-#'   \item{If `summary_format = "html" or "data_frame"`}{The function returns a 4 column table with data on mrca ages, number of taxa, references, and output chronograms as newick strings.
+#'   \item{If `summary_format = "citations"`}{The function returns a character
+#'     vector of references.}
+#'   \item{If `summary_format = "mrca"`}{The function returns a named numeric
+#'     vector of most recent common ancestor (mrca) ages.}
+#'   \item{If `summary_format = "newick_[all, sdm, or median]"`}{The function
+#'     returns output chronograms as newick strings.}
+#'   \item{If `summary_format = "phylo_[all, sdm, median, or biggest]"`}{The
+#'     function returns output chronograms as `phylo` or `multiPhylo` objects.}
+#'   \item{If `summary_format = "html" or "data_frame"`}{The function returns a
+#'     4 column table with data on mrca ages, number of taxa, references, and output chronograms as newick strings.}
 #' }
 #' @export
 summarize_datelife_result <- function(datelife_result = NULL,

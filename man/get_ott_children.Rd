@@ -26,15 +26,16 @@ Use this instead of \code{\link[rotl:tol_subtree]{rotl::tol_subtree()}} when tax
 you still need to get all species or an induced OpenTree subtree
 }
 \examples{
-# try getting an otol tree of a taxon missing from the synthetic tree
-# tnrs <- rotl::tnrs_match_names("Mus")
+# An example with the dog genus:
+
+# It is currently not possible to get an OpenTree subtree of a taxon that is missing from the OpenTree synthetic tree.
+The dog genus is not monophyletic in the OpenTree synthetic tree, so in practice, it has no node to extract a subtree from.
 tnrs <- tnrs_match("Canis")
-# Mus, Gleicheniales, Polypodiales, etc., are missing in synth tree too
 \dontrun{ # This is a flag for package development. You are welcome to run the example.
 rotl::tol_subtree(tnrs$ott_id[1])
 #> Error: HTTP failure: 400
 #> [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
-}
+} # end dontrun
 ids <- tnrs$ott_id[1]
 names(ids) <- tnrs$unique_name
 children <- get_ott_children(ott_ids = ids) # or
@@ -45,7 +46,7 @@ names(ids) <- rownames(children$Canis)
 tree_children <- datelife::get_otol_synthetic_tree(ott_ids = ids)
 plot(tree_children, cex = 0.3)
 
-# Other example:
+# An example with flowering plants:
 
 \dontrun{ # This is a flag for package development. You are welcome to run the example.
 oo <- get_ott_children(input = "magnoliophyta", ott_rank = "order")

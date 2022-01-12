@@ -2,7 +2,7 @@
 % Please edit documentation in R/use_calibrations_treePL.R
 \name{use_calibrations_treePL}
 \alias{use_calibrations_treePL}
-\title{Use calibrations to date a tree with branch lengths with treePL.}
+\title{Date a tree with initial branch lengths with treePL.}
 \usage{
 use_calibrations_treePL(phy, calibrations)
 }
@@ -16,7 +16,7 @@ names in \code{phy}, usually obtained with \code{\link[=get_all_calibrations]{ge
 A phylo object
 }
 \description{
-Use calibrations to date a tree with branch lengths with treePL.
+Date a tree with initial branch lengths with treePL.
 }
 \details{
 This function uses treePL as described in Smith, S. A., & O’Meara, B. C. (2012).

@@ -1,4 +1,4 @@
-#' Use calibrations to date a tree with branch lengths with treePL.
+#' Date a tree with initial branch lengths with treePL.
 #' @inheritParams use_calibrations_bladj
 #' @return A phylo object
 #' @details
@@ -25,7 +25,7 @@ use_calibrations_treePL <- function(phy, calibrations) {
     return(NA)
   }
   if (any(phy$edge.length < 0)) {
-    message("phy has negative branch lengths. treePL fixes this to be able to run, but asigning them to 0 right now.")
+    message("phy has negative branch lengths. treePL fixes this to run, asigning them to 0 right now.")
     phy <- tree_fix_brlen(phy)
   }
   # fix any negative branch lengths?
@@ -115,6 +115,12 @@ use_calibrations_treePL <- function(phy, calibrations) {
 # ape::axisPhylo()
 # chr <- use_calibrations_treePL(phy = catsanddogs_phyloall[[1]], calibrations = catsanddogs_calibrations)
 
+#'
+#'
+#'
+#'
+#'
+#'
 treePL.phylo <- function(phy, calibrations = NULL, base = "", rm = TRUE, ...) {
   phy$node.label <- NULL
   if (!is.null(calibrations)) {

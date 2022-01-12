@@ -16,8 +16,8 @@ Authors@R: c(
   person("Mike", "Alfaro", role=c("aut")),
   person("Luna L.", "Sanchez Reyes", email = "sanchez.reyes.luna@gmail.com", role=c("aut", "cre")),
   person("Emily Jane", "McTavish", role=c("ctb")))
-Description: Methods and workflows to get chronograms, or phylogenetic trees with branch lengths
-    proportional to time, using available scientific data on time of lineage divergence.
+Description: Methods and workflows to get chronograms (i.e., phylogenetic trees with branch lengths
+    proportional to time), using open, peer-reviwed, state-of-the-art scientific data on time of lineage divergence.
     This package constitutes the main underlying code of the DateLife web service
     at <www.datelife.org>. To obtain a single summary chronogram from a group of
     relevant chronograms, we implement the Super Distance Matrix (SDM) method

@@ -24,7 +24,7 @@ Get the ott id and name of all lineages from one or more input taxa
 taxa <- c("Homo", "Bacillus anthracis", "Apis", "Salvia")
 lin <- get_ott_lineage(taxa)
 lin
-# Look up an unknown ott id:
+# Look up an unknown OTT id:
 get_ott_lineage(ott_id = 454749)
-}
+} # end dontrun
 }

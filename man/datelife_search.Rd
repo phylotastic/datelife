@@ -115,11 +115,16 @@ most taxa (\code{criterion = "taxa"}). Defaults to \code{criterion = "taxa"}.}
 \value{
 The output is determined by the argument \code{summary_format}:
 \describe{
-\item{If \code{summary_format = "citations"}}{The function returns a character vector of references.}
-\item{If \code{summary_format = "mrca"}}{The function returns a named numeric vector of most recent common ancestor (mrca) ages.
-\item{If \code{summary_format = "newick_{all, sdm, or median}"}}{The function returns output chronograms as newick strings.
-\item{If \code{summary_format = "phylo_{all, sdm, median, or biggest}"}}{The function returns output chronograms as \code{phylo} or \code{multiPhylo} objects.
-\item{If \verb{summary_format = "html" or "data_frame"}}{The function returns a 4 column table with data on mrca ages, number of taxa, references, and output chronograms as newick strings.
+\item{If \code{summary_format = "citations"}}{The function returns a character
+vector of references.}
+\item{If \code{summary_format = "mrca"}}{The function returns a named numeric
+vector of most recent common ancestor (mrca) ages.}
+\item{If \code{summary_format = "newick_[all, sdm, or median]"}}{The function
+returns output chronograms as newick strings.}
+\item{If \code{summary_format = "phylo_[all, sdm, median, or biggest]"}}{The
+function returns output chronograms as \code{phylo} or \code{multiPhylo} objects.}
+\item{If \verb{summary_format = "html" or "data_frame"}}{The function returns a
+4 column table with data on mrca ages, number of taxa, references, and output chronograms as newick strings.}
 }
 }
 \description{
@@ -134,19 +139,23 @@ If only one taxon name is given as \code{input}, \code{get_spp_from_taxon} is
 always set to \code{TRUE}.
 }
 \examples{
-# Obtain median ages from a set of source chronograms in newick format:
 
-\dontrun{ # This is a flag for package development. You are welcome to run the example.
+# For this example, we will set a temp working directory, but you can set
+# your working directory as needed:
+# we will use the tempdir() function to get a temporary directory:
+tempwd <- tempdir()
+
+# Obtain median ages from a set of source chronograms in newick format:
 ages <- datelife_search(c(
   "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
   "Mus musculus"
 ), summary_format = "newick_median")
 
-# Save the tree in newick format:
-write(ages, file = "some.bird.ages.txt")
+# Save the tree in the temp working directory in newick format:
+write(ages, file = file.path(tempwd, "some.bird.ages.txt"))
 
 # Obtain median ages from a set of source chronograms in phylo format
-# Will produce same tree as above but in `phylo` format:
+# Will produce same tree as above but in "phylo" format:
 ages.again <- datelife_search(c(
   "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
   "Mus musculus"
@@ -157,16 +166,17 @@ ape::axisPhylo()
 mtext("Time (million years ago)", side = 1, line = 2, at = (max(get("last_plot.phylo",
   envir = .PlotPhyloEnv
 )$xx) * 0.5))
-# Save phylo object in newick format
-write.tree(ages.again, file = "some.bird.tree.again.txt")
+
+# Save "phylo" object in newick format
+write.tree(ages.again, file = file.path(tempwd, "some.bird.tree.again.txt"))
 
 # Obtain MRCA ages and target chronograms from all source chronograms
-# Generate an html  output readable in any web browser:
+# Generate an htm"l output readable in any web browser:
 ages.html <- datelife_search(c(
   "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
   "Mus musculus"
 ), summary_format = "html")
-write(ages.html, file = "some.bird.trees.html")
-system("open some.bird.trees.html")
-}
+write(ages.html, file = file.path(tempwd, "some.bird.trees.html"))
+system(paste("open", file.path(tempwd, "some.bird.trees.html")))
+
 }

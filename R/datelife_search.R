@@ -23,19 +23,23 @@
 #' always set to `TRUE`.
 #' @inherit summarize_datelife_result return
 #' @examples
-#' # Obtain median ages from a set of source chronograms in newick format:
 #'
-#' \dontrun{ # This is a flag for package development. You are welcome to run the example.
+#' # For this example, we will set a temp working directory, but you can set
+#' # your working directory as needed:
+#' # we will use the tempdir() function to get a temporary directory:
+#' tempwd <- tempdir()
+#'
+#' # Obtain median ages from a set of source chronograms in newick format:
 #' ages <- datelife_search(c(
 #'   "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
 #'   "Mus musculus"
 #' ), summary_format = "newick_median")
 #'
-#' # Save the tree in newick format:
-#' write(ages, file = "some.bird.ages.txt")
+#' # Save the tree in the temp working directory in newick format:
+#' write(ages, file = file.path(tempwd, "some.bird.ages.txt"))
 #'
 #' # Obtain median ages from a set of source chronograms in phylo format
-#' # Will produce same tree as above but in `phylo` format:
+#' # Will produce same tree as above but in "phylo" format:
 #' ages.again <- datelife_search(c(
 #'   "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
 #'   "Mus musculus"
@@ -46,18 +50,19 @@
 #' mtext("Time (million years ago)", side = 1, line = 2, at = (max(get("last_plot.phylo",
 #'   envir = .PlotPhyloEnv
 #' )$xx) * 0.5))
-#' # Save phylo object in newick format
-#' write.tree(ages.again, file = "some.bird.tree.again.txt")
+#'
+#' # Save "phylo" object in newick format
+#' write.tree(ages.again, file = file.path(tempwd, "some.bird.tree.again.txt"))
 #'
 #' # Obtain MRCA ages and target chronograms from all source chronograms
-#' # Generate an html  output readable in any web browser:
+#' # Generate an htm"l output readable in any web browser:
 #' ages.html <- datelife_search(c(
 #'   "Rhea americana", "Pterocnemia pennata", "Struthio camelus",
 #'   "Mus musculus"
 #' ), summary_format = "html")
-#' write(ages.html, file = "some.bird.trees.html")
-#' system("open some.bird.trees.html")
-#' }
+#' write(ages.html, file = file.path(tempwd, "some.bird.trees.html"))
+#' system(paste("open", file.path(tempwd, "some.bird.trees.html")))
+#'
 #' @export
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
                             use_tnrs = FALSE,

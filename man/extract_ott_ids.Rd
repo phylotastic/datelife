@@ -3,24 +3,24 @@
 \name{extract_ott_ids}
 \alias{extract_ott_ids}
 \alias{extract_ott_ids.default}
-\title{Get ott ids from a character vector containing species names and ott ids.}
+\title{Get OTT ids from a character vector containing species names and OTT ids.}
 \usage{
 extract_ott_ids(x, na.rm = TRUE)
 
 \method{extract_ott_ids}{default}(x, na.rm = TRUE)
 }
 \arguments{
-\item{x}{A character vector of taxon names, or a phylo object with tip names containing ott ids.}
+\item{x}{A character vector of taxon names, or a phylo object with tip names containing OTT ids.}
 
-\item{na.rm}{A logical value indicating whether \code{NA} values should be stripped in the output.}
+\item{na.rm}{A logical value indicating whether \code{NA} values should be stripped from the output.}
 }
 \value{
-An object of class numeric containing ott ids only.
+An object of class numeric containing OTT ids only.
 
 \code{NULL}
 }
 \description{
-Get ott ids from a character vector containing species names and ott ids.
+Get OTT ids from a character vector containing species names and OTT ids.
 }
 \examples{
 canis <- rotl::tnrs_match_names("canis")
