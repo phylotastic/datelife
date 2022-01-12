@@ -136,13 +136,16 @@ get_taxon_summary <- function(datelife_result = NULL,
 #'   in source chronograms should be added to the output as a `"summary"` or as a
 #'   presence/absence `"matrix"`. Default to `"none"`, no information on taxon_summary
 #'   added to the output.
-#' @param criterion A character vector of one element indicating whether to get the
-#'   grove with the most trees or the most taxa, `"trees"` and `"taxa"`.
-#'   For summarizing approaches that return a single synthetic tree from a group of
-#'   chronograms, it is important that the trees leading to it form a grove (roughly,
-#'   a sufficiently overlapping set of taxa between trees (see Ané et al. 2005,
-#'   10.1007/s00026-009-0017-x). In the rare case of multiple groves, should we take
-#'   the one with the most trees or the most taxa? Default to `"taxa"`.
+#' @param criterion Used for chronogram summarizing, i.e., obtaining a single
+#'   summary chronogram from a group of input chronograms.
+#'   For summarizing approaches that return a single summary tree from a group of
+#'   phylogenetic trees, it is necessary that the latter form a grove, roughly,
+#'   a sufficiently overlapping set of taxa between trees, see Ané, C., Eulenstein,
+#'   O., Piaggio-Talice, R., & Sanderson, M. J. (2009). "Groves of phylogenetic
+#'   trees". Annals of Combinatorics, 13(2), 139-167, <doi:10.1007/s00026-009-0017-x>.
+#'   ). In rare cases, a group of trees can have multiple groves. This argument indicates
+#'   whether to get the grove with the most trees (`criterion = "trees"`) or the
+#'   most taxa (`criterion = "taxa"`). Defaults to `criterion = "taxa"`.
 #' @inherit datelife_search return details
 #' @export
 summarize_datelife_result <- function(datelife_result = NULL,
@@ -309,7 +312,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
 }
 # TODO: method to summarize a dateliferesult object
 # #' Main function to summarize a datelifeResult object
-# #' @param object A "datelifeResult" object, typically an output of \code{\link[=get_datelife_result]{get_datelife_result}.
+# #' @param object A `datelifeResult` object, typically an output of [get_datelife_result()].
 # #' @param ... further arguments passed to or from other methods
 # #' @param na.rm Boolean for whether to include partial matches
 # #' @method summary datelifeResult
@@ -326,7 +329,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
 #'
 #'
 #' @param trees A list of trees as multiPhylo or as a plain list object.
-#' @return A phylo object with a citation slot with the citation of the biggest tree
+#' @return A `phylo` object with a citation slot with the citation of the biggest tree.
 #' @export
 get_biggest_phylo <- function(trees) {
   trees <- trees[which(!is.na(trees))] # removes NAs, which will return an error later on next logical:

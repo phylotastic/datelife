@@ -7,14 +7,16 @@
 build_grove_list(datelife_result, n = 2)
 }
 \arguments{
-\item{datelife_result}{datelifeResult object (named list of patristic matrices)}
+\item{datelife_result}{A \code{datelifeResult} object.}
 
-\item{n}{Degree of overlap required}
+\item{n}{The degree of taxon name overlap among input chronograms. Defaults
+to \code{n = 2}, i.e., at least two overlapping taxon names.}
 }
 \value{
-list of vectors; each list element is a grove
+A list of vectors; each list element is a grove.
 }
 \description{
-Using theorem 1.1 of Ané et al. 10.1007/s00026-009-0017-x Groves
-of Phylogenetic Trees.
+Using theorem 1.1 of Ané, C., Eulenstein, O., Piaggio-Talice, R.,
+& Sanderson, M. J. (2009). "Groves of phylogenetic trees". Annals of
+Combinatorics, 13(2), 139-167, \url{doi:10.1007/s00026-009-0017-x}.
 }

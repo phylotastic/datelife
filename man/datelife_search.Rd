@@ -101,13 +101,16 @@ in source chronograms should be added to the output as a \code{"summary"} or as 
 presence/absence \code{"matrix"}. Default to \code{"none"}, no information on taxon_summary
 added to the output.}
 
-\item{criterion}{A character vector of one element indicating whether to get the
-grove with the most trees or the most taxa, \code{"trees"} and \code{"taxa"}.
-For summarizing approaches that return a single synthetic tree from a group of
-chronograms, it is important that the trees leading to it form a grove (roughly,
-a sufficiently overlapping set of taxa between trees (see Ané et al. 2005,
-10.1007/s00026-009-0017-x). In the rare case of multiple groves, should we take
-the one with the most trees or the most taxa? Default to \code{"taxa"}.}
+\item{criterion}{Used for chronogram summarizing, i.e., obtaining a single
+summary chronogram from a group of input chronograms.
+For summarizing approaches that return a single summary tree from a group of
+phylogenetic trees, it is necessary that the latter form a grove, roughly,
+a sufficiently overlapping set of taxa between trees, see Ané, C., Eulenstein,
+O., Piaggio-Talice, R., & Sanderson, M. J. (2009). "Groves of phylogenetic
+trees". Annals of Combinatorics, 13(2), 139-167, \url{doi:10.1007/s00026-009-0017-x}.
+). In rare cases, a group of trees can have multiple groves. This argument indicates
+whether to get the grove with the most trees (\code{criterion = "trees"}) or the
+most taxa (\code{criterion = "taxa"}). Defaults to \code{criterion = "taxa"}.}
 }
 \description{
 \code{datelife_search} is the core DateLife function to find and

@@ -11,13 +11,15 @@ is_n_overlap <- function(names_1, names_2, n = 2) {
   return(sum(names_1 %in% names_2) >= n)
 }
 
-#' Build grove matrix
+#' Find the grove for a group of chronograms and build a matrix.
 #'
-#' @description Using theorem 1.1 of Ané et al. 10.1007/s00026-009-0017-x Groves
-#' of Phylogenetic Trees
-#' @param datelife_result datelifeResult object (named list of patristic matrices)
-#' @param n Degree of overlap required
-#' @return matrix; each cell shows whether n-overlap exists between that pair of inputs
+#' @description Using theorem 1.1 of Ané, C., Eulenstein, O., Piaggio-Talice, R.,
+#'   & Sanderson, M. J. (2009). "Groves of phylogenetic trees". Annals of
+#'   Combinatorics, 13(2), 139-167, <doi:10.1007/s00026-009-0017-x>.
+#' @param datelife_result A `datelifeResult` object.
+#' @param n The degree of taxon name overlap among input chronograms. Defaults
+#'   to `n = 2`, i.e., at least two overlapping taxon names.
+#' @return A matrix. Each cell shows whether n-overlap exists between a pair of inputs.
 #' @export
 build_grove_matrix <- function(datelife_result, n = 2) {
   grove_matrix <- matrix(FALSE, nrow = length(datelife_result), ncol = length(datelife_result))
@@ -34,11 +36,9 @@ build_grove_matrix <- function(datelife_result, n = 2) {
 
 #' Build grove list
 #'
-#' @description Using theorem 1.1 of Ané et al. 10.1007/s00026-009-0017-x Groves
-#' of Phylogenetic Trees.
-#' @param datelife_result datelifeResult object (named list of patristic matrices)
-#' @param n Degree of overlap required
-#' @return list of vectors; each list element is a grove
+#' @inherit build_grove_matrix description
+#' @inheritParams build_grove_matrix
+#' @return A list of vectors; each list element is a grove.
 #' @export
 build_grove_list <- function(datelife_result, n = 2) {
   grove_matrix <- build_grove_matrix(datelife_result, n)
@@ -68,8 +68,8 @@ build_grove_list <- function(datelife_result, n = 2) {
 #' Pick a grove in the case of multiple groves in a set of trees.
 #'
 #' @param grove_list A list of vectors of tree indices. Each element is a grove.
-#' @param criterion A character vector indicating whether to get the grove with the most "trees" or the most "taxa"
-#' @param datelife_result datelifeResult object (named list of patristic matrices). Only needed for "taxa" criterion
+#' @inheritParams summarize_datelife_result
+#' @param datelife_result A `datelifeResult` object. Only needed for `criterion = "taxa"`.
 #' @return A numeric vector of the elements of the picked grove.
 #' @export
 pick_grove <- function(grove_list, criterion = "taxa", datelife_result) {
@@ -96,11 +96,10 @@ pick_grove <- function(grove_list, criterion = "taxa", datelife_result) {
   }
 }
 
-#' Filter a \code{datelifeResult} object to find the largest grove
-#' @param datelife_result datelifeResult object (named list of patristic matrices). Only needed for "taxa" criterion
-#' @param criterion Whether to get the grove with the most trees or the most taxa
-#' @param n Degree of overlap required
-#' @return A datelifeResult object filtered to only include one grove of trees
+#' Filter a \code{datelifeResult} object to find the largest grove.
+#' @inheritParams pick_grove
+#' @inheritParams build_grove_matrix
+#' @return A datelifeResult object filtered to only include one grove of trees.
 #' @export
 filter_for_grove <- function(datelife_result, criterion = "taxa", n = 2) {
   criterion <- match.arg(criterion, c("trees", "taxa"))

@@ -2,19 +2,21 @@
 % Please edit documentation in R/groves.R
 \name{build_grove_matrix}
 \alias{build_grove_matrix}
-\title{Build grove matrix}
+\title{Find the grove for a group of chronograms and build a matrix.}
 \usage{
 build_grove_matrix(datelife_result, n = 2)
 }
 \arguments{
-\item{datelife_result}{datelifeResult object (named list of patristic matrices)}
+\item{datelife_result}{A \code{datelifeResult} object.}
 
-\item{n}{Degree of overlap required}
+\item{n}{The degree of taxon name overlap among input chronograms. Defaults
+to \code{n = 2}, i.e., at least two overlapping taxon names.}
 }
 \value{
-matrix; each cell shows whether n-overlap exists between that pair of inputs
+A matrix. Each cell shows whether n-overlap exists between a pair of inputs.
 }
 \description{
-Using theorem 1.1 of Ané et al. 10.1007/s00026-009-0017-x Groves
-of Phylogenetic Trees
+Using theorem 1.1 of Ané, C., Eulenstein, O., Piaggio-Talice, R.,
+& Sanderson, M. J. (2009). "Groves of phylogenetic trees". Annals of
+Combinatorics, 13(2), 139-167, \url{doi:10.1007/s00026-009-0017-x}.
 }
