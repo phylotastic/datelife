@@ -97,10 +97,10 @@ phylo_has_brlen <- function(phy) {
 # }
 
 #' Get all chronograms from Open Tree of Life database
-#' @param max_tree_count Numeric indicating the max number of trees to be cached. For testing purposes only.
+#' @param max_tree_count Default to "all", it gets all available chronograms. For testing purposes, a numeric value indicating the max number of trees to be cached.
 #' @return A list with elements for the trees, authors, curators, and study ids.
 #' @export
-get_otol_chronograms <- function(max_tree_count = 500) {
+get_otol_chronograms <- function(max_tree_count = "all") {
   options(warn = 1)
   start_time <- Sys.time() # to register run time
   chronogram.matches <- rotl::studies_find_trees(property = "ot:branchLengthMode",
@@ -118,8 +118,10 @@ get_otol_chronograms <- function(max_tree_count = 500) {
   # utils::opentree_chronograms
   for (study.index in sequence(dim(chronogram.matches)[1])) {
     # the only purpose for this conditional is to run the testhat for this function.
-    if (tree.count > max_tree_count) {
-      break
+    if (is.numeric(max_tree_count)) {
+      if (tree.count > max_tree_count) {
+        break
+      }
     }
     message("Downloading tree(s) from study ", study.index, " of ", dim(chronogram.matches)[1])
 
@@ -214,12 +216,13 @@ get_otol_chronograms <- function(max_tree_count = 500) {
     }
   }
   if (nrow(ott_id_problems) > 0) {
+    problems_file <- paste0(getwd(), file.path("data-raw", paste0("ott_id_problems_", max_tree_count, ".csv")))
     utils::write.csv(ott_id_problems,
-      file = paste0(getwd(), "/data-raw/ott_id_problems_", max_tree_count, ".csv"),
+      file = problems_file,
       quote = FALSE, row.names = FALSE
     )
   } else {
-    write("There were no problematic chronograms.", paste0(getwd(), "/data-raw/ott_id_problems_", max_tree_count, ".csv"))
+    write("There were no problematic chronograms.", problems_file)
   }
   tot_time <- Sys.time() - start_time # end of registering function running time
   class(trees) <- "multiPhylo"
@@ -380,7 +383,7 @@ clean_ott_chronogram <- function(phy) {
 #' library(ape)
 #' plot(phy)
 #' nodelabels(phy$node.label)
-#' 
+#'
 #' } #end dontrun
 #' @export
 map_nodes_ott <- function(tree) {

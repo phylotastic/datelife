@@ -4,10 +4,10 @@
 \alias{get_otol_chronograms}
 \title{Get all chronograms from Open Tree of Life database}
 \usage{
-get_otol_chronograms(max_tree_count = 500)
+get_otol_chronograms(max_tree_count = "all")
 }
 \arguments{
-\item{max_tree_count}{Numeric indicating the max number of trees to be cached. For testing purposes only.}
+\item{max_tree_count}{Default to "all", it gets all available chronograms. For testing purposes, a numeric value indicating the max number of trees to be cached.}
 }
 \value{
 A list with elements for the trees, authors, curators, and study ids.
