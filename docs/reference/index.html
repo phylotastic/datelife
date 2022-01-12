@@ -24,7 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started with &lt;code&gt;datelife&lt;/code&gt;</a>
+    <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
   </div>
 </li>
 <li class="nav-item">
@@ -152,6 +152,11 @@ Needed because using <code>include_suppressed = FALSE</code> in <code><a href="h
           <code><a href="datelife_result_median_matrix.html">datelife_result_median_matrix()</a></code> 
         </dt>
         <dd>Function to compute median matrix of a datelifeResult object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="datelife_result_sdm_matrix.html">datelife_result_sdm_matrix()</a></code> 
+        </dt>
+        <dd>Go from a <code>datelifeResult</code> object to a Super Distance Matrix (SDM) using weighting = "flat"</dd>
       </dl><dl><dt>
           
           <code><a href="datelife_result_sdm_phylo.html">datelife_result_sdm_phylo()</a></code> 
@@ -312,11 +317,6 @@ more input taxa</dd>
         <dd>Get the ott id and name of all lineages from one or more input taxa</dd>
       </dl><dl><dt>
           
-          <code><a href="make_sdm.html">make_sdm()</a></code> 
-        </dt>
-        <dd>Get a Super Distance Matrix (SDM) from a list of good matrices obtained with <code><a href="../reference/get_goodmatrices.html">get_goodmatrices()</a></code></dd>
-      </dl><dl><dt>
-          
           <code><a href="get_subset_array_dispatch.html">get_subset_array_dispatch()</a></code> 
         </dt>
         <dd>Figure out which subset function to use. Used inside <code><a href="../reference/get_datelife_result.html">get_datelife_result()</a></code></dd>
@@ -404,6 +404,11 @@ given a set of node calibrations without any data.</dd>
           <code><a href="make_overlap_table.html">make_overlap_table()</a></code> 
         </dt>
         <dd>Create an overlap table</dd>
+      </dl><dl><dt>
+          
+          <code><a href="make_sdm.html">make_sdm()</a></code> 
+        </dt>
+        <dd>Make a Super Distance Matrix (SDM) from a list of good matrices obtained with <code><a href="../reference/get_goodmatrices.html">get_goodmatrices()</a></code></dd>
       </dl><dl><dt>
           
           <code><a href="make_treebase_associations.html">make_treebase_associations()</a></code> 
@@ -593,7 +598,7 @@ given a set of node calibrations without any data.</dd>
           
           <code><a href="summary_matrix_to_phylo.html">summary_matrix_to_phylo()</a></code> 
         </dt>
-        <dd>Go from a summary matrix to an ultrametric phylo object.</dd>
+        <dd>Go from a summary matrix to an ultrametric <code>phylo</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="summary_matrix_to_phylo_all.html">summary_matrix_to_phylo_all()</a></code> 

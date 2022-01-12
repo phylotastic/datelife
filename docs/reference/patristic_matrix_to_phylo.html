@@ -24,7 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started with &lt;code&gt;datelife&lt;/code&gt;</a>
+    <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
   </div>
 </li>
 <li class="nav-item">
@@ -72,14 +72,17 @@
     <dl><dt>patristic_matrix</dt>
 <dd><p>A patristic matrix</p></dd>
 <dt>clustering_method</dt>
-<dd><p>A character vector indicating the method to construct the tree. Options are</p><dl><dt>nj</dt>
+<dd><p>A character vector indicating the method to construct
+the tree. Options are:</p><dl><dt>nj</dt>
 <dd><p>Neighbor-Joining method applied with <code><a href="https://rdrr.io/pkg/ape/man/nj.html" class="external-link">ape::nj()</a></code>.</p></dd>
 
 <dt>upgma</dt>
-<dd><p>Unweighted Pair Group Method with Arithmetic Mean method applied with <code><a href="https://rdrr.io/pkg/phangorn/man/upgma.html" class="external-link">phangorn::upgma()</a></code>.</p></dd>
+<dd><p>Unweighted Pair Group Method with Arithmetic Mean method applied
+with <code><a href="https://rdrr.io/pkg/phangorn/man/upgma.html" class="external-link">phangorn::upgma()</a></code>.</p></dd>
 
 <dt>bionj</dt>
-<dd><p>An improved version of the Neighbor-Joining method applied with <code><a href="https://rdrr.io/pkg/ape/man/bionj.html" class="external-link">ape::bionj()</a></code>.</p></dd>
+<dd><p>An improved version of the Neighbor-Joining method applied with
+<code><a href="https://rdrr.io/pkg/ape/man/bionj.html" class="external-link">ape::bionj()</a></code>.</p></dd>
 
 <dt>triangle</dt>
 <dd><p>Triangles method applied with <code><a href="https://rdrr.io/pkg/ape/man/triangMtd.html" class="external-link">ape::triangMtd()</a></code></p></dd>
@@ -90,17 +93,28 @@
 
 </dl></dd>
 <dt>fix_negative_brlen</dt>
-<dd><p>Boolean indicating whether to fix negative branch lengths in resulting tree or not. Default to TRUE.</p></dd>
+<dd><p>Boolean indicating whether to fix negative branch
+lengths in resulting tree or not. Default to TRUE.</p></dd>
 <dt>fixing_method</dt>
 <dd><p>A character vector specifying the method to fix branch lengths: "bladj", "mrbayes" or a number to be assigned to all branches meeting fixing_criterion</p></dd>
 <dt>ultrametric</dt>
 <dd><p>Boolean indicating whether to force ultrametric or not.</p></dd>
 <dt>variance_matrix</dt>
-<dd><p>A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function. Only used if clustering_method is "mvr".</p></dd>
+<dd><p>A variance matrix from a datelifeResult list of patristic
+matrices. Usually an output from datelife_result_variance_matrix function.
+Only used if clustering_method is "mvr".</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A rooted phylo object</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>We might add the option to insert a function as clustering_method in the future.
+Before, we had hard-coded the function to try Neighbor-Joining first; if it
+errors, it will try UPGMA.
+Now, it uses nj for phylo_all summary, and we are using our own algorithm to
+get a tree from a summary matrix.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

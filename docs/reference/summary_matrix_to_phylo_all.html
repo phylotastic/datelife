@@ -24,7 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started with &lt;code&gt;datelife&lt;/code&gt;</a>
+    <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
   </div>
 </li>
 <li class="nav-item">
@@ -63,22 +63,26 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>summ_matrix</dt>
-<dd><p>A summary patristic distance matrix from sdm or median. See details.</p></dd>
+<dd><p>Any summary patristic distance matrix, such as the ones obtained with <code><a href="datelife_result_sdm_matrix.html">datelife_result_sdm_matrix()</a></code> or <code><a href="datelife_result_median_matrix.html">datelife_result_median_matrix()</a></code>.</p></dd>
 <dt>target_tree</dt>
-<dd><p>A <code>phylo</code> object. Use this in case you want a particular backbone for the output tree.</p></dd>
+<dd><p>A <code>phylo</code> object. Use this in case you want a particular
+backbone for the output tree.</p></dd>
 <dt>...</dt>
 <dd><p>Arguments passed on to <code><a href="summary_matrix_to_phylo.html">summary_matrix_to_phylo</a></code></p><dl><dt><code>total_distance</code></dt>
-<dd><p>Boolean. If TRUE it will divide the matrix in half, if FALSE it will take it as is.</p></dd>
+<dd><p>Boolean. If <code>TRUE</code> it will divide the matrix in half, if
+<code>FALSE</code> it will take it as is.</p></dd>
 
     <dt><code>use</code></dt>
-<dd><p>A character vector indicating what type of age to use for summary. One of the following</p><dl><dt>mean</dt>
+<dd><p>A character vector indicating what type of age to use for summary.
+One of the following:</p><dl><dt>mean</dt>
 <dd><p>It will use the mean of the node age distributions.</p></dd>
 
 <dt>min</dt>
 <dd><p>It will use the minimum age from the node age distributions.</p></dd>
 
 <dt>max</dt>
-<dd><p>Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.</p></dd>
+<dd><p>Choose this if you wanna be conservative; it will use the maximum
+age from the node age distributions.</p></dd>
 
 
 </dl></dd>
@@ -95,8 +99,10 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>With the function summary_matrix_to_phylo users can choose the minimum, mean or maximum ages from the summary matrix as calibration points to get a single summary chronogram.
-With this function users get all three summary chronograms in a multiphylo object.</p>
+    <p>With this function users can choose the minimum, mean  or maximum ages from
+the summary matrix as calibration points to get a single summary chronogram.
+Users get all three summary chronograms in a <code>multiPhylo</code> object.
+Modified from <code>get_all_summaries()</code> function in <code>data-raw/datelife_examples.R</code></p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

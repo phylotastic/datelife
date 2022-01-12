@@ -103,6 +103,9 @@
     <loc>/reference/datelife_result_sdm.html</loc>
   </url>
   <url>
+    <loc>/reference/datelife_result_sdm_matrix.html</loc>
+  </url>
+  <url>
     <loc>/reference/datelife_result_sdm_phylo.html</loc>
   </url>
   <url>
@@ -196,7 +199,7 @@
     <loc>/reference/get_ott_lineage.html</loc>
   </url>
   <url>
-    <loc>/reference/make_sdm.html</loc>
+    <loc>/reference/get_sdm.html</loc>
   </url>
   <url>
     <loc>/reference/get_sdm_matrix.html</loc>
@@ -257,6 +260,9 @@
   </url>
   <url>
     <loc>/reference/make_overlap_table.html</loc>
+  </url>
+  <url>
+    <loc>/reference/make_sdm.html</loc>
   </url>
   <url>
     <loc>/reference/make_treebase_associations.html</loc>
