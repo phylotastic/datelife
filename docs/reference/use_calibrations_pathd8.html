@@ -70,8 +70,8 @@
     <dl><dt>phy</dt>
 <dd><p>A <code>phylo</code> object with branch lengths.</p></dd>
 <dt>calibrations</dt>
-<dd><p>A data frame of secondary calibrations for any pair of taxon
-names in <code>phy</code>. See <code><a href="get_all_calibrations.html">get_all_calibrations</a></code>.</p></dd>
+<dd><p>A <code>data.frame</code> of secondary calibrations for any pair of taxon
+names in <code>phy</code>, usually obtained with <code><a href="get_all_calibrations.html">get_all_calibrations()</a></code>.</p></dd>
 <dt>expand</dt>
 <dd><p>How much to expand by each step to get consistent calibrations. Should be between 0 and 1.</p></dd>
 <dt>giveup</dt>
@@ -79,11 +79,15 @@ names in <code>phy</code>. See <code><a href="get_all_calibrations.html">get_all
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A phylo object with branch length proportional to time.</p>
+    <p>A <code>phylo</code> object with branch lengths proportional to time.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function will try to use the calibrations as fixed ages.
+    <p>This function implements the <a href="https://www2.math.su.se/PATHd8/" class="external-link">PATHd8</a> described in
+Britton, T., Anderson, C. L., Jacquet, D., Lundqvist, S., &amp; Bremer, K. (2007).
+"Estimating divergence times in large phylogenetic trees". Systematic biology,
+56(5), 741-752. <a href="doi:10.1080/10635150701613783">doi:10.1080/10635150701613783</a>, with <code><a href="https://rdrr.io/pkg/geiger/man/geiger-internal.html" class="external-link">geiger::PATHd8.phylo()</a></code>.
+The function first attempts to use the given calibrations as fixed ages.
 If that fails (often due to conflict between calibrations), it will expand the
 range of the minimum age and maximum age and try again. And repeat.
 If expand = 0, it uses the summarized calibrations.

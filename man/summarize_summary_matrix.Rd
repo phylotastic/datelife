@@ -7,7 +7,7 @@
 summarize_summary_matrix(summ_matrix)
 }
 \arguments{
-\item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
+\item{summ_matrix}{Any summary patristic distance matrix, such as the ones obtained with \code{\link[=datelife_result_sdm_matrix]{datelife_result_sdm_matrix()}} or \code{\link[=datelife_result_median_matrix]{datelife_result_median_matrix()}}.}
 }
 \description{
 Internal function used in summary_matrix_to_phylo().

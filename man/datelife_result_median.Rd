@@ -12,15 +12,19 @@ datelife_result_median(datelife_result, ...)
 \item{...}{
   Arguments passed on to \code{\link[=summary_matrix_to_phylo]{summary_matrix_to_phylo}}
   \describe{
-    \item{\code{summ_matrix}}{A summary patristic distance matrix from sdm or median. See details.}
-    \item{\code{total_distance}}{Boolean. If TRUE it will divide the matrix in half, if FALSE it will take it as is.}
-    \item{\code{use}}{A character vector indicating what type of age to use for summary. One of the following
+    \item{\code{summ_matrix}}{Any summary patristic distance matrix, such as the ones obtained with \code{\link[=datelife_result_sdm_matrix]{datelife_result_sdm_matrix()}} or \code{\link[=datelife_result_median_matrix]{datelife_result_median_matrix()}}.}
+    \item{\code{total_distance}}{Boolean. If \code{TRUE} it will divide the matrix in half, if
+\code{FALSE} it will take it as is.}
+    \item{\code{use}}{A character vector indicating what type of age to use for summary.
+One of the following:
 \describe{
 \item{mean}{It will use the mean of the node age distributions.}
 \item{min}{It will use the minimum age from the node age distributions.}
-\item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
+\item{max}{Choose this if you wanna be conservative; it will use the maximum
+age from the node age distributions.}
 }}
-    \item{\code{target_tree}}{A \code{phylo} object. Use this in case you want a particular backbone for the output tree.}
+    \item{\code{target_tree}}{A \code{phylo} object. Use this in case you want a particular
+backbone for the output tree.}
     \item{\code{datelife_query}}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
   }}
 }

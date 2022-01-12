@@ -3,7 +3,7 @@
 object, an output from get_datelife_result().
 This allows rapid processing of data.
 If you need a list of chronograms from your datelifeResult object, this
-is the function you are looking for."><title>Summarize a datelifeResult object — summarize_datelife_result • datelife</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Summarize a datelifeResult object — summarize_datelife_result"><meta property="og:description" content="Get different types of summaries from a datelifeResult
+is the function you are looking for."><title>Summarize a datelifeResult object. — summarize_datelife_result • datelife</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Summarize a datelifeResult object. — summarize_datelife_result"><meta property="og:description" content="Get different types of summaries from a datelifeResult
 object, an output from get_datelife_result().
 This allows rapid processing of data.
 If you need a list of chronograms from your datelifeResult object, this
@@ -54,7 +54,7 @@ is the function you are looking for."><!-- mathjax --><script src="https://cdnjs
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Summarize a <code>datelifeResult</code> object</h1>
+      <img src="" class="logo" alt=""><h1>Summarize a <code>datelifeResult</code> object.</h1>
       <small class="dont-index">Source: <a href="https://github.com/phylotastic/datelife/blob/HEAD/R/datelife_summary.R" class="external-link"><code>R/datelife_summary.R</code></a></small>
       <div class="d-none name"><code>summarize_datelife_result.Rd</code></div>
     </div>
@@ -139,7 +139,7 @@ target taxa: mrca, number of taxa, citations of source chronogram and
 newick target chronogram.</p></dd>
 
 <dt>"data_frame"</dt>
-<dd><p>A data frame with data on target taxa: mrca, number of
+<dd><p>A 4 column <code>data.frame</code> with data on target taxa: mrca, number of
 taxa, citations of source chronograms and newick string.</p></dd>
 
 
@@ -167,19 +167,41 @@ in source chronograms should be added to the output as a <code>"summary"</code> 
 presence/absence <code>"matrix"</code>. Default to <code>"none"</code>, no information on taxon_summary
 added to the output.</p></dd>
 <dt>criterion</dt>
-<dd><p>A character vector of one element indicating whether to get the
-grove with the most trees or the most taxa, <code>"trees"</code> and <code>"taxa"</code>.
-For summarizing approaches that return a single synthetic tree from a group of
-chronograms, it is important that the trees leading to it form a grove (roughly,
-a sufficiently overlapping set of taxa between trees (see Ané et al. 2005,
-10.1007/s00026-009-0017-x). In the rare case of multiple groves, should we take
-the one with the most trees or the most taxa? Default to <code>"taxa"</code>.</p></dd>
+<dd><p>Used for chronogram summarizing, i.e., obtaining a single
+summary chronogram from a group of input chronograms.
+For summarizing approaches that return a single summary tree from a group of
+phylogenetic trees, it is necessary that the latter form a grove, roughly,
+a sufficiently overlapping set of taxa between trees, see Ané, C., Eulenstein,
+O., Piaggio-Talice, R., &amp; Sanderson, M. J. (2009). "Groves of phylogenetic
+trees". Annals of Combinatorics, 13(2), 139-167, <a href="doi:10.1007/s00026-009-0017-x">doi:10.1007/s00026-009-0017-x</a>.
+In rare cases, a group of trees can have multiple groves. This argument indicates
+whether to get the grove with the most trees (<code>criterion = "trees"</code>) or the
+most taxa (<code>criterion = "taxa"</code>). Defaults to <code>criterion = "taxa"</code>.</p></dd>
 </dl></div>
     <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>If only one taxon name is given as <code>input</code>, <code>get_spp_from_taxon</code> is
-always set to <code>TRUE</code>.</p>
-    </div>
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>The output is determined by the argument <code>summary_format</code>:</p><dl><dt>If <code>summary_format = "citations"</code></dt>
+<dd><p>The function returns a character
+vector of references.</p></dd>
+
+<dt>If <code>summary_format = "mrca"</code></dt>
+<dd><p>The function returns a named numeric
+vector of most recent common ancestor (mrca) ages.</p></dd>
+
+<dt>If <code>summary_format = "newick_[all, sdm, or median]"</code></dt>
+<dd><p>The function
+returns output chronograms as newick strings.</p></dd>
+
+<dt>If <code>summary_format = "phylo_[all, sdm, median, or biggest]"</code></dt>
+<dd><p>The
+function returns output chronograms as <code>phylo</code> or <code>multiPhylo</code> objects.</p></dd>
+
+<dt>If <code>summary_format = "html" or "data_frame"</code></dt>
+<dd><p>The function returns a
+4 column table with data on mrca ages, number of taxa, references, and output chronograms as newick strings.</p></dd>
+
+
+</dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

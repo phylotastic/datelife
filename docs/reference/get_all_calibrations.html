@@ -83,14 +83,15 @@ object, OR as a newick character string.</p></dd>
 </dl></dd>
 <dt>each</dt>
 <dd><p>Boolean, default to <code>FALSE</code>: all calibrations are returned in
-the same data frame. If <code>TRUE</code>, calibrations from each chronogram are returned
+the same <code>data.frame</code>. If <code>TRUE</code>, calibrations from each chronogram are returned
 in separate data frames.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>datelifeCalibrations</code> -- a <code>data frame</code>of secondary calibrations (or list of <code>data frames</code>, if <code>each = TRUE</code>),
-for each pair of taxon names in <code>input</code>. The attribute <code>chronograms</code> stores
-the source data from which the calibrations were extracted.</p>
+    <p>An object of class <code>datelifeCalibrations</code>, i.e., a <code>data.frame</code> (if
+<code>each = FALSE</code>) or a list of <code>data.frames</code> (if <code>each = TRUE</code>) of secondary
+calibrations, for each pair of taxon names in <code>input</code>. The attribute
+<code>chronograms</code> stores the <code>input</code> data from which the calibrations were extracted.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

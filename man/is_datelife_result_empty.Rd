@@ -14,7 +14,8 @@ to process input taxon names. Default to \code{TRUE}, it corrects misspellings a
 taxonomic name variations.}
 }
 \value{
-Boolean. If \code{TRUE}, no chronograms were found for the given taxon name(s). If \code{FALSE}, the chronogram search was successful.
+Boolean. If \code{TRUE}, no chronograms were found for the given taxon name(s).
+If \code{FALSE}, the chronogram search was successful.
 }
 \description{
 Check if we obtained an empty search with the given taxon name(s).

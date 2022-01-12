@@ -1,22 +1,36 @@
 #' Convert a patristic matrix to a `phylo` object. Used inside [summarize_datelife_result()].
 #' @param patristic_matrix A patristic matrix
-#' @param clustering_method A character vector indicating the method to construct the tree. Options are
+#' @param clustering_method A character vector indicating the method to construct
+#' the tree. Options are:
 #' \describe{
 #' 	\item{nj}{Neighbor-Joining method applied with [ape::nj()].}
-#' 	\item{upgma}{Unweighted Pair Group Method with Arithmetic Mean method applied with [phangorn::upgma()].}
-#' 	\item{bionj}{An improved version of the Neighbor-Joining method applied with [ape::bionj()].}
+#' 	\item{upgma}{Unweighted Pair Group Method with Arithmetic Mean method applied
+#'        with [phangorn::upgma()].}
+#' 	\item{bionj}{An improved version of the Neighbor-Joining method applied with
+#'       [ape::bionj()].}
 #' 	\item{triangle}{Triangles method applied with [ape::triangMtd()]}
 #' 	\item{mvr}{Minimum Variance Reduction method applied with [ape::mvr()].}
 #' }
-# We might add the option to insert a function as clustering_method.
-# Before, we hard coded it to try Neighbor-Joining first; if it errors, it will try UPGMA.
-# Now, it uses nj for phylo_all summary, and we are using our own algorithm to get a tree from a summary matrix
-#' @param fix_negative_brlen Boolean indicating whether to fix negative branch lengths in resulting tree or not. Default to TRUE.
-#' @param variance_matrix A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function. Only used if clustering_method is "mvr".
+#' @details
+#' We might add the option to insert a function as clustering_method in the future.
+#' Before, we had hard-coded the function to try Neighbor-Joining first; if it
+#'  errors, it will try UPGMA.
+#' Now, it uses nj for phylo_all summary, and we are using our own algorithm to
+#'  get a tree from a summary matrix.
+#' @param fix_negative_brlen Boolean indicating whether to fix negative branch
+#'  lengths in resulting tree or not. Default to TRUE.
+#' @param variance_matrix A variance matrix from a datelifeResult list of patristic
+#'  matrices. Usually an output from datelife_result_variance_matrix function.
+#'  Only used if clustering_method is "mvr".
 #' @inheritParams tree_fix_brlen
 #' @return A rooted phylo object
 #' @export
-patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj", fix_negative_brlen = TRUE, fixing_method = 0, ultrametric = TRUE, variance_matrix = NULL) {
+patristic_matrix_to_phylo <- function(patristic_matrix,
+                                      clustering_method = "nj",
+                                      fix_negative_brlen = TRUE,
+                                      fixing_method = 0,
+                                      ultrametric = TRUE,
+                                      variance_matrix = NULL) {
   # patristic_matrix <- threebirds_result[[5]]
   if (!inherits(patristic_matrix, "matrix") & !inherits(patristic_matrix, "data.frame")) {
     message("patristic_matrix argument is not a matrix")
@@ -26,7 +40,9 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
   if (inherits(patristic_matrix, "data.frame")) {
     patristic_matrix <- as.matrix(patristic_matrix)
   }
-  clustering_method <- match.arg(arg = tolower(clustering_method), choices = c("nj", "upgma", "bionj", "triangle", "mvr"), several.ok = FALSE)
+  clustering_method <- match.arg(arg = tolower(clustering_method),
+                                 choices = c("nj", "upgma", "bionj", "triangle", "mvr"),
+                                 several.ok = FALSE)
   if (anyNA(patristic_matrix)) {
     patristic_matrix <- patristic_matrix[rowSums(is.na(patristic_matrix)) != ncol(patristic_matrix), colSums(is.na(patristic_matrix)) != nrow(patristic_matrix)]
   } # Get rid of rows and columns with all NA or NaNs, leaves the ones with some NA or NaNs
@@ -314,20 +330,25 @@ summarize_summary_matrix <- function(summ_matrix) {
   # SDM summary matrix sometimes has negative values, bc ages are transformed to be approximated in a similar way as a linear regression
   return(calibrations)
 }
-#' Go from a summary matrix to an ultrametric phylo object.
-#' @param summ_matrix A summary patristic distance matrix from sdm or median. See details.
+#' Go from a summary matrix to an ultrametric `phylo` object.
+#' @param summ_matrix Any summary patristic distance matrix, such as the ones obtained with [datelife_result_sdm_matrix()] or [datelife_result_median_matrix()].
 #' @inheritParams get_taxon_summary
-#' @param total_distance Boolean. If TRUE it will divide the matrix in half, if FALSE it will take it as is.
-#' @param use A character vector indicating what type of age to use for summary. One of the following
+#' @param total_distance Boolean. If `TRUE` it will divide the matrix in half, if
+#'  `FALSE` it will take it as is.
+#' @param use A character vector indicating what type of age to use for summary.
+#'  One of the following:
 #' \describe{
 #' 	\item{mean}{It will use the mean of the node age distributions.}
 #' 	\item{min}{It will use the minimum age from the node age distributions.}
-#' 	\item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
+#' 	\item{max}{Choose this if you wanna be conservative; it will use the maximum
+#'        age from the node age distributions.}
 #' }
-#' @param target_tree A `phylo` object. Use this in case you want a particular backbone for the output tree.
+#' @param target_tree A `phylo` object. Use this in case you want a particular
+#'  backbone for the output tree.
 #' @inheritDotParams get_otol_synthetic_tree
 #' @return An ultrametric phylo object.
-#' @details It can take a regular patristic distance matrix, but there are simpler methods for that implemented in [patristic_matrix_to_phylo()].
+#' @details It can take a regular patristic distance matrix, but there are simpler
+#'  methods for that implemented in [patristic_matrix_to_phylo()].
 #' @export
 # #' @examples
 # #' summary_matrix_to_phylo(summ_matrix, use = "median")
@@ -466,9 +487,10 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
 #' @inheritDotParams summary_matrix_to_phylo
 #' @return A `multiPhylo` object of length 3. It contains min, mean and max summary chronograms.
 #' @details
-#' With the function summary_matrix_to_phylo users can choose the minimum, mean or maximum ages from the summary matrix as calibration points to get a single summary chronogram.
-#' With this function users get all three summary chronograms in a multiphylo object.
-# modified from get_all_summaries function from datelife_examples
+#' With this function users can choose the minimum, mean  or maximum ages from
+#' the summary matrix as calibration points to get a single summary chronogram.
+#' Users get all three summary chronograms in a `multiPhylo` object.
+#' Modified from `get_all_summaries()` function in `data-raw/datelife_examples.R`
 #' @export
 summary_matrix_to_phylo_all <- function(summ_matrix, target_tree = NULL, ...) {
   tmean <- summary_matrix_to_phylo(summ_matrix = summ_matrix, use = "mean", target_tree = target_tree, ...)

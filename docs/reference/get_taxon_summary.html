@@ -67,6 +67,22 @@
 <dt>datelife_query</dt>
 <dd><p>A <code>datelifeQuery</code> object, output of <code><a href="make_datelife_query.html">make_datelife_query()</a></code>.</p></dd>
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A <code>datelifeTaxonSummary</code> object, which is a list of 4 elements:</p><dl><dt>$matrix</dt>
+<dd><p>Data as a presence/absence matrix of taxon names across chronograms.</p></dd>
+
+<dt>$summary</dt>
+<dd><p>A <code>data.frame</code> with taxon names as <code><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names()</a></code> and two columns, one with the number of chronograms that contain a taxon name and the other one with the total number of chronograms that have at least 2 taxon names.</p></dd>
+
+<dt>$summary2</dt>
+<dd><p>A <code>data.frame</code> with chronogram citations as <code><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names()</a></code> and two columns, one with the number of taxon names found in each chronogram and the other one with the total number of taxon names.</p></dd>
+
+<dt>$absent_taxa</dt>
+<dd><p>A character vector of taxon names that are not found in the chronogram database.</p></dd>
+
+
+</dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

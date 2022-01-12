@@ -327,8 +327,10 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
 #' @examples
 #' # An example with the dog genus:
 #'
-#' # It is currently not possible to get an OpenTree subtree of a taxon that is missing from the OpenTree synthetic tree.
-#' The dog genus is not monophyletic in the OpenTree synthetic tree, so in practice, it has no node to extract a subtree from.
+#' # It is currently not possible to get an OpenTree subtree of a taxon that is
+#' #  missing from the OpenTree synthetic tree.
+#' # The dog genus is not monophyletic in the OpenTree synthetic tree, so in
+#' #  practice, it has no node to extract a subtree from.
 #' tnrs <- tnrs_match("Canis")
 #' \dontrun{ # This is a flag for package development. You are welcome to run the example.
 #' rotl::tol_subtree(tnrs$ott_id[1])
@@ -349,8 +351,9 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
 #'
 #' \dontrun{ # This is a flag for package development. You are welcome to run the example.
 #' oo <- get_ott_children(input = "magnoliophyta", ott_rank = "order")
-#' sum(oo$Magnoliophyta$rank == "order") # to know how many orders of flowering plants we have
-#' }
+#' # Get the number of orders of flowering plants that we have
+#' sum(oo$Magnoliophyta$rank == "order")
+#' } # end dontrun
 #' @export
 # children <- get_ott_children(input = "Fringillidae")
 # rotl::tol_subtree(ott_id = 839319) #broken taxa

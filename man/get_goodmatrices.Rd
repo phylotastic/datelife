@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_sdm.R
 \name{get_goodmatrices}
 \alias{get_goodmatrices}
-\title{Get indices of good matrices to apply Super Distance Matrix (SDM) method with \code{\link[=get_sdm]{get_sdm()}}.}
+\title{Get indices of good matrices to apply Super Distance Matrix (SDM) method with \code{\link[=make_sdm]{make_sdm()}}.}
 \usage{
 get_goodmatrices(unpadded.matrices)
 }
@@ -13,5 +13,5 @@ get_goodmatrices(unpadded.matrices)
 A numeric vector of good matrix indices in unpadded.matrices.
 }
 \description{
-Get indices of good matrices to apply Super Distance Matrix (SDM) method with \code{\link[=get_sdm]{get_sdm()}}.
+Get indices of good matrices to apply Super Distance Matrix (SDM) method with \code{\link[=make_sdm]{make_sdm()}}.
 }

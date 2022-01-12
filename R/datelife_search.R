@@ -10,9 +10,10 @@
 #' @aliases datelife
 #' @param input One of the following:
 #' \describe{
-#' 	 \item{A character vector}{With taxon names as a single comma separated starting or concatenated with [c()].}
-#' 	 \item{A phylogenetic tree with taxon names as tip labels}{As a `phylo` or `multiPhylo`
-#' 	 			object, OR as a newick character string.}
+#' 	 \item{A character vector}{With taxon names as a single comma separated
+#' 	 	 starting or concatenated with [c()].}
+#' 	 \item{A phylogenetic tree with taxon names as tip labels}{As a `phylo` or
+#' 	 	 `multiPhylo` object, OR as a newick character string.}
 #' 	\item{A `datelifeQuery` object}{An output from [make_datelife_query()].}
 #' 	}
 #' @inheritParams make_datelife_query
@@ -122,7 +123,8 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 #' Check if we obtained an empty search with the given taxon name(s).
 #' @inheritParams summarize_datelife_result
 #' @inheritParams datelife_search
-#' @return Boolean. If `TRUE`, no chronograms were found for the given taxon name(s). If `FALSE`, the chronogram search was successful.
+#' @return Boolean. If `TRUE`, no chronograms were found for the given taxon name(s).
+#' If `FALSE`, the chronogram search was successful.
 #' @export
 is_datelife_result_empty <- function(datelife_result,
                                      use_tnrs = FALSE) {

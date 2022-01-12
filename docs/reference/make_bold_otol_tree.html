@@ -108,10 +108,10 @@ with <code><a href="https://rdrr.io/pkg/phangorn/man/pml.html" class="external-l
 <dd><p>A character vector indicating whether to use MAFFT or MUSCLE
 to align BOLD sequences. It is not case sensitive. Default to MUSCLE,
 supported using the <a href="https://bioconductor.org/packages/release/bioc/html/msa.html" class="external-link">msa</a>
-package from Bioconductor. Needs to be installed using <code><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">BiocManager::install()</a></code>.</p></dd>
+package from Bioconductor, which needs to be installed using <code><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">BiocManager::install()</a></code>.</p></dd>
 <dt>...</dt>
 <dd><p>Arguments passed on to <code><a href="get_otol_synthetic_tree.html">get_otol_synthetic_tree</a></code></p><dl><dt><code>resolve</code></dt>
-<dd><p>boolean; default to TRUE. Whether to resolve the tree at random or not.</p></dd>
+<dd><p>Defaults to <code>TRUE</code>. Whether to resolve the tree at random or not.</p></dd>
 
     <dt><code>ott_ids</code></dt>
 <dd><p>If not NULL, it takes this argument and ignores input. A
@@ -123,16 +123,18 @@ numeric vector of ott ids obtained with <code><a href="https://docs.ropensci.org
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A phylogeny with branch lengths proportional to relative substitution rate.</p>
+    <p>A <code>phylo</code> object. If there are enough BOLD sequences available for the
+<code>input</code> taxon names, the function returns a tree with branch lengths proportional
+to relative substitution rate. If not enough BOLD sequences are available
+for the <code>input</code> taxon names, the function returns the topology given as
+<code>input</code>, or a synthetic Open Tree of Life for the taxon names given in
+<code>input</code>, obtained with <code><a href="get_otol_synthetic_tree.html">get_otol_synthetic_tree()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>If input is a phylo object or a newick string, it is used as backbone topology.
-If input is a character vector of taxon names, an induced synthetic OpenTree
-subtree is used as backbone.
-If there are not enough sequences to return a tree with branch lengths, it returns
-either the original input topology or the synthetic OpenTree subtree obtained
-for the input taxon names.</p>
+    <p>If <code>input</code> is a <code>phylo</code> object or a newick string, it is used as backbone topology.
+If <code>input</code> is a character vector of taxon names, an induced synthetic OpenTree
+subtree is used as backbone.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

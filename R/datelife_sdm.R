@@ -3,7 +3,7 @@
 #'
 #'
 #' @inheritParams summarize_datelife_result
-#' @inheritParams get_sdm
+#' @inheritParams make_sdm
 #' @inheritDotParams summary_matrix_to_phylo
 #' @return A supertree with branch lengths proportional to time, obtained by
 #' summarizing individual chronograms given as input in `datelife_result`.
@@ -33,7 +33,7 @@ datelife_result_sdm_phylo <- function(datelife_result,
     good.matrix.indices <- get_goodmatrices(unpadded.matrices)
     if (length(good.matrix.indices) > 1) {
       unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-      SDM.result <- get_sdm(unpadded.matrices, weighting)
+      SDM.result <- make_sdm(unpadded.matrices, weighting)
       # it is important to use upgma as clustering method; nj produces much younger ages when the matrix comes from sdm
       # phy <- patristic_matrix_to_phylo(SDM.result, clustering_method = clustering_method, fix_negative_brlen = TRUE)
       phy <- summary_matrix_to_phylo(SDM.result, ...) # this also contains the age distributions and calibrations used
@@ -65,7 +65,7 @@ patristic_matrix_unpad <- function(patristic_matrix) {
   return(patristic_matrix)
 }
 
-#' Get a Super Distance Matrix (SDM) from a list of good matrices obtained with [get_goodmatrices()]
+#' Make a Super Distance Matrix (SDM) from a list of good matrices obtained with [get_goodmatrices()]
 #' @param unpadded.matrices A list of patristic matrices, a `datelifeResult` object.
 #' @param weighting A character vector indicating how much weight to give to each
 #' tree in `input` during the SDM analysis. Options are:
@@ -77,7 +77,7 @@ patristic_matrix_unpad <- function(patristic_matrix) {
 #' Defaults to `weighting = "flat"`.
 #' @return A matrix.
 #' @export
-get_sdm <- function(unpadded.matrices, weighting = "flat") {
+make_sdm <- function(unpadded.matrices, weighting = "flat") {
   # used.studies <- used.studies[good.matrix.indices]
   weights <- rep(1, length(unpadded.matrices))
   if (weighting == "taxa") {
@@ -90,8 +90,8 @@ get_sdm <- function(unpadded.matrices, weighting = "flat") {
   SDM.result <- do.call(ape::SDM, c(unpadded.matrices, weights))[[1]]
   return(SDM.result)
 }
-#' Get indices of good matrices to apply Super Distance Matrix (SDM) method with [get_sdm()].
-#' @inheritParams get_sdm
+#' Get indices of good matrices to apply Super Distance Matrix (SDM) method with [make_sdm()].
+#' @inheritParams make_sdm
 #' @return A numeric vector of good matrix indices in unpadded.matrices.
 #' @export
 get_goodmatrices <- function(unpadded.matrices) {
@@ -111,16 +111,16 @@ get_goodmatrices <- function(unpadded.matrices) {
   }
   return(good.matrix.indices)
 }
-# #' Get a Super Distance Matrix from [get_goodmatrices()], using weighting = "flat"
-# #' @inheritParams summarize_datelife_result
-# #' @return A numeric matrix.
-# #' @export
-# get_sdm_matrix <- function(datelife_result) {
-#   unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
-#   good.matrix.indices <- get_goodmatrices(unpadded.matrices)
-#   if (length(good.matrix.indices) > 1) {
-#     unpadded.matrices <- unpadded.matrices[good.matrix.indices]
-#     sdm_matrix <- get_sdm(unpadded.matrices, weighting = "flat")
-#   }
-#   return(sdm_matrix)
-# }
+#' Go from a `datelifeResult` object to a Super Distance Matrix (SDM) using weighting = "flat"
+#' @inheritParams summarize_datelife_result
+#' @return A numeric matrix.
+#' @export
+datelife_result_sdm_matrix <- function(datelife_result) {
+  unpadded.matrices <- lapply(datelife_result, patristic_matrix_unpad)
+  good.matrix.indices <- get_goodmatrices(unpadded.matrices)
+  if (length(good.matrix.indices) > 1) {
+    unpadded.matrices <- unpadded.matrices[good.matrix.indices]
+    sdm_matrix <- make_sdm(unpadded.matrices, weighting = "flat")
+  }
+  return(sdm_matrix)
+}

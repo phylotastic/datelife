@@ -16,26 +16,39 @@ patristic_matrix_to_phylo(
 \arguments{
 \item{patristic_matrix}{A patristic matrix}
 
-\item{clustering_method}{A character vector indicating the method to construct the tree. Options are
+\item{clustering_method}{A character vector indicating the method to construct
+the tree. Options are:
 \describe{
 \item{nj}{Neighbor-Joining method applied with \code{\link[ape:nj]{ape::nj()}}.}
-\item{upgma}{Unweighted Pair Group Method with Arithmetic Mean method applied with \code{\link[phangorn:upgma]{phangorn::upgma()}}.}
-\item{bionj}{An improved version of the Neighbor-Joining method applied with \code{\link[ape:bionj]{ape::bionj()}}.}
+\item{upgma}{Unweighted Pair Group Method with Arithmetic Mean method applied
+with \code{\link[phangorn:upgma]{phangorn::upgma()}}.}
+\item{bionj}{An improved version of the Neighbor-Joining method applied with
+\code{\link[ape:bionj]{ape::bionj()}}.}
 \item{triangle}{Triangles method applied with \code{\link[ape:triangMtd]{ape::triangMtd()}}}
 \item{mvr}{Minimum Variance Reduction method applied with \code{\link[ape:mvr]{ape::mvr()}}.}
 }}
 
-\item{fix_negative_brlen}{Boolean indicating whether to fix negative branch lengths in resulting tree or not. Default to TRUE.}
+\item{fix_negative_brlen}{Boolean indicating whether to fix negative branch
+lengths in resulting tree or not. Default to TRUE.}
 
 \item{fixing_method}{A character vector specifying the method to fix branch lengths: "bladj", "mrbayes" or a number to be assigned to all branches meeting fixing_criterion}
 
 \item{ultrametric}{Boolean indicating whether to force ultrametric or not.}
 
-\item{variance_matrix}{A variance matrix from a datelifeResult list of patristic matrices. Usually an output from datelife_result_variance_matrix function. Only used if clustering_method is "mvr".}
+\item{variance_matrix}{A variance matrix from a datelifeResult list of patristic
+matrices. Usually an output from datelife_result_variance_matrix function.
+Only used if clustering_method is "mvr".}
 }
 \value{
 A rooted phylo object
 }
 \description{
 Convert a patristic matrix to a \code{phylo} object. Used inside \code{\link[=summarize_datelife_result]{summarize_datelife_result()}}.
+}
+\details{
+We might add the option to insert a function as clustering_method in the future.
+Before, we had hard-coded the function to try Neighbor-Joining first; if it
+errors, it will try UPGMA.
+Now, it uses nj for phylo_all summary, and we are using our own algorithm to
+get a tree from a summary matrix.
 }

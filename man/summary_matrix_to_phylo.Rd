@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_phylo.R
 \name{summary_matrix_to_phylo}
 \alias{summary_matrix_to_phylo}
-\title{Go from a summary matrix to an ultrametric phylo object.}
+\title{Go from a summary matrix to an ultrametric \code{phylo} object.}
 \usage{
 summary_matrix_to_phylo(
   summ_matrix,
@@ -14,20 +14,24 @@ summary_matrix_to_phylo(
 )
 }
 \arguments{
-\item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
+\item{summ_matrix}{Any summary patristic distance matrix, such as the ones obtained with \code{\link[=datelife_result_sdm_matrix]{datelife_result_sdm_matrix()}} or \code{\link[=datelife_result_median_matrix]{datelife_result_median_matrix()}}.}
 
 \item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 
-\item{total_distance}{Boolean. If TRUE it will divide the matrix in half, if FALSE it will take it as is.}
+\item{total_distance}{Boolean. If \code{TRUE} it will divide the matrix in half, if
+\code{FALSE} it will take it as is.}
 
-\item{use}{A character vector indicating what type of age to use for summary. One of the following
+\item{use}{A character vector indicating what type of age to use for summary.
+One of the following:
 \describe{
 \item{mean}{It will use the mean of the node age distributions.}
 \item{min}{It will use the minimum age from the node age distributions.}
-\item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
+\item{max}{Choose this if you wanna be conservative; it will use the maximum
+age from the node age distributions.}
 }}
 
-\item{target_tree}{A \code{phylo} object. Use this in case you want a particular backbone for the output tree.}
+\item{target_tree}{A \code{phylo} object. Use this in case you want a particular
+backbone for the output tree.}
 
 \item{...}{
   Arguments passed on to \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree}}
@@ -44,8 +48,9 @@ numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{ro
 An ultrametric phylo object.
 }
 \description{
-Go from a summary matrix to an ultrametric phylo object.
+Go from a summary matrix to an ultrametric \code{phylo} object.
 }
 \details{
-It can take a regular patristic distance matrix, but there are simpler methods for that implemented in \code{\link[=patristic_matrix_to_phylo]{patristic_matrix_to_phylo()}}.
+It can take a regular patristic distance matrix, but there are simpler
+methods for that implemented in \code{\link[=patristic_matrix_to_phylo]{patristic_matrix_to_phylo()}}.
 }

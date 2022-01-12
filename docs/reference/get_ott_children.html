@@ -86,53 +86,7 @@ numeric vector of ott ids obtained with <code><a href="https://docs.ropensci.org
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># try getting an otol tree of a taxon missing from the synthetic tree</span></span>
-<span class="r-in"><span class="co"># tnrs &lt;- rotl::tnrs_match_names("Mus")</span></span>
-<span class="r-in"><span class="va">tnrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="tnrs_match.html">tnrs_match</a></span><span class="op">(</span><span class="st">"Canis"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span>
-<span class="r-in"><span class="co"># Mus, Gleicheniales, Polypodiales, etc., are missing in synth tree too</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># This is a flag for package development. You are welcome to run the example.</span></span>
-<span class="r-in"><span class="fu">rotl</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rotl/reference/tol_subtree.html" class="external-link">tol_subtree</a></span><span class="op">(</span><span class="va">tnrs</span><span class="op">$</span><span class="va">ott_id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="co">#&gt; Error: HTTP failure: 400</span></span>
-<span class="r-in"><span class="co">#&gt; [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="va">tnrs</span><span class="op">$</span><span class="va">ott_id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ids</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">tnrs</span><span class="op">$</span><span class="va">unique_name</span></span>
-<span class="r-in"><span class="va">children</span> <span class="op">&lt;-</span> <span class="fu">get_ott_children</span><span class="op">(</span>ott_ids <span class="op">=</span> <span class="va">ids</span><span class="op">)</span> <span class="co"># or</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span>
-<span class="r-in"><span class="va">children</span> <span class="op">&lt;-</span> <span class="fu">get_ott_children</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"Canis"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'input' is not a 'datelifeQuery' object.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Making a DateLife query.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Phylo-processing 'input'.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'input' is not a phylogeny.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Working with the following taxa: </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 	Canis</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife query done!</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">children</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> List of 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Canis:'data.frame':	11 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ott_id: int [1:11] 3612500 5835572 113383 752755 621168 666235 621176 247331 247341 346723 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rank  : chr [1:11] "species" "species" "species" "species" ...</span>
-<span class="r-in"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="va">children</span><span class="op">$</span><span class="va">Canis</span><span class="op">$</span><span class="va">ott_id</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ids</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">children</span><span class="op">$</span><span class="va">Canis</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tree_children</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="get_otol_synthetic_tree.html">get_otol_synthetic_tree</a></span><span class="op">(</span>ott_ids <span class="op">=</span> <span class="va">ids</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Getting an OpenTree induced synthetic subtree.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> OpenTree synthetic tree of 'input' taxa is not fully resolved (5 nodes/11 tips).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Success!</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree_children</span>, cex <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
-<span class="r-plt img"><img src="get_ott_children-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Other example:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># This is a flag for package development. You are welcome to run the example.</span></span>
-<span class="r-in"><span class="va">oo</span> <span class="op">&lt;-</span> <span class="fu">get_ott_children</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"magnoliophyta"</span>, ott_rank <span class="op">=</span> <span class="st">"order"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">oo</span><span class="op">$</span><span class="va">Magnoliophyta</span><span class="op">$</span><span class="va">rank</span> <span class="op">==</span> <span class="st">"order"</span><span class="op">)</span> <span class="co"># to know how many orders of flowering plants we have</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'oo' not found</span>
-<span class="r-in"></span>
-</code></pre></div>
+    
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

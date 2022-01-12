@@ -1,10 +1,10 @@
 ---
-title: "Getting started with <code>datelife</code>"
+title: "Getting started"
 output:
   rmarkdown::html_vignette:
     keep_md: true
 vignette: >
-  %\VignetteIndexEntry{Getting started with datelife}
+  %\VignetteIndexEntry{Getting started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,30 +16,30 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, include = FALSE}
 library(datelife)
 ```
 
 ## What can you do with `datelife`?
 
-The aim of the `datelife` R package is to allow researchers and the general audience to obtain data on ages for their organisms of interest. This age data is extracted from dated phylogenetic trees (chronograms) that have been published and peer-reviewed in association with a scientific article in an indexed journal. As such, the age data provided by `datelife` constitutes state-of-the-art, peer-reviewed, public scientific knowledge, that can be accessed by experts and non-experts in the field alike.
+The aim of the `datelife` R package is to allow researchers and the general audience to obtain open scientific data on ages for their organisms of interest. These age data is extracted from dated phylogenetic trees (chronograms) that have been published and peer-reviewed in association with a scientific article in an indexed journal. As such, the age data provided by `datelife` constitutes state-of-the-art, peer-reviewed, public scientific knowledge, that can be accessed by experts and non-experts in the field alike.
 
-Users can get age data for their organisms of interest in several forms:
+As a `datelife` user, you can get age data for your organisms of interest in several forms:
 
-- **MRCA**: They can get the age of the most recent common ancestor (MRCA) of their organisms.
+- **MRCA**: Get the age of the most recent common ancestor (MRCA) of your organisms.
 
-- **Original chronogram**: They can get the chronograms from the original publications, pruned to contain their organisms only.
+- **Original chronogram**: Get the chronograms from the original publications, pruned to contain your organisms only.
 
-- **Biggest chronogram**: They can get the original chronogram with the most organisms of interest present as tips.
+- **Biggest chronogram**: Get the original chronogram with the most organisms of interest present as tips.
 
-- **Summary chronogram**: They can obtain a single chronogram, summarized using data from the original chronograms. The summary chronogram can be calculated using different methods.
+- **Summary chronogram**: Obtain a single chronogram, summarized using data from the original chronograms. The summary chronogram can be calculated using different methods.
 
-Users can also apply the obtained age data to date a phylogenetic tree topology of their organisms of interest.
+You can also apply the obtained age data to date a phylogenetic tree topology of your organisms of interest.
 
 ## 1. Preparing your organism names
 
 The function `make_datelife_query` processes the scientific names of your organisms of interest and saves them as a `datelifeQuery` object.
-This allows you to easily use them later to perform a search for ages across the `datelife` chronogram database. You have two general ways of providing organism names:
+This allows you to straightforwrdly use them later to perform a search for ages across the `datelife` chronogram database. You have two general ways of providing organism names:
 
 ### a) From a set of organism names
 You can provide the scientific names as a character vector or as a single comma separated string of names.
@@ -106,7 +106,7 @@ datelife::make_datelife_query(input = "Delphinus_delphis,
 </details>
 
 
-Note that you can use underscores or spaces to separate binomial scientific names and `datelife` will process them.
+Note that you can use underscores or spaces to separate binomial scientific names and `datelife` will process them the same.
 
 ### b) From a tree with organism names on its tips
 
@@ -145,7 +145,7 @@ datelife::make_datelife_query(input = newick)
 ```
 </details>
 
-You can also provide the tree as a `phylo` object. In this example, you have to first convert your newick string to `phylo`. You can do this with the function `read.tree` from the `ape` package. If you already have a tree as a `phylo` object, you can use that directly:
+You can also provide the tree as a `phylo` object. If you already have a tree as a `phylo` object, you can use that directly. For this example, we will first convert our newick string to `phylo`. You can do this with the function `read.tree` from the `ape` package:
 
 ```{r, eval = FALSE}
 phylo <- ape::read.tree(text = newick)
@@ -179,7 +179,7 @@ datelife::make_datelife_query(input = phylo)
 ```
 </details>
 
-Now save your `datelifeQuery` object for the next section:
+Now save your `datelifeQuery` as an object for the next section:
 
 ```{r, eval = FALSE}
 my_datelife_query <- datelife::make_datelife_query(input = phylo)
@@ -191,13 +191,13 @@ my_datelife_query <- datelife::make_datelife_query(input = phylo)
 
 ## 2. Searching the chronogram database
 
-The `datelife_search` function takes a `datelifeQuery` object and goes through the `datelife` chronogram database to find all chronograms matching at least two organism names.
+The `datelife_search` function takes a `datelifeQuery` object and goes through the `datelife` chronogram database to find all chronograms matching at least two organism names:
 
 ```{r, eval = FALSE}
 datelife::datelife_search(input = my_datelife_query)
 ```
 <details>
-<summary>datelife_search output default</summary>
+<summary>datelife_search default output</summary>
 ```r
 #> ... Running a DateLife search.
 #> ... Getting a DateLife result.
@@ -221,9 +221,13 @@ datelife::datelife_search(input = my_datelife_query)
 ```
 </details>
 
-`datelife_search` will also summarize the results from the chronogram database search for you.
+## 3. Summarizing chronogram search results
+
+`datelife_search` will also summarize results from the chronogram database search for you.
 By default, it will give you all original chronograms matching the search, as a `phylo` or `multiPhylo` object. You can specify the format you desire for the summary of results with the argument `summary_format`.
 There are different summary formats to choose from:
+
+### Citations
 
 `summary_format = "citations"` gives back the study citations from all  original chronograms matching your search:
 
@@ -317,6 +321,8 @@ citations <- datelife::datelife_search(input = my_datelife_query,
 #> [1] "datelifeQuery"
 ```
 </details>
+
+### MRCA ages
 
 `summary_format = "mrca"` gives back the age of the MRCA of your organisms of interest:
 
@@ -420,6 +426,8 @@ mrca <- datelife::datelife_search(input = my_datelife_query,
 ```
 </details>
 
+### Newick strings
+ 
 `summary_format = "newick_all"`
 
 ```{r, eval = FALSE}
@@ -636,6 +644,8 @@ newick_median <- datelife::datelife_search(input = my_datelife_query,
 ```
 </details>
 
+### `phylo` objects
+
 `summary_format = "phylo_sdm"`
 
 ```{r, eval = FALSE}
@@ -759,7 +769,9 @@ phylo_biggest <- datelife::datelife_search(input = my_datelife_query,
 ```
 </details>
 
-`summary_format = "html"`
+### Summary tables
+
+`summary_format = "html"` returns a summary table in "html" format that cns be open and read with any web browser.
 
 ```{r, eval = FALSE}
 html <- datelife::datelife_search(input = my_datelife_query,

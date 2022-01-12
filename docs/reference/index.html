@@ -74,13 +74,12 @@
           
           <code><a href="build_grove_matrix.html">build_grove_matrix()</a></code> 
         </dt>
-        <dd>Build grove matrix</dd>
+        <dd>Find the grove for a group of chronograms and build a matrix.</dd>
       </dl><dl><dt>
           
           <code><a href="check_conflicting_calibrations.html">check_conflicting_calibrations()</a></code> 
         </dt>
-        <dd>function to check for conflicting calibrations
-if calibrations are younger or older relative to descendants and ancestors, respectively</dd>
+        <dd>Check for conflicting calibrations</dd>
       </dl><dl><dt>
           
           <code><a href="check_ott_input.html">check_ott_input()</a></code> 
@@ -91,8 +90,9 @@ if calibrations are younger or older relative to descendants and ancestors, resp
           
           <code><a href="choose_cluster.html">choose_cluster()</a></code> 
         </dt>
-        <dd>Choose an ultrametric phylo object from cluster_patristicmatrix obtained with a particular clustering method, or the next best tree.
-If there are not any ultrametric trees, it does not force them.</dd>
+        <dd>Choose an ultrametric phylo object from <code><a href="../reference/cluster_patristicmatrix.html">cluster_patristicmatrix()</a></code> obtained
+with a particular clustering method, or the next best tree.
+If there are no ultrametric trees, it does not force them to be ultrametric.</dd>
       </dl><dl><dt>
           
           <code><a href="classification_paths_from_taxonomy.html">classification_paths_from_taxonomy()</a></code> 
@@ -114,9 +114,9 @@ output</dd>
           
           <code><a href="clean_tnrs.html">clean_tnrs()</a></code> 
         </dt>
-        <dd>Eliminates unmatched (NAs) and invalid taxa from a rotl::tnrs_match_names or datelife::tnrs_match output
-Useful to get ott ids to retrieve an otol induced subtree from.
-Needed because using include_suppressed = FALSE in tnrs_match_names does not drop all invalid taxa</dd>
+        <dd>Eliminates unmatched (NAs) and invalid taxa from a <code><a href="https://docs.ropensci.org/rotl/reference/tnrs_match_names.html" class="external-link">rotl::tnrs_match_names()</a></code> or <code><a href="../reference/tnrs_match.html">tnrs_match()</a></code> output
+Useful to get ott ids to retrieve an induced synthetic Open Tree of Life.
+Needed because using <code>include_suppressed = FALSE</code> in <code><a href="https://docs.ropensci.org/rotl/reference/tnrs_match_names.html" class="external-link">rotl::tnrs_match_names()</a></code> does not drop all invalid taxa.</dd>
       </dl><dl><dt>
           
           <code><a href="cluster_patristicmatrix.html">cluster_patristicmatrix()</a></code> 
@@ -156,8 +156,7 @@ Needed because using include_suppressed = FALSE in tnrs_match_names does not dro
           
           <code><a href="datelife_result_sdm_phylo.html">datelife_result_sdm_phylo()</a></code> 
         </dt>
-        <dd>Function to compute the SDM supertree (Criscuolo et al. 2006) from a
-<code>datelifeResult</code> object</dd>
+        <dd>Reconstruct a supertree from a <code>datelifeResult</code> object using the Super Distance Matrix (SDM) method.</dd>
       </dl><dl><dt>
           
           <code><a href="datelife_result_study_index.html">datelife_result_study_index()</a></code> 
@@ -178,12 +177,12 @@ divergence openly available for a given set of taxon names</dd>
           
           <code><a href="datelife_use.html">datelife_use()</a></code> 
         </dt>
-        <dd>Generate one or multiple chronograms for a set of given taxon names</dd>
+        <dd>Generate one or multiple chronograms for a set of given taxon names.</dd>
       </dl><dl><dt>
           
           <code><a href="datelife_use_datelifequery.html">datelife_use_datelifequery()</a></code> 
         </dt>
-        <dd>Generate one or multiple chronograms from a <code>datelifeQuery</code> object.</dd>
+        <dd>Generate one or multiple chronograms for a set of taxon names given as a <code>datelifeQuery</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="dot-get_ott_lineage.html">.get_ott_lineage()</a></code> 
@@ -199,12 +198,12 @@ divergence openly available for a given set of taxon names</dd>
           <code><a href="extract_calibrations_phylo.html">extract_calibrations_phylo()</a></code> 
         </dt>
         <dd>Extract secondary calibrations from a <code>phylo</code> or <code>multiPhylo</code>
-object with branch lengths proportional to time</dd>
+object with branch lengths proportional to time using <code><a href="https://rdrr.io/pkg/geiger/man/congruify.phylo.html" class="external-link">geiger::congruify.phylo()</a></code></dd>
       </dl><dl><dt>
           
           <code><a href="extract_ott_ids.html">extract_ott_ids()</a></code> 
         </dt>
-        <dd>Get ott ids from a character vector containing species names and ott ids.</dd>
+        <dd>Get OTT ids from a character vector containing species names and OTT ids.</dd>
       </dl><dl><dt>
           
           <code><a href="felid_gdr_phylo_all.html">felid_gdr_phylo_all</a></code> 
@@ -219,12 +218,12 @@ object with branch lengths proportional to time</dd>
           
           <code><a href="filter_for_grove.html">filter_for_grove()</a></code> 
         </dt>
-        <dd>Filter a <code>datelifeResult</code> object to find the largest grove</dd>
+        <dd>Filter a <code>datelifeResult</code> object to find the largest grove.</dd>
       </dl><dl><dt>
           
           <code><a href="force_ultrametric.html">force_ultrametric()</a></code> 
         </dt>
-        <dd>Force a non ultrametric phylo object to be ultrametric</dd>
+        <dd>Force a non-ultrametric <code>phylo</code> object to be ultrametric with <code><a href="https://rdrr.io/pkg/phytools/man/force.ultrametric.html" class="external-link">phytools::force.ultrametric()</a></code>.</dd>
       </dl><dl><dt>
           
           <code><a href="get_all_calibrations.html">get_all_calibrations()</a></code> 
@@ -240,18 +239,18 @@ from a median summary matrix</dd>
           
           <code><a href="get_biggest_phylo.html">get_biggest_phylo()</a></code> 
         </dt>
-        <dd>Get the tree with the most tips: the biggest tree</dd>
+        <dd>Get the tree with the most tips: the biggest tree.</dd>
       </dl><dl><dt>
           
           <code><a href="get_calibrations_datelifequery.html">get_calibrations_datelifequery()</a></code> 
         </dt>
         <dd>Search and extract available secondary calibrations from a given
-'<code>datelifeQuery</code> object</dd>
+<code>datelifeQuery</code> object</dd>
       </dl><dl><dt>
           
           <code><a href="get_calibrations_vector.html">get_calibrations_vector()</a></code> 
         </dt>
-        <dd>Search and extract available secondary calibrations for a given character
+        <dd>Search and extract secondary calibrations for a given character
 vector of taxon names</dd>
       </dl><dl><dt>
           
@@ -277,7 +276,7 @@ vector of taxon names</dd>
           
           <code><a href="get_goodmatrices.html">get_goodmatrices()</a></code> 
         </dt>
-        <dd>Get good matrices for SDM</dd>
+        <dd>Get indices of good matrices to apply Super Distance Matrix (SDM) method with <code><a href="../reference/make_sdm.html">make_sdm()</a></code>.</dd>
       </dl><dl><dt>
           
           <code><a href="get_mrbayes_node_constraints.html">get_mrbayes_node_constraints()</a></code> 
@@ -313,14 +312,9 @@ more input taxa</dd>
         <dd>Get the ott id and name of all lineages from one or more input taxa</dd>
       </dl><dl><dt>
           
-          <code><a href="get_sdm.html">get_sdm()</a></code> 
+          <code><a href="make_sdm.html">make_sdm()</a></code> 
         </dt>
-        <dd>Get SDM result for list of working matrices</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_sdm_matrix.html">get_sdm_matrix()</a></code> 
-        </dt>
-        <dd>Get good matrices for SDM</dd>
+        <dd>Get a Super Distance Matrix (SDM) from a list of good matrices obtained with <code><a href="../reference/get_goodmatrices.html">get_goodmatrices()</a></code></dd>
       </dl><dl><dt>
           
           <code><a href="get_subset_array_dispatch.html">get_subset_array_dispatch()</a></code> 
@@ -335,8 +329,8 @@ more input taxa</dd>
           
           <code><a href="get_valid_children.html">get_valid_children()</a></code> 
         </dt>
-        <dd>Extract valid children from a set of input names or ott ids (not from a taxonomy
-taxon info object)</dd>
+        <dd>Extract valid children from given taxonomic name(s) or OpenTree Taxonomic ids (not from a taxonomy
+taxon info object).</dd>
       </dl><dl><dt>
           
           <code><a href="input_process.html">input_process()</a></code> 
@@ -351,17 +345,17 @@ taxon info object)</dd>
           
           <code><a href="is_datelife_result_empty.html">is_datelife_result_empty()</a></code> 
         </dt>
-        <dd>Check if we obtained an empty search with the set of input taxon names</dd>
+        <dd>Check if we obtained an empty search with the given taxon name(s).</dd>
       </dl><dl><dt>
           
           <code><a href="is_good_chronogram.html">is_good_chronogram()</a></code> 
         </dt>
-        <dd>Check if a tree is a valid chronogram</dd>
+        <dd>Check if a tree is a valid chronogram.</dd>
       </dl><dl><dt>
           
           <code><a href="is_n_overlap.html">is_n_overlap()</a></code> 
         </dt>
-        <dd>Function for computing n overlap for two vectors of names (ie., phy1$tip.label, phy2$tip.label) and seeing if they have n overlap</dd>
+        <dd>Function for computing n-overlap for two vectors of names (ie., phy1$tip.label, phy2$tip.label) and seeing if they have n overlap</dd>
       </dl><dl><dt>
           
           <code><a href="make_all_associations.html">make_all_associations()</a></code> 
@@ -371,8 +365,7 @@ taxon info object)</dd>
           
           <code><a href="make_bladj_tree.html">make_bladj_tree()</a></code> 
         </dt>
-        <dd>Takes a tree and uses bladj to estimate node ages and branch lengths given a
-set of fixed node ages and respective node names</dd>
+        <dd>Use the BLADJ algorithm to get a chronogram from a tree topology for which you have age data for some of its nodes.</dd>
       </dl><dl><dt>
           
           <code><a href="make_bold_otol_tree.html">make_bold_otol_tree()</a></code> 
@@ -399,8 +392,8 @@ calibrations and missing taxa</dd>
           
           <code><a href="make_mrbayes_tree.html">make_mrbayes_tree()</a></code> 
         </dt>
-        <dd>Takes a constraint tree and uses mrBayes to get node ages and branch lengths
-given a set of node calibrations without any data</dd>
+        <dd>Take a constraint tree and use mrBayes to get node ages and branch lengths
+given a set of node calibrations without any data.</dd>
       </dl><dl><dt>
           
           <code><a href="make_otol_associations.html">make_otol_associations()</a></code> 
@@ -480,7 +473,7 @@ given a set of node calibrations without any data</dd>
           
           <code><a href="patristic_matrix_to_phylo.html">patristic_matrix_to_phylo()</a></code> 
         </dt>
-        <dd>Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruifyTree.</dd>
+        <dd>Convert a patristic matrix to a <code>phylo</code> object. Used inside <code><a href="../reference/summarize_datelife_result.html">summarize_datelife_result()</a></code>.</dd>
       </dl><dl><dt>
           
           <code><a href="patristic_matrix_unpad.html">patristic_matrix_unpad()</a></code> 
@@ -530,7 +523,7 @@ given a set of node calibrations without any data</dd>
           
           <code><a href="problems.html">problems</a></code> 
         </dt>
-        <dd>Problematic chronograms from Open Tree of Life</dd>
+        <dd>Problematic chronograms from Open Tree of Life.</dd>
       </dl><dl><dt>
           
           <code><a href="recover_mrcaott.html">recover_mrcaott()</a></code> 
@@ -560,7 +553,7 @@ given a set of node calibrations without any data</dd>
           
           <code><a href="sample_trees.html">sample_trees()</a></code> 
         </dt>
-        <dd>Function to sample trees from a file containing multiple trees. Usually from a bayesian analysis output trees file.</dd>
+        <dd>Sample trees from a file containing multiple trees. Usually from a bayesian analysis output trees file.</dd>
       </dl><dl><dt>
           
           <code><a href="save_otol_chronograms.html">save_otol_chronograms()</a></code> 
@@ -585,7 +578,7 @@ given a set of node calibrations without any data</dd>
           
           <code><a href="summarize_datelife_result.html">summarize_datelife_result()</a></code> 
         </dt>
-        <dd>Summarize a <code>datelifeResult</code> object</dd>
+        <dd>Summarize a <code>datelifeResult</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="summarize_fossil_range.html">summarize_fossil_range()</a></code> 
@@ -595,7 +588,7 @@ given a set of node calibrations without any data</dd>
           
           <code><a href="summarize_summary_matrix.html">summarize_summary_matrix()</a></code> 
         </dt>
-        <dd>Internal for summary_matrix_to_phylo().</dd>
+        <dd>Internal function used in summary_matrix_to_phylo().</dd>
       </dl><dl><dt>
           
           <code><a href="summary_matrix_to_phylo.html">summary_matrix_to_phylo()</a></code> 
@@ -605,7 +598,7 @@ given a set of node calibrations without any data</dd>
           
           <code><a href="summary_matrix_to_phylo_all.html">summary_matrix_to_phylo_all()</a></code> 
         </dt>
-        <dd>function to get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.</dd>
+        <dd>Get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.</dd>
       </dl><dl><dt>
           
           <code><a href="summary_patristic_matrix_array.html">summary_patristic_matrix_array()</a></code> 
@@ -625,7 +618,7 @@ given a set of node calibrations without any data</dd>
           
           <code><a href="tree_add_dates.html">tree_add_dates()</a></code> 
         </dt>
-        <dd>Fabricates dates of missing taxa (with no data) on an already dated tree.</dd>
+        <dd>Add missing taxa to a dated tree and fabricate node ages for these missing taxa.</dd>
       </dl><dl><dt>
           
           <code><a href="tree_add_nodelabels.html">tree_add_nodelabels()</a></code> 
@@ -645,7 +638,7 @@ given a set of node calibrations without any data</dd>
           
           <code><a href="tree_fix_brlen.html">tree_fix_brlen()</a></code> 
         </dt>
-        <dd>Takes a tree with branch lengths and fixes negative or zero length branches in several ways</dd>
+        <dd>Take a tree with branch lengths and fix negative or zero length branches.</dd>
       </dl><dl><dt>
           
           <code><a href="tree_from_taxonomy.html">tree_from_taxonomy()</a></code> 
@@ -655,12 +648,12 @@ given a set of node calibrations without any data</dd>
           
           <code><a href="tree_get_node_data.html">tree_get_node_data()</a></code> 
         </dt>
-        <dd>Gets node numbers, node names, descendant tip numbers and labels of nodes from a any tree and node ages from dated trees</dd>
+        <dd>Get node numbers, node names, descendant tip numbers and labels of nodes from any tree, and node ages from dated trees.</dd>
       </dl><dl><dt>
           
           <code><a href="tree_get_singleton_outgroup.html">tree_get_singleton_outgroup()</a></code> 
         </dt>
-        <dd>Identifies the presence of a single lineage outgroup in a phylogeny</dd>
+        <dd>Identify the presence of a single lineage outgroup in a phylogeny</dd>
       </dl><dl><dt>
           
           <code><a href="tree_node_tips.html">tree_node_tips()</a></code> 
@@ -695,7 +688,7 @@ given a set of node calibrations without any data</dd>
           
           <code><a href="use_calibrations_bladj.html">use_calibrations_bladj()</a></code> 
         </dt>
-        <dd>Use calibrations to date a topology with bladj.</dd>
+        <dd>Use calibrations to date a topology with the BLADJ algorithm.</dd>
       </dl><dl><dt>
           
           <code><a href="use_calibrations_each.html">use_calibrations_each()</a></code> 
@@ -711,7 +704,7 @@ to generate multiple hypothesis of time of divergence</dd>
           
           <code><a href="use_calibrations_treePL.html">use_calibrations_treePL()</a></code> 
         </dt>
-        <dd>Use calibrations to date a tree with branch lengths with treePL.</dd>
+        <dd>Date a tree with initial branch lengths with treePL.</dd>
       </dl></div>
   </main></div>
 

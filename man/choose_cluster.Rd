@@ -11,11 +11,14 @@ choose_cluster(phycluster, clustering_method = "nj")
 \arguments{
 \item{phycluster}{An output from \code{\link[=cluster_patristicmatrix]{cluster_patristicmatrix()}}}
 
-\item{clustering_method}{A character vector indicating the method to construct the tree. Options are
+\item{clustering_method}{A character vector indicating the method to construct
+the tree. Options are:
 \describe{
 \item{nj}{Neighbor-Joining method applied with \code{\link[ape:nj]{ape::nj()}}.}
-\item{upgma}{Unweighted Pair Group Method with Arithmetic Mean method applied with \code{\link[phangorn:upgma]{phangorn::upgma()}}.}
-\item{bionj}{An improved version of the Neighbor-Joining method applied with \code{\link[ape:bionj]{ape::bionj()}}.}
+\item{upgma}{Unweighted Pair Group Method with Arithmetic Mean method applied
+with \code{\link[phangorn:upgma]{phangorn::upgma()}}.}
+\item{bionj}{An improved version of the Neighbor-Joining method applied with
+\code{\link[ape:bionj]{ape::bionj()}}.}
 \item{triangle}{Triangles method applied with \code{\link[ape:triangMtd]{ape::triangMtd()}}}
 \item{mvr}{Minimum Variance Reduction method applied with \code{\link[ape:mvr]{ape::mvr()}}.}
 }}

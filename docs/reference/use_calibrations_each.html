@@ -77,31 +77,30 @@ to date a given tree topology.</p>
 <dd><p>A <code>datelifeCalibrations</code> object, an output of <code><a href="get_all_calibrations.html">get_all_calibrations()</a></code>.</p></dd>
 <dt>...</dt>
 <dd><p>Arguments passed on to <code><a href="use_calibrations.html">use_calibrations</a></code></p><dl><dt><code>dating_method</code></dt>
-<dd><p>Tree dating method to use. Options are "bladj" or "pathd8".</p></dd>
+<dd><p>Tree dating algorithm to use. Options are "bladj" or "pathd8"
+(Webb et al., 2008, <a href="doi:10.1093/bioinformatics/btn358">doi:10.1093/bioinformatics/btn358</a>; Britton et al., 2007,
+<a href="doi:10.1080/10635150701613783">doi:10.1080/10635150701613783</a>).</p></dd>
 
     <dt><code>type</code></dt>
-<dd><p>The type of age to use as calibration: "median", "mean", "min", or "max".</p></dd>
+<dd><p>The type of age to use as calibration. Options are "median", "mean", "min", or "max".</p></dd>
 
   
 </dl></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>multiPhylo</code> object of trees with branch lengths proportional
-to time.</p>
+    <p>A <code>multiPhylo</code> object of trees with branch lengths proportional to time.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><code>calibrations</code> and <code>dating_method</code> are stored as attributes.
-They can be accessed with <code>attributes(return)$datelife_calibrations</code> and
-<code>attributes(return)$dating_method</code>, respectively. <br>
-If <code>input</code> tree does not have branch lengths, <code>dating_method</code> is
-ignored and the function will use secondary calibrations to date the
-<code>input</code> tree with BLADJ from <a href="https://github.com/phylocom/phylocom" class="external-link">phylocom</a>,
-using <code><a href="https://docs.ropensci.org/phylocomr/reference/ph_bladj.html" class="external-link">phylocomr::ph_bladj()</a></code>, via <code><a href="use_calibrations_bladj.html">use_calibrations_bladj()</a></code>. If
-<code>input</code> tree has branch lengths it can be dated
-with <a href="https://www2.math.su.se/PATHd8/" class="external-link">PATHd8</a>, using <code><a href="https://rdrr.io/pkg/geiger/man/geiger-internal.html" class="external-link">geiger::PATHd8.phylo()</a></code>,
-via <code><a href="use_calibrations_pathd8.html">use_calibrations_pathd8()</a></code>.</p>
+    <p>If <code>phy</code> has no branch lengths, <code>dating_method</code> is ignores, and the function applies secondary
+calibrations to date the tree with the BLADJ algorithm. See <code><a href="make_bladj_tree.html">make_bladj_tree()</a></code> and <code><a href="use_calibrations_bladj.html">use_calibrations_bladj()</a></code>.
+If <code>phy</code> has branch lengths, the function can use the PATHd8 algorithm. See <code><a href="use_calibrations_pathd8.html">use_calibrations_pathd8()</a></code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="output">output<a class="anchor" aria-label="anchor" href="#output"></a></h2>
+    <p>The output object stores the used <code>calibrations</code> and <code>dating_method</code> as
+<code>attributes(output)$datelife_calibrations</code> and <code>attributes(output)$dating_method</code>.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

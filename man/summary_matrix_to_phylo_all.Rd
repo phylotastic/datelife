@@ -7,19 +7,23 @@
 summary_matrix_to_phylo_all(summ_matrix, target_tree = NULL, ...)
 }
 \arguments{
-\item{summ_matrix}{A summary patristic distance matrix from sdm or median. See details.}
+\item{summ_matrix}{Any summary patristic distance matrix, such as the ones obtained with \code{\link[=datelife_result_sdm_matrix]{datelife_result_sdm_matrix()}} or \code{\link[=datelife_result_median_matrix]{datelife_result_median_matrix()}}.}
 
-\item{target_tree}{A \code{phylo} object. Use this in case you want a particular backbone for the output tree.}
+\item{target_tree}{A \code{phylo} object. Use this in case you want a particular
+backbone for the output tree.}
 
 \item{...}{
   Arguments passed on to \code{\link[=summary_matrix_to_phylo]{summary_matrix_to_phylo}}
   \describe{
-    \item{\code{total_distance}}{Boolean. If TRUE it will divide the matrix in half, if FALSE it will take it as is.}
-    \item{\code{use}}{A character vector indicating what type of age to use for summary. One of the following
+    \item{\code{total_distance}}{Boolean. If \code{TRUE} it will divide the matrix in half, if
+\code{FALSE} it will take it as is.}
+    \item{\code{use}}{A character vector indicating what type of age to use for summary.
+One of the following:
 \describe{
 \item{mean}{It will use the mean of the node age distributions.}
 \item{min}{It will use the minimum age from the node age distributions.}
-\item{max}{Choose this if you wanna be conservative; it will use the maximum age from the node age distributions.}
+\item{max}{Choose this if you wanna be conservative; it will use the maximum
+age from the node age distributions.}
 }}
     \item{\code{datelife_query}}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
   }}
@@ -31,6 +35,8 @@ A \code{multiPhylo} object of length 3. It contains min, mean and max summary ch
 Get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.
 }
 \details{
-With the function summary_matrix_to_phylo users can choose the minimum, mean or maximum ages from the summary matrix as calibration points to get a single summary chronogram.
-With this function users get all three summary chronograms in a multiphylo object.
+With this function users can choose the minimum, mean  or maximum ages from
+the summary matrix as calibration points to get a single summary chronogram.
+Users get all three summary chronograms in a \code{multiPhylo} object.
+Modified from \code{get_all_summaries()} function in \code{data-raw/datelife_examples.R}
 }
