@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_search.R
 \name{is_datelife_result_empty}
 \alias{is_datelife_result_empty}
-\title{Check if we obtained an empty search with the set of input taxon names}
+\title{Check if we obtained an empty search with the given taxon name(s).}
 \usage{
 is_datelife_result_empty(datelife_result, use_tnrs = FALSE)
 }
@@ -13,6 +13,9 @@ is_datelife_result_empty(datelife_result, use_tnrs = FALSE)
 to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
 taxonomic name variations.}
 }
+\value{
+Boolean. If \code{TRUE}, no chronograms were found for the given taxon name(s). If \code{FALSE}, the chronogram search was successful.
+}
 \description{
-Check if we obtained an empty search with the set of input taxon names
+Check if we obtained an empty search with the given taxon name(s).
 }

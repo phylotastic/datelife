@@ -34,10 +34,7 @@ Life’s tree store](https://tree.opentreeoflife.org/curator).
 
 You can also date a phylogenetic tree of your own making (or choosing
 one from the literature), using node ages from chronograms found with
-`datelife`, using the congruification method ([Eastman et
-al. 2013](https://doi.org/10.1111/2041-210X.12051)) implemented with
-*geiger* ([Harmon et
-al. 2008](https://doi.org/10.1093/bioinformatics/btm538)).
+`datelife` as secondary calibrations.
 
 `datelife` has been developed as part of the
 [phylotastic](http://phylotastic.org/) (NSF-funded) project, and is

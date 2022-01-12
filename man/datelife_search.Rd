@@ -79,7 +79,7 @@ equally large trees is returned.}
 then opened in any web browser. It contains a 4 column table with data on
 target taxa: mrca, number of taxa, citations of source chronogram and
 newick target chronogram.}
-\item{"data_frame"}{A data frame with data on target taxa: mrca, number of
+\item{"data_frame"}{A 4 column \code{data.frame} with data on target taxa: mrca, number of
 taxa, citations of source chronograms and newick string.}
 }}
 
@@ -111,6 +111,16 @@ trees". Annals of Combinatorics, 13(2), 139-167, \url{doi:10.1007/s00026-009-001
 In rare cases, a group of trees can have multiple groves. This argument indicates
 whether to get the grove with the most trees (\code{criterion = "trees"}) or the
 most taxa (\code{criterion = "taxa"}). Defaults to \code{criterion = "taxa"}.}
+}
+\value{
+The output is determined by the argument \code{summary_format}:
+\describe{
+\item{If \code{summary_format = "citations"}}{The function returns a character vector of references.}
+\item{If \code{summary_format = "mrca"}}{The function returns a named numeric vector of most recent common ancestor (mrca) ages.
+\item{If \code{summary_format = "newick_{all, sdm, or median}"}}{The function returns output chronograms as newick strings.
+\item{If \code{summary_format = "phylo_{all, sdm, median, or biggest}"}}{The function returns output chronograms as \code{phylo} or \code{multiPhylo} objects.
+\item{If \verb{summary_format = "html" or "data_frame"}}{The function returns a 4 column table with data on mrca ages, number of taxa, references, and output chronograms as newick strings.
+}
 }
 \description{
 \code{datelife_search} is the core DateLife function to find and

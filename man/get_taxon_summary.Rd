@@ -11,6 +11,15 @@ get_taxon_summary(datelife_result = NULL, datelife_query = NULL)
 
 \item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 }
+\value{
+A \code{datelifeTaxonSummary} object, which is a list of 4 elements:
+\describe{
+\item{$matrix}{Data as a presence/absence matrix of taxon names across chronograms.}
+\item{$summary}{A \code{data.frame} with taxon names as \code{\link[=row.names]{row.names()}} and two columns, one with the number of chronograms that contain a taxon name and the other one with the total number of chronograms that have at least 2 taxon names.}
+\item{$summary2}{A \code{data.frame} with chronogram citations as \code{\link[=row.names]{row.names()}} and two columns, one with the number of taxon names found in each chronogram and the other one with the total number of taxon names.}
+\item{$absent_taxa}{A character vector of taxon names that are not found in the chronogram database.}
+}
+}
 \description{
 Get a taxon summary of a \code{datelifeResult} object
 }

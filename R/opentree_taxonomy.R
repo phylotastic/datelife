@@ -247,13 +247,13 @@ get_ott_clade <- function(input = NULL, ott_ids = NULL, ott_rank = "family") {
 # }
 
 #'
-#' Extract valid children from a set of input names or ott ids (not from a taxonomy
-#' taxon info object)
+#' Extract valid children from given taxonomic name(s) or OpenTree Taxonomic ids (not from a taxonomy
+#' taxon info object).
 #' @inheritParams check_ott_input
-#' @param taxonomic_source A character vector with the desired taxonomic sources. One of "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources. NCBI by default.
-#' @export
+#' @param taxonomic_source A character vector with the desired taxonomic sources. Options are "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources. The function defaults to "ncbi".
+#' @return A named list containing valid taxonomic children of given taxonomic name(s).
 #' @details
-#' Gbif and other taxonomies contain deprecated taxa that are not marked as such in the Open Tree Taxonomy.
+#' GBIF and other taxonomies contain deprecated taxa that are not marked as such in the Open Tree Taxonomy.
 #' We are relying mainly in the NCBI taxonomy for now.
 #' @examples
 #' # genus Dictyophyllidites with ott id = 6003921 has only extinct children
@@ -266,6 +266,7 @@ get_ott_clade <- function(input = NULL, ott_ids = NULL, ott_rank = "family") {
 # input= "Erythrospiza" # obsolete genus that is still on ott
 # input = c("Felis", "Homo", "Malvaceae")
 # input = "Telespiza"
+#' @export
 get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = "ncbi") {
   taxonomic_source_here <- tryCatch(match.arg(taxonomic_source, c("ncbi", "gbif", "irmng")),
     error = function(e) NULL

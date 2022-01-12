@@ -2,8 +2,8 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{get_valid_children}
 \alias{get_valid_children}
-\title{Extract valid children from a set of input names or ott ids (not from a taxonomy
-taxon info object)}
+\title{Extract valid children from given taxonomic name(s) or OpenTree Taxonomic ids (not from a taxonomy
+taxon info object).}
 \usage{
 get_valid_children(input = NULL, ott_ids = NULL, taxonomic_source = "ncbi")
 }
@@ -14,14 +14,17 @@ get_valid_children(input = NULL, ott_ids = NULL, taxonomic_source = "ncbi")
 numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} or
 \code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}}
 
-\item{taxonomic_source}{A character vector with the desired taxonomic sources. One of "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources. NCBI by default.}
+\item{taxonomic_source}{A character vector with the desired taxonomic sources. Options are "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources. The function defaults to "ncbi".}
+}
+\value{
+A named list containing valid taxonomic children of given taxonomic name(s).
 }
 \description{
-Extract valid children from a set of input names or ott ids (not from a taxonomy
-taxon info object)
+Extract valid children from given taxonomic name(s) or OpenTree Taxonomic ids (not from a taxonomy
+taxon info object).
 }
 \details{
-Gbif and other taxonomies contain deprecated taxa that are not marked as such in the Open Tree Taxonomy.
+GBIF and other taxonomies contain deprecated taxa that are not marked as such in the Open Tree Taxonomy.
 We are relying mainly in the NCBI taxonomy for now.
 }
 \examples{

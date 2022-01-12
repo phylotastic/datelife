@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_phylo.R
 \name{summary_matrix_to_phylo_all}
 \alias{summary_matrix_to_phylo_all}
-\title{function to get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.}
+\title{Get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.}
 \usage{
 summary_matrix_to_phylo_all(summ_matrix, target_tree = NULL, ...)
 }
@@ -24,8 +24,11 @@ summary_matrix_to_phylo_all(summ_matrix, target_tree = NULL, ...)
     \item{\code{datelife_query}}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
   }}
 }
+\value{
+A \code{multiPhylo} object of length 3. It contains min, mean and max summary chronograms.
+}
 \description{
-function to get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.
+Get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.
 }
 \details{
 With the function summary_matrix_to_phylo users can choose the minimum, mean or maximum ages from the summary matrix as calibration points to get a single summary chronogram.

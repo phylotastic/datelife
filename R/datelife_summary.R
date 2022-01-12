@@ -4,6 +4,13 @@
 #'
 #' @param datelife_result A `datelifeResult` object, output of [get_datelife_result()].
 #' @param datelife_query A `datelifeQuery` object, output of [make_datelife_query()].
+#' @return A `datelifeTaxonSummary` object, which is a list of 4 elements:
+#' \describe{
+#'    \item{$matrix}{Data as a presence/absence matrix of taxon names across chronograms.}
+#'    \item{$summary}{A `data.frame` with taxon names as [row.names()] and two columns, one with the number of chronograms that contain a taxon name and the other one with the total number of chronograms that have at least 2 taxon names.}
+#'    \item{$summary2}{A `data.frame` with chronogram citations as [row.names()] and two columns, one with the number of taxon names found in each chronogram and the other one with the total number of taxon names.}
+#'    \item{$absent_taxa}{A character vector of taxon names that are not found in the chronogram database.}
+#'}
 #' @export
 get_taxon_summary <- function(datelife_result = NULL,
                               datelife_query = NULL) {
@@ -54,6 +61,7 @@ get_taxon_summary <- function(datelife_result = NULL,
   # from here, replace by print: take it to a print function, so we only store the matrix, absent taxa and chronogram names
   # tax <- unique(rapply(datelife_result, rownames)) #rownames(datelife_result[[1]])
   x <- rapply(datelife_result, rownames)
+  # get the proportion of chronograms where a taxon is found
   prop <- c()
   for (taxon in input.match) {
     prop <- c(prop, paste0(length(which(taxon == x)), "/", length(datelife_result)))
@@ -118,7 +126,7 @@ get_taxon_summary <- function(datelife_result = NULL,
 #' 	 				then opened in any web browser. It contains a 4 column table with data on
 #' 	 				target taxa: mrca, number of taxa, citations of source chronogram and
 #' 	 				newick target chronogram.}
-#' 	 \item{"data_frame"}{A data frame with data on target taxa: mrca, number of
+#' 	 \item{"data_frame"}{A 4 column `data.frame` with data on target taxa: mrca, number of
 #' 	 				taxa, citations of source chronograms and newick string.}
 #' }
 #' @inheritParams datelife_result_MRCA
@@ -146,7 +154,14 @@ get_taxon_summary <- function(datelife_result = NULL,
 #'   In rare cases, a group of trees can have multiple groves. This argument indicates
 #'   whether to get the grove with the most trees (`criterion = "trees"`) or the
 #'   most taxa (`criterion = "taxa"`). Defaults to `criterion = "taxa"`.
-#' @inherit datelife_search return details
+#' @return The output is determined by the argument `summary_format`:
+#' \describe{
+#'   \item{If `summary_format = "citations"`}{The function returns a character vector of references.}
+#'   \item{If `summary_format = "mrca"`}{The function returns a named numeric vector of most recent common ancestor (mrca) ages.
+#'   \item{If `summary_format = "newick_{all, sdm, or median}"`}{The function returns output chronograms as newick strings.
+#'   \item{If `summary_format = "phylo_{all, sdm, median, or biggest}"`}{The function returns output chronograms as `phylo` or `multiPhylo` objects.
+#'   \item{If `summary_format = "html" or "data_frame"`}{The function returns a 4 column table with data on mrca ages, number of taxa, references, and output chronograms as newick strings.
+#' }
 #' @export
 summarize_datelife_result <- function(datelife_result = NULL,
                                       datelife_query = NULL,

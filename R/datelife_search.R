@@ -18,11 +18,10 @@
 #' @inheritParams make_datelife_query
 #' @inheritParams get_datelife_result_datelifequery
 #' @inheritParams summarize_datelife_result
-#' @export
 #' @details
 #' If only one taxon name is given as `input`, `get_spp_from_taxon` is
 #' always set to `TRUE`.
-#'
+#' @inherit summarize_datelife_result return
 #' @examples
 #' # Obtain median ages from a set of source chronograms in newick format:
 #'
@@ -59,6 +58,7 @@
 #' write(ages.html, file = "some.bird.trees.html")
 #' system("open some.bird.trees.html")
 #' }
+#' @export
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
                             use_tnrs = FALSE,
                             # approximate_match = TRUE,
@@ -114,9 +114,10 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
 
 
 
-#' Check if we obtained an empty search with the set of input taxon names
+#' Check if we obtained an empty search with the given taxon name(s).
 #' @inheritParams summarize_datelife_result
 #' @inheritParams datelife_search
+#' @return Boolean. If `TRUE`, no chronograms were found for the given taxon name(s). If `FALSE`, the chronogram search was successful.
 #' @export
 is_datelife_result_empty <- function(datelife_result,
                                      use_tnrs = FALSE) {
