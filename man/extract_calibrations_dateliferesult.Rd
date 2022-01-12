@@ -10,23 +10,25 @@ extract_calibrations_dateliferesult(input = NULL, each = FALSE)
 \item{input}{A \code{datelifeResult} object.}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
-the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
+the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 }
 \value{
-An object of class \code{datelifeCalibrations} -- a \code{data frame}
-of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
-for each pair of taxon names in \code{input}. The attribute \code{chronograms} stores
-the source data from which the calibrations were extracted.
+An object of class \code{datelifeCalibrations}, i.e., a \code{data.frame} (if
+\code{each = FALSE}) or a list of \code{data.frames} (if \code{each = TRUE}) of secondary
+calibrations, for each pair of taxon names in \code{input}. The attribute
+\code{chronograms} stores the \code{input} data from which the calibrations were extracted.
 }
 \description{
-\code{extract_calibrations_dateliferesult} extracts divergence
-times (i.e., secondary calibrations) for each taxon pair in a given
-'\code{datelifeResult} object.
+This function extracts node ages for each taxon
+pair in \code{input}. It applies the congruification method described in Eastman et al.
+(2013) "Congruification: support for time scaling large phylogenetic trees".
+Methods in Ecology and Evolution, 4(7), 688-691, \url{doi:10.1111/2041-210X.12051}
+to create a matrix of suitable secondary calibrations for each taxon pair.
+Congruification is implemented with the function \code{\link[geiger:congruify.phylo]{geiger::congruify.phylo()}}.
 }
 \details{
 The function calls summarize_datelife_result()] with
-\code{summary_format = "phylo_all"} to go from a \code{datelifeResult} object
-to a \code{phylo} or \code{multiPhylo} object that will be passed to
+\verb{summary_format = "phylo_all" to go from a }datelifeResult\verb{object to a}phylo\code{or}multiPhylo` object that will be passed to
 \code{\link[=extract_calibrations_phylo]{extract_calibrations_phylo()}}.
 }

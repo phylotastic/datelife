@@ -3,26 +3,29 @@
 \name{extract_calibrations_phylo}
 \alias{extract_calibrations_phylo}
 \title{Extract secondary calibrations from a \code{phylo} or \code{multiPhylo}
-object with branch lengths proportional to time}
+object with branch lengths proportional to time using \code{\link[geiger:congruify.phylo]{geiger::congruify.phylo()}}}
 \usage{
 extract_calibrations_phylo(input = NULL, each = FALSE)
 }
 \arguments{
-\item{input}{a \code{phylo} or \code{multiPhylo} object with branch lengths
+\item{input}{A \code{phylo} or \code{multiPhylo} object with branch lengths
 proportional to time.}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
-the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
+the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 }
 \value{
-An object of class \code{datelifeCalibrations} -- a \code{data frame}
-of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
-for each pair of taxon names in \code{input}. The attribute \code{chronograms} stores
-the source data from which the calibrations were extracted.
+An object of class \code{datelifeCalibrations}, i.e., a \code{data.frame} (if
+\code{each = FALSE}) or a list of \code{data.frames} (if \code{each = TRUE}) of secondary
+calibrations, for each pair of taxon names in \code{input}. The attribute
+\code{chronograms} stores the \code{input} data from which the calibrations were extracted.
 }
 \description{
-\code{extract_calibrations_phylo} extracts divergence times
-(i.e., secondary calibrations) for each taxon pair in a given
-\code{phylo} or \code{multiPhylo} object.
+This function extracts node ages for each taxon
+pair in \code{input}. It applies the congruification method described in Eastman et al.
+(2013) "Congruification: support for time scaling large phylogenetic trees".
+Methods in Ecology and Evolution, 4(7), 688-691, \url{doi:10.1111/2041-210X.12051}
+to create a matrix of suitable secondary calibrations for each taxon pair.
+Congruification is implemented with the function \code{\link[geiger:congruify.phylo]{geiger::congruify.phylo()}}.
 }

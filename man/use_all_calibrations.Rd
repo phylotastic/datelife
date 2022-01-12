@@ -18,7 +18,7 @@ use_all_calibrations(
 \item{calibrations}{A \code{datelifeCalibrations} object, an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
-the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
+the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 
 \item{dating_method}{Tree dating method to use. Options are "bladj" or "pathd8".}
@@ -31,7 +31,7 @@ in separate data frames.}
 }
 \value{
 A \code{datelife} object, which is a \code{phylo} or \code{multiPhylo}
-object with secondary calibrations used for dating stored in attributes.
+object with secondary calibrations used for dating added as \code{\link[=attributes]{attributes()}}.
 }
 \description{
 \code{use_all_calibrations} generates one or multiple chronograms

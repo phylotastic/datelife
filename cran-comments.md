@@ -1,12 +1,35 @@
 ## Resubmission
 This is a resubmission where I have:
 
-* Fixed a (possibly) invalid file URI: data-raw/hexsticker-current.R From: README.md
-Fixed to https://github.com/phylotastic/datelife/blob/master/data-raw/hexsticker-current.R
+* Reduced the length of the title to less than 65 characters.
 
-* Added donrun to examples with CPU (user + system) or elapsed time > 5s
+* Added references describing the methods in the package in the description field of the DESCRIPTION file
+* 
+authors (year) <doi:...>
+authors (year) <arXiv:...>
+authors (year, ISBN:...)
+or if those are not available: <https:...>
+with no space after 'doi:', 'arXiv:', 'https:' and angle brackets for
+auto-linking.
+(If you want to add a title as well please put it in quotes: "Title")
 
-* Checked possibly misspelled words in DESCRIPTION and determined they are not misspellings.
+Please add \value to .Rd files regarding exported methods and explain
+the functions results in the documentation. Please write about the
+structure of the output (class) and also what the output means. (If a
+function does not return a value, please document that too, e.g.
+\value{No return value, called for side effects} or similar)
+Missing Rd-tags:
+      datelife_search.Rd: \value
+      get_taxon_summary.Rd: \value
+      get_valid_children.Rd: \value
+      is_datelife_result_empty.Rd: \value
+      summarize_datelife_result.Rd: \value
+      summary_matrix_to_phylo_all.Rd: \value
+
+Please ensure that your functions do not write by default or in your
+examples/vignettes/tests in the user's home filespace (including the
+package directory and getwd()). This is not allowed by CRAN policies.
+In your examples/vignettes/tests you can write to tempdir().
 
 ### Test environments:
 

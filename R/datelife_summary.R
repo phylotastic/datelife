@@ -143,7 +143,7 @@ get_taxon_summary <- function(datelife_result = NULL,
 #'   a sufficiently overlapping set of taxa between trees, see Ané, C., Eulenstein,
 #'   O., Piaggio-Talice, R., & Sanderson, M. J. (2009). "Groves of phylogenetic
 #'   trees". Annals of Combinatorics, 13(2), 139-167, <doi:10.1007/s00026-009-0017-x>.
-#'   ). In rare cases, a group of trees can have multiple groves. This argument indicates
+#'   In rare cases, a group of trees can have multiple groves. This argument indicates
 #'   whether to get the grove with the most trees (`criterion = "trees"`) or the
 #'   most taxa (`criterion = "taxa"`). Defaults to `criterion = "taxa"`.
 #' @inherit datelife_search return details

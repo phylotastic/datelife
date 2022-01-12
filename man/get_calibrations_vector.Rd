@@ -2,7 +2,7 @@
 % Please edit documentation in R/calibrations_get.R
 \name{get_calibrations_vector}
 \alias{get_calibrations_vector}
-\title{Search and extract available secondary calibrations for a given character
+\title{Search and extract secondary calibrations for a given character
 vector of taxon names}
 \usage{
 get_calibrations_vector(input = NULL, each = FALSE)
@@ -11,26 +11,25 @@ get_calibrations_vector(input = NULL, each = FALSE)
 \item{input}{A character vector of taxon names.}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
-the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
+the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 }
 \value{
-An object of class \code{datelifeCalibrations} -- a \code{data frame}
-of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
-for each pair of taxon names in \code{input}. The attribute \code{chronograms} stores
-the source data from which the calibrations were extracted.
+An object of class \code{datelifeCalibrations}, i.e., a \code{data.frame} (if
+\code{each = FALSE}) or a list of \code{data.frames} (if \code{each = TRUE}) of secondary
+calibrations, for each pair of taxon names in \code{input}. The attribute
+\code{chronograms} stores the \code{input} data from which the calibrations were extracted.
 }
 \description{
 The function searches DateLife's local
-database of phylogenetic trees with branch lengths proportional to time (aka,
-chronograms) with \code{\link[=datelife_search]{datelife_search()}}, and extracts divergence times
-(i.e., secondary calibrations) from chronograms for each pair of given
-taxon names with \code{\link[=extract_calibrations_phylo]{extract_calibrations_phylo()}}.
+database of phylogenetic trees with branch lengths proportional to time
+(chronograms) with \code{\link[=datelife_search]{datelife_search()}}, and extracts available node ages
+for each pair of given taxon names with \code{\link[=extract_calibrations_phylo]{extract_calibrations_phylo()}}.
 }
 \details{
 The function calls \code{\link[=datelife_search]{datelife_search()}}
-with \code{summary_format = "phylo_all"} to get all chronograms in database
-containing at least two taxa from \code{input}, and generates a \code{phylo}
+with \code{summary_format = "phylo_all"} to get all chronograms in the database
+containing at least two taxa in \code{input}, and generates a \code{phylo}
 or \code{multiPhylo} object object that will be passed to
 \code{\link[=extract_calibrations_phylo]{extract_calibrations_phylo()}}.
 }

@@ -18,5 +18,5 @@ A list of trees obtained with clustering methods detailed in \code{\link[=patris
 Cluster a patristic matrix into a tree with various methods.
 }
 \details{
-If clustering method fails, NA is returned.
+If clustering method fails, \code{NA} is returned.
 }

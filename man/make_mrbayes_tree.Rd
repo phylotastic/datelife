@@ -27,7 +27,7 @@ make_mrbayes_tree(
 \item{A tree}{Either as a phylo object or as a newick character string.
 It contains all taxa that you want at the end, both missing and non missing.
 This tree will be used as a hard constraint.}
-\item{A data frame}{It contains two columns named "taxon" and "clade".
+\item{A \code{data.frame}}{It contains two columns named "taxon" and "clade".
 The first one contains a character vector of missing taxon names.
 The second one contains a character or numeric vector of nodes from a
 constraint tree to which each taxon will be assigned.}

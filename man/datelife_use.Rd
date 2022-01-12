@@ -16,7 +16,7 @@ object, OR as a newick character string.}
 }}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
-the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
+the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 
 \item{dating_method}{Tree dating method to use. Options are "bladj" or "pathd8".}
@@ -35,14 +35,14 @@ object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.labe
 }
 \value{
 A \code{datelife} object, which is a \code{phylo} or \code{multiPhylo}
-object with secondary calibrations used for dating stored in attributes.
+object with secondary calibrations used for dating added as \code{\link[=attributes]{attributes()}}.
 }
 \description{
 \code{datelife_use} gets secondary calibrations available for any
 pair of \code{input} taxon names, mined from code{\link[=opentree_chronograms]{opentree_chronograms}}
 local DateLife database, and uses them to date a given tree topology with BLADJ
 or PATHd8. If no tree topology is provided, it will attempt to generate one with
-BOLD-OpenTree through \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}}.
+BOLD-OpenTree with the function \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}}.
 }
 \details{
 If input is a tree, it will use secondary calibrations to (1) date the tree with bladj

@@ -16,7 +16,7 @@ datelife_use_datelifequery(
 \item{dating_method}{Tree dating method to use. Options are "bladj" or "pathd8".}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
-the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
+the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 }
 \value{

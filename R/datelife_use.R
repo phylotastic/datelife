@@ -1,16 +1,16 @@
 #' Generate one or multiple chronograms for a set of given taxon names
 #'
-#' @description \code{datelife_use} gets secondary calibrations available for any
-#' pair of \code{input} taxon names, mined from code{\link[=opentree_chronograms]{opentree_chronograms}}
+#' @description `datelife_use` gets secondary calibrations available for any
+#' pair of `input` taxon names, mined from code{\link[=opentree_chronograms]{opentree_chronograms}}
 #' local DateLife database, and uses them to date a given tree topology with BLADJ
 #' or PATHd8. If no tree topology is provided, it will attempt to generate one with
-#' BOLD-OpenTree through [make_bold_otol_tree()].
+#' BOLD-OpenTree with the function [make_bold_otol_tree()].
 #'
 #' @inheritParams datelife_search
 #' @inheritParams use_all_calibrations
 #' @inheritDotParams make_datelife_query
-#' @return A \code{datelife} object, which is a \code{phylo} or \code{multiPhylo}
-#' object with secondary calibrations used for dating stored in attributes.
+#' @return A `datelife` object, which is a `phylo` or `multiPhylo`
+#' object with secondary calibrations used for dating added as [attributes()].
 #' @export
 #' @details
 #' If input is a tree, it will use secondary calibrations to (1) date the tree with bladj
@@ -70,9 +70,9 @@ datelife_use <- function(input = NULL,
 #' Generate one or multiple chronograms from a `datelifeQuery` object.
 #'
 #' @description `datelife_use_datelifequery` generates one or multiple chronograms (i.e., phylogenetic
-#' trees with branch lengths proportional to time) for a set of \code{input} taxa,
+#' trees with branch lengths proportional to time) for a set of `input` taxa,
 #' dated with bladj or PATHd8, using secondary calibrations available for any pair
-#' of \code{input} taxa, mined from the code{\link[=opentree_chronograms]{opentree_chronograms}}
+#' of `input` taxa, mined from the code{\link[=opentree_chronograms]{opentree_chronograms}}
 #' local DateLife database.
 #'
 #' @inheritParams get_taxon_summary

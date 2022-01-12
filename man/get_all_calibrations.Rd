@@ -17,14 +17,14 @@ object, OR as a newick character string.}
 }}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
-the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
+the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 }
 \value{
-An object of class \code{datelifeCalibrations} -- a \code{data frame}
-of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
-for each pair of taxon names in \code{input}. The attribute \code{chronograms} stores
-the source data from which the calibrations were extracted.
+An object of class \code{datelifeCalibrations}, i.e., a \code{data.frame} (if
+\code{each = FALSE}) or a list of \code{data.frames} (if \code{each = TRUE}) of secondary
+calibrations, for each pair of taxon names in \code{input}. The attribute
+\code{chronograms} stores the \code{input} data from which the calibrations were extracted.
 }
 \description{
 \code{get_all_calibrations} performs a \code{\link[=datelife_search]{datelife_search()}}

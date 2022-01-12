@@ -1,19 +1,21 @@
-#' Extract secondary calibrations from a \code{phylo} or \code{multiPhylo}
-#' object with branch lengths proportional to time
+#' Extract secondary calibrations from a `phylo` or `multiPhylo`
+#' object with branch lengths proportional to time using [geiger::congruify.phylo()]
 #'
-#' @description \code{extract_calibrations_phylo} extracts divergence times
-#' (i.e., secondary calibrations) for each taxon pair in a given
-#' \code{phylo} or \code{multiPhylo} object.
-#'
-#' @param input a \code{phylo} or \code{multiPhylo} object with branch lengths
+#' @description This function extracts node ages for each taxon
+#'   pair in `input`. It applies the congruification method described in Eastman et al.
+#'   (2013) "Congruification: support for time scaling large phylogenetic trees".
+#'   Methods in Ecology and Evolution, 4(7), 688-691, <doi:10.1111/2041-210X.12051>
+#'   to create a matrix of suitable secondary calibrations for each taxon pair.
+#'   Congruification is implemented with the function [geiger::congruify.phylo()].
+#' @param input A `phylo` or `multiPhylo` object with branch lengths
 #' proportional to time.
-#' @param each Boolean, default to \code{FALSE}: all calibrations are returned in
-#' the same data frame. If \code{TRUE}, calibrations from each chronogram are returned
+#' @param each Boolean, default to `FALSE`: all calibrations are returned in
+#' the same `data.frame`. If `TRUE`, calibrations from each chronogram are returned
 #' in separate data frames.
-#' @return An object of class \code{datelifeCalibrations} -- a \code{data frame}
-#' of secondary calibrations (or list of \code{data frames}, if \code{each = TRUE}),
-#' for each pair of taxon names in \code{input}. The attribute \code{chronograms} stores
-#' the source data from which the calibrations were extracted.
+#' @return An object of class `datelifeCalibrations`, i.e., a `data.frame` (if
+#'   `each = FALSE`) or a list of `data.frames` (if `each = TRUE`) of secondary
+#'   calibrations, for each pair of taxon names in `input`. The attribute
+#'   `chronograms` stores the `input` data from which the calibrations were extracted.
 #' @export
 extract_calibrations_phylo <- function(input = NULL,
                                        each = FALSE) {
@@ -89,18 +91,15 @@ extract_calibrations_phylo <- function(input = NULL,
   return(calibrations)
 }
 
-#' Extract secondary calibrations from a given \code{datelifeResult} object
+#' Extract secondary calibrations from a given `datelifeResult` object
 #'
-#' @description \code{extract_calibrations_dateliferesult} extracts divergence
-#' times (i.e., secondary calibrations) for each taxon pair in a given
-#' '\code{datelifeResult} object.
-#'
+#' @inherit extract_calibrations_phylo description
 #' @details The function calls summarize_datelife_result()] with
-#' \code{summary_format = "phylo_all"} to go from a \code{datelifeResult} object
-#' to a \code{phylo} or \code{multiPhylo} object that will be passed to
+#' `summary_format = "phylo_all" to go from a `datelifeResult` object
+#' to a `phylo` or `multiPhylo` object that will be passed to
 #' [extract_calibrations_phylo()].
 #'
-#' @param input A \code{datelifeResult} object.
+#' @param input A `datelifeResult` object.
 #' @inheritParams get_all_calibrations
 #' @inherit extract_calibrations_phylo return
 #' @export
@@ -121,19 +120,18 @@ extract_calibrations_dateliferesult <- function(input = NULL,
   return(res)
 }
 
-#' Search and extract available secondary calibrations for a given character
+#' Search and extract secondary calibrations for a given character
 #' vector of taxon names
 #'
 #' @description The function searches DateLife's local
-#' database of phylogenetic trees with branch lengths proportional to time (aka,
-#' chronograms) with [datelife_search()], and extracts divergence times
-#' (i.e., secondary calibrations) from chronograms for each pair of given
-#' taxon names with [extract_calibrations_phylo()].
+#' database of phylogenetic trees with branch lengths proportional to time
+#' (chronograms) with [datelife_search()], and extracts available node ages
+#' for each pair of given taxon names with [extract_calibrations_phylo()].
 #'
 #' @details The function calls [datelife_search()]
-#' with \code{summary_format = "phylo_all"} to get all chronograms in database
-#' containing at least two taxa from \code{input}, and generates a \code{phylo}
-#' or \code{multiPhylo} object object that will be passed to
+#' with `summary_format = "phylo_all"` to get all chronograms in the database
+#' containing at least two taxa in `input`, and generates a `phylo`
+#' or `multiPhylo` object object that will be passed to
 #' [extract_calibrations_phylo()].
 #'
 #' @param input A character vector of taxon names.
@@ -158,7 +156,7 @@ get_calibrations_vector <- function(input = NULL,
   return(res)
 }
 #' Search and extract available secondary calibrations from a given
-#' \code{datelifeQuery} object
+#' `datelifeQuery` object
 #'
 #' @param datelife_query A `datelifeQuery` object.
 #' @inheritParams get_all_calibrations

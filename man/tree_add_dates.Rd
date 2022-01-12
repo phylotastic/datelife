@@ -2,7 +2,7 @@
 % Please edit documentation in R/tree_add_dates.R
 \name{tree_add_dates}
 \alias{tree_add_dates}
-\title{Fabricates dates of missing taxa (with no data) on an already dated tree.}
+\title{Add missing taxa to a dated tree and fabricate node ages for these missing taxa.}
 \usage{
 tree_add_dates(
   dated_tree = NULL,
@@ -20,7 +20,7 @@ tree_add_dates(
 \item{A tree}{Either as a phylo object or as a newick character string.
 It contains all taxa that you want at the end, both missing and non missing.
 This tree will be used as a hard constraint.}
-\item{A data frame}{It contains two columns named "taxon" and "clade".
+\item{A \code{data.frame}}{It contains two columns named "taxon" and "clade".
 The first one contains a character vector of missing taxon names.
 The second one contains a character or numeric vector of nodes from a
 constraint tree to which each taxon will be assigned.}
@@ -28,9 +28,9 @@ constraint tree to which each taxon will be assigned.}
 They will be added at random to the constraint tree.}
 }}
 
-\item{dating_method}{The method used for tree dating.}
+\item{dating_method}{The method used for tree dating, options are "mrbayes" and "bladj".}
 
-\item{adding_criterion}{Only valid when dating_method = "mrbayes". A character vector to specify how missing_taxa should be added to dated_tree.
+\item{adding_criterion}{Only used when \code{dating_method = "mrbayes"}. A character vector to specify how missing_taxa should be added to dated_tree.
 Choose one of:
 \describe{
 \item{adding_method = "random"}{missing_taxa will be added at random to dated_tree.
@@ -44,8 +44,9 @@ Choose one of:
 \item{mrbayes_output_file}{A character vector specifying the name of mrBayes run file and outputs (can specify directory too).}
 }
 \value{
-A phylo object
+A \code{phylo} object.
 }
 \description{
-Fabricates dates of missing taxa (with no data) on an already dated tree.
+This function adds missing taxa to a chronogram given in \code{dated_tree}.
+It is still work in progress.
 }

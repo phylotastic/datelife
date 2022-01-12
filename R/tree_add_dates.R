@@ -1,9 +1,11 @@
-
-#' Fabricates dates of missing taxa (with no data) on an already dated tree.
+#' Add missing taxa to a dated tree and fabricate node ages for these missing taxa.
+#'
+#' @description This function adds missing taxa to a chronogram given in `dated_tree`.
+#' It is still work in progress.
 #' @param dated_tree a tree (newick or phylo) with branch lengths proportional to absolute time
 #' @inheritParams  missing_taxa_check
-#' @param dating_method The method used for tree dating.
-#' @param adding_criterion Only valid when dating_method = "mrbayes". A character vector to specify how missing_taxa should be added to dated_tree.
+#' @param dating_method The method used for tree dating, options are "mrbayes" and "bladj".
+#' @param adding_criterion Only used when `dating_method = "mrbayes"`. A character vector to specify how missing_taxa should be added to dated_tree.
 #' 	 Choose one of:
 #' \describe{
 #' 	\item{adding_method = "random"}{missing_taxa will be added at random to dated_tree.
@@ -14,10 +16,12 @@
 #' 	}
 #' }
 #' @inheritParams make_mrbayes_runfile
-#' @return A phylo object
-#' @export
-tree_add_dates <- function(dated_tree = NULL, missing_taxa = NULL, dating_method = "mrbayes",
-                           adding_criterion = "random", mrbayes_output_file = "mrbayes_tree_add_dates.nexus") {
+#' @return A `phylo` object.
+tree_add_dates <- function(dated_tree = NULL,
+                           missing_taxa = NULL,
+                           dating_method = "mrbayes",
+                           adding_criterion = "random",
+                           mrbayes_output_file = "mrbayes_tree_add_dates.nexus") {
   dated_tree <- tree_check(tree = dated_tree, dated = TRUE)
   missing_taxa <- missing_taxa_check(missing_taxa = missing_taxa, dated_tree = dated_tree)
   dating_method <- match.arg(dating_method, c("bladj", "mrbayes"))
@@ -81,7 +85,7 @@ tree_add_dates <- function(dated_tree = NULL, missing_taxa = NULL, dating_method
 #' 	\item{A tree}{Either as a phylo object or as a newick character string.
 #' 		It contains all taxa that you want at the end, both missing and non missing.
 #' 		This tree will be used as a hard constraint.}
-#' 	\item{A data frame}{It contains two columns named "taxon" and "clade".
+#' 	\item{A `data.frame`}{It contains two columns named "taxon" and "clade".
 #' 		The first one contains a character vector of missing taxon names.
 #' 		The second one contains a character or numeric vector of nodes from a
 #'    constraint tree to which each taxon will be assigned.}

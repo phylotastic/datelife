@@ -1,5 +1,5 @@
 
-#' Convert patristic matrix to a phylo object. Used inside: summarize_datelife_result, CongruifyTree.
+#' Convert a patristic matrix to a `phylo` object. Used inside [summarize_datelife_result()].
 #' @param patristic_matrix A patristic matrix
 #' @param clustering_method A character vector indicating the method to construct the tree. Options are
 #' \describe{
@@ -82,12 +82,12 @@ patristic_matrix_to_phylo <- function(patristic_matrix, clustering_method = "nj"
   class(phy) <- c(class(phy), "datelifeTree")
   return(phy)
 }
-#' Force a non ultrametric phylo object to be ultrametric
+#' Force a non-ultrametric `phylo` object to be ultrametric with [phytools::force.ultrametric()].
 #' @inheritParams phylo_check
-#' @return A phylo object
+#' @return A `phylo` object.
 #' @export
 force_ultrametric <- function(phy) {
-  # enhance: check if there is an edge.length.original already There
+  # TODO: check if there is an edge.length.original already there
   # something like how many grepl("edge.length.original") in names(phy) and add an integer after it.
   if (!inherits(phy, "phylo")) {
     message("phy argument is not a phylo object.")
@@ -104,7 +104,7 @@ force_ultrametric <- function(phy) {
 #'
 #' @inheritParams patristic_matrix_to_phylo
 #' @return A list of trees obtained with clustering methods detailed in [patristic_matrix_to_phylo()].
-#' @details If clustering method fails, NA is returned.
+#' @details If clustering method fails, `NA` is returned.
 #' @export
 cluster_patristicmatrix <- function(patristic_matrix, variance_matrix = NULL) {
   if (!inherits(patristic_matrix, "matrix") & !inherits(patristic_matrix, "data.frame")) {
