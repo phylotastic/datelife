@@ -2,18 +2,32 @@
 % Please edit documentation in R/opentree_chronograms.R
 \name{update_datelife_cache}
 \alias{update_datelife_cache}
-\title{Update chronogram database cache}
+\title{Create an updated chronogram database cache that is independent of the \code{opentree_chronograms} data object.}
 \usage{
-update_datelife_cache(save = TRUE, file = "opentree_chronograms.RData")
+update_datelife_cache(
+  write = TRUE,
+  file = file.path(tempdir(), "opentree_chronograms_updated.RData")
+)
 }
 \arguments{
-\item{save}{Default to \code{TRUE}, it saves all chronograms from Open Tree of Life to a ".RData" file (default to opentree_chronograms.RData)}
+\item{write}{Default to \code{TRUE}, it saves an .Rdata file (named opentree_chronograms_updated.RData
+by default) containing all chronograms from Open Tree of Life. Saves to temp dir by default.}
 
 \item{file}{Path including file name}
 }
 \value{
-None
+A list of 4 elements:
+\describe{
+\item{authors}{A list of lists of author names of the original studies that
+published chronograms currently stored in the Open Tree of Life database.}
+\item{curators}{A list of lists of curator names that uplodaded chronograms
+to the Open Tree of Life database.}
+\item{studies}{A list of study identifiers from original studies that
+published chronograms currently stored in the Open Tree of Life database.}
+\item{trees}{A \code{multiPhylo} object storing the chronograms from Open Tree of
+Life database.}
+}
 }
 \description{
-Update chronogram database cache
+Create an updated chronogram database cache that is independent of the \code{opentree_chronograms} data object.
 }

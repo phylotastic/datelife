@@ -2,12 +2,12 @@
 % Please edit documentation in R/opentree_chronograms.R
 \name{update_all_cached}
 \alias{update_all_cached}
-\title{Update all data files}
+\title{Update all data files as data objects for the package}
 \usage{
 update_all_cached()
 }
 \value{
-nothing
+None
 }
 \description{
 This includes opentree chronograms, contributors, treebase and curators

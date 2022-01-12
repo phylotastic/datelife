@@ -10,7 +10,17 @@ get_otol_chronograms(max_tree_count = "all")
 \item{max_tree_count}{Default to "all", it gets all available chronograms. For testing purposes, a numeric value indicating the max number of trees to be cached.}
 }
 \value{
-A list with elements for the trees, authors, curators, and study ids.
+A list of 4 elements:
+\describe{
+\item{authors}{A list of lists of author names of the original studies that
+published chronograms currently stored in the Open Tree of Life database.}
+\item{curators}{A list of lists of curator names that uplodaded chronograms
+to the Open Tree of Life database.}
+\item{studies}{A list of study identifiers from original studies that
+published chronograms currently stored in the Open Tree of Life database.}
+\item{trees}{A \code{multiPhylo} object storing the chronograms from Open Tree of
+Life database.}
+}
 }
 \description{
 Get all chronograms from Open Tree of Life database

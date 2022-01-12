@@ -6,10 +6,13 @@
 #' @docType data
 #' @format A list of four elements, containing data from OpenTree of Life chronograms
 #' \describe{
-#'   \item{authors}{List of lists of authors of the included studies}
-#'   \item{curators}{List of lists of curators of the included studies}
-#'   \item{studies}{List of study identifiers}
-#'   \item{trees}{List storing the chronograms from OpenTree}
+#'   \item{authors}{A list of lists of author names of the original studies that
+#'     published chronograms in the Open Tree of Life database.}
+#'   \item{curators}{A list of lists of curator names that uplodaded chronograms
+#'     to the Open Tree of Life database.}
+#'   \item{studies}{A list of study identifiers.}
+#'   \item{trees}{A `multiPhylo` object storing the chronograms from Open Tree of
+#'     Life database.}
 #' }
 #' @source \url{http://opentreeoflife.org}
 #' @keywords opentree dates myrs million years time phylogeny chronogram
@@ -21,37 +24,27 @@
 "opentree_chronograms"
 
 
-#' Update chronogram database cache
-#' @param save Default to `TRUE`, it saves all chronograms from Open Tree of Life to a ".RData" file (default to opentree_chronograms.RData)
-#' @inheritParams save_otol_chronograms
+#' Create an updated chronogram database cache that is independent of the `opentree_chronograms` data object.
+#' @param write Default to `TRUE`, it saves an .Rdata file (named opentree_chronograms_updated.RData
+#'  by default) containing all chronograms from Open Tree of Life. Saves to temp dir by default.
+#' @param file Path including file name
 #' @inherit get_otol_chronograms return
-#' @inherit save_otol_chronograms return
 #' @export
-update_datelife_cache <- function(save = TRUE, file = "opentree_chronograms.RData") { # , new_studies_only = TRUE
+update_datelife_cache <- function(write = TRUE,
+                                  file = file.path(tempdir(), "opentree_chronograms_updated.RData")) { # , new_studies_only = TRUE
   # enhance: I think we can change the name to update_chronograms_cache
-  if (save) {
-    cache_updated <- save_otol_chronograms(file = file)
-  } else {
-    cache_updated <- get_otol_chronograms()
+  cache_updated <- get_otol_chronograms()
+  if (write) {
+    save(opentree_chronograms, file = file, compress = "xz")
   }
   return(cache_updated)
 }
 
-# enhance: I think we can remove this function and just add one line into save of update_datelife_cache
-#' Save all chronograms from Open Tree of Life
-#' @param file Path including file name
-#' @return None
-#' @export
-save_otol_chronograms <- function(file = "opentree_chronograms.RData") {
-  opentree_chronograms <- get_otol_chronograms()
-  save(opentree_chronograms, file = file, compress = "xz")
-}
-
-#' Update all data files
+#' Update all data files as data objects for the package
 #'
 #' This includes opentree chronograms, contributors, treebase and curators
 #' For speed, datelife caches chronograms and other information. Running this (within the checked out version of datelife) will refresh these. Then git commit and git push them back
-#' @return nothing
+#' @return None
 #' @export
 update_all_cached <- function() {
   opentree_chronograms <- get_otol_chronograms()
@@ -98,7 +91,17 @@ phylo_has_brlen <- function(phy) {
 
 #' Get all chronograms from Open Tree of Life database
 #' @param max_tree_count Default to "all", it gets all available chronograms. For testing purposes, a numeric value indicating the max number of trees to be cached.
-#' @return A list with elements for the trees, authors, curators, and study ids.
+#' @return A list of 4 elements:
+#' \describe{
+#'   \item{authors}{A list of lists of author names of the original studies that
+#'     published chronograms currently stored in the Open Tree of Life database.}
+#'   \item{curators}{A list of lists of curator names that uplodaded chronograms
+#'     to the Open Tree of Life database.}
+#'   \item{studies}{A list of study identifiers from original studies that
+#'     published chronograms currently stored in the Open Tree of Life database.}
+#'   \item{trees}{A `multiPhylo` object storing the chronograms from Open Tree of
+#'     Life database.}
+#' }
 #' @export
 get_otol_chronograms <- function(max_tree_count = "all") {
   options(warn = 1)
@@ -216,18 +219,20 @@ get_otol_chronograms <- function(max_tree_count = "all") {
     }
   }
   if (nrow(ott_id_problems) > 0) {
-    problems_file <- paste0(getwd(), file.path("data-raw", paste0("ott_id_problems_", max_tree_count, ".csv")))
+    problems_file <- file.path(getwd(), "data-raw", paste0("ott_id_problems_", max_tree_count, ".csv"))
     utils::write.csv(ott_id_problems,
       file = problems_file,
       quote = FALSE, row.names = FALSE
     )
   } else {
+    message("There were no problematic chronograms.")
     write("There were no problematic chronograms.", problems_file)
   }
   tot_time <- Sys.time() - start_time # end of registering function running time
   class(trees) <- "multiPhylo"
   result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
   attr(result, "running_time") <- tot_time
+  message(tot_time)
   return(result)
 }
 
