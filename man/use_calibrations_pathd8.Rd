@@ -14,21 +14,22 @@ use_calibrations_pathd8(
 \arguments{
 \item{phy}{A \code{phylo} object with branch lengths.}
 
-\item{calibrations}{A data frame of secondary calibrations for any pair of taxon
-names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.}
+\item{calibrations}{A \code{data.frame} of secondary calibrations for any pair of taxon
+names in \code{phy}, usually obtained with \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 
 \item{expand}{How much to expand by each step to get consistent calibrations. Should be between 0 and 1.}
 
 \item{giveup}{How many expansions to try before giving up}
 }
 \value{
-A phylo object with branch length proportional to time.
+A \code{phylo} object with branch lengths proportional to time.
 }
 \description{
 \code{use_calibrations_pathd8} uses secondary calibrations to date a tree with initial branch lengths using PATHd8.
 }
 \details{
-This function will try to use the calibrations as fixed ages.
+This function implements \href{https://www2.math.su.se/PATHd8/}{PATHd8} with \code{\link[geiger:geiger-internal]{geiger::PATHd8.phylo()}}.
+The function first attempts to use the given calibrations as fixed ages.
 If that fails (often due to conflict between calibrations), it will expand the
 range of the minimum age and maximum age and try again. And repeat.
 If expand = 0, it uses the summarized calibrations.

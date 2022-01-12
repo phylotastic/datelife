@@ -2,8 +2,7 @@
 % Please edit documentation in R/make_bladj_tree.R
 \name{make_bladj_tree}
 \alias{make_bladj_tree}
-\title{Takes a tree and uses bladj to estimate node ages and branch lengths given a
-set of fixed node ages and respective node names}
+\title{Use the BLADJ algorithm to get a chronogram from a tree topology for which you have age data for some of its nodes.}
 \usage{
 make_bladj_tree(tree = NULL, nodenames = NULL, nodeages = NULL)
 }
@@ -15,13 +14,14 @@ make_bladj_tree(tree = NULL, nodenames = NULL, nodeages = NULL)
 \item{nodeages}{A numeric vector with the actual ages of named nodes}
 }
 \value{
-A phylo tree
+A \code{phylo} object.
 }
 \description{
-Takes a tree and uses bladj to estimate node ages and branch lengths given a
-set of fixed node ages and respective node names
+The function takes a tree topology and uses the BLADJ algorithm
+implemented with \code{\link[phylocomr:ph_bladj]{phylocomr::ph_bladj()}} to assign node ages and branch lengths, given a
+set of fixed node ages and respective node names.
 }
 \details{
-tree can or cannot be dated, edge.lengths in it will be ignored anyways;
-only ages from nodeages will be fixed according to nodenames.
+Input \code{tree} can be dated or not, \verb{$edge.length} is ignored.
+Ages given in \code{nodeages} are fixed on their corresponding nodes given in \code{nodenames}.
 }

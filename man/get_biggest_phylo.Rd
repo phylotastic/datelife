@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_summary.R
 \name{get_biggest_phylo}
 \alias{get_biggest_phylo}
-\title{Get the tree with the most tips: the biggest tree}
+\title{Get the tree with the most tips: the biggest tree.}
 \usage{
 get_biggest_phylo(trees)
 }
@@ -13,5 +13,5 @@ get_biggest_phylo(trees)
 A \code{phylo} object with a citation slot with the citation of the biggest tree.
 }
 \description{
-Get the tree with the most tips: the biggest tree
+Get the tree with the most tips: the biggest tree.
 }

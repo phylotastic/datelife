@@ -3,15 +3,18 @@
 #' @description `use_all_calibrations` generates one or multiple chronograms
 #'   (i.e., phylogenetic trees with branch lengths proportional to time) by dating
 #'   a tree topology given in `phy`, and secondary calibrations given in
-#'   `calibrations`, using bladj or PATHd8 specified in `dating_method`.
+#'   `calibrations`, using the algorithm specified in the argument `dating_method`.
 #' @inherit use_calibrations details
 #' @param phy A `phylo` object to use as tree topology.
 #' @param calibrations A `datelifeCalibrations` object, an output of [get_all_calibrations()].
 #' @inheritParams extract_calibrations_phylo
 ## extract_calibrations_phylo has param each
-#' @param dating_method Tree dating method to use. Options are "bladj" or "pathd8".
+#' @param dating_method Tree dating algorithm to use. Options are "bladj" or "pathd8"
+#'   (Webb et al., 2008, <doi:10.1093/bioinformatics/btn358>; Britton et al., 2007,
+#'   <doi:10.1080/10635150701613783>).
 #' @inheritDotParams use_calibrations
-#' @inherit datelife_use return
+#' @return A `phylo` or `multiPhylo` object with branch lengths proportional to time.
+#' @inherit use_calibrations details
 #' @export
 use_all_calibrations <- function(phy = NULL,
                                  calibrations = NULL,
@@ -54,8 +57,7 @@ use_all_calibrations <- function(phy = NULL,
 #' @inheritParams use_all_calibrations
 #' @inheritDotParams use_calibrations
 # #' @param ... Arguments to pass to \code{use_calibrations}.
-#' @return A \code{multiPhylo} object of trees with branch lengths proportional
-#' to time.
+#' @return A `multiPhylo` object of trees with branch lengths proportional to time.
 #' @inherit use_calibrations details
 #' @export
 # You can get the datelifeResult object or the list of chronograms first
@@ -102,18 +104,13 @@ use_calibrations_each <- function(phy = NULL,
 # use_calibrations_bladj has param type
 #' @inheritDotParams use_calibrations_pathd8
 #' @return A `phylo` object with branch lengths proportional to time.
-#' @export
+#' @section output: The output object stores the used `calibrations` and `dating_method` as
+#'   `attributes(output)$datelife_calibrations` and `attributes(output)$dating_method`.
 #' @details
-#' `calibrations` and `dating_method` are stored as attributes.
-#' They can be accessed with `attributes(return)$datelife_calibrations` and
-#' `attributes(return)$dating_method`, respectively. \cr
-#' If `input` tree does not have branch lengths, `dating_method` is
-#' ignored and the function will use secondary calibrations to date the
-#' `input` tree with BLADJ from [phylocom](https://github.com/phylocom/phylocom),
-#' using [phylocomr::ph_bladj()], via [use_calibrations_bladj()]. If
-#' `input` tree has branch lengths it can be dated
-#' with [PATHd8](https://www2.math.su.se/PATHd8/), using [geiger::PATHd8.phylo()],
-#' via [use_calibrations_pathd8()].
+#' If `phy` has no branch lengths, `dating_method` is ignores, and the function applies secondary
+#' calibrations to date the tree with the BLADJ algorithm. See [make_bladj_tree()] and [use_calibrations_bladj()].
+#' If `phy` has branch lengths, the function can use the PATHd8 algorithm. See [use_calibrations_pathd8()].
+#' @export
 use_calibrations <- function(phy = NULL,
                              calibrations = NULL,
                              dating_method = "bladj",

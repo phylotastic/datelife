@@ -2,7 +2,7 @@
 % Please edit documentation in R/use_calibrations_bladj.R
 \name{use_calibrations_bladj}
 \alias{use_calibrations_bladj}
-\title{Use calibrations to date a topology with bladj.}
+\title{Use calibrations to date a topology with the BLADJ algorithm.}
 \usage{
 use_calibrations_bladj(
   phy,
@@ -15,12 +15,12 @@ use_calibrations_bladj(
 \arguments{
 \item{phy}{A \code{phylo} object with or without branch lengths.}
 
-\item{calibrations}{A data frame of secondary calibrations for any pair of taxon
-names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.}
+\item{calibrations}{A \code{data.frame} of secondary calibrations for any pair of taxon
+names in \code{phy}, usually obtained with \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 
-\item{type}{The type of age to use as calibration: "median", "mean", "min", or "max".}
+\item{type}{The type of age to use as calibration. Options are "median", "mean", "min", or "max".}
 
-\item{root_age}{Not implemented yet}
+\item{root_age}{Not implemented yet. Numeric specifying the age of the root. If there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10\% more than the age of the calibration.}
 
 \item{match_calibrations}{Boolean, default to TRUE. It will run match_all_calibrations function. Set to FALSE if your calibrations have already been matched.}
 }
@@ -28,8 +28,9 @@ names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations
 A \code{phylo} object with branch lengths proportional to time.
 }
 \description{
-Use calibrations to date a topology with bladj.
+The function prepares the input for BLADJ and calls \code{\link[=make_bladj_tree]{make_bladj_tree()}}
 }
 \details{
-root_age Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10\% more than the age of the calibration.
+The BLADJ algorithm is part of the Phylocom software, presented in Webb, C. O., Ackerly, D. D., & Kembel, S. W. (2008).
+"Phylocom: software for the analysis of phylogenetic community structure and trait evolution". Bioinformatics, 24(18), \url{doi:10.1093/bioinformatics/btn358}
 }

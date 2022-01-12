@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_summary.R
 \name{summarize_datelife_result}
 \alias{summarize_datelife_result}
-\title{Summarize a \code{datelifeResult} object}
+\title{Summarize a \code{datelifeResult} object.}
 \usage{
 summarize_datelife_result(
   datelife_result = NULL,

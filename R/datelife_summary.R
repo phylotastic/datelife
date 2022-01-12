@@ -76,7 +76,7 @@ get_taxon_summary <- function(datelife_result = NULL,
 # print.datelifeTaxonSummary <- function(taxon_summary){
 #
 # }
-#' Summarize a `datelifeResult` object
+#' Summarize a `datelifeResult` object.
 #'
 #' @description Get different types of summaries from a `datelifeResult`
 #' object, an output from [get_datelife_result()].
@@ -324,8 +324,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
 # 	return(res)
 # }
 
-#' Get the tree with the most tips: the biggest tree
-#'
+#' Get the tree with the most tips: the biggest tree.
 #'
 #'
 #' @param trees A list of trees as multiPhylo or as a plain list object.

@@ -38,7 +38,7 @@ with \code{\link[phangorn:pml]{phangorn::optim.pml()}}. Only relevant if chronog
 \item{aligner}{A character vector indicating whether to use MAFFT or MUSCLE
 to align BOLD sequences. It is not case sensitive. Default to MUSCLE,
 supported using the \href{https://bioconductor.org/packages/release/bioc/html/msa.html}{msa}
-package from Bioconductor. Needs to be installed using \code{\link[BiocManager:install]{BiocManager::install()}}.}
+package from Bioconductor, which needs to be installed using \code{\link[BiocManager:install]{BiocManager::install()}}.}
 
 \item{...}{
   Arguments passed on to \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree}}
@@ -50,7 +50,12 @@ numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{ro
   }}
 }
 \value{
-A phylogeny with branch lengths proportional to relative substitution rate.
+A \code{phylo} object. If there are enough BOLD sequences available for the
+\code{input} taxon names, the function returns a tree with branch lengths proportional
+to relative substitution rate. If not enough BOLD sequences are available
+for the \code{input} taxon names, the function returns the topology given as
+\code{input}, or a synthetic Open Tree of Life for the taxon names given in
+\code{input}, obtained with \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree()}}.
 }
 \description{
 \code{make_bold_otol_tree} takes taxon names from a tree topology or
@@ -59,10 +64,7 @@ a vector of names to search for genetic markers in the Barcode of Life Database
 with Maximum Likelihood.
 }
 \details{
-If input is a phylo object or a newick string, it is used as backbone topology.
-If input is a character vector of taxon names, an induced synthetic OpenTree
+If \code{input} is a \code{phylo} object or a newick string, it is used as backbone topology.
+If \code{input} is a character vector of taxon names, an induced synthetic OpenTree
 subtree is used as backbone.
-If there are not enough sequences to return a tree with branch lengths, it returns
-either the original input topology or the synthetic OpenTree subtree obtained
-for the input taxon names.
 }

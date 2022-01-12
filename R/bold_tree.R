@@ -16,20 +16,20 @@
 #' @param aligner A character vector indicating whether to use MAFFT or MUSCLE
 #' to align BOLD sequences. It is not case sensitive. Default to MUSCLE,
 #' supported using the [msa](https://bioconductor.org/packages/release/bioc/html/msa.html)
-#' package from Bioconductor. Needs to be installed using [BiocManager::install()].
+#' package from Bioconductor, which needs to be installed using [BiocManager::install()].
 #' @inheritParams get_otol_synthetic_tree
 #' @inheritDotParams get_otol_synthetic_tree
-#' @return A phylogeny with branch lengths proportional to relative substitution rate.
+#' @return A `phylo` object. If there are enough BOLD sequences available for the
+#'   `input` taxon names, the function returns a tree with branch lengths proportional
+#'   to relative substitution rate. If not enough BOLD sequences are available
+#'   for the `input` taxon names, the function returns the topology given as
+#'   `input`, or a synthetic Open Tree of Life for the taxon names given in
+#'   `input`, obtained with [get_otol_synthetic_tree()].
 #' @details
-#' If input is a phylo object or a newick string, it is used as backbone topology.
-#' If input is a character vector of taxon names, an induced synthetic OpenTree
-#' subtree is used as backbone.
-#' If there are not enough sequences to return a tree with branch lengths, it returns
-#' either the original input topology or the synthetic OpenTree subtree obtained
-#' for the input taxon names.
+#'   If `input` is a `phylo` object or a newick string, it is used as backbone topology.
+#'   If `input` is a character vector of taxon names, an induced synthetic OpenTree
+#'   subtree is used as backbone.
 #' @export
-# input <- phyloall[[1]]
-# input <- tax_phyloallall[[3]][[13]] # it is now working with this input
 make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"),
                                 marker = "COI",
                                 otol_version = "v3",
@@ -73,7 +73,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
     # if this is TRUE, it means there are no sequences in BOLD for the set of input taxa.
     # if (!use_tnrs) message("Setting 'use_tnrs = TRUE' might change this, but it can be slow.\n")
     warning("Names in input do not match BOLD specimen records; no sequences
-			were found in BOLD for the set of input taxa.\nReturning tree with no branch lengths!")
+			were found in BOLD for the set of input taxa.\nReturning a tree topology with no branch lengths from Open Tree of Life!")
+    phy$tip.label <- gsub(" ", "_", phy$tip.label)
+    attr(phy, "datelife_query") <- datelife_query
     return(phy)
   }
   message("BOLD sequence search done!")
@@ -113,7 +115,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
       bold_input[which(!bold_input %in% taxa.to.drop)]
     )
     warning("There are not enough sequences available in BOLD to reconstruct
-						branch lengths. \nReturning a tree topology only!")
+						branch lengths. \nReturning a tree topology with no branch lengths from Open Tree of Life!")
+    phy$tip.label <- gsub(" ", "_", phy$tip.label)
+    attr(phy, "datelife_query") <- datelife_query
     return(phy)
   }
   if (length(taxa.to.drop) > 0) {
@@ -132,17 +136,17 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
   if ("muscle" %in% aligner) {
     message("... Aligning BOLD sequences with MUSCLE.")
     if (!requireNamespace("msa", quietly=TRUE)) {
-      stop("'msa' package is missing. Please install it from Bioconductor with",
+      stop("'msa' package is not installed. Please install it from Bioconductor with",
            " BiocManager::install('msa', dependencies = TRUE)")
     }
     in_bold <- sapply(1:nrow(final.sequences), function(x) !"-" %in% final.sequences[x, ])
     vector.sequences <- sapply(1:nrow(final.sequences), function(x) paste0(final.sequences[x, ], collapse = ""))
     if (!requireNamespace("msa", quietly=TRUE)) {
-      stop("'msa' package is missing. Please install it from Bioconductor with",
+      stop("'msa' package is not installed. Please install it from Bioconductor with",
            " BiocManager::install('msa', dependencies = TRUE)")
     }
     if (!requireNamespace("Biostrings", quietly=TRUE)) {
-      stop("'Biostring' package is missing. Please install it from Bioconductor with",
+      stop("'Biostring' package is not installed. Please install it from Bioconductor with",
            " BiocManager::install('Biostrings', dependencies = TRUE)")
     }
 msa.sequences <- Biostrings::DNAStringSet(vector.sequences)

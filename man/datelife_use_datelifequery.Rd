@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_use.R
 \name{datelife_use_datelifequery}
 \alias{datelife_use_datelifequery}
-\title{Generate one or multiple chronograms from a \code{datelifeQuery} object.}
+\title{Generate one or multiple chronograms for a set of taxon names given as a \code{datelifeQuery} object.}
 \usage{
 datelife_use_datelifequery(
   datelife_query = NULL,
@@ -13,19 +13,26 @@ datelife_use_datelifequery(
 \arguments{
 \item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 
-\item{dating_method}{Tree dating method to use. Options are "bladj" or "pathd8".}
+\item{dating_method}{Tree dating algorithm to use. Options are "bladj" or "pathd8"
+(Webb et al., 2008, \url{doi:10.1093/bioinformatics/btn358}; Britton et al., 2007,
+\url{doi:10.1080/10635150701613783}).}
 
 \item{each}{Boolean, default to \code{FALSE}: all calibrations are returned in
 the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 }
 \value{
-A list with a chronogram and secondary calibrations used.
+A \code{phylo} or \code{multiPhylo} object with branch lengths proportional to time.
 }
 \description{
-\code{datelife_use_datelifequery} generates one or multiple chronograms (i.e., phylogenetic
-trees with branch lengths proportional to time) for a set of \code{input} taxa,
-dated with bladj or PATHd8, using secondary calibrations available for any pair
-of \code{input} taxa, mined from the code{\link[=opentree_chronograms]{opentree_chronograms}}
-local DateLife database.
+The function gets secondary calibrations available for any
+pair of given taxon names, mined from code{\link[=opentree_chronograms]{opentree_chronograms}}
+local DateLife database, and uses them to date a given tree topology with the
+algorithm defined in \code{dating_method}. If no tree topology is provided,
+it will attempt to get one for the given taxon names by calling the function \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}}.
+}
+\details{
+If \code{phy} has no branch lengths, \code{dating_method} is ignores, and the function applies secondary
+calibrations to date the tree with the BLADJ algorithm. See \code{\link[=make_bladj_tree]{make_bladj_tree()}} and \code{\link[=use_calibrations_bladj]{use_calibrations_bladj()}}.
+If \code{phy} has branch lengths, the function can use the PATHd8 algorithm. See \code{\link[=use_calibrations_pathd8]{use_calibrations_pathd8()}}.
 }

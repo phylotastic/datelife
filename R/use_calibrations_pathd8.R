@@ -2,20 +2,21 @@
 #'
 #' \code{use_calibrations_pathd8} uses secondary calibrations to date a tree with initial branch lengths using PATHd8.
 #'
-#' @param phy A \code{phylo} object with branch lengths.
+#' @param phy A `phylo` object with branch lengths.
 #' @inheritParams use_calibrations_bladj
 #' @param expand How much to expand by each step to get consistent calibrations. Should be between 0 and 1.
 #' @param giveup How many expansions to try before giving up
-#' @return A phylo object with branch length proportional to time.
-#' @export
+#' @return A `phylo` object with branch lengths proportional to time.
 #' @details
-#' This function will try to use the calibrations as fixed ages.
+#' This function implements [PATHd8](https://www2.math.su.se/PATHd8/) with [geiger::PATHd8.phylo()].
+#' The function first attempts to use the given calibrations as fixed ages.
 #' If that fails (often due to conflict between calibrations), it will expand the
 #' range of the minimum age and maximum age and try again. And repeat.
 #' If expand = 0, it uses the summarized calibrations.
 #' In some cases, it returns edge lengths in relative time (with maximum tree depth = 1)
 #' instead of absolute time, as given by calibrations. In this case, the function returns NA.
 #' This is an issue from PATHd8.
+#' @export
 use_calibrations_pathd8 <- function(phy = NULL,
                                     calibrations = NULL,
                                     expand = 0.1,

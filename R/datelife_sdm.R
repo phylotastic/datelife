@@ -1,4 +1,4 @@
-#' Reconstruct a supertree from a \code{datelifeResult} object using the Super Distance Matrix (SDM) method.
+#' Reconstruct a supertree from a `datelifeResult` object using the Super Distance Matrix (SDM) method.
 #'
 #'
 #'
@@ -17,7 +17,7 @@
 #' Matrix (SDM) method described in Criscuolo A, Berry V, Douzery EJ, Gascuel O.
 #' (2006) "SDM: a fast distance-based approach for (super) tree building in
 #' phylogenomics" <doi:10.1080/10635150600969872>, implemented with the function
-#' [ape::SDM()]. The resulting summary SDM Distance Matrix is clustered with [summary_matrix_to_phylo()].
+#' [ape::SDM()]. The resulting summary SDM is clustered with [summary_matrix_to_phylo()].
 datelife_result_sdm_phylo <- function(datelife_result,
                                 weighting = "flat",
                                 ...) {
@@ -52,7 +52,7 @@ datelife_result_sdm_phylo <- function(datelife_result,
   class(phy) <- c(class(phy), "datelifeSDM")
   return(phy)
 }
-#' Function to remove missing taxa from a \code{datelifeResult} object.
+#' Function to remove missing taxa from a `datelifeResult` object.
 #' @description Used in [datelife_result_sdm_phylo()].
 #' @param patristic_matrix A patristic matrix with row and column names for taxa
 #' @return patristic_matrix for all_taxa

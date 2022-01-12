@@ -1,23 +1,22 @@
-#' Generate one or multiple chronograms for a set of given taxon names
+#' Generate one or multiple chronograms for a set of given taxon names.
 #'
-#' @description `datelife_use` gets secondary calibrations available for any
-#' pair of `input` taxon names, mined from code{\link[=opentree_chronograms]{opentree_chronograms}}
-#' local DateLife database, and uses them to date a given tree topology with BLADJ
-#' or PATHd8. If no tree topology is provided, it will attempt to generate one with
-#' BOLD-OpenTree with the function [make_bold_otol_tree()].
+#' @description The function gets secondary calibrations available for any
+#' pair of given taxon names, mined from code{\link[=opentree_chronograms]{opentree_chronograms}}
+#' local DateLife database, and uses them to date a given tree topology with the
+#' algorithm defined in `dating_method`. If no tree topology is provided,
+#' it will attempt to get one for the given taxon names by calling the function [make_bold_otol_tree()].
 #'
 #' @inheritParams datelife_search
 #' @inheritParams use_all_calibrations
 #' @inheritDotParams make_datelife_query
-#' @return A `datelife` object, which is a `phylo` or `multiPhylo`
-#' object with secondary calibrations used for dating added as [attributes()].
-#' @export
+#' @inherit use_all_calibrations return
+#' @inherit use_calibrations output
 #' @details
-#' If input is a tree, it will use secondary calibrations to (1) date the tree with bladj
-#' if it has no branch lengths, or (2) date the tree with PATHd8 if it has branch lengths.
-#' If input is a vector of taxon names, it will attempt to reconstruct a BOLD tree first
-#' to get a topology with branch lengths. If it can't, it will get an Open Tree
-#' of Life synthetic tree topology and will date it with bladj.
+#' If `input` is a vector of taxon names, the function will attempt to reconstruct a BOLD
+#' tree with [make_bold_otol_tree()] to get a tree with branch lengths. If it fails,
+#' it will get an Open Tree of Life synthetic tree topology.
+#' The function then calls [use_calibrations()].
+#' @export
 datelife_use <- function(input = NULL,
                          each = FALSE,
                          dating_method = "bladj",
@@ -58,27 +57,22 @@ datelife_use <- function(input = NULL,
   }
   datelife_query$phy <- phy
   # Finally, call datelife_search, get_all_calibrations and use_all_calibrations:
-  res <- datelife_use_datelifequery(
-    datelife_query = datelife_query,
-    each = each,
-    dating_method = dating_method
-  )
+  res <- datelife_use_datelifequery(datelife_query = datelife_query,
+                                    each = each,
+                                    dating_method = dating_method)
 
   return(res)
 }
 
-#' Generate one or multiple chronograms from a `datelifeQuery` object.
+#' Generate one or multiple chronograms for a set of taxon names given as a `datelifeQuery` object.
 #'
-#' @description `datelife_use_datelifequery` generates one or multiple chronograms (i.e., phylogenetic
-#' trees with branch lengths proportional to time) for a set of `input` taxa,
-#' dated with bladj or PATHd8, using secondary calibrations available for any pair
-#' of `input` taxa, mined from the code{\link[=opentree_chronograms]{opentree_chronograms}}
-#' local DateLife database.
+#' @inherit datelife_use description
 #'
 #' @inheritParams get_taxon_summary
 #' @inheritParams use_all_calibrations
 #' @inheritParams get_all_calibrations
-#' @return A list with a chronogram and secondary calibrations used.
+#' @inherit use_all_calibrations return
+#' @inherit use_calibrations details
 #' @export
 datelife_use_datelifequery <- function(datelife_query = NULL,
                                        dating_method = "bladj",

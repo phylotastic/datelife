@@ -26,9 +26,13 @@ Description: Methods and workflows to get dated phylogenetic trees, aka chronogr
     for summarizing, we implement theorem 1.1. from Ané et al. (2009)
     <doi:10.1007/s00026-009-0017-x>.
     A given phylogenetic tree can be dated using time of lineage divergence data
-    as secondary calibrations. We implement the congruification method described
+    as secondary calibrations (caution, see). We implement the congruification method described
     in Eastman et al. (2013) <doi:10.1111/2041-210X.12051> to obtain and apply
-    secondary calibrations. Tree dating can be performed with BLADJ (), PATHd8 (), or mrBayes ()
+    secondary calibrations. Tree dating can be performed with different methods
+    including BLADJ (Webb et al. (2008) <doi:10.1093/bioinformatics/btn358>), PATHd8
+    (Britton et al. (2007) <doi:10.1080/10635150701613783>), mrBayes (Huelsenbeck
+    and Ronquist (2001) <doi:10.1093/bioinformatics/17.8.754>), and treePL (Smith
+    and O'Meara (2012) <doi:10.1093/bioinformatics/bts492>).
 Depends:
     R (>= 3.6.0)
 biocViews: Software

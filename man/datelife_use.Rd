@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_use.R
 \name{datelife_use}
 \alias{datelife_use}
-\title{Generate one or multiple chronograms for a set of given taxon names}
+\title{Generate one or multiple chronograms for a set of given taxon names.}
 \usage{
 datelife_use(input = NULL, each = FALSE, dating_method = "bladj", ...)
 }
@@ -19,7 +19,9 @@ object, OR as a newick character string.}
 the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram are returned
 in separate data frames.}
 
-\item{dating_method}{Tree dating method to use. Options are "bladj" or "pathd8".}
+\item{dating_method}{Tree dating algorithm to use. Options are "bladj" or "pathd8"
+(Webb et al., 2008, \url{doi:10.1093/bioinformatics/btn358}; Britton et al., 2007,
+\url{doi:10.1080/10635150701613783}).}
 
 \item{...}{
   Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}
@@ -34,20 +36,18 @@ object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.labe
   }}
 }
 \value{
-A \code{datelife} object, which is a \code{phylo} or \code{multiPhylo}
-object with secondary calibrations used for dating added as \code{\link[=attributes]{attributes()}}.
+A \code{phylo} or \code{multiPhylo} object with branch lengths proportional to time.
 }
 \description{
-\code{datelife_use} gets secondary calibrations available for any
-pair of \code{input} taxon names, mined from code{\link[=opentree_chronograms]{opentree_chronograms}}
-local DateLife database, and uses them to date a given tree topology with BLADJ
-or PATHd8. If no tree topology is provided, it will attempt to generate one with
-BOLD-OpenTree with the function \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}}.
+The function gets secondary calibrations available for any
+pair of given taxon names, mined from code{\link[=opentree_chronograms]{opentree_chronograms}}
+local DateLife database, and uses them to date a given tree topology with the
+algorithm defined in \code{dating_method}. If no tree topology is provided,
+it will attempt to get one for the given taxon names by calling the function \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}}.
 }
 \details{
-If input is a tree, it will use secondary calibrations to (1) date the tree with bladj
-if it has no branch lengths, or (2) date the tree with PATHd8 if it has branch lengths.
-If input is a vector of taxon names, it will attempt to reconstruct a BOLD tree first
-to get a topology with branch lengths. If it can't, it will get an Open Tree
-of Life synthetic tree topology and will date it with bladj.
+If \code{input} is a vector of taxon names, the function will attempt to reconstruct a BOLD
+tree with \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}} to get a tree with branch lengths. If it fails,
+it will get an Open Tree of Life synthetic tree topology.
+The function then calls \code{\link[=use_calibrations]{use_calibrations()}}.
 }

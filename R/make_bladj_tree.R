@@ -1,12 +1,14 @@
-
-#' Takes a tree and uses bladj to estimate node ages and branch lengths given a
-#' set of fixed node ages and respective node names
+#' Use the BLADJ algorithm to get a chronogram from a tree topology for which you have age data for some of its nodes.
+#'
+#' @description The function takes a tree topology and uses the BLADJ algorithm
+#' implemented with [phylocomr::ph_bladj()] to assign node ages and branch lengths, given a
+#' set of fixed node ages and respective node names.
 #' @param nodenames A character vector with names of nodes in tree with known ages
 #' @param nodeages A numeric vector with the actual ages of named nodes
 #' @inheritParams tree_fix_brlen
-#' @return A phylo tree
-#' @details tree can or cannot be dated, edge.lengths in it will be ignored anyways;
-#' only ages from nodeages will be fixed according to nodenames.
+#' @return A `phylo` object.
+#' @details Input `tree` can be dated or not, `$edge.length` is ignored.
+#' Ages given in `nodeages` are fixed on their corresponding nodes given in `nodenames`.
 #' @export
 make_bladj_tree <- function(tree = NULL, nodenames = NULL, nodeages = NULL) {
   # tree <- missing_taxa_phy

@@ -2,8 +2,7 @@
 % Please edit documentation in R/use_calibrations_bladj.R
 \name{check_conflicting_calibrations}
 \alias{check_conflicting_calibrations}
-\title{function to check for conflicting calibrations
-if calibrations are younger or older relative to descendants and ancestors, respectively}
+\title{Check for conflicting calibrations}
 \usage{
 check_conflicting_calibrations(phy, calibration_distribution)
 }
@@ -13,8 +12,7 @@ check_conflicting_calibrations(phy, calibration_distribution)
 \item{calibration_distribution}{is a list of node ages distributions, named with the node number from phy}
 }
 \description{
-function to check for conflicting calibrations
-if calibrations are younger or older relative to descendants and ancestors, respectively
+\code{check_conflicting_calibrations} checks if calibrations are younger or older relative to descendants and ancestors, respectively.
 }
 \details{
 it removes them if needed, but BLADJ works as long as it has an age for the root

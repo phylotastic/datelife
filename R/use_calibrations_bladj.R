@@ -5,16 +5,21 @@
 # phy <- cetaceae_phyloall[[2]]
 # plot(use_all_calibrations_bladj(phy,calibrations, use = "Mean"))
 
-#' Use calibrations to date a topology with bladj.
+#' Use calibrations to date a topology with the BLADJ algorithm.
+#'
+#' @description The function prepares the input for BLADJ and calls [make_bladj_tree()]
 #' @param phy A `phylo` object with or without branch lengths.
-#' @param calibrations A data frame of secondary calibrations for any pair of taxon
-#' names in \code{phy}. See \code{\link[=get_all_calibrations]{get_all_calibrations}}.
-#' @param type The type of age to use as calibration: "median", "mean", "min", or "max".
-#' @param root_age Not implemented yet
+#' @param calibrations A `data.frame` of secondary calibrations for any pair of taxon
+#' names in `phy`, usually obtained with [get_all_calibrations()].
+#' @param type The type of age to use as calibration. Options are "median", "mean", "min", or "max".
+#' @param root_age Not implemented yet. Numeric specifying the age of the root. If there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.
 #' @param match_calibrations Boolean, default to TRUE. It will run match_all_calibrations function. Set to FALSE if your calibrations have already been matched.
-#' @return A \code{phylo} object with branch lengths proportional to time.
+#' @return A `phylo` object with branch lengths proportional to time.
 #' @details
-#' root_age Not implemented yet. Numeric specifying the age of the root if there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.
+#' The BLADJ algorithm is part of the Phylocom software, presented in Webb, C. O., Ackerly, D. D., & Kembel, S. W. (2008).
+#' "Phylocom: software for the analysis of phylogenetic community structure and trait evolution". Bioinformatics, 24(18), <doi:10.1093/bioinformatics/btn358>
+#'
+#'
 #' @export
 use_calibrations_bladj <- function(phy,
                                    calibrations,
@@ -82,8 +87,10 @@ use_calibrations_bladj <- function(phy,
 }
 
 
-#' function to check for conflicting calibrations
-#' if calibrations are younger or older relative to descendants and ancestors, respectively
+#' Check for conflicting calibrations
+#'
+#' `check_conflicting_calibrations` checks if calibrations are younger or older relative to descendants and ancestors, respectively.
+#'
 #' @details it removes them if needed, but BLADJ works as long as it has an age for the root
 #' @param phy A `phylo` object.
 #' @param calibration_distribution is a list of node ages distributions, named with the node number from phy
