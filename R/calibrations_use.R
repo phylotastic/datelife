@@ -14,6 +14,7 @@
 #'   <doi:10.1080/10635150701613783>).
 #' @inheritDotParams use_calibrations
 #' @return A `phylo` or `multiPhylo` object with branch lengths proportional to time.
+#' @inheritSection use_calibrations output
 #' @inherit use_calibrations details
 #' @export
 use_all_calibrations <- function(phy = NULL,
@@ -58,6 +59,7 @@ use_all_calibrations <- function(phy = NULL,
 #' @inheritDotParams use_calibrations
 # #' @param ... Arguments to pass to \code{use_calibrations}.
 #' @return A `multiPhylo` object of trees with branch lengths proportional to time.
+#' @inheritSection use_calibrations output
 #' @inherit use_calibrations details
 #' @export
 # You can get the datelifeResult object or the list of chronograms first

@@ -19,7 +19,10 @@ A phylo object
 Use calibrations to date a tree with branch lengths with treePL.
 }
 \details{
-This function will try to use the calibrations as fixed ages.
+This function uses treePL as described in Smith, S. A., & O’Meara, B. C. (2012).
+"treePL: divergence time estimation using penalized likelihood for large phylogenies".
+Bioinformatics, 28(20), 2689-2690, \url{doi:10.1093/bioinformatics/bts492}, with
+the function \code{treePL.phylo}. It attempts to use the calibrations as fixed ages.
 If that fails (often due to conflict between calibrations), it will expand the
 range of the minimum age and maximum age and try again. And repeat.
 If expand = 0, it uses the summarized calibrations.

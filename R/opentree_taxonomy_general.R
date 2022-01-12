@@ -140,9 +140,9 @@ tnrs_match.phylo <- function(input, reference_taxonomy = "otl", tip = NULL, ...)
   class(phy) <- append(class(phy), "match_names")
   return(phy)
 }
-#' Eliminates unmatched (NAs) and invalid taxa from a rotl::tnrs_match_names or datelife::tnrs_match output
-#' Useful to get ott ids to retrieve an otol induced subtree from.
-#' Needed because using include_suppressed = FALSE in tnrs_match_names does not drop all invalid taxa
+#' Eliminates unmatched (NAs) and invalid taxa from a [rotl::tnrs_match_names()] or [tnrs_match()] output
+#' Useful to get ott ids to retrieve an induced synthetic Open Tree of Life.
+#' Needed because using `include_suppressed = FALSE` in [rotl::tnrs_match_names()] does not drop all invalid taxa.
 #'
 #' @param tnrs A data frame, usually an output from datelife::tnrs_match or rotl::tnrs_match_names functions, but see details.
 #' @param invalid A character string with flags to be removed from final object.
@@ -174,7 +174,7 @@ clean_tnrs <- function(tnrs, invalid = c("barren", "extinct", "uncultured", "maj
 
 #' Get ott ids from a character vector containing species names and ott ids.
 #' @param x A character vector of taxon names, or a phylo object with tip names containing ott ids.
-#' @param na.rm A logical value indicating whether \code{NA} values should be stripped in the output.
+#' @param na.rm A logical value indicating whether `NA` values should be stripped in the output.
 #' @return An object of class numeric containing ott ids only.
 #' @export
 extract_ott_ids <- function(x, na.rm = TRUE) {

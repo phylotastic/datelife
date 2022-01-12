@@ -2,9 +2,9 @@
 % Please edit documentation in R/opentree_taxonomy_general.R
 \name{clean_tnrs}
 \alias{clean_tnrs}
-\title{Eliminates unmatched (NAs) and invalid taxa from a rotl::tnrs_match_names or datelife::tnrs_match output
-Useful to get ott ids to retrieve an otol induced subtree from.
-Needed because using include_suppressed = FALSE in tnrs_match_names does not drop all invalid taxa}
+\title{Eliminates unmatched (NAs) and invalid taxa from a \code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}} output
+Useful to get ott ids to retrieve an induced synthetic Open Tree of Life.
+Needed because using \code{include_suppressed = FALSE} in \code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} does not drop all invalid taxa.}
 \usage{
 clean_tnrs(
   tnrs,
@@ -24,9 +24,9 @@ clean_tnrs(
 A data frame or named list (depending on the input) with valid taxa only.
 }
 \description{
-Eliminates unmatched (NAs) and invalid taxa from a rotl::tnrs_match_names or datelife::tnrs_match output
-Useful to get ott ids to retrieve an otol induced subtree from.
-Needed because using include_suppressed = FALSE in tnrs_match_names does not drop all invalid taxa
+Eliminates unmatched (NAs) and invalid taxa from a \code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}} output
+Useful to get ott ids to retrieve an induced synthetic Open Tree of Life.
+Needed because using \code{include_suppressed = FALSE} in \code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} does not drop all invalid taxa.
 }
 \details{
 Input can be any data frame or named list that relates taxa stored in an element named "unique" to a validity category stored in "flags".

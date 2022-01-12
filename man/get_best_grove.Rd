@@ -27,7 +27,7 @@ to \code{n = 2}, i.e., at least two overlapping taxon names.}
 \value{
 A list of two elements:
 \describe{
-\item{best_grove}{A datelifeResult object filtered to only include one grove of trees that can be summarized with median or sdm.
+\item{best_grove}{A \code{datelifeResult} object filtered to only include one grove of trees that can be summarized with median or sdm.
 }
 \item{overlap}{The degree of taxon names overlap among trees in the best grove.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_chronograms.R
 \name{is_good_chronogram}
 \alias{is_good_chronogram}
-\title{Check if a tree is a valid chronogram}
+\title{Check if a tree is a valid chronogram.}
 \usage{
 is_good_chronogram(phy)
 }
@@ -10,8 +10,8 @@ is_good_chronogram(phy)
 \item{phy}{A phylo object}
 }
 \value{
-Boolean: TRUE if good tree
+\code{TRUE} if it is a valid tree.
 }
 \description{
-Check if a tree is a valid chronogram
+Check if a tree is a valid chronogram.
 }

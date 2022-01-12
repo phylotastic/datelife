@@ -1,4 +1,3 @@
-
 #' Convert a patristic matrix to a `phylo` object. Used inside [summarize_datelife_result()].
 #' @param patristic_matrix A patristic matrix
 #' @param clustering_method A character vector indicating the method to construct the tree. Options are

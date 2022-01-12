@@ -2,7 +2,7 @@
 % Please edit documentation in R/uncertainty.R
 \name{sample_trees}
 \alias{sample_trees}
-\title{Function to sample trees from a file containing multiple trees. Usually from a bayesian analysis output trees file.}
+\title{Sample trees from a file containing multiple trees. Usually from a bayesian analysis output trees file.}
 \usage{
 sample_trees(trees_file, trees_object = NULL, burnin = 0.25, size = 100)
 }
@@ -16,8 +16,8 @@ sample_trees(trees_file, trees_object = NULL, burnin = 0.25, size = 100)
 \item{size}{A numeric vector indicating the number of samples to be generated.}
 }
 \value{
-A multiPhylo object with a random sample of trees.
+A \code{multiPhylo} object with a random sample of trees.
 }
 \description{
-Function to sample trees from a file containing multiple trees. Usually from a bayesian analysis output trees file.
+Sample trees from a file containing multiple trees. Usually from a bayesian analysis output trees file.
 }

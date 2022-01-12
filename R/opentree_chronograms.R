@@ -1,4 +1,3 @@
-
 #' Chronogram database
 #'
 #' Now storing >200 chronograms from Open Tree of Life
@@ -23,7 +22,7 @@
 
 
 #' Update chronogram database cache
-#' @param save Boolean; default TRUE: save all chronograms from Open Tree of Life to an RData file (default to opentree_chronograms.RData)
+#' @param save Default to `TRUE`, it saves all chronograms from Open Tree of Life to a ".RData" file (default to opentree_chronograms.RData)
 #' @inheritParams save_otol_chronograms
 #' @inherit get_otol_chronograms return
 #' @inherit save_otol_chronograms return
@@ -99,7 +98,7 @@ phylo_has_brlen <- function(phy) {
 
 #' Get all chronograms from Open Tree of Life database
 #' @param max_tree_count Numeric indicating the max number of trees to be cached. For testing purposes only.
-#' @return A list with elements for the trees, authors, curators, and study ids
+#' @return A list with elements for the trees, authors, curators, and study ids.
 #' @export
 get_otol_chronograms <- function(max_tree_count = 500) {
   options(warn = 1)
@@ -230,9 +229,9 @@ get_otol_chronograms <- function(max_tree_count = 500) {
 }
 
 
-#' Check if a tree is a valid chronogram
+#' Check if a tree is a valid chronogram.
 #' @inheritParams phylo_check
-#' @return Boolean: TRUE if good tree
+#' @return `TRUE` if it is a valid tree.
 #' @export
 is_good_chronogram <- function(phy) {
   passing <- TRUE
@@ -271,7 +270,7 @@ is_good_chronogram <- function(phy) {
 }
 
 
-#' Problematic chronograms from Open Tree of Life
+#' Problematic chronograms from Open Tree of Life.
 #'
 #' @name problems
 #' @docType data
@@ -364,7 +363,7 @@ clean_ott_chronogram <- function(phy) {
 
 #' Add Open Tree of Life Taxonomy to tree nodes.
 #' @inheritParams tree_fix_brlen
-#' @return A phylo object with nodelabels
+#' @return A `phylo` object with "nodelabels".
 #' @examples
 #' \dontrun{ # This is a flag for package development. You are welcome to run the example.
 #' # Load the Open Tree chronograms cached in datelife:

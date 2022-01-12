@@ -1,32 +1,18 @@
 #' Use calibrations to date a tree with branch lengths with treePL.
 #' @inheritParams use_calibrations_bladj
 #' @return A phylo object
-#' @export
 #' @details
-#' This function will try to use the calibrations as fixed ages.
+#' This function uses treePL as described in Smith, S. A., & O’Meara, B. C. (2012).
+#' "treePL: divergence time estimation using penalized likelihood for large phylogenies".
+#' Bioinformatics, 28(20), 2689-2690, <doi:10.1093/bioinformatics/bts492>, with
+#' the function `treePL.phylo`. It attempts to use the calibrations as fixed ages.
 #' If that fails (often due to conflict between calibrations), it will expand the
 #' range of the minimum age and maximum age and try again. And repeat.
 #' If expand = 0, it uses the summarized calibrations.
 #' In some cases, it returns edge lengths in relative time (with maximum tree depth = 1)
 #' instead of absolute time, as given by calibrations. In this case, the function returns NA.
 #' This is an issue from PATHd8.
-# i=1
-# phy <- tax_phyloall_bold[[3]][[1]]
-# phy <- make_bold_otol_tree(tax_phyloallall[[3]][[1]], chronogram = FALSE)
-# phy <- tax_phyloall_bold2[[3]][[1]] # is NA
-# calibrations <- tax_othercalall[[3]][[1]]
-# phy$edge.length
-# calibrations$MaxAge
-# calibs <- match_all_calibrations(tax_phyloall_bold[[1]][[i]], tax_othercalall[[1]][[i]])
-# calibs$phy$edge.length
-# used_calibrations <- calibs$matched_calibrations
-# used_calibrations$MaxAge
-# chronogram <- geiger::PATHd8.phylo(calibs$phy, used_calibrations)
-# chronogram$edge.length
-# plot(chronogram, main = i)
-# ape::axisPhylo()
-# chr <- use_calibrations_treePL(phy = catsanddogs_phyloall[[1]], calibrations = catsanddogs_calibrations)
-
+#' @export
 use_calibrations_treePL <- function(phy, calibrations) {
   message("... Using secondary calibrations with treePL")
   phy <- input_process(phy)
@@ -112,7 +98,22 @@ use_calibrations_treePL <- function(phy, calibrations) {
   }
   return(chronogram)
 }
-
+# i=1
+# phy <- tax_phyloall_bold[[3]][[1]]
+# phy <- make_bold_otol_tree(tax_phyloallall[[3]][[1]], chronogram = FALSE)
+# phy <- tax_phyloall_bold2[[3]][[1]] # is NA
+# calibrations <- tax_othercalall[[3]][[1]]
+# phy$edge.length
+# calibrations$MaxAge
+# calibs <- match_all_calibrations(tax_phyloall_bold[[1]][[i]], tax_othercalall[[1]][[i]])
+# calibs$phy$edge.length
+# used_calibrations <- calibs$matched_calibrations
+# used_calibrations$MaxAge
+# chronogram <- geiger::PATHd8.phylo(calibs$phy, used_calibrations)
+# chronogram$edge.length
+# plot(chronogram, main = i)
+# ape::axisPhylo()
+# chr <- use_calibrations_treePL(phy = catsanddogs_phyloall[[1]], calibrations = catsanddogs_calibrations)
 
 treePL.phylo <- function(phy, calibrations = NULL, base = "", rm = TRUE, ...) {
   phy$node.label <- NULL

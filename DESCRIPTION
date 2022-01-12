@@ -16,19 +16,19 @@ Authors@R: c(
   person("Mike", "Alfaro", role=c("aut")),
   person("Luna L.", "Sanchez Reyes", email = "sanchez.reyes.luna@gmail.com", role=c("aut", "cre")),
   person("Emily Jane", "McTavish", role=c("ctb")))
-Description: Methods and workflows to get dated phylogenetic trees, aka chronograms,
-    using open scientific data on time of lineage divergence.
-    This package constitutes the main underlying code of the DateLife web services
-    at www.datelife.org. To obtain a single summary chronogram from a group of
+Description: Methods and workflows to get chronograms, or phylogenetic trees with branch lengths
+    proportional to time, using available scientific data on time of lineage divergence.
+    This package constitutes the main underlying code of the DateLife web service
+    at <www.datelife.org>. To obtain a single summary chronogram from a group of
     relevant chronograms, we implement the Super Distance Matrix (SDM) method
     described in Criscuolo et al. (2006) <doi:10.1080/10635150600969872>.
     To find the grove of chronograms with a sufficiently overlapping set of taxa
     for summarizing, we implement theorem 1.1. from Ané et al. (2009)
     <doi:10.1007/s00026-009-0017-x>.
     A given phylogenetic tree can be dated using time of lineage divergence data
-    as secondary calibrations (caution, see). We implement the congruification method described
-    in Eastman et al. (2013) <doi:10.1111/2041-210X.12051> to obtain and apply
-    secondary calibrations. Tree dating can be performed with different methods
+    as secondary calibrations (with caution, see Schenk (2016) <10.1371/journal.pone.0148228>).
+    To obtain and apply secondary calibrations, the package implements the congruification method described
+    in Eastman et al. (2013) <doi:10.1111/2041-210X.12051>. Tree dating can be performed with different methods
     including BLADJ (Webb et al. (2008) <doi:10.1093/bioinformatics/btn358>), PATHd8
     (Britton et al. (2007) <doi:10.1080/10635150701613783>), mrBayes (Huelsenbeck
     and Ronquist (2001) <doi:10.1093/bioinformatics/17.8.754>), and treePL (Smith

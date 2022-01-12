@@ -120,12 +120,12 @@ phylo_generate_uncertainty <- function(phy, size = 100, uncertainty_method = "ot
   }
 }
 
-#' Function to sample trees from a file containing multiple trees. Usually from a bayesian analysis output trees file.
+#' Sample trees from a file containing multiple trees. Usually from a bayesian analysis output trees file.
 #' @param trees_file A character vector indicating the name and directory of file with trees to sample.
 #' @param trees_object An R object containing a list of trees already read into R from a tree file from a bayesian analysis output.
 #' @param burnin A numeric vector indicating the burnin fraction. It should be a number between 0 and 1. Default to 0.25
 #' @param size A numeric vector indicating the number of samples to be generated.
-#' @return A multiPhylo object with a random sample of trees.
+#' @return A `multiPhylo` object with a random sample of trees.
 #' @export
 
 sample_trees <- function(trees_file, trees_object = NULL, burnin = 0.25, size = 100) {

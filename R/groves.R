@@ -1,7 +1,8 @@
-#' Function for computing n overlap for two vectors of names (ie., phy1$tip.label, phy2$tip.label) and seeing if they have n overlap
+#' Function for computing n-overlap for two vectors of names (ie., phy1$tip.label, phy2$tip.label) and seeing if they have n overlap
 #'
-#' @description n-overlap comes from Definition 2.8 of Ané et al.
-#' 10.1007/s00026-009-0017-x Groves of Phylogenetic Trees
+#' @description This function implements definition 2.8 for n-overlap from Ané, C., Eulenstein, O.,
+#'   Piaggio-Talice, R., & Sanderson, M. J. (2009). "Groves of phylogenetic trees".
+#'   Annals of Combinatorics, 13(2), 139-167, <doi:10.1007/s00026-009-0017-x>.
 #' @param names_1 First vector of names
 #' @param names_2 Second vector of names
 #' @param n Degree of overlap required
@@ -13,9 +14,10 @@ is_n_overlap <- function(names_1, names_2, n = 2) {
 
 #' Find the grove for a group of chronograms and build a matrix.
 #'
-#' @description Using theorem 1.1 of Ané, C., Eulenstein, O., Piaggio-Talice, R.,
+#' @description This function implements theorem 1.1 of Ané, C., Eulenstein, O., Piaggio-Talice, R.,
 #'   & Sanderson, M. J. (2009). "Groves of phylogenetic trees". Annals of
-#'   Combinatorics, 13(2), 139-167, <doi:10.1007/s00026-009-0017-x>.
+#'   Combinatorics, 13(2), 139-167, <doi:10.1007/s00026-009-0017-x>, to fing a grove
+#'   for a given group of chronograms.
 #' @param datelife_result A `datelifeResult` object.
 #' @param n The degree of taxon name overlap among input chronograms. Defaults
 #'   to `n = 2`, i.e., at least two overlapping taxon names.
@@ -96,10 +98,10 @@ pick_grove <- function(grove_list, criterion = "taxa", datelife_result) {
   }
 }
 
-#' Filter a \code{datelifeResult} object to find the largest grove.
+#' Filter a `datelifeResult` object to find the largest grove.
 #' @inheritParams pick_grove
 #' @inheritParams build_grove_matrix
-#' @return A datelifeResult object filtered to only include one grove of trees.
+#' @return A `datelifeResult` object filtered to only include one grove of trees.
 #' @export
 filter_for_grove <- function(datelife_result, criterion = "taxa", n = 2) {
   criterion <- match.arg(criterion, c("trees", "taxa"))
@@ -113,7 +115,7 @@ filter_for_grove <- function(datelife_result, criterion = "taxa", n = 2) {
 #' @inheritParams filter_for_grove
 #' @return A list of two elements:
 #' \describe{
-#' 	\item{best_grove}{A datelifeResult object filtered to only include one grove of trees that can be summarized with median or sdm.
+#' 	\item{best_grove}{A `datelifeResult` object filtered to only include one grove of trees that can be summarized with median or sdm.
 #' 	}
 #' 	\item{overlap}{The degree of taxon names overlap among trees in the best grove.
 #' 	}

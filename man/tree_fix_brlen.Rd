@@ -2,7 +2,7 @@
 % Please edit documentation in R/tree_fix_brlen.R
 \name{tree_fix_brlen}
 \alias{tree_fix_brlen}
-\title{Takes a tree with branch lengths and fixes negative or zero length branches in several ways}
+\title{Take a tree with branch lengths and fix negative or zero length branches.}
 \usage{
 tree_fix_brlen(
   tree = NULL,
@@ -21,8 +21,8 @@ tree_fix_brlen(
 \item{ultrametric}{Boolean indicating whether to force ultrametric or not.}
 }
 \value{
-A phylo object with fixed branch lengths
+A \code{phylo} object with no negative or zero branch lengths.
 }
 \description{
-Takes a tree with branch lengths and fixes negative or zero length branches in several ways
+Take a tree with branch lengths and fix negative or zero length branches.
 }

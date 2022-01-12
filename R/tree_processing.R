@@ -1,7 +1,7 @@
 # functions to process a tree in newick or phylo format, and get information on its properties
 # most of them are useful to process a tree so it can be taken up by bladj or mrbayes
 
-#' Gets node numbers, node names, descendant tip numbers and labels of nodes from a any tree and node ages from dated trees
+#' Get node numbers, node names, descendant tip numbers and labels of nodes from any tree, and node ages from dated trees.
 #' @inheritParams tree_fix_brlen
 #' @param node_data A character vector containing one or all from: "node_number", "node_label", "node_age", "descendant_tips_number", "descendant_tips_label"
 #' @param nodes Numeric vector with node numbers from which you want to obtain data. Default to NULL: obtain data for all nodes in the tree.

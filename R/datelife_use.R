@@ -10,7 +10,7 @@
 #' @inheritParams use_all_calibrations
 #' @inheritDotParams make_datelife_query
 #' @inherit use_all_calibrations return
-#' @inherit use_calibrations output
+#' @inheritSection use_calibrations output
 #' @details
 #' If `input` is a vector of taxon names, the function will attempt to reconstruct a BOLD
 #' tree with [make_bold_otol_tree()] to get a tree with branch lengths. If it fails,
@@ -72,6 +72,7 @@ datelife_use <- function(input = NULL,
 #' @inheritParams use_all_calibrations
 #' @inheritParams get_all_calibrations
 #' @inherit use_all_calibrations return
+#' @inheritSection use_calibrations output
 #' @inherit use_calibrations details
 #' @export
 datelife_use_datelifequery <- function(datelife_query = NULL,

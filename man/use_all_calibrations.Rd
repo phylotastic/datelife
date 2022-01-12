@@ -45,3 +45,8 @@ If \code{phy} has no branch lengths, \code{dating_method} is ignores, and the fu
 calibrations to date the tree with the BLADJ algorithm. See \code{\link[=make_bladj_tree]{make_bladj_tree()}} and \code{\link[=use_calibrations_bladj]{use_calibrations_bladj()}}.
 If \code{phy} has branch lengths, the function can use the PATHd8 algorithm. See \code{\link[=use_calibrations_pathd8]{use_calibrations_pathd8()}}.
 }
+\section{output}{
+ The output object stores the used \code{calibrations} and \code{dating_method} as
+\code{attributes(output)$datelife_calibrations} and \code{attributes(output)$dating_method}.
+}
+

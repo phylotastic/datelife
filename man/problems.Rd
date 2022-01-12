@@ -3,7 +3,7 @@
 \docType{data}
 \name{problems}
 \alias{problems}
-\title{Problematic chronograms from Open Tree of Life}
+\title{Problematic chronograms from Open Tree of Life.}
 \format{
 A list of trees with unmapped taxa
 }
@@ -14,7 +14,7 @@ A list of trees with unmapped taxa
 problems
 }
 \description{
-Problematic chronograms from Open Tree of Life
+Problematic chronograms from Open Tree of Life.
 }
 \details{
 Before we developed tools to clean and map tip labels for our cached trees

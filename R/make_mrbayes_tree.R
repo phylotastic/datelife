@@ -1,9 +1,8 @@
-
-#' Takes a constraint tree and uses mrBayes to get node ages and branch lengths
-#' given a set of node calibrations without any data
+#' Take a constraint tree and use mrBayes to get node ages and branch lengths
+#' given a set of node calibrations without any data.
 # we can add the option to use data and no constraint tree
 #' @inheritParams make_mrbayes_runfile
-#' @return A phylo tree with branch lengths proportional to time. It will save all mrBayes outputs in the working directory.
+#' @return A `phylo` object with branch lengths proportional to time. It saves all mrBayes outputs in the working directory.
 #' @export
 make_mrbayes_tree <- function(constraint = NULL, taxa = NULL, ncalibration = NULL, missing_taxa = NULL, age_distribution = "fixed", root_calibration = FALSE, mrbayes_output_file = "mrbayes_run.nexus") {
   make_mrbayes_runfile(constraint = constraint, taxa = taxa, ncalibration = ncalibration, age_distribution = age_distribution, root_calibration = root_calibration, missing_taxa = missing_taxa, mrbayes_output_file = mrbayes_output_file)
@@ -334,11 +333,11 @@ get_mrbayes_node_constraints <- function(constraint = NULL, taxa = NULL, missing
   return(node_constraints)
 }
 
-#' Identifies the presence of a single lineage outgroup in a phylogeny
+#' Identify the presence of a single lineage outgroup in a phylogeny
 #' @inheritParams make_mrbayes_tree
 #' @inheritParams tree_fix_brlen
 #' @return A character vector with the name of the single lineage outgroup.
-#'         Returns NA if there is none.
+#'         Returns `NA` if there is none.
 #' @export
 tree_get_singleton_outgroup <- function(tree = NULL) {
   phy <- tree_check(tree = tree)

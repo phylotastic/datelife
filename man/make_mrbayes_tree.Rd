@@ -2,8 +2,8 @@
 % Please edit documentation in R/make_mrbayes_tree.R
 \name{make_mrbayes_tree}
 \alias{make_mrbayes_tree}
-\title{Takes a constraint tree and uses mrBayes to get node ages and branch lengths
-given a set of node calibrations without any data}
+\title{Take a constraint tree and use mrBayes to get node ages and branch lengths
+given a set of node calibrations without any data.}
 \usage{
 make_mrbayes_tree(
   constraint = NULL,
@@ -51,9 +51,9 @@ Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.}
 \item{mrbayes_output_file}{A character vector specifying the name of mrBayes run file and outputs (can specify directory too).}
 }
 \value{
-A phylo tree with branch lengths proportional to time. It will save all mrBayes outputs in the working directory.
+A \code{phylo} object with branch lengths proportional to time. It saves all mrBayes outputs in the working directory.
 }
 \description{
-Takes a constraint tree and uses mrBayes to get node ages and branch lengths
-given a set of node calibrations without any data
+Take a constraint tree and use mrBayes to get node ages and branch lengths
+given a set of node calibrations without any data.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/tree_processing.R
 \name{tree_get_node_data}
 \alias{tree_get_node_data}
-\title{Gets node numbers, node names, descendant tip numbers and labels of nodes from a any tree and node ages from dated trees}
+\title{Get node numbers, node names, descendant tip numbers and labels of nodes from any tree, and node ages from dated trees.}
 \usage{
 tree_get_node_data(
   tree = NULL,
@@ -22,5 +22,5 @@ tree_get_node_data(
 A list
 }
 \description{
-Gets node numbers, node names, descendant tip numbers and labels of nodes from a any tree and node ages from dated trees
+Get node numbers, node names, descendant tip numbers and labels of nodes from any tree, and node ages from dated trees.
 }

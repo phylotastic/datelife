@@ -24,7 +24,7 @@ most taxa (\code{criterion = "taxa"}). Defaults to \code{criterion = "taxa"}.}
 to \code{n = 2}, i.e., at least two overlapping taxon names.}
 }
 \value{
-A datelifeResult object filtered to only include one grove of trees.
+A \code{datelifeResult} object filtered to only include one grove of trees.
 }
 \description{
 Filter a \code{datelifeResult} object to find the largest grove.

@@ -31,6 +31,8 @@ A \code{phylo} object with branch lengths proportional to time.
 The function prepares the input for BLADJ and calls \code{\link[=make_bladj_tree]{make_bladj_tree()}}
 }
 \details{
-The BLADJ algorithm is part of the Phylocom software, presented in Webb, C. O., Ackerly, D. D., & Kembel, S. W. (2008).
-"Phylocom: software for the analysis of phylogenetic community structure and trait evolution". Bioinformatics, 24(18), \url{doi:10.1093/bioinformatics/btn358}
+The BLADJ algorithm is part of the Phylocom software, presented in Webb, C. O.,
+Ackerly, D. D., & Kembel, S. W. (2008). "Phylocom: software for the analysis
+of phylogenetic community structure and trait evolution". Bioinformatics, 24(18),
+\url{doi:10.1093/bioinformatics/btn358}.
 }

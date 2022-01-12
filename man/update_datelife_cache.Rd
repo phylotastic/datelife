@@ -7,7 +7,7 @@
 update_datelife_cache(save = TRUE, file = "opentree_chronograms.RData")
 }
 \arguments{
-\item{save}{Boolean; default TRUE: save all chronograms from Open Tree of Life to an RData file (default to opentree_chronograms.RData)}
+\item{save}{Default to \code{TRUE}, it saves all chronograms from Open Tree of Life to a ".RData" file (default to opentree_chronograms.RData)}
 
 \item{file}{Path including file name}
 }

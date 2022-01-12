@@ -21,7 +21,7 @@ numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{ro
 
 \item{otol_version}{Version of Open Tree of Life to use}
 
-\item{resolve}{boolean; default to TRUE. Whether to resolve the tree at random or not.}
+\item{resolve}{Defaults to \code{TRUE}. Whether to resolve the tree at random or not.}
 
 \item{...}{
   Arguments passed on to \code{\link[=check_ott_input]{check_ott_input}}

@@ -10,7 +10,7 @@ map_nodes_ott(tree)
 \item{tree}{A tree either as a newick character string or as a phylo object}
 }
 \value{
-A phylo object with nodelabels
+A \code{phylo} object with "nodelabels".
 }
 \description{
 Add Open Tree of Life Taxonomy to tree nodes.

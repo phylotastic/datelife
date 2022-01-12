@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_mrbayes_tree.R
 \name{tree_get_singleton_outgroup}
 \alias{tree_get_singleton_outgroup}
-\title{Identifies the presence of a single lineage outgroup in a phylogeny}
+\title{Identify the presence of a single lineage outgroup in a phylogeny}
 \usage{
 tree_get_singleton_outgroup(tree = NULL)
 }
@@ -11,8 +11,8 @@ tree_get_singleton_outgroup(tree = NULL)
 }
 \value{
 A character vector with the name of the single lineage outgroup.
-Returns NA if there is none.
+Returns \code{NA} if there is none.
 }
 \description{
-Identifies the presence of a single lineage outgroup in a phylogeny
+Identify the presence of a single lineage outgroup in a phylogeny
 }

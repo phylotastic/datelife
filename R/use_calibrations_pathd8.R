@@ -8,7 +8,10 @@
 #' @param giveup How many expansions to try before giving up
 #' @return A `phylo` object with branch lengths proportional to time.
 #' @details
-#' This function implements [PATHd8](https://www2.math.su.se/PATHd8/) with [geiger::PATHd8.phylo()].
+#' This function implements the [PATHd8](https://www2.math.su.se/PATHd8/) described in
+#' Britton, T., Anderson, C. L., Jacquet, D., Lundqvist, S., & Bremer, K. (2007).
+#' "Estimating divergence times in large phylogenetic trees". Systematic biology,
+#' 56(5), 741-752. <doi:10.1080/10635150701613783>, with [geiger::PATHd8.phylo()].
 #' The function first attempts to use the given calibrations as fixed ages.
 #' If that fails (often due to conflict between calibrations), it will expand the
 #' range of the minimum age and maximum age and try again. And repeat.

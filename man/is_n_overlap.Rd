@@ -2,7 +2,7 @@
 % Please edit documentation in R/groves.R
 \name{is_n_overlap}
 \alias{is_n_overlap}
-\title{Function for computing n overlap for two vectors of names (ie., phy1$tip.label, phy2$tip.label) and seeing if they have n overlap}
+\title{Function for computing n-overlap for two vectors of names (ie., phy1$tip.label, phy2$tip.label) and seeing if they have n overlap}
 \usage{
 is_n_overlap(names_1, names_2, n = 2)
 }
@@ -17,6 +17,7 @@ is_n_overlap(names_1, names_2, n = 2)
 Boolean for whether the degree of overlap was met
 }
 \description{
-n-overlap comes from Definition 2.8 of Ané et al.
-10.1007/s00026-009-0017-x Groves of Phylogenetic Trees
+This function implements definition 2.8 for n-overlap from Ané, C., Eulenstein, O.,
+Piaggio-Talice, R., & Sanderson, M. J. (2009). "Groves of phylogenetic trees".
+Annals of Combinatorics, 13(2), 139-167, \url{doi:10.1007/s00026-009-0017-x}.
 }

@@ -1,7 +1,7 @@
 #' Get an Open Tree of Life synthetic subtree of a set of given taxon names.
 #' @inheritParams check_ott_input
 #' @param otol_version Version of Open Tree of Life to use
-#' @param resolve boolean; default to TRUE. Whether to resolve the tree at random or not.
+#' @param resolve Defaults to `TRUE`. Whether to resolve the tree at random or not.
 #' @inheritDotParams check_ott_input
 #' @return A phylo object
 #' @export

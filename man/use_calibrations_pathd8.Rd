@@ -28,7 +28,10 @@ A \code{phylo} object with branch lengths proportional to time.
 \code{use_calibrations_pathd8} uses secondary calibrations to date a tree with initial branch lengths using PATHd8.
 }
 \details{
-This function implements \href{https://www2.math.su.se/PATHd8/}{PATHd8} with \code{\link[geiger:geiger-internal]{geiger::PATHd8.phylo()}}.
+This function implements the \href{https://www2.math.su.se/PATHd8/}{PATHd8} described in
+Britton, T., Anderson, C. L., Jacquet, D., Lundqvist, S., & Bremer, K. (2007).
+"Estimating divergence times in large phylogenetic trees". Systematic biology,
+56(5), 741-752. \url{doi:10.1080/10635150701613783}, with \code{\link[geiger:geiger-internal]{geiger::PATHd8.phylo()}}.
 The function first attempts to use the given calibrations as fixed ages.
 If that fails (often due to conflict between calibrations), it will expand the
 range of the minimum age and maximum age and try again. And repeat.

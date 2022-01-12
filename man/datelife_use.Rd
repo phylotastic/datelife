@@ -51,3 +51,8 @@ tree with \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}} to get a tre
 it will get an Open Tree of Life synthetic tree topology.
 The function then calls \code{\link[=use_calibrations]{use_calibrations()}}.
 }
+\section{output}{
+ The output object stores the used \code{calibrations} and \code{dating_method} as
+\code{attributes(output)$datelife_calibrations} and \code{attributes(output)$dating_method}.
+}
+
