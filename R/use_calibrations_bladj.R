@@ -16,10 +16,13 @@
 #' @param match_calibrations Boolean, default to TRUE. It will run match_all_calibrations function. Set to FALSE if your calibrations have already been matched.
 #' @return A `phylo` object with branch lengths proportional to time.
 #' @details
-#' The BLADJ algorithm is part of the Phylocom software, presented in Webb, C. O.,
-#' Ackerly, D. D., & Kembel, S. W. (2008). "Phylocom: software for the analysis
-#' of phylogenetic community structure and trait evolution". Bioinformatics, 24(18),
-#' <doi:10.1093/bioinformatics/btn358>.
+#' The BLADJ algorithm is part of the Phylocom software, presented in Webb et al.
+#' (2008) \doi{10.1093/bioinformatics/btn358}.
+#' @references
+#' Webb, C. O., Ackerly, D. D., & Kembel, S. W. (2008). "Phylocom: software for
+#' the analysis of phylogenetic community structure and trait evolution".
+#' Bioinformatics, 24(18), \doi{10.1093/bioinformatics/btn358}.
+
 #' @export
 use_calibrations_bladj <- function(phy,
                                    calibrations,

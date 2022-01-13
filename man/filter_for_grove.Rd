@@ -13,9 +13,7 @@ filter_for_grove(datelife_result, criterion = "taxa", n = 2)
 summary chronogram from a group of input chronograms.
 For summarizing approaches that return a single summary tree from a group of
 phylogenetic trees, it is necessary that the latter form a grove, roughly,
-a sufficiently overlapping set of taxa between trees, see Ané, C., Eulenstein,
-O., Piaggio-Talice, R., & Sanderson, M. J. (2009). "Groves of phylogenetic
-trees". Annals of Combinatorics, 13(2), 139-167, \url{doi:10.1007/s00026-009-0017-x}.
+a sufficiently overlapping set of taxa between trees, see Ané et al. (2009) \doi{10.1007/s00026-009-0017-x}.
 In rare cases, a group of trees can have multiple groves. This argument indicates
 whether to get the grove with the most trees (\code{criterion = "trees"}) or the
 most taxa (\code{criterion = "taxa"}). Defaults to \code{criterion = "taxa"}.}

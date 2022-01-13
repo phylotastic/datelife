@@ -14,10 +14,14 @@ is_n_overlap(names_1, names_2, n = 2)
 \item{n}{Degree of overlap required}
 }
 \value{
-Boolean for whether the degree of overlap was met
+Boolean for whether the degree of overlap was met or not.
 }
 \description{
-This function implements definition 2.8 for n-overlap from Ané, C., Eulenstein, O.,
-Piaggio-Talice, R., & Sanderson, M. J. (2009). "Groves of phylogenetic trees".
-Annals of Combinatorics, 13(2), 139-167, \url{doi:10.1007/s00026-009-0017-x}.
+This function implements definition 2.8 for n-overlap from Ané
+et al. (2009) \doi{10.1007/s00026-009-0017-x}.
+}
+\references{
+Ané, C., Eulenstein, O., Piaggio-Talice, R., & Sanderson, M. J. (2009).
+"Groves of phylogenetic trees". Annals of Combinatorics, 13(2), 139-167,
+\doi{10.1007/s00026-009-0017-x}.
 }

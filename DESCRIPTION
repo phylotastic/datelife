@@ -26,7 +26,7 @@ Description: Methods and workflows to get chronograms (i.e., phylogenetic trees 
     for summarizing, we implement theorem 1.1. from Ané et al. (2009)
     <doi:10.1007/s00026-009-0017-x>.
     A given phylogenetic tree can be dated using time of lineage divergence data
-    as secondary calibrations (with caution, see Schenk (2016) <10.1371/journal.pone.0148228>).
+    as secondary calibrations (with caution, see Schenk (2016) <doi:10.1371/journal.pone.0148228>).
     To obtain and apply secondary calibrations, the package implements the congruification method described
     in Eastman et al. (2013) <doi:10.1111/2041-210X.12051>. Tree dating can be performed with different methods
     including BLADJ (Webb et al. (2008) <doi:10.1093/bioinformatics/btn358>), PATHd8

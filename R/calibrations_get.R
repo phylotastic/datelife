@@ -3,8 +3,7 @@
 #'
 #' @description This function extracts node ages for each taxon
 #'   pair in `input`. It applies the congruification method described in Eastman et al.
-#'   (2013) "Congruification: support for time scaling large phylogenetic trees".
-#'   Methods in Ecology and Evolution, 4(7), 688-691, <doi:10.1111/2041-210X.12051>
+#'   (2013) \doi{10.1111/2041-210X.12051},
 #'   to create a matrix of suitable secondary calibrations for each taxon pair.
 #'   Congruification is implemented with the function [geiger::congruify.phylo()].
 #' @param input A `phylo` or `multiPhylo` object with branch lengths
@@ -16,6 +15,10 @@
 #'   `each = FALSE`) or a list of `data.frames` (if `each = TRUE`) of secondary
 #'   calibrations, for each pair of taxon names in `input`. The attribute
 #'   `chronograms` stores the `input` data from which the calibrations were extracted.
+#' @references
+#' Eastman et al. (2013) "Congruification: support for time scaling large
+#' phylogenetic trees". Methods in Ecology and Evolution, 4(7), 688-691,
+#' \doi{10.1111/2041-210X.12051}.
 #' @export
 extract_calibrations_phylo <- function(input = NULL,
                                        each = FALSE) {

@@ -3,8 +3,7 @@
 #' @return A phylo object
 #' @details
 #' This function uses treePL as described in Smith, S. A., & O’Meara, B. C. (2012).
-#' "treePL: divergence time estimation using penalized likelihood for large phylogenies".
-#' Bioinformatics, 28(20), 2689-2690, <doi:10.1093/bioinformatics/bts492>, with
+#' \doi{10.1093/bioinformatics/bts492}, with
 #' the function `treePL.phylo`. It attempts to use the calibrations as fixed ages.
 #' If that fails (often due to conflict between calibrations), it will expand the
 #' range of the minimum age and maximum age and try again. And repeat.
@@ -12,6 +11,10 @@
 #' In some cases, it returns edge lengths in relative time (with maximum tree depth = 1)
 #' instead of absolute time, as given by calibrations. In this case, the function returns NA.
 #' This is an issue from PATHd8.
+#' @references
+#' Smith, S. A., & O’Meara, B. C. (2012).
+#' "treePL: divergence time estimation using penalized likelihood for large phylogenies".
+#' Bioinformatics, 28(20), 2689-2690, \doi{10.1093/bioinformatics/bts492}.
 #' @export
 use_calibrations_treePL <- function(phy, calibrations) {
   message("... Using secondary calibrations with treePL")

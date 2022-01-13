@@ -18,8 +18,8 @@ use_calibrations(
 \item{calibrations}{A \code{datelifeCalibrations} object, an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 
 \item{dating_method}{Tree dating algorithm to use. Options are "bladj" or "pathd8"
-(Webb et al., 2008, \url{doi:10.1093/bioinformatics/btn358}; Britton et al., 2007,
-\url{doi:10.1080/10635150701613783}).}
+(Webb et al., 2008, \doi{10.1093/bioinformatics/btn358}; Britton et al., 2007,
+\doi{10.1080/10635150701613783}).}
 
 \item{type}{The type of age to use as calibration. Options are "median", "mean", "min", or "max".}
 

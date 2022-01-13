@@ -16,8 +16,8 @@ use_calibrations_each(phy = NULL, calibrations = NULL, ...)
   Arguments passed on to \code{\link[=use_calibrations]{use_calibrations}}
   \describe{
     \item{\code{dating_method}}{Tree dating algorithm to use. Options are "bladj" or "pathd8"
-(Webb et al., 2008, \url{doi:10.1093/bioinformatics/btn358}; Britton et al., 2007,
-\url{doi:10.1080/10635150701613783}).}
+(Webb et al., 2008, \doi{10.1093/bioinformatics/btn358}; Britton et al., 2007,
+\doi{10.1080/10635150701613783}).}
     \item{\code{type}}{The type of age to use as calibration. Options are "median", "mean", "min", or "max".}
   }}
 }

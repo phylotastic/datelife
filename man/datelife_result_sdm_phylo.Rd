@@ -50,8 +50,12 @@ Reconstruct a supertree from a \code{datelifeResult} object using the Super Dist
 }
 \details{
 Chronograms given as input in \code{datelife_result} are summarized with the Super Distance
-Matrix (SDM) method described in Criscuolo A, Berry V, Douzery EJ, Gascuel O.
+Matrix (SDM) method described in Criscuolo et al. (2006) \doi{10.1080/10635150600969872},
+implemented with the function \code{\link[ape:SDM]{ape::SDM()}}. The resulting summary SDM is
+clustered with \code{\link[=summary_matrix_to_phylo]{summary_matrix_to_phylo()}}.
+}
+\references{
+Criscuolo A, Berry V, Douzery EJ, Gascuel O.
 (2006) "SDM: a fast distance-based approach for (super) tree building in
-phylogenomics" \url{doi:10.1080/10635150600969872}, implemented with the function
-\code{\link[ape:SDM]{ape::SDM()}}. The resulting summary SDM is clustered with \code{\link[=summary_matrix_to_phylo]{summary_matrix_to_phylo()}}.
+phylogenomics" \doi{10.1080/10635150600969872}.
 }

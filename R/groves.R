@@ -1,12 +1,15 @@
 #' Function for computing n-overlap for two vectors of names (ie., phy1$tip.label, phy2$tip.label) and seeing if they have n overlap
 #'
-#' @description This function implements definition 2.8 for n-overlap from Ané, C., Eulenstein, O.,
-#'   Piaggio-Talice, R., & Sanderson, M. J. (2009). "Groves of phylogenetic trees".
-#'   Annals of Combinatorics, 13(2), 139-167, <doi:10.1007/s00026-009-0017-x>.
+#' @description This function implements definition 2.8 for n-overlap from Ané
+#'   et al. (2009) \doi{10.1007/s00026-009-0017-x}.
 #' @param names_1 First vector of names
 #' @param names_2 Second vector of names
 #' @param n Degree of overlap required
-#' @return Boolean for whether the degree of overlap was met
+#' @return Boolean for whether the degree of overlap was met or not.
+#' @references
+#' Ané, C., Eulenstein, O., Piaggio-Talice, R., & Sanderson, M. J. (2009).
+#' "Groves of phylogenetic trees". Annals of Combinatorics, 13(2), 139-167,
+#' \doi{10.1007/s00026-009-0017-x}.
 #' @export
 is_n_overlap <- function(names_1, names_2, n = 2) {
   return(sum(names_1 %in% names_2) >= n)
@@ -14,14 +17,16 @@ is_n_overlap <- function(names_1, names_2, n = 2) {
 
 #' Find the grove for a group of chronograms and build a matrix.
 #'
-#' @description This function implements theorem 1.1 of Ané, C., Eulenstein, O., Piaggio-Talice, R.,
-#'   & Sanderson, M. J. (2009). "Groves of phylogenetic trees". Annals of
-#'   Combinatorics, 13(2), 139-167, <doi:10.1007/s00026-009-0017-x>, to fing a grove
-#'   for a given group of chronograms.
+#' @description This function implements theorem 1.1 of Anéet al. (2009) \doi{10.1007/s00026-009-0017-x}
+#'   to find a grove for a given group of chronograms.
 #' @param datelife_result A `datelifeResult` object.
 #' @param n The degree of taxon name overlap among input chronograms. Defaults
 #'   to `n = 2`, i.e., at least two overlapping taxon names.
 #' @return A matrix. Each cell shows whether n-overlap exists between a pair of inputs.
+#' @references
+#' Ané, C., Eulenstein, O., Piaggio-Talice, R., & Sanderson, M. J. (2009).
+#' "Groves of phylogenetic trees". Annals of Combinatorics, 13(2), 139-167,
+#' \doi{10.1007/s00026-009-0017-x}.
 #' @export
 build_grove_matrix <- function(datelife_result, n = 2) {
   grove_matrix <- matrix(FALSE, nrow = length(datelife_result), ncol = length(datelife_result))

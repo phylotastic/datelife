@@ -11,13 +11,17 @@
 #' with an additional `$data` element storing the input chronograms as a
 #' `datelifeResult` object, and a `$citation` element containing
 #' citations of studies from input chronograms.
-#' @export
 #' @details
 #' Chronograms given as input in `datelife_result` are summarized with the Super Distance
-#' Matrix (SDM) method described in Criscuolo A, Berry V, Douzery EJ, Gascuel O.
+#' Matrix (SDM) method described in Criscuolo et al. (2006) \doi{10.1080/10635150600969872},
+#' implemented with the function [ape::SDM()]. The resulting summary SDM is
+#' clustered with [summary_matrix_to_phylo()].
+#' @export
+#' @references
+#' Criscuolo A, Berry V, Douzery EJ, Gascuel O.
 #' (2006) "SDM: a fast distance-based approach for (super) tree building in
-#' phylogenomics" <doi:10.1080/10635150600969872>, implemented with the function
-#' [ape::SDM()]. The resulting summary SDM is clustered with [summary_matrix_to_phylo()].
+#' phylogenomics" \doi{10.1080/10635150600969872}.
+
 datelife_result_sdm_phylo <- function(datelife_result,
                                 weighting = "flat",
                                 ...) {

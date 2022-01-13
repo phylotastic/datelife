@@ -16,8 +16,6 @@ to \code{n = 2}, i.e., at least two overlapping taxon names.}
 A list of vectors; each list element is a grove.
 }
 \description{
-This function implements theorem 1.1 of Ané, C., Eulenstein, O., Piaggio-Talice, R.,
-& Sanderson, M. J. (2009). "Groves of phylogenetic trees". Annals of
-Combinatorics, 13(2), 139-167, \url{doi:10.1007/s00026-009-0017-x}, to fing a grove
-for a given group of chronograms.
+This function implements theorem 1.1 of Anéet al. (2009) \doi{10.1007/s00026-009-0017-x}
+to find a grove for a given group of chronograms.
 }

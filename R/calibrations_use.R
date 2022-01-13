@@ -10,12 +10,20 @@
 #' @inheritParams extract_calibrations_phylo
 ## extract_calibrations_phylo has param each
 #' @param dating_method Tree dating algorithm to use. Options are "bladj" or "pathd8"
-#'   (Webb et al., 2008, <doi:10.1093/bioinformatics/btn358>; Britton et al., 2007,
-#'   <doi:10.1080/10635150701613783>).
+#'   (Webb et al., 2008, \doi{10.1093/bioinformatics/btn358}; Britton et al., 2007,
+#'   \doi{10.1080/10635150701613783}).
 #' @inheritDotParams use_calibrations
 #' @return A `phylo` or `multiPhylo` object with branch lengths proportional to time.
 #' @inheritSection use_calibrations output
 #' @inherit use_calibrations details
+#' @references
+#' Webb, C. O., Ackerly, D. D., & Kembel, S. W. (2008). "Phylocom: software for
+#' the analysis of phylogenetic community structure and trait evolution".
+#' Bioinformatics, 24(18), \doi{10.1093/bioinformatics/btn358}.
+#'
+#' Britton, T., Anderson, C. L., Jacquet, D., Lundqvist, S., & Bremer, K. (2007).
+#' "Estimating divergence times in large phylogenetic trees". Systematic biology,
+#' 56(5), 741-752. \doi{10.1080/10635150701613783}.
 #' @export
 use_all_calibrations <- function(phy = NULL,
                                  calibrations = NULL,

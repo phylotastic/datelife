@@ -22,8 +22,8 @@ the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram ar
 in separate data frames.}
 
 \item{dating_method}{Tree dating algorithm to use. Options are "bladj" or "pathd8"
-(Webb et al., 2008, \url{doi:10.1093/bioinformatics/btn358}; Britton et al., 2007,
-\url{doi:10.1080/10635150701613783}).}
+(Webb et al., 2008, \doi{10.1093/bioinformatics/btn358}; Britton et al., 2007,
+\doi{10.1080/10635150701613783}).}
 
 \item{...}{
   Arguments passed on to \code{\link[=use_calibrations]{use_calibrations}}
@@ -50,3 +50,12 @@ If \code{phy} has branch lengths, the function can use the PATHd8 algorithm. See
 \code{attributes(output)$datelife_calibrations} and \code{attributes(output)$dating_method}.
 }
 
+\references{
+Webb, C. O., Ackerly, D. D., & Kembel, S. W. (2008). "Phylocom: software for
+the analysis of phylogenetic community structure and trait evolution".
+Bioinformatics, 24(18), \doi{10.1093/bioinformatics/btn358}.
+
+Britton, T., Anderson, C. L., Jacquet, D., Lundqvist, S., & Bremer, K. (2007).
+"Estimating divergence times in large phylogenetic trees". Systematic biology,
+56(5), 741-752. \doi{10.1080/10635150701613783}.
+}
