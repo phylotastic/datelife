@@ -219,14 +219,14 @@ get_otol_chronograms <- function(max_tree_count = "all") {
     }
   }
   if (nrow(ott_id_problems) > 0) {
-    problems_file <- file.path(getwd(), "data-raw", paste0("ott_id_problems_", max_tree_count, ".csv"))
+    problems_file <- file.path(tempdir(), paste0("ott_id_problems_", max_tree_count, ".csv"))
     utils::write.csv(ott_id_problems,
       file = problems_file,
       quote = FALSE, row.names = FALSE
     )
+    message("Problematic chronograms were saved to ", problems_file)
   } else {
     message("There were no problematic chronograms.")
-    write("There were no problematic chronograms.", problems_file)
   }
   tot_time <- Sys.time() - start_time # end of registering function running time
   class(trees) <- "multiPhylo"

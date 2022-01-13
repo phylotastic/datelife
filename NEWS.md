@@ -2,6 +2,10 @@
 
   - Bioconductor packages are used conditionally
   - Package website with `pkgdown`
+  - Open Tree of Life cached chronogram database was updated
+  - get_otol_chronograms was updated and renamed to get_opentree_chronogram
+  - documentation for all functions was expanded
+  - examples and function files are written to tempdir()
 
 # datelife 0.5.0
 
