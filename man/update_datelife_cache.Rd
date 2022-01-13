@@ -2,18 +2,36 @@
 % Please edit documentation in R/opentree_chronograms.R
 \name{update_datelife_cache}
 \alias{update_datelife_cache}
-\title{Create an updated chronogram database cache that is independent of the \code{opentree_chronograms} data object.}
+\title{Create an updated OpenTree chronograms database object}
 \usage{
 update_datelife_cache(
   write = TRUE,
-  file = file.path(tempdir(), "opentree_chronograms_updated.RData")
+  updated_name = "opentree_chronograms_updated",
+  file_path = file.path(tempdir()),
+  ...
 )
 }
 \arguments{
-\item{write}{Default to \code{TRUE}, it saves an .Rdata file (named opentree_chronograms_updated.RData
-by default) containing all chronograms from Open Tree of Life. Saves to temp dir by default.}
+\item{write}{Defaults to \code{TRUE}, it saves an .Rdata file named indicated by argument \code{name},
+containing available chronograms from Open Tree of Life. Saves to path indicated by argument \code{path}.}
 
-\item{file}{Path including file name}
+\item{updated_name}{Used if \code{write = TRUE}. Defaults to \code{"opentree_chronograms_updated"}. A character
+vector of length one indicating the name to assign to both the updated OpenTree chronogram
+database object and the ".Rdata" file. For example, if \code{name = "my_database"}, the
+function will assign the updated chronogram database to an object named \code{my_database}
+and will write it to a file named "my_database.Rdata" in the path indicated
+by argument \code{file_path}.}
+
+\item{file_path}{Used if \code{write = TRUE}. A character vector of length 1 indicating
+the path to write the updated database ".Rdata" file to, excluding file name.
+Defaults to temporary directory obtained with \code{\link[base:tempfile]{base::tempdir()}} and formatted with
+\code{\link[base:file.path]{base::file.path()}}.}
+
+\item{...}{
+  Arguments passed on to \code{\link[=get_otol_chronograms]{get_otol_chronograms}}
+  \describe{
+    \item{\code{max_tree_count}}{Default to "all", it gets all available chronograms. For testing purposes, a numeric value indicating the max number of trees to be cached.}
+  }}
 }
 \value{
 A list of 4 elements:
@@ -29,5 +47,8 @@ Life database.}
 }
 }
 \description{
-Create an updated chronogram database cache that is independent of the \code{opentree_chronograms} data object.
+The function calls \code{\link[=get_otol_chronograms]{get_otol_chronograms()}} to update the OpenTree
+chronograms database cached in datelife. It has the option to write the updated
+object as an .Rdata file, that will be independent of the \code{opentree_chronograms}
+data object that you can load with \code{data("opentree_chronograms", package = "datelife")}.
 }

@@ -24,20 +24,41 @@
 "opentree_chronograms"
 
 
-#' Create an updated chronogram database cache that is independent of the `opentree_chronograms` data object.
-#' @param write Default to `TRUE`, it saves an .Rdata file (named opentree_chronograms_updated.RData
-#'  by default) containing all chronograms from Open Tree of Life. Saves to temp dir by default.
-#' @param file Path including file name
+#' Create an updated OpenTree chronograms database object
+
+#' @description The function calls [get_otol_chronograms()] to update the OpenTree
+#'  chronograms database cached in datelife. It has the option to write the updated
+#' object as an .Rdata file, that will be independent of the `opentree_chronograms`
+#' data object that you can load with `data("opentree_chronograms", package = "datelife")`.
+#' @param write Defaults to `TRUE`, it saves an .Rdata file named indicated by argument `name`,
+#'   containing available chronograms from Open Tree of Life. Saves to path indicated by argument `path`.
+#' @param updated_name Used if `write = TRUE`. Defaults to `"opentree_chronograms_updated"`. A character
+#'   vector of length one indicating the name to assign to both the updated OpenTree chronogram
+#'   database object and the ".Rdata" file. For example, if `name = "my_database"`, the
+#'   function will assign the updated chronogram database to an object named `my_database`
+#'   and will write it to a file named "my_database.Rdata" in the path indicated
+#'   by argument `file_path`.
+#' @param file_path Used if `write = TRUE`. A character vector of length 1 indicating
+#'   the path to write the updated database ".Rdata" file to, excluding file name.
+#'   Defaults to temporary directory obtained with [base::tempdir()] and formatted with
+#'   [base::file.path()].
+#' @inheritDotParams get_otol_chronograms
 #' @inherit get_otol_chronograms return
 #' @export
 update_datelife_cache <- function(write = TRUE,
-                                  file = file.path(tempdir(), "opentree_chronograms_updated.RData")) { # , new_studies_only = TRUE
-  # enhance: I think we can change the name to update_chronograms_cache
-  cache_updated <- get_otol_chronograms()
+                                  updated_name = "opentree_chronograms_updated",
+                                  file_path = file.path(tempdir()),
+                                  ...) {
+  # , new_studies_only = TRUE
+  # enhance: I think we can change the name to update_opentree_chronograms
+  updated <- get_otol_chronograms(...)
   if (write) {
-    save(opentree_chronograms, file = file, compress = "xz")
+    assign(updated_name, updated) # assign the name indicated in updated_name to updated object
+    file_name <- paste0(updated_name, ".RData")
+    save(list = updated_name, file = file.path(file_path, file_name), compress = "xz")
+    message("\nUpdated opentree_chronograms object was saved to file:\n\t", file_name, "\n\nIn directory:\n\t", file_path)
   }
-  return(cache_updated)
+  return(updated)
 }
 
 #' Update all data files as data objects for the package

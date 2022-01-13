@@ -24,7 +24,7 @@ get_datelife_result_datelifequery <- function(datelife_query = NULL,
   #
   message("... Searching the chronogram database.")
   if (update_opentree_chronograms) {
-    cache <- update_datelife_cache(save = TRUE)
+    cache <- update_datelife_cache(write = TRUE)
   } else {
     if ("opentree_chronograms" %in% cache) {
       utils::data("opentree_chronograms", package = "datelife")
