@@ -131,6 +131,9 @@ get_otol_chronograms <- function(max_tree_count = "all") {
                                                  value = "ot:time",
                                                  detailed = TRUE,
                                                  verbose = FALSE)
+  # rotl::studies_find_trees throws this Warning in rbind(c(n_trees = "1", tree_ids = "tree6160", candidate = "tree6160",  :
+  # number of columns of result is not a multiple of vector length (arg 1)  colnames(chronogram_matches)
+  # rotl::list_trees(chronogram_matches)
   trees <- list()
   authors <- list()
   curators <- list()
@@ -158,26 +161,28 @@ get_otol_chronograms <- function(max_tree_count = "all") {
       # 	new_tree <- get_study_tree(study_id=study_id, tree_id=tree_id, tip_label='ott_taxon_name')
       try_tree <- new_tree2 <- new_tree <- NULL
       tree_id <- strsplit(chronogram_matches$match_tree_ids[study_index], ", ")[[1]][chrono_index]
+      if (is.null(tree_id)) {
+        ott_id_problems <- rbind(ott_id_problems, data.frame(study_id, tree_id))
+      }
       potential_bad <- paste("tree_id='", tree_id, "', study_id='", study_id, "'", sep = "")
 
       if (!grepl("\\.\\.\\.", tree_id) & !is.na(tree_id)) { # to deal with ellipsis bug
         message("tree_id = '", tree_id, "', study_id = '", study_id, "'")
-        new_tree <- tryCatch(rotl::get_study_tree(
-          study_id = study_id, tree_id = tree_id,
-          tip_label = "ott_taxon_name", deduplicate = TRUE
-        ),
-        error = function(e) {
-          NULL
-        }
-        ) # would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
+        new_tree <- tryCatch(rotl::get_study_tree(study_id = study_id,
+                                                  tree_id = tree_id,
+                                                  tip_label = "ott_taxon_name",
+                                                  deduplicate = TRUE),
+                             error = function(e) NULL)
+        # would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
         # try(new_tree <- datelife:::get_study_tree_with_dups(study_id=study_id,tree_id=tree_id ))
         # try(new_tree <- rotl::get_study_subtree(study_id=study_id,tree_id=tree_id, tip_label="ott_taxon_name", subtree_id="ingroup")) #only want ingroup, as it's the one that's been lovingly curated.
         if (!is.null(new_tree) & phylo_has_brlen(phy = new_tree)) {
           # add ott_ids
           # right now the function is having trouble to retrieve trees with ott ids as tip labels from certain studies
-          new_tree2 <- tryCatch(rotl::get_study_tree(study_id = study_id, tree_id = tree_id, tip_label = "ott_id"),
-            error = function(e) NULL
-          )
+          new_tree2 <- tryCatch(rotl::get_study_tree(study_id = study_id,
+                                                     tree_id = tree_id,
+                                                     tip_label = "ott_id"),
+                                error = function(e) NULL)
           utils::head(new_tree2$tip.label)
           if (!inherits(new_tree2, "phylo")) {
             problem <- "otol database does not have ott ids for this tree (names have not been curated)"
