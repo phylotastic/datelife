@@ -36,13 +36,21 @@ As a `datelife` user, you can get age data for your organisms of interest in sev
 
 You can also apply the obtained age data to date a phylogenetic tree topology of your organisms of interest.
 
-## 1. Preparing your organism names
+## 1. Processing your organism names
 
-The function `make_datelife_query` processes the scientific names of your organisms of interest and saves them as a `datelifeQuery` object.
-This allows you to straightforwrdly use them later to perform a search for ages across the `datelife` chronogram database. You have two general ways of providing organism names:
+The function `make_datelife_query` processes the taxon names of your organisms of interest and saves them as a `datelifeQuery` object.
+
+A `datelifeQuery` object is a list of three elements:
+- `$cleaned_names`: a character vector of "cleaned" taxon names, 
+- `$ott_ids`: a numeric vector of OpenTree Taxonomy identifiers (OTT ids), and 
+- `$phy`: the input tree as a `phylo` object or `NA` if none was provided.
+
+This allows us to straightforwardly use the processed taxon names later to perform a search for ages across the `datelife` chronogram database and other downstream analyses. 
+
+There are two alternative ways of processing organism names with `datelife`:
 
 ### a) From a set of organism names
-You can provide the scientific names as a character vector or as a single comma separated string of names.
+You can provide the taxon names as a character vector or as a single comma separated string of names.
 For example, running the following:
 
 ```{r, eval = FALSE}

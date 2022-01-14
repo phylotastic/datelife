@@ -25,7 +25,7 @@ One of the following:
 \item{max}{Choose this if you wanna be conservative; it will use the maximum
 age from the node age distributions.}
 }}
-    \item{\code{datelife_query}}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
+    \item{\code{datelife_query}}{A \code{datelifeQuery} object, usually an output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
   }}
 }
 \value{

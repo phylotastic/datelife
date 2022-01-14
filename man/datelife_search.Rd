@@ -13,7 +13,7 @@ datelife_search(
   partial = TRUE,
   cache = "opentree_chronograms",
   summary_format = "phylo_all",
-  na.rm = FALSE,
+  na_rm = FALSE,
   summary_print = c("citations", "taxa"),
   taxon_summary = c("none", "summary", "matrix"),
   criterion = "taxa"
@@ -84,7 +84,7 @@ newick target chronogram.}
 taxa, citations of source chronograms and newick string.}
 }}
 
-\item{na.rm}{If \code{TRUE}, it drops rows containing \code{NA}s from the \code{datelifeResult}
+\item{na_rm}{If \code{TRUE}, it drops rows containing \code{NA}s from the \code{datelifeResult}
 patristic matrix; if \code{FALSE}, it returns \code{NA} where there are missing entries.}
 
 \item{summary_print}{A character vector specifying the type of summary information
@@ -102,14 +102,14 @@ in source chronograms should be added to the output as a \code{"summary"} or as 
 presence/absence \code{"matrix"}. Default to \code{"none"}, no information on taxon_summary
 added to the output.}
 
-\item{criterion}{Used for chronogram summarizing, i.e., obtaining a single
+\item{criterion}{Defaults to \code{criterion = "taxa"}. Used for chronogram summarizing, i.e., obtaining a single
 summary chronogram from a group of input chronograms.
 For summarizing approaches that return a single summary tree from a group of
 phylogenetic trees, it is necessary that the latter form a grove, roughly,
 a sufficiently overlapping set of taxa between trees, see Ané et al. (2009) \doi{10.1007/s00026-009-0017-x}.
 In rare cases, a group of trees can have multiple groves. This argument indicates
 whether to get the grove with the most trees (\code{criterion = "trees"}) or the
-most taxa (\code{criterion = "taxa"}). Defaults to \code{criterion = "taxa"}.}
+most taxa (\code{criterion = "taxa"}).}
 }
 \value{
 The output is determined by the argument \code{summary_format}:

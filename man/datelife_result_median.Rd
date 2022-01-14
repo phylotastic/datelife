@@ -7,7 +7,7 @@
 datelife_result_median(datelife_result, ...)
 }
 \arguments{
-\item{datelife_result}{A \code{datelifeResult} object, output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
+\item{datelife_result}{A \code{datelifeResult} object, usually an output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
 
 \item{...}{
   Arguments passed on to \code{\link[=summary_matrix_to_phylo]{summary_matrix_to_phylo}}
@@ -25,7 +25,7 @@ age from the node age distributions.}
 }}
     \item{\code{target_tree}}{A \code{phylo} object. Use this in case you want a particular
 backbone for the output tree.}
-    \item{\code{datelife_query}}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
+    \item{\code{datelife_query}}{A \code{datelifeQuery} object, usually an output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
   }}
 }
 \value{

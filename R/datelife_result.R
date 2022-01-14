@@ -22,7 +22,7 @@ get_datelife_result_datelifequery <- function(datelife_query = NULL,
                                               update_opentree_chronograms = FALSE,
                                               ...) {
   #
-  message("... Searching the chronogram database.")
+  message("... Searching chronogram database.")
   if (update_opentree_chronograms) {
     cache <- update_datelife_cache(write = TRUE)
   } else {
@@ -53,6 +53,7 @@ get_datelife_result_datelifequery <- function(datelife_query = NULL,
     partial = partial
   )
   message("Search done!")
+  message("\nInput taxon names were found in ", length(datelife_result), " chronograms.")
   class(datelife_result) <- c("datelifeResult")
   attr(datelife_result, "datelife_query") <- datelife_query
   return(datelife_result)

@@ -23,27 +23,6 @@ datelife_result_study_index <- function(datelife_result,
   return(which(names(cache$trees) %in% names(datelife_result)))
 }
 
-#' Get time of MRCA from patristic matrix. Used in [datelife_result_MRCA()].
-#' @param patristic_matrix A patristic matrix (aka a `datelifeResult` object of length 1)
-#' @param na.rm If `TRUE`, it drops rows containing `NA`s from the `datelifeResult`
-#'   patristic matrix; if `FALSE`, it returns `NA` where there are missing entries.
-#' @return The depth of the MRCA as a numeric vector.
-patristic_matrix_MRCA <- function(patristic_matrix, na.rm = TRUE) {
-  # 0.5 since patristic distance is down to the root and back up
-  return(0.5 * max(patristic_matrix, na.rm = na.rm))
-}
-
-#' Get a numeric vector of MRCAs from a `datelifeResult` object. Used in [summarize_datelife_result()].
-#' @inheritParams get_taxon_summary
-# get_taxon_summary has param datelife_result
-#' @inheritParams patristic_matrix_MRCA
-# patristic_matrix_MRCA has param na.rm
-#' @return A named numeric vector of MRCA ages for each element given in `datelife_result`.
-datelife_result_MRCA <- function(datelife_result, na.rm = TRUE) {
-  ages <- sapply(datelife_result, patristic_matrix_MRCA, na.rm = na.rm)
-  return(ages)
-}
-
 #' Figure out which subset function to use. Used inside [get_datelife_result()]
 #' @param study_element The thing being passed in: an array or a phylo object to serve as reference for congruification
 #' @param taxa Vector of taxon names to get a subset for

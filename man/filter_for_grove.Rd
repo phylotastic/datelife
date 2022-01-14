@@ -9,14 +9,14 @@ filter_for_grove(datelife_result, criterion = "taxa", n = 2)
 \arguments{
 \item{datelife_result}{A \code{datelifeResult} object. Only needed for \code{criterion = "taxa"}.}
 
-\item{criterion}{Used for chronogram summarizing, i.e., obtaining a single
+\item{criterion}{Defaults to \code{criterion = "taxa"}. Used for chronogram summarizing, i.e., obtaining a single
 summary chronogram from a group of input chronograms.
 For summarizing approaches that return a single summary tree from a group of
 phylogenetic trees, it is necessary that the latter form a grove, roughly,
 a sufficiently overlapping set of taxa between trees, see Ané et al. (2009) \doi{10.1007/s00026-009-0017-x}.
 In rare cases, a group of trees can have multiple groves. This argument indicates
 whether to get the grove with the most trees (\code{criterion = "trees"}) or the
-most taxa (\code{criterion = "taxa"}). Defaults to \code{criterion = "taxa"}.}
+most taxa (\code{criterion = "taxa"}).}
 
 \item{n}{The degree of taxon name overlap among input chronograms. Defaults
 to \code{n = 2}, i.e., at least two overlapping taxon names.}

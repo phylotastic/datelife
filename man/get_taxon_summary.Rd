@@ -7,9 +7,9 @@
 get_taxon_summary(datelife_result = NULL, datelife_query = NULL)
 }
 \arguments{
-\item{datelife_result}{A \code{datelifeResult} object, output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
+\item{datelife_result}{A \code{datelifeResult} object, usually an output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
 
-\item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
+\item{datelife_query}{A \code{datelifeQuery} object, usually an output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 }
 \value{
 A \code{datelifeTaxonSummary} object, which is a list of 4 elements:

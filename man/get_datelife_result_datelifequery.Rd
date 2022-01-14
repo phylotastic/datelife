@@ -13,7 +13,7 @@ get_datelife_result_datelifequery(
 )
 }
 \arguments{
-\item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
+\item{datelife_query}{A \code{datelifeQuery} object, usually an output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 
 \item{partial}{Whether to return or exclude partially matching source chronograms,
 i.e, those that match some and not all of taxa given in \code{datelife_query}.

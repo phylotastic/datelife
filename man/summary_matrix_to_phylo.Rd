@@ -16,7 +16,7 @@ summary_matrix_to_phylo(
 \arguments{
 \item{summ_matrix}{Any summary patristic distance matrix, such as the ones obtained with \code{\link[=datelife_result_sdm_matrix]{datelife_result_sdm_matrix()}} or \code{\link[=datelife_result_median_matrix]{datelife_result_median_matrix()}}.}
 
-\item{datelife_query}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
+\item{datelife_query}{A \code{datelifeQuery} object, usually an output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 
 \item{total_distance}{Boolean. If \code{TRUE} it will divide the matrix in half, if
 \code{FALSE} it will take it as is.}

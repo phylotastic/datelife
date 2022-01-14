@@ -7,7 +7,7 @@
 datelife_result_sdm_phylo(datelife_result, weighting = "flat", ...)
 }
 \arguments{
-\item{datelife_result}{A \code{datelifeResult} object, output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
+\item{datelife_result}{A \code{datelifeResult} object, usually an output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
 
 \item{weighting}{A character vector indicating how much weight to give to each
 tree in \code{input} during the SDM analysis. Options are:
@@ -34,7 +34,7 @@ age from the node age distributions.}
 }}
     \item{\code{target_tree}}{A \code{phylo} object. Use this in case you want a particular
 backbone for the output tree.}
-    \item{\code{datelife_query}}{A \code{datelifeQuery} object, output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
+    \item{\code{datelife_query}}{A \code{datelifeQuery} object, usually an output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
   }}
 }
 \value{

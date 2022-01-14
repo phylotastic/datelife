@@ -27,6 +27,7 @@ some.bird.trees.html
 cran-comments.md
 datelife.Rproj
 dev.txt
+dev.R
 ^\.github$
 ^README\.Rmd$
 _pkgdown.yml

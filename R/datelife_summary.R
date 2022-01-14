@@ -2,8 +2,8 @@
 #'
 # #' To be renamed `summary_taxon`.
 #'
-#' @param datelife_result A `datelifeResult` object, output of [get_datelife_result()].
-#' @param datelife_query A `datelifeQuery` object, output of [make_datelife_query()].
+#' @param datelife_result A `datelifeResult` object, usually an output of [get_datelife_result()].
+#' @param datelife_query A `datelifeQuery` object, usually an output of [make_datelife_query()].
 #' @return A `datelifeTaxonSummary` object, which is a list of 4 elements:
 #' \describe{
 #'    \item{$matrix}{Data as a presence/absence matrix of taxon names across chronograms.}
@@ -130,7 +130,7 @@ get_taxon_summary <- function(datelife_result = NULL,
 #' 	 				taxa, citations of source chronograms and newick string.}
 #' }
 #' @inheritParams datelife_result_MRCA
-# datelife_result_MRCA has param na.rm
+# datelife_result_MRCA has param na_rm
 #' @param summary_print A character vector specifying the type of summary information
 #'   to be printed to screen. Options are:
 #'   \describe{
@@ -144,14 +144,14 @@ get_taxon_summary <- function(datelife_result = NULL,
 #'   in source chronograms should be added to the output as a `"summary"` or as a
 #'   presence/absence `"matrix"`. Default to `"none"`, no information on taxon_summary
 #'   added to the output.
-#' @param criterion Used for chronogram summarizing, i.e., obtaining a single
+#' @param criterion Defaults to `criterion = "taxa"`. Used for chronogram summarizing, i.e., obtaining a single
 #'   summary chronogram from a group of input chronograms.
 #'   For summarizing approaches that return a single summary tree from a group of
 #'   phylogenetic trees, it is necessary that the latter form a grove, roughly,
 #'   a sufficiently overlapping set of taxa between trees, see Ané et al. (2009) \doi{10.1007/s00026-009-0017-x}.
 #'   In rare cases, a group of trees can have multiple groves. This argument indicates
 #'   whether to get the grove with the most trees (`criterion = "trees"`) or the
-#'   most taxa (`criterion = "taxa"`). Defaults to `criterion = "taxa"`.
+#'   most taxa (`criterion = "taxa"`).
 #' @return The output is determined by the argument `summary_format`:
 #' \describe{
 #'   \item{If `summary_format = "citations"`}{The function returns a character
@@ -173,7 +173,7 @@ get_taxon_summary <- function(datelife_result = NULL,
 summarize_datelife_result <- function(datelife_result = NULL,
                                       datelife_query = NULL,
                                       summary_format = "phylo_all",
-                                      na.rm = TRUE,
+                                      na_rm = TRUE,
                                       summary_print = c("citations", "taxa"),
                                       taxon_summary = c("none", "summary", "matrix"),
                                       criterion = "taxa") {
@@ -203,23 +203,28 @@ summarize_datelife_result <- function(datelife_result = NULL,
   if (summary_format.in == "citations") {
     return.object <- names(datelife_result)
   }
-  mrcas <- datelife_result_MRCA(datelife_result, na.rm = na.rm) # this is later used for median and sdm
+  mrcas <- datelife_result_MRCA(datelife_result, na_rm = na_rm) # this is later used for median and sdm
   if (summary_format.in == "mrca") {
     return.object <- mrcas
   }
+  # TODO replace by datelife_result_newick_all
   if (summary_format.in == "newick_all") {
     trees <- sapply(datelife_result, patristic_matrix_to_newick)
     return.object <- trees[which(!is.na(trees))]
+    newick_all <- return.object
   }
+  # TODO replace by datelife_result_phylo_all
   if (summary_format.in == "phylo_all") {
     trees <- suppressWarnings(lapply(datelife_result, patristic_matrix_to_phylo)) # suppress warning "Converting from patristic distance matrix to a tree resulted in some negative branch lengths"
     return.object <- trees[which(!is.na(trees))]
     class(return.object) <- "multiPhylo"
+    phylo_all <- return.object
+    phylo_biggest <- get_biggest_multiphylo(trees) # NAs in trees are removed in get_biggest_multiphylo
   }
   if (summary_format.in == "phylo_biggest") {
-    # enhance: choose from patristic matrix, not phylo objects, it will be faster.
     trees <- lapply(datelife_result, patristic_matrix_to_phylo)
-    return.object <- get_biggest_phylo(trees) # NAs in trees are removed in get_biggest_phylo
+    return.object <- get_biggest_multiphylo(trees) # NAs in trees are removed in get_biggest_multiphylo
+    # TODO: use get_biggest_datelife_result instead?
   }
   # test if n_overlap = 2 is enough to summarize results with sdm and median:
   if (summary_format.in %in% c("newick_sdm", "phylo_sdm", "newick_median", "phylo_median")) {
@@ -248,7 +253,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
       out.vector1 <- paste(out.vector1, paste("</th><th>", colnames(taxon_summ$matrix), sep = "", collapse = ""), sep = "")
     }
     out.vector1 <- paste(out.vector1, "</th></tr>", sep = "")
-    ages <- datelife_result_MRCA(datelife_result, na.rm = na.rm)
+    ages <- datelife_result_MRCA(datelife_result, na_rm = na_rm)
     trees <- sapply(datelife_result, patristic_matrix_to_newick)
     out.vector2 <- c()
     for (result.index in sequence(length(datelife_result))) {
@@ -279,7 +284,7 @@ summarize_datelife_result <- function(datelife_result = NULL,
   }
   if (summary_format.in == "data_frame") {
     out.df <- data.frame()
-    ages <- datelife_result_MRCA(datelife_result, na.rm = na.rm)
+    ages <- datelife_result_MRCA(datelife_result, na_rm = na_rm)
     trees <- sapply(datelife_result, patristic_matrix_to_newick)
     for (result.index in sequence(length(datelife_result))) {
       out.line <- data.frame(Age = ages[result.index], Ntax = sum(!is.na(diag(datelife_result[[result.index]]))), Citation = names(datelife_result)[result.index], Newick = trees[result.index])
@@ -332,27 +337,15 @@ summarize_datelife_result <- function(datelife_result = NULL,
   }
   return(return.object)
 }
-# TODO: method to summarize a dateliferesult object
-# #' Main function to summarize a datelifeResult object
-# #' @param object A `datelifeResult` object, typically an output of [get_datelife_result()].
-# #' @param ... further arguments passed to or from other methods
-# #' @param na.rm Boolean for whether to include partial matches
-# #' @method summary datelifeResult
-# #' @export
-# summary.datelifeResult <- function(object, ..., na.rm = TRUE) {
-# 	mrcas <- datelife_result_MRCA(object, na.rm = na.rm)
-# 	res <- list(mrca = mrcas)
-# 	class(res) <- "datelifeResultSummary"
-# 	return(res)
-# }
+
 
 #' Get the tree with the most tips: the biggest tree.
 #'
 #'
-#' @param trees A list of trees as multiPhylo or as a plain list object.
-#' @return A `phylo` object with a citation slot with the citation of the biggest tree.
+#' @param trees A list of trees as `multiPhylo` or as a generic `list` object.
+#' @return The largest tree from those given in `trees`, as a `phylo` object with an additional `$citation` element containing the reference of the original publication.
 #' @export
-get_biggest_phylo <- function(trees) {
+get_biggest_multiphylo <- function(trees) {
   trees <- trees[which(!is.na(trees))] # removes NAs, which will return an error later on next logical:
   tree_citation <- names(trees)
   return.object <- trees[which(sapply(trees, ape::Ntip) == max(sapply(trees, ape::Ntip)))]
@@ -371,3 +364,6 @@ get_biggest_phylo <- function(trees) {
   return.object$citation <- tree_citation
   return.object
 }
+
+# TODO: choose from patristic matrix, not phylo objects, it will be faster.
+# get_biggest_datelife_result
