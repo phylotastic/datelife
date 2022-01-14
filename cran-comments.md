@@ -5,7 +5,7 @@ This is a resubmission where I have:
 
 * Added references describing the methods in the package in the description field of the DESCRIPTION file
 
-* Added a \value to the following files .Rd files with exported methods and explained the function's results in the documentation: 
+* Added a \value to the following files .Rd files with exported methods and explained the function's results in the documentation:
       datelife_search.Rd: \value
       get_taxon_summary.Rd: \value
       get_valid_children.Rd: \value
@@ -63,6 +63,24 @@ Possibly misspelled words in DESCRIPTION:
   chronograms (20:73)
   workflows (20:26)
   phylogenetic (20:49)
+  al (24:31, 26:60, 31:19, 32:30, 33:17)
+  Ané (26:53)
+  BLADJ (32:15)
+  Britton (33:6)
+  chronogram (22:55)
+  chronograms (19:43, 23:14, 25:26)
+  congruification (30:76)
+  Criscuolo (24:18)
+  DateLife (21:62)
+  et (24:28, 26:57, 31:16, 32:27, 33:14)
+  Huelsenbeck (33:71)
+  mrBayes (33:62)
+  O'Meara (35:9)
+  PATHd (32:79)
+  Ronquist (34:9)
+  Schenk (29:50)
+  SDM (23:67)
+  treePL (34:69)
 ```
 
 **Comments**: <br/>
