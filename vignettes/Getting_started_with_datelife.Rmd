@@ -38,18 +38,19 @@ You can also apply the obtained age data to date a phylogenetic tree topology of
 
 ## 1. Processing your organism names
 
-The function `make_datelife_query` processes the taxon names of your organisms of interest and saves them as a `datelifeQuery` object.
+The function `make_datelife_query` processes the taxon names of your organisms of interest and structures them as a `datelifeQuery` object.
 
 A `datelifeQuery` object is a list of three elements:
-- `$cleaned_names`: a character vector of "cleaned" taxon names, 
-- `$ott_ids`: a numeric vector of OpenTree Taxonomy identifiers (OTT ids), and 
-- `$phy`: the input tree as a `phylo` object or `NA` if none was provided.
 
-This allows us to straightforwardly use the processed taxon names later to perform a search for ages across the `datelife` chronogram database and other downstream analyses. 
+- `$cleaned_names`: a character vector of "cleaned" taxon names, 
+- `$ott_ids`: a numeric vector of OpenTree Taxonomic identifiers (OTT ids), and 
+- `$phy`: an input tree as a `phylo` object or `NA` if none was provided.
+
+This allows us to straightforwardly use the processed taxon names later to perform a search for ages across the `datelife` chronogram database as well as other downstream analyses. 
 
 There are two alternative ways of processing organism names with `datelife`:
 
-### a) From a set of organism names
+### a) From a set of organism taxonomic names
 You can provide the taxon names as a character vector or as a single comma separated string of names.
 For example, running the following:
 
@@ -116,9 +117,9 @@ datelife::make_datelife_query(input = "Delphinus_delphis,
 
 Note that you can use underscores or spaces to separate binomial scientific names and `datelife` will process them the same.
 
-### b) From a tree with organism names on its tips
+### b) From a tree with organism taxonomic names as tip labels
 
-You can also provide the scientific names of your organisms of interest as labels on the tips of any phylogenetic tree.
+You can also provide the taxon names of your organisms of interest as labels on the tips of any phylogenetic tree.
 You can provide the tree as a newick string:
 
 ```{r, eval = FALSE}
@@ -199,7 +200,7 @@ my_datelife_query <- datelife::make_datelife_query(input = phylo)
 
 ## 2. Searching the chronogram database
 
-The `datelife_search` function takes a `datelifeQuery` object and goes through the `datelife` chronogram database to find all chronograms matching at least two organism names:
+The `datelife_search` function takes a `datelifeQuery` object and goes through the `datelife` chronogram database to find all chronograms matching at least two taxon names:
 
 ```{r, eval = FALSE}
 datelife::datelife_search(input = my_datelife_query)

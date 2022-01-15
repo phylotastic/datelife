@@ -52,7 +52,7 @@ summary.datelifeResult <- function(object,
 	biggest <- get_biggest_multiphylo(phylo_all) # NAs in trees are removed in get_biggest_phylo
 
 	median_and_sdm <- datelife_result_median_and_sdm(datelife_result, datelife_query, na_rm = na_rm)
-  html_table <- datelife_result_html(datelife_result, na_rm = na_rm)
+  html_table <- datelife_result_html(datelife_result, datelife_query, na_rm = na_rm)
   data_frame <- datelife_result_data_frame(datelife_result, na_rm = na_rm)
 	res <- list(citations = names(mrcas),
 	            mrca = mrcas,

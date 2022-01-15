@@ -20,10 +20,10 @@ library(datelife)
 
 ## 1. Processing Fringiliidae names
 
-Get all species names belonging to the family with the flag `get_spp_from_taxon = TRUE`:
+Get all species names belonging to the family using the flag `get_spp_from_taxon = TRUE`:
 
 ```r
-dq <- datelife::make_datelife_query(input = "fringilidae",               
+dquery <- datelife::make_datelife_query(input = "fringilidae",               
                                    get_spp_from_taxon = TRUE)
 
 #> ... Making a DateLife query.
@@ -42,7 +42,7 @@ dq <- datelife::make_datelife_query(input = "fringilidae",
 Inspect the structure of the output:
 
 ```r
-str(dq)
+str(dquery)
 
 #> List of 3
 #>  $ cleaned_names: Named chr [1:289] "Crithagra sulphurata" "Crithagra #> citrinelloides" "Crithagra mozambica" "Crithagra capistrata" ...
@@ -53,18 +53,20 @@ str(dq)
 #>  - attr(*, "class")= chr "datelifeQuery"
 ```
 
-We have 289 species names in the family Fringiliidae and we provided no input tree so `$phy` is `NA`.
+We have 289 species names in the family Fringiliidae and we did not provide an input tree, so `$phy` is `NA`.
 
 ## 2. Search the species names across a chronogram database
 
-Load the prebuilt chronogram database:
+Load the prebuilt OpenTree chronogram database object names `opentree_chronograms`:
 
 ```r
 utils::data("opentree_chronograms", package = "datelife")
 ```
 
+Use your `datelifeQuery` object named `dquery` to search the chronogram database:
+
 ```r
-dr <- datelife::get_datelife_result(input = dq, cache = opentree_chronograms)
+dres <- datelife::get_datelife_result(input = dquery, cache = opentree_chronograms)
 
 #> ... Searching the chronogram database.
 #> Search done!
@@ -72,7 +74,87 @@ dr <- datelife::get_datelife_result(input = dq, cache = opentree_chronograms)
 #> Input taxon names were found in 13 chronograms.
 ```
 
-Results from the chronogram search are returned as a `datelifeResult` object:
+Results from the chronogram search are returned as a `datelifeResult` object, which is a named list of patristic matrices. Each element of the list corresponds to a chronogram that has been translated to a distance matrix or patristic matrix. The main reason for this is that pruning is much faster on a matrix than on a `phylo` object:
 
-class(dr)
+```r
+class(dres)
+#> [1] "datelifeResult"
+
+typeof(dres)
+#> [1] "list"
+
+names(dres)
+```
+
+<details>
+<summary>names on our `datelifeResult` object</summary>
+```r
+#> [1] "Hooper, Daniel M., Trevor D. Price. 2017. Chromosomal inversion differences correlate with range overlap in passerine birds. Nature Ecology & Evolution 1 (10): 1526-1534"
+
+#> [2] "Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845" 
+
+#> [3] "Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845" 
+
+#> [4] "Claramunt, Santiago, Joel Cracraft. 2015. A new time tree reveals Earth historys imprint on the evolution of modern birds. Science Advances 1 (11): e1501005-e1501005" 
+
+#> [5] "Gibb, Gillian C., Ryan England, Gerrit Hartig, P.A. (Trish) McLenachan, Briar L. Taylor Smith, Bennet J. McComish, Alan Cooper, David Penny. 2015. New Zealand passerines help clarify the diversification of major songbird lineages during the Oligocene. Genome Biology and Evolution 7 (11): 2983-2995."      
+
+#> [6] "Barker, F. Keith, Kevin J. Burns, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2015. New insights into New World biogeography: An integrated view from the phylogeny of blackbirds, cardinals, sparrows, tanagers, warblers, and allies. The Auk 132 (2): 333-348."                                                                   
+#> [7] "Barker, F. Keith, Kevin J. Burns, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2015. New insights into New World biogeography: An integrated view from the phylogeny of blackbirds, cardinals, sparrows, tanagers, warblers, and allies. The Auk 132 (2): 333-348."                                                                   
+#> [8] "Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448" 
+
+#> [9] "Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448"
+
+#> [10] "Barker, F. K., K. J. Burns, J. Klicka, S. M. Lanyon, I. J. Lovette. 2013. Going to extremes: contrasting rates of diversification in a recent radiation of New World passerine birds. Systematic Biology 62 (2): 298-320."                                                                                                              
+#> [11] "Burns, Kevin J., Allison J. Shultz, Pascal O. Title, Nicholas A. Mason, F. Keith Barker, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2014. Phylogenetics and diversification of tanagers (Passeriformes: Thraupidae), the largest radiation of Neotropical songbirds. Molecular Phylogenetics and Evolution 75: 41-77."              
+#> [12] "Price, Trevor D., Daniel M. Hooper, Caitlyn D. Buchanan, Ulf S. Johansson, D. Thomas Tietze, Per Alström, Urban Olsson, Mousumi Ghosh-Harihar, Farah Ishtiaq, Sandeep K. Gupta, Jochen Martens, Bettina Harr, Pratap Singh, Dhananjai Mohan. 2014. Niche filling slows the diversification of Himalayan songbirds. Nature 509: 222-225."
+
+#> [13] "Price, Trevor D., Daniel M. Hooper, Caitlyn D. Buchanan, Ulf S. Johansson, D. Thomas Tietze, Per Alström, Urban Olsson, Mousumi Ghosh-Harihar, Farah Ishtiaq, Sandeep K. Gupta, Jochen Martens, Bettina Harr, Pratap Singh, Dhananjai Mohan. 2014. Niche filling slows the diversification of Himalayan songbirds. Nature 509: 222-225."
+```
+</details>
+```
+class(dres[[1]])
+#> [1] "matrix" "array" 
+```
+
+
+## 3. Summarizing a `datelifeResult` object
+
+What if you want to plot all your `datelifeResult` chronograms as a tree? What if you want a single tree summarizing all your resulting chronograms? The function `summary.datelifeResult` will get all types of summaries for you:
+
+```r
+dsumm <- summary(dres)
+
+#> Trying with overlap = 2
+#> 
+#> Success!
+#> 
+#> ... Calculating a median summary chronogram.
+#>   |==========================================================| 100%
+#>   |==========================================================| 100%
+#>   |==========================================================| 100%
+#> 1 out of 13 chronograms tried:  Ok.
+#> 2 out of 13 chronograms tried:  Ok.
+#> 3 out of 13 chronograms tried:  Ok.
+#> 4 out of 13 chronograms tried:  Ok.
+#> 5 out of 13 chronograms tried:  Ok.
+#> 6 out of 13 chronograms tried:  Ok.
+#> 7 out of 13 chronograms tried:  Ok.
+#> 8 out of 13 chronograms tried:  Ok.
+#> 9 out of 13 chronograms tried:  Ok.
+#> 10 out of 13 chronograms tried:  Ok.
+#> 11 out of 13 chronograms tried:  Ok.
+#> 12 out of 13 chronograms tried:  Failed.
+#> 13 out of 13 chronograms tried:  Ok.
+#> 
+#>  Synthesizing 12 chronograms with SDM
+#>   |==========================================================| 100%
+#>   |==========================================================| 100%
+#>   |==========================================================| 100%
+```
+
+
+
+
+
 
