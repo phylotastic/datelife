@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringiliidae</a>
   </div>
 </li>
 <li class="nav-item">
@@ -203,7 +204,7 @@ divergence openly available for a given set of taxon names</dd>
           <code><a href="extract_calibrations_phylo.html">extract_calibrations_phylo()</a></code> 
         </dt>
         <dd>Extract secondary calibrations from a <code>phylo</code> or <code>multiPhylo</code>
-object with branch lengths proportional to time using <code><a href="https://rdrr.io/pkg/geiger/man/congruify.phylo.html" class="external-link">geiger::congruify.phylo()</a></code></dd>
+object with branch lengths proportional to time using congruification.</dd>
       </dl><dl><dt>
           
           <code><a href="extract_ott_ids.html">extract_ott_ids()</a></code> 
@@ -242,14 +243,14 @@ object with branch lengths proportional to time using <code><a href="https://rdr
 from a median summary matrix</dd>
       </dl><dl><dt>
           
-          <code><a href="get_biggest_phylo.html">get_biggest_phylo()</a></code> 
+          <code><a href="get_biggest_multiphylo.html">get_biggest_multiphylo()</a></code> 
         </dt>
         <dd>Get the tree with the most tips: the biggest tree.</dd>
       </dl><dl><dt>
           
           <code><a href="get_calibrations_datelifequery.html">get_calibrations_datelifequery()</a></code> 
         </dt>
-        <dd>Search and extract available secondary calibrations from a given
+        <dd>Search and extract available secondary calibrations for taxon names in a given
 <code>datelifeQuery</code> object</dd>
       </dl><dl><dt>
           
@@ -561,11 +562,6 @@ given a set of node calibrations without any data.</dd>
         <dd>Sample trees from a file containing multiple trees. Usually from a bayesian analysis output trees file.</dd>
       </dl><dl><dt>
           
-          <code><a href="save_otol_chronograms.html">save_otol_chronograms()</a></code> 
-        </dt>
-        <dd>Save all chronograms from Open Tree of Life</dd>
-      </dl><dl><dt>
-          
           <code><a href="some_ants_datelife_result.html">some_ants_datelife_result</a></code> 
         </dt>
         <dd>datelifeResult object of some ants</dd>
@@ -594,6 +590,11 @@ given a set of node calibrations without any data.</dd>
           <code><a href="summarize_summary_matrix.html">summarize_summary_matrix()</a></code> 
         </dt>
         <dd>Internal function used in summary_matrix_to_phylo().</dd>
+      </dl><dl><dt>
+          
+          <code><a href="summary.datelifeResult.html">summary(<i>&lt;datelifeResult&gt;</i>)</a></code> 
+        </dt>
+        <dd>Summarize a datelifeResult object</dd>
       </dl><dl><dt>
           
           <code><a href="summary_matrix_to_phylo.html">summary_matrix_to_phylo()</a></code> 
@@ -673,12 +674,12 @@ given a set of node calibrations without any data.</dd>
           
           <code><a href="update_all_cached.html">update_all_cached()</a></code> 
         </dt>
-        <dd>Update all data files</dd>
+        <dd>Update all data files as data objects for the package</dd>
       </dl><dl><dt>
           
           <code><a href="update_datelife_cache.html">update_datelife_cache()</a></code> 
         </dt>
-        <dd>Update chronogram database cache</dd>
+        <dd>Create an updated OpenTree chronograms database object</dd>
       </dl><dl><dt>
           
           <code><a href="use_all_calibrations.html">use_all_calibrations()</a></code> 

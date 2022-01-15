@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringiliidae</a>
   </div>
 </li>
 <li class="nav-item">
@@ -47,7 +48,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Get a numeric vector of MRCAs from a <code>datelifeResult</code> object. Used in <code><a href="summarize_datelife_result.html">summarize_datelife_result()</a></code>.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/phylotastic/datelife/blob/HEAD/R/datelife_internal.R" class="external-link"><code>R/datelife_internal.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/phylotastic/datelife/blob/HEAD/R/summary.R" class="external-link"><code>R/summary.R</code></a></small>
       <div class="d-none name"><code>datelife_result_MRCA.Rd</code></div>
     </div>
 
@@ -57,14 +58,14 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">datelife_result_MRCA</span><span class="op">(</span><span class="va">datelife_result</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">datelife_result_MRCA</span><span class="op">(</span><span class="va">datelife_result</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>datelife_result</dt>
-<dd><p>A <code>datelifeResult</code> object, output of <code><a href="get_datelife_result.html">get_datelife_result()</a></code>.</p></dd>
-<dt>na.rm</dt>
+<dd><p>A <code>datelifeResult</code> object, usually an output of <code><a href="get_datelife_result.html">get_datelife_result()</a></code>.</p></dd>
+<dt>na_rm</dt>
 <dd><p>If <code>TRUE</code>, it drops rows containing <code>NA</code>s from the <code>datelifeResult</code>
 patristic matrix; if <code>FALSE</code>, it returns <code>NA</code> where there are missing entries.</p></dd>
 </dl></div>

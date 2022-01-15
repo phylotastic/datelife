@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringiliidae</a>
   </div>
 </li>
 <li class="nav-item">
@@ -83,10 +84,9 @@ names in <code>phy</code>, usually obtained with <code><a href="get_all_calibrat
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function implements the <a href="https://www2.math.su.se/PATHd8/" class="external-link">PATHd8</a> described in
-Britton, T., Anderson, C. L., Jacquet, D., Lundqvist, S., &amp; Bremer, K. (2007).
-"Estimating divergence times in large phylogenetic trees". Systematic biology,
-56(5), 741-752. <a href="doi:10.1080/10635150701613783">doi:10.1080/10635150701613783</a>, with <code><a href="https://rdrr.io/pkg/geiger/man/geiger-internal.html" class="external-link">geiger::PATHd8.phylo()</a></code>.
+    <p>This function implements the <a href="https://www2.math.su.se/PATHd8/" class="external-link">PATHd8</a> algorithm
+described in Britton et al. (2007) doi: <a href="https://doi.org/10.1080/10635150701613783" class="external-link">10.1080/10635150701613783</a>
+, with <code><a href="https://rdrr.io/pkg/geiger/man/geiger-internal.html" class="external-link">geiger::PATHd8.phylo()</a></code>.
 The function first attempts to use the given calibrations as fixed ages.
 If that fails (often due to conflict between calibrations), it will expand the
 range of the minimum age and maximum age and try again. And repeat.
@@ -94,6 +94,13 @@ If expand = 0, it uses the summarized calibrations.
 In some cases, it returns edge lengths in relative time (with maximum tree depth = 1)
 instead of absolute time, as given by calibrations. In this case, the function returns NA.
 This is an issue from PATHd8.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Britton, T., Anderson, C. L., Jacquet, D., Lundqvist, S., &amp; Bremer, K. (2007).
+"Estimating divergence times in large phylogenetic trees". Systematic biology,
+56(5), 741-752. doi: <a href="https://doi.org/10.1080/10635150701613783" class="external-link">10.1080/10635150701613783</a>
+.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

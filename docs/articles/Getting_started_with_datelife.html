@@ -42,6 +42,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringiliidae</a>
   </div>
 </li>
 <li class="nav-item">
@@ -90,13 +91,24 @@
 <p>You can also apply the obtained age data to date a phylogenetic tree topology of your organisms of interest.</p>
 </div>
 <div class="section level2">
-<h2 id="preparing-your-organism-names">1. Preparing your organism names<a class="anchor" aria-label="anchor" href="#preparing-your-organism-names"></a>
+<h2 id="processing-your-organism-names">1. Processing your organism names<a class="anchor" aria-label="anchor" href="#processing-your-organism-names"></a>
 </h2>
-<p>The function <code>make_datelife_query</code> processes the scientific names of your organisms of interest and saves them as a <code>datelifeQuery</code> object. This allows you to straightforwrdly use them later to perform a search for ages across the <code>datelife</code> chronogram database. You have two general ways of providing organism names:</p>
+<p>The function <code>make_datelife_query</code> processes the taxon names of your organisms of interest and structures them as a <code>datelifeQuery</code> object.</p>
+<p>A <code>datelifeQuery</code> object is a list of three elements:</p>
+<ul>
+<li>
+<code>$cleaned_names</code>: a character vector of “cleaned” taxon names,</li>
+<li>
+<code>$ott_ids</code>: a numeric vector of OpenTree Taxonomic identifiers (OTT ids), and</li>
+<li>
+<code>$phy</code>: an input tree as a <code>phylo</code> object or <code>NA</code> if none was provided.</li>
+</ul>
+<p>This allows us to straightforwardly use the processed taxon names later to perform a search for ages across the <code>datelife</code> chronogram database as well as other downstream analyses.</p>
+<p>There are two alternative ways of processing organism names with <code>datelife</code>:</p>
 <div class="section level3">
-<h3 id="a-from-a-set-of-organism-names">a) From a set of organism names<a class="anchor" aria-label="anchor" href="#a-from-a-set-of-organism-names"></a>
+<h3 id="a-from-a-set-of-organism-taxonomic-names">a) From a set of organism taxonomic names<a class="anchor" aria-label="anchor" href="#a-from-a-set-of-organism-taxonomic-names"></a>
 </h3>
-<p>You can provide the scientific names as a character vector or as a single comma separated string of names. For example, running the following:</p>
+<p>You can provide the taxon names as a character vector or as a single comma separated string of names. For example, running the following:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/make_datelife_query.html">make_datelife_query</a></span><span class="op">(</span>input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Delphinus_delphis"</span>,
                                         <span class="st">"Gallus gallus"</span>,
@@ -149,9 +161,9 @@
 </details><p>Note that you can use underscores or spaces to separate binomial scientific names and <code>datelife</code> will process them the same.</p>
 </div>
 <div class="section level3">
-<h3 id="b-from-a-tree-with-organism-names-on-its-tips">b) From a tree with organism names on its tips<a class="anchor" aria-label="anchor" href="#b-from-a-tree-with-organism-names-on-its-tips"></a>
+<h3 id="b-from-a-tree-with-organism-taxonomic-names-as-tip-labels">b) From a tree with organism taxonomic names as tip labels<a class="anchor" aria-label="anchor" href="#b-from-a-tree-with-organism-taxonomic-names-as-tip-labels"></a>
 </h3>
-<p>You can also provide the scientific names of your organisms of interest as labels on the tips of any phylogenetic tree. You can provide the tree as a newick string:</p>
+<p>You can also provide the taxon names of your organisms of interest as labels on the tips of any phylogenetic tree. You can provide the tree as a newick string:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">newick</span> <span class="op">&lt;-</span> <span class="st">"((Elephas_maximus,(Homo_sapiens,(Delphinus_delphis, Felis_silvestris))), Gallus_gallus);"</span>
 <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/make_datelife_query.html">make_datelife_query</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">newick</span><span class="op">)</span></code></pre></div>
@@ -219,7 +231,7 @@
 <div class="section level2">
 <h2 id="searching-the-chronogram-database">2. Searching the chronogram database<a class="anchor" aria-label="anchor" href="#searching-the-chronogram-database"></a>
 </h2>
-<p>The <code>datelife_search</code> function takes a <code>datelifeQuery</code> object and goes through the <code>datelife</code> chronogram database to find all chronograms matching at least two organism names:</p>
+<p>The <code>datelife_search</code> function takes a <code>datelifeQuery</code> object and goes through the <code>datelife</code> chronogram database to find all chronograms matching at least two taxon names:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span><span class="op">)</span></code></pre></div>
 <details><p><summary>datelife_search default output</summary></p>

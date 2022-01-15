@@ -35,6 +35,7 @@ an already processed datelifeQuery object obtained with make_datelife_query().">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringiliidae</a>
   </div>
 </li>
 <li class="nav-item">
@@ -79,7 +80,7 @@ an already processed <code>datelifeQuery</code> object obtained with <code><a hr
   partial <span class="op">=</span> <span class="cn">TRUE</span>,
   cache <span class="op">=</span> <span class="st">"opentree_chronograms"</span>,
   summary_format <span class="op">=</span> <span class="st">"phylo_all"</span>,
-  na.rm <span class="op">=</span> <span class="cn">FALSE</span>,
+  na_rm <span class="op">=</span> <span class="cn">FALSE</span>,
   summary_print <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"citations"</span>, <span class="st">"taxa"</span><span class="op">)</span>,
   taxon_summary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"summary"</span>, <span class="st">"matrix"</span><span class="op">)</span>,
   criterion <span class="op">=</span> <span class="st">"taxa"</span>
@@ -178,7 +179,7 @@ taxa, citations of source chronograms and newick string.</p></dd>
 
 
 </dl></dd>
-<dt>na.rm</dt>
+<dt>na_rm</dt>
 <dd><p>If <code>TRUE</code>, it drops rows containing <code>NA</code>s from the <code>datelifeResult</code>
 patristic matrix; if <code>FALSE</code>, it returns <code>NA</code> where there are missing entries.</p></dd>
 <dt>summary_print</dt>
@@ -201,16 +202,15 @@ in source chronograms should be added to the output as a <code>"summary"</code> 
 presence/absence <code>"matrix"</code>. Default to <code>"none"</code>, no information on taxon_summary
 added to the output.</p></dd>
 <dt>criterion</dt>
-<dd><p>Used for chronogram summarizing, i.e., obtaining a single
+<dd><p>Defaults to <code>criterion = "taxa"</code>. Used for chronogram summarizing, i.e., obtaining a single
 summary chronogram from a group of input chronograms.
 For summarizing approaches that return a single summary tree from a group of
 phylogenetic trees, it is necessary that the latter form a grove, roughly,
-a sufficiently overlapping set of taxa between trees, see Ané, C., Eulenstein,
-O., Piaggio-Talice, R., &amp; Sanderson, M. J. (2009). "Groves of phylogenetic
-trees". Annals of Combinatorics, 13(2), 139-167, <a href="doi:10.1007/s00026-009-0017-x">doi:10.1007/s00026-009-0017-x</a>.
+a sufficiently overlapping set of taxa between trees, see Ané et al. (2009) doi: <a href="https://doi.org/10.1007/s00026-009-0017-x" class="external-link">10.1007/s00026-009-0017-x</a>
+.
 In rare cases, a group of trees can have multiple groves. This argument indicates
 whether to get the grove with the most trees (<code>criterion = "trees"</code>) or the
-most taxa (<code>criterion = "taxa"</code>). Defaults to <code>criterion = "taxa"</code>.</p></dd>
+most taxa (<code>criterion = "taxa"</code>).</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -244,7 +244,8 @@ always set to <code>TRUE</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># This is a flag for package development. You are welcome to run the example.</span></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="co"># For this example, we will set a temp working directory, but you can set</span></span>
 <span class="r-in"><span class="co"># your working directory as needed:</span></span>
 <span class="r-in"><span class="co"># we will use the tempdir() function to get a temporary directory:</span></span>
@@ -262,8 +263,10 @@ always set to <code>TRUE</code>.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Working with the following taxa: </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 	Rhea americana | Pterocnemia pennata | Struthio camelus | Mus musculus</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife query done!</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Searching the chronogram database.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Searching chronogram database.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Search done!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Input taxon names were found in 9 chronograms.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Trying with overlap = 2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Success!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... Calculating a median summary chronogram.</span>
@@ -292,6 +295,7 @@ always set to <code>TRUE</code>.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Save the tree in the temp working directory in newick format:</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/write.html" class="external-link">write</a></span><span class="op">(</span><span class="va">ages</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tempwd</span>, <span class="st">"some.bird.ages.txt"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in file.path(tempwd, "some.bird.ages.txt"):</span> object 'tempwd' not found</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Obtain median ages from a set of source chronograms in phylo format</span></span>
 <span class="r-in"><span class="co"># Will produce same tree as above but in "phylo" format:</span></span>
@@ -306,8 +310,10 @@ always set to <code>TRUE</code>.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Working with the following taxa: </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 	Rhea americana | Pterocnemia pennata | Struthio camelus | Mus musculus</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife query done!</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Searching the chronogram database.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Searching chronogram database.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Search done!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Input taxon names were found in 9 chronograms.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Trying with overlap = 2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Success!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ... Calculating a median summary chronogram.</span>
@@ -335,6 +341,7 @@ always set to <code>TRUE</code>.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife search done!</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ages.again</span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/" class="external-link">ape</a></span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>package ‘ape’ was built under R version 4.1.2</span>
 <span class="r-in"><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/axisPhylo.html" class="external-link">axisPhylo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Time (million years ago)"</span>, side <span class="op">=</span> <span class="fl">1</span>, line <span class="op">=</span> <span class="fl">2</span>, at <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="st">"last_plot.phylo"</span>,</span>
 <span class="r-in">  envir <span class="op">=</span> <span class="va">.PlotPhyloEnv</span></span>
@@ -343,6 +350,7 @@ always set to <code>TRUE</code>.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Save "phylo" object in newick format</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/ape/man/write.tree.html" class="external-link">write.tree</a></span><span class="op">(</span><span class="va">ages.again</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tempwd</span>, <span class="st">"some.bird.tree.again.txt"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in file.path(tempwd, "some.bird.tree.again.txt"):</span> object 'tempwd' not found</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Obtain MRCA ages and target chronograms from all source chronograms</span></span>
 <span class="r-in"><span class="co"># Generate an htm"l output readable in any web browser:</span></span>
@@ -357,8 +365,10 @@ always set to <code>TRUE</code>.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Working with the following taxa: </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 	Rhea americana | Pterocnemia pennata | Struthio camelus | Mus musculus</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife query done!</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Searching the chronogram database.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Searching chronogram database.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Search done!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Input taxon names were found in 9 chronograms.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Input taxa presence across source chronograms:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>                 taxon chronograms</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1 Pterocnemia pennata         6/9</span>
@@ -370,8 +380,9 @@ always set to <code>TRUE</code>.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1  None</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife search done!</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/write.html" class="external-link">write</a></span><span class="op">(</span><span class="va">ages.html</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tempwd</span>, <span class="st">"some.bird.trees.html"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/system.html" class="external-link">system</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"open"</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tempwd</span>, <span class="st">"some.bird.trees.html"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in file.path(tempwd, "some.bird.trees.html"):</span> object 'tempwd' not found</span>
+<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/system.html" class="external-link">system</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"open"</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tempwd</span>, <span class="st">"some.bird.trees.html"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"> <span class="co"># end dontrun</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

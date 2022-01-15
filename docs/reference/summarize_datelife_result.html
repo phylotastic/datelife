@@ -33,6 +33,7 @@ is the function you are looking for."><!-- mathjax --><script src="https://cdnjs
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringiliidae</a>
   </div>
 </li>
 <li class="nav-item">
@@ -73,7 +74,7 @@ is the function you are looking for.</p>
   datelife_result <span class="op">=</span> <span class="cn">NULL</span>,
   datelife_query <span class="op">=</span> <span class="cn">NULL</span>,
   summary_format <span class="op">=</span> <span class="st">"phylo_all"</span>,
-  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
+  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,
   summary_print <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"citations"</span>, <span class="st">"taxa"</span><span class="op">)</span>,
   taxon_summary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"summary"</span>, <span class="st">"matrix"</span><span class="op">)</span>,
   criterion <span class="op">=</span> <span class="st">"taxa"</span>
@@ -83,9 +84,9 @@ is the function you are looking for.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>datelife_result</dt>
-<dd><p>A <code>datelifeResult</code> object, output of <code><a href="get_datelife_result.html">get_datelife_result()</a></code>.</p></dd>
+<dd><p>A <code>datelifeResult</code> object, usually an output of <code><a href="get_datelife_result.html">get_datelife_result()</a></code>.</p></dd>
 <dt>datelife_query</dt>
-<dd><p>A <code>datelifeQuery</code> object, output of <code><a href="make_datelife_query.html">make_datelife_query()</a></code>.</p></dd>
+<dd><p>A <code>datelifeQuery</code> object, usually an output of <code><a href="make_datelife_query.html">make_datelife_query()</a></code>.</p></dd>
 <dt>summary_format</dt>
 <dd><p>A character vector of length one, indicating the output
 format for results of the DateLife search. Available output formats are:</p><dl><dt>"citations"</dt>
@@ -144,7 +145,7 @@ taxa, citations of source chronograms and newick string.</p></dd>
 
 
 </dl></dd>
-<dt>na.rm</dt>
+<dt>na_rm</dt>
 <dd><p>If <code>TRUE</code>, it drops rows containing <code>NA</code>s from the <code>datelifeResult</code>
 patristic matrix; if <code>FALSE</code>, it returns <code>NA</code> where there are missing entries.</p></dd>
 <dt>summary_print</dt>
@@ -167,16 +168,15 @@ in source chronograms should be added to the output as a <code>"summary"</code> 
 presence/absence <code>"matrix"</code>. Default to <code>"none"</code>, no information on taxon_summary
 added to the output.</p></dd>
 <dt>criterion</dt>
-<dd><p>Used for chronogram summarizing, i.e., obtaining a single
+<dd><p>Defaults to <code>criterion = "taxa"</code>. Used for chronogram summarizing, i.e., obtaining a single
 summary chronogram from a group of input chronograms.
 For summarizing approaches that return a single summary tree from a group of
 phylogenetic trees, it is necessary that the latter form a grove, roughly,
-a sufficiently overlapping set of taxa between trees, see Ané, C., Eulenstein,
-O., Piaggio-Talice, R., &amp; Sanderson, M. J. (2009). "Groves of phylogenetic
-trees". Annals of Combinatorics, 13(2), 139-167, <a href="doi:10.1007/s00026-009-0017-x">doi:10.1007/s00026-009-0017-x</a>.
+a sufficiently overlapping set of taxa between trees, see Ané et al. (2009) doi: <a href="https://doi.org/10.1007/s00026-009-0017-x" class="external-link">10.1007/s00026-009-0017-x</a>
+.
 In rare cases, a group of trees can have multiple groves. This argument indicates
 whether to get the grove with the most trees (<code>criterion = "trees"</code>) or the
-most taxa (<code>criterion = "taxa"</code>). Defaults to <code>criterion = "taxa"</code>.</p></dd>
+most taxa (<code>criterion = "taxa"</code>).</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -202,6 +202,13 @@ function returns output chronograms as <code>phylo</code> or <code>multiPhylo</c
 
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Ané, C., Eulenstein, O., Piaggio-Talice, R., &amp; Sanderson, M. J. (2009).
+"Groves of phylogenetic trees". Annals of Combinatorics, 13(2), 139-167,
+doi: <a href="https://doi.org/10.1007/s00026-009-0017-x" class="external-link">10.1007/s00026-009-0017-x</a>
+.</p>
+    </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringiliidae</a>
   </div>
 </li>
 <li class="nav-item">
@@ -75,8 +76,8 @@ names in <code>phy</code>, usually obtained with <code><a href="get_all_calibrat
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function uses treePL as described in Smith, S. A., &amp; O’Meara, B. C. (2012).
-"treePL: divergence time estimation using penalized likelihood for large phylogenies".
-Bioinformatics, 28(20), 2689-2690, <a href="doi:10.1093/bioinformatics/bts492">doi:10.1093/bioinformatics/bts492</a>, with
+doi: <a href="https://doi.org/10.1093/bioinformatics/bts492" class="external-link">10.1093/bioinformatics/bts492</a>
+, with
 the function <code>treePL.phylo</code>. It attempts to use the calibrations as fixed ages.
 If that fails (often due to conflict between calibrations), it will expand the
 range of the minimum age and maximum age and try again. And repeat.
@@ -84,6 +85,13 @@ If expand = 0, it uses the summarized calibrations.
 In some cases, it returns edge lengths in relative time (with maximum tree depth = 1)
 instead of absolute time, as given by calibrations. In this case, the function returns NA.
 This is an issue from PATHd8.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Smith, S. A., &amp; O’Meara, B. C. (2012).
+"treePL: divergence time estimation using penalized likelihood for large phylogenies".
+Bioinformatics, 28(20), 2689-2690, doi: <a href="https://doi.org/10.1093/bioinformatics/bts492" class="external-link">10.1093/bioinformatics/bts492</a>
+.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

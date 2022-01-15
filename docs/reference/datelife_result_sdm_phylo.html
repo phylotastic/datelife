@@ -25,6 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringiliidae</a>
   </div>
 </li>
 <li class="nav-item">
@@ -63,7 +64,7 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>datelife_result</dt>
-<dd><p>A <code>datelifeResult</code> object, output of <code><a href="get_datelife_result.html">get_datelife_result()</a></code>.</p></dd>
+<dd><p>A <code>datelifeResult</code> object, usually an output of <code><a href="get_datelife_result.html">get_datelife_result()</a></code>.</p></dd>
 <dt>weighting</dt>
 <dd><p>A character vector indicating how much weight to give to each
 tree in <code>input</code> during the SDM analysis. Options are:</p><dl><dt>weighting = "flat"</dt>
@@ -105,7 +106,7 @@ age from the node age distributions.</p></dd>
 backbone for the output tree.</p></dd>
 
     <dt><code>datelife_query</code></dt>
-<dd><p>A <code>datelifeQuery</code> object, output of <code><a href="make_datelife_query.html">make_datelife_query()</a></code>.</p></dd>
+<dd><p>A <code>datelifeQuery</code> object, usually an output of <code><a href="make_datelife_query.html">make_datelife_query()</a></code>.</p></dd>
 
   
 </dl></dd>
@@ -122,10 +123,17 @@ citations of studies from input chronograms.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Chronograms given as input in <code>datelife_result</code> are summarized with the Super Distance
-Matrix (SDM) method described in Criscuolo A, Berry V, Douzery EJ, Gascuel O.
+Matrix (SDM) method described in Criscuolo et al. (2006) doi: <a href="https://doi.org/10.1080/10635150600969872" class="external-link">10.1080/10635150600969872</a>
+,
+implemented with the function <code><a href="https://rdrr.io/pkg/ape/man/SDM.html" class="external-link">ape::SDM()</a></code>. The resulting summary SDM is
+clustered with <code><a href="summary_matrix_to_phylo.html">summary_matrix_to_phylo()</a></code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Criscuolo A, Berry V, Douzery EJ, Gascuel O.
 (2006) "SDM: a fast distance-based approach for (super) tree building in
-phylogenomics" <a href="doi:10.1080/10635150600969872">doi:10.1080/10635150600969872</a>, implemented with the function
-<code><a href="https://rdrr.io/pkg/ape/man/SDM.html" class="external-link">ape::SDM()</a></code>. The resulting summary SDM is clustered with <code><a href="summary_matrix_to_phylo.html">summary_matrix_to_phylo()</a></code>.</p>
+phylogenomics" doi: <a href="https://doi.org/10.1080/10635150600969872" class="external-link">10.1080/10635150600969872</a>
+.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

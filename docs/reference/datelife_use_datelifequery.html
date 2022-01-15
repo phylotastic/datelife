@@ -33,6 +33,7 @@ it will attempt to get one for the given taxon names by calling the function mak
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringiliidae</a>
   </div>
 </li>
 <li class="nav-item">
@@ -79,11 +80,13 @@ it will attempt to get one for the given taxon names by calling the function <co
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>datelife_query</dt>
-<dd><p>A <code>datelifeQuery</code> object, output of <code><a href="make_datelife_query.html">make_datelife_query()</a></code>.</p></dd>
+<dd><p>A <code>datelifeQuery</code> object, usually an output of <code><a href="make_datelife_query.html">make_datelife_query()</a></code>.</p></dd>
 <dt>dating_method</dt>
 <dd><p>Tree dating algorithm to use. Options are "bladj" or "pathd8"
-(Webb et al., 2008, <a href="doi:10.1093/bioinformatics/btn358">doi:10.1093/bioinformatics/btn358</a>; Britton et al., 2007,
-<a href="doi:10.1080/10635150701613783">doi:10.1080/10635150701613783</a>).</p></dd>
+(Webb et al., 2008, doi: <a href="https://doi.org/10.1093/bioinformatics/btn358" class="external-link">10.1093/bioinformatics/btn358</a>
+; Britton et al., 2007,
+doi: <a href="https://doi.org/10.1080/10635150701613783" class="external-link">10.1080/10635150701613783</a>
+).</p></dd>
 <dt>each</dt>
 <dd><p>Boolean, default to <code>FALSE</code>: all calibrations are returned in
 the same <code>data.frame</code>. If <code>TRUE</code>, calibrations from each chronogram are returned

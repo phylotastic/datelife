@@ -22,6 +22,9 @@
     <loc>/articles/datelife_workflow.html</loc>
   </url>
   <url>
+    <loc>/articles/fringiliidae.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -155,6 +158,9 @@
   </url>
   <url>
     <loc>/reference/get_best_grove.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_biggest_multiphylo.html</loc>
   </url>
   <url>
     <loc>/reference/get_biggest_phylo.html</loc>
