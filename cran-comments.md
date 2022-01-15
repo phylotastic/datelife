@@ -13,10 +13,7 @@ This is a resubmission where I have:
       summarize_datelife_result.Rd: \value
       summary_matrix_to_phylo_all.Rd: \value
 
-Please ensure that your functions do not write by default or in your
-examples/vignettes/tests in the user's home filespace (including the
-package directory and getwd()). This is not allowed by CRAN policies.
-In your examples/vignettes/tests you can write to tempdir().
+* Have ensured that functions/examples/vignettes/tests do not write by default in the user's home filespace (including the package directory and getwd()). We use tempdir() instead.
 
 ### Test environments:
 
