@@ -14,7 +14,7 @@ numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{ro
 \code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}}
 }
 \value{
-a list of named numeric vectors of ott ids from input and all the clades it belongs to.
+A list of named numeric vectors of ott ids from input and all the clades it belongs to.
 }
 \description{
 Get the ott id and name of all lineages from one or more input taxa

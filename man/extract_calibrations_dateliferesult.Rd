@@ -21,7 +21,7 @@ calibrations, for each pair of taxon names in \code{input}. The attribute
 }
 \description{
 This function extracts node ages for each taxon
-pair in \code{input}. It applies the congruification method described in Eastman et al.
+pair given as \code{input}. It applies the congruification method described in Eastman et al.
 (2013) \doi{10.1111/2041-210X.12051},
 to create a matrix of suitable secondary calibrations for each taxon pair.
 Congruification is implemented with the function \code{\link[geiger:congruify.phylo]{geiger::congruify.phylo()}}.

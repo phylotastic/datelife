@@ -114,7 +114,7 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...) {
 }
 #' Get the ott id and name of all lineages from one or more input taxa
 #' @inheritParams check_ott_input
-#' @return a list of named numeric vectors of ott ids from input and all the clades it belongs to.
+#' @return A list of named numeric vectors of ott ids from input and all the clades it belongs to.
 #' @examples
 #' \dontrun{ # This is a flag for package development. You are welcome to run the example.
 #' taxa <- c("Homo", "Bacillus anthracis", "Apis", "Salvia")

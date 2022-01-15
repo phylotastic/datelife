@@ -177,6 +177,6 @@ ages.html <- datelife_search(c(
   "Mus musculus"
 ), summary_format = "html")
 write(ages.html, file = file.path(tempwd, "some.bird.trees.html"))
-system(paste("open", file.path(tempwd, "some.bird.trees.html")))
+if(interactive()) system(paste("open", file.path(tempwd, "some.bird.trees.html")))
 } # end dontrun
 }

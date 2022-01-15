@@ -3,7 +3,7 @@
 #' @param object An object of class `datelifeResult`, usually an output of [get_datelife_result()].
 #' @inheritParams get_taxon_summary
 #' @param na_rm Default to `TRUE`, whether to include partial matches or not.
-#' @inheritDotParams ape::summary.phylo
+#' @param ... Further arguments passed to or from other methods.
 #' @return A named list of 11 elements:
 #' \describe{
 #' 	 \item{"citations"}{A character vector of references where chronograms with

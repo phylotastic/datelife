@@ -1,8 +1,8 @@
 #' Extract secondary calibrations from a `phylo` or `multiPhylo`
-#' object with branch lengths proportional to time using [geiger::congruify.phylo()]
+#' object with branch lengths proportional to time using congruification.
 #'
 #' @description This function extracts node ages for each taxon
-#'   pair in `input`. It applies the congruification method described in Eastman et al.
+#'   pair given as `input`. It applies the congruification method described in Eastman et al.
 #'   (2013) \doi{10.1111/2041-210X.12051},
 #'   to create a matrix of suitable secondary calibrations for each taxon pair.
 #'   Congruification is implemented with the function [geiger::congruify.phylo()].
@@ -158,7 +158,7 @@ get_calibrations_vector <- function(input = NULL,
   class(res) <- c("data.frame", "datelifeCalibrations")
   return(res)
 }
-#' Search and extract available secondary calibrations from a given
+#' Search and extract available secondary calibrations for taxon names in a given
 #' `datelifeQuery` object
 #'
 #' @param datelife_query A `datelifeQuery` object.

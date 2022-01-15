@@ -13,11 +13,7 @@
 
 \item{na_rm}{Default to \code{TRUE}, whether to include partial matches or not.}
 
-\item{...}{
-  Arguments passed on to \code{\link[ape:summary.phylo]{ape::summary.phylo}}
-  \describe{
-    \item{\code{}}{}
-  }}
+\item{...}{Further arguments passed to or from other methods.}
 }
 \value{
 A named list of 11 elements:

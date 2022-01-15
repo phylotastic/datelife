@@ -63,7 +63,7 @@
 #'   "Mus musculus"
 #' ), summary_format = "html")
 #' write(ages.html, file = file.path(tempwd, "some.bird.trees.html"))
-#' system(paste("open", file.path(tempwd, "some.bird.trees.html")))
+#' if(interactive()) system(paste("open", file.path(tempwd, "some.bird.trees.html")))
 #' } # end dontrun
 #' @export
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),

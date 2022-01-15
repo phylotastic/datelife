@@ -2,7 +2,7 @@
 % Please edit documentation in R/calibrations_get.R
 \name{get_calibrations_datelifequery}
 \alias{get_calibrations_datelifequery}
-\title{Search and extract available secondary calibrations from a given
+\title{Search and extract available secondary calibrations for taxon names in a given
 \code{datelifeQuery} object}
 \usage{
 get_calibrations_datelifequery(datelife_query = NULL, each = FALSE)
