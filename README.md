@@ -49,15 +49,14 @@ still under development.
 
 ## 1\. Installation
 
-Once accepted on CRAN, `datelife`s stable version will be available for
-installation with:
+`datelife`s stable version is currently available for installation from
+CRAN with:
 
 ``` r
 install.packages("datelife")
 ```
 
-For now, you can install the development version from the GitHub
-repository:
+You can install the development version from the GitHub repository:
 
 ``` r
 devtools::install_github("phylotastic/datelife")

@@ -4,18 +4,7 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit THIS file -->
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  results = "asis",
-  echo = TRUE,
-  comment = "#>",
-  fig.path = "vignettes/figures/README-",
-  out.width = "100%"
-)
-IS_README <- TRUE
-library(datelife)
-```
+
 <img src='man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
 
 <!-- badges: start -->
@@ -54,13 +43,15 @@ You can also date a phylogenetic tree of your own making (or choosing one from t
 
 `datelife`s stable version is currently available for installation from CRAN with:
 
-```{r eval = FALSE}
+
+```r
 install.packages("datelife")
 ```
 
 You can install the development version from the GitHub repository:
 
-```{r eval = FALSE}
+
+```r
 devtools::install_github("phylotastic/datelife")
 ```
 
@@ -68,12 +59,20 @@ devtools::install_github("phylotastic/datelife")
 
 If you use `datelife` for a publication, please cite the R package and the accompanying paper:
 
-```{r eval = TRUE, echo = FALSE}
-print(citation("datelife"), bibtex = FALSE, style = "html")
-```
+<p>O'Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K, Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022).
+<em>datelife: Scientific Data on Time of Lineage Divergence for Your Taxa</em>.
+R package version 0.6.0, <a href="https://doi.org/10.5281/zenodo.593938">https://doi.org/10.5281/zenodo.593938</a>. 
+</p>
+
+<p>Sanchez-Reyes L, O'Meara B (2019).
+&ldquo;datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life.&rdquo;
+<em>bioRxiv</em>, <b>782094</b>.
+<a href="https://doi.org/10.1101/782094">https://doi.org/10.1101/782094</a>. 
+</p>
 
 You can get these citations and the bibtex entry with:
-```{r eval = FALSE}
+
+```r
 citation("datelife")
 toBibtex(citation("datelife"))
 ```
@@ -90,7 +89,8 @@ If you want to contribute with code directly, we welcome and encourage [pull req
 
 Package and function documentation was generated with [roxygen2](https://CRAN.R-project.org/package=roxygen2):
 
-```{r eval = FALSE}
+
+```r
 roxygen2::roxygenise()
 ```
 
@@ -98,7 +98,8 @@ roxygen2::roxygenise()
 
 We used the package [lintr](https://CRAN.R-project.org/package=lintr) to check for coding style:
 
-```{r eval = FALSE}
+
+```r
 lintr::lint_package()
 ```
 
@@ -106,7 +107,8 @@ lintr::lint_package()
 
 Code coverage was calculated with the package [covr](https://CRAN.R-project.org/package=covr):
 
-```{r eval = FALSE}
+
+```r
 cov <- covr::package_coverage()
 
 usethis::use_data(cov, overwrite = TRUE)
@@ -114,13 +116,15 @@ usethis::use_data(cov, overwrite = TRUE)
 
 You can see an interactive report of testing coverage:
 
-```{r eval = FALSE}
+
+```r
 covr::report(cov)
 ```
 
 And, find code with zero coverage:
 
-```{r eval = FALSE}
+
+```r
 covr::zero_coverage(cov)
 ```
 
@@ -133,7 +137,8 @@ Code used to generate current `datelife`'s logo hexsticker is in [data-raw/hexst
 Vignettes are rendered automatically upon built. However, if you wish to see how they look rendered before releasing the package, you can do this with `knitr::knit()`. The following command renders the vignette `Getting_started_with_datelife` as html:
 
 
-```{r eval = FALSE}
+
+```r
 knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
 ```
 
