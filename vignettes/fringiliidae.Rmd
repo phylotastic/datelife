@@ -1,8 +1,8 @@
 ---
-title: "Case study: the Fringiliidae"
+title: "Case study: the Fringillidae"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Case study: the Fringiliidae}
+  %\VignetteIndexEntry{Case study: the Fringillidae}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,12 +18,12 @@ knitr::opts_chunk$set(
 library(datelife)
 ```
 
-## 1. Processing Fringiliidae names
+## 1. Processing Fringillidae names
 
 Get all species names belonging to the family using the flag `get_spp_from_taxon = TRUE`:
 
 ```r
-dquery <- datelife::make_datelife_query(input = "fringilidae",               
+dquery <- datelife::make_datelife_query(input = "fringillidae",               
                                    get_spp_from_taxon = TRUE)
 
 #> ... Making a DateLife query.
@@ -34,7 +34,7 @@ dquery <- datelife::make_datelife_query(input = "fringilidae",
 #>   |=========================================================| 100%
 #>   |=========================================================| 100%
 #>   |=========================================================| 100%
-#> Working with the following taxa: 
+#> Working with the following taxa:
 #>	Crithagra sulphurata | Crithagra citrinelloides | Crithagra mozambica | Crithagra capistrata | Crithagra burtoni | Crithagra rufobrunnea | Crithagra flaviventris | Callacanthis burtoni | Chaunoproctus ferreorostris | Rhynchostruthus socotranus | Chlorophonia cyanea | Chlorophonia occipitalis | Chlorophonia flavirostris | Akialoa obscura | Euphonia gouldi | Euphonia plumbea | Euphonia elegantissima | Euphonia luteicapilla | Euphonia chrysopasta | Euphonia fulvicrissa | Euphonia hirundinacea | Euphonia chlorotica | Euphonia cyanocephala | Euphonia rufiventris | Euphonia minuta | Euphonia cayennensis | Euphonia xanthogaster | Euphonia violacea | Euphonia pectoralis | Euphonia musica | Euphonia anneae | Euphonia affinis | Euphonia laniirostris | Euphonia finschi | Psittirostra psittacea | Urocynchramus pylzowi | Telespiza cantans | Telespiza ultima | Palmeria dolei | Oreomystis bairdi | Loxops coccineus | Loxops mana | Loxops caeruleirostris | Himatione sanguinea | Rhodopechys sanguineus | Paroreomyza montana | Pseudonestor xanthophrys | Vestiaria coccinea | Bucanetes githagineus | Hemignathus parvus | Hemignathus wilsoni | Hemignathus virens | Hemignathus munroi | Hemignathus flavus | Hemignathus kauaiensis | Hemignathus stejnegeri | Loxioides bailleui | Eremopsaltria mongolica | Rhodospiza obsoleta | Peucedramus taeniatus | Cyanerpes caeruleus | Cyanerpes cyaneus | Cyanerpes nitidus | Cyanerpes lucidus | Fringillaria goslingi | Fringillaria striolata | Fringillaria impetuani | Fringillaria poliopleura | Fringillaria tahapisi | Hemispingus atropileus | Hemispingus verticalis | Hemispingus auricularis | Hemispingus calophrys | Hemispingus rufosuperciliaris | Hemispingus superciliaris | Hemispingus trifasciatus | Hemispingus piurae | Hemispingus xanthophthalmus | Hemispingus parodii | Hemispingus goeringi | Hemispingus melanotis | Hemispingus frontalis | Hemispingus reyi | Rowettia goughensis | Embernagra platensis | Schoeniclus rusticus | Schoeniclus aureolus | Schoeniclus elegans | Schoeniclus siemsseni | Schoeniclus spodocephala | Schoeniclus yessoensis | Tersina viridis | Orthogonys chloricterus | Buarremon apertus | Buarremon assimilis | Buarremon atricapillus | Buarremon basilicus | Buarremon virenticeps | Buarremon torquatus | Peucaea aestivalis | Peucaea cassinii | Peucaea botterii | Phaeothlypis fulvicauda | Donacospiza albifrons | Platyspiza crassirostris | Melopyrrha nigra | Carduelis citrinella | Carduelis corsicana | Carduelis carduelis | Uragus sibiricus | Melamprosops phaeosoma | Hesperiphona vespertina | Pyrrhoplectes epauletta | Haemorhous mexicanus | Haemorhous purpureus | Haemorhous cassinii | Kozlowia roborowskii | Serinus syriacus | Serinus albogularis | Serinus atrogularis | Serinus citrinipectus | Serinus citrinella | Serinus pusillus | Serinus canaria | Serinus alario | Serinus striolatus | Serinus melanochrous | Serinus whytii | Serinus mennelli | Serinus reichardi | Serinus scotops | Serinus flavivertex | Serinus totta | Serinus estherae | Serinus hypostictus | Serinus leucopygius | Serinus thibetanus | Serinus gularis | Serinus dorsostriatus | Serinus canicollis | Serinus serinus | Linaria flavirostris | Linaria cannabina | Chloris monguilloti | Chloris sinica | Chloris spinoides | Chloris ambigua | Chloris chloris | Spinus yarrellii | Spinus spinus | Spinus olivaceus | Spinus uropygialis | Spinus siemiradzkii | Spinus atriceps | Spinus dominicensis | Spinus xanthogastrus | Spinus magellanicus | Spinus pinus | Spinus notatus | Spinus tristis | Spinus spinescens | Spinus crassirostris | Spinus barbatus | Spinus atratus | Spinus lawrencei | Spinus psaltria | Spinus cucullatus | Neospiza concolor | Loxia curvirostra | Loxia pytyopsittacus | Loxia leucoptera | Loxia scotica | Eophona migratoria | Eophona personata | Haematospiza sipahi | Mycerobas icterioides | Mycerobas melanozanthos | Mycerobas affinis | Mycerobas carnipes | Pinicola subhimachala | Pinicola enucleator | Linurgus olivaceus | Leucosticte sillemi | Leucosticte arctoa | Leucosticte australis | Leucosticte nemoricola | Leucosticte tephrocotis | Leucosticte atrata | Leucosticte brandti | Carpodacus vinaceus | Carpodacus rodopeplus | Carpodacus davidianus | Carpodacus rhodochlamys | Carpodacus rubescens | Carpodacus synoicus | Carpodacus severtzovi | Carpodacus rodochroa | Carpodacus erythrinus | Carpodacus roseus | Carpodacus nipalensis | Carpodacus trifasciatus | Carpodacus rubicilloides | Carpodacus pulcherrimus | Carpodacus thura | Carpodacus eos | Carpodacus rubicilla | Carpodacus grandis | Carpodacus edwardsii | Carpodacus puniceus | Carpodacus formosanus | Coccothraustes coccothraustes | Acanthis hornemanni | Acanthis cabaret | Acanthis flammea | Pyrrhula nipalensis | Pyrrhula erythaca | Pyrrhula erythrocephala | Pyrrhula murina | Pyrrhula leucogenis | Pyrrhula aurantiaca | Pyrrhula pyrrhula | Fringilla montifringilla | Fringilla teydea | Fringilla coelebs | Fringilla polatzeki | Calcarius lapponicus | Calcarius pictus | Calcarius ornatus | Calcarius mccownii | Emberiza variabilis | Emberiza hortulana | Emberiza pusilla | Emberiza cioides | Emberiza tristrami | Emberiza cabanisi | Emberiza jankowskii | Emberiza cineracea | Emberiza rutila | Emberiza sahari | Emberiza buchanani | Emberiza chrysophrys | Emberiza capensis | Emberiza cia | Emberiza schoeniclus | Emberiza stewarti | Emberiza godlewskii | Emberiza pallasi | Emberiza leucocephalos | Emberiza socotrana | Emberiza melanocephala | Emberiza bruniceps | Emberiza koslowi | Emberiza cirlus | Emberiza flaviventris | Emberiza affinis | Emberiza fucata | Emberiza citrinella | Emberiza sulphurata | Emberiza caesia | Plectrophenax nivalis | Plectrophenax hyperboreus | Melophus lathami | Cyanoloxia glaucocaerulea | Cyanoloxia cyanoides | Cyanoloxia rothschildii | Caryothraustes canadensis | Caryothraustes poliogaster | Cyanocompsa brissonii | Cyanocompsa parellina | Passerina caerulea | Passerina cyanea | Passerina amoena | Passerina ciris | Passerina leclancherii | Passerina rositae | Passerina versicolor | Parkerthraustes humeralis | Spiza americana | Pheucticus aureoventris | Pheucticus ludovicianus | Pheucticus melanocephalus | Pheucticus chrysogaster | Pheucticus tibialis | Cardinalis cardinalis | Cardinalis sinuatus | Cardinalis phoeniceus | Porphyrospiza caerulescens | Rhodothraupis celaeno | Periporphyrus erythromelas
 #> DateLife query done!
 ```
@@ -53,7 +53,7 @@ str(dquery)
 #>  - attr(*, "class")= chr "datelifeQuery"
 ```
 
-We have 289 species names in the family Fringiliidae and we did not provide an input tree, so `$phy` is `NA`.
+We have 289 species names in the family Fringillidae and we did not provide an input tree, so `$phy` is `NA`.
 
 ## 2. Search the species names across a chronogram database
 
@@ -91,22 +91,22 @@ names(dres)
 ```r
 #> [1] "Hooper, Daniel M., Trevor D. Price. 2017. Chromosomal inversion differences correlate with range overlap in passerine birds. Nature Ecology & Evolution 1 (10): 1526-1534"
 
-#> [2] "Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845" 
+#> [2] "Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845"
 
-#> [3] "Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845" 
+#> [3] "Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845"
 
-#> [4] "Claramunt, Santiago, Joel Cracraft. 2015. A new time tree reveals Earth historys imprint on the evolution of modern birds. Science Advances 1 (11): e1501005-e1501005" 
+#> [4] "Claramunt, Santiago, Joel Cracraft. 2015. A new time tree reveals Earth historys imprint on the evolution of modern birds. Science Advances 1 (11): e1501005-e1501005"
 
-#> [5] "Gibb, Gillian C., Ryan England, Gerrit Hartig, P.A. (Trish) McLenachan, Briar L. Taylor Smith, Bennet J. McComish, Alan Cooper, David Penny. 2015. New Zealand passerines help clarify the diversification of major songbird lineages during the Oligocene. Genome Biology and Evolution 7 (11): 2983-2995."      
+#> [5] "Gibb, Gillian C., Ryan England, Gerrit Hartig, P.A. (Trish) McLenachan, Briar L. Taylor Smith, Bennet J. McComish, Alan Cooper, David Penny. 2015. New Zealand passerines help clarify the diversification of major songbird lineages during the Oligocene. Genome Biology and Evolution 7 (11): 2983-2995."
 
-#> [6] "Barker, F. Keith, Kevin J. Burns, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2015. New insights into New World biogeography: An integrated view from the phylogeny of blackbirds, cardinals, sparrows, tanagers, warblers, and allies. The Auk 132 (2): 333-348."                                                                   
-#> [7] "Barker, F. Keith, Kevin J. Burns, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2015. New insights into New World biogeography: An integrated view from the phylogeny of blackbirds, cardinals, sparrows, tanagers, warblers, and allies. The Auk 132 (2): 333-348."                                                                   
-#> [8] "Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448" 
+#> [6] "Barker, F. Keith, Kevin J. Burns, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2015. New insights into New World biogeography: An integrated view from the phylogeny of blackbirds, cardinals, sparrows, tanagers, warblers, and allies. The Auk 132 (2): 333-348."
+#> [7] "Barker, F. Keith, Kevin J. Burns, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2015. New insights into New World biogeography: An integrated view from the phylogeny of blackbirds, cardinals, sparrows, tanagers, warblers, and allies. The Auk 132 (2): 333-348."
+#> [8] "Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448"
 
 #> [9] "Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448"
 
-#> [10] "Barker, F. K., K. J. Burns, J. Klicka, S. M. Lanyon, I. J. Lovette. 2013. Going to extremes: contrasting rates of diversification in a recent radiation of New World passerine birds. Systematic Biology 62 (2): 298-320."                                                                                                              
-#> [11] "Burns, Kevin J., Allison J. Shultz, Pascal O. Title, Nicholas A. Mason, F. Keith Barker, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2014. Phylogenetics and diversification of tanagers (Passeriformes: Thraupidae), the largest radiation of Neotropical songbirds. Molecular Phylogenetics and Evolution 75: 41-77."              
+#> [10] "Barker, F. K., K. J. Burns, J. Klicka, S. M. Lanyon, I. J. Lovette. 2013. Going to extremes: contrasting rates of diversification in a recent radiation of New World passerine birds. Systematic Biology 62 (2): 298-320."
+#> [11] "Burns, Kevin J., Allison J. Shultz, Pascal O. Title, Nicholas A. Mason, F. Keith Barker, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2014. Phylogenetics and diversification of tanagers (Passeriformes: Thraupidae), the largest radiation of Neotropical songbirds. Molecular Phylogenetics and Evolution 75: 41-77."
 #> [12] "Price, Trevor D., Daniel M. Hooper, Caitlyn D. Buchanan, Ulf S. Johansson, D. Thomas Tietze, Per Alström, Urban Olsson, Mousumi Ghosh-Harihar, Farah Ishtiaq, Sandeep K. Gupta, Jochen Martens, Bettina Harr, Pratap Singh, Dhananjai Mohan. 2014. Niche filling slows the diversification of Himalayan songbirds. Nature 509: 222-225."
 
 #> [13] "Price, Trevor D., Daniel M. Hooper, Caitlyn D. Buchanan, Ulf S. Johansson, D. Thomas Tietze, Per Alström, Urban Olsson, Mousumi Ghosh-Harihar, Farah Ishtiaq, Sandeep K. Gupta, Jochen Martens, Bettina Harr, Pratap Singh, Dhananjai Mohan. 2014. Niche filling slows the diversification of Himalayan songbirds. Nature 509: 222-225."
@@ -114,7 +114,7 @@ names(dres)
 </details>
 ```
 class(dres[[1]])
-#> [1] "matrix" "array" 
+#> [1] "matrix" "array"
 ```
 
 
@@ -126,9 +126,9 @@ What if you want to plot all your `datelifeResult` chronograms as a tree? What i
 dsumm <- summary(dres)
 
 #> Trying with overlap = 2
-#> 
+#>
 #> Success!
-#> 
+#>
 #> ... Calculating a median summary chronogram.
 #>   |==========================================================| 100%
 #>   |==========================================================| 100%
@@ -146,15 +146,9 @@ dsumm <- summary(dres)
 #> 11 out of 13 chronograms tried:  Ok.
 #> 12 out of 13 chronograms tried:  Failed.
 #> 13 out of 13 chronograms tried:  Ok.
-#> 
+#>
 #>  Synthesizing 12 chronograms with SDM
 #>   |==========================================================| 100%
 #>   |==========================================================| 100%
 #>   |==========================================================| 100%
 ```
-
-
-
-
-
-
