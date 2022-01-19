@@ -10,7 +10,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/datelife)](https://CRAN.R-project.org/package=datelife)
 ![GitHub R package
-version](https://img.shields.io/github/r-package/v/phylotastic/datelife?color=green)
+version](https://img.shields.io/github/r-package/v/phylotastic/datelife?color=pink&label=GitHub)
 [![R-CMD-check](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)
 [![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://app.codecov.io/gh/phylotastic/datelife)
 [![Github Open
