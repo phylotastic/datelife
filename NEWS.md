@@ -1,9 +1,11 @@
+# datelife 0.6.1
+  - get_opentree_chronograms was updated and renamed to get_opentree_chronograms
+  - Eliminated unecessary examples
+
 # datelife 0.6.0
 
   - Bioconductor packages are used conditionally
   - Package website with `pkgdown`
-  - Open Tree of Life cached chronogram database not yet updated
-  - get_opentree_chronograms was updated and renamed to get_opentree_chronograms
   - documentation for all functions was expanded
   - examples and function files are written to tempdir()
 
