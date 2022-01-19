@@ -1,4 +1,4 @@
-print.datelifeResultSummary <- function(datelifeResultSummary) {
-
-  print(length(datelifeResultSummary))
-}
+# print.datelifeResultSummary <- function(datelifeResultSummary) {
+#
+#   print(length(datelifeResultSummary))
+# }
