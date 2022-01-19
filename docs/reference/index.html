@@ -25,7 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
-    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringiliidae</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringillidae</a>
   </div>
 </li>
 <li class="nav-item">
@@ -80,13 +80,12 @@
           
           <code><a href="check_conflicting_calibrations.html">check_conflicting_calibrations()</a></code> 
         </dt>
-        <dd>Check for conflicting calibrations</dd>
+        <dd>Check for conflicting calibrations.</dd>
       </dl><dl><dt>
           
           <code><a href="check_ott_input.html">check_ott_input()</a></code> 
         </dt>
-        <dd>Checks input for <code><a href="../reference/get_ott_clade.html">get_ott_clade()</a></code>, <code><a href="../reference/get_ott_children.html">get_ott_children()</a></code>, and
-<code><a href="../reference/get_otol_synthetic_tree.html">get_otol_synthetic_tree()</a></code> functions</dd>
+        <dd>Check input for other functions</dd>
       </dl><dl><dt>
           
           <code><a href="choose_cluster.html">choose_cluster()</a></code> 
@@ -109,8 +108,8 @@ For now it 1) checks unmapped taxa and maps them with tnrs_match.phylo, 2) roots
           
           <code><a href="clean_taxon_info_children.html">clean_taxon_info_children()</a></code> 
         </dt>
-        <dd>Identifies, extracts and cleans children names from a <code>taxonomy_taxon_info()</code>
-output</dd>
+        <dd>Identify, extract and clean taxonomic children names from a <code>taxonomy_taxon_info()</code>
+output.</dd>
       </dl><dl><dt>
           
           <code><a href="clean_tnrs.html">clean_tnrs()</a></code> 
@@ -125,19 +124,25 @@ Needed because using <code>include_suppressed = FALSE</code> in <code><a href="h
         <dd>Cluster a patristic matrix into a tree with various methods.</dd>
       </dl><dl><dt>
           
+          <code><a href="congruify_and_check.html">congruify_and_check()</a></code> 
+        </dt>
+        <dd>Congruify and check.</dd>
+      </dl><dl><dt>
+          
           <code><a href="contributor_cache.html">contributor_cache</a></code> 
         </dt>
-        <dd>Information on contributors, authors, study ids and clades from studies with chronograms in Open tree of Life</dd>
+        <dd>Information on contributors, authors, study ids and clades from studies with
+chronograms in Open Tree of Life (Open Tree)</dd>
       </dl><dl><dt>
           
           <code><a href="date_with_pbdb.html">date_with_pbdb()</a></code> 
         </dt>
-        <dd>Date with Paleobiology Database and paleotree</dd>
+        <dd>Date with Paleobiology Database and paleotree.</dd>
       </dl><dl><dt>
           
           <code><a href="datelife_authors_tabulate.html">datelife_authors_tabulate()</a></code> 
         </dt>
-        <dd>Return the relevant authors for a set of studies</dd>
+        <dd>Return the relevant authors for a set of studies.</dd>
       </dl><dl><dt>
           
           <code><a href="datelife_result_MRCA.html">datelife_result_MRCA()</a></code> 
@@ -147,12 +152,12 @@ Needed because using <code>include_suppressed = FALSE</code> in <code><a href="h
           
           <code><a href="datelife_result_median.html">datelife_result_median()</a></code> 
         </dt>
-        <dd>Get a median summary chronogram from a datelifeResult object</dd>
+        <dd>Get a median summary chronogram from a <code>datelifeResult</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="datelife_result_median_matrix.html">datelife_result_median_matrix()</a></code> 
         </dt>
-        <dd>Function to compute median matrix of a datelifeResult object</dd>
+        <dd>Compute a median matrix of a <code>datelifeResult</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="datelife_result_sdm_matrix.html">datelife_result_sdm_matrix()</a></code> 
@@ -167,12 +172,12 @@ Needed because using <code>include_suppressed = FALSE</code> in <code><a href="h
           
           <code><a href="datelife_result_study_index.html">datelife_result_study_index()</a></code> 
         </dt>
-        <dd>Find the index of relevant studies in a opentree_chronograms object. Used inside: summarize_datelife_result.</dd>
+        <dd>Find the index of relevant studies in a cached chronogram database.</dd>
       </dl><dl><dt>
           
           <code><a href="datelife_result_variance_matrix.html">datelife_result_variance_matrix()</a></code> 
         </dt>
-        <dd>Function to compute variance matrix of a datelifeResult object</dd>
+        <dd>Compute a variance matrix of a <code>datelifeResult</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="datelife_search.html">datelife_search()</a></code> 
@@ -193,7 +198,8 @@ divergence openly available for a given set of taxon names</dd>
           
           <code><a href="dot-get_ott_lineage.html">.get_ott_lineage()</a></code> 
         </dt>
-        <dd>Get the lineage of a set of taxa using rotl:taxonomy_taxon_info(include_lineage = TRUE)</dd>
+        <dd>Get the lineage of a set of taxa.
+<code>.get_ott_lineage</code> uses <code><a href="https://docs.ropensci.org/rotl/reference/taxonomy_taxon_info.html" class="external-link">rotl::taxonomy_taxon_info()</a></code> with <code>include_lineage = TRUE</code>.</dd>
       </dl><dl><dt>
           
           <code><a href="extract_calibrations_dateliferesult.html">extract_calibrations_dateliferesult()</a></code> 
@@ -309,18 +315,19 @@ you still need to get all species or an induced OpenTree subtree</dd>
           
           <code><a href="get_ott_clade.html">get_ott_clade()</a></code> 
         </dt>
-        <dd>Get the ott id and name of one or several given taxonomic ranks from one or
-more input taxa</dd>
+        <dd>Get the Open Tree of Life Taxonomic identifiers (OTT ids) and name of one or
+several given taxonomic ranks from one or more input taxa.</dd>
       </dl><dl><dt>
           
           <code><a href="get_ott_lineage.html">get_ott_lineage()</a></code> 
         </dt>
-        <dd>Get the ott id and name of all lineages from one or more input taxa</dd>
+        <dd>Get the Open Tree of Life Taxonomic identifier (OTT id) and name of all lineages
+from one or more input taxa.</dd>
       </dl><dl><dt>
           
           <code><a href="get_subset_array_dispatch.html">get_subset_array_dispatch()</a></code> 
         </dt>
-        <dd>Figure out which subset function to use. Used inside <code><a href="../reference/get_datelife_result.html">get_datelife_result()</a></code></dd>
+        <dd>Figure out which subset function to use.</dd>
       </dl><dl><dt>
           
           <code><a href="get_taxon_summary.html">get_taxon_summary()</a></code> 
@@ -330,8 +337,8 @@ more input taxa</dd>
           
           <code><a href="get_valid_children.html">get_valid_children()</a></code> 
         </dt>
-        <dd>Extract valid children from given taxonomic name(s) or OpenTree Taxonomic ids (not from a taxonomy
-taxon info object).</dd>
+        <dd>Extract valid children from given taxonomic name(s) or Open Tree of Life
+Taxonomic identifiers (OTT ids) from a taxonomic source.</dd>
       </dl><dl><dt>
           
           <code><a href="input_process.html">input_process()</a></code> 
@@ -452,24 +459,55 @@ given a set of node calibrations without any data.</dd>
         <dd>Get time of MRCA from patristic matrix. Used in <code><a href="../reference/datelife_result_MRCA.html">datelife_result_MRCA()</a></code>.</dd>
       </dl><dl><dt>
           
+          <code><a href="patristic_matrix_array_congruify.html">patristic_matrix_array_congruify()</a></code> 
+        </dt>
+        <dd><code>patristic_matrix_array_congruify</code> is used for patristic_matrix_array_subset_both and patristic_matrix_array_congruify.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="patristic_matrix_array_phylo_congruify.html">patristic_matrix_array_phylo_congruify()</a></code> 
+        </dt>
+        <dd>Congruify a patristic matrix array from a given <code>phylo</code> object.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="patristic_matrix_array_split.html">patristic_matrix_array_split()</a></code> 
+        </dt>
+        <dd>Split a patristic matrix array
+Used inside: patristic_matrix_array_congruify</dd>
+      </dl><dl><dt>
+          
+          <code><a href="patristic_matrix_array_subset.html">patristic_matrix_array_subset()</a></code> 
+        </dt>
+        <dd>Subset a patristic matrix array</dd>
+      </dl><dl><dt>
+          
+          <code><a href="patristic_matrix_array_subset_both.html">patristic_matrix_array_subset_both()</a></code> 
+        </dt>
+        <dd>Are all desired taxa in the patristic matrix array?</dd>
+      </dl><dl><dt>
+          
           <code><a href="patristic_matrix_list_to_array.html">patristic_matrix_list_to_array()</a></code> 
         </dt>
-        <dd>Convert list of patristic matrices to a 3D array. Used inside: summarize_datelife_result, patristic_matrix_array_congruify.</dd>
+        <dd>Convert list of patristic matrices to a 3D array.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="patristic_matrix_name_order_test.html">patristic_matrix_name_order_test()</a></code> 
+        </dt>
+        <dd>Test the name order of a patristic matrix so that row and column labels are in alphabetical order.</dd>
       </dl><dl><dt>
           
           <code><a href="patristic_matrix_name_reorder.html">patristic_matrix_name_reorder()</a></code> 
         </dt>
-        <dd>Function to reorder a matrix so that row and column labels are in alphabetical order. Used in: patristic_matrix_pad.</dd>
+        <dd>Reorder a matrix so that row and column labels are in alphabetical order.</dd>
       </dl><dl><dt>
           
           <code><a href="patristic_matrix_pad.html">patristic_matrix_pad()</a></code> 
         </dt>
-        <dd>Function to fill in empty cells in a patristic matrix for missing taxa. Used in: patristic_matrix_list_to_array.</dd>
+        <dd>Fill in empty cells in a patristic matrix for missing taxa.</dd>
       </dl><dl><dt>
           
           <code><a href="patristic_matrix_taxa_all_matching.html">patristic_matrix_taxa_all_matching()</a></code> 
         </dt>
-        <dd>Are all desired taxa in the patristic_matrix? Used inside: results_list_process.</dd>
+        <dd>Are all desired taxa in the patristic matrix?</dd>
       </dl><dl><dt>
           
           <code><a href="patristic_matrix_to_newick.html">patristic_matrix_to_newick()</a></code> 
@@ -479,7 +517,7 @@ given a set of node calibrations without any data.</dd>
           
           <code><a href="patristic_matrix_to_phylo.html">patristic_matrix_to_phylo()</a></code> 
         </dt>
-        <dd>Convert a patristic matrix to a <code>phylo</code> object. Used inside <code><a href="../reference/summarize_datelife_result.html">summarize_datelife_result()</a></code>.</dd>
+        <dd>Convert a patristic matrix to a <code>phylo</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="patristic_matrix_unpad.html">patristic_matrix_unpad()</a></code> 
@@ -489,12 +527,17 @@ given a set of node calibrations without any data.</dd>
           
           <code><a href="phylo_check.html">phylo_check()</a></code> 
         </dt>
-        <dd>Checks if phy is a phylo class object and/or a chronogram</dd>
+        <dd>Checks if <code>phy</code> is a <code>phylo</code> object and/or a chronogram.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="phylo_congruify.html">phylo_congruify()</a></code> 
+        </dt>
+        <dd>Congruify a reference tree and a target tree given as <code>phylo</code> objects.</dd>
       </dl><dl><dt>
           
           <code><a href="phylo_generate_uncertainty.html">phylo_generate_uncertainty()</a></code> 
         </dt>
-        <dd>Function to generate uncertainty in branch lengths using a lognormal</dd>
+        <dd>Generate uncertainty in branch lengths using a lognormal.</dd>
       </dl><dl><dt>
           
           <code><a href="phylo_get_node_numbers.html">phylo_get_node_numbers()</a></code> 
@@ -502,19 +545,45 @@ given a set of node calibrations without any data.</dd>
         <dd>Gets node numbers from any phylogeny</dd>
       </dl><dl><dt>
           
+          <code><a href="phylo_get_subset_array.html">phylo_get_subset_array()</a></code> 
+        </dt>
+        <dd>Get a subset array from a <code>phylo</code> object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="phylo_get_subset_array_congruify.html">phylo_get_subset_array_congruify()</a></code> 
+        </dt>
+        <dd>Get a congruified subset array from a <code>phylo</code> object</dd>
+      </dl><dl><dt>
+          
           <code><a href="phylo_has_brlen.html">phylo_has_brlen()</a></code> 
         </dt>
         <dd>Check if a tree has branch lengths</dd>
       </dl><dl><dt>
           
+          <code><a href="phylo_prune_missing_taxa.html">phylo_prune_missing_taxa()</a></code> 
+        </dt>
+        <dd>Prune missing taxa from a <code>phylo</code> object
+Used inside phylo_get_subset_array and phylo_get_subset_array_congruify.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="phylo_subset_both.html">phylo_subset_both()</a></code> 
+        </dt>
+        <dd>Subset a reference and a target tree given as <code>phylo</code> objects.</dd>
+      </dl><dl><dt>
+          
           <code><a href="phylo_tiplabel_space_to_underscore.html">phylo_tiplabel_space_to_underscore()</a></code> 
         </dt>
-        <dd>Convert spaces to underscores in trees. Used in: make_mrbayes_runfile, get_mrbayes_node_calibrations, tree_get_singleton_outgroup, congruify_and_check, patristic_matrix_array_phylo_congruify.</dd>
+        <dd>Convert spaces to underscores in trees.</dd>
       </dl><dl><dt>
           
           <code><a href="phylo_tiplabel_underscore_to_space.html">phylo_tiplabel_underscore_to_space()</a></code> 
         </dt>
-        <dd>Convert underscores to spaces in trees. Used inside: patristic_matrix_array_phylo_congruify, congruify_and_check.</dd>
+        <dd>Convert underscores to spaces in trees.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="phylo_to_patristic_matrix.html">phylo_to_patristic_matrix()</a></code> 
+        </dt>
+        <dd>Get a patristic matrix from a <code>phylo</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="pick_grove.html">pick_grove()</a></code> 
@@ -539,12 +608,12 @@ given a set of node calibrations without any data.</dd>
           
           <code><a href="relevant_curators_tabulate.html">relevant_curators_tabulate()</a></code> 
         </dt>
-        <dd>Return the relevant curators for a set of studies</dd>
+        <dd>Return the relevant curators for a set of studies.</dd>
       </dl><dl><dt>
           
           <code><a href="results_list_process.html">results_list_process()</a></code> 
         </dt>
-        <dd>Take results_list and process it. Used inside: get_datelife_result</dd>
+        <dd>Take results_list and process it.</dd>
       </dl><dl><dt>
           
           <code><a href="run.html">run()</a></code> 
@@ -604,7 +673,7 @@ given a set of node calibrations without any data.</dd>
           
           <code><a href="summary_matrix_to_phylo_all.html">summary_matrix_to_phylo_all()</a></code> 
         </dt>
-        <dd>Get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.</dd>
+        <dd>Get minimum, mean and maximum summary chronograms from a summary matrix of a <code>datelifeResult</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="summary_patristic_matrix_array.html">summary_patristic_matrix_array()</a></code> 

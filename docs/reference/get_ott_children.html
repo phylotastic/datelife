@@ -29,7 +29,7 @@ you still need to get all species or an induced OpenTree subtree"><!-- mathjax -
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
-    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringiliidae</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringillidae</a>
   </div>
 </li>
 <li class="nav-item">
@@ -70,11 +70,11 @@ you still need to get all species or an induced OpenTree subtree</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>input</dt>
-<dd><p>Optional. A character vector of names or a <code>datelifeQuery</code> object</p></dd>
+<dd><p>Optional. A character vector of names or a <code>datelifeQuery</code> object.</p></dd>
 <dt>ott_ids</dt>
 <dd><p>If not NULL, it takes this argument and ignores input. A
 numeric vector of ott ids obtained with <code><a href="https://docs.ropensci.org/rotl/reference/taxonomy_taxon_info.html" class="external-link">rotl::taxonomy_taxon_info()</a></code> or
-<code><a href="https://docs.ropensci.org/rotl/reference/tnrs_match_names.html" class="external-link">rotl::tnrs_match_names()</a></code> or <code><a href="tnrs_match.html">tnrs_match()</a></code></p></dd>
+<code><a href="https://docs.ropensci.org/rotl/reference/tnrs_match_names.html" class="external-link">rotl::tnrs_match_names()</a></code> or <code><a href="tnrs_match.html">tnrs_match()</a></code>.</p></dd>
 <dt>ott_rank</dt>
 <dd><p>A character vector with the ranks you wanna get lineage children from.</p></dd>
 <dt>...</dt>
@@ -95,11 +95,14 @@ numeric vector of ott ids obtained with <code><a href="https://docs.ropensci.org
 <span class="r-in"><span class="co">#  practice, it has no node to extract a subtree from.</span></span>
 <span class="r-in"><span class="va">tnrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="tnrs_match.html">tnrs_match</a></span><span class="op">(</span><span class="st">"Canis"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span>
+<span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># This is a flag for package development. You are welcome to run the example.</span></span>
 <span class="r-in"><span class="fu">rotl</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rotl/reference/tol_subtree.html" class="external-link">tol_subtree</a></span><span class="op">(</span><span class="va">tnrs</span><span class="op">$</span><span class="va">ott_id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span class="r-in"><span class="co">#&gt; Error: HTTP failure: 400</span></span>
 <span class="r-in"><span class="co">#&gt; [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).</span></span>
+<span class="r-in"></span>
 <span class="r-in"> <span class="co"># end dontrun</span></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="va">tnrs</span><span class="op">$</span><span class="va">ott_id</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ids</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">tnrs</span><span class="op">$</span><span class="va">unique_name</span></span>
 <span class="r-in"><span class="va">children</span> <span class="op">&lt;-</span> <span class="fu">get_ott_children</span><span class="op">(</span>ott_ids <span class="op">=</span> <span class="va">ids</span><span class="op">)</span> <span class="co"># or</span></span>
@@ -132,10 +135,12 @@ numeric vector of ott ids obtained with <code><a href="https://docs.ropensci.org
 <span class="r-in"><span class="co"># An example with flowering plants:</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># This is a flag for package development. You are welcome to run the example.</span></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="va">oo</span> <span class="op">&lt;-</span> <span class="fu">get_ott_children</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"magnoliophyta"</span>, ott_rank <span class="op">=</span> <span class="st">"order"</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># Get the number of orders of flowering plants that we have</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">oo</span><span class="op">$</span><span class="va">Magnoliophyta</span><span class="op">$</span><span class="va">rank</span> <span class="op">==</span> <span class="st">"order"</span><span class="op">)</span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'oo' not found</span>
+<span class="r-in"></span>
 <span class="r-in"> <span class="co"># end dontrun</span></span>
 </code></pre></div>
     </div>

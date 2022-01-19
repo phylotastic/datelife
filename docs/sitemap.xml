@@ -79,6 +79,9 @@
     <loc>/reference/cluster_patristicmatrix.html</loc>
   </url>
   <url>
+    <loc>/reference/congruify_and_check.html</loc>
+  </url>
+  <url>
     <loc>/reference/contributor_cache.html</loc>
   </url>
   <url>
@@ -193,6 +196,9 @@
     <loc>/reference/get_opentree_chronograms.html</loc>
   </url>
   <url>
+    <loc>/reference/get_otol_chronograms.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_otol_synthetic_tree.html</loc>
   </url>
   <url>
@@ -295,7 +301,25 @@
     <loc>/reference/patristic_matrix_MRCA.html</loc>
   </url>
   <url>
+    <loc>/reference/patristic_matrix_array_congruify.html</loc>
+  </url>
+  <url>
+    <loc>/reference/patristic_matrix_array_phylo_congruify.html</loc>
+  </url>
+  <url>
+    <loc>/reference/patristic_matrix_array_split.html</loc>
+  </url>
+  <url>
+    <loc>/reference/patristic_matrix_array_subset.html</loc>
+  </url>
+  <url>
+    <loc>/reference/patristic_matrix_array_subset_both.html</loc>
+  </url>
+  <url>
     <loc>/reference/patristic_matrix_list_to_array.html</loc>
+  </url>
+  <url>
+    <loc>/reference/patristic_matrix_name_order_test.html</loc>
   </url>
   <url>
     <loc>/reference/patristic_matrix_name_reorder.html</loc>
@@ -319,10 +343,19 @@
     <loc>/reference/phylo_check.html</loc>
   </url>
   <url>
+    <loc>/reference/phylo_congruify.html</loc>
+  </url>
+  <url>
     <loc>/reference/phylo_generate_uncertainty.html</loc>
   </url>
   <url>
     <loc>/reference/phylo_get_node_numbers.html</loc>
+  </url>
+  <url>
+    <loc>/reference/phylo_get_subset_array.html</loc>
+  </url>
+  <url>
+    <loc>/reference/phylo_get_subset_array_congruify.html</loc>
   </url>
   <url>
     <loc>/reference/phylo_has_brlen.html</loc>
@@ -331,10 +364,19 @@
     <loc>/reference/phylo_height_omi.html</loc>
   </url>
   <url>
+    <loc>/reference/phylo_prune_missing_taxa.html</loc>
+  </url>
+  <url>
+    <loc>/reference/phylo_subset_both.html</loc>
+  </url>
+  <url>
     <loc>/reference/phylo_tiplabel_space_to_underscore.html</loc>
   </url>
   <url>
     <loc>/reference/phylo_tiplabel_underscore_to_space.html</loc>
+  </url>
+  <url>
+    <loc>/reference/phylo_to_patristic_matrix.html</loc>
   </url>
   <url>
     <loc>/reference/pick_grove.html</loc>

@@ -27,7 +27,7 @@ to any pair of given taxon names in a data frame of secondary calibrations."><!-
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
-    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringiliidae</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringillidae</a>
   </div>
 </li>
 <li class="nav-item">
@@ -67,7 +67,7 @@ to any pair of given taxon names in a data frame of secondary calibrations.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>phy</dt>
-<dd><p>A <code>phylo</code> object. Nodes can be named or not.</p></dd>
+<dd><p>A <code>phylo</code> object.</p></dd>
 <dt>calibrations</dt>
 <dd><p>An object of class <code>datelifeCalibrations</code>, that is,
 an output of <code><a href="get_all_calibrations.html">get_all_calibrations()</a></code>.</p></dd>
@@ -91,7 +91,8 @@ an output of <code><a href="get_all_calibrations.html">get_all_calibrations()</a
     <p>The function takes pairs of taxon names in a secondary calibrations data frame,
 and looks for them in the vector of tip labels of the tree. If both are present,
 then it gets the node that represents the Most Recent
-Common Ancestor for that pair of taxa in the tree.</p>
+Common Ancestor for that pair of taxa in the tree.
+Nodes of <code>phy</code> can be named or not.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
