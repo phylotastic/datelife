@@ -40,9 +40,9 @@ object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.labe
 A \code{phylo} or \code{multiPhylo} object with branch lengths proportional to time.
 }
 \description{
-The function gets secondary calibrations available for any
-pair of given taxon names, mined from code {\link[=opentree_chronograms]{opentree_chronograms}}
-local DateLife database, and uses them to date a given tree topology with the
+\code{datelife_use} gets secondary calibrations available for any
+pair of given taxon names, mined from the \link{opentree_chronograms} object,
+and uses them to date a given tree topology with the
 algorithm defined in \code{dating_method}. If no tree topology is provided,
 it will attempt to get one for the given taxon names by calling the function \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}}.
 }
@@ -52,7 +52,7 @@ tree with \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}} to get a tre
 it will get an Open Tree of Life synthetic tree topology.
 The function then calls \code{\link[=use_calibrations]{use_calibrations()}}.
 }
-\section{output}{
+\section{More}{
  The output object stores the used \code{calibrations} and \code{dating_method} as
 \code{attributes(output)$datelife_calibrations} and \code{attributes(output)$dating_method}.
 }

@@ -25,9 +25,9 @@ in separate data frames.}
 A \code{phylo} or \code{multiPhylo} object with branch lengths proportional to time.
 }
 \description{
-The function gets secondary calibrations available for any
-pair of given taxon names, mined from code {\link[=opentree_chronograms]{opentree_chronograms}}
-local DateLife database, and uses them to date a given tree topology with the
+\code{datelife_use} gets secondary calibrations available for any
+pair of given taxon names, mined from the \link{opentree_chronograms} object,
+and uses them to date a given tree topology with the
 algorithm defined in \code{dating_method}. If no tree topology is provided,
 it will attempt to get one for the given taxon names by calling the function \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}}.
 }
@@ -36,7 +36,7 @@ If \code{phy} has no branch lengths, \code{dating_method} is ignores, and the fu
 calibrations to date the tree with the BLADJ algorithm. See \code{\link[=make_bladj_tree]{make_bladj_tree()}} and \code{\link[=use_calibrations_bladj]{use_calibrations_bladj()}}.
 If \code{phy} has branch lengths, the function can use the PATHd8 algorithm. See \code{\link[=use_calibrations_pathd8]{use_calibrations_pathd8()}}.
 }
-\section{output}{
+\section{More}{
  The output object stores the used \code{calibrations} and \code{dating_method} as
 \code{attributes(output)$datelife_calibrations} and \code{attributes(output)$dating_method}.
 }

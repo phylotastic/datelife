@@ -1,8 +1,8 @@
 #' Generate one or multiple chronograms for a set of given taxon names.
 #'
-#' @description The function gets secondary calibrations available for any
-#' pair of given taxon names, mined from code {\link[=opentree_chronograms]{opentree_chronograms}}
-#' local DateLife database, and uses them to date a given tree topology with the
+#' @description `datelife_use` gets secondary calibrations available for any
+#' pair of given taxon names, mined from the [opentree_chronograms] object,
+#' and uses them to date a given tree topology with the
 #' algorithm defined in `dating_method`. If no tree topology is provided,
 #' it will attempt to get one for the given taxon names by calling the function [make_bold_otol_tree()].
 #'
@@ -10,7 +10,7 @@
 #' @inheritParams use_all_calibrations
 #' @inheritDotParams make_datelife_query
 #' @inherit use_all_calibrations return
-#' @inheritSection use_calibrations output
+#' @inheritSection use_calibrations More
 #' @details
 #' If `input` is a vector of taxon names, the function will attempt to reconstruct a BOLD
 #' tree with [make_bold_otol_tree()] to get a tree with branch lengths. If it fails,
@@ -72,7 +72,7 @@ datelife_use <- function(input = NULL,
 #' @inheritParams use_all_calibrations
 #' @inheritParams get_all_calibrations
 #' @inherit use_all_calibrations return
-#' @inheritSection use_calibrations output
+#' @inheritSection use_calibrations More
 #' @inherit use_calibrations details
 #' @export
 datelife_use_datelifequery <- function(datelife_query = NULL,
