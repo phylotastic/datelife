@@ -37,11 +37,14 @@ datelife_result_study_index <- function(datelife_result,
 #' @param phy4 A user tree to congruify in `phylo4` format (phylobase).
 #' @param dating_method The method used for tree dating.
 #' @return A patristic matrix with ages for the target taxa.
-get_subset_array_dispatch <- function(study_element, taxa, phy = NULL, phy4 = NULL, dating_method = "PATHd8") {
+get_subset_array_dispatch <- function(study_element,
+                                      taxa, phy = NULL,
+                                      phy4 = NULL,
+                                      dating_method = "PATHd8") {
   if (class(study_element) == "array") {
     return(patristic_matrix_array_subset_both(study_element, taxa, phy, phy4, dating_method))
   } else {
-    return(phylo_subset_both(reference_tree.in = study_element, taxa.in = taxa, phy.in = phy, phy4.in = phy4, dating_method.in = dating_method))
+    return(phylo_subset_both(reference_tree = study_element, taxa = taxa, phy = phy, phy4 = phy4, dating_method = dating_method))
   }
 }
 
@@ -245,10 +248,14 @@ patristic_matrix_name_order_test <- function(patristic_matrix,
 
 # Used inside: patristic_matrix_array_congruify.
 #' Congruify a patristic matrix array from a given `phylo` object.
+#' @inheritParams patristic_matrix_taxa_all_matching
 #' @inheritParams patristic_matrix_array_congruify
+#' @inheritParams phylo_get_subset_array
 #' @inherit phylo_congruify return
-patristic_matrix_array_phylo_congruify <- function(patristic_matrix, target_tree,
-                                                   dating_method = "PATHd8", attempt_fix = TRUE) {
+patristic_matrix_array_phylo_congruify <- function(patristic_matrix,
+                                                   target_tree,
+                                                   dating_method = "PATHd8",
+                                                   attempt_fix = TRUE) {
   result_matrix <- matrix(nrow = dim(patristic_matrix)[1], ncol = dim(patristic_matrix)[2])
   if (is.null(target_tree$edge.length)) {
     target_tree$edge.length <- numeric(nrow(target_tree$edge))
@@ -278,6 +285,7 @@ patristic_matrix_array_phylo_congruify <- function(patristic_matrix, target_tree
 #' Get a patristic matrix from a `phylo` object.
 #' @inheritParams phylo_check
 #' @inheritParams congruify_and_check
+#' @param test Default to `TRUE`. Whether to test if `phy` has branch lengths and is ultrametric or not.
 #' @return A patristic matrix.
 phylo_to_patristic_matrix <- function(phy, test = TRUE, tol = 0.01, option = 2) {
   # stores the distance between taxa
@@ -285,7 +293,7 @@ phylo_to_patristic_matrix <- function(phy, test = TRUE, tol = 0.01, option = 2) 
   if (class(phy) == "phylo") {
     if (test) {
       if (!ape::is.ultrametric(phy, tol = tol, option = option)) {
-        stop("currently we require that chronograms be ultrametric") # can pad them so that terminals all reach to present
+        stop("Currently, datelife require that chronograms are ultrametric.") # can pad them so that terminals all reach to present
       }
     }
     patristic_matrix <- stats::cophenetic(phy)
@@ -296,8 +304,13 @@ phylo_to_patristic_matrix <- function(phy, test = TRUE, tol = 0.01, option = 2) 
 # Used inside: get_subset_array_dispatch.
 #' Subset a reference and a target tree given as `phylo` objects.
 #' @inheritParams get_subset_array_dispatch
+#' @inheritParams phylo_get_subset_array
 #' @inherit phylo_get_subset_array return
-phylo_subset_both <- function(reference_tree, taxa, phy = NULL, phy4 = NULL, dating_method = "PATHd8") {
+phylo_subset_both <- function(reference_tree,
+                              taxa,
+                              phy = NULL,
+                              phy4 = NULL,
+                              dating_method = "PATHd8") {
   # COMMENTING OUT: OpenTree gives single trees, let's just standardize on those
   #  if (inherits(reference_tree, "phylo")) {
   #    reference_tree<-c(reference_tree) #from here in, assumes multiphylo object, even if a single tree
@@ -326,7 +339,10 @@ phylo_subset_both <- function(reference_tree, taxa, phy = NULL, phy4 = NULL, dat
 #' @param reference_tree A `phylo` object.
 #' @inheritParams get_subset_array_dispatch
 #' @inherit patristic_matrix_array_subset return
-phylo_get_subset_array <- function(reference_tree, taxa, phy4 = NULL, dating_method = "PATHd8") {
+phylo_get_subset_array <- function(reference_tree,
+                                   taxa,
+                                   phy4 = NULL,
+                                   dating_method = "PATHd8") {
   final.size <- sum(reference_tree$tip.label %in% taxa) # returns number of matches
   if (final.size >= 2) { # it's worth doing the pruning
     reference_tree <- phylo_prune_missing_taxa(reference_tree, taxa)
@@ -358,7 +374,10 @@ phylo_get_subset_array <- function(reference_tree, taxa, phy4 = NULL, dating_met
 #' @inheritParams phylo_get_subset_array
 #' @inheritParams get_subset_array_dispatch
 #' @inherit patristic_matrix_array_subset return
-phylo_get_subset_array_congruify <- function(reference_tree, taxa, phy = NULL, dating_method = "PATHd8") {
+phylo_get_subset_array_congruify <- function(reference_tree,
+                                             taxa,
+                                             phy = NULL,
+                                             dating_method = "PATHd8") {
   final.size <- sum(reference_tree$tip.label %in% taxa) # returns number of matches
   if (final.size >= 2) { # it's worth doing the pruning
     reference_tree <- phylo_prune_missing_taxa(reference_tree, taxa)
@@ -391,9 +410,14 @@ phylo_prune_missing_taxa <- function(phy, taxa) {
 
 # Used inside: phylo_get_subset_array_congruify.
 #' Congruify a reference tree and a target tree given as `phylo` objects.
+#' @inheritParams summary_matrix_to_phylo
 #' @inheritParams phylo_get_subset_array
+#' @inheritParams congruify_and_check
 #' @return A matrix.
-phylo_congruify <- function(reference_tree, target_tree, dating_method = "PATHd8", attempt_fix = TRUE) {
+phylo_congruify <- function(reference_tree,
+                            target_tree,
+                            dating_method = "PATHd8",
+                            attempt_fix = TRUE) {
   result_matrix <- matrix(nrow = ape::Ntip(reference_tree), ncol = ape::Ntip(reference_tree))
   if (is.null(target_tree$edge.length)) {
     target_tree$edge.length <- numeric(nrow(target_tree$edge)) # makes it so that branches that don't match reference tree get zero length
