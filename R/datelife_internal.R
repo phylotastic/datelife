@@ -89,7 +89,14 @@ patristic_matrix_taxa_all_matching <- function(patristic_matrix, taxa) {
   return(sum(!(taxa %in% rownames(patristic_matrix))) == 0)
 }
 
-# Used inside: [get_subset_array_dispatch()].
+
+#' Are all desired taxa in the patristic matrix array?
+#'
+#' `patristic_matrix_array_subset_both` is used inside [get_subset_array_dispatch()].
+#'
+#' @param patristic_matrix_array A patristic matrix array, `rownames` and `colnames` must be taxa.
+#' @inheritParams get_subset_array_dispatch
+#' @inherit get_subset_array_dispatch return
 patristic_matrix_array_subset_both <- function(patristic_matrix_array, taxa, phy = NULL, phy4 = NULL, dating_method = "PATHd8") {
   if (is.null(phy)) {
     return(patristic_matrix_array_subset(patristic_matrix_array = patristic_matrix_array, taxa = taxa, phy4 = phy4))
@@ -98,7 +105,9 @@ patristic_matrix_array_subset_both <- function(patristic_matrix_array, taxa, phy
   }
 }
 
-# Used inside: patristic_matrix_array_subset_both
+#' Subset a patristic matrix array
+#' @inheritParams patristic_matrix_array_subset_both
+#' @return A list with a paristic maytrix array and a `$problem` if any.
 patristic_matrix_array_subset <- function(patristic_matrix_array, taxa, phy4 = NULL) {
   # gets a subset of the patristic_matrix_array. If you give it a phylo4 object, it can check to see if taxa are a clade
   patristic_matrix_array <- patristic_matrix_array[rownames(patristic_matrix_array) %in% taxa, colnames(patristic_matrix_array) %in% taxa, ]
@@ -119,8 +128,14 @@ patristic_matrix_array_subset <- function(patristic_matrix_array, taxa, phy4 = N
   return(list(patristic_matrix_array = patristic_matrix_array, problem = problem))
 }
 
-# Used inside: patristic_matrix_array_subset_both. patristic_matrix_array_congruify
-patristic_matrix_array_congruify <- function(patristic_matrix_array, taxa, phy = NULL,
+
+#' `patristic_matrix_array_congruify` is used for patristic_matrix_array_subset_both and patristic_matrix_array_congruify.
+#'
+#' @inheritParams patristic_matrix_array_subset_both
+#' @inherit patristic_matrix_array_subset_both return
+patristic_matrix_array_congruify <- function(patristic_matrix_array,
+                                             taxa,
+                                             phy = NULL,
                                              dating_method = "PATHd8") {
   # gets a subset of the patristic_matrix_array.
   patristic_matrix_array <- patristic_matrix_array[rownames(patristic_matrix_array) %in% taxa, colnames(patristic_matrix_array) %in% taxa, ]
@@ -139,14 +154,15 @@ patristic_matrix_array_congruify <- function(patristic_matrix_array, taxa, phy =
   return(list(patristic_matrix_array = patristic_matrix_array, problem = problem))
 }
 
-# Used inside: patristic_matrix_array_congruify
+#' Split a patristic matrix array
+#' Used inside: patristic_matrix_array_congruify
+#' @inheitParams patristic_matrix_array_congruify
+#' @return  A patristic matrix array,
 patristic_matrix_array_split <- function(patristic_matrix_array) {
+  asub_for_lapply <- function(idx, x, dims = 3) {
+    return(abind::asub(x, idx, dims))
+  }
   return(lapply(sequence(dim(patristic_matrix_array)[3]), asub_for_lapply, patristic_matrix_array))
-}
-
-# Used inside: patristic_matrix_array_split to asub.list?
-asub_for_lapply <- function(idx, x, dims = 3) {
-  return(abind::asub(x, idx, dims))
 }
 
 #' Convert list of patristic matrices to a 3D array.
@@ -175,11 +191,11 @@ patristic_matrix_list_to_array <- function(patristic_matrix_list, pad = TRUE) {
   return(abind::abind(patristic_matrix_list, along = 3))
 }
 
-#' Function to fill in empty cells in a patristic matrix for missing taxa.
+#' Fill in empty cells in a patristic matrix for missing taxa.
 #'
 #' Used in: [patristic_matrix_list_to_array()].
 #'
-#' @param patristic_matrix A patristic matrix with row and column names for taxa.
+#' @inheritParams patristic_matrix_taxa_all_matching
 #' @param all_taxa A vector of names of all taxa you want, including ones not
 #' in the patristic matrix.
 #' @return patristic_matrix for all_taxa, with `NA` for entries between taxa
@@ -196,17 +212,23 @@ patristic_matrix_pad <- function(patristic_matrix, all_taxa) {
   return(patristic_matrix_name_reorder(final_matrix))
 }
 
-#' Function to reorder a matrix so that row and column labels are in alphabetical order.
+#' Reorder a matrix so that row and column labels are in alphabetical order.
 #'
-#' `patristic_matrix_name_reorder` is used in: [patristic_matrix_pad()].
+#' `patristic_matrix_name_reorder` is only used in: [patristic_matrix_pad()].
 #'
-#' @param patristic_matrix A patristic matrix with row and column names for taxa
-#' @return patristic_matrix A patristic matrix with row and column names for taxa in alphabetical order
+#' @inheritParams patristic_matrix_taxa_all_matching
+#' @return A patristic matrix with row and column names for taxa in alphabetical order.
 patristic_matrix_name_reorder <- function(patristic_matrix) {
   return(patristic_matrix[order(rownames(patristic_matrix)), order(colnames(patristic_matrix))])
 }
 
-# Used in: patristic_matrix_list_to_array.
+
+#' Test the order name of a patristic matrix so that row and column labels are in alphabetical order.
+#'
+#' `patristic_matrix_name_order_test` is only used in [patristic_matrix_list_to_array()].
+#'
+#' @inheritParams patristic_matrix_taxa_all_matching
+#' @return Boolean.
 patristic_matrix_name_order_test <- function(patristic_matrix, standard.rownames,
                                              standard.colnames) {
   if (compare::compare(rownames(patristic_matrix), standard.rownames)$result != TRUE) {
@@ -220,14 +242,14 @@ patristic_matrix_name_order_test <- function(patristic_matrix, standard.rownames
 
 # Used inside: patristic_matrix_array_congruify.
 patristic_matrix_array_phylo_congruify <- function(patristic_matrix, target_tree,
-                                                   dating_method = "PATHd8", attempt.fix = TRUE) {
+                                                   dating_method = "PATHd8", attempt_fix = TRUE) {
   result_matrix <- matrix(nrow = dim(patristic_matrix)[1], ncol = dim(patristic_matrix)[2])
   if (is.null(target_tree$edge.length)) {
     target_tree$edge.length <- numeric(nrow(target_tree$edge))
   }
   try(result_matrix <- phylo_to_patristic_matrix(congruify_and_check(
     reference = patristic_matrix_to_phylo(patristic_matrix),
-    target = target_tree, scale = dating_method, attempt.fix = attempt.fix
+    target = target_tree, scale = dating_method, attempt_fix = attempt_fix
   )))
   return(result_matrix)
 }
@@ -336,18 +358,23 @@ phylo_prune_missing_taxa <- function(phy, taxa) {
 }
 
 # Used inside: phylo_get_subset_array_congruify.
-phylo_congruify <- function(reference_tree, target_tree, dating_method = "PATHd8", attempt.fix = TRUE) {
+phylo_congruify <- function(reference_tree, target_tree, dating_method = "PATHd8", attempt_fix = TRUE) {
   result_matrix <- matrix(nrow = ape::Ntip(reference_tree), ncol = ape::Ntip(reference_tree))
   if (is.null(target_tree$edge.length)) {
     target_tree$edge.length <- numeric(nrow(target_tree$edge)) # makes it so that branches that don't match reference tree get zero length
   }
-  try(result_matrix <- phylo_to_patristic_matrix(congruify_and_check(reference = reference_tree, target = target_tree, scale = dating_method, attempt.fix = attempt.fix)))
+  try(result_matrix <- phylo_to_patristic_matrix(congruify_and_check(reference = reference_tree, target = target_tree, scale = dating_method, attempt_fix = attempt_fix)))
   return(result_matrix)
 }
 
 # Used inside: patristic_matrix_array_phylo_congruify and phylo_congruify.
+#' Congruify and check.
+#' @inheritParams geiger::congruify.phylo
+#' @inheritParams ape::is.ultrametric
+#' @param attempt_fix Default to `TRUE`. If congruification results in NA branch
+#' lengths, it will attempt to fix them.
 congruify_and_check <- function(reference, target, taxonomy = NULL, tol = 0.01,
-                                option = 2, scale = "pathd8", attempt.fix = TRUE) {
+                                option = 2, scale = "pathd8", attempt_fix = TRUE) {
   if (!ape::is.ultrametric(reference, tol = tol, option = option)) {
     return(NA)
   }
@@ -355,7 +382,7 @@ congruify_and_check <- function(reference, target, taxonomy = NULL, tol = 0.01,
     phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(target),
     taxonomy = taxonomy, tol = tol, scale = scale
   )$phy)) # suppressing warnings b/c geiger ignores tolerance
-  if (anyNA(new.tree$edge.length) & attempt.fix) {
+  if (anyNA(new.tree$edge.length) & attempt_fix) {
     message("Congruification resulted in NA edge lengths. Resolving polytomies and making up starting branch lengths")
     new.tree <- phylo_tiplabel_underscore_to_space(geiger::congruify.phylo(
       phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(

@@ -27,7 +27,7 @@ Now storing >200 chronograms from Open Tree of Life
 }
 \details{
 Generated with
-opentree_chronograms <- get_otol_chronograms()
+opentree_chronograms <- get_opentree_chronograms()
 usethis::use_data(opentree_chronograms, overwrite = T)
 and updated with update_datelife_cache()
 }

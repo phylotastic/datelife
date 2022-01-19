@@ -1,10 +1,10 @@
-test_that("get_otol_chronograms works", {
-  skip("Skipping get_otol_chronograms, since it somehow fails in automated checks but works manually") # since it fails on checks, but works in real life.
+test_that("get_opentree_chronograms works", {
+  skip("Skipping get_opentree_chronograms, since it somehow fails in automated checks but works manually") # since it fails on checks, but works in real life.
   skip_on_cran()
   skip_on_travis()
-  xx5 <- get_otol_chronograms(max_tree_count = 5)
+  xx5 <- get_opentree_chronograms(max_tree_count = 5)
   expect_true(all(c("trees", "authors", "curators", "studies", "dois") %in% names(xx5)))
-  # xx <- get_otol_chronograms()
+  # xx <- get_opentree_chronograms()
   # table(unlist((sapply(xx$trees, "[", "mapped"))))
   # check the state of trees with ott_id problems:
 

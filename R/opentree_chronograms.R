@@ -18,7 +18,7 @@
 #' @keywords opentree dates myrs million years time phylogeny chronogram
 #' @details
 #' Generated with
-#' opentree_chronograms <- get_otol_chronograms()
+#' opentree_chronograms <- get_opentree_chronograms()
 #' usethis::use_data(opentree_chronograms, overwrite = T)
 #' and updated with update_datelife_cache()
 "opentree_chronograms"
@@ -26,7 +26,7 @@
 
 #' Create an updated OpenTree chronograms database object
 
-#' @description The function calls [get_otol_chronograms()] to update the OpenTree
+#' @description The function calls [get_opentree_chronograms()] to update the OpenTree
 #'  chronograms database cached in datelife. It has the option to write the updated
 #' object as an .Rdata file, that will be independent of the `opentree_chronograms`
 #' data object that you can load with `data("opentree_chronograms", package = "datelife")`.
@@ -42,8 +42,8 @@
 #'   the path to write the updated database ".Rdata" file to, excluding file name.
 #'   Defaults to temporary directory obtained with [base::tempdir()] and formatted with
 #'   [base::file.path()].
-#' @inheritDotParams get_otol_chronograms
-#' @inherit get_otol_chronograms return
+#' @inheritDotParams get_opentree_chronograms
+#' @inherit get_opentree_chronograms return
 #' @export
 update_datelife_cache <- function(write = TRUE,
                                   updated_name = "opentree_chronograms_updated",
@@ -51,7 +51,7 @@ update_datelife_cache <- function(write = TRUE,
                                   ...) {
   # , new_studies_only = TRUE
   # enhance: I think we can change the name to update_opentree_chronograms
-  updated <- get_otol_chronograms(...)
+  updated <- get_opentree_chronograms(...)
   if (write) {
     assign(updated_name, updated) # assign the name indicated in updated_name to updated object
     file_name <- paste0(updated_name, ".RData")
@@ -68,7 +68,7 @@ update_datelife_cache <- function(write = TRUE,
 #' @return None
 #' @export
 update_all_cached <- function() {
-  opentree_chronograms <- get_otol_chronograms()
+  opentree_chronograms <- get_opentree_chronograms()
   usethis::use_data(opentree_chronograms, overwrite = TRUE)
   contributor_cache <- make_contributor_cache(outputfile = paste0(tempdir(), "/contributor.rda"))
   usethis::use_data(contributor_cache, overwrite = TRUE)
@@ -124,7 +124,7 @@ phylo_has_brlen <- function(phy) {
 #'     Life database.}
 #' }
 #' @export
-get_otol_chronograms <- function(max_tree_count = "all") {
+get_opentree_chronograms <- function(max_tree_count = "all") {
   options(warn = 1)
   start_time <- Sys.time() # to register run time
   chronogram_matches <- rotl::studies_find_trees(property = "ot:branchLengthMode",
@@ -261,7 +261,6 @@ get_otol_chronograms <- function(max_tree_count = "all") {
   message(tot_time)
   return(result)
 }
-
 
 #' Check if a tree is a valid chronogram.
 #' @inheritParams phylo_check
