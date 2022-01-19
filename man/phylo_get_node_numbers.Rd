@@ -7,7 +7,7 @@
 phylo_get_node_numbers(phy)
 }
 \arguments{
-\item{phy}{A phylo object}
+\item{phy}{A \code{phylo} object.}
 }
 \value{
 A numeric vector with node numbers

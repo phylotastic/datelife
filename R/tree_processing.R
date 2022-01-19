@@ -110,10 +110,10 @@ tree_add_outgroup <- function(tree = NULL, outgroup = "outgroup") {
   return(phy)
 }
 
-#' Checks if phy is a phylo class object and/or a chronogram
-#' @param phy A phylo object
-#' @param brlen Boolean. If TRUE it checks if phylo object has branch lengths.
-#' @param dated Boolean. If TRUE it checks if phylo object is ultrametric.
+#' Checks if `phy` is a `phylo` object and/or a chronogram.
+#' @param phy A `phylo` object.
+#' @param brlen Boolean. If `TRUE` it checks if `phylo` object has branch lengths.
+#' @param dated Boolean. If `TRUE` it checks if `phylo` object is ultrametric.
 #' @return Nothing
 #' @export
 phylo_check <- function(phy = NULL, brlen = FALSE, dated = FALSE) {
@@ -136,7 +136,7 @@ phylo_check <- function(phy = NULL, brlen = FALSE, dated = FALSE) {
 #' Checks if a tree is a phylo class object otherwise it uses input_process. Additionally it can check if tree is a chronogram with phylo_check
 #' @inheritParams tree_fix_brlen
 #' @inheritDotParams phylo_check -phy
-#' @return If tree is correctly formatted, it returns a phylo object
+#' @return If tree is correctly formatted, it returns a `phylo` object.
 #' @export
 tree_check <- function(tree = NULL, ...) {
   if (!inherits(tree, "phylo")) {

@@ -7,7 +7,7 @@
 force_ultrametric(phy)
 }
 \arguments{
-\item{phy}{A phylo object}
+\item{phy}{A \code{phylo} object.}
 }
 \value{
 A \code{phylo} object.

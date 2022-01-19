@@ -20,7 +20,7 @@ to serve as reference for congruification.}
 
 \item{phy}{A user tree to congruify as \code{phylo} object (ape).}
 
-\item{phy4}{A user tree to congruify in \code{phylo4} format (phylobase)}
+\item{phy4}{A user tree to congruify in \code{phylo4} format (phylobase).}
 
 \item{dating_method}{The method used for tree dating.}
 }

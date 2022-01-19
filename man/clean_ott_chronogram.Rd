@@ -8,7 +8,7 @@ For now it 1) checks unmapped taxa and maps them with tnrs_match.phylo, 2) roots
 clean_ott_chronogram(phy)
 }
 \arguments{
-\item{phy}{A phylo object}
+\item{phy}{A \code{phylo} object.}
 }
 \value{
 An object of class  data frame or phylo, with the added class match_names.

@@ -7,7 +7,7 @@
 phylo_has_brlen(phy)
 }
 \arguments{
-\item{phy}{A phylo object}
+\item{phy}{A \code{phylo} object.}
 }
 \value{
 A TRUE or FALSE

@@ -12,12 +12,12 @@ tree_check(tree = NULL, ...)
 \item{...}{
   Arguments passed on to \code{\link[=phylo_check]{phylo_check}}
   \describe{
-    \item{\code{brlen}}{Boolean. If TRUE it checks if phylo object has branch lengths.}
-    \item{\code{dated}}{Boolean. If TRUE it checks if phylo object is ultrametric.}
+    \item{\code{brlen}}{Boolean. If \code{TRUE} it checks if \code{phylo} object has branch lengths.}
+    \item{\code{dated}}{Boolean. If \code{TRUE} it checks if \code{phylo} object is ultrametric.}
   }}
 }
 \value{
-If tree is correctly formatted, it returns a phylo object
+If tree is correctly formatted, it returns a \code{phylo} object.
 }
 \description{
 Checks if a tree is a phylo class object otherwise it uses input_process. Additionally it can check if tree is a chronogram with phylo_check

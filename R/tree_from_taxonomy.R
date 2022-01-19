@@ -280,13 +280,13 @@ summarize_fossil_range <- function(taxon, recent = FALSE, assume_recent_if_missi
   return(result)
 }
 
-#' Date with Paleobiology Database and paleotree
+#' Date with Paleobiology Database and paleotree.
 #'
-#' This will take a topology, look up information about fossils for taxa on the tree, and use paleotree's timePaleoPhy() function to compute branch lengths.
-#' @param phy Phylogeny of taxa
-#' @param recent If TRUE, forces the minimum age to be zero for any taxon
-#' @param assume_recent_if_missing If TRUE, any taxon missing from pbdb is assumed to be recent
-#' @return A dated tree
+#' This will take a topology, look up information about fossils for taxa on the tree, and use [paleotree::timePaleoPhy()] to compute branch lengths.
+#' @inheritParams phylo_check
+#' @param recent If `TRUE`, forces the minimum age to be zero for any taxon
+#' @param assume_recent_if_missing If `TRUE`, any taxon missing from PBDB is assumed to be recent.
+#' @return A dated tree.
 #' @export
 #' @examples
 #' taxa <- c(

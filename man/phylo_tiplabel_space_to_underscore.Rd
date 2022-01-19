@@ -7,10 +7,10 @@
 phylo_tiplabel_space_to_underscore(phy)
 }
 \arguments{
-\item{phy}{A phylo object}
+\item{phy}{A \code{phylo} object.}
 }
 \value{
-A \code{phylo} object,
+A \code{phylo} object.
 }
 \description{
 \code{phylo_tiplabel_space_to_underscore} is used in: \code{\link[=make_mrbayes_runfile]{make_mrbayes_runfile()}},

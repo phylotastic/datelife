@@ -7,7 +7,7 @@
 is_good_chronogram(phy)
 }
 \arguments{
-\item{phy}{A phylo object}
+\item{phy}{A \code{phylo} object.}
 }
 \value{
 \code{TRUE} if it is a valid tree.

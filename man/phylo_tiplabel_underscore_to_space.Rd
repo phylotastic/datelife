@@ -7,10 +7,10 @@
 phylo_tiplabel_underscore_to_space(phy)
 }
 \arguments{
-\item{phy}{A phylo object}
+\item{phy}{A \code{phylo} object.}
 }
 \value{
-A phylo object
+A \code{phylo} object.
 }
 \description{
 \code{phylo_tiplabel_underscore_to_space} is used inside \code{\link[=patristic_matrix_array_phylo_congruify]{patristic_matrix_array_phylo_congruify()}}, \code{\link[=congruify_and_check]{congruify_and_check()}}.

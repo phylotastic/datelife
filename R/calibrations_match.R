@@ -3,7 +3,7 @@
 #' @description \code{match_all_calibrations} summarizes nodes in tree that match
 #' to any pair of given taxon names in a data frame of secondary calibrations.
 #'
-#' @param phy A \code{phylo} object. Nodes can be named or not.
+#' @inheritParams phylo_check
 # #' or a vector of taxon names (see details).
 #' @param calibrations An object of class \code{datelifeCalibrations}, that is,
 #' an output of [get_all_calibrations()].
@@ -18,6 +18,7 @@
 #' and looks for them in the vector of tip labels of the tree. If both are present,
 #' then it gets the node that represents the Most Recent
 #' Common Ancestor for that pair of taxa in the tree.
+#' Nodes of `phy` can be named or not.
 #' @export
 match_all_calibrations <- function(phy, calibrations) {
   # Should we implement this??? -> If input is a phylo object, it is used as backbone. If it is a character vector

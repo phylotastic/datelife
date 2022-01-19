@@ -90,14 +90,14 @@ use_calibrations_bladj <- function(phy,
 }
 
 
-#' Check for conflicting calibrations
+#' Check for conflicting calibrations.
 #'
-#' `check_conflicting_calibrations` checks if calibrations are younger or older relative to descendants and ancestors, respectively.
+#' `check_conflicting_calibrations` checks if calibrations are younger or older
+#'  relative to descendants and ancestors, respectively.
 #'
-#' @details it removes them if needed, but BLADJ works as long as it has an age for the root
-#' @param phy A `phylo` object.
-#' @param calibration_distribution is a list of node ages distributions, named with the node number from phy
-# calibration_distribution <- calibs$phy$calibration_distribution
+#' @details It removes conflicting calibrations if needed, but BLADJ works as long as it has an age for the root.
+#' @inheritParams phylo_check
+#' @param calibration_distribution A list of node age distributions, named with `phy`'s node numbers.
 check_conflicting_calibrations <- function(phy,
                                            calibration_distribution) {
   #

@@ -1,7 +1,7 @@
 # uncertainty generation Functions
 
-#' Function to generate uncertainty in branch lengths using a lognormal
-#' @param phy The input tree
+#' Generate uncertainty in branch lengths using a lognormal.
+#' @inheritParams phylo_check
 #' @inheritParams sample_trees
 #' @param uncertainty_method A character vector specifying the method to generate uncertainty. mrbayes is default.
 #' @inheritParams make_mrbayes_tree

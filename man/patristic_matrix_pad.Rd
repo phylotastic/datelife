@@ -13,8 +13,8 @@ patristic_matrix_pad(patristic_matrix, all_taxa)
 in the patristic matrix.}
 }
 \value{
-patristic_matrix for all_taxa, with \code{NA} for entries between taxa
-where at least one was not in the original patristic_matrix.
+A patristic matrix, with \code{NA} for entries between taxa
+where at least one was not in the original patristic matrix.
 }
 \description{
 Used in: \code{\link[=patristic_matrix_list_to_array]{patristic_matrix_list_to_array()}}.

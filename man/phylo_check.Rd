@@ -2,20 +2,20 @@
 % Please edit documentation in R/tree_processing.R
 \name{phylo_check}
 \alias{phylo_check}
-\title{Checks if phy is a phylo class object and/or a chronogram}
+\title{Checks if \code{phy} is a \code{phylo} object and/or a chronogram.}
 \usage{
 phylo_check(phy = NULL, brlen = FALSE, dated = FALSE)
 }
 \arguments{
-\item{phy}{A phylo object}
+\item{phy}{A \code{phylo} object.}
 
-\item{brlen}{Boolean. If TRUE it checks if phylo object has branch lengths.}
+\item{brlen}{Boolean. If \code{TRUE} it checks if \code{phylo} object has branch lengths.}
 
-\item{dated}{Boolean. If TRUE it checks if phylo object is ultrametric.}
+\item{dated}{Boolean. If \code{TRUE} it checks if \code{phylo} object is ultrametric.}
 }
 \value{
 Nothing
 }
 \description{
-Checks if phy is a phylo class object and/or a chronogram
+Checks if \code{phy} is a \code{phylo} object and/or a chronogram.
 }

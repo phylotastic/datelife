@@ -2,7 +2,7 @@
 % Please edit documentation in R/uncertainty.R
 \name{phylo_generate_uncertainty}
 \alias{phylo_generate_uncertainty}
-\title{Function to generate uncertainty in branch lengths using a lognormal}
+\title{Generate uncertainty in branch lengths using a lognormal.}
 \usage{
 phylo_generate_uncertainty(
   phy,
@@ -17,7 +17,7 @@ phylo_generate_uncertainty(
 )
 }
 \arguments{
-\item{phy}{The input tree}
+\item{phy}{A \code{phylo} object.}
 
 \item{size}{A numeric vector indicating the number of samples to be generated.}
 
@@ -48,7 +48,7 @@ Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.}
 A phylo or multiPhylo object with the same topology as phy but different branch lengths
 }
 \description{
-Function to generate uncertainty in branch lengths using a lognormal
+Generate uncertainty in branch lengths using a lognormal.
 }
 \details{
 If you want to change the size of sampled trees you do not need to run mrbayes again.

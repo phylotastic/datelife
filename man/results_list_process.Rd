@@ -9,7 +9,7 @@ results_list_process(results_list, taxa = NULL, partial = FALSE)
 \arguments{
 \item{results_list}{A \code{list} returned from using \code{\link[=get_subset_array_dispatch]{get_subset_array_dispatch()}} on \code{opentree_chronograms$trees}}
 
-\item{taxa}{A vector of taxa to match.}
+\item{taxa}{Vector of taxon names to get a subset for.}
 
 \item{partial}{If \code{TRUE}, return matrices that have only partial matches.}
 }

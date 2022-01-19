@@ -9,7 +9,7 @@ patristic_matrix_taxa_all_matching(patristic_matrix, taxa)
 \arguments{
 \item{patristic_matrix}{A patristic matrix, \code{rownames} and \code{colnames} must be taxa.}
 
-\item{taxa}{A vector of taxon names.}
+\item{taxa}{Vector of taxon names to get a subset for.}
 }
 \value{
 A Boolean.

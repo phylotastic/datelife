@@ -7,7 +7,7 @@
 match_all_calibrations(phy, calibrations)
 }
 \arguments{
-\item{phy}{A \code{phylo} object. Nodes can be named or not.}
+\item{phy}{A \code{phylo} object.}
 
 \item{calibrations}{An object of class \code{datelifeCalibrations}, that is,
 an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
@@ -30,4 +30,5 @@ The function takes pairs of taxon names in a secondary calibrations data frame,
 and looks for them in the vector of tip labels of the tree. If both are present,
 then it gets the node that represents the Most Recent
 Common Ancestor for that pair of taxa in the tree.
+Nodes of \code{phy} can be named or not.
 }
