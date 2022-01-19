@@ -14,6 +14,6 @@ A \code{phylo} object.
 }
 \description{
 \code{phylo_tiplabel_space_to_underscore} is used in: \code{\link[=make_mrbayes_runfile]{make_mrbayes_runfile()}},
-\code{\link[=get_mrbayes_node_calibrations]{get_mrbayes_node_calibrations()}}, \code{\link[=tree_get_singleton_outgroup]{tree_get_singleton_outgroup()}},
+\code{\link[=tree_get_singleton_outgroup]{tree_get_singleton_outgroup()}},
 \code{\link[=congruify_and_check]{congruify_and_check()}}, \code{\link[=patristic_matrix_array_phylo_congruify]{patristic_matrix_array_phylo_congruify()}}.
 }

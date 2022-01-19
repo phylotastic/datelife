@@ -346,7 +346,7 @@ summarize_summary_matrix <- function(summ_matrix) {
 #' 	\item{max}{Choose this if you wanna be conservative; it will use the maximum
 #'        age from the node age distributions.}
 #' }
-#' @param target_tree A `phylo` object. Use this in case you want a particular
+#' @param target_tree A `phylo` object. Use this in case you want a specific
 #'  backbone for the output tree.
 #' @inheritDotParams get_otol_synthetic_tree
 #' @return An ultrametric phylo object.

@@ -249,8 +249,9 @@ patristic_matrix_name_order_test <- function(patristic_matrix,
 # Used inside: patristic_matrix_array_congruify.
 #' Congruify a patristic matrix array from a given `phylo` object.
 #' @inheritParams patristic_matrix_taxa_all_matching
-#' @inheritParams patristic_matrix_array_congruify
-#' @inheritParams phylo_get_subset_array
+# # ' @inheritParams patristic_matrix_array_congruify
+# # ' @inheritParams phylo_get_subset_array
+#' @inheritParams phylo_congruify
 #' @inherit phylo_congruify return
 patristic_matrix_array_phylo_congruify <- function(patristic_matrix,
                                                    target_tree,
@@ -316,7 +317,7 @@ phylo_subset_both <- function(reference_tree,
   #    reference_tree<-c(reference_tree) #from here in, assumes multiphylo object, even if a single tree
   #  }
   congruify <- FALSE
-  if (inherits(phy.in, "phylo")) {
+  if (inherits(phy, "phylo")) {
     congruify <- TRUE
   } else {
     congruify <- FALSE
@@ -462,7 +463,7 @@ congruify_and_check <- function(reference, target, taxonomy = NULL, tol = 0.01,
 #' Convert spaces to underscores in trees.
 #'
 #' `phylo_tiplabel_space_to_underscore` is used in: [make_mrbayes_runfile()],
-#' [get_mrbayes_node_calibrations()], [tree_get_singleton_outgroup()],
+#' [tree_get_singleton_outgroup()],
 #' [congruify_and_check()], [patristic_matrix_array_phylo_congruify()].
 #'
 #' @inheritParams phylo_check

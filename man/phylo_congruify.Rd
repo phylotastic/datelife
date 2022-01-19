@@ -14,7 +14,7 @@ phylo_congruify(
 \arguments{
 \item{reference_tree}{A \code{phylo} object.}
 
-\item{target_tree}{A \code{phylo} object. Use this in case you want a particular
+\item{target_tree}{A \code{phylo} object. Use this in case you want a specific
 backbone for the output tree.}
 
 \item{dating_method}{The method used for tree dating.}

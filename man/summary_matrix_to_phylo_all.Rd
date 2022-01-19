@@ -9,7 +9,7 @@ summary_matrix_to_phylo_all(summ_matrix, target_tree = NULL, ...)
 \arguments{
 \item{summ_matrix}{Any summary patristic distance matrix, such as the ones obtained with \code{\link[=datelife_result_sdm_matrix]{datelife_result_sdm_matrix()}} or \code{\link[=datelife_result_median_matrix]{datelife_result_median_matrix()}}.}
 
-\item{target_tree}{A \code{phylo} object. Use this in case you want a particular
+\item{target_tree}{A \code{phylo} object. Use this in case you want a specific
 backbone for the output tree.}
 
 \item{...}{

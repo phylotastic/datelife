@@ -30,7 +30,7 @@ One of the following:
 age from the node age distributions.}
 }}
 
-\item{target_tree}{A \code{phylo} object. Use this in case you want a particular
+\item{target_tree}{A \code{phylo} object. Use this in case you want a specific
 backbone for the output tree.}
 
 \item{...}{

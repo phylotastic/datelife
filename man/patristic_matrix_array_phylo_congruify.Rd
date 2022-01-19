@@ -14,7 +14,13 @@ patristic_matrix_array_phylo_congruify(
 \arguments{
 \item{patristic_matrix}{A patristic matrix, \code{rownames} and \code{colnames} must be taxa.}
 
+\item{target_tree}{A \code{phylo} object. Use this in case you want a specific
+backbone for the output tree.}
+
 \item{dating_method}{The method used for tree dating.}
+
+\item{attempt_fix}{Default to \code{TRUE}. If congruification results in NA branch
+lengths, it will attempt to fix them.}
 }
 \value{
 A matrix.
