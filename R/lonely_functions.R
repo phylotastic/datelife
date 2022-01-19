@@ -46,10 +46,10 @@ patristic_matrix_subset <- function(patristic_matrix, taxa, phy4 = NULL) {
   return(list(patristic_matrix = patristic_matrix.new, problem = problem.new))
 }
 
-#' Return the relevant authors for a set of studies
-#' @param results.index A vector from datelife_result_study_index() with the indices of the relevant studies
-#' @param cache The cache
-#' @return A vector with counts of each author, with names equal to author names
+#' Return the relevant authors for a set of studies.
+#' @param results.index A vector from [datelife_result_study_index()] with the indices of the relevant studies.
+#' @param cache The cached chronogram database.
+#' @return A vector with counts of each author, with names equal to author names.
 #' @export
 datelife_authors_tabulate <- function(results.index,
                                       cache = "opentree_chronograms") {
@@ -61,10 +61,9 @@ datelife_authors_tabulate <- function(results.index,
   return(table(unlist(authors)))
 }
 
-#' Return the relevant curators for a set of studies
-#' @param results.index A vector from datelife_result_study_index() with the indices of the relevant studies
-#' @param cache The cache
-#' @return A vector with counts of each curator, with names equal to curator names
+#' Return the relevant curators for a set of studies.
+#' @inheritParams datelife_authors_tabulate
+#' @return A vector with counts of each curator, with names equal to curator names.
 #' @export
 relevant_curators_tabulate <- function(results.index,
                                        cache = "opentree_chronograms") {

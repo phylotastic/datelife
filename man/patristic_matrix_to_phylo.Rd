@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_phylo.R
 \name{patristic_matrix_to_phylo}
 \alias{patristic_matrix_to_phylo}
-\title{Convert a patristic matrix to a \code{phylo} object. Used inside \code{\link[=summarize_datelife_result]{summarize_datelife_result()}}.}
+\title{Convert a patristic matrix to a \code{phylo} object.}
 \usage{
 patristic_matrix_to_phylo(
   patristic_matrix,
@@ -29,26 +29,26 @@ with \code{\link[phangorn:upgma]{phangorn::upgma()}}.}
 }}
 
 \item{fix_negative_brlen}{Boolean indicating whether to fix negative branch
-lengths in resulting tree or not. Default to TRUE.}
+lengths in resulting tree or not. Default to \code{TRUE}.}
 
 \item{fixing_method}{A character vector specifying the method to fix branch lengths: "bladj", "mrbayes" or a number to be assigned to all branches meeting fixing_criterion}
 
 \item{ultrametric}{Boolean indicating whether to force ultrametric or not.}
 
-\item{variance_matrix}{A variance matrix from a datelifeResult list of patristic
-matrices. Usually an output from datelife_result_variance_matrix function.
-Only used if clustering_method is "mvr".}
+\item{variance_matrix}{A variance matrix from a \code{datelifeResult} object,
+usually an output from \code{\link[=datelife_result_variance_matrix]{datelife_result_variance_matrix()}}.
+Only used if \code{clustering_method = "mvr"}.}
 }
 \value{
-A rooted phylo object
+A rooted \code{phylo} object.
 }
 \description{
-Convert a patristic matrix to a \code{phylo} object. Used inside \code{\link[=summarize_datelife_result]{summarize_datelife_result()}}.
+U\code{patristic_matrix_to_phylo} us used inside \code{\link[=summarize_datelife_result]{summarize_datelife_result()}}.
 }
 \details{
-We might add the option to insert a function as clustering_method in the future.
-Before, we had hard-coded the function to try Neighbor-Joining first; if it
+We might add the option to insert a function as \code{clustering_method} in the future.
+Before, we had hard-coded the function to try Neighbor-Joining (NJ) first; if it
 errors, it will try UPGMA.
-Now, it uses nj for phylo_all summary, and we are using our own algorithm to
+Now, it uses NJ for a "phylo_all" summary, and we are using our own algorithm to
 get a tree from a summary matrix.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_internal.R
 \name{patristic_matrix_name_reorder}
 \alias{patristic_matrix_name_reorder}
-\title{Function to reorder a matrix so that row and column labels are in alphabetical order. Used in: patristic_matrix_pad.}
+\title{Function to reorder a matrix so that row and column labels are in alphabetical order.}
 \usage{
 patristic_matrix_name_reorder(patristic_matrix)
 }
@@ -13,5 +13,5 @@ patristic_matrix_name_reorder(patristic_matrix)
 patristic_matrix A patristic matrix with row and column names for taxa in alphabetical order
 }
 \description{
-Function to reorder a matrix so that row and column labels are in alphabetical order. Used in: patristic_matrix_pad.
+\code{patristic_matrix_name_reorder} is used in: \code{\link[=patristic_matrix_pad]{patristic_matrix_pad()}}.
 }

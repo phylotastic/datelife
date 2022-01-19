@@ -2,20 +2,20 @@
 % Please edit documentation in R/datelife_internal.R
 \name{results_list_process}
 \alias{results_list_process}
-\title{Take results_list and process it. Used inside: get_datelife_result}
+\title{Take results_list and process it.}
 \usage{
 results_list_process(results_list, taxa = NULL, partial = FALSE)
 }
 \arguments{
-\item{results_list}{A list returned from using get_subset_array_dispatch on opentree_chronograms$trees}
+\item{results_list}{A \code{list} returned from using \code{\link[=get_subset_array_dispatch]{get_subset_array_dispatch()}} on \code{opentree_chronograms$trees}}
 
-\item{taxa}{A vector of taxa to match}
+\item{taxa}{A vector of taxa to match.}
 
-\item{partial}{If TRUE, return matrices that have only partial matches}
+\item{partial}{If \code{TRUE}, return matrices that have only partial matches.}
 }
 \value{
-A list with the patristic.matrices that are not NA
+A list with the patristic.matrices that are not \code{NA}.
 }
 \description{
-Take results_list and process it. Used inside: get_datelife_result
+\code{results_list_process} is used inside: \code{\link[=get_datelife_result]{get_datelife_result()}}
 }

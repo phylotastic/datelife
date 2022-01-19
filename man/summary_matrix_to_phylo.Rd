@@ -38,10 +38,10 @@ backbone for the output tree.}
   \describe{
     \item{\code{otol_version}}{Version of Open Tree of Life to use}
     \item{\code{resolve}}{Defaults to \code{TRUE}. Whether to resolve the tree at random or not.}
-    \item{\code{input}}{Optional. A character vector of names or a \code{datelifeQuery} object}
+    \item{\code{input}}{Optional. A character vector of names or a \code{datelifeQuery} object.}
     \item{\code{ott_ids}}{If not NULL, it takes this argument and ignores input. A
 numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} or
-\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}}
+\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}.}
   }}
 }
 \value{

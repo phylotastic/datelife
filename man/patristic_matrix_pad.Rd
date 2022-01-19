@@ -2,18 +2,20 @@
 % Please edit documentation in R/datelife_internal.R
 \name{patristic_matrix_pad}
 \alias{patristic_matrix_pad}
-\title{Function to fill in empty cells in a patristic matrix for missing taxa. Used in: patristic_matrix_list_to_array.}
+\title{Function to fill in empty cells in a patristic matrix for missing taxa.}
 \usage{
 patristic_matrix_pad(patristic_matrix, all_taxa)
 }
 \arguments{
-\item{patristic_matrix}{A patristic matrix with row and column names for taxa}
+\item{patristic_matrix}{A patristic matrix with row and column names for taxa.}
 
-\item{all_taxa}{A vector of the names of all taxa you want, including ones not in the patristic matrix}
+\item{all_taxa}{A vector of names of all taxa you want, including ones not
+in the patristic matrix.}
 }
 \value{
-patristic_matrix for all_taxa, with NA for entries between taxa where at least one was not in the original patristic_matrix
+patristic_matrix for all_taxa, with \code{NA} for entries between taxa
+where at least one was not in the original patristic_matrix.
 }
 \description{
-Function to fill in empty cells in a patristic matrix for missing taxa. Used in: patristic_matrix_list_to_array.
+Used in: \code{\link[=patristic_matrix_list_to_array]{patristic_matrix_list_to_array()}}.
 }

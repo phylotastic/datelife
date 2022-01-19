@@ -2,18 +2,18 @@
 % Please edit documentation in R/lonely_functions.R
 \name{relevant_curators_tabulate}
 \alias{relevant_curators_tabulate}
-\title{Return the relevant curators for a set of studies}
+\title{Return the relevant curators for a set of studies.}
 \usage{
 relevant_curators_tabulate(results.index, cache = "opentree_chronograms")
 }
 \arguments{
-\item{results.index}{A vector from datelife_result_study_index() with the indices of the relevant studies}
+\item{results.index}{A vector from \code{\link[=datelife_result_study_index]{datelife_result_study_index()}} with the indices of the relevant studies.}
 
-\item{cache}{The cache}
+\item{cache}{The cached chronogram database.}
 }
 \value{
-A vector with counts of each curator, with names equal to curator names
+A vector with counts of each curator, with names equal to curator names.
 }
 \description{
-Return the relevant curators for a set of studies
+Return the relevant curators for a set of studies.
 }

@@ -1,4 +1,7 @@
-#' Convert a patristic matrix to a `phylo` object. Used inside [summarize_datelife_result()].
+#' Convert a patristic matrix to a `phylo` object.
+#'
+#' U`patristic_matrix_to_phylo` us used inside [summarize_datelife_result()].
+#'
 #' @param patristic_matrix A patristic matrix
 #' @param clustering_method A character vector indicating the method to construct
 #' the tree. Options are:
@@ -12,18 +15,18 @@
 #' 	\item{mvr}{Minimum Variance Reduction method applied with [ape::mvr()].}
 #' }
 #' @details
-#' We might add the option to insert a function as clustering_method in the future.
-#' Before, we had hard-coded the function to try Neighbor-Joining first; if it
+#' We might add the option to insert a function as `clustering_method` in the future.
+#' Before, we had hard-coded the function to try Neighbor-Joining (NJ) first; if it
 #'  errors, it will try UPGMA.
-#' Now, it uses nj for phylo_all summary, and we are using our own algorithm to
+#' Now, it uses NJ for a "phylo_all" summary, and we are using our own algorithm to
 #'  get a tree from a summary matrix.
 #' @param fix_negative_brlen Boolean indicating whether to fix negative branch
-#'  lengths in resulting tree or not. Default to TRUE.
-#' @param variance_matrix A variance matrix from a datelifeResult list of patristic
-#'  matrices. Usually an output from datelife_result_variance_matrix function.
-#'  Only used if clustering_method is "mvr".
+#'  lengths in resulting tree or not. Default to `TRUE`.
+#' @param variance_matrix A variance matrix from a `datelifeResult` object,
+#'  usually an output from [datelife_result_variance_matrix()].
+#'  Only used if `clustering_method = "mvr"`.
 #' @inheritParams tree_fix_brlen
-#' @return A rooted phylo object
+#' @return A rooted `phylo` object.
 #' @export
 patristic_matrix_to_phylo <- function(patristic_matrix,
                                       clustering_method = "nj",
@@ -482,7 +485,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
   return(new_phy)
 }
 
-#' Get min, mean and max summary chronograms from a summary matrix of a datelifeResult object.
+#' Get minimum, mean and maximum summary chronograms from a summary matrix of a `datelifeResult` object.
 #' @inheritParams summary_matrix_to_phylo
 #' @inheritDotParams summary_matrix_to_phylo
 #' @return A `multiPhylo` object of length 3. It contains min, mean and max summary chronograms.
@@ -490,7 +493,7 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
 #' With this function users can choose the minimum, mean  or maximum ages from
 #' the summary matrix as calibration points to get a single summary chronogram.
 #' Users get all three summary chronograms in a `multiPhylo` object.
-#' Modified from `get_all_summaries()` function in `data-raw/datelife_examples.R`
+# Modified from `get_all_summaries()` function in `data-raw/datelife_examples.R`
 #' @export
 summary_matrix_to_phylo_all <- function(summ_matrix, target_tree = NULL, ...) {
   tmean <- summary_matrix_to_phylo(summ_matrix = summ_matrix, use = "mean", target_tree = target_tree, ...)

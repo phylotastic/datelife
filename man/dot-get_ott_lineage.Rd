@@ -2,7 +2,8 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{.get_ott_lineage}
 \alias{.get_ott_lineage}
-\title{Get the lineage of a set of taxa using rotl:taxonomy_taxon_info(include_lineage = TRUE)}
+\title{Get the lineage of a set of taxa.
+\code{.get_ott_lineage} uses \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} with \code{include_lineage = TRUE}.}
 \usage{
 .get_ott_lineage(input_ott_match)
 }
@@ -13,5 +14,6 @@
 A taxonomy_taxon_info object
 }
 \description{
-Get the lineage of a set of taxa using rotl:taxonomy_taxon_info(include_lineage = TRUE)
+Get the lineage of a set of taxa.
+\code{.get_ott_lineage} uses \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} with \code{include_lineage = TRUE}.
 }

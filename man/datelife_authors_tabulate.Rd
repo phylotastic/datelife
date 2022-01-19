@@ -2,18 +2,18 @@
 % Please edit documentation in R/lonely_functions.R
 \name{datelife_authors_tabulate}
 \alias{datelife_authors_tabulate}
-\title{Return the relevant authors for a set of studies}
+\title{Return the relevant authors for a set of studies.}
 \usage{
 datelife_authors_tabulate(results.index, cache = "opentree_chronograms")
 }
 \arguments{
-\item{results.index}{A vector from datelife_result_study_index() with the indices of the relevant studies}
+\item{results.index}{A vector from \code{\link[=datelife_result_study_index]{datelife_result_study_index()}} with the indices of the relevant studies.}
 
-\item{cache}{The cache}
+\item{cache}{The cached chronogram database.}
 }
 \value{
-A vector with counts of each author, with names equal to author names
+A vector with counts of each author, with names equal to author names.
 }
 \description{
-Return the relevant authors for a set of studies
+Return the relevant authors for a set of studies.
 }

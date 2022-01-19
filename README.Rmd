@@ -165,7 +165,7 @@ R CMD build datelife
 Finally, run `R CMD check package-tar-ball` on the tar ball that you just generated:
 
 ``` bash
-R CMD check datelife_0.6.0.tar.gz
+R CMD check --as-cran datelife_0.6.0.tar.gz
 ```
 
 ##### Remote checks

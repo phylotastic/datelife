@@ -3,15 +3,18 @@
 \docType{data}
 \name{contributor_cache}
 \alias{contributor_cache}
-\title{Information on contributors, authors, study ids and clades from studies with chronograms in Open tree of Life}
+\title{Information on contributors, authors, study ids and clades from studies with
+chronograms in Open Tree of Life (Open Tree)}
 \format{
-A list of five data sets
+A list of five data sets.
 \describe{
-\item{author.pretty}{A character vector with the author names from studies with chronograms that are in OToL}
-\item{author.results}{A dataframe with three variables: authors, study ids and clades}
-\item{curator.pretty}{A character vector with the names of curators of chronograms that are in OToL}
-\item{curator.results}{A dataframe with three variables: curators, study ids and clades}
-\item{missed_doi}{A character vector with study ids whose doi could not be retrieved}
+\item{author.pretty}{A character vector with the author names from studies
+with chronograms that are in Open Tree.}
+\item{author.results}{A dataframe with three variables: authors, study ids and clades.}
+\item{curator.pretty}{A character vector with the names of curators of
+chronograms that are in Open Tree.}
+\item{curator.results}{A \code{data.frame} with three variables: curators, study ids and clades.}
+\item{missed_doi}{A character vector with study ids whose "doi" could not be retrieved.}
 }
 }
 \source{
@@ -21,10 +24,11 @@ A list of five data sets
 contributor_cache
 }
 \description{
-Information on contributors, authors, study ids and clades from studies with chronograms in Open tree of Life
+Information on contributors, authors, study ids and clades from studies with
+chronograms in Open Tree of Life (Open Tree)
 }
 \details{
-Generated with make_contributor_cache()
+Generated with \code{\link[=make_contributor_cache]{make_contributor_cache()}}.
 }
 \keyword{author}
 \keyword{chronogram}

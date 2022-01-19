@@ -16,30 +16,32 @@
 # #' How were the data obtained or generated
 # "data_object"
 
-#' Information on contributors, authors, study ids and clades from studies with chronograms in Open tree of Life
+#' Information on contributors, authors, study ids and clades from studies with
+#' chronograms in Open Tree of Life (Open Tree)
 #'
 #' @name contributor_cache
 #' @docType data
-#' @format A list of five data sets
+#' @format A list of five data sets.
 #' \describe{
-#'   \item{author.pretty}{A character vector with the author names from studies with chronograms that are in OToL}
-#'   \item{author.results}{A dataframe with three variables: authors, study ids and clades}
-#'   \item{curator.pretty}{A character vector with the names of curators of chronograms that are in OToL}
-#'   \item{curator.results}{A dataframe with three variables: curators, study ids and clades}
-#'   \item{missed_doi}{A character vector with study ids whose doi could not be retrieved}
+#'   \item{author.pretty}{A character vector with the author names from studies
+#'    with chronograms that are in Open Tree.}
+#'   \item{author.results}{A dataframe with three variables: authors, study ids and clades.}
+#'   \item{curator.pretty}{A character vector with the names of curators of
+#'    chronograms that are in Open Tree.}
+#'   \item{curator.results}{A `data.frame` with three variables: curators, study ids and clades.}
+#'   \item{missed_doi}{A character vector with study ids whose "doi" could not be retrieved.}
 #' }
 #' @source \url{http://opentreeoflife.org}
 #' @keywords otol study studies tree chronogram author
 #' @details
-#'
-#' Generated with make_contributor_cache()
+#' Generated with [make_contributor_cache()].
 "contributor_cache"
 
-# #' Authors from studies with chronograms in Open tree of Life
+# #' Authors from studies with chronograms in Open Tree of Life
 # #'
 # #' @name author.pretty
 # #' @docType data
-# #' @format A character vector with the author names from studies with chronograms that are in OToL
+# #' @format A character vector with the author names from studies with chronograms that are in Open Tree
 # #' @source \url{http://opentreeoflife.org}
 # #' @keywords otol study studies tree chronogram author
 # #' @details

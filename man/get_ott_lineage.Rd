@@ -2,29 +2,34 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{get_ott_lineage}
 \alias{get_ott_lineage}
-\title{Get the ott id and name of all lineages from one or more input taxa}
+\title{Get the Open Tree of Life Taxonomic identifier (OTT id) and name of all lineages
+from one or more input taxa.}
 \usage{
 get_ott_lineage(input = NULL, ott_ids = NULL)
 }
 \arguments{
-\item{input}{Optional. A character vector of names or a \code{datelifeQuery} object}
+\item{input}{Optional. A character vector of names or a \code{datelifeQuery} object.}
 
 \item{ott_ids}{If not NULL, it takes this argument and ignores input. A
 numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} or
-\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}}
+\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}.}
 }
 \value{
 A list of named numeric vectors of ott ids from input and all the clades it belongs to.
 }
 \description{
-Get the ott id and name of all lineages from one or more input taxa
+Get the Open Tree of Life Taxonomic identifier (OTT id) and name of all lineages
+from one or more input taxa.
 }
 \examples{
 \dontrun{ # This is a flag for package development. You are welcome to run the example.
+
 taxa <- c("Homo", "Bacillus anthracis", "Apis", "Salvia")
 lin <- get_ott_lineage(taxa)
 lin
+
 # Look up an unknown OTT id:
 get_ott_lineage(ott_id = 454749)
+
 } # end dontrun
 }

@@ -47,7 +47,7 @@ package from Bioconductor, which needs to be installed using \code{\link[BiocMan
     \item{\code{resolve}}{Defaults to \code{TRUE}. Whether to resolve the tree at random or not.}
     \item{\code{ott_ids}}{If not NULL, it takes this argument and ignores input. A
 numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} or
-\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}}
+\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}.}
   }}
 }
 \value{

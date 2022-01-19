@@ -2,18 +2,18 @@
 % Please edit documentation in R/datelife_internal.R
 \name{datelife_result_study_index}
 \alias{datelife_result_study_index}
-\title{Find the index of relevant studies in a opentree_chronograms object. Used inside: summarize_datelife_result.}
+\title{Find the index of relevant studies in a cached chronogram database.}
 \usage{
 datelife_result_study_index(datelife_result, cache = "opentree_chronograms")
 }
 \arguments{
 \item{datelife_result}{A \code{datelifeResult} object, usually an output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
 
-\item{cache}{The cache of studies}
+\item{cache}{The cached chronogram database.}
 }
 \value{
-A vector with the indices of studies that have relevant info
+A vector of indices of studies that have relevant information.
 }
 \description{
-Find the index of relevant studies in a opentree_chronograms object. Used inside: summarize_datelife_result.
+\code{datelife_result_study_index} is used in \code{\link[=summarize_datelife_result]{summarize_datelife_result()}}.
 }

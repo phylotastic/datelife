@@ -41,7 +41,7 @@ A \code{phylo} or \code{multiPhylo} object with branch lengths proportional to t
 }
 \description{
 The function gets secondary calibrations available for any
-pair of given taxon names, mined from code{\link[=opentree_chronograms]{opentree_chronograms}}
+pair of given taxon names, mined from code {\link[=opentree_chronograms]{opentree_chronograms}}
 local DateLife database, and uses them to date a given tree topology with the
 algorithm defined in \code{dating_method}. If no tree topology is provided,
 it will attempt to get one for the given taxon names by calling the function \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}}.

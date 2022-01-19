@@ -1,7 +1,7 @@
 #' Generate one or multiple chronograms for a set of given taxon names.
 #'
 #' @description The function gets secondary calibrations available for any
-#' pair of given taxon names, mined from code{\link[=opentree_chronograms]{opentree_chronograms}}
+#' pair of given taxon names, mined from code {\link[=opentree_chronograms]{opentree_chronograms}}
 #' local DateLife database, and uses them to date a given tree topology with the
 #' algorithm defined in `dating_method`. If no tree topology is provided,
 #' it will attempt to get one for the given taxon names by calling the function [make_bold_otol_tree()].

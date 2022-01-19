@@ -2,18 +2,18 @@
 % Please edit documentation in R/datelife_internal.R
 \name{patristic_matrix_taxa_all_matching}
 \alias{patristic_matrix_taxa_all_matching}
-\title{Are all desired taxa in the patristic_matrix? Used inside: results_list_process.}
+\title{Are all desired taxa in the patristic matrix?}
 \usage{
 patristic_matrix_taxa_all_matching(patristic_matrix, taxa)
 }
 \arguments{
-\item{patristic_matrix}{A patristic matrix, rownames and colnames must be taxa}
+\item{patristic_matrix}{A patristic matrix, \code{rownames} and \code{colnames} must be taxa.}
 
-\item{taxa}{A vector of taxon names}
+\item{taxa}{A vector of taxon names.}
 }
 \value{
-A Boolean
+A Boolean.
 }
 \description{
-Are all desired taxa in the patristic_matrix? Used inside: results_list_process.
+\code{patristic_matrix_taxa_all_matching} is used inside: \code{\link[=results_list_process]{results_list_process()}}.
 }

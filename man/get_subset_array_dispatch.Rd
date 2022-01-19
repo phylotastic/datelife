@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_internal.R
 \name{get_subset_array_dispatch}
 \alias{get_subset_array_dispatch}
-\title{Figure out which subset function to use. Used inside \code{\link[=get_datelife_result]{get_datelife_result()}}}
+\title{Figure out which subset function to use.}
 \usage{
 get_subset_array_dispatch(
   study_element,
@@ -13,13 +13,14 @@ get_subset_array_dispatch(
 )
 }
 \arguments{
-\item{study_element}{The thing being passed in: an array or a phylo object to serve as reference for congruification}
+\item{study_element}{The thing being passed in: an \code{array} or a \code{phylo} object
+to serve as reference for congruification.}
 
-\item{taxa}{Vector of taxon names to get a subset for}
+\item{taxa}{Vector of taxon names to get a subset for.}
 
-\item{phy}{A user tree to congruify as phylo object (ape)}
+\item{phy}{A user tree to congruify as \code{phylo} object (ape).}
 
-\item{phy4}{A user tree to congruify in phylo4 format (phylobase)}
+\item{phy4}{A user tree to congruify in \code{phylo4} format (phylobase)}
 
 \item{dating_method}{The method used for tree dating.}
 }
@@ -27,5 +28,5 @@ get_subset_array_dispatch(
 A patristic matrix with ages for the target taxa.
 }
 \description{
-Figure out which subset function to use. Used inside \code{\link[=get_datelife_result]{get_datelife_result()}}
+\code{get_subset_array_dispatch} is used inside \code{\link[=get_datelife_result]{get_datelife_result()}}
 }

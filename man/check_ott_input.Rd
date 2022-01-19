@@ -2,17 +2,16 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{check_ott_input}
 \alias{check_ott_input}
-\title{Checks input for \code{\link[=get_ott_clade]{get_ott_clade()}}, \code{\link[=get_ott_children]{get_ott_children()}}, and
-\code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree()}} functions}
+\title{Check input for other functions}
 \usage{
 check_ott_input(input = NULL, ott_ids = NULL, ...)
 }
 \arguments{
-\item{input}{Optional. A character vector of names or a \code{datelifeQuery} object}
+\item{input}{Optional. A character vector of names or a \code{datelifeQuery} object.}
 
 \item{ott_ids}{If not NULL, it takes this argument and ignores input. A
 numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} or
-\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}}
+\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}.}
 
 \item{...}{
   Arguments passed on to \code{\link[=make_datelife_query]{make_datelife_query}}
@@ -30,8 +29,8 @@ object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.labe
 A named numeric vector of valid Open Tree Taxonomy (OTT) ids.
 }
 \description{
-Checks input for \code{\link[=get_ott_clade]{get_ott_clade()}}, \code{\link[=get_ott_children]{get_ott_children()}}, and
-\code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree()}} functions
+\verb{check_ott_input is currently used in functions }\code{\link[=get_ott_clade]{get_ott_clade()}},
+\code{\link[=get_ott_children]{get_ott_children()}}, and \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree()}}.
 }
 \details{
 By default, it uses the \code{ott_id} argument if it is not NULL.

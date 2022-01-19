@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_internal.R
 \name{patristic_matrix_list_to_array}
 \alias{patristic_matrix_list_to_array}
-\title{Convert list of patristic matrices to a 3D array. Used inside: summarize_datelife_result, patristic_matrix_array_congruify.}
+\title{Convert list of patristic matrices to a 3D array.}
 \usage{
 patristic_matrix_list_to_array(patristic_matrix_list, pad = TRUE)
 }
@@ -15,5 +15,5 @@ patristic_matrix_list_to_array(patristic_matrix_list, pad = TRUE)
 A 3d array of patristic matrices
 }
 \description{
-Convert list of patristic matrices to a 3D array. Used inside: summarize_datelife_result, patristic_matrix_array_congruify.
+\code{patristic_matrix_list_to_array} us ised inside \code{\link[=summarize_datelife_result]{summarize_datelife_result()}}, \code{\link[=patristic_matrix_array_congruify]{patristic_matrix_array_congruify()}}.
 }

@@ -10,10 +10,13 @@ summary_patristic_matrix_array <- function(patristic_matrix_array, fn = stats::m
 
 
 
-#' Find the index of relevant studies in a opentree_chronograms object. Used inside: summarize_datelife_result.
+#' Find the index of relevant studies in a cached chronogram database.
+#'
+#' `datelife_result_study_index` is used in [summarize_datelife_result()].
+#'
 #' @inheritParams summarize_datelife_result
-#' @param cache The cache of studies
-#' @return A vector with the indices of studies that have relevant info
+#' @inheritParams datelife_authors_tabulate
+#' @return A vector of indices of studies that have relevant information.
 datelife_result_study_index <- function(datelife_result,
                                         cache = "opentree_chronograms") {
   if ("opentree_chronograms" %in% cache) {
@@ -23,11 +26,15 @@ datelife_result_study_index <- function(datelife_result,
   return(which(names(cache$trees) %in% names(datelife_result)))
 }
 
-#' Figure out which subset function to use. Used inside [get_datelife_result()]
-#' @param study_element The thing being passed in: an array or a phylo object to serve as reference for congruification
-#' @param taxa Vector of taxon names to get a subset for
-#' @param phy A user tree to congruify as phylo object (ape)
-#' @param phy4 A user tree to congruify in phylo4 format (phylobase)
+#' Figure out which subset function to use.
+#'
+#' `get_subset_array_dispatch` is used inside [get_datelife_result()]
+#'
+#' @param study_element The thing being passed in: an `array` or a `phylo` object
+#'  to serve as reference for congruification.
+#' @param taxa Vector of taxon names to get a subset for.
+#' @param phy A user tree to congruify as `phylo` object (ape).
+#' @param phy4 A user tree to congruify in `phylo4` format (phylobase)
 #' @param dating_method The method used for tree dating.
 #' @return A patristic matrix with ages for the target taxa.
 get_subset_array_dispatch <- function(study_element, taxa, phy = NULL, phy4 = NULL, dating_method = "PATHd8") {
@@ -38,11 +45,14 @@ get_subset_array_dispatch <- function(study_element, taxa, phy = NULL, phy4 = NU
   }
 }
 
-#' Take results_list and process it. Used inside: get_datelife_result
-#' @param results_list A list returned from using get_subset_array_dispatch on opentree_chronograms$trees
-#' @param taxa A vector of taxa to match
-#' @param partial If TRUE, return matrices that have only partial matches
-#' @return A list with the patristic.matrices that are not NA
+#' Take results_list and process it.
+#'
+#' `results_list_process` is used inside: [get_datelife_result()]
+#'
+#' @param results_list A `list` returned from using [get_subset_array_dispatch()] on `opentree_chronograms$trees`
+#' @param taxa A vector of taxa to match.
+#' @param partial If `TRUE`, return matrices that have only partial matches.
+#' @return A list with the patristic.matrices that are not `NA`.
 results_list_process <- function(results_list, taxa = NULL, partial = FALSE) {
   if (is.null(taxa)) {
     taxa <- unique(unname(unlist(lapply(final_matrices, rownames))))
@@ -68,15 +78,18 @@ results_list_process <- function(results_list, taxa = NULL, partial = FALSE) {
   return(final_matrices)
 }
 
-#' Are all desired taxa in the patristic_matrix? Used inside: results_list_process.
-#' @param patristic_matrix A patristic matrix, rownames and colnames must be taxa
-#' @param taxa A vector of taxon names
-#' @return A Boolean
+#' Are all desired taxa in the patristic matrix?
+#'
+#' `patristic_matrix_taxa_all_matching` is used inside: [results_list_process()].
+#'
+#' @param patristic_matrix A patristic matrix, `rownames` and `colnames` must be taxa.
+#' @param taxa A vector of taxon names.
+#' @return A Boolean.
 patristic_matrix_taxa_all_matching <- function(patristic_matrix, taxa) {
   return(sum(!(taxa %in% rownames(patristic_matrix))) == 0)
 }
 
-# Used inside: get_subset_array_dispatch.
+# Used inside: [get_subset_array_dispatch()].
 patristic_matrix_array_subset_both <- function(patristic_matrix_array, taxa, phy = NULL, phy4 = NULL, dating_method = "PATHd8") {
   if (is.null(phy)) {
     return(patristic_matrix_array_subset(patristic_matrix_array = patristic_matrix_array, taxa = taxa, phy4 = phy4))
@@ -136,7 +149,10 @@ asub_for_lapply <- function(idx, x, dims = 3) {
   return(abind::asub(x, idx, dims))
 }
 
-#' Convert list of patristic matrices to a 3D array. Used inside: summarize_datelife_result, patristic_matrix_array_congruify.
+#' Convert list of patristic matrices to a 3D array.
+#'
+#' `patristic_matrix_list_to_array` us ised inside [summarize_datelife_result()], [patristic_matrix_array_congruify()].
+#'
 #' @param patristic_matrix_list List of patristic matrices
 #' @param pad If TRUE, pad missing entries
 #' @return A 3d array of patristic matrices
@@ -159,10 +175,15 @@ patristic_matrix_list_to_array <- function(patristic_matrix_list, pad = TRUE) {
   return(abind::abind(patristic_matrix_list, along = 3))
 }
 
-#' Function to fill in empty cells in a patristic matrix for missing taxa. Used in: patristic_matrix_list_to_array.
-#' @param patristic_matrix A patristic matrix with row and column names for taxa
-#' @param all_taxa A vector of the names of all taxa you want, including ones not in the patristic matrix
-#' @return patristic_matrix for all_taxa, with NA for entries between taxa where at least one was not in the original patristic_matrix
+#' Function to fill in empty cells in a patristic matrix for missing taxa.
+#'
+#' Used in: [patristic_matrix_list_to_array()].
+#'
+#' @param patristic_matrix A patristic matrix with row and column names for taxa.
+#' @param all_taxa A vector of names of all taxa you want, including ones not
+#' in the patristic matrix.
+#' @return patristic_matrix for all_taxa, with `NA` for entries between taxa
+#' where at least one was not in the original patristic_matrix.
 patristic_matrix_pad <- function(patristic_matrix, all_taxa) {
   number.missing <- length(all_taxa) - dim(patristic_matrix)[1]
   final_matrix <- patristic_matrix
@@ -175,7 +196,10 @@ patristic_matrix_pad <- function(patristic_matrix, all_taxa) {
   return(patristic_matrix_name_reorder(final_matrix))
 }
 
-#' Function to reorder a matrix so that row and column labels are in alphabetical order. Used in: patristic_matrix_pad.
+#' Function to reorder a matrix so that row and column labels are in alphabetical order.
+#'
+#' `patristic_matrix_name_reorder` is used in: [patristic_matrix_pad()].
+#'
 #' @param patristic_matrix A patristic matrix with row and column names for taxa
 #' @return patristic_matrix A patristic matrix with row and column names for taxa in alphabetical order
 patristic_matrix_name_reorder <- function(patristic_matrix) {
@@ -349,15 +373,23 @@ congruify_and_check <- function(reference, target, taxonomy = NULL, tol = 0.01,
 }
 
 
-#' Convert spaces to underscores in trees. Used in: make_mrbayes_runfile, get_mrbayes_node_calibrations, tree_get_singleton_outgroup, congruify_and_check, patristic_matrix_array_phylo_congruify.
+#' Convert spaces to underscores in trees.
+#'
+#' `phylo_tiplabel_space_to_underscore` is used in: [make_mrbayes_runfile()],
+#' [get_mrbayes_node_calibrations()], [tree_get_singleton_outgroup()],
+#' [congruify_and_check()], [patristic_matrix_array_phylo_congruify()].
+#'
 #' @inheritParams phylo_check
-#' @return A phylo object
+#' @return A `phylo` object,
 phylo_tiplabel_space_to_underscore <- function(phy) {
   phy$tip.label <- gsub(" ", "_", phy$tip.label)
   return(phy)
 }
 
-#' Convert underscores to spaces in trees. Used inside: patristic_matrix_array_phylo_congruify, congruify_and_check.
+#' Convert underscores to spaces in trees.
+#'
+#' `phylo_tiplabel_underscore_to_space` is used inside [patristic_matrix_array_phylo_congruify()], [congruify_and_check()].
+#'
 #' @inheritParams phylo_check
 #' @return A phylo object
 phylo_tiplabel_underscore_to_space <- function(phy) {

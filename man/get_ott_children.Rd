@@ -8,11 +8,11 @@ you still need to get all species or an induced OpenTree subtree}
 get_ott_children(input = NULL, ott_ids = NULL, ott_rank = "species", ...)
 }
 \arguments{
-\item{input}{Optional. A character vector of names or a \code{datelifeQuery} object}
+\item{input}{Optional. A character vector of names or a \code{datelifeQuery} object.}
 
 \item{ott_ids}{If not NULL, it takes this argument and ignores input. A
 numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} or
-\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}}
+\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}.}
 
 \item{ott_rank}{A character vector with the ranks you wanna get lineage children from.}
 
@@ -33,11 +33,14 @@ you still need to get all species or an induced OpenTree subtree
 # The dog genus is not monophyletic in the OpenTree synthetic tree, so in
 #  practice, it has no node to extract a subtree from.
 tnrs <- tnrs_match("Canis")
+
 \dontrun{ # This is a flag for package development. You are welcome to run the example.
 rotl::tol_subtree(tnrs$ott_id[1])
 #> Error: HTTP failure: 400
 #> [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
+
 } # end dontrun
+
 ids <- tnrs$ott_id[1]
 names(ids) <- tnrs$unique_name
 children <- get_ott_children(ott_ids = ids) # or
@@ -51,8 +54,10 @@ plot(tree_children, cex = 0.3)
 # An example with flowering plants:
 
 \dontrun{ # This is a flag for package development. You are welcome to run the example.
+
 oo <- get_ott_children(input = "magnoliophyta", ott_rank = "order")
 # Get the number of orders of flowering plants that we have
 sum(oo$Magnoliophyta$rank == "order")
+
 } # end dontrun
 }

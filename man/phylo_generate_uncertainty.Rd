@@ -55,13 +55,18 @@ If you want to change the size of sampled trees you do not need to run mrbayes a
 Just use sample_trees("mrbayes_trees_file_directory", size = new_size) and you will get a multiPhylo object with a new tree sample.
 }
 \examples{
-# Generate uncertainty over feline species SDM chronogram
-# Load data
+# Generate uncertainty over feline species SDM chronogram.
+# Load the data:
+
 data(felid_sdm)
-# by default, generates a sample of 100 trees with var = 0.1
+
+# By default, generates a sample of 100 trees with var = 0.1:
+
 unc <- phylo_generate_uncertainty(felid_sdm$phy)
 length(unc)
-# ltt plot:
+
+# Make an LTT plot:
+
 max_age <- max(sapply(unc, ape::branching.times))
 ape::ltt.plot(phy = unc[[1]], xlim = c(-max_age, 0), col = "#cce5ff50")
 for (i in 2:100) {

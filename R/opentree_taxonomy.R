@@ -1,23 +1,32 @@
 # functions (from phunding package) to deal with open tree Taxonomy rotl
 # functions, namely, rotl::taxonomy_taxon_info()
 
-#' Identifies, extracts and cleans children names from a [taxonomy_taxon_info()]
-#' output
+#' Identify, extract and clean taxonomic children names from a [taxonomy_taxon_info()]
+#' output.
 #'
 #' @param taxon_info An output of [rotl::taxonomy_taxon_info()].
-#' @param invalid A character vector of flags used by Open Tree of Life Taxonomy
-#'   to detect invalid taxon names.
-#' @return A list with valid children unique OTT names, ott_ids and ranks.
-#' @details Eliminates all taxa that will give problems when trying to retrieve
-#'   an induced subtree from Open Tree of Life.
-#' @examples
-#' # Some suppressed taxa within "Gleicheniales" family of ferns:
-#' tt <- rotl::taxonomy_taxon_info(3866048)
-#' rotl::taxonomy_taxon_info(5262766)
+#' @param invalid A character vector of "flags", i.e., characteristics that are
+#'    used by Open Tree of Life Taxonomy to detect invalid taxon names.
+#' @return A list with valid children unique OTT names, OTT ids and taxonomic ranks.
+#' @description `clean_taxon_info_children` eliminates all taxa that will give
+#'   problems when trying to retrieve an induced subtree from Open Tree of Life.
+# # ' @examples
+# # ' # Some suppressed taxa within "Gleicheniales" family of ferns:
+# # ' tt <- rotl::taxonomy_taxon_info(3866048)
+# # ' rotl::taxonomy_taxon_info(5262766)
 #' @export
-clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct", "uncultured", "major_rank_conflict", "incertae_sedis", "unplaced", "conflict", "environmental", "not_otu", "hidden", "hybrid")) {
-  # invalid <- c("BARREN", "EXTINCT", "UNCULTURED", "MAJOR_RANK_CONFLICT", "INCERTAE", "UNPLACED", "CONFLICT")
-  # names(taxon_info[[2]])
+clean_taxon_info_children <- function(taxon_info,
+                                      invalid = c("barren",
+                                                  "extinct",
+                                                  "uncultured",
+                                                  "major_rank_conflict",
+                                                  "incertae_sedis",
+                                                  "unplaced",
+                                                  "conflict",
+                                                  "environmental",
+                                                  "not_otu",
+                                                  "hidden",
+                                                  "hybrid")) {
   for (i in seq(taxon_info)) {
     # length(tax_info[[i]][[1]]$children)
     # sapply(tax_info[[i]][[1]]$children, length)
@@ -39,13 +48,15 @@ clean_taxon_info_children <- function(taxon_info, invalid = c("barren", "extinct
   return(taxon_info)
 }
 
-#' Checks input for [get_ott_clade()], [get_ott_children()], and
-#' [get_otol_synthetic_tree()] functions
+#' Check input for other functions
 #'
-#' @param input Optional. A character vector of names or a `datelifeQuery` object
+#' `check_ott_input is currently used in functions `[get_ott_clade()],
+#' [get_ott_children()], and [get_otol_synthetic_tree()].
+#'
+#' @param input Optional. A character vector of names or a `datelifeQuery` object.
 #' @param ott_ids If not NULL, it takes this argument and ignores input. A
 #'   numeric vector of ott ids obtained with [rotl::taxonomy_taxon_info()] or
-#'   [rotl::tnrs_match_names()] or [tnrs_match()]
+#'   [rotl::tnrs_match_names()] or [tnrs_match()].
 #' @inheritDotParams make_datelife_query
 #' @return A named numeric vector of valid Open Tree Taxonomy (OTT) ids.
 #' @export
@@ -112,16 +123,20 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...) {
   }
   return(ott_ids)
 }
-#' Get the ott id and name of all lineages from one or more input taxa
+#' Get the Open Tree of Life Taxonomic identifier (OTT id) and name of all lineages
+#'  from one or more input taxa.
 #' @inheritParams check_ott_input
 #' @return A list of named numeric vectors of ott ids from input and all the clades it belongs to.
 #' @examples
 #' \dontrun{ # This is a flag for package development. You are welcome to run the example.
+#'
 #' taxa <- c("Homo", "Bacillus anthracis", "Apis", "Salvia")
 #' lin <- get_ott_lineage(taxa)
 #' lin
+#'
 #' # Look up an unknown OTT id:
 #' get_ott_lineage(ott_id = 454749)
+#'
 #' } # end dontrun
 #' @export
 get_ott_lineage <- function(input = NULL, ott_ids = NULL) {
@@ -150,7 +165,8 @@ get_ott_lineage <- function(input = NULL, ott_ids = NULL) {
   # stats::setNames(ott_ids, names(input_ott_match))
   return(res)
 }
-#' Get the lineage of a set of taxa using rotl:taxonomy_taxon_info(include_lineage = TRUE)
+#' Get the lineage of a set of taxa.
+#' `.get_ott_lineage` uses [rotl::taxonomy_taxon_info()] with `include_lineage = TRUE`.
 #' @param input_ott_match An Output of check_ott_input function.
 #' @return A taxonomy_taxon_info object
 .get_ott_lineage <- function(input_ott_match) {
@@ -167,11 +183,11 @@ get_ott_lineage <- function(input = NULL, ott_ids = NULL) {
 }
 
 
-#' Get the ott id and name of one or several given taxonomic ranks from one or
-#' more input taxa
+#' Get the Open Tree of Life Taxonomic identifiers (OTT ids) and name of one or
+#' several given taxonomic ranks from one or more input taxa.
 #' @inheritParams check_ott_input
 #' @inheritParams get_ott_children
-#' @return A list of named numeric vectors with ott ids from input and all requested ranks.
+#' @return A list of named numeric vectors with OTT ids from input and all requested ranks.
 #' @export
 get_ott_clade <- function(input = NULL, ott_ids = NULL, ott_rank = "family") {
   # ott_ids= c('649007', '782239', '782231', '1053057', '372826', '766272', '36015', '914245', '873016', '684051')
@@ -247,23 +263,30 @@ get_ott_clade <- function(input = NULL, ott_ids = NULL, ott_rank = "family") {
 # }
 
 #'
-#' Extract valid children from given taxonomic name(s) or OpenTree Taxonomic ids (not from a taxonomy
-#' taxon info object).
+#' Extract valid children from given taxonomic name(s) or Open Tree of Life
+#' Taxonomic identifiers (OTT ids) from a taxonomic source.
+#'
 #' @inheritParams check_ott_input
-#' @param taxonomic_source A character vector with the desired taxonomic sources. Options are "ncbi", "gbif" or "irmng". Any other value will retrieve data from all taxonomic sources. The function defaults to "ncbi".
+#' @param taxonomic_source A character vector with the desired taxonomic sources.
+#'  Options are "ncbi", "gbif" or "irmng". Any other value will retrieve data
+#'  from all taxonomic sources. The function defaults to "ncbi".
 #' @return A named list containing valid taxonomic children of given taxonomic name(s).
 #' @details
-#' GBIF and other taxonomies contain deprecated taxa that are not marked as such in the Open Tree Taxonomy.
+#' GBIF and other taxonomies contain deprecated taxa that are not marked as such
+#'  in the Open Tree of Life Taxonomy.
 #' We are relying mainly in the NCBI taxonomy for now.
 #' @examples
 #' # genus Dictyophyllidites with ott id = 6003921 has only extinct children
 #' # in cases like this the same name will be returned
+#'
 #' tti <- rotl::taxonomy_taxon_info(6003921, include_children = TRUE)
 #' gvc <- get_valid_children(ott_ids = 6003921)
+#'
 #' # More examples:
+#'
 #' get_valid_children(ott_ids = 769681) # Psilotopsida
 #' get_valid_children(ott_ids = 56601) # Marchantiophyta
-# input= "Erythrospiza" # obsolete genus that is still on ott
+# input= "Erythrospiza" # obsolete genus that is still on OTT
 # input = c("Felis", "Homo", "Malvaceae")
 # input = "Telespiza"
 #' @export
@@ -332,11 +355,14 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
 #' # The dog genus is not monophyletic in the OpenTree synthetic tree, so in
 #' #  practice, it has no node to extract a subtree from.
 #' tnrs <- tnrs_match("Canis")
+#'
 #' \dontrun{ # This is a flag for package development. You are welcome to run the example.
 #' rotl::tol_subtree(tnrs$ott_id[1])
 #' #> Error: HTTP failure: 400
 #' #> [/v3/tree_of_life/subtree] Error: node_id was not found (broken taxon).
+#'
 #' } # end dontrun
+#'
 #' ids <- tnrs$ott_id[1]
 #' names(ids) <- tnrs$unique_name
 #' children <- get_ott_children(ott_ids = ids) # or
@@ -350,9 +376,11 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
 #' # An example with flowering plants:
 #'
 #' \dontrun{ # This is a flag for package development. You are welcome to run the example.
+#'
 #' oo <- get_ott_children(input = "magnoliophyta", ott_rank = "order")
 #' # Get the number of orders of flowering plants that we have
 #' sum(oo$Magnoliophyta$rank == "order")
+#'
 #' } # end dontrun
 #' @export
 # children <- get_ott_children(input = "Fringillidae")
