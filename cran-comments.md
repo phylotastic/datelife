@@ -1,19 +1,7 @@
-## Resubmission
-This is a resubmission where I have:
+## New submission
+This is a new submission where I have:
 
-* Reduced the length of the title to less than 65 characters.
-
-* Added references describing the methods in the package in the description field of the DESCRIPTION file
-
-* Added a \value to the following files .Rd files with exported methods and explained the function's results in the documentation:
-      datelife_search.Rd: \value
-      get_taxon_summary.Rd: \value
-      get_valid_children.Rd: \value
-      is_datelife_result_empty.Rd: \value
-      summarize_datelife_result.Rd: \value
-      summary_matrix_to_phylo_all.Rd: \value
-
-* Have ensured that functions/examples/vignettes/tests do not write by default in the user's home filespace (including the package directory and getwd()). We use tempdir() instead.
+* Fixed examples with functions that use Internet resources that were not failing gracefully.
 
 ### Test environments:
 
