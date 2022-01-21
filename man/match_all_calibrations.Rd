@@ -2,33 +2,33 @@
 % Please edit documentation in R/calibrations_match.R
 \name{match_all_calibrations}
 \alias{match_all_calibrations}
-\title{Match calibrations to nodes of a tree}
+\title{Match calibrations to nodes of a given tree}
 \usage{
 match_all_calibrations(phy, calibrations)
 }
 \arguments{
 \item{phy}{A \code{phylo} object.}
 
-\item{calibrations}{An object of class \code{datelifeCalibrations}, that is,
+\item{calibrations}{An object of class \code{data.frame} and \code{datelifeCalibrations}, that is,
 an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 }
 \value{
-A list with:
+A list of two elements:
 \describe{
-\item{phy}{A phylo object with additional data of calibration distributions per node.}
-\item{matched_calibrations}{A data frame of summarized calibrations.}
-\item{present_calibrations}{A data frame of summarized calibrations.}
+\item{phy}{A \code{phylo} object with nodes renamed with \code{\link[=tree_add_nodelabels]{tree_add_nodelabels()}}.}
+\item{matched_calibrations}{A \code{matchedCalibrations} object, which is a \code{datelifeCalibrations}
+object with two extra columns storing results from mrca search with
+\code{\link[phytools:findMRCA]{phytools::findMRCA()}}: \verb{$mrca_node_number} and \verb{$mrca_node_name}.}
 }
-TODO: Explain the difference between present_calibrations and matched_calibrations
 }
 \description{
-\code{match_all_calibrations} summarizes nodes in tree that match
-to any pair of given taxon names in a data frame of secondary calibrations.
+\code{match_all_calibrations} searches a given tree for the most recent common
+ancestor (mrca) of all taxon name pairs in a \code{datelifeCalibration}. It uses \code{\link[phytools:findMRCA]{phytools::findMRCA()}}.
 }
 \details{
 The function takes pairs of taxon names in a secondary calibrations data frame,
 and looks for them in the vector of tip labels of the tree. If both are present,
-then it gets the node that represents the Most Recent
-Common Ancestor for that pair of taxa in the tree.
-Nodes of \code{phy} can be named or not.
+then it gets the node that represents the most recent
+common ancestor (mrca) for that pair of taxa in the tree.
+Nodes of input \code{phy} can be named or not.
 }

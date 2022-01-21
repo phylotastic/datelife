@@ -2,6 +2,7 @@
 
 S3method(extract_ott_ids,default)
 S3method(summary,datelifeResult)
+S3method(summary,matchedCalibrations)
 S3method(tnrs_match,default)
 S3method(tnrs_match,phylo)
 export(build_grove_list)

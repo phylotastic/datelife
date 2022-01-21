@@ -9,9 +9,9 @@ is_datelife_result_empty(datelife_result, use_tnrs = FALSE)
 \arguments{
 \item{datelife_result}{A \code{datelifeResult} object, usually an output of \code{\link[=get_datelife_result]{get_datelife_result()}}.}
 
-\item{use_tnrs}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+\item{use_tnrs}{Whether to use Open Tree of Life's Taxonomic Name Resolution Service (TNRS)
 to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
-taxonomic name variations.}
+taxonomic name variations with \code{\link[=tnrs_match]{tnrs_match()}}, a wrapper of \code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}}.}
 }
 \value{
 Boolean. If \code{TRUE}, no chronograms were found for the given taxon name(s).

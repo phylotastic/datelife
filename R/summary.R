@@ -1,10 +1,9 @@
-# TODO: summary method for a datelifeResult object
-#' Summarize a datelifeResult object
+#' Summarize a `datelifeResult` object.
 #' @param object An object of class `datelifeResult`, usually an output of [get_datelife_result()].
 #' @inheritParams get_taxon_summary
 #' @param na_rm Default to `TRUE`, whether to include partial matches or not.
 #' @param ... Further arguments passed to or from other methods.
-#' @return A named list of 11 elements:
+#' @return A named `list` of 11 elements:
 #' \describe{
 #' 	 \item{"citations"}{A character vector of references where chronograms with
 #' 	 				some or all of the target taxa are published (source chronograms).}
@@ -39,7 +38,6 @@
 #' 	 \item{"data_frame"}{A 4 column `data.frame` with data on target taxa: mrca, number of
 #' 	 				taxa, citations of source chronograms and newick string.}
 #' }
-#'
 #' @export
 summary.datelifeResult <- function(object,
 	                                 datelife_query,

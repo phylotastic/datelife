@@ -2,8 +2,7 @@
 % Please edit documentation in R/datelife_query.R
 \name{make_datelife_query}
 \alias{make_datelife_query}
-\title{Go from taxon names from a character vector, a phylo object or a newick character
-string to a \code{datelifeQuery} object}
+\title{Go from taxon names to a \code{datelifeQuery} object}
 \usage{
 make_datelife_query(
   input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
@@ -19,9 +18,9 @@ make_datelife_query(
 object, OR as a newick character string.}
 }}
 
-\item{use_tnrs}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+\item{use_tnrs}{Whether to use Open Tree of Life's Taxonomic Name Resolution Service (TNRS)
 to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
-taxonomic name variations.}
+taxonomic name variations with \code{\link[=tnrs_match]{tnrs_match()}}, a wrapper of \code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}}.}
 
 \item{get_spp_from_taxon}{Whether to search ages for all species belonging to a
 given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
@@ -37,8 +36,7 @@ A \code{datelifeQuery} object, which is a list of three elements:
 }
 }
 \description{
-Go from taxon names from a character vector, a phylo object or a newick character
-string to a \code{datelifeQuery} object
+Go from taxon names to a \code{datelifeQuery} object
 }
 \details{
 It processes \code{phylo} objects and newick character string inputs

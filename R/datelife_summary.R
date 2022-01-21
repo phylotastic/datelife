@@ -1,4 +1,4 @@
-#' Get a taxon summary of a `datelifeResult` object
+#' Get a taxon summary of a `datelifeResult` object.
 #'
 # #' To be renamed `summary_taxon`.
 #'
@@ -7,9 +7,15 @@
 #' @return A `datelifeTaxonSummary` object, which is a list of 4 elements:
 #' \describe{
 #'    \item{$matrix}{Data as a presence/absence matrix of taxon names across chronograms.}
-#'    \item{$summary}{A `data.frame` with taxon names as [row.names()] and two columns, one with the number of chronograms that contain a taxon name and the other one with the total number of chronograms that have at least 2 taxon names.}
-#'    \item{$summary2}{A `data.frame` with chronogram citations as [row.names()] and two columns, one with the number of taxon names found in each chronogram and the other one with the total number of taxon names.}
-#'    \item{$absent_taxa}{A character vector of taxon names that are not found in the chronogram database.}
+#'    \item{$summary}{A `data.frame` with taxon names as [row.names()] and two
+#'     columns, one with the number of chronograms that contain a taxon name and
+#'     the other one with the total number of chronograms that have at least 2
+#'     taxon names.}
+#'    \item{$summary2}{A `data.frame` with chronogram citations as [row.names()]
+#'     and two columns, one with the number of taxon names found in each chronogram
+#'     and the other one with the total number of taxon names.}
+#'    \item{$absent_taxa}{A character vector of taxon names that are not found
+#'     in the chronogram database.}
 #'}
 #' @export
 get_taxon_summary <- function(datelife_result = NULL,

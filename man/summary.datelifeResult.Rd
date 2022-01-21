@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.R
 \name{summary.datelifeResult}
 \alias{summary.datelifeResult}
-\title{Summarize a datelifeResult object}
+\title{Summarize a \code{datelifeResult} object.}
 \usage{
 \method{summary}{datelifeResult}(object, datelife_query, na_rm = TRUE, ...)
 }
@@ -16,7 +16,7 @@
 \item{...}{Further arguments passed to or from other methods.}
 }
 \value{
-A named list of 11 elements:
+A named \code{list} of 11 elements:
 \describe{
 \item{"citations"}{A character vector of references where chronograms with
 some or all of the target taxa are published (source chronograms).}
@@ -53,5 +53,5 @@ taxa, citations of source chronograms and newick string.}
 }
 }
 \description{
-Summarize a datelifeResult object
+Summarize a \code{datelifeResult} object.
 }

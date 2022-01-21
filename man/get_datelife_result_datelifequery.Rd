@@ -36,9 +36,9 @@ Defaults to \code{FALSE}.}
 \item{A phylogenetic tree with taxon names as tip labels}{As a \code{phylo} or \code{multiPhylo}
 object, OR as a newick character string.}
 }}
-    \item{\code{use_tnrs}}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+    \item{\code{use_tnrs}}{Whether to use Open Tree of Life's Taxonomic Name Resolution Service (TNRS)
 to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
-taxonomic name variations.}
+taxonomic name variations with \code{\link[=tnrs_match]{tnrs_match()}}, a wrapper of \code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}}.}
     \item{\code{get_spp_from_taxon}}{Whether to search ages for all species belonging to a
 given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
 If input is a newick string with some clades it will be converted to a \code{phylo}

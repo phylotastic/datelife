@@ -1,7 +1,6 @@
-#' Go from taxon names from a character vector, a phylo object or a newick character
-#' string to a `datelifeQuery` object
+#' Go from taxon names to a `datelifeQuery` object
 #'
-# #' @description
+## #' @description
 #'
 #' @param input Taxon names as one of the following:
 #' \describe{
@@ -9,9 +8,9 @@
 #' 	 \item{A phylogenetic tree with taxon names as tip labels}{As a `phylo` or `multiPhylo`
 #' 	 			object, OR as a newick character string.}
 #' }
-#' @param use_tnrs Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+#' @param use_tnrs Whether to use Open Tree of Life's Taxonomic Name Resolution Service (TNRS)
 #'   to process input taxon names. Default to `TRUE`, it corrects misspellings and
-#'   taxonomic name variations.
+#'   taxonomic name variations with [tnrs_match()], a wrapper of [rotl::tnrs_match_names()].
 # #' @param use_tnrs Boolean; default to `FALSE`. If `TRUE`, use OpenTree's services
 # #'   to resolve names. This can dramatically improve the chance of matches, but also
 # #'   take much longer.
@@ -170,7 +169,7 @@ input_process <- function(input) {
     phy_out <- ape::collapse.singles(ape::read.tree(text = gsub(" ", "_", input[1])))
     phy_out$ott_ids <- ott_ids
     class(phy_out) <- input_class
-    message("'input' is a phylogeny and it is correcly formatted.")
+    message("'input' is a phylogeny and it is correctly formatted.")
     # ape::read.tree creates NaN edge lengths for tree without branch lengths
     # clean it up:
     if (!is.null(phy_out$edge.length)) {
@@ -187,17 +186,19 @@ input_process <- function(input) {
   return(phy_out)
 }
 
-#' Check if input is a \code{datelifeQuery} object
+#' Check if input is a `datelifeQuery` object
 #'
-#' @description \code{is_datelife_query} checks (1) if a given object is a list that contains the
-#' elements of a \code{datelifeQuery} object: \code{cleaned_names}: A character
-#' vector of taxon names, and \code{phy}: Either NA or a phylo object; and (2)
-#' if the object is of class \code{datelifeQuery}.
-#'
-#' @param input Any object that will be checked to have the format of a 'datelifeQuery' class.
-#' @return boolean
-#' @details If the object has the correct format but is not a \code{datelifeQuery}
-#' object, it will not be assigned the correct class.
+#' @description `is_datelife_query` checks for two things to be `TRUE` or `FALSE`.
+#' First, that `input` is of class {datelifeQuery}.
+#' Second, that `input` is a list that contains at least two elements of a `datelifeQuery` object:
+#' \describe{
+#' 	 \item{cleaned_names}{A character vector of taxon names.}
+#' 	 \item{phy}{Either NA or a `phylo` object.}
+#' }
+#' @param input An object to be checked as an object with essential properties of a 'datelifeQuery' object.
+#' @return Is determined by the second condition.
+#' @details If the object has the correct format but it has a class different than
+#'  `datelifeQuery`, the class is not modified.
 #' @export
 is_datelife_query <- function(input) {
   if (is.list(input) & "phy" %in% names(input) & "cleaned_names" %in% names(input)) {
@@ -213,7 +214,6 @@ is_datelife_query <- function(input) {
     }
     return(TRUE)
   } else {
-    isdatelifequery <- FALSE
     message("'input' is not a 'datelifeQuery' object.")
     return(FALSE)
   }

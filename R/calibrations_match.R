@@ -1,24 +1,24 @@
-#' Match calibrations to nodes of a tree
+#' Match calibrations to nodes of a given tree
 #'
-#' @description \code{match_all_calibrations} summarizes nodes in tree that match
-#' to any pair of given taxon names in a data frame of secondary calibrations.
+#' @description \code{match_all_calibrations} searches a given tree for the most recent common
+#'   ancestor (mrca) of all taxon name pairs in a `datelifeCalibration`. It uses [phytools::findMRCA()].
 #'
 #' @inheritParams phylo_check
 # #' or a vector of taxon names (see details).
-#' @param calibrations An object of class \code{datelifeCalibrations}, that is,
+#' @param calibrations An object of class `data.frame` and `datelifeCalibrations`, that is,
 #' an output of [get_all_calibrations()].
-#' @return A list with:
+#' @return A list of two elements:
 #' \describe{
-#' 	\item{phy}{A phylo object with additional data of calibration distributions per node.}
-#' 	\item{matched_calibrations}{A data frame of summarized calibrations.}
-#' 	\item{present_calibrations}{A data frame of summarized calibrations.}
+#' 	\item{phy}{A `phylo` object with nodes renamed with [tree_add_nodelabels()].}
+#' 	\item{matched_calibrations}{A `matchedCalibrations` object, which is a `datelifeCalibrations`
+#'    object with two extra columns storing results from mrca search with
+#'    [phytools::findMRCA()]: `$mrca_node_number` and `$mrca_node_name`.}
 #' 	}
-#' TODO: Explain the difference between present_calibrations and matched_calibrations
 #' @details The function takes pairs of taxon names in a secondary calibrations data frame,
 #' and looks for them in the vector of tip labels of the tree. If both are present,
-#' then it gets the node that represents the Most Recent
-#' Common Ancestor for that pair of taxa in the tree.
-#' Nodes of `phy` can be named or not.
+#' then it gets the node that represents the most recent
+#' common ancestor (mrca) for that pair of taxa in the tree.
+#' Nodes of input `phy` can be named or not.
 #' @export
 match_all_calibrations <- function(phy, calibrations) {
   # Should we implement this??? -> If input is a phylo object, it is used as backbone. If it is a character vector
@@ -38,34 +38,50 @@ match_all_calibrations <- function(phy, calibrations) {
   phy$tip.label <- gsub(" ", "_", phy$tip.label) # underscores vs spaces: the battle will never end.
   calibrations$taxonA <- gsub(" ", "_", calibrations$taxonA)
   calibrations$taxonB <- gsub(" ", "_", calibrations$taxonB)
-  calibrations <- calibrations[which(calibrations$taxonA %in% phy$tip.label), ]
-  calibrations <- calibrations[which(calibrations$taxonB %in% phy$tip.label), ]
-  if (nrow(calibrations) == 0) {
-    warning("Taxon name pairs in 'calibrations' do not match 'phy' tip labels.")
+  # identify taxon name pairs that are in phy:
+  in_phy <- calibrations$taxonA %in% phy$tip.label & calibrations$taxonB %in% phy$tip.label
+  if (all(!in_phy)) {
+    warning("Taxon name pairs in 'calibrations' do not match any tip labels in 'phy'.")
     return(NA)
   }
-  age_column <- grep("age", tolower(names(calibrations))) # get columns with "age" in their names
-  target_tree_nodes <- sapply(
-    seq(nrow(calibrations)),
+  mrca_nodes <- sapply(
+    seq(in_phy),
     function(i) {
-      phytools::findMRCA(
-        tree = phy, type = "node",
-        tips = as.character(calibrations[i, c("taxonA", "taxonB")])
-      )
+      if (in_phy[i]) {
+        x <- phytools::findMRCA(
+                    tips = as.character(calibrations[i, c("taxonA", "taxonB")]),
+                    tree = phy,
+                    type = "node"
+                  )
+        # phytools returns node numbers starting at Ntip(phy) + 1
+        # x - ape::Ntip(phy)
+     } else { NA }
     }
   )
-  target_tree_nodes <- target_tree_nodes - ape::Ntip(phy)
-  all_nodes <- sort(unique(target_tree_nodes))
-  # get the node age distribution (ages taken from the first column with "age" in its name):
-  all_ages <- lapply(all_nodes, function(i) calibrations[target_tree_nodes == i, age_column[1]])
-  # any(sapply(all_ages, is.null)) # if FALSE, all nodes have at least one calibration.
-  rowsies <- !duplicated(target_tree_nodes)
-  target_tree_nodes2 <- target_tree_nodes[rowsies]
-  calibrations2 <- calibrations[rowsies, ]
-  calibrations2 <- calibrations2[order(target_tree_nodes2), ]
-  calibrations2$MaxAge <- sapply(all_ages, max)
-  calibrations2$MinAge <- sapply(all_ages, min)
-  calibrations2$NodeNames <- paste0("n", all_nodes)
+
+# attempt to simplify the code to get mrca_nodes:
+# tryCatch(expr = {
+#   x <- phytools::findMRCA(tips = as.character(calibrations[i, c("taxonA", "taxonB")]),
+#                      tree = phy,
+#                      type = "node")
+#   # phytools returns node numbers starting at Ntip(phy) + 1
+#   x - ape::Ntip(phy)
+# }, error = NA)
+
+# taxon pairs not in 'phy':
+# calibrations[which(is.na(mrca_nodes)), -6]
+
+  calibrations$mrca_node_number <- mrca_nodes
+  calibrations$mrca_node_name <- paste0("n", mrca_nodes)
+  calibrations$mrca_node_name <- gsub("nNA", "NA", calibrations$mrca_node_name)
+
+  # Order the data.frame by mrca_node_number, minage and maxage
+  calibrations <- calibrations[order(mrca_nodes, calibrations$MinAge, calibrations$MaxAge), ]
+
+  # Generate node names for 'phy'
+  # All nodes need to be named so that make_bladj_tree runs properly:
+  all_nodes <- sort(unique(mrca_nodes))
+
   if (all(all_nodes < ape::Ntip(phy))) {
     all_nodes_numbers <- all_nodes + ape::Ntip(phy)
     node_index <- "consecutive"
@@ -73,20 +89,63 @@ match_all_calibrations <- function(phy, calibrations) {
     all_nodes_numbers <- all_nodes
     node_index <- "node_number"
   }
-  # so we can rename all nodes of interest to match our labels, make sure node.label is null:
+  # now we can rename all nodes of interest to match our node labels
+  # first make sure node.label is null
   phy$node.label <- NULL
-  # all nodes need to be named so that make_bladj_tree runs properly:
   phy <- tree_add_nodelabels(
     tree = phy,
     node_index = node_index
   )
-  phy$calibration_distribution <- stats::setNames(
-    all_ages,
-    all_nodes_numbers
-  )
   return(list(
     phy = phy,
-    matched_calibrations = calibrations2,
-    present_calibrations = calibrations
+    # summarized_calibrations = calibrations3,
+    # matched_calibrations = calibrations2,
+    matched_calibrations = calibrations
   ))
 }
+#' Summarize a `matchedCalibrations` object
+#' summary.datelifeCalibrations gets the node age distribution from a `matchedCalibrations` object.
+#' @param object A `matchedCalibrations` object, usually an output of [match_all_calibrations()].
+#' @param ... Further arguments passed to or from other methods.
+#' @export
+summary.matchedCalibrations <- function(object, ...) {
+  all_nodes <- sort(unique(object$mrca_node_number))
+
+  # Subset the data.frame:
+  not_in_phy_rows <- which(is.na(object$mrca_node_number))
+  if (length(not_in_phy_rows) > 0) {
+    not_in_phy <- object[not_in_phy_rows, ]
+    in_phy <- object[-not_in_phy_rows, ]
+  } else {
+    message("All taxon name pairs are in 'phy'")
+    in_phy <- object
+  }
+  in_phy$mrca_node_name <- as.factor(in_phy$mrca_node_name)
+  # is MaxAge and MinAge the same value?
+  if (all(in_phy$MaxAge == in_phy$MinAge)) {
+    message("'MaxAge' and 'MinAge' columns in input 'matchedCalibrations' have the same values.")
+  }
+  return(list(not_in_phy = not_in_phy, in_phy = in_phy))
+
+
+}
+
+
+# # Get the node age distribution:
+# # So we take data from the first column name matching the word "age":
+# age_column <- grep("age", tolower(names(object))) # get columns with "age" in their names
+# # create a list with node age distributions:
+# ages_distribution <- lapply(all_nodes, function(i) object[all_nodes == i, age_column[1]])
+#
+# # get the references for ages in ages_distribution:
+# ages_references <- lapply(all_nodes, function(i) calibrations[all_nodes == i, "reference"])
+#
+#
+# # any(sapply(ages_distribution, is.null)) # if FALSE, all nodes have at least one calibration.
+# rowsies <- !duplicated(mrca_nodes)
+# mrca_nodes2 <- mrca_nodes[rowsies]
+# calibrations2 <- calibrations[rowsies, ]
+# calibrations2 <- calibrations2[order(mrca_nodes2), ]
+# calibrations2$MaxAge <- sapply(ages_distribution, max)
+# calibrations2$MinAge <- sapply(ages_distribution, min)
+# calibrations2$NodeNames <- paste0("n", all_nodes)

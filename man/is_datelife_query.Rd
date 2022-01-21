@@ -7,18 +7,21 @@
 is_datelife_query(input)
 }
 \arguments{
-\item{input}{Any object that will be checked to have the format of a 'datelifeQuery' class.}
+\item{input}{An object to be checked as an object with essential properties of a 'datelifeQuery' object.}
 }
 \value{
-boolean
+Is determined by the second condition.
 }
 \description{
-\code{is_datelife_query} checks (1) if a given object is a list that contains the
-elements of a \code{datelifeQuery} object: \code{cleaned_names}: A character
-vector of taxon names, and \code{phy}: Either NA or a phylo object; and (2)
-if the object is of class \code{datelifeQuery}.
+\code{is_datelife_query} checks for two things to be \code{TRUE} or \code{FALSE}.
+First, that \code{input} is of class {datelifeQuery}.
+Second, that \code{input} is a list that contains at least two elements of a \code{datelifeQuery} object:
+\describe{
+\item{cleaned_names}{A character vector of taxon names.}
+\item{phy}{Either NA or a \code{phylo} object.}
+}
 }
 \details{
-If the object has the correct format but is not a \code{datelifeQuery}
-object, it will not be assigned the correct class.
+If the object has the correct format but it has a class different than
+\code{datelifeQuery}, the class is not modified.
 }

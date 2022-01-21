@@ -29,9 +29,9 @@ starting or concatenated with \code{\link[=c]{c()}}.}
 \item{A \code{datelifeQuery} object}{An output from \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 }}
 
-\item{use_tnrs}{Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+\item{use_tnrs}{Whether to use Open Tree of Life's Taxonomic Name Resolution Service (TNRS)
 to process input taxon names. Default to \code{TRUE}, it corrects misspellings and
-taxonomic name variations.}
+taxonomic name variations with \code{\link[=tnrs_match]{tnrs_match()}}, a wrapper of \code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}}.}
 
 \item{get_spp_from_taxon}{Whether to search ages for all species belonging to a
 given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.

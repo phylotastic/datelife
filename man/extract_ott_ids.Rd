@@ -26,6 +26,6 @@ Get OTT ids from a character vector containing species names and OTT ids.
 canis <- rotl::tnrs_match_names("canis")
 canis_taxonomy <- rotl::taxonomy_subtree(canis$ott_id)
 my_ott_ids <- extract_ott_ids(x = canis_taxonomy$tip_label)
-# get the problematic elements from input
+# Get the problematic elements from input
 canis_taxonomy$tip_label[attr(my_ott_ids, "na.action")]
 }
