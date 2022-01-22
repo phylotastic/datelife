@@ -21,6 +21,7 @@ if all input taxon names are found in the given tree.}
 \item{in_phy}{A \code{data.frame} subset of input \code{matchedCalibrations} object
 containing all taxon name pairs that were present in the given tree.}
 }
+}
 \description{
 Summarize a \code{matchedCalibrations} object
 summary.datelifeCalibrations gets the node age distribution from a \code{matchedCalibrations} object.

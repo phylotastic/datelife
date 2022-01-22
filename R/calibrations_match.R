@@ -112,10 +112,11 @@ match_all_calibrations <- function(phy, calibrations) {
 #' @return A `summaryMatchedCalibrations` object, which is a list of two `matchedCalibrations` objects:
 #' \describe{
 #' 	\item{not_in_phy}{A `data.frame` subset of input `matchedCalibrations` object
-#' 	 containing taxon name pairs that were not present in the given tree. `NULL`
-#' 	 if all input taxon names are found in the given tree.}
+#' 	  containing taxon name pairs that were not present in the given tree. `NULL`
+#' 	  if all input taxon names are found in the given tree.}
 #' 	\item{in_phy}{A `data.frame` subset of input `matchedCalibrations` object
-#' 	 containing all taxon name pairs that were present in the given tree.}
+#' 	  containing all taxon name pairs that were present in the given tree.}
+#' }
 #' @details Columns `in_phy$mrca_node_name` and `in_phy$reference` are factors.
 #' @export
 summary.matchedCalibrations <- function(object, ...) {
