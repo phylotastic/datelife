@@ -107,8 +107,16 @@ match_all_calibrations <- function(phy, calibrations) {
 }
 #' Summarize a `matchedCalibrations` object
 #' summary.datelifeCalibrations gets the node age distribution from a `matchedCalibrations` object.
-#' @param object A `matchedCalibrations` object, usually an output of [match_all_calibrations()].
+#' @param object A `matchedCalibrations` object, usually an element of the output of [match_all_calibrations()].
 #' @param ... Further arguments passed to or from other methods.
+#' @return A `summaryMatchedCalibrations` object, which is a list of two `matchedCalibrations` objects:
+#' \describe{
+#' 	\item{not_in_phy}{A `data.frame` subset of input `matchedCalibrations` object
+#' 	 containing taxon name pairs that were not present in the given tree. `NULL`
+#' 	 if all input taxon names are found in the given tree.}
+#' 	\item{in_phy}{A `data.frame` subset of input `matchedCalibrations` object
+#' 	 containing all taxon name pairs that were present in the given tree.}
+#' @details Columns `in_phy$mrca_node_name` and `in_phy$reference` are factors.
 #' @export
 summary.matchedCalibrations <- function(object, ...) {
   all_nodes <- sort(unique(object$mrca_node_number))
@@ -119,17 +127,18 @@ summary.matchedCalibrations <- function(object, ...) {
     not_in_phy <- object[not_in_phy_rows, ]
     in_phy <- object[-not_in_phy_rows, ]
   } else {
-    message("All taxon name pairs are in 'phy'")
+    message("All taxon name pairs are in 'phy'.")
+    not_in_phy <- NULL
     in_phy <- object
   }
   in_phy$mrca_node_name <- as.factor(in_phy$mrca_node_name)
+  in_phy$reference <- as.factor(in_phy$reference)
   # is MaxAge and MinAge the same value?
   if (all(in_phy$MaxAge == in_phy$MinAge)) {
     message("'MaxAge' and 'MinAge' columns in input 'matchedCalibrations' have the same values.")
   }
-  return(list(not_in_phy = not_in_phy, in_phy = in_phy))
-
-
+  return(structure(list(not_in_phy = not_in_phy, in_phy = in_phy),
+                   class = c("list", "summaryMatchedCalibrations")))
 }
 
 

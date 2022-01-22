@@ -8,11 +8,23 @@ summary.datelifeCalibrations gets the node age distribution from a \code{matched
 \method{summary}{matchedCalibrations}(object, ...)
 }
 \arguments{
-\item{object}{A \code{matchedCalibrations} object, usually an output of \code{\link[=match_all_calibrations]{match_all_calibrations()}}.}
+\item{object}{A \code{matchedCalibrations} object, usually an element of the output of \code{\link[=match_all_calibrations]{match_all_calibrations()}}.}
 
 \item{...}{Further arguments passed to or from other methods.}
+}
+\value{
+A \code{summaryMatchedCalibrations} object, which is a list of two \code{matchedCalibrations} objects:
+\describe{
+\item{not_in_phy}{A \code{data.frame} subset of input \code{matchedCalibrations} object
+containing taxon name pairs that were not present in the given tree. \code{NULL}
+if all input taxon names are found in the given tree.}
+\item{in_phy}{A \code{data.frame} subset of input \code{matchedCalibrations} object
+containing all taxon name pairs that were present in the given tree.}
 }
 \description{
 Summarize a \code{matchedCalibrations} object
 summary.datelifeCalibrations gets the node age distribution from a \code{matchedCalibrations} object.
+}
+\details{
+Columns \code{in_phy$mrca_node_name} and \code{in_phy$reference} are factors.
 }
