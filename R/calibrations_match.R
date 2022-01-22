@@ -96,12 +96,14 @@ match_all_calibrations <- function(phy, calibrations) {
     tree = phy,
     node_index = node_index
   )
-  return(structure(list(
-    phy = phy,
-    # summarized_calibrations = calibrations3,
-    # matched_calibrations = calibrations2,
-    matched_calibrations = calibrations
-  ), class = c("data.frame", "matchedCalibrations")))
+  #
+  return(list(phy = phy,
+              matched_calibrations = structure(calibrations,
+                                               class = c("data.frame",
+                                                         "matchedCalibrations")
+                                     )
+        )
+  )
 }
 #' Summarize a `matchedCalibrations` object
 #' summary.datelifeCalibrations gets the node age distribution from a `matchedCalibrations` object.
