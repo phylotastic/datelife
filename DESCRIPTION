@@ -57,7 +57,8 @@ Imports:
     utils,
     httr,
     plyr,
-    phylocomr
+    phylocomr,
+    BiocManager
 Suggests:
     testthat,
     knitr,
