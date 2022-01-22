@@ -1,20 +1,20 @@
-#' Extract secondary calibrations from a `phylo` or `multiPhylo`
-#' object with branch lengths proportional to time using congruification.
+#' Use congruification to extract secondary calibrations from a `phylo` or `multiPhylo`
+#' object with branch lengths proportional to time.
 #'
 #' @description This function extracts node ages for each taxon
-#'   pair given as `input`. It applies the congruification method described in Eastman et al.
-#'   (2013) \doi{10.1111/2041-210X.12051},
-#'   to create a matrix of suitable secondary calibrations for each taxon pair.
-#'   Congruification is implemented with the function [geiger::congruify.phylo()].
+#'   pair given in `input$tip.labels`. It applies the congruification method
+#'   described in Eastman et al. (2013) \doi{10.1111/2041-210X.12051},
+#'   implemented with the function [geiger::congruify.phylo()], to create a
+#'   `data.frame` of taxon pair node ages that can be used as secondary calibrations.
 #' @param input A `phylo` or `multiPhylo` object with branch lengths
 #' proportional to time.
 #' @param each Boolean, default to `FALSE`: all calibrations are returned in
 #' the same `data.frame`. If `TRUE`, calibrations from each chronogram are returned
 #' in separate data frames.
-#' @return An object of class `datelifeCalibrations`, i.e., a `data.frame` (if
-#'   `each = FALSE`) or a list of `data.frames` (if `each = TRUE`) of secondary
-#'   calibrations, for each pair of taxon names in `input`. The attribute
-#'   `chronograms` stores the `input` data from which the calibrations were extracted.
+#' @return An object of class `congruifiedCalibrations`, which is a `data.frame` (if
+#'   `each = FALSE`) or a list of `data.frames` (if `each = TRUE`) of node
+#'   ages for each pair of taxon names. You can access the `input` data from which
+#'   the calibrations were extracted with attributes(output)$chronograms.
 #' @references
 #' Eastman et al. (2013) "Congruification: support for time scaling large
 #' phylogenetic trees". Methods in Ecology and Evolution, 4(7), 688-691,
@@ -50,7 +50,7 @@ extract_calibrations_phylo <- function(input = NULL,
     chronograms <- list(input)
   }
   if (is.null(chronograms)) {
-    stop("'input' must be a 'phylo' or 'multiPhylo' object with branch length sproportional to time.")
+    stop("'input' must be a 'phylo' or 'multiPhylo' object with branch lengths proportional to time.")
   }
   if (each) {
     calibrations <- vector(mode = "list")
@@ -89,7 +89,7 @@ extract_calibrations_phylo <- function(input = NULL,
   }
   attr(calibrations, "chronograms") <- chronograms
   # TODO check that class data frame is also preserved. Might wanna do:
-  class(calibrations) <- c(class(calibrations), "calibrations")
+  class(calibrations) <- c(class(calibrations), "congruifiedCalibrations")
   # instead of using structure()
   return(calibrations)
 }
@@ -119,7 +119,7 @@ extract_calibrations_dateliferesult <- function(input = NULL,
     each = each
   )
   attr(res, "datelife_result") <- input
-  class(res) <- c("data.frame", "datelifeCalibrations")
+  class(res) <- c("data.frame", "congruifiedCalibrations")
   return(res)
 }
 
@@ -155,7 +155,7 @@ get_calibrations_vector <- function(input = NULL,
     each = each
   )
   attr(res, "datelife_result") <- attributes(phyloall)$datelife_result
-  class(res) <- c("data.frame", "datelifeCalibrations")
+  class(res) <- c("data.frame", "congruifiedCalibrations")
   return(res)
 }
 #' Search and extract available secondary calibrations for taxon names in a given
@@ -180,7 +180,7 @@ get_calibrations_datelifequery <- function(datelife_query = NULL,
     each = each
   )
   attr(res, "datelife_result") <- attributes(phyloall)$datelife_result
-  class(res) <- c("data.frame", "datelifeCalibrations")
+  class(res) <- c("data.frame", "congruifiedCalibrations")
   return(extract_calibrations_phylo(
     input = phyloall,
     each = each

@@ -5,8 +5,8 @@
 #'
 #' @inheritParams phylo_check
 # #' or a vector of taxon names (see details).
-#' @param calibrations An object of class `data.frame` and `datelifeCalibrations`, that is,
-#' an output of [get_all_calibrations()].
+#' @param calibrations A `congruifiedCalibrations` object, an output of
+#'   [get_all_calibrations()].
 #' @return A list of two elements:
 #' \describe{
 #' 	\item{phy}{A `phylo` object with nodes renamed with [tree_add_nodelabels()].}
@@ -106,7 +106,7 @@ match_all_calibrations <- function(phy, calibrations) {
   )
 }
 #' Summarize a `matchedCalibrations` object
-#' summary.datelifeCalibrations gets the node age distribution from a `matchedCalibrations` object.
+#' `summary.matchedCalibrations` gets the node age distribution from a `matchedCalibrations` object.
 #' @param object A `matchedCalibrations` object, usually an element of the output of [match_all_calibrations()].
 #' @param ... Further arguments passed to or from other methods.
 #' @return A `summaryMatchedCalibrations` object, which is a list of two `matchedCalibrations` objects:

@@ -15,10 +15,10 @@ the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram ar
 in separate data frames.}
 }
 \value{
-An object of class \code{datelifeCalibrations}, i.e., a \code{data.frame} (if
-\code{each = FALSE}) or a list of \code{data.frames} (if \code{each = TRUE}) of secondary
-calibrations, for each pair of taxon names in \code{input}. The attribute
-\code{chronograms} stores the \code{input} data from which the calibrations were extracted.
+An object of class \code{congruifiedCalibrations}, which is a \code{data.frame} (if
+\code{each = FALSE}) or a list of \code{data.frames} (if \code{each = TRUE}) of node
+ages for each pair of taxon names. You can access the \code{input} data from which
+the calibrations were extracted with attributes(output)$chronograms.
 }
 \description{
 The function searches DateLife's local

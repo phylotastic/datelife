@@ -2,8 +2,8 @@
 % Please edit documentation in R/calibrations_get.R
 \name{extract_calibrations_phylo}
 \alias{extract_calibrations_phylo}
-\title{Extract secondary calibrations from a \code{phylo} or \code{multiPhylo}
-object with branch lengths proportional to time using congruification.}
+\title{Use congruification to extract secondary calibrations from a \code{phylo} or \code{multiPhylo}
+object with branch lengths proportional to time.}
 \usage{
 extract_calibrations_phylo(input = NULL, each = FALSE)
 }
@@ -16,17 +16,17 @@ the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram ar
 in separate data frames.}
 }
 \value{
-An object of class \code{datelifeCalibrations}, i.e., a \code{data.frame} (if
-\code{each = FALSE}) or a list of \code{data.frames} (if \code{each = TRUE}) of secondary
-calibrations, for each pair of taxon names in \code{input}. The attribute
-\code{chronograms} stores the \code{input} data from which the calibrations were extracted.
+An object of class \code{congruifiedCalibrations}, which is a \code{data.frame} (if
+\code{each = FALSE}) or a list of \code{data.frames} (if \code{each = TRUE}) of node
+ages for each pair of taxon names. You can access the \code{input} data from which
+the calibrations were extracted with attributes(output)$chronograms.
 }
 \description{
 This function extracts node ages for each taxon
-pair given as \code{input}. It applies the congruification method described in Eastman et al.
-(2013) \doi{10.1111/2041-210X.12051},
-to create a matrix of suitable secondary calibrations for each taxon pair.
-Congruification is implemented with the function \code{\link[geiger:congruify.phylo]{geiger::congruify.phylo()}}.
+pair given in \code{input$tip.labels}. It applies the congruification method
+described in Eastman et al. (2013) \doi{10.1111/2041-210X.12051},
+implemented with the function \code{\link[geiger:congruify.phylo]{geiger::congruify.phylo()}}, to create a
+\code{data.frame} of taxon pair node ages that can be used as secondary calibrations.
 }
 \references{
 Eastman et al. (2013) "Congruification: support for time scaling large

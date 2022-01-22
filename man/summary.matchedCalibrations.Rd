@@ -3,7 +3,7 @@
 \name{summary.matchedCalibrations}
 \alias{summary.matchedCalibrations}
 \title{Summarize a \code{matchedCalibrations} object
-summary.datelifeCalibrations gets the node age distribution from a \code{matchedCalibrations} object.}
+\code{summary.matchedCalibrations} gets the node age distribution from a \code{matchedCalibrations} object.}
 \usage{
 \method{summary}{matchedCalibrations}(object, ...)
 }
@@ -24,7 +24,7 @@ containing all taxon name pairs that were present in the given tree.}
 }
 \description{
 Summarize a \code{matchedCalibrations} object
-summary.datelifeCalibrations gets the node age distribution from a \code{matchedCalibrations} object.
+\code{summary.matchedCalibrations} gets the node age distribution from a \code{matchedCalibrations} object.
 }
 \details{
 Columns \code{in_phy$mrca_node_name} and \code{in_phy$reference} are factors.
