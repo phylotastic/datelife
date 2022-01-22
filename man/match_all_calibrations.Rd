@@ -16,8 +16,8 @@ an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 A list of two elements:
 \describe{
 \item{phy}{A \code{phylo} object with nodes renamed with \code{\link[=tree_add_nodelabels]{tree_add_nodelabels()}}.}
-\item{matched_calibrations}{A \code{matchedCalibrations} object, which is a \code{datelifeCalibrations}
-object with two extra columns storing results from mrca search with
+\item{matched_calibrations}{A \code{matchedCalibrations} object, which is the input \code{calibrations}
+object with two additional columns storing results from the mrca search with
 \code{\link[phytools:findMRCA]{phytools::findMRCA()}}: \verb{$mrca_node_number} and \verb{$mrca_node_name}.}
 }
 }

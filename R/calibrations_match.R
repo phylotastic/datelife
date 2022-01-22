@@ -10,8 +10,8 @@
 #' @return A list of two elements:
 #' \describe{
 #' 	\item{phy}{A `phylo` object with nodes renamed with [tree_add_nodelabels()].}
-#' 	\item{matched_calibrations}{A `matchedCalibrations` object, which is a `datelifeCalibrations`
-#'    object with two extra columns storing results from mrca search with
+#' 	\item{matched_calibrations}{A `matchedCalibrations` object, which is the input `calibrations`
+#'    object with two additional columns storing results from the mrca search with
 #'    [phytools::findMRCA()]: `$mrca_node_number` and `$mrca_node_name`.}
 #' 	}
 #' @details The function takes pairs of taxon names in a secondary calibrations data frame,
@@ -96,12 +96,12 @@ match_all_calibrations <- function(phy, calibrations) {
     tree = phy,
     node_index = node_index
   )
-  return(list(
+  return(structure(list(
     phy = phy,
     # summarized_calibrations = calibrations3,
     # matched_calibrations = calibrations2,
     matched_calibrations = calibrations
-  ))
+  ), class = c("data.frame", "matchedCalibrations")))
 }
 #' Summarize a `matchedCalibrations` object
 #' summary.datelifeCalibrations gets the node age distribution from a `matchedCalibrations` object.
