@@ -1,6 +1,6 @@
 # datelife 0.6.1
   - functions:
-    - `get_opentree_chronograms` was updated and renamed to `get_opentree_chronograms`
+    - `get_otol_chronograms` was updated and renamed to `get_opentree_chronograms`
     - update `match_all_calibrations`
   - documentation:
     - added a "More" section describing return value attributes (will rename to "Attributes")
