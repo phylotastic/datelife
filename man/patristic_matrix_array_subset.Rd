@@ -14,7 +14,7 @@ patristic_matrix_array_subset(patristic_matrix_array, taxa, phy4 = NULL)
 \item{phy4}{A user tree to congruify in \code{phylo4} format (phylobase).}
 }
 \value{
-A list with a paristic maytrix array and a \verb{$problem} if any.
+A list with a patristic matrix array and a \verb{$problem} if any.
 }
 \description{
 Subset a patristic matrix array

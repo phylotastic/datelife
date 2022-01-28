@@ -24,7 +24,7 @@ phylo_subset_both(
 \item{dating_method}{The method used for tree dating.}
 }
 \value{
-A list with a paristic maytrix array and a \verb{$problem} if any.
+A list with a patristic matrix array and a \verb{$problem} if any.
 }
 \description{
 Subset a reference and a target tree given as \code{phylo} objects.

@@ -104,9 +104,9 @@ starting or concatenated with <code><a href="https://rdrr.io/r/base/c.html" clas
 
 </dl></dd>
 <dt>use_tnrs</dt>
-<dd><p>Whether to use OpenTree's Taxonomic Name Resolution Service (TNRS)
+<dd><p>Whether to use Open Tree of Life's Taxonomic Name Resolution Service (TNRS)
 to process input taxon names. Default to <code>TRUE</code>, it corrects misspellings and
-taxonomic name variations.</p></dd>
+taxonomic name variations with <code><a href="tnrs_match.html">tnrs_match()</a></code>, a wrapper of <code><a href="https://docs.ropensci.org/rotl/reference/tnrs_match_names.html" class="external-link">rotl::tnrs_match_names()</a></code>.</p></dd>
 <dt>get_spp_from_taxon</dt>
 <dd><p>Whether to search ages for all species belonging to a
 given taxon or not. Default to <code>FALSE</code>. If <code>TRUE</code>, it must have same length as input.
@@ -341,7 +341,6 @@ always set to <code>TRUE</code>.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife search done!</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ages.again</span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/" class="external-link">ape</a></span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>package ‘ape’ was built under R version 4.1.2</span>
 <span class="r-in"><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/axisPhylo.html" class="external-link">axisPhylo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">"Time (million years ago)"</span>, side <span class="op">=</span> <span class="fl">1</span>, line <span class="op">=</span> <span class="fl">2</span>, at <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="st">"last_plot.phylo"</span>,</span>
 <span class="r-in">  envir <span class="op">=</span> <span class="va">.PlotPhyloEnv</span></span>

@@ -21,7 +21,7 @@ phylo_get_subset_array_congruify(
 \item{dating_method}{The method used for tree dating.}
 }
 \value{
-A list with a paristic maytrix array and a \verb{$problem} if any.
+A list with a patristic matrix array and a \verb{$problem} if any.
 }
 \description{
 Get a congruified subset array from a \code{phylo} object

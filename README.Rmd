@@ -15,6 +15,9 @@ knitr::opts_chunk$set(
 )
 IS_README <- TRUE
 library(datelife)
+if (!requireNamespace("versions")) {
+  install.packages("versions")
+}
 ```
 <img src='man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
 
@@ -52,13 +55,13 @@ You can also date a phylogenetic tree of your own making (or choosing one from t
 
 ## 1. Installation
 
-`datelife`s stable version is currently available for installation from CRAN with:
+`datelife`'s **stable version `r versions::available.versions("datelife")$datelife$version`** is available for installation from CRAN with:
 
 ```{r eval = FALSE}
 install.packages("datelife")
 ```
 
-You can install the development version from the GitHub repository:
+You can install `datelife`'s **development versions** from the GitHub repository with:
 
 ```{r eval = FALSE}
 devtools::install_github("phylotastic/datelife")
@@ -78,7 +81,7 @@ citation("datelife")
 toBibtex(citation("datelife"))
 ```
 
-.bibtex files are available
+".bibtex" files are also available.
 
 ## 3. Feedback and Information for Developers
 

@@ -14,7 +14,7 @@ A list of 4 elements:
 \describe{
 \item{authors}{A list of lists of author names of the original studies that
 published chronograms currently stored in the Open Tree of Life database.}
-\item{curators}{A list of lists of curator names that uplodaded chronograms
+\item{curators}{A list of lists of curator names that uploaded chronograms
 to the Open Tree of Life database.}
 \item{studies}{A list of study identifiers from original studies that
 published chronograms currently stored in the Open Tree of Life database.}

@@ -119,10 +119,10 @@
 <div class="section level2">
 <h2 id="1-installation">1. Installation<a class="anchor" aria-label="anchor" href="#1-installation"></a>
 </h2>
-<p><code>datelife</code>s stable version is currently available for installation from CRAN with:</p>
+<p><code>datelife</code>’s <strong>stable version 0.6.0</strong> is available for installation from CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"datelife"</span><span class="op">)</span></code></pre></div>
-<p>You can install the development version from the GitHub repository:</p>
+<p>You can install <code>datelife</code>’s <strong>development versions</strong> from the GitHub repository with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"phylotastic/datelife"</span><span class="op">)</span></code></pre></div>
 </div>
@@ -131,18 +131,16 @@
 </h2>
 <p>If you use <code>datelife</code> for a publication, please cite the R package and the accompanying paper:</p>
 <p>
+O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K, Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022). <em>datelife: Scientific Data on Time of Lineage Divergence for Your Taxa</em>. R package version 0.6.1, <a href="https://doi.org/10.5281/zenodo.593938" class="external-link">https://doi.org/10.5281/zenodo.593938</a>.
 </p>
-<p>O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K, Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022). <em>datelife: Scientific Data on Time of Lineage Divergence for Your Taxa</em>. R package version 0.6.0, <a href="https://doi.org/10.5281/zenodo.593938" class="external-link">https://doi.org/10.5281/zenodo.593938</a>.</p>
-
 <p>
+Sanchez-Reyes L, O’Meara B (2019). “datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life.” <em>bioRxiv</em>, <b>782094</b>. <a href="https://doi.org/10.1101/782094" class="external-link">https://doi.org/10.1101/782094</a>.
 </p>
-<p>Sanchez-Reyes L, O’Meara B (2019). “datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life.” <em>bioRxiv</em>, <b>782094</b>. <a href="https://doi.org/10.1101/782094" class="external-link">https://doi.org/10.1101/782094</a>.</p>
-
 <p>You can get these citations and the bibtex entry with:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"datelife"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/toLatex.html" class="external-link">toBibtex</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"datelife"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>.bibtex files are available</p>
+<p>“.bibtex” files are also available.</p>
 </div>
 <div class="section level2">
 <h2 id="3-feedback-and-information-for-developers">3. Feedback and Information for Developers<a class="anchor" aria-label="anchor" href="#3-feedback-and-information-for-developers"></a>
@@ -204,11 +202,11 @@
 <h5 id="local-checks">Local checks<a class="anchor" aria-label="anchor" href="#local-checks"></a>
 </h5>
 <p>To be able to release to CRAN, the first step is to pass the checks locally. To run a local check, you can use the command <code>R CMD check</code> from your terminal. For that, change directories to the one above your working clone of the <code>datelife</code> repo:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="bu">cd</span> ../</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span></code></pre></div>
 <p>Generate a tar ball for your package by running <code>R CMD build package-name</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="ex">R</span> CMD build datelife</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD build datelife</span></code></pre></div>
 <p>Finally, run <code>R CMD check package-tar-ball</code> on the tar ball that you just generated:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="ex">R</span> CMD check --as-cran datelife_0.6.0.tar.gz</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD check <span class="at">--as-cran</span> datelife_0.6.0.tar.gz</span></code></pre></div>
 </div>
 <div class="section level5">
 <h5 id="remote-checks">Remote checks<a class="anchor" aria-label="anchor" href="#remote-checks"></a>

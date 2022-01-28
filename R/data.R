@@ -256,7 +256,7 @@
 #' usethis::use_data(subset2_taxa)
 "subset2_taxa"
 
-#' A list with datelieQuery and datelifeResult objects from a search of taxon names from subset2_taxa
+#' A list with datelifeQuery and datelifeResult objects from a search of taxon names from subset2_taxa
 #'
 #' @name subset2_search
 #' @docType data

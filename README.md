@@ -4,7 +4,6 @@
 <img src='man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
 
 <!-- badges: start -->
-
 <!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions) -->
 
 [![CRAN
@@ -23,7 +22,7 @@ Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg
 [![NSF-1458572](https://img.shields.io/badge/NSF-1458572-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458572)
 <!-- badges: end -->
 
-# Welcome to DateLife’s R package GitHub repository\!
+# Welcome to DateLife’s R package GitHub repository!
 
 Get a phylogenetic tree with branch lengths proportional to geologic
 time (aka a ***chronogram***) of any two or more lineages of interest to
@@ -47,43 +46,39 @@ still under development.
 3.  [Feedback and info for developers](#feedback)
 4.  [License](#license)
 
-## 1\. Installation
+## 1. Installation
 
-`datelife`s stable version is currently available for installation from
+`datelife`’s **stable version 0.6.0** is available for installation from
 CRAN with:
 
 ``` r
 install.packages("datelife")
 ```
 
-You can install the development version from the GitHub repository:
+You can install `datelife`’s **development versions** from the GitHub
+repository with:
 
 ``` r
 devtools::install_github("phylotastic/datelife")
 ```
 
-## 2\. Citation
+## 2. Citation
 
 If you use `datelife` for a publication, please cite the R package and
 the accompanying paper:
 
 <p>
-
 O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K,
 Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022).
 <em>datelife: Scientific Data on Time of Lineage Divergence for Your
-Taxa</em>. R package version 0.6.0,
+Taxa</em>. R package version 0.6.1,
 <a href="https://doi.org/10.5281/zenodo.593938">https://doi.org/10.5281/zenodo.593938</a>.
-
 </p>
-
 <p>
-
 Sanchez-Reyes L, O’Meara B (2019). “datelife: Leveraging databases and
 analytical tools to reveal the dated Tree of Life.” <em>bioRxiv</em>,
 <b>782094</b>.
 <a href="https://doi.org/10.1101/782094">https://doi.org/10.1101/782094</a>.
-
 </p>
 
 You can get these citations and the bibtex entry with:
@@ -93,9 +88,9 @@ citation("datelife")
 toBibtex(citation("datelife"))
 ```
 
-.bibtex files are available
+“.bibtex” files are also available.
 
-## 3\. Feedback and Information for Developers
+## 3. Feedback and Information for Developers
 
 We welcome and encourage to post a [GitHub
 issue](https://github.com/phylotastic/datelife/issues/new) with any
@@ -182,8 +177,8 @@ working clone of the `datelife` repo:
 cd ../
 ```
 
-Generate a tar ball for your package by running `R CMD build
-package-name`:
+Generate a tar ball for your package by running
+`R CMD build package-name`:
 
 ``` bash
 R CMD build datelife
@@ -210,6 +205,6 @@ To submit to CRAN call `devtools::release()` and answer the prompted
 questions. If the answer to all of these is *yes*, the package will be
 submitted to CRAN :rocket:
 
-## 4\. License
+## 4. License
 
 This package is free and open source software, licensed under GPL.
