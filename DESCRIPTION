@@ -1,6 +1,6 @@
 Package: datelife
 Title: Scientific Data on Time of Lineage Divergence for Your Taxa
-Version: 0.6.1
+Version: 0.6.2
 Maintainer: Luna L. Sanchez Reyes <sanchez.reyes.luna@gmail.com>
 Authors@R: c(
   person("Brian", "O'Meara", email = "bomeara@gmail.com", role=c("aut")),
