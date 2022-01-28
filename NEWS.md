@@ -1,3 +1,6 @@
+# datelife 0.6.2
+  - data: updated `opentree_chornograms` object. It now has 253 chronograms from Open Tree of Life
+
 # datelife 0.6.1
   - functions:
     - `get_otol_chronograms` was updated and renamed to `get_opentree_chronograms`
