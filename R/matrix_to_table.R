@@ -3,7 +3,6 @@
 #' @param matrix A patristic distance matrix.
 #' @param reference A character vector with the study reference from where the ages come from.
 #' @return A `data.frame` of "taxonA", "taxonB", and "age".
-#'
 #' @export
 matrix_to_table <- function(matrix, reference) {
   tt <- as.data.frame(as.table(matrix), useNA = "no", stringsAsFactors = FALSE)
@@ -33,7 +32,6 @@ matrix_to_table <- function(matrix, reference) {
 #'
 #' @param matrices A names list of patristic distance matrices. Names correspond to the study reference.
 #' @return A single `data.frame` of "taxonA", "taxonB", and "age".
-#'
 #' @export
 matrices_to_table <- function(matrices) {
   # apply matrix_to_table to a list of matrices and get a list of tables back:

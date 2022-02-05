@@ -76,6 +76,9 @@ match_all_calibrations <- function(phy, calibrations) {
   calibrations$mrca_node_name <- gsub("nNA", "NA", calibrations$mrca_node_name)
 
   # Order the data.frame by mrca_node_number, minage and maxage
+  if ("nodeAge" %in% colnames(calibrations)) {
+    calibrations$MinAge <- calibrations$MaxAge <- calibrations$nodeAge
+  }
   calibrations <- calibrations[order(mrca_nodes, calibrations$MinAge, calibrations$MaxAge), ]
 
   # Generate node names for 'phy'
