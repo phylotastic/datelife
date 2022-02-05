@@ -14,6 +14,9 @@ to the Open Tree of Life database.}
 \item{studies}{A list of study identifiers.}
 \item{trees}{A \code{multiPhylo} object storing the chronograms from Open Tree of
 Life database.}
+\item{update}{A character vector indicating the time when the database object
+was last updated.}
+\item{version}{A character vector indicating the datelife package version when the
 }
 }
 \source{
@@ -27,7 +30,11 @@ Now storing >200 chronograms from Open Tree of Life
 }
 \details{
 Generated with
+devtools::install_github("ropensci/rotl", ref = devtools::github_pull("137"))
+remotes::install_github("ROpenSci/bibtex")'
 opentree_chronograms <- get_opentree_chronograms()
+opentree_chronograms$update <- Sys.time()
+opentree_chronograms$version <- '0.6.2'
 usethis::use_data(opentree_chronograms, overwrite = T)
 and updated with update_datelife_cache()
 }

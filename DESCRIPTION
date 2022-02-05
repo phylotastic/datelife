@@ -58,7 +58,8 @@ Imports:
     httr,
     plyr,
     phylocomr,
-    BiocManager
+    BiocManager,
+    data.table
 Suggests:
     testthat,
     knitr,
