@@ -15,7 +15,8 @@
 #'     Life database.}
 #'   \item{update}{A character vector indicating the time when the database object
 #'     was last updated.}
-#'   \item{version}{A character vector indicating the datelife package version when the
+#'   \item{version}{A character vector indicating the datelife [utils::packageVersion()]
+#'     when the database was last updated.}
 #' }
 #' @source \url{http://opentreeoflife.org}
 #' @keywords opentree dates myrs million years time phylogeny chronogram
@@ -273,7 +274,7 @@ get_opentree_chronograms <- function(max_tree_count = "all") {
                  studies = studies,
                  dois = dois,
                  update = Sys.time(),
-                 version = packageVersion("datelife"))
+                 version = utils::packageVersion("datelife"))
   attr(result, "running_time") <- tot_time
   message(tot_time)
   return(result)

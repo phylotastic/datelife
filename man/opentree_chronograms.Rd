@@ -16,7 +16,8 @@ to the Open Tree of Life database.}
 Life database.}
 \item{update}{A character vector indicating the time when the database object
 was last updated.}
-\item{version}{A character vector indicating the datelife package version when the
+\item{version}{A character vector indicating the datelife \code{\link[utils:packageDescription]{utils::packageVersion()}}
+when the database was last updated.}
 }
 }
 \source{
