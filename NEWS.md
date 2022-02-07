@@ -18,6 +18,7 @@
   - Package website with `pkgdown`
   - documentation: expanded for all functions
   - examples and function files are written to tempdir()
+  - function rename: `get_biggest_phylo` to `get_biggest_multiphylo`
 
 # datelife 0.5.0
 

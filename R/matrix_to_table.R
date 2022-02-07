@@ -32,6 +32,7 @@ matrix_to_table <- function(matrix, reference) {
 #'
 #' @param matrices A names list of patristic distance matrices. Names correspond to the study reference.
 #' @return A single `data.frame` of "taxonA", "taxonB", and "age".
+#' @importFrom data.table rbindlist
 #' @export
 matrices_to_table <- function(matrices) {
   # apply matrix_to_table to a list of matrices and get a list of tables back:
