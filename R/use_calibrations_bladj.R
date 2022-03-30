@@ -63,8 +63,8 @@ use_calibrations_bladj <- function(phy,
   }
   # check that the root node has a calibration
   # otherwise, add one
+  # bladj does not run if there is no calibration for the root
   # bladj will run if calibrations are in conflict
-  # it will not run if there is no calibration for the root
   node_names <- calibs$matched_calibrations$NodeNames
   # length(node_names)
   if (!"n1" %in% calibs$matched_calibrations$NodeNames) {

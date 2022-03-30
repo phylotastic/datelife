@@ -17,50 +17,39 @@
 #' Bioinformatics, 24(18), \doi{10.1093/bioinformatics/btn358}.
 
 #' @export
-use_calibrations_bladj.matchedCalibrations <- function(phy,
-                                   calibrations,
-                                   type = "median",
-                                   root_age = NULL,
-                                   match_calibrations = TRUE) {
+use_calibrations_bladj.matchedCalibrations <- function(calibrations,
+                                                       type = "mean",
+                                                       root_age = NULL,) {
   #
   message("... Using secondary calibrations with BLADJ.")
-  if (!inherits(phy, "phylo")) {
-    stop("'phy' is not a phylo object.")
-  }
-  if (!inherits(calibrations, "data.frame")) {
-    stop("'calibrations' is not a data.frame, dating with BLADJ is not possible.\n\t Provide a set of calibrations for 'phy', hint: see get_all_calibrations function.")
+  if (!inherits(calibrations, "macthedCalibrations")) {
+    stop("'calibrations' is not a matchedCalibrations object.\n\t Provide a set of calibrations from get_all_calibrations function.")
   }
   type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
-  if (match_calibrations) {
-    calibs <- match_all_calibrations(phy, calibrations)
-  } else {
-    calibs <- calibrations
-    # calibs <- all_calibs_93_matched
-  }
-  if (nrow(calibs$matched_calibrations) < 1) {
+  if (nrow(calibrations$matched_calibrations) < 1) {
     stop("Nodes in 'calibrations' (determined by taxon pairs) do not match any nodes
 						in 'phy'.\n\t Dating analysis is not possible with this set of calibrations.")
   }
   if ("mean" %in% type) {
-    node_ages <- sapply(calibs$phy$calibration_distribution, mean)
+    node_ages <- sapply(calibrations$phy$calibration_distribution, mean)
     # length(node_ages)
   }
   if ("min" %in% type) {
-    node_ages <- sapply(calibs$phy$calibration_distribution, min)
+    node_ages <- sapply(calibrations$phy$calibration_distribution, min)
   }
   if ("max" %in% type) {
-    node_ages <- sapply(calibs$phy$calibration_distribution, max)
+    node_ages <- sapply(calibrations$phy$calibration_distribution, max)
   }
   if ("median" %in% type) {
-    node_ages <- sapply(calibs$phy$calibration_distribution, stats::median)
+    node_ages <- sapply(calibrations$phy$calibration_distribution, stats::median)
   }
   # check that the root node has a calibration
   # otherwise, add one
   # bladj does not run if there is no calibration for the root
   # bladj will run if calibrations are in conflict
-  node_names <- calibs$matched_calibrations$NodeNames
+  node_names <- calibrations$matched_calibrations$NodeNames
   # length(node_names)
-  if (!"n1" %in% calibs$matched_calibrations$NodeNames) {
+  if (!"n1" %in% calibrations$matched_calibrations$NodeNames) {
     if (length(node_ages) > 1) {
       root_age <- max(node_ages) + mean(abs(diff(sort(node_ages))))
     } else {
@@ -70,14 +59,14 @@ use_calibrations_bladj.matchedCalibrations <- function(phy,
     node_ages <- c(root_age, node_ages)
     node_names <- c("n1", node_names)
   }
-  new_phy <- make_bladj_tree(
-    tree = calibs$phy, nodeages = node_ages,
+  chronogram <- make_bladj_tree(
+    tree = calibrations$phy, nodeages = node_ages,
     nodenames = node_names
   )
   # TODO: something about these extra list elements, set up as attributes??
-  new_phy$dating_method <- "bladj"
-  new_phy$calibration_distribution <- calibs$phy$calibration_distribution
-  new_phy$calibrations <- calibs$matched_calibrations
-  new_phy$used_calibrations <- stats::setNames(node_ages, node_names)
-  return(new_phy)
+  chronogram$dating_method <- "bladj"
+  chronogram$calibration_distribution <- calibrations$phy$calibration_distribution
+  chronogram$calibrations <- calibrations$matched_calibrations
+  chronogram$used_calibrations <- stats::setNames(node_ages, node_names)
+  return(chronogram)
 }
