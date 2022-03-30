@@ -5,22 +5,20 @@
 \title{Use calibrations to date a topology with the BLADJ algorithm.}
 \usage{
 use_calibrations_bladj.matchedCalibrations(
-  phy,
   calibrations,
-  type = "median",
-  root_age = NULL,
-  match_calibrations = TRUE
+  type = "mean",
+  root_age = NULL
 )
 }
 \arguments{
-\item{phy}{A \code{phylo} object with or without branch lengths.}
-
 \item{calibrations}{A \code{data.frame} of secondary calibrations for any pair of taxon
 names in \code{phy}, usually obtained with \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 
 \item{type}{The type of age to use as calibration. Options are "median", "mean", "min", or "max".}
 
 \item{root_age}{Not implemented yet. Numeric specifying the age of the root. If there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10\% more than the age of the calibration.}
+
+\item{phy}{A \code{phylo} object with or without branch lengths.}
 
 \item{match_calibrations}{Boolean, default to TRUE. It will run match_all_calibrations function. Set to FALSE if your calibrations have already been matched.}
 }

@@ -19,10 +19,10 @@
 #' @export
 use_calibrations_bladj.matchedCalibrations <- function(calibrations,
                                                        type = "mean",
-                                                       root_age = NULL,) {
+                                                       root_age = NULL) {
   #
   message("... Using secondary calibrations with BLADJ.")
-  if (!inherits(calibrations, "macthedCalibrations")) {
+  if (!inherits(calibrations, "matchedCalibrations")) {
     stop("'calibrations' is not a matchedCalibrations object.\n\t Provide a set of calibrations from get_all_calibrations function.")
   }
   type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
