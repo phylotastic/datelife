@@ -15,7 +15,7 @@ use_calibrations(
 \arguments{
 \item{phy}{A \code{phylo} object to use as tree topology.}
 
-\item{calibrations}{A \code{congruifiedCalibrations} object, an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
+\item{calibrations}{A \code{calibrations} object, an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 
 \item{dating_method}{Tree dating algorithm to use. Options are "bladj" or "pathd8"
 (Webb et al., 2008, \doi{10.1093/bioinformatics/btn358}; Britton et al., 2007,

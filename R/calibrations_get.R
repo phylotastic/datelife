@@ -1,3 +1,8 @@
+# `Get calibrations` functions take taxon names and perform a chronogram search
+# on a database. Then, they extract all node ages from matching chronograms as
+# taxon pair ages using `extract calibrations` functions.
+# These functions should be named `get all ages`.
+
 #' Get secondary calibrations from a chronogram database for a set of given taxon names
 #'
 #' @aliases datelife_calibrations
@@ -68,7 +73,7 @@ get_calibrations_vector <- function(input = NULL,
     each = each
   )
   attr(res, "datelife_result") <- attributes(phyloall)$datelife_result
-  class(res) <- c("data.frame", "congruifiedCalibrations")
+  class(res) <- c("data.frame", "calibrations")
   return(res)
 }
 #' Search and extract available secondary calibrations for taxon names in a given
@@ -93,7 +98,7 @@ get_calibrations_datelifequery <- function(datelife_query = NULL,
     each = each
   )
   attr(res, "datelife_result") <- attributes(phyloall)$datelife_result
-  class(res) <- c("data.frame", "congruifiedCalibrations")
+  class(res) <- c("data.frame", "calibrations")
   return(extract_calibrations_phylo(
     input = phyloall,
     each = each

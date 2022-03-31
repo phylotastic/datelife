@@ -5,8 +5,8 @@
 #'
 #' @inheritParams phylo_check
 # #' or a vector of taxon names (see details).
-#' @param calibrations A `congruifiedCalibrations` object, an output of
-#'   [extract_all_calibrations()].
+#' @param calibrations A `calibrations` object, an output of
+#'   [extract_calibrations_phylo()].
 #' @return A list of two elements:
 #' \describe{
 #' 	\item{phy}{A `phylo` object with nodes renamed with [tree_add_nodelabels()].}

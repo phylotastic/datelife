@@ -1,3 +1,8 @@
+# `Extract calibrations` functions take chronograms and extract all node ages as
+# taxon pair ages.
+# These functions should be named `extract ages`.
+
+
 #' Use congruification to extract secondary calibrations from a `phylo` or `multiPhylo`
 #' object with branch lengths proportional to time.
 #'
@@ -11,7 +16,7 @@
 #' @param each Boolean, default to `FALSE`: all calibrations are returned in
 #' the same `data.frame`. If `TRUE`, calibrations from each chronogram are returned
 #' in separate data frames.
-#' @return An object of class `congruifiedCalibrations`, which is a `data.frame` (if
+#' @return An object of class `calibrations`, which is a `data.frame` (if
 #'   `each = FALSE`) or a list of `data.frames` (if `each = TRUE`) of node
 #'   ages for each pair of taxon names. You can access the `input` data from which
 #'   the calibrations were extracted with attributes(output)$chronograms.
@@ -22,6 +27,11 @@
 #' @export
 extract_calibrations_phylo <- function(input = NULL,
                                        each = FALSE) {
+  ##############################################################################
+  ##############################################################################
+  # Initial argument check
+  ##############################################################################
+  ##############################################################################
   chronograms <- NULL
   if (inherits(input, "multiPhylo")) {
     chronograms <- input
@@ -52,6 +62,11 @@ extract_calibrations_phylo <- function(input = NULL,
   if (is.null(chronograms)) {
     stop("'input' must be a 'phylo' or 'multiPhylo' object with branch lengths proportional to time.")
   }
+  ##############################################################################
+  ##############################################################################
+  # Self congruifiction to get a data.frame of taxon pair ages
+  ##############################################################################
+  ##############################################################################
   if (each) {
     calibrations <- vector(mode = "list")
   } else {
@@ -84,12 +99,17 @@ extract_calibrations_phylo <- function(input = NULL,
       }
     }
   }
+  ##############################################################################
+  ##############################################################################
+  # Output
+  ##############################################################################
+  ##############################################################################
   if (each) {
     names(calibrations) <- names(chronograms)
   }
   attr(calibrations, "chronograms") <- chronograms
   # TODO check that class data frame is also preserved. Might wanna do:
-  class(calibrations) <- c(class(calibrations), "congruifiedCalibrations")
+  class(calibrations) <- c(class(calibrations), "calibrations")
   # instead of using structure()
   return(calibrations)
 }
@@ -119,6 +139,6 @@ extract_calibrations_dateliferesult <- function(input = NULL,
     each = each
   )
   attr(res, "datelife_result") <- input
-  class(res) <- c("data.frame", "congruifiedCalibrations")
+  class(res) <- c("data.frame", "calibrations")
   return(res)
 }
