@@ -42,11 +42,11 @@ The function `make_datelife_query` processes the taxon names of your organisms o
 
 A `datelifeQuery` object is a list of three elements:
 
-- `$cleaned_names`: a character vector of "cleaned" taxon names, 
-- `$ott_ids`: a numeric vector of OpenTree Taxonomic identifiers (OTT ids), and 
+- `$cleaned_names`: a character vector of "cleaned" taxon names,
+- `$ott_ids`: a numeric vector of OpenTree Taxonomic identifiers (OTT ids), and
 - `$phy`: an input tree as a `phylo` object or `NA` if none was provided.
 
-This allows us to straightforwardly use the processed taxon names later to perform a search for ages across the `datelife` chronogram database as well as other downstream analyses. 
+This allows us to straightforwardly use the processed taxon names later to perform a search for ages across the `datelife` chronogram database as well as other downstream analyses.
 
 There are two alternative ways of processing organism names with `datelife`:
 
@@ -436,7 +436,7 @@ mrca <- datelife::datelife_search(input = my_datelife_query,
 </details>
 
 ### Newick strings
- 
+
 `summary_format = "newick_all"`
 
 ```{r, eval = FALSE}
@@ -909,3 +909,8 @@ data_frame <- datelife::datelife_search(input = my_datelife_query,
 #> 4 ((Elephas_maximus:105.009658,(Felis_silvestris:78.392518,Delphinus_delphis:78.392517):26.617141):215.5141645,Gallus_gallus:320.5238235);
 ```
 </details>
+
+TODO: add something about NJ, why is this happening
+
+One can use a clustering method like Neighbor Joining (NJ). While we implemented this method in the package, because NJ are greedy algorithms they do not perform well and often return toologies that are not biologically plausible. Hence, we implement
+a different workflow,

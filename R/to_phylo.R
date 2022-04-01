@@ -336,15 +336,17 @@ summarize_summary_matrix <- function(summ_matrix) {
 #' Go from a summary matrix to an ultrametric `phylo` object.
 #' @param summ_matrix Any summary patristic distance matrix, such as the ones obtained with [datelife_result_sdm_matrix()] or [datelife_result_median_matrix()].
 #' @inheritParams get_taxon_summary
-#' @param total_distance Boolean. If `TRUE` it will divide the matrix in half, if
-#'  `FALSE` it will take it as is.
+#' @param total_distance Whether the input `summ_matrix` stores total age distance
+#'  (from tip to tip) or distance from node to tip. Default to `TRUE`,
+#'  divides the matrix in half, if `FALSE` it will take it as is.
 #' @param use A character vector indicating what type of age to use for summary.
 #'  One of the following:
 #' \describe{
-#' 	\item{mean}{It will use the mean of the node age distributions.}
-#' 	\item{min}{It will use the minimum age from the node age distributions.}
-#' 	\item{max}{Choose this if you wanna be conservative; it will use the maximum
-#'        age from the node age distributions.}
+#' 	\item{"mean"}{It will use the [mean()] of the node ages in `summ_matrix`.}
+#' 	\item{"median"}{It uses the [median()] age of node ages in `summ_matrix`.
+#' 	\item{"min"}{It will use the [min()] age from node ages in `summ_matrix`.}
+#' 	\item{"max"}{Choose this if you wanna be conservative; it will use the [max()]
+#'        age from node ages in `summ_matrix`.}
 #' }
 #' @param target_tree A `phylo` object. Use this in case you want a specific
 #'  backbone for the output tree.
@@ -355,7 +357,12 @@ summarize_summary_matrix <- function(summ_matrix) {
 #' @export
 # #' @examples
 # #' summary_matrix_to_phylo(summ_matrix, use = "median")
-summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_distance = TRUE, use = "mean", target_tree = NULL, ...) {
+summary_matrix_to_phylo <- function(summ_matrix,
+                                    datelife_query = NULL,
+                                    total_distance = TRUE,
+                                    use = "mean",
+                                    target_tree = NULL,
+                                    ...) {
   # enhance: add other methods, besides bladj.
   # for debugging:
   # summ_matrix <- subset2_sdm_matrix
@@ -395,8 +402,8 @@ summary_matrix_to_phylo <- function(summ_matrix, datelife_query = NULL, total_di
     # plot(target_tree, cex = 0.5)
   }
   if (!inherits(target_tree, "phylo")) {
-    message("target_tree is missing or not a phylo object and a backbone tree could not be constructed; returning NA")
-    message("Hint: Was summ_matrix constructed from an object with no good groves? Try running get_best_grove first.")
+    message("'target_tree' is missing or not a 'phylo' object and a backbone tree could not be constructed; returning 'NA'")
+    message("Hint: Was summ_matrix constructed from an object with no good groves? Try running 'get_best_grove' first.")
     # enhance: add a more formal test of best grove
     return(NA)
   }
