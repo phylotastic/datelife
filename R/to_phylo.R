@@ -343,7 +343,7 @@ summarize_summary_matrix <- function(summ_matrix) {
 #'  One of the following:
 #' \describe{
 #' 	\item{"mean"}{It will use the [mean()] of the node ages in `summ_matrix`.}
-#' 	\item{"median"}{It uses the [median()] age of node ages in `summ_matrix`.
+#' 	\item{"median"}{It uses the [stats::median()] age of node ages in `summ_matrix`.}
 #' 	\item{"min"}{It will use the [min()] age from node ages in `summ_matrix`.}
 #' 	\item{"max"}{Choose this if you wanna be conservative; it will use the [max()]
 #'        age from node ages in `summ_matrix`.}
@@ -428,10 +428,12 @@ summary_matrix_to_phylo <- function(summ_matrix,
 
 
 
-
+  ##############################################################################
+  ##############################################################################
   # ATTENTION
   # start of use_all_calibrations_bladj, that contains match_all_calibrations
-  # use_all_calibrations_bladj(phy = target_tree, calibrations = caibrations, type = use)
+  # something like:
+  # use_all_calibrations_bladj(phy = target_tree, calibrations = calibrations, type = use)
   # start of match_all_calibrations:
   # get the coincident node numbers:
   # ape::is.binary(target_tree)

@@ -18,16 +18,18 @@ summary_matrix_to_phylo(
 
 \item{datelife_query}{A \code{datelifeQuery} object, usually an output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
 
-\item{total_distance}{Boolean. If \code{TRUE} it will divide the matrix in half, if
-\code{FALSE} it will take it as is.}
+\item{total_distance}{Whether the input \code{summ_matrix} stores total age distance
+(from tip to tip) or distance from node to tip. Default to \code{TRUE},
+divides the matrix in half, if \code{FALSE} it will take it as is.}
 
 \item{use}{A character vector indicating what type of age to use for summary.
 One of the following:
 \describe{
-\item{mean}{It will use the mean of the node age distributions.}
-\item{min}{It will use the minimum age from the node age distributions.}
-\item{max}{Choose this if you wanna be conservative; it will use the maximum
-age from the node age distributions.}
+\item{"mean"}{It will use the \code{\link[=mean]{mean()}} of the node ages in \code{summ_matrix}.}
+\item{"median"}{It uses the \code{\link[stats:median]{stats::median()}} age of node ages in \code{summ_matrix}.}
+\item{"min"}{It will use the \code{\link[=min]{min()}} age from node ages in \code{summ_matrix}.}
+\item{"max"}{Choose this if you wanna be conservative; it will use the \code{\link[=max]{max()}}
+age from node ages in \code{summ_matrix}.}
 }}
 
 \item{target_tree}{A \code{phylo} object. Use this in case you want a specific

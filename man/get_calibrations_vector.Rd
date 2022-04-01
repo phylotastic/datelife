@@ -15,7 +15,7 @@ the same \code{data.frame}. If \code{TRUE}, calibrations from each chronogram ar
 in separate data frames.}
 }
 \value{
-An object of class \code{congruifiedCalibrations}, which is a \code{data.frame} (if
+An object of class \code{calibrations}, which is a \code{data.frame} (if
 \code{each = FALSE}) or a list of \code{data.frames} (if \code{each = TRUE}) of node
 ages for each pair of taxon names. You can access the \code{input} data from which
 the calibrations were extracted with attributes(output)$chronograms.

@@ -1,9 +1,9 @@
-#' Get secondary calibrations from a set of given taxon names
+#' Get secondary calibrations from a chronogram database for a set of given taxon names
 #'
 #' @aliases datelife_calibrations
 #' @description \code{get_all_calibrations} performs a [datelife_search()]
-#' and gets divergence times (i.e., secondary calibrations) for each taxon name
-#' pair given in \code{input}.
+#' and gets divergence times (i.e., secondary calibrations) from a chronogram
+#' database for each taxon name pair given as \code{input}.
 #'
 #' @inheritParams datelife_search
 #' @inheritParams extract_calibrations_phylo
