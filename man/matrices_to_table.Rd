@@ -2,7 +2,7 @@
 % Please edit documentation in R/matrix_to_table.R
 \name{matrices_to_table}
 \alias{matrices_to_table}
-\title{Go from a list of patristic distance matrix to a node ages table}
+\title{Go from a list of patristic distance matrix to a table of node ages}
 \usage{
 matrices_to_table(matrices)
 }
@@ -13,5 +13,5 @@ matrices_to_table(matrices)
 A single \code{data.frame} of "taxonA", "taxonB", and "age".
 }
 \description{
-Go from a list of patristic distance matrix to a node ages table
+Go from a list of patristic distance matrix to a table of node ages
 }

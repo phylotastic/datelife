@@ -2,14 +2,17 @@
 % Please edit documentation in R/calibrations_congruify.R
 \name{congruify_calibrations}
 \alias{congruify_calibrations}
-\title{Use congruification to match nodes from chronograms to node in a tree topology.}
+\title{Congruify nodes of a tree topology to nodes from taxon pair calibrations}
 \usage{
-congruify_calibrations(phy, chronograms)
+congruify_calibrations(phy, chronograms, calibrations)
 }
 \arguments{
 \item{phy}{A \code{phylo} object.}
 
 \item{chronograms}{A \code{phylo} or \code{multiPhylo} object, output of \code{\link[=datelife_search]{datelife_search()}}.}
+
+\item{calibrations}{A \code{calibrations} object, an output of
+\code{\link[=extract_calibrations_phylo]{extract_calibrations_phylo()}}.}
 }
 \value{
 A list of two elements:

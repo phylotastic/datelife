@@ -1,4 +1,4 @@
-#' Get nodes of a tree topology that are most recent common ancestor (mrca) taxon pair calibrations
+#' Identify nodes of a tree topology that are most recent common ancestor (mrca) of taxon pair calibrations
 #'
 #' @description \code{mrca_calibrations} get nodes of a tree topology given in
 #'   `phy` that correspond to the most recent common ancestor (mrca) of taxon
@@ -105,5 +105,5 @@ mrca_calibrations <- function(phy, calibrations) {
   return(list(matched_phy = phy,
               matched_calibrations = structure(calibrations,
                                                class = c("data.frame",
-                                                         "matchedCalibrations"))))
+                                                         "mrcaCalibrations"))))
 }

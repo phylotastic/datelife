@@ -28,7 +28,7 @@ matrix_to_table <- function(matrix, reference) {
   tt
 }
 
-#' Go from a list of patristic distance matrix to a node ages table
+#' Go from a list of patristic distance matrix to a table of node ages
 #'
 #' @param matrices A names list of patristic distance matrices. Names correspond to the study reference.
 #' @return A single `data.frame` of "taxonA", "taxonB", and "age".
