@@ -22,17 +22,20 @@ use_calibrations_bladj.matchedCalibrations <- function(calibrations,
                                                        root_age = NULL) {
   #
   message("... Using secondary calibrations with BLADJ.")
-  if (!inherits(calibrations, "matchedCalibrations")) {
-    stop("'calibrations' is not a matchedCalibrations object.\n\t Provide a set of calibrations from get_all_calibrations function.")
+  if (any(!names(calibrations) %in% c("matched_phy", "matched_calibrations"))) {
+    stop("'calibrations' must be a `matchedCalibrations` or `congruifiedCalibrations` object.\n")
   }
   type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
-  if (nrow(calibrations$matched_calibrations) < 1) {
+  matched <- calibrations$matched_calibrations
+  if (nrow(matched) < 1) {
     stop("Nodes in 'calibrations' (determined by taxon pairs) do not match any nodes
 						in 'phy'.\n\t Dating analysis is not possible with this set of calibrations.")
   }
   if ("mean" %in% type) {
-    node_ages <- sapply(calibrations$phy$calibration_distribution, mean)
-    # length(node_ages)
+    #node_ages <- sapply(calibrations$phy$calibration_distribution, mean)
+    node_ages <- sapply(unique(matched$mrca_node_name), function(x) {
+      node <- matched$mrca_node_name == x
+      mean(matched$MinAge[node])})
   }
   if ("min" %in% type) {
     node_ages <- sapply(calibrations$phy$calibration_distribution, min)
@@ -47,25 +50,27 @@ use_calibrations_bladj.matchedCalibrations <- function(calibrations,
   # otherwise, add one
   # bladj does not run if there is no calibration for the root
   # bladj will run if calibrations are in conflict
-  node_names <- calibrations$matched_calibrations$NodeNames
+  node_names <- names(node_ages)
   # length(node_names)
-  if (!"n1" %in% calibrations$matched_calibrations$NodeNames) {
+  root_node_name <- paste0("n", ape::Ntip(calibrations$matched_phy) + 1)
+  if (!root_node_name %in% node_names) {
     if (length(node_ages) > 1) {
       root_age <- max(node_ages) + mean(abs(diff(sort(node_ages))))
     } else {
       # if there is only one calibration the line above will give NaN
       root_age <- 1.1 * max(node_ages)
     }
+    # add root node name and age:
     node_ages <- c(root_age, node_ages)
-    node_names <- c("n1", node_names)
+    node_names <- c(root_node_name, node_names)
   }
   chronogram <- make_bladj_tree(
-    tree = calibrations$phy, nodeages = node_ages,
+    tree = calibrations$matched_phy, nodeages = node_ages,
     nodenames = node_names
   )
   # TODO: something about these extra list elements, set up as attributes??
   chronogram$dating_method <- "bladj"
-  chronogram$calibration_distribution <- calibrations$phy$calibration_distribution
+  # chronogram$calibration_distribution <- calibrations$phy$calibration_distribution
   chronogram$calibrations <- calibrations$matched_calibrations
   chronogram$used_calibrations <- stats::setNames(node_ages, node_names)
   return(chronogram)

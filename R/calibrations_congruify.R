@@ -29,7 +29,7 @@ congruify_calibrations <- function(phy, chronograms, calibrations) {
   # Extract all calibrations as a data.frame if none are provided
   ##############################################################################
   ##############################################################################
-  if (is.missing(calibrations)) {
+  if (missing(calibrations)) {
     extracted_calibrations <- extract_calibrations_phylo(input = chronograms,
                                                          each = TRUE)
   }
@@ -39,8 +39,8 @@ congruify_calibrations <- function(phy, chronograms, calibrations) {
   # so we have all taxon pairs and the corresponding real node labels
   ##############################################################################
   ##############################################################################
-  if (is.null(edge.length(phy))) {
-    message("addding even temporary branch lengths to 'phy'")
+  if (is.null(phy$edge.length)) {
+    message("... Adding temporary branch lengths to 'phy' for congruification.")
     phy <- ape::compute.brlen(phy)
   }
   phy_calibrations <- suppressWarnings(
@@ -62,17 +62,19 @@ congruify_calibrations <- function(phy, chronograms, calibrations) {
   run_congruification_self <- function(phy,
                                   chronograms,
                                   index) {
-      self <- chronograms[[index]]
-      phy$tip.label <- sub(" ", "_", phy$tip.label)
-      self$tip.label <- sub(" ", "_", self$tip.label)
+    self <- chronograms[[index]]
+    phy$tip.label <- sub(" ", "_", phy$tip.label)
+    self$tip.label <- sub(" ", "_", self$tip.label)
 
-      cc <- suppressWarnings(geiger::congruify.phylo(reference = list(phy = phy,
-                                                     self = self),
-                              target = self,
-                              scale = NA,
-                              ncores = 1))
-      names(cc) <- c("phy", "self")
-      cc
+    cc_phy <- suppressWarnings(geiger::congruify.phylo(reference = phy,
+                               target = self,
+                               scale = NA,
+                               ncores = 1))
+    cc_self <- suppressWarnings(geiger::congruify.phylo(reference = self,
+                               target = self,
+                               scale = NA,
+                               ncores = 1))
+    list(phy = cc_phy, self = cc_self)
   }
   congruified_self <- lapply(seq(chronograms),
                             function(i) {
@@ -134,27 +136,32 @@ congruify_calibrations <- function(phy, chronograms, calibrations) {
                                     MaxAge = unname(nn_ages),
                                     congruent = rep(FALSE, length(nn_ages)),
                                     source_mrca_node_number = nn_node_number,
-                                    source_mrca_node_name = nn_node_name,
-                                  )
+                                    source_mrca_node_name = nn_node_name)
         calibs <- data.table::rbindlist(list(calibs, non_congruent),
                                         fill = TRUE)
       }
     calibs$reference <- rep(names(congruified_self)[index], nrow(calibs))
     return(calibs)
   }
-
+  # TODO: fix error in cross validation data set when running the following:
   fixed_congruification <- lapply(seq(congruified_self),
                                   function(i) {
-                                    fix_congruification(congruified_self,
+                                    tryCatch(fix_congruification(congruified_self,
                                                         index = i,
-                                                        extracted_calibrations)})
+                                                        extracted_calibrations),
+                                              error = function(e) NA) } )
+  errored <- is.na(fixed_congruification)
+  if (any(errored)) {
+    message("fixing congruification errored for:\n",
+              paste(which(errored), "--", names(congruified_self)[errored], "\n"))
+  }
   ##############################################################################
   ##############################################################################
   # Merge calibrations data frames into a single one
   # and match to phy nodes
   ##############################################################################
   ##############################################################################
-  calibrations <-   data.table::rbindlist(fixed_congruification, fill = TRUE)
+  calibrations <-   data.table::rbindlist(fixed_congruification[!errored], fill = TRUE)
   calibrations_results <- mrca_calibrations(phy = phy,
                                             calibrations = calibrations)
   return(structure(calibrations_results,
