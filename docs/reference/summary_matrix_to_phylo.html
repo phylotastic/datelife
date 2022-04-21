@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datelife</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,19 +75,23 @@
 <dt>datelife_query</dt>
 <dd><p>A <code>datelifeQuery</code> object, usually an output of <code><a href="make_datelife_query.html">make_datelife_query()</a></code>.</p></dd>
 <dt>total_distance</dt>
-<dd><p>Boolean. If <code>TRUE</code> it will divide the matrix in half, if
-<code>FALSE</code> it will take it as is.</p></dd>
+<dd><p>Whether the input <code>summ_matrix</code> stores total age distance
+(from tip to tip) or distance from node to tip. Default to <code>TRUE</code>,
+divides the matrix in half, if <code>FALSE</code> it will take it as is.</p></dd>
 <dt>use</dt>
 <dd><p>A character vector indicating what type of age to use for summary.
-One of the following:</p><dl><dt>mean</dt>
-<dd><p>It will use the mean of the node age distributions.</p></dd>
+One of the following:</p><dl><dt>"mean"</dt>
+<dd><p>It will use the <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code> of the node ages in <code>summ_matrix</code>.</p></dd>
 
-<dt>min</dt>
-<dd><p>It will use the minimum age from the node age distributions.</p></dd>
+<dt>"median"</dt>
+<dd><p>It uses the <code><a href="https://rdrr.io/r/stats/median.html" class="external-link">stats::median()</a></code> age of node ages in <code>summ_matrix</code>.</p></dd>
 
-<dt>max</dt>
-<dd><p>Choose this if you wanna be conservative; it will use the maximum
-age from the node age distributions.</p></dd>
+<dt>"min"</dt>
+<dd><p>It will use the <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min()</a></code> age from node ages in <code>summ_matrix</code>.</p></dd>
+
+<dt>"max"</dt>
+<dd><p>Choose this if you wanna be conservative; it will use the <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max()</a></code>
+age from node ages in <code>summ_matrix</code>.</p></dd>
 
 
 </dl></dd>

@@ -1,0 +1,4 @@
+
+## Acknowledgements
+
+`datelife` has been developed as part of the [phylotastic](http://phylotastic.org/) (NSF-funded) project, and is still under development.

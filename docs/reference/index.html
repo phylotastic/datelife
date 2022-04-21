@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datelife</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,6 +129,11 @@ Needed because using <code>include_suppressed = FALSE</code> in <code><a href="h
         <dd>Congruify and check.</dd>
       </dl><dl><dt>
           
+          <code><a href="congruify_calibrations.html">congruify_calibrations()</a></code> 
+        </dt>
+        <dd>Congruify nodes of a tree topology to nodes from taxon pair calibrations</dd>
+      </dl><dl><dt>
+          
           <code><a href="contributor_cache.html">contributor_cache</a></code> 
         </dt>
         <dd>Information on contributors, authors, study ids and clades from studies with
@@ -204,13 +209,13 @@ divergence openly available for a given set of taxon names</dd>
           
           <code><a href="extract_calibrations_dateliferesult.html">extract_calibrations_dateliferesult()</a></code> 
         </dt>
-        <dd>Extract secondary calibrations from a given <code>datelifeResult</code> object</dd>
+        <dd>Use congruification to extract secondary calibrations from a <code>datelifeResult</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="extract_calibrations_phylo.html">extract_calibrations_phylo()</a></code> 
         </dt>
-        <dd>Extract secondary calibrations from a <code>phylo</code> or <code>multiPhylo</code>
-object with branch lengths proportional to time using congruification.</dd>
+        <dd>Use congruification to extract secondary calibrations from a <code>phylo</code> or <code>multiPhylo</code>
+object with branch lengths proportional to time.</dd>
       </dl><dl><dt>
           
           <code><a href="extract_ott_ids.html">extract_ott_ids()</a></code> 
@@ -238,9 +243,9 @@ object with branch lengths proportional to time using congruification.</dd>
         <dd>Force a non-ultrametric <code>phylo</code> object to be ultrametric with <code><a href="https://rdrr.io/pkg/phytools/man/force.ultrametric.html" class="external-link">phytools::force.ultrametric()</a></code>.</dd>
       </dl><dl><dt>
           
-          <code><a href="get_all_calibrations.html">get_all_calibrations()</a></code> 
+          <code><a href="get_all_calibrations.html">get_all_calibrations()</a></code> <code><a href="get_all_calibrations.html">get_all_calibrations()</a></code> 
         </dt>
-        <dd>Get secondary calibrations from a set of given taxon names</dd>
+        <dd>Get secondary calibrations from a chronogram database for a set of given taxon names</dd>
       </dl><dl><dt>
           
           <code><a href="get_best_grove.html">get_best_grove()</a></code> 
@@ -251,7 +256,7 @@ from a median summary matrix</dd>
           
           <code><a href="get_biggest_multiphylo.html">get_biggest_multiphylo()</a></code> 
         </dt>
-        <dd>Get the tree with the most tips: the biggest tree.</dd>
+        <dd>Get the tree with the most tips from a multiPhylo object: the biggest tree.</dd>
       </dl><dl><dt>
           
           <code><a href="get_calibrations_datelifequery.html">get_calibrations_datelifequery()</a></code> 
@@ -332,7 +337,7 @@ from one or more input taxa.</dd>
           
           <code><a href="get_taxon_summary.html">get_taxon_summary()</a></code> 
         </dt>
-        <dd>Get a taxon summary of a <code>datelifeResult</code> object</dd>
+        <dd>Get a taxon summary of a <code>datelifeResult</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="get_valid_children.html">get_valid_children()</a></code> 
@@ -388,8 +393,7 @@ Taxonomic identifiers (OTT ids) from a taxonomic source.</dd>
           
           <code><a href="make_datelife_query.html">make_datelife_query()</a></code> 
         </dt>
-        <dd>Go from taxon names from a character vector, a phylo object or a newick character
-string to a <code>datelifeQuery</code> object</dd>
+        <dd>Go from taxon names to a <code>datelifeQuery</code> object</dd>
       </dl><dl><dt>
           
           <code><a href="make_mrbayes_runfile.html">make_mrbayes_runfile()</a></code> 
@@ -436,7 +440,17 @@ given a set of node calibrations without any data.</dd>
           
           <code><a href="match_all_calibrations.html">match_all_calibrations()</a></code> 
         </dt>
-        <dd>Match calibrations to nodes of a tree</dd>
+        <dd>Match calibrations to nodes of a given tree</dd>
+      </dl><dl><dt>
+          
+          <code><a href="matrices_to_table.html">matrices_to_table()</a></code> 
+        </dt>
+        <dd>Go from a list of patristic distance matrix to a table of node ages</dd>
+      </dl><dl><dt>
+          
+          <code><a href="matrix_to_table.html">matrix_to_table()</a></code> 
+        </dt>
+        <dd>Go from a patristic distance matrix to a node ages table</dd>
       </dl><dl><dt>
           
           <code><a href="message_multiphylo.html">message_multiphylo()</a></code> 
@@ -447,6 +461,11 @@ given a set of node calibrations without any data.</dd>
           <code><a href="missing_taxa_check.html">missing_taxa_check()</a></code> 
         </dt>
         <dd>Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile inside tree_add_dates functions.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="mrca_calibrations.html">mrca_calibrations()</a></code> 
+        </dt>
+        <dd>Identify nodes of a tree topology that are most recent common ancestor (mrca) of taxon pair calibrations</dd>
       </dl><dl><dt>
           
           <code><a href="opentree_chronograms.html">opentree_chronograms</a></code> 
@@ -663,7 +682,13 @@ Used inside phylo_get_subset_array and phylo_get_subset_array_congruify.</dd>
           
           <code><a href="summary.datelifeResult.html">summary(<i>&lt;datelifeResult&gt;</i>)</a></code> 
         </dt>
-        <dd>Summarize a datelifeResult object</dd>
+        <dd>Summarize a <code>datelifeResult</code> object.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="summary.matchedCalibrations.html">summary(<i>&lt;matchedCalibrations&gt;</i>)</a></code> 
+        </dt>
+        <dd>Summarize a <code>matchedCalibrations</code> object
+<code>summary.matchedCalibrations</code> gets the node age distribution from a <code>matchedCalibrations</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="summary_matrix_to_phylo.html">summary_matrix_to_phylo()</a></code> 
@@ -762,6 +787,11 @@ Used inside phylo_get_subset_array and phylo_get_subset_array_congruify.</dd>
       </dl><dl><dt>
           
           <code><a href="use_calibrations_bladj.html">use_calibrations_bladj()</a></code> 
+        </dt>
+        <dd>Use calibrations to date a topology with the BLADJ algorithm.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="use_calibrations_bladj.matchedCalibrations.html">use_calibrations_bladj.matchedCalibrations()</a></code> 
         </dt>
         <dd>Use calibrations to date a topology with the BLADJ algorithm.</dd>
       </dl><dl><dt>

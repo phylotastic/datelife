@@ -58,7 +58,7 @@
     
     <a class="navbar-brand me-2" href="index.html">datelife</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,126 +104,27 @@
 <!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions) -->
 
 <div class="section level1">
-<div class="page-header"><h1 id="welcome-to-datelifes-r-package-github-repository">Welcome to DateLife’s R package GitHub repository!<a class="anchor" aria-label="anchor" href="#welcome-to-datelifes-r-package-github-repository"></a>
+<div class="page-header"><h1 id="welcome-to-datelifes-r-package-documentation">Welcome to DateLife’s R package documentation!<a class="anchor" aria-label="anchor" href="#welcome-to-datelifes-r-package-documentation"></a>
 </h1></div>
-<p>Get a phylogenetic tree with branch lengths proportional to geologic time (aka a <strong><em>chronogram</em></strong>) of any two or more lineages of interest to you.</p>
-<p>Use the <code>datelife</code> R package locally, or through <a href="http://datelife.opentreeoflife.org/query/" class="external-link">DateLife’s website</a> to search for chronograms available for your lineages of interest in <a href="https://tree.opentreeoflife.org/curator" class="external-link">Open Tree of Life’s tree store</a>.</p>
-<p>You can also date a phylogenetic tree of your own making (or choosing one from the literature), using node ages from chronograms found with <code>datelife</code> as secondary calibrations.</p>
-<p><code>datelife</code> has been developed as part of the <a href="http://phylotastic.org/" class="external-link">phylotastic</a> (NSF-funded) project, and is still under development.</p>
-<ol style="list-style-type: decimal">
-<li><a href="#installation">Installation</a></li>
-<li><a href="#citation">Citation</a></li>
-<li><a href="#feedback">Feedback and info for developers</a></li>
-<li><a href="#license">License</a></li>
-</ol>
 <div class="section level2">
-<h2 id="1-installation">1. Installation<a class="anchor" aria-label="anchor" href="#1-installation"></a>
+<h2 id="what-is-datelife">What is <code>datelife</code>?<a class="anchor" aria-label="anchor" href="#what-is-datelife"></a>
 </h2>
-<p><code>datelife</code>s stable version is currently available for installation from CRAN with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"datelife"</span><span class="op">)</span></code></pre></div>
-<p>You can install the development version from the GitHub repository:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"phylotastic/datelife"</span><span class="op">)</span></code></pre></div>
+<p><code>datelife</code> is an R package that allows researchers and the general audience to obtain open scientific data on the age of any organism they are interested in. <code>datelife</code> retrieves organism ages from a database of dated phylogenetic trees (chronograms), which have been peer-reviewed and published in association with a scientific research article in an indexed journal (<a href="https://tree.opentreeoflife.org/curator" class="external-link">Open Tree of Life’s tree store</a>). As such, these organism ages constitute state-of-the-art, peer-reviewed, public scientific knowledge, that can be accessed and reused by experts and non-experts in the field alike.</p>
 </div>
 <div class="section level2">
-<h2 id="2-citation">2. Citation<a class="anchor" aria-label="anchor" href="#2-citation"></a>
+<h2 id="how-can-you-use-datelife">How can you use <code>datelife</code>?<a class="anchor" aria-label="anchor" href="#how-can-you-use-datelife"></a>
 </h2>
-<p>If you use <code>datelife</code> for a publication, please cite the R package and the accompanying paper:</p>
-<p>
-</p>
-<p>O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K, Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022). <em>datelife: Scientific Data on Time of Lineage Divergence for Your Taxa</em>. R package version 0.6.0, <a href="https://doi.org/10.5281/zenodo.593938" class="external-link">https://doi.org/10.5281/zenodo.593938</a>.</p>
-
-<p>
-</p>
-<p>Sanchez-Reyes L, O’Meara B (2019). “datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life.” <em>bioRxiv</em>, <b>782094</b>. <a href="https://doi.org/10.1101/782094" class="external-link">https://doi.org/10.1101/782094</a>.</p>
-
-<p>You can get these citations and the bibtex entry with:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"datelife"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/toLatex.html" class="external-link">toBibtex</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"datelife"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>.bibtex files are available</p>
+<p>You can install the <code>datelife</code> R package on your own computer and use it locally.</p>
+<p>If you do not want to deal with installation, you can go to <a href="http://datelife.opentreeoflife.org/query/" class="external-link">DateLife’s interactive website application</a>.</p>
 </div>
 <div class="section level2">
-<h2 id="3-feedback-and-information-for-developers">3. Feedback and Information for Developers<a class="anchor" aria-label="anchor" href="#3-feedback-and-information-for-developers"></a>
+<h2 id="documentation-topics">Documentation topics:<a class="anchor" aria-label="anchor" href="#documentation-topics"></a>
 </h2>
-<p>We welcome and encourage to post a <a href="https://github.com/phylotastic/datelife/issues/new" class="external-link">GitHub issue</a> with any comments, ideas and questions about <code>datelife</code>’s software and website. If you want to contribute with code directly, we welcome and encourage <a href="https://github.com/phylotastic/datelife/pulls" class="external-link">pull requests</a>.</p>
-<div class="section level4">
-<h4 id="function-documentation">Function documentation:<a class="anchor" aria-label="anchor" href="#function-documentation"></a>
-</h4>
-<p>Package and function documentation was generated with <a href="https://CRAN.R-project.org/package=roxygen2" class="external-link">roxygen2</a>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">roxygen2</span><span class="fu">::</span><span class="fu"><a href="https://roxygen2.r-lib.org/reference/roxygenize.html" class="external-link">roxygenise</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="styling-code">Styling code:<a class="anchor" aria-label="anchor" href="#styling-code"></a>
-</h4>
-<p>We used the package <a href="https://CRAN.R-project.org/package=lintr" class="external-link">lintr</a> to check for coding style:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">lintr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lintr/man/lint_package.html" class="external-link">lint_package</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="calculating-test-coverage">Calculating test coverage:<a class="anchor" aria-label="anchor" href="#calculating-test-coverage"></a>
-</h4>
-<p>Code coverage was calculated with the package <a href="https://CRAN.R-project.org/package=covr" class="external-link">covr</a>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cov</span> <span class="op">&lt;-</span> <span class="fu">covr</span><span class="fu">::</span><span class="fu"><a href="http://covr.r-lib.org/reference/package_coverage.html" class="external-link">package_coverage</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_data.html" class="external-link">use_data</a></span><span class="op">(</span><span class="va">cov</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>You can see an interactive report of testing coverage:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">covr</span><span class="fu">::</span><span class="fu"><a href="http://covr.r-lib.org/reference/report.html" class="external-link">report</a></span><span class="op">(</span><span class="va">cov</span><span class="op">)</span></code></pre></div>
-<p>And, find code with zero coverage:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">covr</span><span class="fu">::</span><span class="fu"><a href="http://covr.r-lib.org/reference/zero_coverage.html" class="external-link">zero_coverage</a></span><span class="op">(</span><span class="va">cov</span><span class="op">)</span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="generating-datelifes-hexsticker">Generating <code>datelife</code>’s hexsticker:<a class="anchor" aria-label="anchor" href="#generating-datelifes-hexsticker"></a>
-</h4>
-<p>Code used to generate current <code>datelife</code>’s logo hexsticker is in <a href="https://github.com/phylotastic/datelife/blob/master/data-raw/hexsticker-current.R" class="external-link">data-raw/hexsticker-current.R</a></p>
-</div>
-<div class="section level4">
-<h4 id="rendering-the-vignettes">Rendering the vignettes:<a class="anchor" aria-label="anchor" href="#rendering-the-vignettes"></a>
-</h4>
-<p>Vignettes are rendered automatically upon built. However, if you wish to see how they look rendered before releasing the package, you can do this with <code><a href="https://rdrr.io/pkg/knitr/man/knit.html" class="external-link">knitr::knit()</a></code>. The following command renders the vignette <code>Getting_started_with_datelife</code> as html:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/knit.html" class="external-link">knit</a></span><span class="op">(</span><span class="st">"vignettes/Getting_started_with_datelife.Rmd"</span><span class="op">)</span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="creating-a-webiste-for-the-package">Creating a webiste for the package<a class="anchor" aria-label="anchor" href="#creating-a-webiste-for-the-package"></a>
-</h4>
-<p>Using <code>pkgdown</code> for this is quite straightforward and fun:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">use_pkgdown</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="releasing-to-cran">Releasing to CRAN<a class="anchor" aria-label="anchor" href="#releasing-to-cran"></a>
-</h4>
-<div class="section level5">
-<h5 id="local-checks">Local checks<a class="anchor" aria-label="anchor" href="#local-checks"></a>
-</h5>
-<p>To be able to release to CRAN, the first step is to pass the checks locally. To run a local check, you can use the command <code>R CMD check</code> from your terminal. For that, change directories to the one above your working clone of the <code>datelife</code> repo:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1"></a><span class="bu">cd</span> ../</span></code></pre></div>
-<p>Generate a tar ball for your package by running <code>R CMD build package-name</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="ex">R</span> CMD build datelife</span></code></pre></div>
-<p>Finally, run <code>R CMD check package-tar-ball</code> on the tar ball that you just generated:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="ex">R</span> CMD check --as-cran datelife_0.6.0.tar.gz</span></code></pre></div>
-</div>
-<div class="section level5">
-<h5 id="remote-checks">Remote checks<a class="anchor" aria-label="anchor" href="#remote-checks"></a>
-</h5>
-<p>If you do not have access to different OS to test your package on, the <a href="https://CRAN.R-project.org/package=rhub" class="external-link">rhub</a> package allows remote testing on a variety of OS with the command:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">rhub</span><span class="fu">::</span><span class="fu"><a href="https://r-hub.github.io/rhub/reference/check_for_cran.html" class="external-link">check_for_cran</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>To submit to CRAN call <code><a href="https://devtools.r-lib.org/reference/release.html" class="external-link">devtools::release()</a></code> and answer the prompted questions. If the answer to all of these is <em>yes</em>, the package will be submitted to CRAN <span class="emoji" data-emoji="rocket">🚀</span></p>
-</div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="4-license">4. License<a class="anchor" aria-label="anchor" href="#4-license"></a>
-</h2>
-<p>This package is free and open source software, licensed under GPL.</p>
+<ul>
+<li><a href="">Local installation</a></li>
+<li><a href="">Getting started</a></li>
+<li><a href="">Function documentation</a></li>
+</ul>
 </div>
 </div>
 

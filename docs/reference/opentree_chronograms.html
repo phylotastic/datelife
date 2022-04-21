@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datelife</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,6 +78,14 @@ to the Open Tree of Life database.</p></dd>
 <dd><p>A <code>multiPhylo</code> object storing the chronograms from Open Tree of
 Life database.</p></dd>
 
+<dt>update</dt>
+<dd><p>A character vector indicating the time when the database object
+was last updated.</p></dd>
+
+<dt>version</dt>
+<dd><p>A character vector indicating the datelife <code><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">utils::packageVersion()</a></code>
+when the database was last updated.</p></dd>
+
 
 </dl></div>
     <div class="section level2">
@@ -87,7 +95,11 @@ Life database.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Generated with
+devtools::install_github("ropensci/rotl", ref = devtools::github_pull("137"))
+remotes::install_github("ROpenSci/bibtex")'
 opentree_chronograms &lt;- get_opentree_chronograms()
+opentree_chronograms$update &lt;- Sys.time()
+opentree_chronograms$version &lt;- '0.6.2'
 usethis::use_data(opentree_chronograms, overwrite = T)
 and updated with update_datelife_cache()</p>
     </div>

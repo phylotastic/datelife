@@ -1,0 +1,99 @@
+## Feedback and Information for Developers
+
+We welcome and encourage to post a [GitHub issue](https://github.com/phylotastic/datelife/issues/new)
+with any comments, ideas and questions about `datelife`'s software and website.
+If you want to contribute with code directly, we welcome and encourage [pull requests](https://github.com/phylotastic/datelife/pulls).
+
+#### _Function documentation_:
+
+Package and function documentation was generated with [roxygen2](https://CRAN.R-project.org/package=roxygen2):
+
+```{r eval = FALSE}
+roxygen2::roxygenise()
+```
+
+#### _Styling code_:
+
+We used the package [lintr](https://CRAN.R-project.org/package=lintr) to check for coding style:
+
+```{r eval = FALSE}
+lintr::lint_package()
+```
+
+#### _Calculating test coverage_:
+
+Code coverage was calculated with the package [covr](https://CRAN.R-project.org/package=covr):
+
+```{r eval = FALSE}
+cov <- covr::package_coverage()
+
+usethis::use_data(cov, overwrite = TRUE)
+```
+
+You can see an interactive report of testing coverage:
+
+```{r eval = FALSE}
+covr::report(cov)
+```
+
+And, find code with zero coverage:
+
+```{r eval = FALSE}
+covr::zero_coverage(cov)
+```
+
+#### _Generating `datelife`'s hexsticker_:
+
+Code used to generate current `datelife`'s logo hexsticker is in [data-raw/hexsticker-current.R](https://github.com/phylotastic/datelife/blob/master/data-raw/hexsticker-current.R)
+
+#### _Rendering the vignettes_:
+
+Vignettes are rendered automatically upon built. However, if you wish to see how they look rendered before releasing the package, you can do this with `knitr::knit()`. The following command renders the vignette `Getting_started_with_datelife` as html:
+
+
+```{r eval = FALSE}
+knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
+```
+
+#### _Creating a documentation webiste for the package_
+
+Using `pkgdown` for this is quite straightforward and fun:
+
+```r
+usethis::use_pkgdown()
+pkgdown::build_site()
+```
+
+
+#### _Releasing to CRAN_
+
+##### _**Local checks**_
+
+To be able to release to CRAN, the first step is to pass the checks locally. To run a local check, you can use the command `R CMD check` from your terminal. For that, change directories to the one above your working clone of the `datelife` repo:
+
+``` bash
+cd ../
+```
+
+Generate a tar ball for your package by running `R CMD build package-name`:
+
+``` bash
+R CMD build datelife
+```
+
+Finally, run `R CMD check package-tar-ball` on the tar ball that you just generated:
+
+``` bash
+R CMD check --as-cran datelife_0.6.0.tar.gz
+```
+
+##### _**Remote checks**_
+
+If you do not have access to different OS to test your package on, the [rhub](https://CRAN.R-project.org/package=rhub) package allows remote testing on a variety of OS with the command:
+
+
+```r
+rhub::check_for_cran()
+```
+
+To submit to CRAN call `devtools::release()` and answer the prompted questions. If the answer to all of these is _yes_, the package will be submitted to CRAN :rocket:

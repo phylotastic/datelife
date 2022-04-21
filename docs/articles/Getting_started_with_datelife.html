@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datelife</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,8 @@
     
   </div>
 </nav><div class="container template-article">
-<script src="Getting_started_with_datelife_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Getting started</h1>
             
@@ -78,9 +79,8 @@
     
     
 <div class="section level2">
-<h2 id="what-can-you-do-with-datelife">What can you do with <code>datelife</code>?<a class="anchor" aria-label="anchor" href="#what-can-you-do-with-datelife"></a>
+<h2 id="what-can-you-get-with-datelife">What can you get with <code>datelife</code>?<a class="anchor" aria-label="anchor" href="#what-can-you-get-with-datelife"></a>
 </h2>
-<p>The aim of the <code>datelife</code> R package is to allow researchers and the general audience to obtain open scientific data on ages for their organisms of interest. These age data is extracted from dated phylogenetic trees (chronograms) that have been published and peer-reviewed in association with a scientific article in an indexed journal. As such, the age data provided by <code>datelife</code> constitutes state-of-the-art, peer-reviewed, public scientific knowledge, that can be accessed by experts and non-experts in the field alike.</p>
 <p>As a <code>datelife</code> user, you can get age data for your organisms of interest in several forms:</p>
 <ul>
 <li><p><strong>MRCA</strong>: Get the age of the most recent common ancestor (MRCA) of your organisms.</p></li>
@@ -91,8 +91,11 @@
 <p>You can also apply the obtained age data to date a phylogenetic tree topology of your organisms of interest.</p>
 </div>
 <div class="section level2">
-<h2 id="processing-your-organism-names">1. Processing your organism names<a class="anchor" aria-label="anchor" href="#processing-your-organism-names"></a>
+<h2 id="how-do-you-use-datelife-to-get-these-data">How do you use <code>datelife</code> to get these data?<a class="anchor" aria-label="anchor" href="#how-do-you-use-datelife-to-get-these-data"></a>
 </h2>
+<div class="section level3">
+<h3 id="processing-your-organism-names">1. Processing your organism names<a class="anchor" aria-label="anchor" href="#processing-your-organism-names"></a>
+</h3>
 <p>The function <code>make_datelife_query</code> processes the taxon names of your organisms of interest and structures them as a <code>datelifeQuery</code> object.</p>
 <p>A <code>datelifeQuery</code> object is a list of three elements:</p>
 <ul>
@@ -105,9 +108,9 @@
 </ul>
 <p>This allows us to straightforwardly use the processed taxon names later to perform a search for ages across the <code>datelife</code> chronogram database as well as other downstream analyses.</p>
 <p>There are two alternative ways of processing organism names with <code>datelife</code>:</p>
-<div class="section level3">
-<h3 id="a-from-a-set-of-organism-taxonomic-names">a) From a set of organism taxonomic names<a class="anchor" aria-label="anchor" href="#a-from-a-set-of-organism-taxonomic-names"></a>
-</h3>
+<div class="section level4">
+<h4 id="a-from-a-set-of-organism-taxonomic-names">a) From a set of organism taxonomic names<a class="anchor" aria-label="anchor" href="#a-from-a-set-of-organism-taxonomic-names"></a>
+</h4>
 <p>You can provide the taxon names as a character vector or as a single comma separated string of names. For example, running the following:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/make_datelife_query.html">make_datelife_query</a></span><span class="op">(</span>input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Delphinus_delphis"</span>,
@@ -115,8 +118,9 @@
                                         <span class="st">"elephas Maximus"</span>,
                                         <span class="st">"felis_catus"</span>,
                                         <span class="st">"homo-sapiens"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<details><p><summary>make_datelife_query output 1</summary></p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<details><summary>
+make_datelife_query output 1
+</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Making a DateLife query.</span>
 <span class="co">#&gt; ... Phylo-processing 'input'.</span>
 <span class="co">#&gt; 'input' is not a phylogeny.</span>
@@ -140,8 +144,9 @@
                                        elephas Maximus,
                                        felis_catus,
                                        homo-sapiens"</span><span class="op">)</span></code></pre></div>
-<details><p><summary>make_datelife_query output 2</summary></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<details><summary>
+make_datelife_query output 2
+</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Making a DateLife query.</span>
 <span class="co">#&gt; ... Phylo-processing 'input'.</span>
 <span class="co">#&gt; 'input' is not a phylogeny.</span>
@@ -160,6 +165,7 @@
 <span class="co">#&gt; [1] "datelifeQuery"</span></code></pre></div>
 </details><p>Note that you can use underscores or spaces to separate binomial scientific names and <code>datelife</code> will process them the same.</p>
 </div>
+</div>
 <div class="section level3">
 <h3 id="b-from-a-tree-with-organism-taxonomic-names-as-tip-labels">b) From a tree with organism taxonomic names as tip labels<a class="anchor" aria-label="anchor" href="#b-from-a-tree-with-organism-taxonomic-names-as-tip-labels"></a>
 </h3>
@@ -167,8 +173,9 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">newick</span> <span class="op">&lt;-</span> <span class="st">"((Elephas_maximus,(Homo_sapiens,(Delphinus_delphis, Felis_silvestris))), Gallus_gallus);"</span>
 <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/make_datelife_query.html">make_datelife_query</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">newick</span><span class="op">)</span></code></pre></div>
-<details><p><summary>make_datelife_query output 3</summary></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<details><summary>
+make_datelife_query output 3
+</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Making a DateLife query.</span>
 <span class="co">#&gt; ... Phylo-processing 'input'.</span>
 <span class="co">#&gt; 'input' is a phylogeny and it is correcly formatted.</span>
@@ -195,8 +202,9 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">phylo</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree</a></span><span class="op">(</span>text <span class="op">=</span> <span class="va">newick</span><span class="op">)</span>
 <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/make_datelife_query.html">make_datelife_query</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">phylo</span><span class="op">)</span></code></pre></div>
-<details><p><summary>make_datelife_query output 4</summary></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<details><summary>
+make_datelife_query output 4
+</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Making a DateLife query.</span>
 <span class="co">#&gt; ... Phylo-processing 'input'.</span>
 <span class="co">#&gt; 'input' is a phylogeny and it is correcly formatted.</span>
@@ -224,18 +232,18 @@
 <code class="sourceCode R"><span class="va">my_datelife_query</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/make_datelife_query.html">make_datelife_query</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">phylo</span><span class="op">)</span>
 <span class="co">#&gt; ... Making a DateLife query.</span>
 <span class="co">#&gt; ... Phylo-processing 'input'.</span>
-<span class="co">#&gt; 'input' is a phylogeny and it is correcly formatted.</span>
+<span class="co">#&gt; 'input' is a phylogeny and it is correctly formatted.</span>
 <span class="co">#&gt; DateLife query done!</span></code></pre></div>
 </div>
-</div>
-<div class="section level2">
-<h2 id="searching-the-chronogram-database">2. Searching the chronogram database<a class="anchor" aria-label="anchor" href="#searching-the-chronogram-database"></a>
-</h2>
+<div class="section level3">
+<h3 id="searching-the-chronogram-database">2. Searching the chronogram database<a class="anchor" aria-label="anchor" href="#searching-the-chronogram-database"></a>
+</h3>
 <p>The <code>datelife_search</code> function takes a <code>datelifeQuery</code> object and goes through the <code>datelife</code> chronogram database to find all chronograms matching at least two taxon names:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span><span class="op">)</span></code></pre></div>
-<details><p><summary>datelife_search default output</summary></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<details><summary>
+datelife_search default output
+</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Running a DateLife search.</span>
 <span class="co">#&gt; ... Getting a DateLife result.</span>
 <span class="co">#&gt; DateLife result obtained!</span>
@@ -257,10 +265,11 @@
 <span class="co">#&gt; 4 phylogenetic trees</span></code></pre></div>
 </details>
 </div>
-<div class="section level2">
-<h2 id="summarizing-chronogram-search-results">3. Summarizing chronogram search results<a class="anchor" aria-label="anchor" href="#summarizing-chronogram-search-results"></a>
-</h2>
+<div class="section level3">
+<h3 id="summarizing-chronogram-search-results">3. Summarizing chronogram search results<a class="anchor" aria-label="anchor" href="#summarizing-chronogram-search-results"></a>
+</h3>
 <p><code>datelife_search</code> will also summarize results from the chronogram database search for you. By default, it will give you all original chronograms matching the search, as a <code>phylo</code> or <code>multiPhylo</code> object. You can specify the format you desire for the summary of results with the argument <code>summary_format</code>. There are different summary formats to choose from:</p>
+</div>
 <div class="section level3">
 <h3 id="citations">Citations<a class="anchor" aria-label="anchor" href="#citations"></a>
 </h3>
@@ -268,8 +277,9 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">citations</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span>,
                           summary_format <span class="op">=</span> <span class="st">"citations"</span><span class="op">)</span></code></pre></div>
-<details><p><summary>datelife_search output “citations”</summary></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<details><summary>
+datelife_search output “citations”
+</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Running a DateLife search.</span>
 <span class="co">#&gt; ... Getting a DateLife result.</span>
 <span class="co">#&gt; DateLife result obtained!</span>
@@ -360,8 +370,9 @@
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mrca</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span>,
                           summary_format <span class="op">=</span> <span class="st">"mrca"</span><span class="op">)</span></code></pre></div>
-<details><p><summary>datelife_search output “mrca”</summary></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<details><summary>
+datelife_search output “mrca”
+</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Running a DateLife search.</span>
 <span class="co">#&gt; ... Getting a DateLife result.</span>
 <span class="co">#&gt; DateLife result obtained!</span>
@@ -461,8 +472,9 @@
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">newick_all</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span>,
                           summary_format <span class="op">=</span> <span class="st">"newick_all"</span><span class="op">)</span></code></pre></div>
-<details><p><summary>datelife_search output “newick_all”</summary></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<details><summary>
+datelife_search output “newick_all”
+</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Running a DateLife search.</span>
 <span class="co">#&gt; ... Getting a DateLife result.</span>
 <span class="co">#&gt; DateLife result obtained!</span>
@@ -557,15 +569,17 @@
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">newick_sdm</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span>,
                           summary_format <span class="op">=</span> <span class="st">"newick_sdm"</span><span class="op">)</span></code></pre></div>
-<details><p><summary>datelife_search output “newick_sdm”</summary></p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<details><summary>
+datelife_search output “newick_sdm”
+</summary><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"></code></pre></div>
 </details><p><code>summary_format = "newick_median"</code></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">newick_median</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span>,
                           summary_format <span class="op">=</span> <span class="st">"newick_median"</span><span class="op">)</span></code></pre></div>
-<details><p><summary>datelife_search output “newick_median”</summary></p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<details><summary>
+datelife_search output “newick_median”
+</summary><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Running a DateLife search.</span>
 <span class="co">#&gt; ... Getting a DateLife result.</span>
 <span class="co">#&gt; DateLife result obtained!</span>
@@ -665,15 +679,17 @@
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">phylo_sdm</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span>,
                           summary_format <span class="op">=</span> <span class="st">"phylo_sdm"</span><span class="op">)</span></code></pre></div>
-<details><p><summary>datelife_search output </summary></p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<details><summary>
+datelife_search output
+</summary><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"></code></pre></div>
 </details><p><code>summary_format = "phylo_median"</code></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">phylo_median</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span>,
                           summary_format <span class="op">=</span> <span class="st">"phylo_median"</span><span class="op">)</span></code></pre></div>
-<details><p><summary>datelife_search output “phylo_median”</summary></p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<details><summary>
+datelife_search output “phylo_median”
+</summary><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Running a DateLife search.</span>
 <span class="co">#&gt; ... Getting a DateLife result.</span>
 <span class="co">#&gt; DateLife result obtained!</span>
@@ -708,8 +724,9 @@
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">phylo_all</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span>,
                           summary_format <span class="op">=</span> <span class="st">"phylo_all"</span><span class="op">)</span></code></pre></div>
-<details><p><summary>datelife_search output “phylo_all”</summary></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<details><summary>
+datelife_search output “phylo_all”
+</summary><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Running a DateLife search.</span>
 <span class="co">#&gt; ... Getting a DateLife result.</span>
 <span class="co">#&gt; DateLife result obtained!</span>
@@ -733,8 +750,9 @@
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">phylo_biggest</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span>,
                           summary_format <span class="op">=</span> <span class="st">"phylo_biggest"</span><span class="op">)</span></code></pre></div>
-<details><p><summary>datelife_search output “phylo_biggest”</summary></p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<details><summary>
+datelife_search output “phylo_biggest”
+</summary><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Running a DateLife search.</span>
 <span class="co">#&gt; ... Getting a DateLife result.</span>
 <span class="co">#&gt; DateLife result obtained!</span>
@@ -769,8 +787,9 @@
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">html</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span>,
                           summary_format <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></code></pre></div>
-<details><p><summary>datelife_search output “html”</summary></p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<details><summary>
+datelife_search output “html”
+</summary><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Running a DateLife search.</span>
 <span class="co">#&gt; ... Getting a DateLife result.</span>
 <span class="co">#&gt; DateLife result obtained!</span>
@@ -853,8 +872,9 @@
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data_frame</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/datelife_search.html">datelife_search</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">my_datelife_query</span>,
                           summary_format <span class="op">=</span> <span class="st">"data_frame"</span><span class="op">)</span></code></pre></div>
-<details><p><summary>datelife_search output “data_frame”</summary></p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<details><summary>
+datelife_search output “data_frame”
+</summary><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#&gt; ... Running a DateLife search.</span>
 <span class="co">#&gt; ... Getting a DateLife result.</span>
 <span class="co">#&gt; DateLife result obtained!</span>
@@ -883,7 +903,8 @@
 <span class="co">#&gt; 2                                                               ((Delphinus_delphis:86.8,Felis_silvestris:86.8):9.3,Elephas_maximus:96.1);</span>
 <span class="co">#&gt; 3                                                               ((Felis_silvestris:89.8,Delphinus_delphis:89.8):21,Elephas_maximus:110.8);</span>
 <span class="co">#&gt; 4 ((Elephas_maximus:105.009658,(Felis_silvestris:78.392518,Delphinus_delphis:78.392517):26.617141):215.5141645,Gallus_gallus:320.5238235);</span></code></pre></div>
-</details>
+</details><p>TODO: add something about NJ, why is this happening</p>
+<p>One can use a clustering method like Neighbor Joining (NJ). While we implemented this method in the package, because NJ are greedy algorithms they do not perform well and often return toologies that are not biologically plausible. Hence, we implement a different workflow,</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

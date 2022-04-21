@@ -2,7 +2,7 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit THIS file -->
+<!-- README.md is generated from README.Rmd. Make sure to edit the .Rmd file and not the .md -->
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
@@ -16,33 +16,26 @@ knitr::opts_chunk$set(
 IS_README <- TRUE
 library(datelife)
 ```
+
 <img src='man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
 
-<!-- badges: start -->
-
-<!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions) -->
-[![CRAN status](https://www.r-pkg.org/badges/version/datelife)](https://CRAN.R-project.org/package=datelife)
-![GitHub R package version](https://img.shields.io/github/r-package/v/phylotastic/datelife?color=pink&label=GitHub)
-[![R-CMD-check](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)
-[![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://app.codecov.io/gh/phylotastic/datelife)
-[![Github Open Issues](https://img.shields.io/github/issues-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues)
-[![Github Closed Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues?q=is%3Aissue+is%3Aclosed)
-[![DOI](https://zenodo.org/badge/23036/phylotastic/datelife.svg)](https://zenodo.org/badge/latestdoi/23036/phylotastic/datelife)
-[![NSF-1458603](https://img.shields.io/badge/NSF-1458603-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458603)
-[![NSF-0905606](https://img.shields.io/badge/NSF-0905606-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=0905606)
-[![NSF-1458572](https://img.shields.io/badge/NSF-1458572-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458572)
-<!-- badges: end -->
+```{r, child = "pkgdown/badges.Rmd"}
+```
 
 # Welcome to DateLife's R package GitHub repository!
 
+```{r, child = "pkgdown/presentation.Rmd"}
+```
+
+<!--
 Get a phylogenetic tree with branch lengths proportional to geologic time (aka a
 _**chronogram**_) of any two or more lineages of interest to you.
 
-Use the `datelife` R package locally, or through [DateLife's website](http://datelife.opentreeoflife.org/query/) to search for chronograms available for your lineages of interest in [Open Tree of Life's tree store](https://tree.opentreeoflife.org/curator).
-
 You can also date a phylogenetic tree of your own making (or choosing one from the literature), using node ages from chronograms found with `datelife` as secondary calibrations.
+-->
 
-`datelife` has been developed as part of the [phylotastic](http://phylotastic.org/) (NSF-funded) project, and is still under development.
+To learn more, please go to
+[datelife's documentation website](http://phylotastic.org/datelife/index.html).
 
 1. [Installation](#installation)
 1. [Citation](#citation)
@@ -50,138 +43,14 @@ You can also date a phylogenetic tree of your own making (or choosing one from t
 1. [License](#license)
 
 
-## 1. Installation
-
-`datelife`s stable version is currently available for installation from CRAN with:
-
-```{r eval = FALSE}
-install.packages("datelife")
+```{r, child = "pkgdown/installation.Rmd"}
 ```
 
-You can install the development version from the GitHub repository:
-
-```{r eval = FALSE}
-devtools::install_github("phylotastic/datelife")
+```{r, child = "pkgdown/citation.Rmd"}
 ```
 
-## 2. Citation
-
-If you use `datelife` for a publication, please cite the R package and the accompanying paper:
-
-```{r eval = TRUE, echo = FALSE}
-print(citation("datelife"), bibtex = FALSE, style = "html")
+```{r, child = "pkgdown/dev.Rmd"}
 ```
 
-You can get these citations and the bibtex entry with:
-```{r eval = FALSE}
-citation("datelife")
-toBibtex(citation("datelife"))
+```{r, child = "pkgdown/license.Rmd"}
 ```
-
-.bibtex files are available
-
-## 3. Feedback and Information for Developers
-
-We welcome and encourage to post a [GitHub issue](https://github.com/phylotastic/datelife/issues/new)
-with any comments, ideas and questions about `datelife`'s software and website.
-If you want to contribute with code directly, we welcome and encourage [pull requests](https://github.com/phylotastic/datelife/pulls).
-
-#### Function documentation:
-
-Package and function documentation was generated with [roxygen2](https://CRAN.R-project.org/package=roxygen2):
-
-```{r eval = FALSE}
-roxygen2::roxygenise()
-```
-
-#### Styling code:
-
-We used the package [lintr](https://CRAN.R-project.org/package=lintr) to check for coding style:
-
-```{r eval = FALSE}
-lintr::lint_package()
-```
-
-#### Calculating test coverage:
-
-Code coverage was calculated with the package [covr](https://CRAN.R-project.org/package=covr):
-
-```{r eval = FALSE}
-cov <- covr::package_coverage()
-
-usethis::use_data(cov, overwrite = TRUE)
-```
-
-You can see an interactive report of testing coverage:
-
-```{r eval = FALSE}
-covr::report(cov)
-```
-
-And, find code with zero coverage:
-
-```{r eval = FALSE}
-covr::zero_coverage(cov)
-```
-
-#### Generating `datelife`'s hexsticker:
-
-Code used to generate current `datelife`'s logo hexsticker is in [data-raw/hexsticker-current.R](https://github.com/phylotastic/datelife/blob/master/data-raw/hexsticker-current.R)
-
-#### Rendering the vignettes:
-
-Vignettes are rendered automatically upon built. However, if you wish to see how they look rendered before releasing the package, you can do this with `knitr::knit()`. The following command renders the vignette `Getting_started_with_datelife` as html:
-
-
-```{r eval = FALSE}
-knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
-```
-
-#### Creating a webiste for the package
-
-Using `pkgdown` for this is quite straightforward and fun:
-
-```r
-usethis::use_pkgdown()
-pkgdown::build_site()
-```
-
-
-#### Releasing to CRAN
-
-##### Local checks
-
-To be able to release to CRAN, the first step is to pass the checks locally. To run a local check, you can use the command `R CMD check` from your terminal. For that, change directories to the one above your working clone of the `datelife` repo:
-
-``` bash
-cd ../
-```
-
-Generate a tar ball for your package by running `R CMD build package-name`:
-
-``` bash
-R CMD build datelife
-```
-
-Finally, run `R CMD check package-tar-ball` on the tar ball that you just generated:
-
-``` bash
-R CMD check --as-cran datelife_0.6.0.tar.gz
-```
-
-##### Remote checks
-
-If you do not have access to different OS to test your package on, the [rhub](https://CRAN.R-project.org/package=rhub) package allows remote testing on a variety of OS with the command:
-
-
-```r
-rhub::check_for_cran()
-```
-
-To submit to CRAN call `devtools::release()` and answer the prompted questions. If the answer to all of these is _yes_, the package will be submitted to CRAN :rocket:
-
-
-
-## 4. License
-
-This package is free and open source software, licensed under GPL.
