@@ -35,12 +35,14 @@ You can also date a phylogenetic tree of your own making (or choosing one from t
 -->
 
 To learn more, please go to
-[datelife's documentation website](http://phylotastic.org/datelife/index.html).
+[`datelife`'s documentation website](http://phylotastic.org/datelife/index.html).
 
-1. [Installation](#installation)
-1. [Citation](#citation)
-1. [Feedback and info for developers](#feedback)
-1. [License](#license)
+## README topics:
+
+- [Installation](#installation)
+- [Citation](#citation)
+- [Feedback and info for developers](#feedback)
+- [License](#license)
 
 
 ```{r, child = "pkgdown/installation.Rmd"}
@@ -53,4 +55,7 @@ To learn more, please go to
 ```
 
 ```{r, child = "pkgdown/license.Rmd"}
+```
+
+```{r, child = "pkgdown/funding.Rmd"}
 ```

@@ -33,3 +33,12 @@ library(datelife)
 - [Local installation]()
 - [Getting started]()
 - [Function documentation]()
+
+```{r, child = "citation.Rmd"}
+```
+
+```{r, child = "license.Rmd"}
+```
+
+```{r, child = "funding.Rmd"}
+```

@@ -53,13 +53,15 @@ _**chronogram**_) of any two or more lineages of interest to you.
 You can also date a phylogenetic tree of your own making (or choosing one from the literature), using node ages from chronograms found with `datelife` as secondary calibrations.
 -->
 
-To learn more, please go to [datelife’s documentation
+To learn more, please go to [`datelife`’s documentation
 website](http://phylotastic.org/datelife/index.html).
 
-1.  [Installation](#installation)
-2.  [Citation](#citation)
-3.  [Feedback and info for developers](#feedback)
-4.  [License](#license)
+## README topics:
+
+-   [Installation](#installation)
+-   [Citation](#citation)
+-   [Feedback and info for developers](#feedback)
+-   [License](#license)
 
 ## Local installation of the `datelife` R package
 
@@ -222,3 +224,9 @@ submitted to CRAN :rocket:
 ## License
 
 This package is free and open source software, licensed under GPL.
+
+## Acknowledgements
+
+`datelife` has been developed as part of the
+[phylotastic](http://phylotastic.org/) (NSF-funded) project, and is
+still under development.
