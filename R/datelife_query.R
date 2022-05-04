@@ -128,10 +128,9 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
     cleaned_names = cleaned_names, ott_ids = ott_ids,
     phy = phy_new
   )
-  message("DateLife query done!\n")
   #TODO: print working taxa to a file instead of screen:
   message("Working with the following taxa: ", "\n", "\t", cleaned_names.print)
-
+  message("DateLife query done!\n")
   return(structure(datelife_query.return, class = "datelifeQuery"))
 }
 #' Process a phylo object or a character string to determine if it's correct newick

@@ -1,8 +1,8 @@
 ---
-title: "Case study: the Fringillidae"
+title: "Case study: the true finches"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Case study: the Fringillidae}
+  %\VignetteIndexEntry{Case study: the true finches}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,9 +18,15 @@ knitr::opts_chunk$set(
 library(datelife)
 ```
 
-## 1. Processing Fringillidae names
+The family Fringillidae is a taxon that includes the true finches. Let's see what is known about their time of divergence.
 
-Get all species names belonging to the family using the flag `get_spp_from_taxon = TRUE`:
+## 1. Getting species names within the family Fringillidae
+
+DateLife searches its chronogram database using species names standardized to a [unified taxonomy](https://tree.opentreeoflife.org/about/taxonomy-version/ott3.3) constructed by the Open Tree of Life project.
+
+When working with taxon names above the species level in DateLife, the first step is to obtain all species names belonging to the taxon of interest. 
+
+We will get all species names belonging to the family Fringillidae, using the flag `get_spp_from_taxon = TRUE` from the function `datelife::make_datelife_query()`:
 
 ```r
 dquery <- datelife::make_datelife_query(input = "fringillidae",               
@@ -53,7 +59,7 @@ str(dquery)
 #>  - attr(*, "class")= chr "datelifeQuery"
 ```
 
-We have 289 species names in the family Fringillidae and we did not provide an input tree, so `$phy` is `NA`.
+We have 289 species names belonging to the family Fringillidae according to OpenTree's unified taxonomy. We did not provide an input tree, so `$phy` is `NA`.
 
 ## 2. Search the species names across a chronogram database
 
@@ -71,7 +77,7 @@ dres <- datelife::get_datelife_result(input = dquery, cache = opentree_chronogra
 #> ... Searching the chronogram database.
 #> Search done!
 #>
-#> Input taxon names were found in 13 chronograms.
+#> Input taxon names were found in 19 chronograms.
 ```
 
 Results from the chronogram search are returned as a `datelifeResult` object, which is a named list of patristic matrices. Each element of the list corresponds to a chronogram that has been translated to a distance matrix or patristic matrix. The main reason for this is that pruning is much faster on a matrix than on a `phylo` object:
@@ -83,47 +89,47 @@ class(dres)
 typeof(dres)
 #> [1] "list"
 
-names(dres)
-```
-
-<details>
-<summary>names on our `datelifeResult` object</summary>
-```r
-#> [1] "Hooper, Daniel M., Trevor D. Price. 2017. Chromosomal inversion differences correlate with range overlap in passerine birds. Nature Ecology & Evolution 1 (10): 1526-1534"
-
-#> [2] "Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845"
-
-#> [3] "Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845"
-
-#> [4] "Claramunt, Santiago, Joel Cracraft. 2015. A new time tree reveals Earth historys imprint on the evolution of modern birds. Science Advances 1 (11): e1501005-e1501005"
-
-#> [5] "Gibb, Gillian C., Ryan England, Gerrit Hartig, P.A. (Trish) McLenachan, Briar L. Taylor Smith, Bennet J. McComish, Alan Cooper, David Penny. 2015. New Zealand passerines help clarify the diversification of major songbird lineages during the Oligocene. Genome Biology and Evolution 7 (11): 2983-2995."
-
-#> [6] "Barker, F. Keith, Kevin J. Burns, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2015. New insights into New World biogeography: An integrated view from the phylogeny of blackbirds, cardinals, sparrows, tanagers, warblers, and allies. The Auk 132 (2): 333-348."
-#> [7] "Barker, F. Keith, Kevin J. Burns, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2015. New insights into New World biogeography: An integrated view from the phylogeny of blackbirds, cardinals, sparrows, tanagers, warblers, and allies. The Auk 132 (2): 333-348."
-#> [8] "Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448"
-
-#> [9] "Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448"
-
-#> [10] "Barker, F. K., K. J. Burns, J. Klicka, S. M. Lanyon, I. J. Lovette. 2013. Going to extremes: contrasting rates of diversification in a recent radiation of New World passerine birds. Systematic Biology 62 (2): 298-320."
-#> [11] "Burns, Kevin J., Allison J. Shultz, Pascal O. Title, Nicholas A. Mason, F. Keith Barker, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2014. Phylogenetics and diversification of tanagers (Passeriformes: Thraupidae), the largest radiation of Neotropical songbirds. Molecular Phylogenetics and Evolution 75: 41-77."
-#> [12] "Price, Trevor D., Daniel M. Hooper, Caitlyn D. Buchanan, Ulf S. Johansson, D. Thomas Tietze, Per Alström, Urban Olsson, Mousumi Ghosh-Harihar, Farah Ishtiaq, Sandeep K. Gupta, Jochen Martens, Bettina Harr, Pratap Singh, Dhananjai Mohan. 2014. Niche filling slows the diversification of Himalayan songbirds. Nature 509: 222-225."
-
-#> [13] "Price, Trevor D., Daniel M. Hooper, Caitlyn D. Buchanan, Ulf S. Johansson, D. Thomas Tietze, Per Alström, Urban Olsson, Mousumi Ghosh-Harihar, Farah Ishtiaq, Sandeep K. Gupta, Jochen Martens, Bettina Harr, Pratap Singh, Dhananjai Mohan. 2014. Niche filling slows the diversification of Himalayan songbirds. Nature 509: 222-225."
-```
-</details>
-```
 class(dres[[1]])
 #> [1] "matrix" "array"
+```
+
+Names on your `datelifeResult` object correspond to study citations from source chronograms:
+
+```r
+names(dres)
+
+#> [1] "Hooper, Daniel M., Trevor D. Price. 2017. Chromosomal inversion differences correlate with range overlap in passerine birds. Nature Ecology & Evolution 1 (10): 1526-1534"                                                                                                                                                              
+#> [2] "Roquet, C., Lavergne, S., & Thuiller, W. (2014). One Tree to Link Them All: A Phylogenetic Dataset for the European Tetrapoda. PLoS Currents. doi:10.1371/currents.tol.5102670fff8aa5c918e78f5592790e48\n"                                                                                                                              
+#> [3] "Roquet, C., Lavergne, S., & Thuiller, W. (2014). One Tree to Link Them All: A Phylogenetic Dataset for the European Tetrapoda. PLoS Currents. doi:10.1371/currents.tol.5102670fff8aa5c918e78f5592790e48\n"                                                                                                                              
+#> [4] "Oliveros, C. H., Field, D. J., Ksepka, D. T., Barker, F. K., Aleixo, A., Andersen, M. J., … Faircloth, B. C. (2019). Earth history and the passerine superradiation. Proceedings of the National Academy of Sciences, 116(16), 7916–7925. doi:10.1073/pnas.1813206116\n"                                                                
+#> [5] "Kimball, R. T., Oliveros, C. H., Wang, N., White, N. D., Barker, F. K., Field, D. J., … Braun, E. L. (2019). A Phylogenomic Supertree of Birds. Diversity, 11(7), 109. doi:10.3390/d11070109\n"                                                                                                                                         
+#> [6] "Kimball, R. T., Oliveros, C. H., Wang, N., White, N. D., Barker, F. K., Field, D. J., … Braun, E. L. (2019). A Phylogenomic Supertree of Birds. Diversity, 11(7), 109. doi:10.3390/d11070109\n"                                                                                                                                         
+#> [7] "Uyeda, J. C., Pennell, M. W., Miller, E. T., Maia, R., & McClain, C. R. (2017). The Evolution of Energetic Scaling across the Vertebrate Tree of Life. The American Naturalist, 190(2), 185–199. doi:10.1086/692326\n"                                                                                                                  
+#> [8] "Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845"                                                                                                                                   
+#> [9] "Hedges, S. Blair, Julie Marin, Michael Suleski, Madeline Paymer, Sudhir Kumar. 2015. Tree of life reveals clock-like speciation and diversification. Molecular Biology and Evolution 32 (4): 835-845"                                                                                                                                   
+#> [10] "Claramunt, Santiago, Joel Cracraft. 2015. A new time tree reveals Earth historys imprint on the evolution of modern birds. Science Advances 1 (11): e1501005-e1501005"                                                                                                                                                                  
+#> [11] "Gibb, Gillian C., Ryan England, Gerrit Hartig, P.A. (Trish) McLenachan, Briar L. Taylor Smith, Bennet J. McComish, Alan Cooper, David Penny. 2015. New Zealand passerines help clarify the diversification of major songbird lineages during the Oligocene. Genome Biology and Evolution 7 (11): 2983-2995."                            
+#> [12] "Barker, F. Keith, Kevin J. Burns, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2015. New insights into New World biogeography: An integrated view from the phylogeny of blackbirds, cardinals, sparrows, tanagers, warblers, and allies. The Auk 132 (2): 333-348."   
+
+#> [13] "Barker, F. Keith, Kevin J. Burns, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2015. New insights into New World biogeography: An integrated view from the phylogeny of blackbirds, cardinals, sparrows, tanagers, warblers, and allies. The Auk 132 (2): 333-348."                                                                   
+
+#> [14] "Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448"                                                                                              
+#> [15] "Jetz, W., G. H. Thomas, J. B. Joy, K. Hartmann, A. O. Mooers. 2012. The global diversity of birds in space and time. Nature 491 (7424): 444-448"                                                                                                                                                                                        
+#> [16] "Barker, F. K., K. J. Burns, J. Klicka, S. M. Lanyon, I. J. Lovette. 2013. Going to extremes: contrasting rates of diversification in a recent radiation of New World passerine birds. Systematic Biology 62 (2): 298-320."                                                                                                              
+#> [17] "Burns, Kevin J., Allison J. Shultz, Pascal O. Title, Nicholas A. Mason, F. Keith Barker, John Klicka, Scott M. Lanyon, Irby J. Lovette. 2014. Phylogenetics and diversification of tanagers (Passeriformes: Thraupidae), the largest radiation of Neotropical songbirds. Molecular Phylogenetics and Evolution 75: 41-77."              
+
+#> [18] "Price, Trevor D., Daniel M. Hooper, Caitlyn D. Buchanan, Ulf S. Johansson, D. Thomas Tietze, Per Alström, Urban Olsson, Mousumi Ghosh-Harihar, Farah Ishtiaq, Sandeep K. Gupta, Jochen Martens, Bettina Harr, Pratap Singh, Dhananjai Mohan. 2014. Niche filling slows the diversification of Himalayan songbirds. Nature 509: 222-225."
+
+#> [19] "Price, Trevor D., Daniel M. Hooper, Caitlyn D. Buchanan, Ulf S. Johansson, D. Thomas Tietze, Per Alström, Urban Olsson, Mousumi Ghosh-Harihar, Farah Ishtiaq, Sandeep K. Gupta, Jochen Martens, Bettina Harr, Pratap Singh, Dhananjai Mohan. 2014. Niche filling slows the diversification of Himalayan songbirds. Nature 509: 222-225."
 ```
 
 
 ## 3. Summarizing a `datelifeResult` object
 
-What if you want to plot all your `datelifeResult` chronograms as a tree? What if you want a single tree summarizing all your resulting chronograms? The function `summary.datelifeResult` will get all types of summaries for you:
+What if you want to plot all your `datelifeResult` chronograms individually? What if you want a single tree summarizing all your source chronograms? The function `datelife::summary.datelifeResult()` will get all types of summaries for you, so you can access them later:
 
 ```r
-dsumm <- summary(dres)
+dsumm <- summary(dres, datelife_query = dquery)
 
 #> Trying with overlap = 2
 #>
@@ -143,12 +149,61 @@ dsumm <- summary(dres)
 #> 8 out of 13 chronograms tried:  Ok.
 #> 9 out of 13 chronograms tried:  Ok.
 #> 10 out of 13 chronograms tried:  Ok.
-#> 11 out of 13 chronograms tried:  Ok.
-#> 12 out of 13 chronograms tried:  Failed.
-#> 13 out of 13 chronograms tried:  Ok.
+#> 12 out of 19 chronograms tried:  Ok.
+#> 13 out of 19 chronograms tried:  Ok.
+#> 14 out of 19 chronograms tried:  Ok.
+#> 15 out of 19 chronograms tried:  Ok.
+#> 16 out of 19 chronograms tried:  Ok.
+#> 17 out of 19 chronograms tried:  Ok.
+#> 18 out of 19 chronograms tried:  Failed.
+#> 19 out of 19 chronograms tried:  Ok.
 #>
-#>  Synthesizing 12 chronograms with SDM
+#>  Synthesizing 18 chronograms with SDM
 #>   |==========================================================| 100%
 #>   |==========================================================| 100%
 #>   |==========================================================| 100%
 ```
+
+Now we can explore different age summaries.
+
+### 3.1 Source chronograms:
+
+Chronograms that matched our database search, and that were pruned to contain only the species names we looked for are called source chronograms. These can be accessed as follow:
+
+```r
+dsumm$phylo_all
+
+#> 19 phylogenetic trees
+```
+
+By study name:
+
+```r
+dsumm$phylo_all$`Gibb, Gillian C., Ryan England, Gerrit Hartig, P.A. (Trish) McLenachan, Briar L. Taylor Smith, Bennet J. McComish, Alan Cooper, David Penny. 2015. New Zealand passerines help clarify the diversification of major songbird lineages during the Oligocene. Genome Biology and Evolution 7 (11): 2983-2995.`
+
+#> Phylogenetic tree with 7 tips and 6 internal nodes.
+#> 
+#> Tip labels:
+#>   Schoeniclus_spodocephala, Emberiza_tristrami, Emberiza_chrysophrys, #> Emberiza_pusilla, Schoeniclus_aureolus, Serinus_canaria, ...
+#> 
+#> Rooted; includes branch lengths.
+```
+
+Or, by index position:
+
+```r
+names(dsumm$phylo_all)[1]
+
+#> [1] "Hooper, Daniel M., Trevor D. Price. 2017. Chromosomal inversion differences correlate with range overlap in passerine birds. Nature Ecology & Evolution 1 (10): 1526-1534"
+
+dsumm$phylo_all[[1]]
+
+#> Phylogenetic tree with 44 tips and 43 internal nodes.
+#> 
+#> Tip labels:
+#>   Peucedramus_taeniatus, Peucaea_botterii, Schoeniclus_spodocephala, #> Schoeniclus_aureolus, Emberiza_chrysophrys, Emberiza_pusilla, ...
+#> 
+#> Rooted; includes branch lengths.
+```
+
+
