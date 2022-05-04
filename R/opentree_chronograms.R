@@ -461,7 +461,7 @@ map_nodes_ott <- function(tree) {
     # bb[[x]]
   })
   # dt <- as.matrix(data.table::rbindlist(as.data.frame(bb), fill = TRUE))
-  # if uncomment line above, have to add #' @importFrom data.table rbindlist to the documentation
+  # if uncomment line above, have to add #' @importFrom data.table rbindlist to the roxygen documentation block
   dt <- plyr::rbind.fill.matrix(bb) # works better than previous line
   rownames(dt) <- cc$resolved$user_supplied_name
   # dt <- dt[,-grep("species", colnames(dt))]  # not needed

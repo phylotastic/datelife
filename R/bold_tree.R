@@ -29,6 +29,7 @@
 #'   If `input` is a `phylo` object or a newick string, it is used as backbone topology.
 #'   If `input` is a character vector of taxon names, an induced synthetic OpenTree
 #'   subtree is used as backbone.
+#' @importFrom BiocManager install
 #' @export
 make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"),
                                 marker = "COI",
