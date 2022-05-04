@@ -17,7 +17,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
@@ -25,7 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
-    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringillidae</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the true finches</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -54,22 +54,20 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.2" id="datelife-062">datelife 0.6.2<a class="anchor" aria-label="anchor" href="#datelife-062"></a></h2>
 <ul><li>data: updated <code>opentree_chornograms</code> object. It now has 253 chronograms from Open Tree of Life</li>
-<li>functions:
-<ul><li>added functions <code>matrix_to_table</code> and matrices_to_table` that go from a matrix of patristic distances to a table of taxon name pairs and respective node ages.</li>
+<li>functions:<ul><li>added functions <code>matrix_to_table</code> and matrices_to_table` that go from a matrix of patristic distances to a table of taxon name pairs and respective node ages.</li>
 <li>bug fix on <code>use_calibrations_bladj</code> that used element $present_calibrations instead of $matched_calibrations</li>
+<li>get_otol_chronogram is another name to call get_opentree_chronograms</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.1" id="datelife-061">datelife 0.6.1<a class="anchor" aria-label="anchor" href="#datelife-061"></a></h2><p class="text-muted">CRAN release: 2022-01-31</p>
-<ul><li>functions:
-<ul><li>
+<ul><li>functions:<ul><li>
 <code>get_otol_chronograms</code> was updated and renamed to <code>get_opentree_chronograms</code>
 </li>
-<li>update <code>match_all_calibrations</code>
+<li>updated <code>match_all_calibrations</code>
 </li>
 </ul></li>
-<li>documentation:
-<ul><li>added a “More” section describing return value attributes (will rename to “Attributes”)</li>
+<li>documentation:<ul><li>added a “More” section describing return value attributes (will rename to “Attributes”)</li>
 <li>eliminated unecessary examples</li>
 </ul></li>
 <li>vignettes: added case study vignette</li>
@@ -86,19 +84,16 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="datelife-050">datelife 0.5.0<a class="anchor" aria-label="anchor" href="#datelife-050"></a></h2>
-<ul><li>functions:
-<ul><li>
+<ul><li>functions:<ul><li>
 <code>datelife_query_check</code> is deprecated</li>
 <li>
 <code>use_each_calibration</code> renamed to <code>use_calibrations_each</code>
 </li>
 <li>plotting functions have been moved to <code>datelifeplot</code> package</li>
-</ul></li>
-</ul></div>
+</ul></li></ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.1" id="datelife-031">datelife 0.3.1<a class="anchor" aria-label="anchor" href="#datelife-031"></a></h2>
-<ul><li>Now muscle or mafft can be used for alignment of BOLD sequences</li>
-</ul></div>
+<ul><li>Now muscle or mafft can be used for alignment of BOLD sequences</li></ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.19" id="datelife-0219">datelife 0.2.19<a class="anchor" aria-label="anchor" href="#datelife-0219"></a></h2>
 <ul><li>MrBayes and TreePL as dating methods</li>
@@ -115,7 +110,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer></div>
