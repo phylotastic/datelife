@@ -280,6 +280,10 @@ get_opentree_chronograms <- function(max_tree_count = "all") {
   return(result)
 }
 
+#' @rdname get_opentree_chronograms
+#' @export
+get_otol_chronograms <- get_opentree_chronograms
+
 #' Check if a tree is a valid chronogram.
 #' @inheritParams phylo_check
 #' @return `TRUE` if it is a valid tree.

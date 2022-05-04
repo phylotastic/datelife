@@ -2,9 +2,12 @@
 % Please edit documentation in R/opentree_chronograms.R
 \name{get_opentree_chronograms}
 \alias{get_opentree_chronograms}
+\alias{get_otol_chronograms}
 \title{Get all chronograms from Open Tree of Life database}
 \usage{
 get_opentree_chronograms(max_tree_count = "all")
+
+get_otol_chronograms(max_tree_count = "all")
 }
 \arguments{
 \item{max_tree_count}{Default to "all", it gets all available chronograms. For testing purposes, a numeric value indicating the max number of trees to be cached.}
