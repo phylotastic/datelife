@@ -65,14 +65,15 @@ website](http://phylotastic.org/datelife/index.html).
 
 ## Local installation of the `datelife` R package
 
-`datelife`s stable version is currently available for installation from
+`datelife`’s **stable version 0.6.0** is available for installation from
 CRAN with:
 
 ``` r
 install.packages("datelife")
 ```
 
-You can install the development version from the GitHub repository:
+You can install `datelife`’s **development versions** from the GitHub
+repository with:
 
 ``` r
 devtools::install_github("phylotastic/datelife")

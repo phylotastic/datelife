@@ -3,7 +3,7 @@
 \docType{data}
 \name{subset2_search}
 \alias{subset2_search}
-\title{A list with datelieQuery and datelifeResult objects from a search of taxon names from subset2_taxa}
+\title{A list with datelifeQuery and datelifeResult objects from a search of taxon names from subset2_taxa}
 \format{
 A list with two named elements. datelifeResult object with 24 patristic matrices
 \describe{
@@ -15,7 +15,7 @@ A list with two named elements. datelifeResult object with 24 patristic matrices
 subset2_search
 }
 \description{
-A list with datelieQuery and datelifeResult objects from a search of taxon names from subset2_taxa
+A list with datelifeQuery and datelifeResult objects from a search of taxon names from subset2_taxa
 }
 \details{
 Generated with:

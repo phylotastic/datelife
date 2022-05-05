@@ -6,13 +6,15 @@
     - get_otol_chronogram is another name to call get_opentree_chronograms
 
 # datelife 0.6.1
-  - functions:
+  - Functions:
     - `get_otol_chronograms` was updated and renamed to `get_opentree_chronograms`
-    - updated `match_all_calibrations`
-  - documentation:
-    - added a "More" section describing return value attributes (will rename to "Attributes")
-    - eliminated unecessary examples
-  - vignettes: added case study vignette
+    - Update `match_all_calibrations`
+    - Added a `summary` method for `datelifeResult` objects
+  - Documentation:
+    - Added a "More" section describing return value attributes (will rename to "Attributes")
+    - Eliminated unnecessary examples
+  - Vignettes: added case study vignette
+  - Description: added `BiocManager` package to imports
 
 # datelife 0.6.0
 

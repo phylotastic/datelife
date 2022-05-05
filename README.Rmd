@@ -15,6 +15,9 @@ knitr::opts_chunk$set(
 )
 IS_README <- TRUE
 library(datelife)
+if (!requireNamespace("versions")) {
+  install.packages("versions")
+}
 ```
 
 <img src='man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />

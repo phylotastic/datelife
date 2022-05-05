@@ -138,11 +138,13 @@
 <span class="fu"><a href="https://rdrr.io/r/base/typeof.html" class="external-link">typeof</a></span><span class="op">(</span><span class="va">dres</span><span class="op">)</span>
 <span class="co">#&gt; [1] "list"</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dres</span><span class="op">)</span></code></pre></div>
-<details><summary>
-names on our <code>datelifeResult</code> object
-</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#&gt; [1] "Hooper, Daniel M., Trevor D. Price. 2017. Chromosomal inversion differences correlate with range overlap in passerine birds. Nature Ecology &amp; Evolution 1 (10): 1526-1534"                                                                                                                                                              </span>
+<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">dres</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+<span class="co">#&gt; [1] "matrix" "array"</span></code></pre></div>
+<p>Names on your <code>datelifeResult</code> object correspond to study citations from source chronograms:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dres</span><span class="op">)</span>
+
+<span class="co">#&gt; [1] "Hooper, Daniel M., Trevor D. Price. 2017. Chromosomal inversion differences correlate with range overlap in passerine birds. Nature Ecology &amp; Evolution 1 (10): 1526-1534"                                                                                                                                                              </span>
 <span class="co">#&gt; [2] "Roquet, C., Lavergne, S., &amp; Thuiller, W. (2014). One Tree to Link Them All: A Phylogenetic Dataset for the European Tetrapoda. PLoS Currents. doi:10.1371/currents.tol.5102670fff8aa5c918e78f5592790e48\n"                                                                                                                              </span>
 <span class="co">#&gt; [3] "Roquet, C., Lavergne, S., &amp; Thuiller, W. (2014). One Tree to Link Them All: A Phylogenetic Dataset for the European Tetrapoda. PLoS Currents. doi:10.1371/currents.tol.5102670fff8aa5c918e78f5592790e48\n"                                                                                                                              </span>
 <span class="co">#&gt; [4] "Oliveros, C. H., Field, D. J., Ksepka, D. T., Barker, F. K., Aleixo, A., Andersen, M. J., … Faircloth, B. C. (2019). Earth history and the passerine superradiation. Proceedings of the National Academy of Sciences, 116(16), 7916–7925. doi:10.1073/pnas.1813206116\n"                                                                </span>
@@ -165,14 +167,12 @@ names on our <code>datelifeResult</code> object
 <span class="co">#&gt; [18] "Price, Trevor D., Daniel M. Hooper, Caitlyn D. Buchanan, Ulf S. Johansson, D. Thomas Tietze, Per Alström, Urban Olsson, Mousumi Ghosh-Harihar, Farah Ishtiaq, Sandeep K. Gupta, Jochen Martens, Bettina Harr, Pratap Singh, Dhananjai Mohan. 2014. Niche filling slows the diversification of Himalayan songbirds. Nature 509: 222-225."</span>
 
 <span class="co">#&gt; [19] "Price, Trevor D., Daniel M. Hooper, Caitlyn D. Buchanan, Ulf S. Johansson, D. Thomas Tietze, Per Alström, Urban Olsson, Mousumi Ghosh-Harihar, Farah Ishtiaq, Sandeep K. Gupta, Jochen Martens, Bettina Harr, Pratap Singh, Dhananjai Mohan. 2014. Niche filling slows the diversification of Himalayan songbirds. Nature 509: 222-225."</span></code></pre></div>
-</details><pre><code><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">dres</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; [1] "matrix" "array"</span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="summarizing-a-dateliferesult-object">3. Summarizing a <code>datelifeResult</code> object<a class="anchor" aria-label="anchor" href="#summarizing-a-dateliferesult-object"></a>
 </h2>
-<p>What if you want to plot all your <code>datelifeResult</code> chronograms individually? What if you want a single tree summarizing all your source chronograms? The function <code>summary.datelifeResult</code> will get all types of summaries for you, so you can access them later:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>What if you want to plot all your <code>datelifeResult</code> chronograms individually? What if you want a single tree summarizing all your source chronograms? The function <code><a href="../reference/summary.datelifeResult.html">datelife::summary.datelifeResult()</a></code> will get all types of summaries for you, so you can access them later:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dsumm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">dres</span>, datelife_query <span class="op">=</span> <span class="va">dquery</span><span class="op">)</span>
 
 <span class="co">#&gt; Trying with overlap = 2</span>
@@ -206,13 +206,17 @@ names on our <code>datelifeResult</code> object
 <span class="co">#&gt;   |==========================================================| 100%</span>
 <span class="co">#&gt;   |==========================================================| 100%</span>
 <span class="co">#&gt;   |==========================================================| 100%</span></code></pre></div>
-<p>Now we can explore different age summaries. For example, we can access all source chronograms:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>Now we can explore different age summaries.</p>
+<div class="section level3">
+<h3 id="source-chronograms">3.1 Source chronograms:<a class="anchor" aria-label="anchor" href="#source-chronograms"></a>
+</h3>
+<p>Chronograms that matched our database search, and that were pruned to contain only the species names we looked for are called source chronograms. These can be accessed as follow:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dsumm</span><span class="op">$</span><span class="va">phylo_all</span>
 
 <span class="co">#&gt; 19 phylogenetic trees</span></code></pre></div>
 <p>By study name:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dsumm</span><span class="op">$</span><span class="va">phylo_all</span><span class="op">$</span><span class="va">`Gibb, Gillian C., Ryan England, Gerrit Hartig, P.A. (Trish) McLenachan, Briar L. Taylor Smith, Bennet J. McComish, Alan Cooper, David Penny. 2015. New Zealand passerines help clarify the diversification of major songbird lineages during the Oligocene. Genome Biology and Evolution 7 (11): 2983-2995.`</span>
 
 <span class="co">#&gt; Phylogenetic tree with 7 tips and 6 internal nodes.</span>
@@ -221,8 +225,8 @@ names on our <code>datelifeResult</code> object
 <span class="co">#&gt;   Schoeniclus_spodocephala, Emberiza_tristrami, Emberiza_chrysophrys, #&gt; Emberiza_pusilla, Schoeniclus_aureolus, Serinus_canaria, ...</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Rooted; includes branch lengths.</span></code></pre></div>
-<p>Or by index position:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<p>Or, by index position:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dsumm</span><span class="op">$</span><span class="va">phylo_all</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>
 
 <span class="co">#&gt; [1] "Hooper, Daniel M., Trevor D. Price. 2017. Chromosomal inversion differences correlate with range overlap in passerine birds. Nature Ecology &amp; Evolution 1 (10): 1526-1534"</span>
@@ -235,6 +239,7 @@ names on our <code>datelifeResult</code> object
 <span class="co">#&gt;   Peucedramus_taeniatus, Peucaea_botterii, Schoeniclus_spodocephala, #&gt; Schoeniclus_aureolus, Emberiza_chrysophrys, Emberiza_pusilla, ...</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Rooted; includes branch lengths.</span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

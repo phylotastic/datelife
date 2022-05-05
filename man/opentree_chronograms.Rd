@@ -9,7 +9,7 @@ A list of four elements, containing data from OpenTree of Life chronograms
 \describe{
 \item{authors}{A list of lists of author names of the original studies that
 published chronograms in the Open Tree of Life database.}
-\item{curators}{A list of lists of curator names that uplodaded chronograms
+\item{curators}{A list of lists of curator names that uploaded chronograms
 to the Open Tree of Life database.}
 \item{studies}{A list of study identifiers.}
 \item{trees}{A \code{multiPhylo} object storing the chronograms from Open Tree of

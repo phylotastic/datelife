@@ -1,7 +1,8 @@
-## New submission
+## New submission v 0.6.1
 This is a new submission where I have:
 
-* Fixed examples with functions that use Internet resources that were not failing gracefully.
+* Fixed examples with functions from dependent packages that use Internet resources that were not failing properly.
+* Fixed note: "undeclared package ‘BiocManager’ in Rd xrefs" for r-devel-linux-x86_64-fedora-clang
 
 ### Test environments:
 

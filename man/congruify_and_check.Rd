@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_internal.R
 \name{congruify_and_check}
 \alias{congruify_and_check}
-\title{Congruify and check.}
+\title{Congruify and Check.}
 \usage{
 congruify_and_check(
   reference,
@@ -31,5 +31,5 @@ congruify_and_check(
 lengths, it will attempt to fix them.}
 }
 \description{
-Congruify and check.
+Congruify and Check.
 }

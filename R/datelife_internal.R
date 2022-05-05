@@ -110,7 +110,7 @@ patristic_matrix_array_subset_both <- function(patristic_matrix_array, taxa, phy
 
 #' Subset a patristic matrix array
 #' @inheritParams patristic_matrix_array_subset_both
-#' @return A list with a paristic maytrix array and a `$problem` if any.
+#' @return A list with a patristic matrix array and a `$problem` if any.
 patristic_matrix_array_subset <- function(patristic_matrix_array, taxa, phy4 = NULL) {
   # gets a subset of the patristic_matrix_array. If you give it a phylo4 object, it can check to see if taxa are a clade
   patristic_matrix_array <- patristic_matrix_array[rownames(patristic_matrix_array) %in% taxa, colnames(patristic_matrix_array) %in% taxa, ]
@@ -428,7 +428,7 @@ phylo_congruify <- function(reference_tree,
 }
 
 # Used inside: patristic_matrix_array_phylo_congruify and phylo_congruify.
-#' Congruify and check.
+#' Congruify and Check.
 #' @inheritParams geiger::congruify.phylo
 #' @inheritParams ape::is.ultrametric
 #' @param attempt_fix Default to `TRUE`. If congruification results in NA branch

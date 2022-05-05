@@ -17,7 +17,7 @@ is_n_overlap <- function(names_1, names_2, n = 2) {
 
 #' Find the grove for a group of chronograms and build a matrix.
 #'
-#' @description This function implements theorem 1.1 of Anéet al. (2009) \doi{10.1007/s00026-009-0017-x}
+#' @description This function implements theorem 1.1 of Ané et al. (2009) \doi{10.1007/s00026-009-0017-x}
 #'   to find a grove for a given group of chronograms.
 #' @param datelife_result A `datelifeResult` object.
 #' @param n The degree of taxon name overlap among input chronograms. Defaults
