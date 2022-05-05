@@ -29,6 +29,7 @@
 #'   If `input` is a `phylo` object or a newick string, it is used as backbone topology.
 #'   If `input` is a character vector of taxon names, an induced synthetic OpenTree
 #'   subtree is used as backbone.
+#' @importFrom BiocManager install
 #' @export
 make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", "Gallus gallus"),
                                 marker = "COI",
@@ -37,6 +38,15 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
                                 doML = FALSE,
                                 aligner = "muscle",
                                 ...) {
+  #
+  if (!requireNamespace("msa", quietly=TRUE)) {
+    stop("'msa' package is not installed. Please install it from Bioconductor with",
+         " BiocManager::install('msa', dependencies = TRUE)")
+  }
+  if (!requireNamespace("Biostrings", quietly=TRUE)) {
+    stop("'Biostring' package is not installed. Please install it from Bioconductor with",
+         " BiocManager::install('Biostrings', dependencies = TRUE)")
+  }
   # input check (accepts newick strings too)
   datelife_query <- input
   if (suppressMessages(!is_datelife_query(input))) {
@@ -135,21 +145,10 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
   }
   if ("muscle" %in% aligner) {
     message("... Aligning BOLD sequences with MUSCLE.")
-    if (!requireNamespace("msa", quietly=TRUE)) {
-      stop("'msa' package is not installed. Please install it from Bioconductor with",
-           " BiocManager::install('msa', dependencies = TRUE)")
-    }
     in_bold <- sapply(1:nrow(final.sequences), function(x) !"-" %in% final.sequences[x, ])
     vector.sequences <- sapply(1:nrow(final.sequences), function(x) paste0(final.sequences[x, ], collapse = ""))
-    if (!requireNamespace("msa", quietly=TRUE)) {
-      stop("'msa' package is not installed. Please install it from Bioconductor with",
-           " BiocManager::install('msa', dependencies = TRUE)")
-    }
-    if (!requireNamespace("Biostrings", quietly=TRUE)) {
-      stop("'Biostring' package is not installed. Please install it from Bioconductor with",
-           " BiocManager::install('Biostrings', dependencies = TRUE)")
-    }
-msa.sequences <- Biostrings::DNAStringSet(vector.sequences)
+
+    msa.sequences <- Biostrings::DNAStringSet(vector.sequences)
     names(msa.sequences) <- rownames(final.sequences)
     msa.sequences <- msa.sequences[in_bold]
     alignment <- msa::msaMuscle(msa.sequences, type = "dna")

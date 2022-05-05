@@ -5,8 +5,8 @@
 #'
 #' @inheritParams phylo_check
 # #' or a vector of taxon names (see details).
-#' @param calibrations A `congruifiedCalibrations` object, an output of
-#'   [get_all_calibrations()].
+#' @param calibrations A `calibrations` object, an output of
+#'   [extract_calibrations_phylo()].
 #' @return A list of two elements:
 #' \describe{
 #' 	\item{phy}{A `phylo` object with nodes renamed with [tree_add_nodelabels()].}
@@ -76,6 +76,9 @@ match_all_calibrations <- function(phy, calibrations) {
   calibrations$mrca_node_name <- gsub("nNA", "NA", calibrations$mrca_node_name)
 
   # Order the data.frame by mrca_node_number, minage and maxage
+  if ("nodeAge" %in% colnames(calibrations)) {
+    calibrations$MinAge <- calibrations$MaxAge <- calibrations$nodeAge
+  }
   calibrations <- calibrations[order(mrca_nodes, calibrations$MinAge, calibrations$MaxAge), ]
 
   # Generate node names for 'phy'
@@ -124,11 +127,13 @@ summary.matchedCalibrations <- function(object, ...) {
 
   # Subset the data.frame:
   not_in_phy_rows <- which(is.na(object$mrca_node_number))
+  message1 <- c()
   if (length(not_in_phy_rows) > 0) {
     not_in_phy <- object[not_in_phy_rows, ]
     in_phy <- object[-not_in_phy_rows, ]
+    message1 <- c(message1, "Not all taxon name pairs are in 'phy'.")
   } else {
-    message("All taxon name pairs are in 'phy'.")
+    message1 <- c(message1, "All taxon name pairs are in 'phy'.")
     not_in_phy <- NULL
     in_phy <- object
   }
@@ -136,8 +141,12 @@ summary.matchedCalibrations <- function(object, ...) {
   in_phy$reference <- as.factor(in_phy$reference)
   # is MaxAge and MinAge the same value?
   if (all(in_phy$MaxAge == in_phy$MinAge)) {
-    message("'MaxAge' and 'MinAge' columns in input 'matchedCalibrations' have the same values.")
+    message1 <- c(message1,
+                  "\n'MaxAge' and 'MinAge' columns in input 'matchedCalibrations' /
+                   have the same values.")
   }
+  message("Success!")
+  message(message1)
   return(structure(list(not_in_phy = not_in_phy, in_phy = in_phy),
                    class = c("list", "summaryMatchedCalibrations")))
 }

@@ -9,8 +9,8 @@ match_all_calibrations(phy, calibrations)
 \arguments{
 \item{phy}{A \code{phylo} object.}
 
-\item{calibrations}{A \code{congruifiedCalibrations} object, an output of
-\code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
+\item{calibrations}{A \code{calibrations} object, an output of
+\code{\link[=extract_calibrations_phylo]{extract_calibrations_phylo()}}.}
 }
 \value{
 A list of two elements:

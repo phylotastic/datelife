@@ -32,3 +32,6 @@ dev.R
 _pkgdown.yml
 ^CRAN-SUBMISSION$
 tests/_*
+renv
+renv.lock
+pkgdown/

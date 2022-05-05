@@ -10,7 +10,7 @@ use_calibrations_each(phy = NULL, calibrations = NULL, ...)
 \arguments{
 \item{phy}{A \code{phylo} object to use as tree topology.}
 
-\item{calibrations}{A \code{congruifiedCalibrations} object, an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
+\item{calibrations}{A \code{calibrations} object, an output of \code{\link[=get_all_calibrations]{get_all_calibrations()}}.}
 
 \item{...}{
   Arguments passed on to \code{\link[=use_calibrations]{use_calibrations}}

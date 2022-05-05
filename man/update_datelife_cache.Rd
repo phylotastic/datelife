@@ -44,6 +44,10 @@ to the Open Tree of Life database.}
 published chronograms currently stored in the Open Tree of Life database.}
 \item{trees}{A \code{multiPhylo} object storing the chronograms from Open Tree of
 Life database.}
+\item{update}{A character vector indicating the time when the database object
+was last updated.}
+\item{version}{A character vector indicating the datelife package version when the
+object was last updated.}
 }
 }
 \description{

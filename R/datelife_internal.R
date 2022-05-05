@@ -41,7 +41,7 @@ get_subset_array_dispatch <- function(study_element,
                                       taxa, phy = NULL,
                                       phy4 = NULL,
                                       dating_method = "PATHd8") {
-  if (class(study_element) == "array") {
+  if (inherits(study_element, "array")) {
     return(patristic_matrix_array_subset_both(study_element, taxa, phy, phy4, dating_method))
   } else {
     return(phylo_subset_both(reference_tree = study_element, taxa = taxa, phy = phy, phy4 = phy4, dating_method = dating_method))
@@ -291,7 +291,7 @@ patristic_matrix_array_phylo_congruify <- function(patristic_matrix,
 phylo_to_patristic_matrix <- function(phy, test = TRUE, tol = 0.01, option = 2) {
   # stores the distance between taxa
   patristic_matrix <- NA
-  if (class(phy) == "phylo") {
+  if (inherits(phy, "phylo")) {
     if (test) {
       if (!ape::is.ultrametric(phy, tol = tol, option = option)) {
         stop("Currently, datelife require that chronograms are ultrametric.") # can pad them so that terminals all reach to present

@@ -1,6 +1,6 @@
 Package: datelife
 Title: Scientific Data on Time of Lineage Divergence for Your Taxa
-Version: 0.6.1
+Version: 0.6.2
 Maintainer: Luna L. Sanchez Reyes <sanchez.reyes.luna@gmail.com>
 Authors@R: c(
   person("Brian", "O'Meara", email = "bomeara@gmail.com", role=c("aut")),
@@ -58,7 +58,8 @@ Imports:
     httr,
     plyr,
     phylocomr,
-    BiocManager
+    BiocManager,
+    data.table
 Suggests:
     testthat,
     knitr,
@@ -68,6 +69,7 @@ Suggests:
     covr,
     msa,
     Biostrings
+LazyDataCompression:xz
 SystemRequirements: PATHd8
 URL: https://github.com/phylotastic/datelife
 License: GPL (>=2)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/datelife_summary.R
 \name{get_biggest_multiphylo}
 \alias{get_biggest_multiphylo}
-\title{Get the tree with the most tips: the biggest tree.}
+\title{Get the tree with the most tips from a multiPhylo object: the biggest tree.}
 \usage{
 get_biggest_multiphylo(trees)
 }
@@ -13,5 +13,5 @@ get_biggest_multiphylo(trees)
 The largest tree from those given in \code{trees}, as a \code{phylo} object with an additional \verb{$citation} element containing the reference of the original publication.
 }
 \description{
-Get the tree with the most tips: the biggest tree.
+Get the tree with the most tips from a multiPhylo object: the biggest tree.
 }

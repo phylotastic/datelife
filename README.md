@@ -1,5 +1,5 @@
 
-<!-- README.md is generated from README.Rmd. Please edit THIS file -->
+<!-- README.md is generated from README.Rmd. Make sure to edit the .Rmd file and not the .md -->
 
 <img src='man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
 
@@ -24,29 +24,46 @@ Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg
 
 # Welcome to DateLife’s R package GitHub repository!
 
-Get a phylogenetic tree with branch lengths proportional to geologic
-time (aka a ***chronogram***) of any two or more lineages of interest to
-you.
+## What is `datelife`?
 
-Use the `datelife` R package locally, or through [DateLife’s
-website](http://datelife.opentreeoflife.org/query/) to search for
-chronograms available for your lineages of interest in [Open Tree of
-Life’s tree store](https://tree.opentreeoflife.org/curator).
+`datelife` is an R package that allows researchers and the general
+audience to obtain open scientific data on the age of any organism they
+are interested in. `datelife` retrieves organism ages from a database of
+dated phylogenetic trees (chronograms), which have been peer-reviewed
+and published in association with a scientific research article in an
+indexed journal ([Open Tree of Life’s tree
+store](https://tree.opentreeoflife.org/curator)). As such, these
+organism ages constitute state-of-the-art, peer-reviewed, public
+scientific knowledge, that can be accessed and reused by experts and
+non-experts in the field alike.
 
-You can also date a phylogenetic tree of your own making (or choosing
-one from the literature), using node ages from chronograms found with
-`datelife` as secondary calibrations.
+## How can you use `datelife`?
 
-`datelife` has been developed as part of the
-[phylotastic](http://phylotastic.org/) (NSF-funded) project, and is
-still under development.
+You can install the `datelife` R package on your own computer and use it
+locally.
 
-1.  [Installation](#installation)
-2.  [Citation](#citation)
-3.  [Feedback and info for developers](#feedback)
-4.  [License](#license)
+If you do not want to deal with installation, you can go to [DateLife’s
+interactive website
+application](http://datelife.opentreeoflife.org/query/).
 
-## 1. Installation
+<!--
+Get a phylogenetic tree with branch lengths proportional to geologic time (aka a
+_**chronogram**_) of any two or more lineages of interest to you.
+
+You can also date a phylogenetic tree of your own making (or choosing one from the literature), using node ages from chronograms found with `datelife` as secondary calibrations.
+-->
+
+To learn more, please go to [`datelife`’s documentation
+website](http://phylotastic.org/datelife/index.html).
+
+## README topics:
+
+-   [Installation](#installation)
+-   [Citation](#citation)
+-   [Feedback and info for developers](#feedback)
+-   [License](#license)
+
+## Local installation of the `datelife` R package
 
 `datelife`’s **stable version 0.6.0** is available for installation from
 CRAN with:
@@ -62,7 +79,7 @@ repository with:
 devtools::install_github("phylotastic/datelife")
 ```
 
-## 2. Citation
+## Citing `datelife`
 
 If you use `datelife` for a publication, please cite the R package and
 the accompanying paper:
@@ -71,7 +88,7 @@ the accompanying paper:
 O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K,
 Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022).
 <em>datelife: Scientific Data on Time of Lineage Divergence for Your
-Taxa</em>. R package version 0.6.1,
+Taxa</em>. R package version 0.6.2,
 <a href="https://doi.org/10.5281/zenodo.593938">https://doi.org/10.5281/zenodo.593938</a>.
 </p>
 <p>
@@ -88,9 +105,9 @@ citation("datelife")
 toBibtex(citation("datelife"))
 ```
 
-“.bibtex” files are also available.
+<!--.bibtex files are available-->
 
-## 3. Feedback and Information for Developers
+## Feedback and Information for Developers
 
 We welcome and encourage to post a [GitHub
 issue](https://github.com/phylotastic/datelife/issues/new) with any
@@ -98,7 +115,7 @@ comments, ideas and questions about `datelife`’s software and website.
 If you want to contribute with code directly, we welcome and encourage
 [pull requests](https://github.com/phylotastic/datelife/pulls).
 
-#### Function documentation:
+#### *Function documentation*:
 
 Package and function documentation was generated with
 [roxygen2](https://CRAN.R-project.org/package=roxygen2):
@@ -107,7 +124,7 @@ Package and function documentation was generated with
 roxygen2::roxygenise()
 ```
 
-#### Styling code:
+#### *Styling code*:
 
 We used the package [lintr](https://CRAN.R-project.org/package=lintr) to
 check for coding style:
@@ -116,7 +133,7 @@ check for coding style:
 lintr::lint_package()
 ```
 
-#### Calculating test coverage:
+#### *Calculating test coverage*:
 
 Code coverage was calculated with the package
 [covr](https://CRAN.R-project.org/package=covr):
@@ -139,12 +156,12 @@ And, find code with zero coverage:
 covr::zero_coverage(cov)
 ```
 
-#### Generating `datelife`’s hexsticker:
+#### *Generating `datelife`’s hexsticker*:
 
 Code used to generate current `datelife`’s logo hexsticker is in
 [data-raw/hexsticker-current.R](https://github.com/phylotastic/datelife/blob/master/data-raw/hexsticker-current.R)
 
-#### Rendering the vignettes:
+#### *Rendering the vignettes*:
 
 Vignettes are rendered automatically upon built. However, if you wish to
 see how they look rendered before releasing the package, you can do this
@@ -155,7 +172,7 @@ with `knitr::knit()`. The following command renders the vignette
 knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
 ```
 
-#### Creating a webiste for the package
+#### *Creating a documentation webiste for the package*
 
 Using `pkgdown` for this is quite straightforward and fun:
 
@@ -164,9 +181,9 @@ usethis::use_pkgdown()
 pkgdown::build_site()
 ```
 
-#### Releasing to CRAN
+#### *Releasing to CRAN*
 
-##### Local checks
+##### ***Local checks***
 
 To be able to release to CRAN, the first step is to pass the checks
 locally. To run a local check, you can use the command `R CMD check`
@@ -191,7 +208,7 @@ just generated:
 R CMD check --as-cran datelife_0.6.0.tar.gz
 ```
 
-##### Remote checks
+##### ***Remote checks***
 
 If you do not have access to different OS to test your package on, the
 [rhub](https://CRAN.R-project.org/package=rhub) package allows remote
@@ -205,6 +222,12 @@ To submit to CRAN call `devtools::release()` and answer the prompted
 questions. If the answer to all of these is *yes*, the package will be
 submitted to CRAN :rocket:
 
-## 4. License
+## License
 
 This package is free and open source software, licensed under GPL.
+
+## Acknowledgements
+
+`datelife` has been developed as part of the
+[phylotastic](http://phylotastic.org/) (NSF-funded) project, and is
+still under development.

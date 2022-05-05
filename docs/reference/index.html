@@ -10,14 +10,14 @@
     
     <a class="navbar-brand me-2" href="../index.html">datelife</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
@@ -25,7 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
-    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringillidae</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the true finches</a>
   </div>
 </li>
 <li class="nav-item">
@@ -129,6 +129,11 @@ Needed because using <code>include_suppressed = FALSE</code> in <code><a href="h
         <dd>Congruify and Check.</dd>
       </dl><dl><dt>
           
+          <code><a href="congruify_calibrations.html">congruify_calibrations()</a></code> 
+        </dt>
+        <dd>Congruify nodes of a tree topology to nodes from taxon pair calibrations</dd>
+      </dl><dl><dt>
+          
           <code><a href="contributor_cache.html">contributor_cache</a></code> 
         </dt>
         <dd>Information on contributors, authors, study ids and clades from studies with
@@ -204,7 +209,7 @@ divergence openly available for a given set of taxon names</dd>
           
           <code><a href="extract_calibrations_dateliferesult.html">extract_calibrations_dateliferesult()</a></code> 
         </dt>
-        <dd>Extract secondary calibrations from a given <code>datelifeResult</code> object</dd>
+        <dd>Use congruification to extract secondary calibrations from a <code>datelifeResult</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="extract_calibrations_phylo.html">extract_calibrations_phylo()</a></code> 
@@ -238,9 +243,9 @@ object with branch lengths proportional to time.</dd>
         <dd>Force a non-ultrametric <code>phylo</code> object to be ultrametric with <code><a href="https://rdrr.io/pkg/phytools/man/force.ultrametric.html" class="external-link">phytools::force.ultrametric()</a></code>.</dd>
       </dl><dl><dt>
           
-          <code><a href="get_all_calibrations.html">get_all_calibrations()</a></code> 
+          <code><a href="get_all_calibrations.html">get_all_calibrations()</a></code> <code><a href="get_all_calibrations.html">get_all_calibrations()</a></code> 
         </dt>
-        <dd>Get secondary calibrations from a set of given taxon names</dd>
+        <dd>Get secondary calibrations from a chronogram database for a set of given taxon names</dd>
       </dl><dl><dt>
           
           <code><a href="get_best_grove.html">get_best_grove()</a></code> 
@@ -251,7 +256,7 @@ from a median summary matrix</dd>
           
           <code><a href="get_biggest_multiphylo.html">get_biggest_multiphylo()</a></code> 
         </dt>
-        <dd>Get the tree with the most tips: the biggest tree.</dd>
+        <dd>Get the tree with the most tips from a multiPhylo object: the biggest tree.</dd>
       </dl><dl><dt>
           
           <code><a href="get_calibrations_datelifequery.html">get_calibrations_datelifequery()</a></code> 
@@ -297,7 +302,7 @@ vector of taxon names</dd>
 from a list of taxa and ages, or from a dated tree</dd>
       </dl><dl><dt>
           
-          <code><a href="get_opentree_chronograms.html">get_opentree_chronograms()</a></code> 
+          <code><a href="get_opentree_chronograms.html">get_opentree_chronograms()</a></code> <code><a href="get_opentree_chronograms.html">get_otol_chronograms()</a></code> 
         </dt>
         <dd>Get all chronograms from Open Tree of Life database</dd>
       </dl><dl><dt>
@@ -438,6 +443,16 @@ given a set of node calibrations without any data.</dd>
         <dd>Match calibrations to nodes of a given tree</dd>
       </dl><dl><dt>
           
+          <code><a href="matrices_to_table.html">matrices_to_table()</a></code> 
+        </dt>
+        <dd>Go from a list of patristic distance matrix to a table of node ages</dd>
+      </dl><dl><dt>
+          
+          <code><a href="matrix_to_table.html">matrix_to_table()</a></code> 
+        </dt>
+        <dd>Go from a patristic distance matrix to a node ages table</dd>
+      </dl><dl><dt>
+          
           <code><a href="message_multiphylo.html">message_multiphylo()</a></code> 
         </dt>
         <dd>Message for a <code>multiPhylo</code> input</dd>
@@ -446,6 +461,11 @@ given a set of node calibrations without any data.</dd>
           <code><a href="missing_taxa_check.html">missing_taxa_check()</a></code> 
         </dt>
         <dd>Checks that missing_taxa argument is ok to be used by make_mrbayes_runfile inside tree_add_dates functions.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="mrca_calibrations.html">mrca_calibrations()</a></code> 
+        </dt>
+        <dd>Identify nodes of a tree topology that are most recent common ancestor (mrca) of taxon pair calibrations</dd>
       </dl><dl><dt>
           
           <code><a href="opentree_chronograms.html">opentree_chronograms</a></code> 
@@ -771,6 +791,11 @@ Used inside phylo_get_subset_array and phylo_get_subset_array_congruify.</dd>
         <dd>Use calibrations to date a topology with the BLADJ algorithm.</dd>
       </dl><dl><dt>
           
+          <code><a href="use_calibrations_bladj.matchedCalibrations.html">use_calibrations_bladj.matchedCalibrations()</a></code> 
+        </dt>
+        <dd>Use calibrations to date a topology with the BLADJ algorithm.</dd>
+      </dl><dl><dt>
+          
           <code><a href="use_calibrations_each.html">use_calibrations_each()</a></code> 
         </dt>
         <dd>Date a given tree topology by using a given list of calibrations independently,
@@ -794,7 +819,7 @@ to generate multiple hypothesis of time of divergence</dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer></div>

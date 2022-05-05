@@ -10,14 +10,14 @@
     
     <a class="navbar-brand me-2" href="../index.html">datelife</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
@@ -25,7 +25,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
-    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the Fringillidae</a>
+    <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the true finches</a>
   </div>
 </li>
 <li class="nav-item">
@@ -75,19 +75,23 @@
 <dt>datelife_query</dt>
 <dd><p>A <code>datelifeQuery</code> object, usually an output of <code><a href="make_datelife_query.html">make_datelife_query()</a></code>.</p></dd>
 <dt>total_distance</dt>
-<dd><p>Boolean. If <code>TRUE</code> it will divide the matrix in half, if
-<code>FALSE</code> it will take it as is.</p></dd>
+<dd><p>Whether the input <code>summ_matrix</code> stores total age distance
+(from tip to tip) or distance from node to tip. Default to <code>TRUE</code>,
+divides the matrix in half, if <code>FALSE</code> it will take it as is.</p></dd>
 <dt>use</dt>
 <dd><p>A character vector indicating what type of age to use for summary.
-One of the following:</p><dl><dt>mean</dt>
-<dd><p>It will use the mean of the node age distributions.</p></dd>
+One of the following:</p><dl><dt>"mean"</dt>
+<dd><p>It will use the <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code> of the node ages in <code>summ_matrix</code>.</p></dd>
 
-<dt>min</dt>
-<dd><p>It will use the minimum age from the node age distributions.</p></dd>
+<dt>"median"</dt>
+<dd><p>It uses the <code><a href="https://rdrr.io/r/stats/median.html" class="external-link">stats::median()</a></code> age of node ages in <code>summ_matrix</code>.</p></dd>
 
-<dt>max</dt>
-<dd><p>Choose this if you wanna be conservative; it will use the maximum
-age from the node age distributions.</p></dd>
+<dt>"min"</dt>
+<dd><p>It will use the <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min()</a></code> age from node ages in <code>summ_matrix</code>.</p></dd>
+
+<dt>"max"</dt>
+<dd><p>Choose this if you wanna be conservative; it will use the <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max()</a></code>
+age from node ages in <code>summ_matrix</code>.</p></dd>
 
 
 </dl></dd>
@@ -131,7 +135,7 @@ methods for that implemented in <code><a href="patristic_matrix_to_phylo.html">p
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer></div>

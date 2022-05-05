@@ -13,12 +13,20 @@
 #'   \item{studies}{A list of study identifiers.}
 #'   \item{trees}{A `multiPhylo` object storing the chronograms from Open Tree of
 #'     Life database.}
+#'   \item{update}{A character vector indicating the time when the database object
+#'     was last updated.}
+#'   \item{version}{A character vector indicating the datelife [utils::packageVersion()]
+#'     when the database was last updated.}
 #' }
 #' @source \url{http://opentreeoflife.org}
 #' @keywords opentree dates myrs million years time phylogeny chronogram
 #' @details
 #' Generated with
+#' devtools::install_github("ropensci/rotl", ref = devtools::github_pull("137"))
+#' remotes::install_github("ROpenSci/bibtex")'
 #' opentree_chronograms <- get_opentree_chronograms()
+#' opentree_chronograms$update <- Sys.time()
+#' opentree_chronograms$version <- '0.6.2'
 #' usethis::use_data(opentree_chronograms, overwrite = T)
 #' and updated with update_datelife_cache()
 "opentree_chronograms"
@@ -122,6 +130,10 @@ phylo_has_brlen <- function(phy) {
 #'     published chronograms currently stored in the Open Tree of Life database.}
 #'   \item{trees}{A `multiPhylo` object storing the chronograms from Open Tree of
 #'     Life database.}
+#'   \item{update}{A character vector indicating the time when the database object
+#'     was last updated.}
+#'   \item{version}{A character vector indicating the datelife package version when the
+#'     object was last updated.}
 #' }
 #' @export
 get_opentree_chronograms <- function(max_tree_count = "all") {
@@ -256,11 +268,21 @@ get_opentree_chronograms <- function(max_tree_count = "all") {
   }
   tot_time <- Sys.time() - start_time # end of registering function running time
   class(trees) <- "multiPhylo"
-  result <- list(trees = trees, authors = authors, curators = curators, studies = studies, dois = dois)
+  result <- list(trees = trees,
+                 authors = authors,
+                 curators = curators,
+                 studies = studies,
+                 dois = dois,
+                 update = Sys.time(),
+                 version = utils::packageVersion("datelife"))
   attr(result, "running_time") <- tot_time
   message(tot_time)
   return(result)
 }
+
+#' @rdname get_opentree_chronograms
+#' @export
+get_otol_chronograms <- get_opentree_chronograms
 
 #' Check if a tree is a valid chronogram.
 #' @inheritParams phylo_check
@@ -443,6 +465,7 @@ map_nodes_ott <- function(tree) {
     # bb[[x]]
   })
   # dt <- as.matrix(data.table::rbindlist(as.data.frame(bb), fill = TRUE))
+  # if uncomment line above, have to add #' @importFrom data.table rbindlist to the roxygen documentation block
   dt <- plyr::rbind.fill.matrix(bb) # works better than previous line
   rownames(dt) <- cc$resolved$user_supplied_name
   # dt <- dt[,-grep("species", colnames(dt))]  # not needed

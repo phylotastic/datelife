@@ -20,9 +20,7 @@ knitr::opts_chunk$set(
 library(datelife)
 ```
 
-## What can you do with `datelife`?
-
-The aim of the `datelife` R package is to allow researchers and the general audience to obtain open scientific data on ages for their organisms of interest. These age data is extracted from dated phylogenetic trees (chronograms) that have been published and peer-reviewed in association with a scientific article in an indexed journal. As such, the age data provided by `datelife` constitutes state-of-the-art, peer-reviewed, public scientific knowledge, that can be accessed by experts and non-experts in the field alike.
+## What can you get with `datelife`?
 
 As a `datelife` user, you can get age data for your organisms of interest in several forms:
 
@@ -36,21 +34,23 @@ As a `datelife` user, you can get age data for your organisms of interest in sev
 
 You can also apply the obtained age data to date a phylogenetic tree topology of your organisms of interest.
 
-## 1. Processing your organism names
+## How do you use `datelife` to get these data?
+
+### 1. Processing your organism names
 
 The function `make_datelife_query` processes the taxon names of your organisms of interest and structures them as a `datelifeQuery` object.
 
 A `datelifeQuery` object is a list of three elements:
 
-- `$cleaned_names`: a character vector of "cleaned" taxon names, 
-- `$ott_ids`: a numeric vector of OpenTree Taxonomic identifiers (OTT ids), and 
+- `$cleaned_names`: a character vector of "cleaned" taxon names,
+- `$ott_ids`: a numeric vector of OpenTree Taxonomic identifiers (OTT ids), and
 - `$phy`: an input tree as a `phylo` object or `NA` if none was provided.
 
-This allows us to straightforwardly use the processed taxon names later to perform a search for ages across the `datelife` chronogram database as well as other downstream analyses. 
+This allows us to straightforwardly use the processed taxon names later to perform a search for ages across the `datelife` chronogram database as well as other downstream analyses.
 
 There are two alternative ways of processing organism names with `datelife`:
 
-### a) From a set of organism taxonomic names
+#### a) From a set of organism taxonomic names
 You can provide the taxon names as a character vector or as a single comma separated string of names.
 For example, running the following:
 
@@ -198,7 +198,7 @@ my_datelife_query <- datelife::make_datelife_query(input = phylo)
 #> DateLife query done!
 ```
 
-## 2. Searching the chronogram database
+### 2. Searching the chronogram database
 
 The `datelife_search` function takes a `datelifeQuery` object and goes through the `datelife` chronogram database to find all chronograms matching at least two taxon names:
 
@@ -230,7 +230,7 @@ datelife::datelife_search(input = my_datelife_query)
 ```
 </details>
 
-## 3. Summarizing chronogram search results
+### 3. Summarizing chronogram search results
 
 `datelife_search` will also summarize results from the chronogram database search for you.
 By default, it will give you all original chronograms matching the search, as a `phylo` or `multiPhylo` object. You can specify the format you desire for the summary of results with the argument `summary_format`.
@@ -436,7 +436,7 @@ mrca <- datelife::datelife_search(input = my_datelife_query,
 </details>
 
 ### Newick strings
- 
+
 `summary_format = "newick_all"`
 
 ```{r, eval = FALSE}
@@ -909,3 +909,8 @@ data_frame <- datelife::datelife_search(input = my_datelife_query,
 #> 4 ((Elephas_maximus:105.009658,(Felis_silvestris:78.392518,Delphinus_delphis:78.392517):26.617141):215.5141645,Gallus_gallus:320.5238235);
 ```
 </details>
+
+TODO: add something about NJ, why is this happening
+
+One can use a clustering method like Neighbor Joining (NJ). While we implemented this method in the package, because NJ are greedy algorithms they do not perform well and often return toologies that are not biologically plausible. Hence, we implement
+a different workflow,

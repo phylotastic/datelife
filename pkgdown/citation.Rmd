@@ -1,0 +1,16 @@
+## Citing `datelife`
+
+If you use `datelife` for a publication, please cite the R package and the accompanying paper:
+
+```{r eval = TRUE, echo = FALSE}
+print(citation("datelife"), bibtex = FALSE, style = "html")
+```
+
+You can get these citations and the bibtex entry with:
+
+```{r eval = FALSE}
+citation("datelife")
+toBibtex(citation("datelife"))
+```
+
+<!--.bibtex files are available-->

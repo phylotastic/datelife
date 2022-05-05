@@ -1,0 +1,44 @@
+---
+output: github_document
+---
+
+<!-- index.md is generated from index.Rmd. Make sure to edit the .Rmd file and not the .md -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  results = "asis",
+  echo = TRUE,
+  comment = "#>",
+  fig.path = "vignettes/figures/README-",
+  out.width = "100%"
+)
+IS_README <- TRUE
+library(datelife)
+```
+
+<img src='man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
+
+
+```{r, child = "badges.Rmd"}
+```
+
+# Welcome to DateLife's R package documentation!
+
+```{r, child = "presentation.Rmd"}
+```
+
+## Documentation topics:
+
+- [Local installation]()
+- [Getting started]()
+- [Function documentation]()
+
+```{r, child = "citation.Rmd"}
+```
+
+```{r, child = "license.Rmd"}
+```
+
+```{r, child = "funding.Rmd"}
+```

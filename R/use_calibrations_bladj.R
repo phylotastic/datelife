@@ -44,7 +44,7 @@ use_calibrations_bladj <- function(phy,
     calibs <- calibrations
     # calibs <- all_calibs_93_matched
   }
-  if (nrow(calibs$present_calibrations) < 1) {
+  if (nrow(calibs$matched_calibrations) < 1) {
     stop("Nodes in 'calibrations' (determined by taxon pairs) do not match any nodes
 						in 'phy'.\n\t Dating analysis is not possible with this set of calibrations.")
   }
@@ -63,8 +63,8 @@ use_calibrations_bladj <- function(phy,
   }
   # check that the root node has a calibration
   # otherwise, add one
+  # bladj does not run if there is no calibration for the root
   # bladj will run if calibrations are in conflict
-  # it will not run if there is no calibration for the root
   node_names <- calibs$matched_calibrations$NodeNames
   # length(node_names)
   if (!"n1" %in% calibs$matched_calibrations$NodeNames) {

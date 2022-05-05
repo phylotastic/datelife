@@ -82,6 +82,9 @@
     <loc>/reference/congruify_and_check.html</loc>
   </url>
   <url>
+    <loc>/reference/congruify_calibrations.html</loc>
+  </url>
+  <url>
     <loc>/reference/contributor_cache.html</loc>
   </url>
   <url>
@@ -289,10 +292,19 @@
     <loc>/reference/match_all_calibrations.html</loc>
   </url>
   <url>
+    <loc>/reference/matrices_to_table.html</loc>
+  </url>
+  <url>
+    <loc>/reference/matrix_to_table.html</loc>
+  </url>
+  <url>
     <loc>/reference/message_multiphylo.html</loc>
   </url>
   <url>
     <loc>/reference/missing_taxa_check.html</loc>
+  </url>
+  <url>
+    <loc>/reference/mrca_calibrations.html</loc>
   </url>
   <url>
     <loc>/reference/opentree_chronograms.html</loc>
@@ -518,6 +530,9 @@
   </url>
   <url>
     <loc>/reference/use_calibrations_bladj.html</loc>
+  </url>
+  <url>
+    <loc>/reference/use_calibrations_bladj.matchedCalibrations.html</loc>
   </url>
   <url>
     <loc>/reference/use_calibrations_each.html</loc>

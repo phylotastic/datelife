@@ -47,7 +47,7 @@ summary.datelifeResult <- function(object,
 	mrcas <- datelife_result_MRCA(datelife_result, na_rm = na_rm)
 	newick_all <- datelife_result_newick_all(datelife_result, na_rm = na_rm)
 	phylo_all <- datelife_result_phylo_all(datelife_result, na_rm = na_rm)
-	biggest <- get_biggest_multiphylo(phylo_all) # NAs in trees are removed in get_biggest_phylo
+	biggest <- get_biggest_multiphylo(phylo_all) # NAs in trees are removed in get_biggest_multiphylo
 
 	median_and_sdm <- datelife_result_median_and_sdm(datelife_result, datelife_query, na_rm = na_rm)
   html_table <- datelife_result_html(datelife_result, datelife_query, na_rm = na_rm)
