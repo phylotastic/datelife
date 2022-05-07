@@ -22,7 +22,6 @@ get_datelife_result_datelifequery <- function(datelife_query = NULL,
                                               update_opentree_chronograms = FALSE,
                                               ...) {
   #
-  message("... Searching chronogram database.")
   if (update_opentree_chronograms) {
     cache <- update_datelife_cache(write = TRUE)
   } else {
@@ -31,6 +30,8 @@ get_datelife_result_datelifequery <- function(datelife_query = NULL,
       cache <- get("opentree_chronograms")
     }
   }
+  message("... Searching DateLife's OpenTree chronogram database version v",
+          cache$version)
   if (suppressMessages(!is_datelife_query(datelife_query))) {
     stop("'datelife_query' must be a 'datelifeQuery' object.")
   }

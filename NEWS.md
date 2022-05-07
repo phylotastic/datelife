@@ -1,10 +1,12 @@
 # datelife 0.6.2
-  - data: updated `opentree_chornograms` object. It now has 253 chronograms from Open Tree of Life
+  - data: updated `opentree_chronograms` object. It now has 253 chronograms from Open Tree of Life
+  - examples: set to not run most examples
   - functions:
-    - added functions `matrix_to_table` and matrices_to_table` that go from a matrix of patristic distances to a table of taxon name pairs and respective node ages.
+    - added functions `matrix_to_table` and `matrices_to_table` that go from a matrix of patristic distances to a table of taxon name pairs and respective node ages.
     - bug fix on `use_calibrations_bladj` that used element $present_calibrations instead of $matched_calibrations
-    - get_otol_chronogram is another name to call get_opentree_chronograms
-
+    - `get_otol_chronogram` is another name to call `get_opentree_chronograms`
+    - added taxonomic source options argument to `make_datelife_query`. You can choose from OTT, NCBI, IRMNG and GBIF.
+  -
 # datelife 0.6.1
   - Functions:
     - `get_otol_chronograms` was updated and renamed to `get_opentree_chronograms`
