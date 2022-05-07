@@ -20,6 +20,8 @@
 #'   given taxon or not. Default to `FALSE`. If `TRUE`, it must have same length as input.
 #'   If input is a newick string with some clades it will be converted to a `phylo`
 #'   object, and the order of `get_spp_from_taxon` will match `phy$tip.label`.
+#' @param taxonomic_source Used if `get_spp_from_taxon = TRUE`. A character vector with the desired taxonomic sources.
+#'  Options are "ott", "ncbi", "gbif" or "irmng". The function defaults to "ott".
 #' @return A `datelifeQuery` object, which is a list of three elements:
 #' \describe{
 #' 	 \item{$phy}{A `phylo` object or `NA`, if input is not a tree.}
@@ -33,8 +35,8 @@
 #' @export
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
                                 use_tnrs = TRUE,
-                                # approximate_match = TRUE,
-                                get_spp_from_taxon = FALSE) {
+                                get_spp_from_taxon = FALSE,
+                                taxonomic_source = "ott") {
   # enhance: add mapped (has tnrs been performed?) and matched (was it matched successfully?) element to phylo object
   # add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
   if (suppressMessages(is_datelife_query(input))) {
@@ -73,8 +75,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
   if (use_tnrs_global) {
     # process names even if it's a "higher" taxon name:
     cleaned_names_tnrs <- clean_tnrs(tnrs_match(input = cleaned_names),
-      remove_nonmatches = TRUE
-    )
+                                     remove_nonmatches = TRUE)
     # recover original names of invalid taxa and unmatched:
     ii <- !tolower(cleaned_names) %in% cleaned_names_tnrs$search_string
     cleaned_names <- c(cleaned_names_tnrs$unique_name, cleaned_names[ii])
@@ -104,22 +105,30 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
     # rotl::tol_subtree is very fast but returns subspecies too \o/
     # it has no argument to restrict it to species only
     # so we are using our own function that wraps up their services nicely
-    # example: df <- get_ott_children(ott_ids = 698424, ott_rank = "species")
-    df <- get_ott_children(ott_ids = cleaned_names_tnrs$ott_id, ott_rank = "species")
-    # head(rownames(df[[1]])[grepl("species", df[[1]]$rank)])
-    # the following does not work; it gives subspecies back
-    # fixing it from get_ott_children function and here too
-    cleaned_names <- lapply(df, function(x) rownames(x)[grepl("\\bspecies\\b", x$rank)])
-    # enhance: create vector original_taxon with original names: rep(cleaned_names[i], length(cleaned_names[i]))
-    original_taxa <- lapply(seq(nrow(cleaned_names_tnrs)), function(i) {
-      rep(cleaned_names_tnrs$unique_name[i], length(cleaned_names[[i]]))
-    })
-    ott_ids <- lapply(df, function(x) x$ott_id[grepl("\\bspecies\\b", x$rank)])
-    cleaned_names <- unlist(cleaned_names)
-    ott_ids <- unlist(ott_ids)
+    if ("ott" %in% taxonomic_source) {
+      species_list <- get_opentree_species(taxon_name = cleaned_names_tnrs$unique_name,
+                                           ott_id = cleaned_names_tnrs$ott_id,
+                                           synth_tree_only = TRUE)
+      cleaned_names <- species_list$species_names
+      ott_ids <- species_list$ott_ids
+    } else {
+      # example: df <- get_ott_children(ott_ids = 698424, ott_rank = "species")
+      df <- get_ott_children(ott_ids = cleaned_names_tnrs$ott_id, ott_rank = "species")
+      # head(rownames(df[[1]])[grepl("species", df[[1]]$rank)])
+      # the following does not work; it gives subspecies back
+      # fixing it from get_ott_children function and here too
+      cleaned_names <- lapply(df, function(x) rownames(x)[grepl("\\bspecies\\b", x$rank)])
+      # enhance: create vector original_taxon with original names: rep(cleaned_names[i], length(cleaned_names[i]))
+      original_taxa <- lapply(seq(nrow(cleaned_names_tnrs)), function(i) {
+        rep(cleaned_names_tnrs$unique_name[i], length(cleaned_names[[i]]))
+      })
+      ott_ids <- lapply(df, function(x) x$ott_id[grepl("\\bspecies\\b", x$rank)])
+      cleaned_names <- unlist(cleaned_names)
+      ott_ids <- unlist(ott_ids)
+   }
   }
   cleaned_names <- gsub("_", " ", cleaned_names)
-  cleaned_names.print <- paste(cleaned_names, collapse = " | ")
+  cleaned_names.print <- paste(utils::head(cleaned_names, ceiling(length(cleaned_names)/10)), collapse = ", ")
   if (inherits(ott_ids, "numeric") | inherits(ott_ids, "integer")) {
     names(ott_ids) <- cleaned_names
   }
@@ -129,7 +138,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
     phy = phy_new
   )
   #TODO: print working taxa to a file instead of screen:
-  message("Working with the following taxa: ", "\n", "\t", cleaned_names.print)
+  message("Working with ", length(cleaned_names), " taxa (", cleaned_names.print, ", ...).")
   message("DateLife query done!\n")
   return(structure(datelife_query.return, class = "datelifeQuery"))
 }

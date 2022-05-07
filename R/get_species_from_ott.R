@@ -8,9 +8,16 @@
 #' @export
 get_opentree_species <- function(taxon_name, ott_id, synth_tree_only = TRUE) {
   if (missing(ott_id)) {
+    if(missing(taxon_name)) {
+      stop("A `taxon name` or an `ott id` must be provided.")
+    }
     taxon_tnrs <- rotl::tnrs_match_names(names = taxon_name)
     ott_id <- taxon_tnrs$ott_id
-    message("Getting species for OTT taxon '", taxon_tnrs$unique_name, "' with OTT id number = ", taxon_tnrs$ott_id, ".")
+    taxon_name <- taxon_tnrs$unique_name
+    message("Getting species for OTT taxon '", 
+            taxon_name,
+            "' with OTT id number = ",
+            ott_id, ".")
   }
   children_names <- rotl::taxonomy_subtree(ott_id = ott_id,
                                output_format = "taxa",
@@ -46,7 +53,7 @@ get_opentree_species <- function(taxon_name, ott_id, synth_tree_only = TRUE) {
   are_species_all <- unlist(sapply(taxon_info, "[", "rank")) == "species"
   message("... There are ", sum(are_species_all), " species.")
   spp_in_synth <- is_in_synth_all & are_species_all
-  message("... There are ", sum(spp_in_synth), " species of '", taxon_tnrs$unique_name, "' in the OpenTree synthetic tree.")
+  message("... There are ", sum(spp_in_synth), " species of '", taxon_name, "' in the OpenTree synthetic tree.")
   return_species <- unlist(ifelse(synth_tree_only,
                            list(spp_in_synth),
                            list(are_species_all)))

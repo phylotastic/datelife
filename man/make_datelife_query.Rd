@@ -7,7 +7,8 @@
 make_datelife_query(
   input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
   use_tnrs = TRUE,
-  get_spp_from_taxon = FALSE
+  get_spp_from_taxon = FALSE,
+  taxonomic_source = "ott"
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ taxonomic name variations with \code{\link[=tnrs_match]{tnrs_match()}}, a wrappe
 given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
 If input is a newick string with some clades it will be converted to a \code{phylo}
 object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.label}.}
+
+\item{taxonomic_source}{Used if \code{get_spp_from_taxon = TRUE}. A character vector with the desired taxonomic sources.
+Options are "ott", "ncbi", "gbif" or "irmng". The function defaults to "ott".}
 }
 \value{
 A \code{datelifeQuery} object, which is a list of three elements:
