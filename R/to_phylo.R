@@ -364,9 +364,6 @@ summary_matrix_to_phylo <- function(summ_matrix,
                                     target_tree = NULL,
                                     ...) {
   # enhance: add other methods, besides bladj.
-  # for debugging:
-  # summ_matrix <- subset2_sdm_matrix
-  # summ_matrix <- median_matrix
   use <- match.arg(use, c("mean", "median", "min", "max"))
   if (!inherits(summ_matrix, "matrix") & !inherits(summ_matrix, "data.frame")) {
     message("'summ_matrix' argument is not a matrix")
@@ -386,10 +383,13 @@ summary_matrix_to_phylo <- function(summ_matrix,
   if (total_distance) {
     summ_matrix <- summ_matrix * 0.5 # bc it's total distance tip to tip
   }
-  # get a backbone tree:
-  # chronogram <- geiger::PATHd8.phylo(phy_target, calibrations)
-  # try(chronogram <- geiger::PATHd8.phylo(phy_target, calibrations), silent = TRUE)
+  ############################################################################
+  ############################################################################
+  # get a backbone tree topology if none is provided
+  ############################################################################
+  ############################################################################
   if (!inherits(target_tree, "phylo")) {
+    message("... No target_tree was provided, obtaining a tree topology from Open Tree synthetic phylogeny.")
     target_tree <- suppressMessages(get_otol_synthetic_tree(input = colnames(summ_matrix), ...))
     if (!inherits(target_tree, "phylo")) {
       # enhance: we should find a better way to do this, but it should be ok for now:
@@ -397,9 +397,6 @@ summary_matrix_to_phylo <- function(summ_matrix,
       # target_tree <- consensus(phyloall, p = 0.5) # can't use consensus here: bc not all trees have the same number of tips
     }
     target_tree <- ape::collapse.singles(target_tree)
-    # ape::is.ultrametric(target_tree)
-    # ape::is.binary(target_tree)
-    # plot(target_tree, cex = 0.5)
   }
   if (!inherits(target_tree, "phylo")) {
     message("'target_tree' is missing or not a 'phylo' object and a backbone tree could not be constructed; returning 'NA'")
@@ -410,7 +407,11 @@ summary_matrix_to_phylo <- function(summ_matrix,
   target_tree$edge.length <- NULL
   target_tree$edge.length.original <- NULL
   target_tree$tip.label <- gsub(" ", "_", target_tree$tip.label)
+  ############################################################################
+  ############################################################################
   # test that taxonA and taxonB are all in target tree tip labels
+  ############################################################################
+  ############################################################################
   rownames(summ_matrix) <- gsub(" ", "_", rownames(summ_matrix))
   colnames(summ_matrix) <- gsub(" ", "_", colnames(summ_matrix))
   # find taxa missing in target tree and remove them from summ_matrix
@@ -430,7 +431,9 @@ summary_matrix_to_phylo <- function(summ_matrix,
 
   ##############################################################################
   ##############################################################################
-  # ATTENTION
+  # get mrca node numbers from calibration pairs
+  ############################################################################
+  ############################################################################
   # start of use_all_calibrations_bladj, that contains match_all_calibrations
   # something like:
   # use_all_calibrations_bladj(phy = target_tree, calibrations = calibrations, type = use)
@@ -446,7 +449,11 @@ summary_matrix_to_phylo <- function(summ_matrix,
   })
   target_tree_nodes <- target_tree_nodes - ape::Ntip(target_tree)
   all_nodes <- sort(unique(target_tree_nodes))
-  # get the node age distribution:
+  ##############################################################################
+  ##############################################################################
+  # get the node age distribution
+  ############################################################################
+  ############################################################################
   all_ages <- lapply(all_nodes, function(i) calibrations[target_tree_nodes == i, "Age"])
   # any(sapply(all_ages, is.null)) # if FALSE, all nodes have at least one calibration.
   calibrations2 <- data.frame(MRCA = paste0("n", all_nodes), MinAge = sapply(all_ages, min), MaxAge = sapply(all_ages, max))
@@ -461,6 +468,11 @@ summary_matrix_to_phylo <- function(summ_matrix,
   target_tree$node.label <- NULL # make sure its null, so we can rename all nodes of interest to match our labels
   target_tree <- tree_add_nodelabels(tree = target_tree, node_index = node_index) # all nodes need to be named so make_bladj_tree runs properly
   # end of match_all_calibrations
+  ##############################################################################
+  ##############################################################################
+  # use bladj to date the tree:
+  ############################################################################
+  ############################################################################
   if ("mean" %in% use) {
     node_ages <- sapply(seq(nrow(calibrations2)), function(i) sum(calibrations2[i, c("MinAge", "MaxAge")]) / 2)
   }
