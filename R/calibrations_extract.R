@@ -75,6 +75,7 @@ extract_calibrations_phylo <- function(input = NULL,
   }
   for (i in seq(length(chronograms))) {
     chronograms[[i]]$tip.label <- gsub(" ", "_", chronograms[[i]]$tip.label) # the battle will never end!
+    class(chronograms[[i]]) <- "phylo"
     local_df <- suppressWarnings(
       geiger::congruify.phylo(
         reference = chronograms[[i]],
