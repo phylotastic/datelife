@@ -194,7 +194,6 @@ summary_matrix_to_phylo_all <- function(summ_matrix,
   # use bladj to date the tree using node age distributions:
   ############################################################################
   ############################################################################
-  print(names(all_ages))
   node_ages_midpoint <- sapply(seq(nrow(calibrations2)),
                         function(i) sum(calibrations2[i, c("MinAge", "MaxAge")]) / 2)
   new_phy_midpoint <- make_bladj_tree(

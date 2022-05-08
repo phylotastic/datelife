@@ -16,7 +16,7 @@ datelife_result_median(datelife_result, ...)
     \item{\code{total_distance}}{Whether the input \code{summ_matrix} stores total age distance
 (from tip to tip) or distance from node to tip. Default to \code{TRUE},
 divides the matrix in half, if \code{FALSE} it will take it as is.}
-    \item{\code{use}}{A character vector indicating what type of age to use for summary.
+    \item{\code{use}}{A character vector indicating what type of age to use for summary tree.
 One of the following:
 \describe{
 \item{"mean"}{It will use the \code{\link[=mean]{mean()}} of the node ages in \code{summ_matrix}.}
@@ -24,6 +24,7 @@ One of the following:
 \item{"min"}{It will use the \code{\link[=min]{min()}} age from node ages in \code{summ_matrix}.}
 \item{"max"}{Choose this if you wanna be conservative; it will use the \code{\link[=max]{max()}}
 age from node ages in \code{summ_matrix}.}
+\item{"midpoint"}{It will use the mean of minimum age and maximum age.}
 }}
     \item{\code{target_tree}}{A \code{phylo} object. Use this in case you want a specific
 backbone for the output tree.}

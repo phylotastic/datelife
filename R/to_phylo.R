@@ -313,7 +313,7 @@ choose_cluster <- function(phycluster, clustering_method = "nj") {
 #' @param total_distance Whether the input `summ_matrix` stores total age distance
 #'  (from tip to tip) or distance from node to tip. Default to `TRUE`,
 #'  divides the matrix in half, if `FALSE` it will take it as is.
-#' @param use A character vector indicating what type of age to use for summary.
+#' @param use A character vector indicating what type of age to use for summary tree.
 #'  One of the following:
 #' \describe{
 #' 	\item{"mean"}{It will use the [mean()] of the node ages in `summ_matrix`.}
@@ -321,6 +321,7 @@ choose_cluster <- function(phycluster, clustering_method = "nj") {
 #' 	\item{"min"}{It will use the [min()] age from node ages in `summ_matrix`.}
 #' 	\item{"max"}{Choose this if you wanna be conservative; it will use the [max()]
 #'        age from node ages in `summ_matrix`.}
+#' 	\item{"midpoint"}{It will use the mean of minimum age and maximum age.}
 #' }
 #' @param target_tree A `phylo` object. Use this in case you want a specific
 #'  backbone for the output tree.
@@ -335,7 +336,7 @@ summary_matrix_to_phylo <- function(summ_matrix,
                                     datelife_query = NULL,
                                     target_tree = NULL,
                                     total_distance = TRUE,
-                                    use = "midpoint",
+                                    use = "mean",
                                     ...) {
   # enhance: add other dating methods, besides bladj.
   use <- match.arg(use, c("midpoint", "mean", "median", "min", "max"))
@@ -365,7 +366,7 @@ summary_matrix_to_phylo <- function(summ_matrix,
     new_phy <- all_trees$midpoint
   }
   new_phy$dating_method <- "bladj"
-  new_phy$calibration_distribution <- all_trees$node_age_distributions
+  new_phy$calibration_distribution <- attributes(all_trees)$node_age_distributions
   new_phy$clustering_method <- NULL
   new_phy$ott_ids <- NULL
   if (!is.null(target_tree$ott_ids)) {
