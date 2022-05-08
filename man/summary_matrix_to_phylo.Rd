@@ -7,9 +7,9 @@
 summary_matrix_to_phylo(
   summ_matrix,
   datelife_query = NULL,
-  total_distance = TRUE,
-  use = "mean",
   target_tree = NULL,
+  total_distance = TRUE,
+  use = "midpoint",
   ...
 )
 }
@@ -17,6 +17,9 @@ summary_matrix_to_phylo(
 \item{summ_matrix}{Any summary patristic distance matrix, such as the ones obtained with \code{\link[=datelife_result_sdm_matrix]{datelife_result_sdm_matrix()}} or \code{\link[=datelife_result_median_matrix]{datelife_result_median_matrix()}}.}
 
 \item{datelife_query}{A \code{datelifeQuery} object, usually an output of \code{\link[=make_datelife_query]{make_datelife_query()}}.}
+
+\item{target_tree}{A \code{phylo} object. Use this in case you want a specific
+backbone for the output tree.}
 
 \item{total_distance}{Whether the input \code{summ_matrix} stores total age distance
 (from tip to tip) or distance from node to tip. Default to \code{TRUE},
@@ -32,18 +35,10 @@ One of the following:
 age from node ages in \code{summ_matrix}.}
 }}
 
-\item{target_tree}{A \code{phylo} object. Use this in case you want a specific
-backbone for the output tree.}
-
 \item{...}{
-  Arguments passed on to \code{\link[=get_otol_synthetic_tree]{get_otol_synthetic_tree}}
+  Arguments passed on to \code{\link[=summary_matrix_to_phylo_all]{summary_matrix_to_phylo_all}}
   \describe{
-    \item{\code{otol_version}}{Version of Open Tree of Life to use}
-    \item{\code{resolve}}{Defaults to \code{TRUE}. Whether to resolve the tree at random or not.}
-    \item{\code{input}}{Optional. A character vector of names or a \code{datelifeQuery} object.}
-    \item{\code{ott_ids}}{If not NULL, it takes this argument and ignores input. A
-numeric vector of ott ids obtained with \code{\link[rotl:taxonomy_taxon_info]{rotl::taxonomy_taxon_info()}} or
-\code{\link[rotl:tnrs_match_names]{rotl::tnrs_match_names()}} or \code{\link[=tnrs_match]{tnrs_match()}}.}
+    \item{\code{}}{}
   }}
 }
 \value{
