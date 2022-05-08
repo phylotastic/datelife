@@ -166,24 +166,35 @@ summary_matrix_to_phylo_all <- function(summ_matrix,
                               MinAge = sapply(all_ages, min),
                               MaxAge = sapply(all_ages, max))
   # calibrations2$MRCA is a factor so have to be made as.character to work with bladj
-  if (all(all_nodes < ape::Ntip(target_tree))) {
-    all_nodes_numbers <- all_nodes + ape::Ntip(target_tree)
-    node_index <- "consecutive"
-  } else {
-    all_nodes_numbers <- all_nodes
-    node_index <- "node_number"
-  }
-  # give nide names to distribution of node ages
-  names(all_ages) <- paste0("n", all_nodes_numbers)
-  # rename nodes on target tree:
-  target_tree$node.label <- NULL # make sure its null, so we can rename all nodes of interest to match our labels
-  target_tree <- tree_add_nodelabels(tree = target_tree, node_index = node_index) # all nodes need to be named so make_bladj_tree runs properly
+  ##############################################################################
+  ##############################################################################
+  # rename nodes on target tree and age distributions:
+  ############################################################################
+  ############################################################################
+  # give node names to the distribution of node ages
+  names(all_ages) <- paste0("n", all_nodes)
+  # then make sure node labels are null,
+  # so we can rename all nodes of interest to match our labels
+  target_tree$node.label <- NULL
+  # all nodes need to be named so make_bladj_tree runs properly:
+  node_index <- ifelse(all(all_nodes < ape::Ntip(target_tree)),
+                       "from_1",
+                       "node_number")
+  # if (all(all_nodes < ape::Ntip(target_tree))) {
+  #   # all_nodes_numbers <- all_nodes + ape::Ntip(target_tree)
+  #   node_index <- "from_1"
+  # } else {
+  #   # all_nodes_numbers <- all_nodes
+  #   node_index <- "node_number"
+  # }
+  target_tree <- tree_add_nodelabels(tree = target_tree, node_index = node_index)
   # end of match_all_calibrations
   ##############################################################################
   ##############################################################################
   # use bladj to date the tree using node age distributions:
   ############################################################################
   ############################################################################
+  print(names(all_ages))
   node_ages_midpoint <- sapply(seq(nrow(calibrations2)),
                         function(i) sum(calibrations2[i, c("MinAge", "MaxAge")]) / 2)
   new_phy_midpoint <- make_bladj_tree(
@@ -207,8 +218,9 @@ summary_matrix_to_phylo_all <- function(summ_matrix,
     nodeages = sapply(all_ages, stats::median)
   )
   # end use_all_calibrations_bladj
-  res <- c(new_phy_min, new_phy_max, new_phy_median, new_phy_mean, new_phy_midpoint, all_ages)
-  names(res) <- c("min", "max", "median", "mean", "midpoint", "node_age_distributions")
+  res <- c(new_phy_min, new_phy_max, new_phy_median, new_phy_mean, new_phy_midpoint)
+  attributes(res)$node_age_distributions <- all_ages
+  names(res) <- c("min", "max", "median", "mean", "midpoint")
   class(res) <- "multiPhylo"
 
   return(res)

@@ -47,16 +47,18 @@ tree_get_node_data <- function(tree = NULL, nodes = NULL, node_data = c("node_nu
 #' Adds labels to nodes with no assigned label
 #' @inheritParams tree_fix_brlen
 #' @param node_prefix Character vector. If length 1, it will be used to name all nodes with no labels, followed by a number which can be the node_number or consecutive, as specified in node_index.
-#' @param node_index Character vector. Choose between "consecutive" and "node_number" as numeric index for node labels. It will use consecutive numbers from 1 to total node number in the first case and phylo node numbers in the second case (i.e, from Ntip + 1).
+#' @param node_index Character vector. Choose between "from_1" and "node_number" as numeric index for node labels. It will use consecutive numbers from 1 to total node number in the first case and phylo node numbers in the second case (i.e, from Ntip + 1).
 #' @return A phylo object
 #' @export
 tree_add_nodelabels <- function(tree = NULL, node_prefix = "n", node_index = "node_number") {
   phy <- tree_check(tree = tree)
-  node_index <- match.arg(arg = node_index, choices = c("consecutive", "node_number"), several.ok = FALSE)
+  node_index <- match.arg(arg = node_index,
+                          choices = c("from_1", "node_number"),
+                          several.ok = FALSE)
   if ("node_number" %in% node_index) {
     node_number <- phylo_get_node_numbers(phy = phy)
   }
-  if ("consecutive" %in% node_index) {
+  if ("from_1" %in% node_index) {
     node_number <- seq(phy$Nnode)
   }
   if (is.null(phy$node.label)) {

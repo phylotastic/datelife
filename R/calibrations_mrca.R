@@ -89,7 +89,7 @@ mrca_calibrations <- function(phy, calibrations) {
 
   if (all(all_nodes < ape::Ntip(phy))) {
     all_nodes_numbers <- all_nodes + ape::Ntip(phy)
-    node_index <- "consecutive"
+    node_index <- "from_1"
   } else {
     all_nodes_numbers <- all_nodes
     node_index <- "node_number"
