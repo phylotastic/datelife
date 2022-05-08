@@ -2,13 +2,19 @@
 % Please edit documentation in R/to_phylo.R
 \name{summarize_summary_matrix}
 \alias{summarize_summary_matrix}
-\title{Internal function used in summary_matrix_to_phylo().}
+\title{Gets all ages per taxon pair from a distance matrix
+Internal function used in summary_matrix_to_phylo().}
 \usage{
 summarize_summary_matrix(summ_matrix)
 }
 \arguments{
 \item{summ_matrix}{Any summary patristic distance matrix, such as the ones obtained with \code{\link[=datelife_result_sdm_matrix]{datelife_result_sdm_matrix()}} or \code{\link[=datelife_result_median_matrix]{datelife_result_median_matrix()}}.}
 }
+\value{
+A \code{data.frame} of pairwise ages, with row number equal to the combinatory
+of column names (or row names), estimated as \code{ncol(summ_matrix)^2 - sum(1:(ncol(summ_matrix)-1))}.
+}
 \description{
+Gets all ages per taxon pair from a distance matrix
 Internal function used in summary_matrix_to_phylo().
 }
