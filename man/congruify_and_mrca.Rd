@@ -2,19 +2,16 @@
 % Please edit documentation in R/calibrations_congruify.R
 \name{congruify_and_mrca}
 \alias{congruify_and_mrca}
-\title{Congruify nodes of a tree topology to nodes from a source chronogram}
+\title{Congruify nodes of a tree topology to nodes from a source chronogram, and find the mrca nodes}
 \usage{
-congruify_and_mrca(phy, source_chronogram, study)
+congruify_and_mrca(phy)
 }
 \arguments{
 \item{phy}{A \code{phylo} object.}
-
-\item{source_chronogram}{A \code{phylo} object, output of \code{\link[=datelife_search]{datelife_search()}}.}
-
-\item{study}{A character string indicating the name of the study the \code{source_chronogram} comes from.}
+}
+\value{
+An object of class data frame.
 }
 \description{
-\code{congruify_and_mrca} congruifies a target tree against a source chronogram gets nodes of a tree topology given in
-\code{phy} that correspond to the most recent common ancestor (mrca) of taxon
-pairs from the congruified calibrations. It uses \code{\link[phytools:findMRCA]{phytools::findMRCA()}} to get mrca nodes.
+Congruify nodes of a tree topology to nodes from a source chronogram, and find the mrca nodes
 }

@@ -1,4 +1,5 @@
-#' Identify nodes of a tree topology that are most recent common ancestor (mrca) of taxon pair calibrations
+#' Identify nodes of a tree topology that are most recent common ancestor (mrca)
+#' of taxon pairs from a `calibrations` object
 #'
 #' @description \code{mrca_calibrations} get nodes of a tree topology given in
 #'   `phy` that correspond to the most recent common ancestor (mrca) of taxon

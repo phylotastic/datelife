@@ -2,7 +2,8 @@
 % Please edit documentation in R/calibrations_mrca.R
 \name{mrca_calibrations}
 \alias{mrca_calibrations}
-\title{Identify nodes of a tree topology that are most recent common ancestor (mrca) of taxon pair calibrations}
+\title{Identify nodes of a tree topology that are most recent common ancestor (mrca)
+of taxon pairs from a \code{calibrations} object}
 \usage{
 mrca_calibrations(phy, calibrations)
 }

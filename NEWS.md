@@ -6,7 +6,8 @@
     - bug fix on `use_calibrations_bladj` that used element $present_calibrations instead of $matched_calibrations
     - `get_otol_chronogram` is another name to call `get_opentree_chronograms`
     - added taxonomic source options argument to `make_datelife_query`. You can choose from OTT, NCBI, IRMNG and GBIF.
-  -
+  - added function method `congruify and mrca`
+  - 
 # datelife 0.6.1
   - Functions:
     - `get_otol_chronograms` was updated and renamed to `get_opentree_chronograms`
