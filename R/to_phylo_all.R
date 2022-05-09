@@ -142,7 +142,7 @@ summary_matrix_to_phylo_all <- function(summ_matrix,
   # start of use_all_calibrations_bladj, that contains match_all_calibrations
   # something like:
   # use_all_calibrations_bladj(phy = target_tree, calibrations = calibrations, type = use)
-  # start of match_all_calibrations:
+  # start of match_all_calibrations or mrca calibrations:
   # get the coincident node numbers:
   # ape::is.binary(target_tree)
   target_tree_nodes <- sapply(seq(nrow(calibrations)), function(i) {
@@ -188,7 +188,7 @@ summary_matrix_to_phylo_all <- function(summ_matrix,
   #   node_index <- "node_number"
   # }
   target_tree <- tree_add_nodelabels(tree = target_tree, node_index = node_index)
-  # end of match_all_calibrations
+  # end of match_all_calibrations or mrca calibrations
   ##############################################################################
   ##############################################################################
   # use bladj to date the tree using node age distributions:

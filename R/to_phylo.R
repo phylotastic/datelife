@@ -365,14 +365,16 @@ summary_matrix_to_phylo <- function(summ_matrix,
   if ("midpoint" %in% use) {
     new_phy <- all_trees$midpoint
   }
-  new_phy$dating_method <- "bladj"
   new_phy$calibration_distribution <- attributes(all_trees)$node_age_distributions
-  new_phy$clustering_method <- NULL
-  new_phy$ott_ids <- NULL
-  if (!is.null(target_tree$ott_ids)) {
-    tt <- match(new_phy$tip.label, target_tree$tip.label)
-    # match(c("a", "b", "c", "d"), c("c", "d", "a", "a", "a", "b"))
-    new_phy$ott_ids <- target_tree$ott_ids[tt]
+  if (is.null(new_phy$clustering_method)) {
+    new_phy$clustering_method <- NULL    
+  }
+  if (inherits(target_tree, "phylo")) {
+    if (!is.null(target_tree$ott_ids) & is.null(new_phy$ott_ids)) {
+      tt <- match(new_phy$tip.label, target_tree$tip.label)
+      # match(c("a", "b", "c", "d"), c("c", "d", "a", "a", "a", "b"))
+      new_phy$ott_ids <- target_tree$ott_ids[tt]
+    }
   }
   return(new_phy)
 }

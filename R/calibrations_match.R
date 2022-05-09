@@ -19,7 +19,7 @@
 #' then it gets the node that represents the most recent
 #' common ancestor (mrca) for that pair of taxa in the tree.
 #' Nodes of input `phy` can be named or not.
-#' @export
+# #' @export
 match_all_calibrations <- function(phy, calibrations) {
   # Should we implement this??? -> If input is a phylo object, it is used as backbone. If it is a character vector
   # of taxon names, an induced synthetic OpenTree subtree is used as backbone.
