@@ -14,7 +14,7 @@ datelife_result_median <- function(datelife_result, ...) {
   # sometimes max(ape::branching.times) is off (too big or too small), so we could
   # standardize by real median of original data (max(mrcas)).
   # median.phylo$edge.length <- median.phylo$edge.length * stats::median(mrcas)/max(ape::branching.times(median.phylo))
-  phy <- summary_matrix_to_phylo(median_matrix, ...)
+  phy <- summary_matrix_to_phylo(median_matrix, use = "median", ...)
   phy$data <- datelife_result
   phy$citation <- names(datelife_result)
   return(phy)

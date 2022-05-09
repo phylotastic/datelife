@@ -1,3 +1,42 @@
+#' Congruify nodes of a tree topology to nodes from a source chronogram
+#'
+#' @description \code{congruify_and_mrca} congruifies a target tree against a source chronogram gets nodes of a tree topology given in
+#'   `phy` that correspond to the most recent common ancestor (mrca) of taxon
+#'   pairs from the congruified calibrations. It uses [phytools::findMRCA()] to get mrca nodes.
+#' @inheritParams phylo_check
+# #' or a vector of taxon names (see details).
+#' @param source_chronogram A `phylo` object, output of [datelife_search()].
+#' @param study A character string indicating the name of the study the `source_chronogram` comes from.
+congruify_and_mrca <- function(phy,
+                               source_chronogram,
+                               study) {
+    #
+    if (!inherits(phy, "phylo")) {
+      return(NA)
+    }
+    if (!inherits(source_chronogram, "phylo")) {
+      return(NA)
+    }
+    if (missing(study)) {
+      study <- "source_chronogram"
+    }
+    # homogenize tip labels:
+    phy$tip.label <- sub(" ", "_", phy$tip.label)
+    source_chronogram$tip.label <- sub(" ", "_", source_chronogram$tip.label)
+    class(source_chronogram) <- "phylo"
+    congruified <- suppressWarnings(geiger::congruify.phylo(reference = source_chronogram,
+                               target = phy,
+                               scale = NA,
+                               ncores = 1))
+
+    mrcas <- mrca_calibrations(phy = congruified$target,
+                               calibrations = congruified$calibrations)
+    calibs_matched <- mrcas$matched_calibrations
+    calibs_matched$study <- rep(study, nrow(calibs_matched))
+    return(structure(calibs_matched,
+                     class = "congruifiedCalibrations"))
+}
+
 #' Congruify nodes of a tree topology to nodes from taxon pair calibrations
 #'
 #' @description \code{congruify_calibrations} get nodes of a tree topology given in
@@ -22,7 +61,6 @@
 #' then it gets the node that represents the most recent
 #' common ancestor (mrca) for that pair of taxa in the tree.
 #' Nodes of input `phy` can be named or not. They will be renamed.
-#' @export
 congruify_calibrations <- function(phy, chronograms, calibrations) {
   ##############################################################################
   ##############################################################################
