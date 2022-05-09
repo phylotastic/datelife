@@ -55,8 +55,10 @@ congruify_and_mrca.multiPhylo <- function(phy,
                                             source_chronogram = source_chronograms[[i]],
                                             study = names(source_chronograms)[i])
                  })
-    # merge the list of tables and return a single table:
-    data.table::rbindlist(res)
+    # merge the list of tables and return a single table (data.table object):
+    res <- data.table::rbindlist(res)
+    # Convert to simple data.frame object:
+    as.data.frame.data.frame(res)
 }
 
 #
