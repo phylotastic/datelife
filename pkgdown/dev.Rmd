@@ -55,7 +55,7 @@ Vignettes are rendered automatically upon built. However, if you wish to see how
 knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
 ```
 
-#### _Creating a documentation webiste for the package_
+#### _Creating a documentation website for the package_
 
 Using `pkgdown` for this is quite straightforward and fun:
 

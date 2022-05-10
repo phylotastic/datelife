@@ -912,5 +912,5 @@ data_frame <- datelife::datelife_search(input = my_datelife_query,
 
 TODO: add something about NJ, why is this happening
 
-One can use a clustering method like Neighbor Joining (NJ). While we implemented this method in the package, because NJ are greedy algorithms they do not perform well and often return toologies that are not biologically plausible. Hence, we implement
+One can use a clustering method like Neighbor Joining (NJ). While we implemented this method in the package, because NJ are greedy algorithms they do not perform well and often return topologies that are not biologically plausible. Hence, we implement
 a different workflow,

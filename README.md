@@ -65,15 +65,14 @@ website](http://phylotastic.org/datelife/index.html).
 
 ## Local installation of the `datelife` R package
 
-`datelife`’s **stable version 0.6.0** is available for installation from
+`datelife`s stable version is currently available for installation from
 CRAN with:
 
 ``` r
 install.packages("datelife")
 ```
 
-You can install `datelife`’s **development versions** from the GitHub
-repository with:
+You can install the development version from the GitHub repository:
 
 ``` r
 devtools::install_github("phylotastic/datelife")
@@ -172,7 +171,7 @@ with `knitr::knit()`. The following command renders the vignette
 knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
 ```
 
-#### *Creating a documentation webiste for the package*
+#### *Creating a documentation website for the package*
 
 Using `pkgdown` for this is quite straightforward and fun:
 
