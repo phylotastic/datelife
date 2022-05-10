@@ -12,7 +12,7 @@ A list of five data sets
 }
 }
 \source{
-\url{http://treebase.org}
+TreeBASE database, no longer available online \url{https://en.wikipedia.org/wiki/TreeBASE}
 }
 \usage{
 treebase_cache

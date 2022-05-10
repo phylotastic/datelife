@@ -1,8 +1,7 @@
-## New submission v 0.6.1
+## New submission v 0.6.2
 This is a new submission where I have:
 
-* Fixed examples with functions from dependent packages that use Internet resources that were not failing properly.
-* Fixed note: "undeclared package ‘BiocManager’ in Rd xrefs" for r-devel-linux-x86_64-fedora-clang
+* Fixed examples that were failing in some Linux environments.
 
 ### Test environments:
 
@@ -17,57 +16,18 @@ This is a new submission where I have:
   - R Under development (2021-11-26 r81252), `rhub::check_for_cran("linux-x86_64-fedora-clang")`
 
 ### Results
-0 errors | 0 warnings | 3 notes
+0 errors ✔ | 0 warnings ✔ | 1 note ✖
 
 * Note 1
 
 ```
-checking installed package size ... NOTE
-    installed size is 6.1Mb
-    sub-directories of 1Mb or more:
-      data         4.7Mb
+❯ checking package dependencies ... NOTE
+  Packages suggested but not available for checking: 'msa', 'Biostrings'
+
+  Imports includes 21 non-default packages.
+  Importing from so many packages makes the package vulnerable to any 
+  of them becoming unavailable.  Move as many as possible to Suggests 
+  and use conditionally.
 ```
 **Comments**: <br/>
-The package is hosting a database (`data/opentree_chronograms.rda`), increasing the size of the data dir. This database is needed to run main functions.
-
-* Note 2
-
-```
-checking data for non-ASCII characters ... NOTE
-  Note: found 2575 marked UTF-8 strings
-```
-
-**Comments**: <br/>
-We ran `tools::showNonASCIIfile()`` on our data objects. non-ASCII characters can only be found in the opentree_chronograms.rda object. We then ran `tools::showNonASCII()`` on each element of the object. non-ASCII characters are found only in the `opentree_chronograms$authors` list, which contains names of authors of our study database. These are obtained from a different database, and should be conserved in their original form.
-
-* Note3
-
-```
-Possibly misspelled words in DESCRIPTION:
-  Chronogram (2:46)
-  DateLife (22:62)
-  chronograms (20:73)
-  workflows (20:26)
-  phylogenetic (20:49)
-  al (24:31, 26:60, 31:19, 32:30, 33:17)
-  Ané (26:53)
-  BLADJ (32:15)
-  Britton (33:6)
-  chronogram (22:55)
-  chronograms (19:43, 23:14, 25:26)
-  congruification (30:76)
-  Criscuolo (24:18)
-  DateLife (21:62)
-  et (24:28, 26:57, 31:16, 32:27, 33:14)
-  Huelsenbeck (33:71)
-  mrBayes (33:62)
-  O'Meara (35:9)
-  PATHd (32:79)
-  Ronquist (34:9)
-  Schenk (29:50)
-  SDM (23:67)
-  treePL (34:69)
-```
-
-**Comments**: <br/>
-To my knowledge, none of these words are misspelled.
+All the packages imported are needed for the datelife workflow.

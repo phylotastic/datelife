@@ -77,14 +77,15 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># This is a flag for package development. You are welcome to run the example.</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="st">"Archaeopteryx"</span>, <span class="st">"Pinus"</span>, <span class="st">"Quetzalcoatlus"</span>, <span class="st">"Homo sapiens"</span>,</span>
 <span class="r-in">  <span class="st">"Tyrannosaurus rex"</span>, <span class="st">"Megatheriidae"</span>, <span class="st">"Metasequoia"</span>, <span class="st">"Aedes"</span>, <span class="st">"Panthera"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">phy</span> <span class="op">&lt;-</span> <span class="fu"><a href="tree_from_taxonomy.html">tree_from_taxonomy</a></span><span class="op">(</span><span class="va">taxa</span>, sources <span class="op">=</span> <span class="st">"The Paleobiology Database"</span><span class="op">)</span><span class="op">$</span><span class="va">phy</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> has class</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> reordered</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> collapsed</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in lapply(x, f):</span> object 'taxa' not found</span>
+<span class="r-in"> <span class="co"># end dontrun</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

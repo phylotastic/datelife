@@ -20,9 +20,12 @@ A dated tree.
 This will take a topology, look up information about fossils for taxa on the tree, and use \code{\link[paleotree:timePaleoPhy]{paleotree::timePaleoPhy()}} to compute branch lengths.
 }
 \examples{
+\dontrun{ # This is a flag for package development. You are welcome to run the example.
+
 taxa <- c(
   "Archaeopteryx", "Pinus", "Quetzalcoatlus", "Homo sapiens",
   "Tyrannosaurus rex", "Megatheriidae", "Metasequoia", "Aedes", "Panthera"
 )
 phy <- tree_from_taxonomy(taxa, sources = "The Paleobiology Database")$phy
+} # end dontrun
 }

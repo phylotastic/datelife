@@ -129,9 +129,14 @@ Needed because using <code>include_suppressed = FALSE</code> in <code><a href="h
         <dd>Congruify and Check.</dd>
       </dl><dl><dt>
           
-          <code><a href="congruify_calibrations.html">congruify_calibrations()</a></code> 
+          <code><a href="congruify_and_mrca.html">congruify_and_mrca()</a></code> 
         </dt>
-        <dd>Congruify nodes of a tree topology to nodes from taxon pair calibrations</dd>
+        <dd>Congruify nodes of a tree topology to nodes from a source chronogram, and find the mrca nodes</dd>
+      </dl><dl><dt>
+          
+          <code><a href="congruify_and_mrca.phylo.html">congruify_and_mrca(<i>&lt;phylo&gt;</i>)</a></code> 
+        </dt>
+        <dd>Congruify nodes of a tree topology to nodes from a source chronogram, and find the mrca nodes</dd>
       </dl><dl><dt>
           
           <code><a href="contributor_cache.html">contributor_cache</a></code> 
@@ -307,6 +312,11 @@ from a list of taxa and ages, or from a dated tree</dd>
         <dd>Get all chronograms from Open Tree of Life database</dd>
       </dl><dl><dt>
           
+          <code><a href="get_opentree_species.html">get_opentree_species()</a></code> 
+        </dt>
+        <dd>Get all species belonging to a taxon from the Open Tree of Life Taxonomy</dd>
+      </dl><dl><dt>
+          
           <code><a href="get_otol_synthetic_tree.html">get_otol_synthetic_tree()</a></code> 
         </dt>
         <dd>Get an Open Tree of Life synthetic subtree of a set of given taxon names.</dd>
@@ -465,7 +475,8 @@ given a set of node calibrations without any data.</dd>
           
           <code><a href="mrca_calibrations.html">mrca_calibrations()</a></code> 
         </dt>
-        <dd>Identify nodes of a tree topology that are most recent common ancestor (mrca) of taxon pair calibrations</dd>
+        <dd>Identify nodes of a tree topology that are most recent common ancestor (mrca)
+of taxon pairs from a <code>calibrations</code> object</dd>
       </dl><dl><dt>
           
           <code><a href="opentree_chronograms.html">opentree_chronograms</a></code> 
@@ -677,7 +688,8 @@ Used inside phylo_get_subset_array and phylo_get_subset_array_congruify.</dd>
           
           <code><a href="summarize_summary_matrix.html">summarize_summary_matrix()</a></code> 
         </dt>
-        <dd>Internal function used in summary_matrix_to_phylo().</dd>
+        <dd>Gets all ages per taxon pair from a distance matrix
+Internal function used in summary_matrix_to_phylo_all().</dd>
       </dl><dl><dt>
           
           <code><a href="summary.datelifeResult.html">summary(<i>&lt;datelifeResult&gt;</i>)</a></code> 
@@ -698,7 +710,8 @@ Used inside phylo_get_subset_array and phylo_get_subset_array_congruify.</dd>
           
           <code><a href="summary_matrix_to_phylo_all.html">summary_matrix_to_phylo_all()</a></code> 
         </dt>
-        <dd>Get minimum, mean and maximum summary chronograms from a summary matrix of a <code>datelifeResult</code> object.</dd>
+        <dd>Get minimum, median, mean, midpoint, and maximum summary chronograms from a
+summary matrix of a <code>datelifeResult</code> object.</dd>
       </dl><dl><dt>
           
           <code><a href="summary_patristic_matrix_array.html">summary_patristic_matrix_array()</a></code> 

@@ -149,7 +149,7 @@
 #'   \item{tb.author.pretty}{A dataframe with two elements: author names and number of studies in TreeBase authored by each}
 #'   \item{tb.author.results}{A dataframe with two elements: author names and study identifiers}
 #' }
-#' @source \url{http://treebase.org}
+#' @source TreeBASE database, no longer available online \url{https://en.wikipedia.org/wiki/TreeBASE}
 #' @keywords treebase tree chronogram author study count id
 #' @details
 #'
@@ -166,7 +166,7 @@
 # #'   \item{person}{Character vector of authors of the included studies}
 # #'   \item{study.count}{Numeric vector of studies authored by each person}
 # #' }
-# #' @source \url{http://treebase.org}
+# #' @source TreeBASE database, no longer available online \url{https://en.wikipedia.org/wiki/TreeBASE}
 # #' @keywords treebase tree chronogram author study count
 # #' @details
 # #' Generated with make_treebase_cache()
@@ -183,7 +183,7 @@
 # #'   \item{person}{Named character vector of authors of the included studies}
 # #'   \item{study}{Named character vector of study identifiers}
 # #' }
-# #' @source \url{http://treebase.org}
+# #' @source TreeBASE database, no longer available online \url{https://en.wikipedia.org/wiki/TreeBASE}
 # #' @keywords treebase tree chronogram study studies id
 # #' @details
 # #' Generated with make_treebase_cache()

@@ -88,7 +88,7 @@ tree in <code>input</code> during the SDM analysis. Options are:</p><dl><dt>weig
 divides the matrix in half, if <code>FALSE</code> it will take it as is.</p></dd>
 
     <dt><code>use</code></dt>
-<dd><p>A character vector indicating what type of age to use for summary.
+<dd><p>A character vector indicating what type of age to use for summary tree.
 One of the following:</p><dl><dt>"mean"</dt>
 <dd><p>It will use the <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code> of the node ages in <code>summ_matrix</code>.</p></dd>
 
@@ -101,6 +101,9 @@ One of the following:</p><dl><dt>"mean"</dt>
 <dt>"max"</dt>
 <dd><p>Choose this if you wanna be conservative; it will use the <code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max()</a></code>
 age from node ages in <code>summ_matrix</code>.</p></dd>
+
+<dt>"midpoint"</dt>
+<dd><p>It will use the mean of minimum age and maximum age.</p></dd>
 
 
 </dl></dd>

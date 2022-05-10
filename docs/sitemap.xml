@@ -82,6 +82,12 @@
     <loc>/reference/congruify_and_check.html</loc>
   </url>
   <url>
+    <loc>/reference/congruify_and_mrca.html</loc>
+  </url>
+  <url>
+    <loc>/reference/congruify_and_mrca.phylo.html</loc>
+  </url>
+  <url>
     <loc>/reference/congruify_calibrations.html</loc>
   </url>
   <url>
@@ -197,6 +203,9 @@
   </url>
   <url>
     <loc>/reference/get_opentree_chronograms.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_opentree_species.html</loc>
   </url>
   <url>
     <loc>/reference/get_otol_chronograms.html</loc>

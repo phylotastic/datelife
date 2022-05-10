@@ -61,7 +61,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">make_datelife_query</span><span class="op">(</span>
   input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Rhea americana"</span>, <span class="st">"Pterocnemia pennata"</span>, <span class="st">"Struthio camelus"</span><span class="op">)</span>,
   use_tnrs <span class="op">=</span> <span class="cn">TRUE</span>,
-  get_spp_from_taxon <span class="op">=</span> <span class="cn">FALSE</span>
+  get_spp_from_taxon <span class="op">=</span> <span class="cn">FALSE</span>,
+  taxonomic_source <span class="op">=</span> <span class="st">"ott"</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -86,6 +87,9 @@ taxonomic name variations with <code><a href="tnrs_match.html">tnrs_match()</a><
 given taxon or not. Default to <code>FALSE</code>. If <code>TRUE</code>, it must have same length as input.
 If input is a newick string with some clades it will be converted to a <code>phylo</code>
 object, and the order of <code>get_spp_from_taxon</code> will match <code>phy$tip.label</code>.</p></dd>
+<dt>taxonomic_source</dt>
+<dd><p>Used if <code>get_spp_from_taxon = TRUE</code>. A character vector with the desired taxonomic sources.
+Options are "ott", "ncbi", "gbif" or "irmng". The function defaults to "ott".</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
