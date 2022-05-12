@@ -1,6 +1,6 @@
 #' Convert a patristic matrix to a `phylo` object.
 #'
-#' U`patristic_matrix_to_phylo` us used inside [summarize_datelife_result()].
+#' Function `patristic_matrix_to_phylo` is used inside [summarize_datelife_result()].
 #'
 #' @param patristic_matrix A patristic matrix
 #' @param clustering_method A character vector indicating the method to construct
@@ -367,7 +367,7 @@ summary_matrix_to_phylo <- function(summ_matrix,
   }
   new_phy$calibration_distribution <- attributes(all_trees)$node_age_distributions
   if (is.null(new_phy$clustering_method)) {
-    new_phy$clustering_method <- NULL    
+    new_phy$clustering_method <- NULL
   }
   if (inherits(target_tree, "phylo")) {
     if (!is.null(target_tree$ott_ids) & is.null(new_phy$ott_ids)) {

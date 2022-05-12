@@ -44,9 +44,10 @@ A \code{phylo} or \code{multiPhylo} object with branch lengths proportional to t
 \description{
 \code{datelife_use} gets secondary calibrations available for any
 pair of given taxon names, mined from the \link{opentree_chronograms} object,
-and uses them to date a given tree topology with the
+congruifies them, and uses them to date a given tree topology with the
 algorithm defined in \code{dating_method}. If no tree topology is provided,
-it will attempt to get one for the given taxon names by calling the function \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}}.
+it will attempt to get one for the given taxon names from Open Tree of Life
+synthetic tree, using \code{\link[=make_bold_otol_tree]{make_bold_otol_tree()}}.
 }
 \details{
 If \code{input} is a vector of taxon names, the function will attempt to reconstruct a BOLD

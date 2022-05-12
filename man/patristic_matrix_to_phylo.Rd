@@ -43,7 +43,7 @@ Only used if \code{clustering_method = "mvr"}.}
 A rooted \code{phylo} object.
 }
 \description{
-U\code{patristic_matrix_to_phylo} us used inside \code{\link[=summarize_datelife_result]{summarize_datelife_result()}}.
+Function \code{patristic_matrix_to_phylo} is used inside \code{\link[=summarize_datelife_result]{summarize_datelife_result()}}.
 }
 \details{
 We might add the option to insert a function as \code{clustering_method} in the future.

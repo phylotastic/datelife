@@ -61,8 +61,8 @@ get_all_calibrations <- function(input = NULL,
 #' @export
 get_calibrations_vector <- function(input = NULL,
                                     each = FALSE) {
-  # TODO: is_datelife_search_input function or any type of input format checking
-  # function to trap the case were input is a list
+  # TODO: is_datelife_search_input function, or any type of input format checking
+  # i.e., a function to trap the case were input is a list
   phyloall <- datelife_search(
     input = input,
     summary_format = "phylo_all"

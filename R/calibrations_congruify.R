@@ -1,10 +1,10 @@
-#' Congruify nodes of a tree topology to nodes from a source chronogram, and find the mrca nodes
-#' @inheritParams phylo_check
-#' @return An object of class data frame.
-#' @export
-congruify_and_mrca <- function(phy) {
-  UseMethod("congruify_and_mrca", phy)
-}
+# #' Congruify nodes of a tree topology to nodes from a source chronogram, and find the mrca nodes
+# #' @inheritParams phylo_check
+# #' @return An object of class data frame.
+# #' @export
+# congruify_and_mrca <- function(phy) {
+#   UseMethod("congruify_and_mrca", phy)
+# }
 
 #' Congruify nodes of a tree topology to nodes from a source chronogram, and find the mrca nodes
 #'
@@ -16,7 +16,7 @@ congruify_and_mrca <- function(phy) {
 # #' or a vector of taxon names (see details).
 #' @param source_chronogram A `phylo` object, output of [datelife_search()].
 #' @param study A character string indicating the name of the study the `source_chronogram` comes from.
-congruify_and_mrca.phylo <- function(phy,
+congruify_and_mrca_phylo <- function(phy,
                                      source_chronogram,
                                      study) {
     #
@@ -29,38 +29,156 @@ congruify_and_mrca.phylo <- function(phy,
     if (missing(study)) {
       study <- "source_chronogram"
     }
+    ############################################################################
     # homogenize tip labels:
+    ############################################################################
     phy$tip.label <- sub(" ", "_", phy$tip.label)
     source_chronogram$tip.label <- sub(" ", "_", source_chronogram$tip.label)
     class(source_chronogram) <- "phylo"
-    congruified <- suppressWarnings(geiger::congruify.phylo(reference = source_chronogram,
-                               target = phy,
-                               scale = NA,
-                               ncores = 1))
-
+    ############################################################################
+    # congruify source chronogram to target topology:
+    ############################################################################
+    congruified <- suppressWarnings(geiger::congruify.phylo(
+                                    reference = source_chronogram,
+                                    target = phy,
+                                    scale = NA,
+                                    ncores = 1))
+    ############################################################################
+    # get mrca nodes for available ages:
+    ############################################################################
     mrcas <- mrca_calibrations(phy = congruified$target,
                                calibrations = congruified$calibrations)
     calibs_matched <- mrcas$matched_calibrations
+    ############################################################################
+    # add column of study reference:
     calibs_matched$study <- rep(study, nrow(calibs_matched))
+    ############################################################################
+    # reorder columns:
+    # colnames are "MRCA" "MaxAge" "MinAge" "taxonA" "taxonB" "mrca_node_number"
+    # "mrca_node_name" "study"
+    calibs_matched <- calibs_matched[ , c("mrca_node_name",
+                                          "taxonA",
+                                          "taxonB",
+                                          "MinAge",
+                                          "MaxAge",
+                                          "study",
+                                          "mrca_node_number",
+                                          "MRCA")]
+    ############################################################################
+    # order rows:
+    row_order <- order(calibs_matched$mrca_node_number,
+                    calibs_matched$MaxAge,
+                    calibs_matched$study,
+                    calibs_matched$taxonA,
+                    calibs_matched$taxonB)
+    calibs_matched <- calibs_matched[row_order,]
+    ############################################################################
+    # add topology as atttribute
+    attributes(calibs_matched)$phy <- mrcas$matched_phy
     return(structure(calibs_matched,
                      class = c("congruifiedCalibrations", "data.frame")))
 }
 
-congruify_and_mrca.multiPhylo <- function(phy,
+congruify_and_mrca_multiPhylo <- function(phy,
                                           source_chronograms) {
-    #
+    ############################################################################
+    # congruify and mrca, recover matched phy:
     res <- lapply(seq(length(source_chronograms)),
                  function(i) {
-                   congruify_and_mrca.phylo(phy = phy,
+                   congruify_and_mrca_phylo(phy = phy,
                                             source_chronogram = source_chronograms[[i]],
                                             study = names(source_chronograms)[i])
                  })
+    phy <- attributes(res[[1]])$phy
+    ############################################################################
     # merge the list of tables and return a single table (data.table object):
     res <- data.table::rbindlist(res)
+    ############################################################################
     # Convert to simple data.frame object:
-    as.data.frame.data.frame(res)
+    res <- as.data.frame.data.frame(res)
+    ############################################################################
+    # reorder columns:
+    # colnames are "MRCA" "MaxAge" "MinAge" "taxonA" "taxonB" "mrca_node_number"
+    # "mrca_node_name" "study"
+    res <- res[ , c("mrca_node_name",
+                    "taxonA",
+                    "taxonB",
+                    "MinAge",
+                    "MaxAge",
+                    "study",
+                    "mrca_node_number",
+                    "MRCA")]
+    ############################################################################
+    # order rows:
+    row_order <- order(res$mrca_node_number,
+                       res$MaxAge,
+                       res$study,
+                       res$taxonA,
+                       res$taxonB)
+    res <- res[row_order,]
+    ############################################################################
+    # add topology as attribute
+    attributes(res)$phy <- phy
+    return(structure(res,
+                     class = c("congruifiedCalibrations", "data.frame")))
 }
 
+summarize_congruifiedCalibrations <- function(congruified_calibrations,
+                                              age_column) {
+    ############################################################################
+    if (missing(age_column)) {
+      age_column = "MaxAge"
+    }
+    age_column <- age_column[1]
+    if (!age_column %in% colnames(congruified_calibrations)) {
+      stop("'age_column' provided is not a column of 'congruified_calibrations'.")
+    }
+    message("Using ", age_column, " column to summarize ages.")
+    if (all(congruified_calibrations$MinAge == congruified_calibrations$MaxAge)) {
+      message("Minimum and maximum ages are equal in 'congruified_calibrations' data.frame.")
+    }
+    ############################################################################
+    # create vectors of summary statistics per node in congruified_calibrations
+    min_ages <- q1 <- median_ages <- mean_ages <- q3 <- max_ages <- sd_ages <- var_ages <- c()
+    for (node in unique(congruified_calibrations$mrca_node_name)) {
+      rowsies <- congruified_calibrations$mrca_node_name %in% node
+      min_ages <- c(min_ages, min(congruified_calibrations[rowsies, age_column]))
+      q1 <- c(q1, quantile(congruified_calibrations[rowsies, age_column], 0.25))
+      median_ages <- c(median_ages, median(congruified_calibrations[rowsies, age_column]))
+      mean_ages <- c(mean_ages, mean(congruified_calibrations[rowsies, age_column]))
+      q3 <- c(q3, quantile(congruified_calibrations[rowsies, age_column], 0.75))
+      max_ages <- c(max_ages, max(congruified_calibrations[rowsies, age_column]))
+      sd_ages <- c(sd_ages, sd(congruified_calibrations[rowsies, age_column]))
+      var_ages <- c(var_ages, var(congruified_calibrations[rowsies, age_column]))
+    }
+    ############################################################################
+    # assemble summary table as data.frame
+    summary_table <- data.frame(unique(congruified_calibrations$mrca_node_name),
+                                min_ages,
+                                q1,
+                                median_ages,
+                                mean_ages,
+                                q3,
+                                max_ages,
+                                var_ages,
+                                sd_ages)
+    #
+    ############################################################################
+    # Give meaningful names to columns
+    colnames(summary_table) <- c("Node Name",
+                                 "Min Age",
+                                 "Q1",
+                                 "Median Age",
+                                 "Mean Age",
+                                 "Q3",
+                                 "Max Age",
+                                 "Variance",
+                                 "SD")
+    ############################################################################
+    # TODO: add calibration_distribution as attribute
+    # attributes(summary_table)$calibration_distribution <- NA
+    return(summary_table)
+}
 #
 # #' Congruify nodes of a tree topology to nodes from taxon pair calibrations
 # #'

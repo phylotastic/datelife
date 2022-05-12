@@ -2,9 +2,10 @@
 #'
 #' @description `datelife_use` gets secondary calibrations available for any
 #' pair of given taxon names, mined from the [opentree_chronograms] object,
-#' and uses them to date a given tree topology with the
+#' congruifies them, and uses them to date a given tree topology with the
 #' algorithm defined in `dating_method`. If no tree topology is provided,
-#' it will attempt to get one for the given taxon names by calling the function [make_bold_otol_tree()].
+#' it will attempt to get one for the given taxon names from Open Tree of Life
+#' synthetic tree, using [make_bold_otol_tree()].
 #'
 #' @inheritParams datelife_search
 #' @inheritParams use_all_calibrations
@@ -21,12 +22,7 @@ datelife_use <- function(input = NULL,
                          each = FALSE,
                          dating_method = "bladj",
                          ...) {
-  # use congruification to expand calibrations: already implemented in match_all_calibrations
-  # and pathd8 still does not work sometimes
-  # calibrations.df <- eachcal[[2]]
-  # calibrations.df <- calibs$calibration
-  # phy <- tax_phyloallall[[2]][[3]]
-
+  # pathd8 still does not work sometimes
 
   datelife_query <- input
   if (suppressMessages(!is_datelife_query(input))) {
@@ -80,26 +76,31 @@ datelife_use_datelifequery <- function(datelife_query = NULL,
                                        each = FALSE) {
   #
   if (suppressMessages(!is_datelife_query(datelife_query))) {
-    stop("'datelife_query' is not a 'datelifeQuery' object.")
+    stop("'datelife_query' argument is not a 'datelifeQuery' object.")
   }
   if (!inherits(datelife_query$phy, "phylo")) {
-    message("A tree topology is needed for a dating analysis.")
     warning("'datelife_query$phy' is not a 'phylo' object.")
+    message("A tree topology is needed for a dating analysis, returning 'NA'")
     return(NA)
   }
-  # get calibrations by performing a datelife_search with get_all_calibrations:
-  calibrations <- get_calibrations_datelifequery(
-    datelife_query = datelife_query,
-    each = each
+  # get congruified calibrations
+  # perform a datelife_search:
+  message("Searching the chronogram database ...")
+  phyloall <- datelife_search(
+    input = datelife_query,
+    summary_format = "phylo_all"
   )
+  message("Extracting and congruifying ages from source chronograms ...")
+  calibrations <- congruify_and_mrca_multiPhylo(phy = datelife_query$phy,
+                                                source_chronograms = phyloall)
 
   # date the topology with obtained calibrations
-  res <- use_all_calibrations(
-    phy = datelife_query$phy,
-    calibrations = calibrations,
-    dating_method = dating_method
-  )
-  # attributes(calibrations)
-  attr(res, "datelife_query") <- datelife_query
-  return(res)
+  # res <- use_all_calibrations(
+  #   phy = datelife_query$phy,
+  #   calibrations = calibrations,
+  #   dating_method = dating_method
+  # )
+  # # attributes(calibrations)
+  # attr(res, "datelife_query") <- datelife_query
+  # return(res)
 }
