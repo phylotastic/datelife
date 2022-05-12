@@ -363,7 +363,7 @@ get_biggest_multiphylo <- function(trees) {
     return.object <- return.object[which.min(abs(tree.depths - stats::median(tree.depths)))]
     tree_citation <- tree_citation[which.min(abs(tree.depths - stats::median(tree.depths)))]
   }
-  if (class(return.object) != "phylo") {
+  if (!inherits(return.object, "phylo")) {
     return.object <- return.object[[1]]
   }
   return.object$citation <- tree_citation
