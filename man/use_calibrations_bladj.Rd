@@ -4,13 +4,7 @@
 \alias{use_calibrations_bladj}
 \title{Use calibrations to date a topology with the BLADJ algorithm.}
 \usage{
-use_calibrations_bladj(
-  phy,
-  calibrations,
-  type = "median",
-  root_age = NULL,
-  match_calibrations = TRUE
-)
+use_calibrations_bladj(phy = NULL, calibrations, type = "median", root_age)
 }
 \arguments{
 \item{phy}{A \code{phylo} object with or without branch lengths.}
@@ -20,15 +14,19 @@ names in \code{phy}, usually obtained with \code{\link[=get_all_calibrations]{ge
 
 \item{type}{The type of age to use as calibration. Options are "median", "mean", "min", or "max".}
 
-\item{root_age}{Not implemented yet. Numeric specifying the age of the root. If there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10\% more than the age of the calibration.}
-
-\item{match_calibrations}{Boolean, default to TRUE. It will run match_all_calibrations function. Set to FALSE if your calibrations have already been matched.}
+\item{root_age}{Numeric specifying the age of the root. Only used if there are
+no ages for the root node in  \code{calibrations} argument.
+If missing, NULL, or not numeric, the value of the oldest calibration plus one
+unit of the mean differences across calibrations, will be used as root calibration.
+If there is one single age point provided as \code{calibrations}, the root age will
+be set to 10\% more than the age of the single calibration.}
 }
 \value{
-A \code{phylo} object with branch lengths proportional to time.
+A chronogram: a \code{phylo} object with branch lengths proportional to time.
 }
 \description{
-The function prepares the input for BLADJ and calls \code{\link[=make_bladj_tree]{make_bladj_tree()}}
+The function \code{use_calibrations_bladj} prepares the input for BLADJ
+and calls \code{\link[=make_bladj_tree]{make_bladj_tree()}}.
 }
 \details{
 The BLADJ algorithm is part of the Phylocom software, presented in Webb et al.

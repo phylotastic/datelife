@@ -141,9 +141,9 @@ summarize_congruifiedCalibrations <- function(congruified_calibrations,
     if (!age_column %in% colnames(congruified_calibrations)) {
       stop("'age_column' provided is not a column of 'congruified_calibrations'.")
     }
-    message("Using ", age_column, " column to summarize ages.")
+    message("... Using ", age_column, " column to summarize ages.")
     if (all(congruified_calibrations$MinAge == congruified_calibrations$MaxAge)) {
-      message("Minimum and maximum ages are equal in 'congruified_calibrations' data.frame.")
+      message("... Minimum and maximum ages are equal in 'congruified_calibrations' data.frame.")
     }
     ############################################################################
     # create vectors of summary statistics per node in congruified_calibrations
@@ -152,7 +152,7 @@ summarize_congruifiedCalibrations <- function(congruified_calibrations,
       rowsies <- congruified_calibrations$mrca_node_name %in% node
       min_ages <- c(min_ages, min(congruified_calibrations[rowsies, age_column]))
       q1 <- c(q1, quantile(congruified_calibrations[rowsies, age_column], 0.25))
-      median_ages <- c(median_ages, median(congruified_calibrations[rowsies, age_column]))
+      median_ages <- c(median_ages, stats::median(congruified_calibrations[rowsies, age_column]))
       mean_ages <- c(mean_ages, mean(congruified_calibrations[rowsies, age_column]))
       q3 <- c(q3, quantile(congruified_calibrations[rowsies, age_column], 0.75))
       max_ages <- c(max_ages, max(congruified_calibrations[rowsies, age_column]))
