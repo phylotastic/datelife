@@ -88,6 +88,12 @@
     <loc>/reference/congruify_and_mrca.phylo.html</loc>
   </url>
   <url>
+    <loc>/reference/congruify_and_mrca_multiPhylo.html</loc>
+  </url>
+  <url>
+    <loc>/reference/congruify_and_mrca_phylo.html</loc>
+  </url>
+  <url>
     <loc>/reference/congruify_calibrations.html</loc>
   </url>
   <url>
@@ -461,6 +467,9 @@
   </url>
   <url>
     <loc>/reference/subset_trees.html</loc>
+  </url>
+  <url>
+    <loc>/reference/summarize_congruifiedCalibrations.html</loc>
   </url>
   <url>
     <loc>/reference/summarize_datelife_result.html</loc>

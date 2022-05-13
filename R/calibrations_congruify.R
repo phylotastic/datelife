@@ -15,13 +15,13 @@
 #' @inheritParams phylo_check
 # #' or a vector of taxon names (see details).
 #' @param source_chronogram A `phylo` object, output of [datelife_search()].
-#' @param study A character string indicating the name of the study the `source_chronogram` comes from.
+#' @param reference A character string indicating the study reference that the `source_chronogram` comes from.
 #' @return a `data.frame` of node ages from `source_chronograms` and corresponding
 #' mrca nodes in target tree `phy`.
 #' @export
 congruify_and_mrca_phylo <- function(phy,
                                      source_chronogram,
-                                     study) {
+                                     reference) {
     #
     if (!inherits(phy, "phylo")) {
       return(NA)
@@ -29,8 +29,8 @@ congruify_and_mrca_phylo <- function(phy,
     if (!inherits(source_chronogram, "phylo")) {
       return(NA)
     }
-    if (missing(study)) {
-      study <- "source_chronogram"
+    if (missing(reference)) {
+      reference <- "source_chronogram"
     }
     ############################################################################
     # homogenize tip labels:
@@ -54,24 +54,24 @@ congruify_and_mrca_phylo <- function(phy,
     calibs_matched <- mrcas$matched_calibrations
     ############################################################################
     # add column of study reference:
-    calibs_matched$study <- rep(study, nrow(calibs_matched))
+    calibs_matched$reference <- rep(reference, nrow(calibs_matched))
     ############################################################################
     # reorder columns:
     # colnames are "MRCA" "MaxAge" "MinAge" "taxonA" "taxonB" "mrca_node_number"
-    # "mrca_node_name" "study"
+    # "mrca_node_name" "reference"
     calibs_matched <- calibs_matched[ , c("mrca_node_name",
                                           "taxonA",
                                           "taxonB",
                                           "MinAge",
                                           "MaxAge",
-                                          "study",
+                                          "reference",
                                           "mrca_node_number",
                                           "MRCA")]
     ############################################################################
     # order rows:
     row_order <- order(calibs_matched$mrca_node_number,
                     calibs_matched$MaxAge,
-                    calibs_matched$study,
+                    calibs_matched$reference,
                     calibs_matched$taxonA,
                     calibs_matched$taxonB)
     calibs_matched <- calibs_matched[row_order,]
@@ -103,7 +103,7 @@ congruify_and_mrca_multiPhylo <- function(phy,
                  function(i) {
                    congruify_and_mrca_phylo(phy = phy,
                                             source_chronogram = source_chronograms[[i]],
-                                            study = names(source_chronograms)[i])
+                                            reference = names(source_chronograms)[i])
                  })
     phy <- attributes(res[[1]])$phy
     ############################################################################
@@ -115,20 +115,20 @@ congruify_and_mrca_multiPhylo <- function(phy,
     ############################################################################
     # reorder columns:
     # colnames are "MRCA" "MaxAge" "MinAge" "taxonA" "taxonB" "mrca_node_number"
-    # "mrca_node_name" "study"
+    # "mrca_node_name" "reference"
     res <- res[ , c("mrca_node_name",
                     "taxonA",
                     "taxonB",
                     "MinAge",
                     "MaxAge",
-                    "study",
+                    "reference",
                     "mrca_node_number",
                     "MRCA")]
     ############################################################################
     # order rows:
     row_order <- order(res$mrca_node_number,
                        res$MaxAge,
-                       res$study,
+                       res$reference,
                        res$taxonA,
                        res$taxonB)
     res <- res[row_order,]

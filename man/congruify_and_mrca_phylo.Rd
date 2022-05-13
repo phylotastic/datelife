@@ -4,14 +4,14 @@
 \alias{congruify_and_mrca_phylo}
 \title{Congruify nodes of a tree topology to nodes from a source chronogram, and find the mrca nodes}
 \usage{
-congruify_and_mrca_phylo(phy, source_chronogram, study)
+congruify_and_mrca_phylo(phy, source_chronogram, reference)
 }
 \arguments{
 \item{phy}{A \code{phylo} object.}
 
 \item{source_chronogram}{A \code{phylo} object, output of \code{\link[=datelife_search]{datelife_search()}}.}
 
-\item{study}{A character string indicating the name of the study the \code{source_chronogram} comes from.}
+\item{reference}{A character string indicating the study reference that the \code{source_chronogram} comes from.}
 }
 \value{
 a \code{data.frame} of node ages from \code{source_chronograms} and corresponding

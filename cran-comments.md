@@ -1,6 +1,7 @@
 ## New submission v 0.6.2
 This is a new submission where I have:
 
+* Fixed R code problem by useding `inherits` instead of if() conditions comparing class() to string
 * Fixed examples that were failing in some Linux environments.
 
 ### Test environments:
@@ -16,7 +17,7 @@ This is a new submission where I have:
   - R Under development (2021-11-26 r81252), `rhub::check_for_cran("linux-x86_64-fedora-clang")`
 
 ### Results
-0 errors ✔ | 0 warnings ✔ | 1 note ✖
+0 errors ✔ | 0 warnings ✔ | 3 notes ✖
 
 * Note 1
 
@@ -25,9 +26,46 @@ This is a new submission where I have:
   Packages suggested but not available for checking: 'msa', 'Biostrings'
 
   Imports includes 21 non-default packages.
-  Importing from so many packages makes the package vulnerable to any 
-  of them becoming unavailable.  Move as many as possible to Suggests 
+  Importing from so many packages makes the package vulnerable to any
+  of them becoming unavailable.  Move as many as possible to Suggests
   and use conditionally.
 ```
 **Comments**: <br/>
 All the packages imported are needed for the datelife workflow.
+
+* Note 2
+
+```
+Possibly misspelled words in DESCRIPTION:
+  Ané (26:53)
+  BLADJ (32:15)
+  Britton (33:6)
+  Criscuolo (24:18)
+  DateLife (21:62)
+  Huelsenbeck (33:71)
+  O'Meara (35:9)
+  PATHd (32:79)
+  Ronquist (34:9)
+  SDM (23:67)
+  Schenk (29:50)
+  al (24:31, 26:60, 31:19, 32:30, 33:17)
+  chronogram (22:55)
+  chronograms (19:43, 23:14, 25:26)
+  congruification (30:76)
+  et (24:28, 26:57, 31:16, 32:27, 33:14)
+  mrBayes (33:62)
+  treePL (34:69)
+```
+**Comments**: <br/>
+None of these word are misspelled
+
+* Note 3
+
+```
+Found the following (possibly) invalid DOIs:
+  DOI: 10.1111/2041-210X.12051
+    From: DESCRIPTION
+    Status: Service Unavailable
+    Message: 503
+**Comments**: <br/>
+The DOI is functional
