@@ -1,9 +1,8 @@
-
-TODO:
+<!--TODO:
   - add congruification step to `datelife_use` functions
-  - `use_calibrations_bladj` should take an output of `congruify_andd_mrca`
 
 DONE:
+-->
 
 # datelife 0.6.2
   - data: updated `opentree_chronograms` object. It now has 253 chronograms from Open Tree of Life
@@ -14,6 +13,7 @@ DONE:
     - `get_otol_chronogram` is another name to call `get_opentree_chronograms`
     - added taxonomic source options argument to `make_datelife_query`. You can choose from OTT, NCBI, IRMNG and GBIF.
     - function `congruify_and_mrca`: output has congruified topology with nodelables as attribute.
+    - `use_calibrations_bladj` takes an output of `congruify_and_mrca` functions.
   - added function method `congruify_and_mrca`
 
 # datelife 0.6.1

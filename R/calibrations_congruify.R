@@ -16,6 +16,9 @@
 # #' or a vector of taxon names (see details).
 #' @param source_chronogram A `phylo` object, output of [datelife_search()].
 #' @param study A character string indicating the name of the study the `source_chronogram` comes from.
+#' @return a `data.frame` of node ages from `source_chronograms` and corresponding
+#' mrca nodes in target tree `phy`.
+#' @export
 congruify_and_mrca_phylo <- function(phy,
                                      source_chronogram,
                                      study) {
@@ -79,6 +82,19 @@ congruify_and_mrca_phylo <- function(phy,
                      class = c("congruifiedCalibrations", "data.frame")))
 }
 
+#' Congruify nodes of a tree topology to nodes from a source chronogram, and find the mrca nodes
+#'
+#' @description \code{congruify_and_mrca_multiPhylo} congruifies a target tree against all
+#'   source chronograms in a `multiPhylo` object, and gets nodes of target tree
+#'   that correspond to the most recent common ancestor (mrca) of taxon pairs
+#'   in the congruified calibrations.
+#'   It calls [congruify_and_mrca_phylo()], and [phytools::findMRCA()] to get mrca nodes.
+#' @inheritParams phylo_check
+# #' or a vector of taxon names (see details).
+#' @param source_chronograms A `multiPhylo` object, output of [datelife_search()].
+#' @return a `data.frame` of node ages from `source_chronograms` and corresponding
+#' mrca nodes in target tree `phy`.
+#' @export
 congruify_and_mrca_multiPhylo <- function(phy,
                                           source_chronograms) {
     ############################################################################
@@ -151,13 +167,13 @@ summarize_congruifiedCalibrations <- function(congruified_calibrations,
     for (node in unique(congruified_calibrations$mrca_node_name)) {
       rowsies <- congruified_calibrations$mrca_node_name %in% node
       min_ages <- c(min_ages, min(congruified_calibrations[rowsies, age_column]))
-      q1 <- c(q1, quantile(congruified_calibrations[rowsies, age_column], 0.25))
+      q1 <- c(q1, stats::quantile(congruified_calibrations[rowsies, age_column], 0.25))
       median_ages <- c(median_ages, stats::median(congruified_calibrations[rowsies, age_column]))
       mean_ages <- c(mean_ages, mean(congruified_calibrations[rowsies, age_column]))
-      q3 <- c(q3, quantile(congruified_calibrations[rowsies, age_column], 0.75))
+      q3 <- c(q3, stats::quantile(congruified_calibrations[rowsies, age_column], 0.75))
       max_ages <- c(max_ages, max(congruified_calibrations[rowsies, age_column]))
-      sd_ages <- c(sd_ages, sd(congruified_calibrations[rowsies, age_column]))
-      var_ages <- c(var_ages, var(congruified_calibrations[rowsies, age_column]))
+      sd_ages <- c(sd_ages, stats::sd(congruified_calibrations[rowsies, age_column]))
+      var_ages <- c(var_ages, stats::var(congruified_calibrations[rowsies, age_column]))
     }
     ############################################################################
     # assemble summary table as data.frame

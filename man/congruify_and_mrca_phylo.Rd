@@ -13,6 +13,10 @@ congruify_and_mrca_phylo(phy, source_chronogram, study)
 
 \item{study}{A character string indicating the name of the study the \code{source_chronogram} comes from.}
 }
+\value{
+a \code{data.frame} of node ages from \code{source_chronograms} and corresponding
+mrca nodes in target tree \code{phy}.
+}
 \description{
 \code{congruify_and_mrca} congruifies a target tree against a single
 source chronogram, and gets nodes of target tree that correspond to the most
