@@ -2,7 +2,7 @@
 % Please edit documentation in R/calibrations_use.R
 \name{use_all_calibrations}
 \alias{use_all_calibrations}
-\title{Date a given tree topology using a given set of calibrations}
+\title{Date a given tree topology using a given set of congruified calibrations or ages}
 \usage{
 use_all_calibrations(
   phy = NULL,

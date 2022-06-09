@@ -138,7 +138,7 @@ If only one taxon name is given as \code{input}, \code{get_spp_from_taxon} is
 always set to \code{TRUE}.
 }
 \examples{
-if (interactive()) {
+\dontrun{
 
 # For this example, we will set a temp working directory, but you can set
 # your working directory as needed:
@@ -178,5 +178,5 @@ ages.html <- datelife_search(c(
 ), summary_format = "html")
 write(ages.html, file = file.path(tempwd, "some.bird.trees.html"))
 system(paste("open", file.path(tempwd, "some.bird.trees.html")))
-} # end interactive
+} # end dontrun
 }
