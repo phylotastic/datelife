@@ -1,3 +1,6 @@
 template:
   bootstrap: 5
   bootswatch: minty
+url: http://phylotastic.org/datelife/
+deploy:
+  install_metadata: true

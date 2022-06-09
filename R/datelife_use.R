@@ -94,13 +94,11 @@ datelife_use_datelifequery <- function(datelife_query = NULL,
   calibrations <- congruify_and_mrca_multiPhylo(phy = datelife_query$phy,
                                                 source_chronograms = phyloall)
 
-  # date the topology with obtained calibrations
-  # res <- use_all_calibrations(
-  #   phy = datelife_query$phy,
-  #   calibrations = calibrations,
-  #   dating_method = dating_method
-  # )
-  # # attributes(calibrations)
-  # attr(res, "datelife_query") <- datelife_query
-  # return(res)
+  # date the topology with calibrations
+  res <- use_all_calibrations(phy = datelife_query$phy,
+                              calibrations = calibrations,
+                              dating_method = dating_method)
+  # attributes(calibrations)
+  attr(res, "datelife_query") <- datelife_query
+  return(res)
 }

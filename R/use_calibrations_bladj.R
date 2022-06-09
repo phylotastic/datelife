@@ -26,8 +26,8 @@ use_calibrations_bladj <- function(phy = NULL,
                                    calibrations,
                                    type = "median",
                                    root_age) {
-  #
   ############################################################################
+  # initial checks
   type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
   message("... Using ", type, " ages as secondary calibrations with BLADJ.")
   ############################################################################
@@ -49,7 +49,7 @@ use_calibrations_bladj <- function(phy = NULL,
       if ("median" %in% type) {
         node_ages <- sapply(age_distributions, stats::median)
       }
-    stop("Not finished yet, apologies.")
+    # stop("Not finished yet, apologies.")
   }
   ############################################################################
   if (inherits(calibrations, "congruifiedCalibrations")) {
@@ -78,9 +78,9 @@ use_calibrations_bladj <- function(phy = NULL,
   }
   ############################################################################
   # check that the root node has a calibration
-  # otherwise, add one
+  # otherwise, add one because
   # bladj stops if there is no calibration for the root
-  # get the node label of the root:
+  # first, get the node label of the root:
   root_node_name <- min(phy$node.label)
   if (!root_node_name %in% node_names) {
     if (missing(root_age)) {
@@ -96,7 +96,8 @@ use_calibrations_bladj <- function(phy = NULL,
     node_names <- c(root_node_name, node_names)
   }
   ############################################################################
-  # bladj freezes if calibrations are in conflict
+  # bladj does not seem to freeze no more if calibrations are in conflict
+  # it does ignore ages of descendant nodes that are older than ancestral nodes
   chronogram <- make_bladj_tree(tree = phy,
                                 nodeages = node_ages,
                                 nodenames = node_names)

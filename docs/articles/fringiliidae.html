@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datelife</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,13 +81,20 @@
 
     
     
-<p>The family Fringillidae is a taxon that includes the true finches. Let’s see what is known about their time of divergence.</p>
+<p>The family Fringillidae is a taxon that includes the true finches.
+Let’s see what is known about their time of divergence.</p>
 <div class="section level2">
 <h2 id="getting-species-names-within-the-family-fringillidae">1. Getting species names within the family Fringillidae<a class="anchor" aria-label="anchor" href="#getting-species-names-within-the-family-fringillidae"></a>
 </h2>
-<p>DateLife searches its chronogram database using species names standardized to a <a href="https://tree.opentreeoflife.org/about/taxonomy-version/ott3.3" class="external-link">unified taxonomy</a> constructed by the Open Tree of Life project.</p>
-<p>When working with taxon names above the species level in DateLife, the first step is to obtain all species names belonging to the taxon of interest.</p>
-<p>We will get all species names belonging to the family Fringillidae, using the flag <code>get_spp_from_taxon = TRUE</code> from the function <code><a href="../reference/make_datelife_query.html">datelife::make_datelife_query()</a></code>:</p>
+<p>DateLife searches its chronogram database using species names
+standardized to a <a href="https://tree.opentreeoflife.org/about/taxonomy-version/ott3.3" class="external-link">unified
+taxonomy</a> constructed by the Open Tree of Life project.</p>
+<p>When working with taxon names above the species level in DateLife,
+the first step is to obtain all species names belonging to the taxon of
+interest.</p>
+<p>We will get all species names belonging to the family Fringillidae,
+using the flag <code>get_spp_from_taxon = TRUE</code> from the function
+<code><a href="../reference/make_datelife_query.html">datelife::make_datelife_query()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dquery</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/make_datelife_query.html">make_datelife_query</a></span><span class="op">(</span>input <span class="op">=</span> <span class="st">"fringillidae"</span>,               
                                    get_spp_from_taxon <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -114,15 +121,19 @@
 <span class="co">#&gt;   ..- attr(*, "names")= chr [1:289] "Crithagra sulphurata" "Crithagra #&gt; citrinelloides" "Crithagra mozambica" "Crithagra capistrata" ...</span>
 <span class="co">#&gt;  $ phy          : logi NA</span>
 <span class="co">#&gt;  - attr(*, "class")= chr "datelifeQuery"</span></code></pre></div>
-<p>We have 289 species names belonging to the family Fringillidae according to OpenTree’s unified taxonomy. We did not provide an input tree, so <code>$phy</code> is <code>NA</code>.</p>
+<p>We have 289 species names belonging to the family Fringillidae
+according to OpenTree’s unified taxonomy. We did not provide an input
+tree, so <code>$phy</code> is <code>NA</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="search-the-species-names-across-a-chronogram-database">2. Search the species names across a chronogram database<a class="anchor" aria-label="anchor" href="#search-the-species-names-across-a-chronogram-database"></a>
 </h2>
-<p>Load the prebuilt OpenTree chronogram database object names <code>opentree_chronograms</code>:</p>
+<p>Load the prebuilt OpenTree chronogram database object names
+<code>opentree_chronograms</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"opentree_chronograms"</span>, package <span class="op">=</span> <span class="st">"datelife"</span><span class="op">)</span></code></pre></div>
-<p>Use your <code>datelifeQuery</code> object named <code>dquery</code> to search the chronogram database:</p>
+<p>Use your <code>datelifeQuery</code> object named <code>dquery</code>
+to search the chronogram database:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dres</span> <span class="op">&lt;-</span> <span class="fu">datelife</span><span class="fu">::</span><span class="fu"><a href="../reference/get_datelife_result.html">get_datelife_result</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">dquery</span>, cache <span class="op">=</span> <span class="va">opentree_chronograms</span><span class="op">)</span>
 
@@ -130,7 +141,12 @@
 <span class="co">#&gt; Search done!</span>
 <span class="co">#&gt;</span>
 <span class="co">#&gt; Input taxon names were found in 19 chronograms.</span></code></pre></div>
-<p>Results from the chronogram search are returned as a <code>datelifeResult</code> object, which is a named list of patristic matrices. Each element of the list corresponds to a chronogram that has been translated to a distance matrix or patristic matrix. The main reason for this is that pruning is much faster on a matrix than on a <code>phylo</code> object:</p>
+<p>Results from the chronogram search are returned as a
+<code>datelifeResult</code> object, which is a named list of patristic
+matrices. Each element of the list corresponds to a chronogram that has
+been translated to a distance matrix or patristic matrix. The main
+reason for this is that pruning is much faster on a matrix than on a
+<code>phylo</code> object:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">dres</span><span class="op">)</span>
 <span class="co">#&gt; [1] "datelifeResult"</span>
@@ -140,7 +156,8 @@
 
 <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">dres</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt; [1] "matrix" "array"</span></code></pre></div>
-<p>Names on your <code>datelifeResult</code> object correspond to study citations from source chronograms:</p>
+<p>Names on your <code>datelifeResult</code> object correspond to study
+citations from source chronograms:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dres</span><span class="op">)</span>
 
@@ -171,7 +188,11 @@
 <div class="section level2">
 <h2 id="summarizing-a-dateliferesult-object">3. Summarizing a <code>datelifeResult</code> object<a class="anchor" aria-label="anchor" href="#summarizing-a-dateliferesult-object"></a>
 </h2>
-<p>What if you want to plot all your <code>datelifeResult</code> chronograms individually? What if you want a single tree summarizing all your source chronograms? The function <code><a href="../reference/summary.datelifeResult.html">datelife::summary.datelifeResult()</a></code> will get all types of summaries for you, so you can access them later:</p>
+<p>What if you want to plot all your <code>datelifeResult</code>
+chronograms individually? What if you want a single tree summarizing all
+your source chronograms? The function
+<code><a href="../reference/summary.datelifeResult.html">datelife::summary.datelifeResult()</a></code> will get all types of
+summaries for you, so you can access them later:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dsumm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">dres</span>, datelife_query <span class="op">=</span> <span class="va">dquery</span><span class="op">)</span>
 
@@ -210,7 +231,9 @@
 <div class="section level3">
 <h3 id="source-chronograms">3.1 Source chronograms:<a class="anchor" aria-label="anchor" href="#source-chronograms"></a>
 </h3>
-<p>Chronograms that matched our database search, and that were pruned to contain only the species names we looked for are called source chronograms. These can be accessed as follow:</p>
+<p>Chronograms that matched our database search, and that were pruned to
+contain only the species names we looked for are called source
+chronograms. These can be accessed as follow:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dsumm</span><span class="op">$</span><span class="va">phylo_all</span>
 

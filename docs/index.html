@@ -58,7 +58,7 @@
     
     <a class="navbar-brand me-2" href="index.html">datelife</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,8 +99,10 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><p><img src="reference/figures/datelife-hexsticker-ai.png" align="right" style="width:150px"></p>
-<!-- badges: start --><!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions) -->
+  <main id="main" class="col-md-9"><p><img src="../reference/figures/datelife-hexsticker-ai.png" align="right" style="width:150px"></p>
+<!-- badges: start -->
+<!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions) -->
+
 <div class="section level1">
 <div class="page-header"><h1 id="welcome-to-datelifes-r-package-documentation">Welcome to DateLife’s R package documentation!<a class="anchor" aria-label="anchor" href="#welcome-to-datelifes-r-package-documentation"></a>
 </h1></div>
@@ -119,20 +121,37 @@
 <h2 id="documentation-topics">Documentation topics:<a class="anchor" aria-label="anchor" href="#documentation-topics"></a>
 </h2>
 <ul>
-<li><a href="">Local installation</a></li>
-<li><a href="">Getting started</a></li>
-<li><a href="">Function documentation</a></li>
+<li><a href="http://phylotastic.org/datelife/index.html#installation">Local installation</a></li>
+<li><a href="http://phylotastic.org/datelife/articles/Getting_started_with_datelife.html">Getting started</a></li>
+<li><a href="http://phylotastic.org/datelife/reference/index.html">Function documentation</a></li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="local-installation-of-the-datelife-r-package">Local installation of the <code>datelife</code> R package<a class="anchor" aria-label="anchor" href="#local-installation-of-the-datelife-r-package"></a>
+</h2>
+<p><code>datelife</code>’s most recent stable version can be installed with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"datelife"</span><span class="op">)</span></code></pre></div>
+<p><code>datelife</code>’s previous stable versions are available for installation from the CRAN repository. For example, to install <code>version 0.6.1</code>, you can run:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_version</a></span><span class="op">(</span><span class="st">"datelife"</span>, version<span class="op">=</span><span class="st">"0.6.1"</span><span class="op">)</span></code></pre></div>
+<p>You can install <code>datelife</code>’s development version from its GitHub repository with:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"phylotastic/datelife"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="citing-datelife">Citing <code>datelife</code>
 <a class="anchor" aria-label="anchor" href="#citing-datelife"></a>
 </h2>
 <p>If you use <code>datelife</code> for a publication, please cite the R package and the accompanying paper:</p>
-<p>O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K, Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022). <em>datelife: Scientific Data on Time of Lineage Divergence for Your Taxa</em>. R package version 0.6.2, <a href="https://doi.org/10.5281/zenodo.593938" class="external-link">https://doi.org/10.5281/zenodo.593938</a>.</p>
-<p>Sanchez-Reyes L, O’Meara B (2019). “datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life.” <em>bioRxiv</em>, <b>782094</b>. <a href="https://doi.org/10.1101/782094" class="external-link">https://doi.org/10.1101/782094</a>.</p>
+<p>
+O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K, Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022). <em>datelife: Scientific Data on Time of Lineage Divergence for Your Taxa</em>. R package version 0.6.2, <a href="https://doi.org/10.5281/zenodo.593938" class="external-link">https://doi.org/10.5281/zenodo.593938</a>.
+</p>
+<p>
+Sanchez-Reyes L, O’Meara B (2019). “datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life.” <em>bioRxiv</em>, <b>782094</b>. <a href="https://doi.org/10.1101/782094" class="external-link">https://doi.org/10.1101/782094</a>.
+</p>
 <p>You can get these citations and the bibtex entry with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"datelife"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/toLatex.html" class="external-link">toBibtex</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"datelife"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <!--.bibtex files are available-->

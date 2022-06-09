@@ -1,21 +1,22 @@
-## New submission v 0.6.2
+## New submission v 0.6.3
 This is a new submission where I have:
 
-* Fixed R code problem by useding `inherits` instead of if() conditions comparing class() to string
+* Removed unnecessary "dontrun" from examples
+* Fixed R code problem by useing `inherits` instead of if() conditions comparing class() to string
 * Fixed examples that were failing in some Linux environments.
 
 ### Test environments:
 
 - MacOS, Platform: x86_64-apple-darwin17.0 (64-bit)
-  - R 4.1.0, local `devtools::check()`
+  - R 4.2.0, local `devtools::check()`
   - R 4.1.1, `rhub::check_for_cran(platforms = "macos-highsierra-release-cran")`
 - Windows, Platform x86_64-w64-mingw32 (64-bit)
-  - R 4.1.2, `devtools::check_win_release()`
+  - R 4.2.0, `devtools::check_win_release()`
   - R Under development (2021-11-26 r81252), `rhub::check_for_cran(platforms = "windows-x86_64-release")`
 - Linux, Platform: x86_64-pc-linux-gnu (64-bit)
-  - R 4.1.2, `rhub::check_for_cran("ubuntu-gcc-release")`
-  - R Under development (2021-11-26 r81252), `rhub::check_for_cran("linux-x86_64-fedora-clang")`
-
+  - R 4.2.0 release
+  - R 4.3 Under development (2022-06-07 r82464)
+  
 ### Results
 0 errors ✔ | 0 warnings ✔ | 3 notes ✖
 

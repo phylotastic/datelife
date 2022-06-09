@@ -1,7 +1,7 @@
 
 <!-- index.md is generated from index.Rmd. Make sure to edit the .Rmd file and not the .md -->
 
-<img src='man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
+<img src='../man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
 
 <!-- badges: start -->
 <!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions) -->
@@ -48,9 +48,35 @@ application](http://datelife.opentreeoflife.org/query/).
 
 ## Documentation topics:
 
--   [Local installation]()
--   [Getting started]()
--   [Function documentation]()
+-   [Local
+    installation](http://phylotastic.org/datelife/index.html#installation)
+-   [Getting
+    started](http://phylotastic.org/datelife/articles/Getting_started_with_datelife.html)
+-   [Function
+    documentation](http://phylotastic.org/datelife/reference/index.html)
+
+## Local installation of the `datelife` R package
+
+`datelife`’s most recent stable version can be installed with:
+
+``` r
+install.packages("datelife")
+```
+
+`datelife`’s previous stable versions are available for installation
+from the CRAN repository. For example, to install `version 0.6.1`, you
+can run:
+
+``` r
+devtools::install_version("datelife", version="0.6.1")
+```
+
+You can install `datelife`’s development version from its GitHub
+repository with:
+
+``` r
+devtools::install_github("phylotastic/datelife")
+```
 
 ## Citing `datelife`
 

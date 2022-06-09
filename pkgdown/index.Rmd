@@ -17,7 +17,7 @@ IS_README <- TRUE
 library(datelife)
 ```
 
-<img src='man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
+<img src='../man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
 
 
 ```{r, child = "badges.Rmd"}
@@ -30,9 +30,13 @@ library(datelife)
 
 ## Documentation topics:
 
-- [Local installation]()
-- [Getting started]()
-- [Function documentation]()
+- [Local installation](http://phylotastic.org/datelife/index.html#installation)
+- [Getting started](http://phylotastic.org/datelife/articles/Getting_started_with_datelife.html)
+- [Function documentation](http://phylotastic.org/datelife/reference/index.html)
+
+
+```{r, child = "installation.Rmd"}
+```
 
 ```{r, child = "citation.Rmd"}
 ```

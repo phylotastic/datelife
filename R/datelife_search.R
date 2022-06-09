@@ -24,7 +24,7 @@
 #' always set to `TRUE`.
 #' @inherit summarize_datelife_result return
 #' @examples
-#' \dontrun{ # This is a flag for package development. You are welcome to run the example.
+#' if (interactive()) {
 #'
 #' # For this example, we will set a temp working directory, but you can set
 #' # your working directory as needed:
@@ -63,8 +63,8 @@
 #'   "Mus musculus"
 #' ), summary_format = "html")
 #' write(ages.html, file = file.path(tempwd, "some.bird.trees.html"))
-#' if(interactive()) system(paste("open", file.path(tempwd, "some.bird.trees.html")))
-#' } # end dontrun
+#' system(paste("open", file.path(tempwd, "some.bird.trees.html")))
+#' } # end interactive
 #' @export
 datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
                             use_tnrs = FALSE,
