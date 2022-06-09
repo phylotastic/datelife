@@ -1,7 +1,7 @@
 
 <!-- index.md is generated from index.Rmd. Make sure to edit the .Rmd file and not the .md -->
 
-<img src='../man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
+<img src='https://github.com/phylotastic/datelife/raw/master/man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
 
 <!-- badges: start -->
 <!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions) -->
