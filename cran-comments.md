@@ -1,7 +1,8 @@
-## New submission v 0.6.3
+## New submission v 0.6.4
 This is a new submission where I have:
 
-* Removed unnecessary "dontrun" from examples
+* addressed note on package size: The package hosts a database of 4.7Mb that is needed to run main functions
+* Removed unnecessary "if (interactive())" from examples
 * Fixed R code problem by useing `inherits` instead of if() conditions comparing class() to string
 * Fixed examples that were failing in some Linux environments.
 
@@ -15,12 +16,26 @@ This is a new submission where I have:
   - R Under development, `rhub::check_for_cran(platforms = "windows-x86_64-release")`
 - Linux, Platform: x86_64-pc-linux-gnu (64-bit)
   - R 4.2.0 release
-  - R 4.3 Under development (2022-06-07 r82464)
-  
+  - R 4.3 Under development (2022-06-08 r82470)
+
 ### Results
-0 errors ✔ | 0 warnings ✔ | 3 notes ✖
+0 errors ✔ | 0 warnings ✔ | 4 notes ✖
 
 * Note 1
+
+```
+checking installed package size ... NOTE
+    installed size is 6.1Mb
+    sub-directories of 1Mb or more:
+      data         4.7Mb
+```
+
+**Comments**: <br/>
+The package is hosting a database (`data/opentree_chronograms.rda`), increasing the size of the data dir.
+This database is needed to run main functions.
+
+
+* Note 2
 
 ```
 ❯ checking package dependencies ... NOTE
@@ -34,7 +49,7 @@ This is a new submission where I have:
 **Comments**: <br/>
 All the packages imported are needed for the datelife workflow.
 
-* Note 2
+* Note 3
 
 ```
 Possibly misspelled words in DESCRIPTION:
@@ -60,7 +75,7 @@ Possibly misspelled words in DESCRIPTION:
 **Comments**: <br/>
 None of these word are misspelled
 
-* Note 3
+* Note 4
 
 ```
 Found the following (possibly) invalid DOIs:
@@ -68,5 +83,6 @@ Found the following (possibly) invalid DOIs:
     From: DESCRIPTION
     Status: Service Unavailable
     Message: 503
+```
 **Comments**: <br/>
 The DOI is functional

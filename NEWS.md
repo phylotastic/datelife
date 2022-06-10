@@ -4,7 +4,7 @@
 DONE:
 -->
 
-# datelife 0.6.3
+# datelife 0.6.4
   - data: updated `opentree_chronograms` object. It now has 253 chronograms from Open Tree of Life
   - examples: set to not run most examples
   - functions:

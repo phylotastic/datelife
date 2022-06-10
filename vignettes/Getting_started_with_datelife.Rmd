@@ -910,7 +910,7 @@ data_frame <- datelife::datelife_search(input = my_datelife_query,
 ```
 </details>
 
-TODO: add something about NJ, why is this happening
+<!--TODO: add something about NJ, why is this happening
 
 One can use a clustering method like Neighbor Joining (NJ). While we implemented this method in the package, because NJ are greedy algorithms they do not perform well and often return topologies that are not biologically plausible. Hence, we implement
-a different workflow,
+a different workflow, -->
