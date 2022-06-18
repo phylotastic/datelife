@@ -4,9 +4,11 @@
 DONE:
 -->
 
-# datelife 0.6.4
-  - data: updated `opentree_chronograms` object. It now has 253 chronograms from Open Tree of Life
-  - examples: set to not run most examples
+# datelife 0.6.5
+  - data: 
+    - updated `opentree_chronograms` object. It now has 253 chronograms from Open Tree of Life and uses "xz" compression. 
+  - examples: 
+    - set to not test examples
   - functions:
     - added functions `matrix_to_table` and `matrices_to_table` that go from a matrix of patristic distances to a table of taxon name pairs and respective node ages.
     - bug fix on `use_calibrations_bladj` that used element $present_calibrations instead of $matched_calibrations

@@ -7,7 +7,7 @@
 tree_add_outgroup(tree = NULL, outgroup = "outgroup")
 }
 \arguments{
-\item{tree}{A tree either as a newick character string or as a phylo object}
+\item{tree}{A tree either as a newick character string or as a \code{phylo} object.}
 
 \item{outgroup}{A character vector with the name of the outgroup. If it has length>1, only first element will be used.}
 }

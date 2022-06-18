@@ -12,7 +12,7 @@ tree_fix_brlen(
 )
 }
 \arguments{
-\item{tree}{A tree either as a newick character string or as a phylo object}
+\item{tree}{A tree either as a newick character string or as a \code{phylo} object.}
 
 \item{fixing_criterion}{A character vector specifying the type of branch length to be fixed: "negative" or "zero" (the number 0 is also allowed).}
 

@@ -1,10 +1,8 @@
-## New submission v 0.6.4
+## New submission v 0.6.5
 This is a new submission where I have:
 
-* addressed note on package size: The package hosts a database of 4.7Mb that is needed to run main functions
-* Removed unnecessary "if (interactive())" from examples
-* Fixed R code problem by useing `inherits` instead of if() conditions comparing class() to string
-* Fixed examples that were failing in some Linux environments.
+* compressed database with "xz" compression, so the package size is now under 5 Mb
+* started the process of moving database object and functions used to create it to its own package
 
 ### Test environments:
 
@@ -20,23 +18,9 @@ This is a new submission where I have:
   - R 4.3 Under development (2022-06-08 r82470)
 
 ### Results
-0 errors ✔ | 0 warnings ✔ | 4 notes ✖
+0 errors ✔ | 0 warnings ✔ | 3 notes ✖
 
 * Note 1
-
-```
-checking installed package size ... NOTE
-    installed size is 6.1Mb
-    sub-directories of 1Mb or more:
-      data         4.7Mb
-```
-
-**Comments**: <br/>
-The package is hosting a database (`data/opentree_chronograms.rda`), increasing the size of the data dir.
-This database is needed to run main functions.
-
-
-* Note 2
 
 ```
 ❯ checking package dependencies ... NOTE
@@ -50,7 +34,7 @@ This database is needed to run main functions.
 **Comments**: <br/>
 All the packages imported are needed for the datelife workflow.
 
-* Note 3
+* Note 2
 
 ```
 Possibly misspelled words in DESCRIPTION:
@@ -76,7 +60,7 @@ Possibly misspelled words in DESCRIPTION:
 **Comments**: <br/>
 None of these word are misspelled
 
-* Note 4
+* Note 3
 
 ```
 Found the following (possibly) invalid DOIs:

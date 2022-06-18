@@ -7,7 +7,7 @@
 tree_add_nodelabels(tree = NULL, node_prefix = "n", node_index = "node_number")
 }
 \arguments{
-\item{tree}{A tree either as a newick character string or as a phylo object}
+\item{tree}{A tree either as a newick character string or as a \code{phylo} object.}
 
 \item{node_prefix}{Character vector. If length 1, it will be used to name all nodes with no labels, followed by a number which can be the node_number or consecutive, as specified in node_index.}
 

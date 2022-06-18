@@ -9,7 +9,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/datelife)](https://CRAN.R-project.org/package=datelife)
 ![GitHub R package
-version](https://img.shields.io/github/r-package/v/phylotastic/datelife?color=pink&label=GitHub)
+version](https://img.shields.io/github/r-package/v/phylotastic/datelife?color=green&label=GitHub)
 [![R-CMD-check](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)
 [![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://app.codecov.io/gh/phylotastic/datelife)
 [![Github Open
@@ -20,6 +20,8 @@ Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg
 [![NSF-1458603](https://img.shields.io/badge/NSF-1458603-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458603)
 [![NSF-0905606](https://img.shields.io/badge/NSF-0905606-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=0905606)
 [![NSF-1458572](https://img.shields.io/badge/NSF-1458572-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458572)
+[![CRAN RStudio mirror
+downloads](https://cranlogs.r-pkg.org/badges/datelife)](https://www.r-pkg.org/pkg/datelife)
 <!-- badges: end -->
 
 # Welcome to DateLife’s R package GitHub repository!
@@ -95,7 +97,7 @@ the accompanying paper:
 O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K,
 Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022).
 <em>datelife: Scientific Data on Time of Lineage Divergence for Your
-Taxa</em>. R package version 0.6.2,
+Taxa</em>. R package version 0.6.4,
 <a href="https://doi.org/10.5281/zenodo.593938">https://doi.org/10.5281/zenodo.593938</a>.
 </p>
 <p>

@@ -1,7 +1,7 @@
 # functions to fix negative or null branch lengths from an ultranetric treem, and to add dates of missing taxa at random
 
 #' Take a tree with branch lengths and fix negative or zero length branches.
-#' @param tree A tree either as a newick character string or as a phylo object
+#' @param tree A tree either as a newick character string or as a `phylo` object.
 #' @param fixing_criterion A character vector specifying the type of branch length to be fixed: "negative" or "zero" (the number 0 is also allowed).
 #' @param fixing_method A character vector specifying the method to fix branch lengths: "bladj", "mrbayes" or a number to be assigned to all branches meeting fixing_criterion
 #' @param ultrametric Boolean indicating whether to force ultrametric or not.

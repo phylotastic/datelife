@@ -7,7 +7,7 @@
 make_bladj_tree(tree = NULL, nodenames = NULL, nodeages = NULL)
 }
 \arguments{
-\item{tree}{A tree either as a newick character string or as a phylo object}
+\item{tree}{A tree either as a newick character string or as a \code{phylo} object.}
 
 \item{nodenames}{A character vector with names of nodes in tree with known ages}
 

@@ -7,7 +7,7 @@
 tree_get_singleton_outgroup(tree = NULL)
 }
 \arguments{
-\item{tree}{A tree either as a newick character string or as a phylo object}
+\item{tree}{A tree either as a newick character string or as a \code{phylo} object.}
 }
 \value{
 A character vector with the name of the single lineage outgroup.

@@ -12,7 +12,7 @@ tree_get_node_data(
 )
 }
 \arguments{
-\item{tree}{A tree either as a newick character string or as a phylo object}
+\item{tree}{A tree either as a newick character string or as a \code{phylo} object.}
 
 \item{nodes}{Numeric vector with node numbers from which you want to obtain data. Default to NULL: obtain data for all nodes in the tree.}
 

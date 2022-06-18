@@ -2,12 +2,13 @@
 % Please edit documentation in R/tree_processing.R
 \name{tree_check}
 \alias{tree_check}
-\title{Checks if a tree is a phylo class object otherwise it uses input_process. Additionally it can check if tree is a chronogram with phylo_check}
+\title{Checks if a tree is a phylo class object otherwise it uses input_process.
+Additionally it can check if tree is a chronogram with phylo_check}
 \usage{
 tree_check(tree = NULL, ...)
 }
 \arguments{
-\item{tree}{A tree either as a newick character string or as a phylo object}
+\item{tree}{A tree either as a newick character string or as a \code{phylo} object.}
 
 \item{...}{
   Arguments passed on to \code{\link[=phylo_check]{phylo_check}}
@@ -20,5 +21,6 @@ tree_check(tree = NULL, ...)
 If tree is correctly formatted, it returns a \code{phylo} object.
 }
 \description{
-Checks if a tree is a phylo class object otherwise it uses input_process. Additionally it can check if tree is a chronogram with phylo_check
+Checks if a tree is a phylo class object otherwise it uses input_process.
+Additionally it can check if tree is a chronogram with phylo_check
 }

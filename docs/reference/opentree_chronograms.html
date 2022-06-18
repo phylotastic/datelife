@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datelife</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A list of four elements, containing data from OpenTree of Life chronograms</p><dl><dt>authors</dt>
+    <p>A list of four elements, containing data from Open Tree of Life chronograms</p><dl><dt>authors</dt>
 <dd><p>A list of lists of author names of the original studies that
 published chronograms in the Open Tree of Life database.</p></dd>
 
@@ -99,8 +99,8 @@ devtools::install_github("ropensci/rotl", ref = devtools::github_pull("137"))
 remotes::install_github("ROpenSci/bibtex")'
 opentree_chronograms &lt;- get_opentree_chronograms()
 opentree_chronograms$update &lt;- Sys.time()
-opentree_chronograms$version &lt;- '0.6.2'
-usethis::use_data(opentree_chronograms, overwrite = T)
+opentree_chronograms$version &lt;- '2022.01.28'
+usethis::use_data(opentree_chronograms, overwrite = T, compress = "xz")
 and updated with update_datelife_cache()</p>
     </div>
 

@@ -5,7 +5,7 @@
 \alias{opentree_chronograms}
 \title{Chronogram database}
 \format{
-A list of four elements, containing data from OpenTree of Life chronograms
+A list of four elements, containing data from Open Tree of Life chronograms
 \describe{
 \item{authors}{A list of lists of author names of the original studies that
 published chronograms in the Open Tree of Life database.}
@@ -35,8 +35,8 @@ devtools::install_github("ropensci/rotl", ref = devtools::github_pull("137"))
 remotes::install_github("ROpenSci/bibtex")'
 opentree_chronograms <- get_opentree_chronograms()
 opentree_chronograms$update <- Sys.time()
-opentree_chronograms$version <- '0.6.2'
-usethis::use_data(opentree_chronograms, overwrite = T)
+opentree_chronograms$version <- '2022.01.28'
+usethis::use_data(opentree_chronograms, overwrite = T, compress = "xz")
 and updated with update_datelife_cache()
 }
 \keyword{chronogram}
