@@ -91,9 +91,27 @@ R CMD check --as-cran datelife_0.6.0.tar.gz
 
 If you do not have access to different OS to test your package on, the [rhub](https://CRAN.R-project.org/package=rhub) package allows remote testing on a variety of OS with the command:
 
-
 ```r
 rhub::check_for_cran()
 ```
 
+For more `rhub` useful workflows, check out its [documentation](https://r-hub.github.io/rhub/articles/rhub.html). For example
+
+```r
+previous_checks <- rhub::list_package_checks(".",
+                                  email = "sanchez.reyes.luna@gmail.com",
+                                  howmany = 4)
+group_check <- rhub::get_check(previous_checks$group[1])
+group_check
+
+cran_prep <- check_for_cran()
+cran_prep$cran_summary()
+```
+
 To submit to CRAN call `devtools::release()` and answer the prompted questions. If the answer to all of these is _yes_, the package will be submitted to CRAN :rocket:
+
+To [check for URL validity](https://blog.r-hub.io/2020/12/01/url-checks/) specifically, use:
+
+```r
+devtools::check_win_release()
+```

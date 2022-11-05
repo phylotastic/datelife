@@ -4,24 +4,36 @@
 <img src='man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
 
 <!-- badges: start -->
-<!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions) -->
+<!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)
+[![R-CMD-check](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)-->
+<!-- Stable status -->
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/datelife)](https://CRAN.R-project.org/package=datelife)
-![GitHub R package
-version](https://img.shields.io/github/r-package/v/phylotastic/datelife?color=green&label=GitHub)
-[![R-CMD-check](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)
+[![CRAN checks
+results](https://cranchecks.info/badges/worst/datelife)](https://cran.r-project.org/web/checks/check_results_datelife.html)
+[![CRAN RStudio mirror
+downloads](https://cranlogs.r-pkg.org/badges/datelife)](https://www.r-pkg.org/pkg/datelife)
+[![DOI](https://zenodo.org/badge/23036/phylotastic/datelife.svg)](https://zenodo.org/badge/latestdoi/23036/phylotastic/datelife)
+
+<!-- Development status -->
+
+![GitHub master branch package
+version](https://img.shields.io/github/r-package/v/phylotastic/datelife/master?color=y&label=GitHub%40master)
+![GitHub Workflow
+Status](https://img.shields.io/github/workflow/status/phylotastic/datelife/R-CMD-check)
 [![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://app.codecov.io/gh/phylotastic/datelife)
 [![Github Open
 Issues](https://img.shields.io/github/issues-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues)
 [![Github Closed
 Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues?q=is%3Aissue+is%3Aclosed)
-[![DOI](https://zenodo.org/badge/23036/phylotastic/datelife.svg)](https://zenodo.org/badge/latestdoi/23036/phylotastic/datelife)
+
+<!-- Funding -->
+
 [![NSF-1458603](https://img.shields.io/badge/NSF-1458603-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458603)
 [![NSF-0905606](https://img.shields.io/badge/NSF-0905606-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=0905606)
 [![NSF-1458572](https://img.shields.io/badge/NSF-1458572-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458572)
-[![CRAN RStudio mirror
-downloads](https://cranlogs.r-pkg.org/badges/datelife)](https://www.r-pkg.org/pkg/datelife)
+
 <!-- badges: end -->
 
 # Welcome to DateLife’s R package GitHub repository!
@@ -30,22 +42,22 @@ downloads](https://cranlogs.r-pkg.org/badges/datelife)](https://www.r-pkg.org/pk
 
 `datelife` is an R package that allows researchers and the general
 audience to obtain open scientific data on the age of any organism they
-are interested in. `datelife` retrieves organism ages from a database of
-dated phylogenetic trees (chronograms), which have been peer-reviewed
-and published in association with a scientific research article in an
-indexed journal ([Open Tree of Life’s tree
-store](https://tree.opentreeoflife.org/curator)). As such, these
-organism ages constitute state-of-the-art, peer-reviewed, public
-scientific knowledge, that can be accessed and reused by experts and
-non-experts in the field alike.
+are interested in, by retrieving organism ages from a database of dated
+phylogenetic trees (*aka* chronograms), that have been peer-reviewed and
+published as part of a scientific research article, in an indexed
+journal ([Open Tree of Life’s tree
+store](https://tree.opentreeoflife.org/curator)). As such, organism ages
+retrieved by `datelife` constitute state-of-the-art, peer-reviewed,
+public scientific knowledge, that can be accessed and reused by experts
+and non-experts in the field alike.
 
 ## How can you use `datelife`?
 
 You can install the `datelife` R package on your own computer and use it
 locally.
 
-If you do not want to deal with installation, you can go to [DateLife’s
-interactive website
+If you do not want/have time to deal with installation and R code, you
+can use [DateLife’s interactive website
 application](http://datelife.opentreeoflife.org/query/).
 
 <!--
@@ -60,10 +72,10 @@ website](http://phylotastic.org/datelife/index.html).
 
 ## README topics:
 
--   [Installation](#installation)
--   [Citation](#citation)
--   [Feedback and info for developers](#feedback)
--   [License](#license)
+- [Installation](#installation)
+- [Citation](#citation)
+- [Feedback and info for developers](#feedback)
+- [License](#license)
 
 ## Local installation of the `datelife` R package
 
@@ -97,7 +109,7 @@ the accompanying paper:
 O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K,
 Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022).
 <em>datelife: Scientific Data on Time of Lineage Divergence for Your
-Taxa</em>. R package version 0.6.4,
+Taxa</em>. R package version 0.6.5,
 <a href="https://doi.org/10.5281/zenodo.593938">https://doi.org/10.5281/zenodo.593938</a>.
 </p>
 <p>
@@ -227,9 +239,32 @@ testing on a variety of OS with the command:
 rhub::check_for_cran()
 ```
 
+For more `rhub` useful workflows, check out its
+[documentation](https://r-hub.github.io/rhub/articles/rhub.html). For
+example
+
+``` r
+previous_checks <- rhub::list_package_checks(".",
+                                  email = "sanchez.reyes.luna@gmail.com",
+                                  howmany = 4)
+group_check <- rhub::get_check(previous_checks$group[1])
+group_check
+
+cran_prep <- check_for_cran()
+cran_prep$cran_summary()
+```
+
 To submit to CRAN call `devtools::release()` and answer the prompted
 questions. If the answer to all of these is *yes*, the package will be
 submitted to CRAN :rocket:
+
+To [check for URL
+validity](https://blog.r-hub.io/2020/12/01/url-checks/) specifically,
+use:
+
+``` r
+devtools::check_win_release()
+```
 
 ## License
 

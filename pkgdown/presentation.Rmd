@@ -1,11 +1,11 @@
 ## What is `datelife`?
 
 `datelife` is an R package that allows researchers and the general audience to obtain
-open scientific data on the age of any organism they are interested in.
-`datelife` retrieves organism ages from a database of dated phylogenetic trees (chronograms), which
-have been peer-reviewed and published in association with a scientific research
-article in an indexed journal ([Open Tree of Life's tree store](https://tree.opentreeoflife.org/curator)).
-As such, these organism ages constitute state-of-the-art,
+open scientific data on the age of any organism they are interested in, by retrieving
+organism ages from a database of dated phylogenetic trees (_aka_ chronograms), that
+have been peer-reviewed and published as part of a scientific research
+article, in an indexed journal ([Open Tree of Life's tree store](https://tree.opentreeoflife.org/curator)).
+As such, organism ages retrieved by `datelife` constitute state-of-the-art,
 peer-reviewed, public scientific knowledge, that can be accessed and reused by
 experts and non-experts in the field alike.
 
@@ -13,5 +13,5 @@ experts and non-experts in the field alike.
 
 You can install the `datelife` R package on your own computer and use it locally.
 
-If you do not want to deal with installation, you can go to
+If you do not want/have time to deal with installation and R code, you can use
 [DateLife's interactive website application](http://datelife.opentreeoflife.org/query/).
