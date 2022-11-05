@@ -1,6 +1,6 @@
 Package: datelife
 Title: Scientific Data on Time of Lineage Divergence for Your Taxa
-Version: 0.6.5
+Version: 0.6.6
 Maintainer: Luna L. Sanchez Reyes <sanchez.reyes.luna@gmail.com>
 Authors@R: c(
   person("Brian", "O'Meara", email = "bomeara@gmail.com", role=c("aut")),
@@ -19,7 +19,7 @@ Authors@R: c(
 Description: Methods and workflows to get chronograms (i.e., phylogenetic trees with branch lengths
     proportional to time), using open, peer-reviewed, state-of-the-art scientific data on time of lineage divergence.
     This package constitutes the main underlying code of the DateLife web service
-    at <www.datelife.org>. To obtain a single summary chronogram from a group of
+    at <https:www.datelife.org>. To obtain a single summary chronogram from a group of
     relevant chronograms, we implement the Super Distance Matrix (SDM) method
     described in Criscuolo et al. (2006) <doi:10.1080/10635150600969872>.
     To find the grove of chronograms with a sufficiently overlapping set of taxa
