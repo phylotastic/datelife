@@ -46,6 +46,10 @@ congruify_and_mrca_phylo <- function(phy,
                                     target = phy,
                                     scale = NA,
                                     ncores = 1))
+    if (!inherits(congruified, "list")) {
+      warning("Congruification failed for study: ", reference)
+      return(NA)
+    }
     ############################################################################
     # get mrca nodes for available ages:
     ############################################################################
@@ -76,7 +80,7 @@ congruify_and_mrca_phylo <- function(phy,
                     calibs_matched$taxonB)
     calibs_matched <- calibs_matched[row_order,]
     ############################################################################
-    # add topology as atttribute
+    # add topology as attribute
     attributes(calibs_matched)$phy <- mrcas$matched_phy
     return(structure(calibs_matched,
                      class = c("congruifiedCalibrations", "data.frame")))
@@ -93,22 +97,33 @@ congruify_and_mrca_phylo <- function(phy,
 # #' or a vector of taxon names (see details).
 #' @param source_chronograms A `multiPhylo` object, output of [datelife_search()].
 #' @return a `data.frame` of node ages from `source_chronograms` and corresponding
-#' mrca nodes in target tree `phy`.
+#' mrca nodes in target tree `phy`. `attributes(return)$phy` stores the congruified and mrca matched phylogeny.
 #' @export
 congruify_and_mrca_multiPhylo <- function(phy,
                                           source_chronograms) {
     ############################################################################
-    # congruify and mrca, recover matched phy:
+    # congruify and mrca each source chronogram:
     res <- lapply(seq(length(source_chronograms)),
                  function(i) {
-                   congruify_and_mrca_phylo(phy = phy,
+                   xx <- congruify_and_mrca_phylo(phy = phy,
                                             source_chronogram = source_chronograms[[i]],
                                             reference = names(source_chronograms)[i])
+                   return(xx)
                  })
-    phy <- attributes(res[[1]])$phy
+    ############################################################################
+    # get congruified and matched phylogenies, and remove null ones:
+    matched_multiPhylo <- lapply(res, function(x) attributes(x)$phy)
+    is_null <- sapply(matched_multiPhylo, is.null)
+    matched_multiPhylo <- matched_multiPhylo[!is_null]
+    ############################################################################
+    # get one congruified and matched phy to assign as attribute later:
+    phy <- matched_multiPhylo[[1]]
+    ############################################################################
+    # identify elements of res that are not tables:
+    is_data_frame <- sapply(res, inherits, "data.frame")
     ############################################################################
     # merge the list of tables and return a single table (data.table object):
-    res <- data.table::rbindlist(res)
+    res <- data.table::rbindlist(res[is_data_frame])
     ############################################################################
     # Convert to simple data.frame object:
     res <- as.data.frame.data.frame(res)
