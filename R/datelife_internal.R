@@ -438,18 +438,44 @@ congruify_and_check <- function(reference, target, taxonomy = NULL, tol = 0.01,
   if (!ape::is.ultrametric(reference, tol = tol, option = option)) {
     return(NA)
   }
-  new.tree <- phylo_tiplabel_underscore_to_space(suppressWarnings(geiger::congruify.phylo(
-    phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(target),
-    taxonomy = taxonomy, tol = tol, scale = scale
-  )$phy)) # suppressing warnings b/c geiger ignores tolerance
+  new.tree <- tryCatch(
+                  expr = suppressWarnings( # suppressing warnings b/c geiger ignores tolerance
+                     geiger::congruify.phylo(phylo_tiplabel_space_to_underscore(reference),
+                                             phylo_tiplabel_space_to_underscore(target),
+                                             taxonomy = taxonomy,
+                                             tol = tol,
+                                             scale = scale,
+                                             ncores = 1))$phy,
+                  error = function(e) {
+                    message(e)
+                    return(NA)
+                  })
+  if (is.na(new.tree)) {
+    warning("Congruification failed")
+    return(NA)
+  }
+  new.tree <- phylo_tiplabel_underscore_to_space(new.tree)
   if (anyNA(new.tree$edge.length) & attempt_fix) {
-    message("Congruification resulted in NA edge lengths. Resolving polytomies and making up starting branch lengths")
-    new.tree <- phylo_tiplabel_underscore_to_space(geiger::congruify.phylo(
-      phylo_tiplabel_space_to_underscore(reference), phylo_tiplabel_space_to_underscore(
-        ape::compute.brlen(ape::multi2di(target))
-      ), taxonomy, tol, scale,
-      ncores = 1
-    )$phy)
+    message("Congruification resulted in NA edge lengths. Trying to fix by resolving polytomies and making up starting branch lengths...")
+    reference <- phylo_tiplabel_space_to_underscore(reference)
+    target <- phylo_tiplabel_space_to_underscore(ape::compute.brlen(ape::multi2di(target)))
+    new.tree <- tryCatch(
+                    expr = suppressWarnings( # suppressing warnings b/c geiger ignores tolerance
+                       geiger::congruify.phylo(reference,
+                                               target,
+                                               taxonomy,
+                                               tol,
+                                               scale,
+                                               ncores = 1))$phy,
+                    error = function(e) {
+                      message(e)
+                      return(NA)
+                    })
+    if (is.na(new.tree)) {
+      warning("Congruification failed")
+      return(NA)
+    }
+    new.tree <- phylo_tiplabel_underscore_to_space(new.tree)
     if (anyNA(new.tree$edge.length)) {
       message("There are still NAs in edge lengths; returning NA")
       new.tree <- NA
