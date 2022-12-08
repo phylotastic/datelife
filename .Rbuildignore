@@ -27,6 +27,7 @@ cran-comments.md
 datelife.Rproj
 dev.txt
 dev.R
+git_status.txt
 ^\.github$
 ^README\.Rmd$
 _pkgdown.yml
