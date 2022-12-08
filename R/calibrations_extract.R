@@ -76,19 +76,26 @@ extract_calibrations_phylo <- function(input = NULL,
   for (i in seq(length(chronograms))) {
     chronograms[[i]]$tip.label <- gsub(" ", "_", chronograms[[i]]$tip.label) # the battle will never end!
     class(chronograms[[i]]) <- "phylo"
-    local_df <- suppressWarnings(
-      geiger::congruify.phylo(
-        reference = chronograms[[i]],
-        target = chronograms[[i]],
-        scale = NA,
-        ncores = 1
-      )
-    )$calibrations
+    local_df <- tryCatch(
+        expr = { suppressWarnings(
+            geiger::congruify.phylo(reference = chronograms[[i]],
+                                    target = chronograms[[i]],
+                                    scale = NA,
+                                    ncores = 1))$calibrations
+                                  },
+        error = function(e) {
+          message(e)
+          return(NA)
+        })
     # suppressedWarnings bc of warning message when running
     # geiger::congruify.phylo(reference = chronograms[[i]], target = chronograms[[i]], scale = NA)
     # 		Warning message:
     # In if (class(stock) == "phylo") { :
     # the condition has length > 1 and only the first element will be used
+    if (!inherits(local_df, "list")) {
+      warning("Congruification failed")
+      return(NA)
+    }
     local_df$reference <- names(chronograms)[i]
     if (each) {
       calibrations <- c(calibrations, list(local_df))
