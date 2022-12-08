@@ -66,17 +66,20 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...) {
   # utils::data(threebirds.rda)
   # input <- threebirds_query$cleaned_names
   # ott_ids <- threebirds_query$ott_ids
-
+  # check that there is at least one input to attempt get ott ids from
   if (is.null(input) & is.null(ott_ids)) {
-    message("Both input arguments are empty; please specify one.")
+    message("Both 'input' and 'ott_ids' arguments are empty; please specify one.")
     return(NA)
   }
+  ##############################################################################
+  # case when ott ids are not provided
+  ##############################################################################
   if (is.null(ott_ids) | all(is.na(ott_ids))) {
     # checks that input is a datelifeQuery object, otherwise it uses make_datelife_query on input
     if (!is_datelife_query(input)) {
       input <- make_datelife_query(input, ...)
     }
-    if (is.numeric(input$ott_id)) {
+    if (is.numeric(input$ott_id) & !is.na(input$ott_id)) {
       ott_ids <- input$ott_ids
       names(ott_ids) <- input$cleaned_names
     } else {
@@ -91,12 +94,19 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...) {
   }
   # ott_ids <- suppressWarnings(as.numeric(ott_ids))
   if (!is.numeric(ott_ids)) {
-    ott_ids2 <- ott_ids
-    message("ott_ids is not a numeric vector; coercing to numeric.")
-    ott_ids <- as.numeric(ott_ids)
-    if (any(is.na(is.numeric(ott_ids2)))) {
-      message(paste0("\nInput '", paste(names(input)[which(is.na(ott_ids2))], collapse = "', '"), "' not numeric."))
+    ott_ids_not_numeric <- ott_ids
+    message("---> Coercing input to numeric.")
+    ott_ids <- suppressWarnings(as.numeric(ott_ids))
+    if (any(is.na(ott_ids))) {
+      fails <- ott_ids_not_numeric[which(is.na(ott_ids))]
+      verb <- ifelse(length(fails) == 1, "is", "are")
+      fails <- paste(fails, collapse = '", ')
+      message(paste0('---> Input ("', paste(ott_ids_not_numeric[which(is.na(ott_ids))], collapse = '", "'), '") ', verb, ' not numeric.'))
     }
+  }
+  if (all(is.na(ott_ids))) {
+    message("---> Input provided is invalid. \nReturning NA.")
+    return(NA)
   }
   if (is.null(names(ott_ids))) {
     # ott_ids <- c(1, ott_ids) # if ott_ids does not exist it will give an error
@@ -367,11 +377,13 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
 #' names(ids) <- tnrs$unique_name
 #' children <- get_ott_children(ott_ids = ids) # or
 #' children <- get_ott_children(input = "Canis")
+#' if (!is.na(children)) {
 #' str(children)
 #' ids <- children$Canis$ott_id
 #' names(ids) <- rownames(children$Canis)
 #' tree_children <- datelife::get_otol_synthetic_tree(ott_ids = ids)
 #' plot(tree_children, cex = 0.3)
+#' }
 #'
 #' # An example with flowering plants:
 #'
@@ -389,11 +401,23 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
 # nrow(children[[1]])
 # sum(children[[1]]$rank == "species")
 get_ott_children <- function(input = NULL, ott_ids = NULL, ott_rank = "species", ...) {
-  # iput <- c("Felis", "Homo", "Malvaceae")
+  # input <- c("Felis", "Homo", "Malvaceae")
   input_ott_match <- check_ott_input(input, ott_ids)
-  # names(input_ott_match)
+  if (is.na(input_ott_match)) {
+    # no need for message, here, they are all wrapped in check_ott_input
+    return(NA)
+  }
   all_children <- vector(mode = "list", length = length(input_ott_match))
-  input_ott_match_ranks <- unlist(sapply(rotl::taxonomy_taxon_info(input_ott_match), "[", "rank"))
+  input_ott_match_ranks <- tryCatch({unlist(sapply(rotl::taxonomy_taxon_info(input_ott_match), "[", "rank"))},
+                                    error = function(e) {
+                                      message(e)
+                                      return(NA)
+                                    })
+  if (is.na(input_ott_match_ranks)) {
+    message("---> Could not retrieve taxonomic data from Open Tree of Life database for the provided inputs.")
+    message("Returning NA.")
+    return(NA)
+  }
   # grepl(paste0("\\b", ott_rank, "\\b"), c("species", "subspecies"))
   ott_ranki <- grepl(paste0("\\b", ott_rank, "\\b"), input_ott_match_ranks)
   df <- data.frame(ott_id = input_ott_match[ott_ranki], rank = rep(ott_rank, sum(ott_ranki)))

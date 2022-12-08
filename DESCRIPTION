@@ -59,7 +59,8 @@ Imports:
     plyr,
     phylocomr,
     BiocManager,
-    data.table
+    data.table,
+    curl
 Suggests:
     testthat,
     knitr,
