@@ -79,14 +79,17 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...) {
   }
   ##############################################################################
   # case when ott_ids argument is NULL or NA (not provided)
-  # get OT ids from input argument
+  # get OTT ids from input argument
   ##############################################################################
   if (is.null(ott_ids) | all(is.na(ott_ids))) {
     # checks that input is a datelifeQuery object, otherwise it uses make_datelife_query on input
     if (!is_datelife_query(input)) {
       input <- make_datelife_query(input, ...)
     }
-    if (is.null(input$ott_id)) message(input) stop()
+    if (is.null(input$ott_id)) {
+      message(input)
+      stop("OTT ids are NULL.")
+    }
     if (is.numeric(input$ott_id) & !is.na(input$ott_id)) {
       ott_ids <- input$ott_ids
       names(ott_ids) <- input$cleaned_names
