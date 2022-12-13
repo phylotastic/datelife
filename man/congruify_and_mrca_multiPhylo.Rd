@@ -13,7 +13,7 @@ congruify_and_mrca_multiPhylo(phy, source_chronograms)
 }
 \value{
 a \code{data.frame} of node ages from \code{source_chronograms} and corresponding
-mrca nodes in target tree \code{phy}.
+mrca nodes in target tree \code{phy}. \code{attributes(return)$phy} stores the congruified and mrca matched phylogeny.
 }
 \description{
 \code{congruify_and_mrca_multiPhylo} congruifies a target tree against all

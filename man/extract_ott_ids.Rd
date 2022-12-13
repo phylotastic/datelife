@@ -3,14 +3,14 @@
 \name{extract_ott_ids}
 \alias{extract_ott_ids}
 \alias{extract_ott_ids.default}
-\title{Get OTT ids from a character vector containing species names and OTT ids.}
+\title{Extract numeric OTT ids from a character vector that combines taxon names and OTT ids.}
 \usage{
 extract_ott_ids(x, na.rm = TRUE)
 
 \method{extract_ott_ids}{default}(x, na.rm = TRUE)
 }
 \arguments{
-\item{x}{A character vector of taxon names, or a phylo object with tip names containing OTT ids.}
+\item{x}{A character vector of taxon names, or a phylo object with tree tip labels containing OTT ids.}
 
 \item{na.rm}{A logical value indicating whether \code{NA} values should be stripped from the output.}
 }
@@ -20,12 +20,16 @@ An object of class numeric containing OTT ids only.
 \code{NULL}
 }
 \description{
-Get OTT ids from a character vector containing species names and OTT ids.
+Extract numeric OTT ids from a character vector that combines taxon names and OTT ids.
 }
 \examples{
+\dontrun{ # This is a flag for package development. You are welcome to run the example.
+
 canis <- rotl::tnrs_match_names("canis")
 canis_taxonomy <- rotl::taxonomy_subtree(canis$ott_id)
 my_ott_ids <- extract_ott_ids(x = canis_taxonomy$tip_label)
 # Get the problematic elements from input
 canis_taxonomy$tip_label[attr(my_ott_ids, "na.action")]
+
+} # end dontrun
 }

@@ -45,11 +45,13 @@ ids <- tnrs$ott_id[1]
 names(ids) <- tnrs$unique_name
 children <- get_ott_children(ott_ids = ids) # or
 children <- get_ott_children(input = "Canis")
+if (!is.na(children)) {
 str(children)
 ids <- children$Canis$ott_id
 names(ids) <- rownames(children$Canis)
 tree_children <- datelife::get_otol_synthetic_tree(ott_ids = ids)
 plot(tree_children, cex = 0.3)
+}
 
 # An example with flowering plants:
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/opentree_taxonomy.R
 \name{check_ott_input}
 \alias{check_ott_input}
-\title{Check input for other functions}
+\title{Check input for usage in other \code{datelife} functions}
 \usage{
 check_ott_input(input = NULL, ott_ids = NULL, ...)
 }
