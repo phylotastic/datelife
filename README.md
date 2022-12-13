@@ -204,6 +204,19 @@ pkgdown::build_site()
 
 #### *Releasing to CRAN*
 
+##### ***Updating GitHub actions R CMD check***
+
+Run the following function from the package
+[`usethis`](https://usethis.r-lib.org/reference/github_actions.html) to
+update R CMD Check on GitHub:
+
+``` r
+usethis::use_github_action_check_standard()
+```
+
+This downloads the standard R CMD check workflow from [r-lib action
+examples](https://github.com/r-lib/actions/blob/v2/examples/check-standard.yaml).
+
 ##### ***Local checks***
 
 To be able to release to CRAN, the first step is to pass the checks
