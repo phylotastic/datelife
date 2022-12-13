@@ -18,7 +18,7 @@ It calls congruify_and_mrca_phylo(), and phytools::findMRCA() to get mrca nodes.
     
     <a class="navbar-brand me-2" href="../index.html">datelife</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,7 @@ It calls congruify_and_mrca_phylo(), and phytools::findMRCA() to get mrca nodes.
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
     <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the true finches</a>
+    <a class="dropdown-item" href="../articles/make_datelife_query.html">Making a DateLife query</a>
   </div>
 </li>
 <li class="nav-item">
@@ -83,7 +84,7 @@ It calls <code><a href="congruify_and_mrca_phylo.html">congruify_and_mrca_phylo(
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>a <code>data.frame</code> of node ages from <code>source_chronograms</code> and corresponding
-mrca nodes in target tree <code>phy</code>.</p>
+mrca nodes in target tree <code>phy</code>. <code>attributes(return)$phy</code> stores the congruified and mrca matched phylogeny.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

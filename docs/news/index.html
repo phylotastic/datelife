@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">datelife</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +26,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/Getting_started_with_datelife.html">Getting started</a>
     <a class="dropdown-item" href="../articles/fringiliidae.html">Case study: the true finches</a>
+    <a class="dropdown-item" href="../articles/make_datelife_query.html">Making a DateLife query</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -52,7 +53,25 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.5" id="datelife-065">datelife 0.6.5<a class="anchor" aria-label="anchor" href="#datelife-065"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.6.6" id="datelife-v066">datelife v0.6.6<a class="anchor" aria-label="anchor" href="#datelife-v066"></a></h2>
+<ul><li>when congruification fails, return <code>NA</code> and produce a warning on functions that use <code><a href="https://rdrr.io/pkg/geiger/man/congruify.phylo.html" class="external-link">geiger::congruify.phylo()</a></code>:
+<ul><li><code><a href="../reference/congruify_and_mrca_phylo.html">congruify_and_mrca_phylo()</a></code></li>
+<li><code><a href="../reference/extract_calibrations_phylo.html">extract_calibrations_phylo()</a></code></li>
+<li><code><a href="../reference/congruify_and_check.html">congruify_and_check()</a></code></li>
+</ul></li>
+<li>changes to <code><a href="../reference/congruify_and_mrca_multiPhylo.html">congruify_and_mrca_multiPhylo()</a></code>:
+<ul><li>filters out results of <code><a href="../reference/congruify_and_mrca_phylo.html">congruify_and_mrca_phylo()</a></code> that do not inherit <code>data.frame</code>; usually this happens when congruification fails</li>
+<li>correctly assigns congruified <code>phy</code> as attribute</li>
+</ul></li>
+<li>
+<code><a href="../reference/use_calibrations_bladj.matchedCalibrations.html">use_calibrations_bladj.matchedCalibrations()</a></code> correctly uses <code>calibrations</code> argument</li>
+<li>
+<code><a href="../reference/get_ott_children.html">get_ott_children()</a></code> has error handling for when OpenTree APIs might be down, or there is no internet connection</li>
+<li>
+<code><a href="../reference/make_datelife_query.html">make_datelife_query()</a></code> function fix and a stub for a vignette</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.5" id="datelife-v065">datelife v0.6.5<a class="anchor" aria-label="anchor" href="#datelife-v065"></a></h2><p class="text-muted">CRAN release: 2022-06-21</p>
 <ul><li>data:
 <ul><li>updated <code>opentree_chronograms</code> object. It now has 253 chronograms from Open Tree of Life and uses “xz” compression.</li>
 </ul></li>
@@ -74,7 +93,7 @@
 </li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.1" id="datelife-061">datelife 0.6.1<a class="anchor" aria-label="anchor" href="#datelife-061"></a></h2><p class="text-muted">CRAN release: 2022-01-31</p>
+<h2 class="pkg-version" data-toc-text="0.6.1" id="datelife-v061">datelife v0.6.1<a class="anchor" aria-label="anchor" href="#datelife-v061"></a></h2><p class="text-muted">CRAN release: 2022-01-31</p>
 <ul><li>Functions:
 <ul><li>
 <code>get_otol_chronograms</code> was updated and renamed to <code>get_opentree_chronograms</code>
@@ -91,7 +110,7 @@
 <li>Description: added <code>BiocManager</code> package to imports</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.0" id="datelife-060">datelife 0.6.0<a class="anchor" aria-label="anchor" href="#datelife-060"></a></h2><p class="text-muted">CRAN release: 2022-01-17</p>
+<h2 class="pkg-version" data-toc-text="0.6.0" id="datelife-v060">datelife v0.6.0<a class="anchor" aria-label="anchor" href="#datelife-v060"></a></h2><p class="text-muted">CRAN release: 2022-01-17</p>
 <ul><li>Dependencies: Bioconductor packages are used conditionally</li>
 <li>Package website with <code>pkgdown</code>
 </li>
@@ -101,7 +120,7 @@
 </li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.0" id="datelife-050">datelife 0.5.0<a class="anchor" aria-label="anchor" href="#datelife-050"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.5.0" id="datelife-v050">datelife v0.5.0<a class="anchor" aria-label="anchor" href="#datelife-v050"></a></h2>
 <ul><li>functions:
 <ul><li>
 <code>datelife_query_check</code> is deprecated</li>
@@ -112,11 +131,11 @@
 </ul></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.3.1" id="datelife-031">datelife 0.3.1<a class="anchor" aria-label="anchor" href="#datelife-031"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.3.1" id="datelife-v031">datelife v0.3.1<a class="anchor" aria-label="anchor" href="#datelife-v031"></a></h2>
 <ul><li>Now muscle or mafft can be used for alignment of BOLD sequences</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.19" id="datelife-0219">datelife 0.2.19<a class="anchor" aria-label="anchor" href="#datelife-0219"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.19" id="datelife-v0219">datelife v0.2.19<a class="anchor" aria-label="anchor" href="#datelife-v0219"></a></h2>
 <ul><li>MrBayes and TreePL as dating methods</li>
 <li>Fully ultrametric summary chronograms and datelife() outputs</li>
 <li>Overlay and lineage through time plots of source chronograms</li>
