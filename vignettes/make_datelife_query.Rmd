@@ -1,0 +1,29 @@
+---
+title: "Making a DateLife query"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{make_datelife_query}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(datelife)
+```
+
+To query DateLife's chronogram database, taxon names provided as input are processed and matched to the  Open Tree of Life taxonomy (OTT). To create a DateLife query, we use the function `make_datelife_query()`. In this vignette we present some usage examples of this function.
+
+## A. When `input` is not a phylogeny
+
+```{r}
+make_datelife_query(input = "Canis")
+
+make_datelife_query(input = rep("Canis", 10))
+```
