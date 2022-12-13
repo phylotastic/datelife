@@ -1,0 +1,46 @@
+cff-version: 1.1.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Sanchez Reyes
+    given-names: Luna L.
+    orcid: https://orcid.org/0000-0001-7668-2528
+  - family-names: O'Meara
+    given-names: Brian
+    orcid: https://orcid.org/0000-0002-0337-5997
+  - family-names: McTavish
+    given-names: Emily Jane
+    orcid: https://orcid.org/0000-0001-9766-5727
+  - family-names: Heath
+    given-names: Tracy
+    orcid: 
+  - family-names: Midford
+    given-names: Peter E
+    orcid: 
+  - family-names: Chamberlain
+    given-names: Scott
+    orcid: 
+  - family-names: Brown
+    given-names: Joseph W
+    orcid: 
+  - family-names: Leinweber
+    given-names: Katrin
+    orcid: 
+  - family-names: Eastman
+    given-names: Jonathan
+    orcid: 
+  - family-names: Wright
+    given-names: April
+    orcid: 
+  - family-names: Schliep
+    given-names: Klaus
+    orcid: 
+  - family-names: Harmon
+    given-names: Luke
+    orcid: 
+  - family-names: Pennell
+    given-names: Matt
+    orcid: 
+    
+title: phylotastic/datelife: v0.6.1
+version: v0.6.1
+date-released: 2022-02-07
