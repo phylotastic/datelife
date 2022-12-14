@@ -10,7 +10,7 @@ codecov.yml
 ^cran-comments\.md$ # Comments for CRAN submission
 ^.tmp_*
 ^\.travis\.yml$     # Used for continuous integration testing with travis
-
+inst/CITATION.cff
 ^doc$
 ^Meta$
 ^\.travis\.yml$
