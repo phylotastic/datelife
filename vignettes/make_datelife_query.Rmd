@@ -23,7 +23,7 @@ To query DateLife's chronogram database, taxon names provided as input are proce
 
 Next, we present some usage examples of this function.
 
-## A. When `input` is not a phylogeny
+### When `input` is list or vector of taxon names
 
 We can process a single taxon:
 ```{r}
@@ -39,4 +39,136 @@ In any case, the output is a list:
 
 ```{r}
 query10
+```
+
+### When `input` names are not found in the taxonomy
+
+The function returns `NA` as taxonomic id for the missing name:
+
+```{r}
+make_datelife_query2(input = c("Canis", "werewolf", "jupiter"))
+```
+
+### Subspecies can also be searched
+
+```{r}
+make_datelife_query2(input = "Canis mesomelas elongae")
+
+all_subspecies <- c("Canis mesomelas elongae", "Canis mesomelas elongae")
+make_datelife_query2(input = all_subspecies)
+
+one_subspecies <- c("Canis mesomelas elongae", "Canis adustus", "Lycalopex fulvipes")
+make_datelife_query2(input = one_subspecies)
+
+```
+
+### Choosing between homonyms
+
+Taxonomic homonyms are valid names that are used for different biological entities. For example, the genus name _Aotus_ refers to a monkey and a grass.
+TNRS is smart enough to choose a taxonomic context for a set of names, but it is not infallible.
+
+For example, when referring to the grass, TNRS chooses the correct taxon id:
+
+```{r}
+make_datelife_query2(input = c("Aotus", "Poa", "Arabidopsis"))
+```
+
+But when referring to the monkey, TNRS still chooses the grass:
+
+```{r}
+make_datelife_query2(input = c("Aotus", "Insulacebus", "Microcebus"))
+```
+To make sure that we get the taxonomic id and data for the taxon we want, we can specify a "taxonomic context":
+
+```{r eval = FALSE}
+rotl::tnrs_contexts()
+
+make_datelife_query2(input = c("Aotus", "Insulacebus", "Microcebus"), context_name = "Mammals")
+```
+### Making a query from an inclusive taxonomic group
+
+You can run it for one taxon name only:
+
+```{r}
+make_datelife_query2(input = "Canis",
+                     get_spp_from_taxon = TRUE,
+                     reference_taxonomy = "ott")
+```
+
+Or two or more:
+
+```{r}
+make_datelife_query2(input = c("Canis", "Elephas"),
+                     get_spp_from_taxon = TRUE,
+                     reference_taxonomy = "ott")
+```
+
+Sometimes, only some input taxon names are inclusive:
+
+```{r}
+make_datelife_query2(input = c("Mus", "Mus musculus"),
+                     get_spp_from_taxon = c(TRUE, FALSE),
+                     reference_taxonomy = "ott")
+```
+
+### The function `get_opentree_species()`
+
+The function `get_opentree_species()` works under the hood to extract species names within a given taxonomic group.
+
+This is how it fails:
+
+```{r}
+get_opentree_species()
+
+get_opentree_species(taxon_name = c("Canis", "Elephas"))
+
+get_opentree_species(ott_id = c(372706, 541927))
+
+# TOFIX:
+# datelife::get_opentree_species(taxon_name = "Canis", ott_id = 541927)
+```
+
+By default, it only return species that are in OpenTree's synthetic tree:
+
+```{r}
+get_opentree_species(taxon_name = "Canis")
+```
+
+You can override that behaviour and get all species by setting `synth_tree_only = FALSE`:
+
+```{r}
+get_opentree_species(taxon_name = "Canis", synth_tree_only = FALSE)
+
+```
+
+If you know the OTT id of your group, you can use it:
+
+```{r}
+get_opentree_species(ott_id = 541927)
+```
+
+```{r}
+get_opentree_species(ott_id = 541927, synth_tree_only = FALSE)
+```
+
+To get species for multiple (more than one) taxon names:
+
+```{r,}
+ott_ids <- c(541927, 100)
+
+# TODO: make a function out of the following code
+# then it can replace code inside datelife_query_get_spp, section # getting species
+species_list <- lapply(ott_ids,
+                       function(x) {
+                         datelife::get_opentree_species(ott_id = x,
+                                              synth_tree_only = TRUE)
+                        })
+return_names <- unlist(sapply(species_list, "[", "tnrs_names"))
+return_ott_ids <- unlist(sapply(species_list, "[", "ott_ids"))
+names(return_names) <- return_ott_ids
+names(return_ott_ids) <- return_names
+
+list(tnrs_names = return_names,
+     ott_ids = return_ott_ids)
+
 ```
