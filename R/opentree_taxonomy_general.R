@@ -1,6 +1,7 @@
 #' Taxon name resolution service (tnrs) applied to a vector of names by batches
 #' @param input A character vector of taxon names, or a phylo object with tip names, to be matched to taxonomy.
-#' @param reference_taxonomy A character vector specifying the reference taxonomy to use for tnrs.
+#' @param reference_taxonomy A character vector specifying the reference taxonomy to use for TNRS.
+#'  Options are "ott", "ncbi", "gbif" or "irmng". The function defaults to "ott".
 #' @inheritDotParams rotl::tnrs_match_names -names
 #' @details There is no limit to the number of names that can be queried and matched.
 #' @return An object of class  data frame or phylo, with the added class match_names.
@@ -8,6 +9,7 @@
 tnrs_match <- function(input, reference_taxonomy, tip, ...) {
   UseMethod("tnrs_match", input)
 }
+
 
 #' @return \code{NULL}
 #'
@@ -18,19 +20,19 @@ tnrs_match <- function(input, reference_taxonomy, tip, ...) {
 #' tnrs_match(input = c("Mus", "Mus musculus"))
 #' tnrs_match(input = c("Mus", "Echinus", "Hommo", "Mus"))
 #' @export
-tnrs_match.default <- function(input, reference_taxonomy = "otl", ...) { # enhance: add other reference taxonomies in the future
+tnrs_match.default <- function(input, reference_taxonomy = "ott", ...) { # enhance: add other reference taxonomies in the future
   # names <- unique(names) # it is best to allow processing everything, i.e., without modifying the original input vector
   # names <- names[!is.na(names)]  # tnrs_match_names does not allow NAs, but they're caught after with tryCatch
-  # for debugging:
-  # input <- c("Mus", "Mus musculus")
-  # input = c("cetaceae", "felis", "luke skywalker")
+  message("---> Runnning TNRS to match input names to reference taxonomy (",
+          toupper(reference_taxonomy),
+          ").")
   input <- stringr::str_trim(input, side = "both") # cleans the input of lingering unneeded white spaces
   allinput <- input
   input <- unique(input)
   # enhance: infer taxonomic contexts:
   # tnrs_infer_context(names = names)
   # rotl::tnrs_contexts()
-  if (reference_taxonomy == "otl") {
+  if (reference_taxonomy == "ott") {
     df <- suppressWarnings(rotl::tnrs_match_names(names = "Apis mellifera")) # this just generates the dummy for the table, it will be removed at the end
     df <- df[nrow(df) + 1, ]
     df[nrow(df) + length(input) - 1, ] <- NA
@@ -45,7 +47,7 @@ tnrs_match.default <- function(input, reference_taxonomy = "otl", ...) { # enhan
       )
       utils::setTxtProgressBar(progression, i)
     }
-    cat("\n") # just to make the progress bar look better
+    # cat("\n") # just to make the progress bar look better
     # hardcoding Mus:
     if (sum("mus" == tolower(input)) > 0) {
       df["mus" == tolower(input), ] <- list("mus", "Mus (genus in Deuterostomia)", FALSE, 1068778, FALSE, "SIBLING_HIGHER", 3)
@@ -59,6 +61,7 @@ tnrs_match.default <- function(input, reference_taxonomy = "otl", ...) { # enhan
     ii <- match(tolower(allinput), df$search_string)
     result <- df[ii, ]
   }
+  cat("\n") # just to make the progress bar look better
   return(result) # returns the whole data frame
 }
 #' @return \code{NULL}
@@ -69,8 +72,6 @@ tnrs_match.default <- function(input, reference_taxonomy = "otl", ...) { # enhan
 # # ' Taxon name resolution service (tnrs) applied to tips of a phylogeny
 # # ' @inheritParams phylo_check
 #' @param tip A vector of mode numeric or character specifying the tips to match. If left empty all tips will be matched.
-# #' @param reference_taxonomy A character vector specifying the reference taxonomy to use for tnrs.
-# #' @inheritDotParams rotl::tnrs_match_names -names
 # #' @return An object of class phylo and match_names. See details.
 #' @details
 #' The output will preserve all elements from original input phylo object and will add
@@ -88,7 +89,7 @@ tnrs_match.default <- function(input, reference_taxonomy = "otl", ...) { # enhan
 #' }
 #' if tips are duplicated, tnrs will only be run once (avoiding increases in function running time) but the result will be applied to all duplicated tip labels
 #' @export
-tnrs_match.phylo <- function(input, reference_taxonomy = "otl", tip = NULL, ...) { # we can add other reference taxonomies in the future
+tnrs_match.phylo <- function(input, reference_taxonomy = "ott", tip = NULL, ...) { # we can add other reference taxonomies in the future
   # enhance_aproximates: add an argument in case we want to give the choice to users of changing only direct matches or also approximated matches
   phylo_check(input, dated = FALSE)
   phy.ori <- phy <- input

@@ -86,7 +86,7 @@ get_calibrations_vector <- function(input = NULL,
 #' @export
 get_calibrations_datelifequery <- function(datelife_query = NULL,
                                            each = FALSE) {
-  if (suppressMessages(!is_datelife_query(datelife_query))) {
+  if (suppressMessages(!is_datelife_query(input = datelife_query))) {
     stop("'datelife_query' is not a 'datelifeQuery' object.")
   }
   phyloall <- datelife_search(

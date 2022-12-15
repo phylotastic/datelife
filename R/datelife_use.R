@@ -75,7 +75,7 @@ datelife_use_datelifequery <- function(datelife_query = NULL,
                                        dating_method = "bladj",
                                        each = FALSE) {
   #
-  if (suppressMessages(!is_datelife_query(datelife_query))) {
+  if (suppressMessages(!is_datelife_query(input = datelife_query))) {
     stop("'datelife_query' argument is not a 'datelifeQuery' object.")
   }
   if (!inherits(datelife_query$phy, "phylo")) {

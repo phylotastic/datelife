@@ -20,8 +20,7 @@
 #'   given taxon or not. Default to `FALSE`. If `TRUE`, it must have same length as input.
 #'   If input is a newick string with some clades it will be converted to a `phylo`
 #'   object, and the order of `get_spp_from_taxon` will match `phy$tip.label`.
-#' @param taxonomic_source Used if `get_spp_from_taxon = TRUE`. A character vector with the desired taxonomic sources.
-#'  Options are "ott", "ncbi", "gbif" or "irmng". The function defaults to "ott".
+#' @inheritParams tnrs_match
 #' @return A `datelifeQuery` object, which is a list of three elements:
 #' \describe{
 #' 	 \item{$phy}{A `phylo` object or `NA`, if input is not a tree.}
@@ -36,7 +35,7 @@
 make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata", "Struthio camelus"),
                                 use_tnrs = TRUE,
                                 get_spp_from_taxon = FALSE,
-                                taxonomic_source = "ott") {
+                                reference_taxonomy = "ott") {
   # enhance: add mapped (has tnrs been performed?) and matched (was it matched successfully?) element to phylo object
   # add one for each taxonomy queried: ott, catalogue of life (also contains fossils), enciclopedia of life (common names)
   if (suppressMessages(is_datelife_query(input))) {
@@ -122,7 +121,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
     # rotl::tol_subtree is very fast but returns subspecies too \o/
     # it has no argument to restrict it to species only
     # so we are using our own function that wraps up their services nicely
-    if ("ott" %in% taxonomic_source) {
+    if ("ott" %in% reference_taxonomy) {
       species_list <- get_opentree_species(taxon_name = cleaned_names_tnrs$unique_name,
                                            ott_id = cleaned_names_tnrs$ott_id,
                                            synth_tree_only = TRUE)
@@ -179,7 +178,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
 #' @return A `phylo` object or `NA` if input is not a tree .
 #' @export
 input_process <- function(input) {
-  message("... Phylo-processing 'input':")
+  message("---> Phylo-processing 'input'.")
   input_class <- "phylo"
   ott_ids <- NULL
   # TODO remove the multiPhylo if option from here?
@@ -194,7 +193,7 @@ input_process <- function(input) {
     input <- ape::write.tree(input) # converts to newick
   }
   if (!is.character(input)) {
-    message("'input' must be a character vector of taxon names, a newick string, or a 'phylo' or 'multiPhylo' object.")
+    message("* 'input' must be a character vector of taxon names, a newick string, or a 'phylo' or 'multiPhylo' object.")
     return(NA)
   }
   input <- gsub("\\+", " ", input) # clean the string
@@ -210,18 +209,18 @@ input_process <- function(input) {
     phy_out <- ape::collapse.singles(ape::read.tree(text = gsub(" ", "_", input[1])))
     phy_out$ott_ids <- ott_ids
     class(phy_out) <- input_class
-    message("'input' is a phylogeny and it is correctly formatted...")
+    message("* 'input' is a phylogeny and it is correctly formatted...")
     # ape::read.tree creates NaN edge lengths for tree without branch lengths
     # clean it up:
     if (!is.null(phy_out$edge.length)) {
       if (any(is.na(phy_out$edge.length))) {
-        warning("'input' has NA or NaN as branch lengths...")
+        warning("* 'input' has NA or NaN as branch lengths...")
         # phy_out$edge.length <- NULL
       }
     }
   } else {
     # not a requirement for input to be a phylogeny at this point
-    message("'input' is not a phylogeny.") # so message instead of warning or stop
+    message("* 'input' is not a phylogeny.") # so message instead of warning or stop
     return(NA)
   }
   return(phy_out)

@@ -32,7 +32,7 @@ get_datelife_result_datelifequery <- function(datelife_query = NULL,
   }
   message("... Searching DateLife's OpenTree chronogram database version v",
           cache$version)
-  if (suppressMessages(!is_datelife_query(datelife_query))) {
+  if (suppressMessages(!is_datelife_query(input = datelife_query))) {
     stop("'datelife_query' must be a 'datelifeQuery' object.")
   }
   if (length(datelife_query$cleaned_names) == 1) {

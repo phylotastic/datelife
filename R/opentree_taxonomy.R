@@ -305,7 +305,7 @@ get_ott_clade <- function(input = NULL, ott_ids = NULL, ott_rank = "family") {
 #' Taxonomic identifiers (OTT ids) from a taxonomic source.
 #'
 #' @inheritParams check_ott_input
-#' @param taxonomic_source A character vector with the desired taxonomic sources.
+#' @param reference_taxonomy A character vector with the desired taxonomic sources.
 #'  Options are "ncbi", "gbif" or "irmng". Any other value will retrieve data
 #'  from all taxonomic sources. The function defaults to "ncbi".
 #' @return A named list containing valid taxonomic children of given taxonomic name(s).
@@ -328,8 +328,8 @@ get_ott_clade <- function(input = NULL, ott_ids = NULL, ott_rank = "family") {
 # input = c("Felis", "Homo", "Malvaceae")
 # input = "Telespiza"
 #' @export
-get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = "ncbi") {
-  taxonomic_source_here <- tryCatch(match.arg(taxonomic_source, c("ncbi", "gbif", "irmng")),
+get_valid_children <- function(input = NULL, ott_ids = NULL, reference_taxonomy = "ncbi") {
+  reference_taxonomy_here <- tryCatch(match.arg(reference_taxonomy, c("ncbi", "gbif", "irmng")),
     error = function(e) NULL
   )
   input_ott_match <- check_ott_input(input, ott_ids)
@@ -366,8 +366,8 @@ get_valid_children <- function(input = NULL, ott_ids = NULL, taxonomic_source = 
       names(tax_sources) <- names(child) <- names(rr) <- tt[[1]]$unique_name
       monotypic <- TRUE
     }
-    if (inherits(taxonomic_source_here, "character")) {
-      keep <- sapply(tax_sources, function(x) any(grepl(taxonomic_source_here, x)))
+    if (inherits(reference_taxonomy_here, "character")) {
+      keep <- sapply(tax_sources, function(x) any(grepl(reference_taxonomy_here, x)))
       child <- child[keep]
       rr <- rr[keep]
     }

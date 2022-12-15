@@ -27,7 +27,7 @@ get_taxon_summary <- function(datelife_result = NULL,
     return(NA)
   }
 
-  if (suppressMessages(is_datelife_query(datelife_query))) {
+  if (suppressMessages(is_datelife_query(input = datelife_query))) {
     if (is.null(attributes(datelife_result)$datelife_query)) {
       cleaned_names <- datelife_query$cleaned_names
     } else {
