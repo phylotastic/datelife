@@ -244,6 +244,9 @@
     <loc>http://phylotastic.org/datelife/reference/get_taxon_summary.html</loc>
   </url>
   <url>
+    <loc>http://phylotastic.org/datelife/reference/get_tnrs_names.html</loc>
+  </url>
+  <url>
     <loc>http://phylotastic.org/datelife/reference/get_valid_children.html</loc>
   </url>
   <url>
@@ -281,6 +284,9 @@
   </url>
   <url>
     <loc>http://phylotastic.org/datelife/reference/make_datelife_query.html</loc>
+  </url>
+  <url>
+    <loc>http://phylotastic.org/datelife/reference/make_datelife_query2.html</loc>
   </url>
   <url>
     <loc>http://phylotastic.org/datelife/reference/make_mrbayes_runfile.html</loc>

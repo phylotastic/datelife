@@ -62,10 +62,10 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">tnrs_match</span><span class="op">(</span><span class="va">input</span>, <span class="va">reference_taxonomy</span>, <span class="va">tip</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
-<span class="fu">tnrs_match</span><span class="op">(</span><span class="va">input</span>, reference_taxonomy <span class="op">=</span> <span class="st">"otl"</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">tnrs_match</span><span class="op">(</span><span class="va">input</span>, reference_taxonomy <span class="op">=</span> <span class="st">"ott"</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for phylo</span>
-<span class="fu">tnrs_match</span><span class="op">(</span><span class="va">input</span>, reference_taxonomy <span class="op">=</span> <span class="st">"otl"</span>, tip <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu">tnrs_match</span><span class="op">(</span><span class="va">input</span>, reference_taxonomy <span class="op">=</span> <span class="st">"ott"</span>, tip <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,7 +73,8 @@
     <dl><dt>input</dt>
 <dd><p>A character vector of taxon names, or a phylo object with tip names, to be matched to taxonomy.</p></dd>
 <dt>reference_taxonomy</dt>
-<dd><p>A character vector specifying the reference taxonomy to use for tnrs.</p></dd>
+<dd><p>A character vector specifying the reference taxonomy to use for TNRS.
+Options are "ott", "ncbi", "gbif" or "irmng". The function defaults to "ott".</p></dd>
 <dt>tip</dt>
 <dd><p>A vector of mode numeric or character specifying the tips to match. If left empty all tips will be matched.</p></dd>
 <dt>...</dt>
@@ -132,12 +133,14 @@ results.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">tnrs_match</span><span class="op">(</span>input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Mus"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   search_string                  unique_name approximate_match  ott_id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1           mus Mus (genus in Deuterostomia)             FALSE 1068778</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   is_synonym          flags number_matches</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      FALSE SIBLING_HIGHER              3</span>
 <span class="r-in"><span class="fu">tnrs_match</span><span class="op">(</span>input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Mus"</span>, <span class="st">"Mus musculus"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   search_string                  unique_name approximate_match  ott_id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1           mus Mus (genus in Deuterostomia)             FALSE 1068778</span>
@@ -146,6 +149,7 @@ results.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      FALSE SIBLING_HIGHER              3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2      FALSE                             1</span>
 <span class="r-in"><span class="fu">tnrs_match</span><span class="op">(</span>input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Mus"</span>, <span class="st">"Echinus"</span>, <span class="st">"Hommo"</span>, <span class="st">"Mus"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     search_string                     unique_name approximate_match  ott_id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1             mus    Mus (genus in Deuterostomia)             FALSE 1068778</span>

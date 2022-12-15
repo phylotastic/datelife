@@ -95,6 +95,7 @@ numeric vector of ott ids obtained with <code><a href="https://docs.ropensci.org
 <span class="r-in"><span class="co"># The dog genus is not monophyletic in the OpenTree synthetic tree, so in</span></span>
 <span class="r-in"><span class="co">#  practice, it has no node to extract a subtree from.</span></span>
 <span class="r-in"><span class="va">tnrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="tnrs_match.html">tnrs_match</a></span><span class="op">(</span><span class="st">"Canis"</span><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># This is a flag for package development. You are welcome to run the example.</span></span>
@@ -110,9 +111,10 @@ numeric vector of ott ids obtained with <code><a href="https://docs.ropensci.org
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span>
 <span class="r-in"><span class="va">children</span> <span class="op">&lt;-</span> <span class="fu">get_ott_children</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"Canis"</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 'input' is not a 'datelifeQuery' object.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ... Phylo-processing 'input':</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'input' is not a phylogeny.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ---&gt; Phylo-processing 'input'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> * 'input' is not a phylogeny.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ---&gt; Making a DateLife query.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ---&gt; Working with the following taxon: Canis.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> DateLife query done!</span>

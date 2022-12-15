@@ -36,3 +36,4 @@ tests/_*
 renv
 renv.lock
 pkgdown/
+inst/CITATION.cff
