@@ -8,14 +8,15 @@
 \usage{
 tnrs_match(input, reference_taxonomy, tip, ...)
 
-\method{tnrs_match}{default}(input, reference_taxonomy = "otl", ...)
+\method{tnrs_match}{default}(input, reference_taxonomy = "ott", ...)
 
-\method{tnrs_match}{phylo}(input, reference_taxonomy = "otl", tip = NULL, ...)
+\method{tnrs_match}{phylo}(input, reference_taxonomy = "ott", tip = NULL, ...)
 }
 \arguments{
 \item{input}{A character vector of taxon names, or a phylo object with tip names, to be matched to taxonomy.}
 
-\item{reference_taxonomy}{A character vector specifying the reference taxonomy to use for tnrs.}
+\item{reference_taxonomy}{A character vector specifying the reference taxonomy to use for TNRS.
+Options are "ott", "ncbi", "gbif" or "irmng". The function defaults to "ott".}
 
 \item{tip}{A vector of mode numeric or character specifying the tips to match. If left empty all tips will be matched.}
 

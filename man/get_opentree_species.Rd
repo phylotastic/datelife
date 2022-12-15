@@ -2,21 +2,23 @@
 % Please edit documentation in R/get_species_from_ott.R
 \name{get_opentree_species}
 \alias{get_opentree_species}
-\title{Get all species belonging to a taxon from the Open Tree of Life Taxonomy}
+\title{Get all species belonging to a taxon from the Open Tree of Life Taxonomy (OTT)}
 \usage{
 get_opentree_species(taxon_name, ott_id, synth_tree_only = TRUE)
 }
 \arguments{
 \item{taxon_name}{A character vector providing an inclusive taxonomic name.}
 
-\item{ott_id}{A numeric vector providig an Open Tree Taxonomic id number for a taxonomic name. If provided, \code{taxon_name} is ignored.
-used by Open Tree of Life Taxonomy to detect invalid taxon names.}
+\item{ott_id}{A numeric vector providig an Open Tree Taxonomic id number for
+a taxonomic name. If provided, \code{taxon_name} is ignored.
+Used in the context of OTT to detect invalid taxon names.}
 
-\item{synth_tree_only}{Whether to include species that are in synthetic Open Tee only or not. Default to \code{TRUE}.}
+\item{synth_tree_only}{Whether to include species that are in the synthetic Open
+Tree of Life only or not. Default to \code{TRUE}.}
 }
 \value{
 A list of unique OTT names and OTT ids of species withing the provided taxon.
 }
 \description{
-Get all species belonging to a taxon from the Open Tree of Life Taxonomy
+Get all species belonging to a taxon from the Open Tree of Life Taxonomy (OTT)
 }

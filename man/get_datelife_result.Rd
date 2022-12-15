@@ -44,7 +44,7 @@ taxonomic name variations with \code{\link[=tnrs_match]{tnrs_match()}}, a wrappe
 given taxon or not. Default to \code{FALSE}. If \code{TRUE}, it must have same length as input.
 If input is a newick string with some clades it will be converted to a \code{phylo}
 object, and the order of \code{get_spp_from_taxon} will match \code{phy$tip.label}.}
-    \item{\code{taxonomic_source}}{Used if \code{get_spp_from_taxon = TRUE}. A character vector with the desired taxonomic sources.
+    \item{\code{reference_taxonomy}}{A character vector specifying the reference taxonomy to use for TNRS.
 Options are "ott", "ncbi", "gbif" or "irmng". The function defaults to "ott".}
   }}
 }
