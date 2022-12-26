@@ -1,0 +1,193 @@
+---
+title: "Estimating initial branch lengths"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{making_bold_trees}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(datelife)
+library(phangorn)
+```
+
+Ideally, to perform a phylogenetic dating analysis, we require some estimate of initial branch lengths.
+
+`datelife` does this by extracting DNA sequence data from BOLD.
+
+The function `make_bold_otol_tree()` does all the work:
+
+```{r eval = FALSE}
+make_bold_otol_tree(input = "Canis")
+```
+
+To exemplify how the function works under the hood, we will use a DNA sequence alignment data set provided in the `phangorn` package:
+
+```{r}
+data(Laurasiatherian)
+Laurasiatherian
+common_names <- names(Laurasiatherian)
+common_names
+```
+
+Get scientific names from common names:
+
+```{r, cache = TRUE, results = "hide", message = FALSE}
+taxize_names <- taxize::comm2sci(common_names)
+```
+
+```{r}
+length(taxize_names)
+
+is_empty <- lapply(taxize_names, length) == 0
+
+taxize_names[is_empty] <- "NA"
+
+taxon_names <- unlist(taxize_names)
+names(taxon_names[is_empty])
+```
+
+Manually add scientific names that were not found with `taxize`:
+
+```{r}
+# rphylotastic::taxa_common_to_scientific(common_names)
+taxon_names["Wallaroo"] <- "Macropus robustus"
+taxon_names["Possum"] <- "Trichosurus"
+taxon_names["Bandicoot"] <- "Perameles"
+taxon_names["Opposum"] <- "Didelphis marsupialis"
+taxon_names["Elephant"] <- "Elephas maximus"
+taxon_names["Aardvark"] <- "Orycteropus afer"
+taxon_names["Tenrec"] <- "Hemicentetes"
+taxon_names["Hedghog"] <- "Echinops"
+taxon_names["Gymnure"] <- "Echinosorex gymnura"
+taxon_names["Mole"] <- "Talpa"
+taxon_names["Shrew"] <- "Sorex"
+taxon_names["Rbat"] <- "Lasiurus borealis"
+taxon_names["FlyingFox"] <- "Pteropus alecto"
+taxon_names["RyFlyFox"] <- "Pteropus aruensis"
+taxon_names["FruitBat"] <- "Desmodus rotundus"
+taxon_names["LongTBat"] <- "Chalinolobus tuberculatus"
+taxon_names["WhiteRhino"] <- "Ceratotherium simum"
+taxon_names["IndianRhin"] <- "Rhinoceros unicornis"
+taxon_names["Hippo"] <- "Hippopotamus amphibius"
+taxon_names["FinWhale"] <- "Balaenoptera physalus"
+taxon_names["BlueWhale"] <- "Balaenoptera musculus"
+taxon_names["SpermWhale"] <- "Physeter macrocephalus"
+taxon_names["Pika"] <- "Ochotona"
+taxon_names["Squirrel"] <- "Sciurini"
+taxon_names["Dormouse"] <- "Gliridae"
+taxon_names["GuineaPig"] <- "Cavia porcellus"
+taxon_names["Vole"] <- "Arvicolinae"
+taxon_names["CaneRat"] <- "Thryonomys"
+taxon_names["Loris"] <- "Lorisinae"
+taxon_names["Cebus"] <- "Cebus"
+taxon_names["HarbSeal"] <- "Phoca vitulina"
+taxon_names["FurSeal"] <- "Otariidae"
+taxon_names["GraySeal"] <- "Halichoerus grypus"
+```
+
+Get datelife query data:
+
+```{r, messages = FALSE}
+query <- datelife::make_datelife_query2(input = taxon_names)
+```
+
+```{r}
+data.frame(query$cleaned_names, query$tnrs_names)
+```
+
+Get a topology:
+
+```{r, warning = FALSE}
+topology <- rotl::tol_induced_subtree(ott_ids = query$ott_ids, label_format = "id") 
+topology_names <- rotl::tol_induced_subtree(ott_ids = query$ott_ids, label_format = "name")$tip.label
+topology <- ape::collapse.singles(topology)
+index <- match(topology$tip.label, paste0("ott", query$ott_ids))
+data.frame(topology$tip.label, query$ott_ids[index])
+a <- query$cleaned_names %in% query$cleaned_names[index]
+query$cleaned_names[!a]
+
+data.frame(query$cleaned_names[index], taxon_names[index])
+topology$tip.label <- names(taxon_names[index])
+```
+
+Get an NJ tree:
+
+```{r, fig.show='hide'}
+# get NJ tree
+dm <- dist.hamming(Laurasiatherian)
+tree_nj <- NJ(dm)
+# parsimony(tree_nj, Laurasiatherian)
+plot(tree_nj)
+```
+
+![NJ tree](unnamed-chunk-10-1.png)
+
+
+---
+
+Get branch lengths with ACCTRAN algorithm (deltran is not available in R):
+
+```{r, fig.show='hide'}
+# names(Laurasiatherian)
+tree_acctran <- phangorn::acctran(tree = tree_nj, 
+                                  data = Laurasiatherian)
+plot(tree_acctran, cex = 0.8)
+```
+
+![ACCTRAN tree](unnamed-chunk-11-1.png)
+
+
+Optimize branch lengths to get maximum likelihood:
+
+```{r, fig.show='hide'}
+pml <- phangorn::pml(tree_acctran, data = Laurasiatherian)
+tree_pml <- phangorn::optim.pml(pml, data = Laurasiatherian)
+plot(tree_pml, cex = 0.8)
+```
+
+![Optimized tree](unnamed-chunk-12-1.png)
+
+
+```{r}
+data.frame(nj = ape::branching.times(tree_nj), 
+           acctran = ape::branching.times(tree_acctran), 
+           optim_pml = ape::branching.times(tree_pml$tree))
+```
+
+## Using OpenTree topology:
+
+```{r}
+# ape::comparePhylo(x = tree_nj, y = tree_acctran)
+
+otol_acctran <- phangorn::acctran(tree = ape::unroot(topology), 
+                                  data = Laurasiatherian)
+
+# get likelihood of acctran branch lengths and alignment
+otol_pml <- phangorn::pml(otol_acctran, data = Laurasiatherian)
+# optimize branch lengths
+otol_optim <-  phangorn::optim.pml(otol_pml)
+
+data.frame(otol_acctran = ape::branching.times(otol_acctran), 
+           otol_optim_pml = ape::branching.times(otol_optim$tree))
+```
+
+```{r, fig.show='hide'}
+plot(otol_pml, main="ACCTRAN branches", cex = 0.8)   # top = default 
+```
+
+![ACCTRAN tree](unnamed-chunk-15-1.png)
+
+```{r, fig.show='hide'}
+plot(otol_optim, main="optimized branches", cex = 0.8)   # bottom = optimized branch lengths
+```
+
+![Optimized tree](unnamed-chunk-16-1.png)
