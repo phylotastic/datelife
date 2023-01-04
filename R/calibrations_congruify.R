@@ -157,7 +157,7 @@ congruify_and_mrca_multiPhylo <- function(phy,
 #' Get summary statistics of ages in a `congruifiedCalibrations` object.
 #'
 #' @description Function `summarize_congruifiedCalibrations` returns a table of
-#'   summary statistic for each node in `congruified_calibrations` argument.
+#'   summary statistics for each node in `congruified_calibrations` argument.
 #' @param congruified_calibrations A `congruifiedCalibrations` object, output of [congruify_and_mrca_multiPhylo()].
 #' @param age_column A character string indicating the name of the column to be summarized.
 #' @return A `data.frame` of summarized ages.

@@ -11,8 +11,9 @@
 #' @param chronogram Default to `TRUE`, branch lengths returned are estimated with
 #' [ape::chronoMPL()]. If `FALSE`, branch lengths returned are estimated with
 #' [phangorn::acctran()] and represent relative substitution rates.
-#' @param doML Default to `FALSE`. If `TRUE`, it does ML branch length optimization
-#' with [phangorn::optim.pml()]. Only relevant if chronogram = `TRUE`.
+#' @param doML Default to `FALSE`. If `TRUE`, it does a ML branch length optimization
+#' with [phangorn::optim.pml()].
+# Only relevant if chronogram = `TRUE`.
 #' @param aligner A character vector indicating whether to use MAFFT or MUSCLE
 #' to align BOLD sequences. It is not case sensitive. Default to MUSCLE,
 #' supported using the [msa](https://bioconductor.org/packages/release/bioc/html/msa.html)
@@ -38,7 +39,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
                                 doML = FALSE,
                                 aligner = "muscle",
                                 ...) {
-  #
+  ##############################################################################
+  # checking arguments and packages
+  ##############################################################################
   if (!requireNamespace("msa", quietly=TRUE)) {
     stop("'msa' package is not installed. Please install it from Bioconductor with",
          " BiocManager::install('msa', dependencies = TRUE)")
@@ -59,6 +62,10 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
     # otol returns error with missing taxa in v3 of rotl
   }
   attr(phy, "datelife_query") <- datelife_query
+  ##############################################################################
+  # searching sequences in BOLD
+  # is function get_bold_data now
+  ##############################################################################
   message("... Searching for ", marker, " sequences from 'input' taxa available in BOLD.")
   aligner <- match.arg(arg = tolower(aligner), choices = c("muscle", "mafft"), several.ok = FALSE)
   phy$edge.length <- NULL # making sure there are no branch lengths in phy
@@ -89,6 +96,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
     return(phy)
   }
   message("BOLD sequence search done!")
+  ##############################################################################
+  # checking obtained sequences
+  ##############################################################################
   sequences$nucleotide_ATGC <- gsub("[^A,T,G,C]", "", sequences$nucleotides) # preserve good nucleotide data, i.e., only A,T,G,C
   sequences$nucleotide_ATGC_length <- unlist(lapply(sequences$nucleotide_ATGC, nchar)) # add a column in data frame, indicating the amount of good information contained in sequences#nucelotides (ATGC)
   col_number <- max(sapply(strsplit(sequences$nucleotides, ""), length))
@@ -137,6 +147,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
     taxa.to.drop <- gsub(" ", "_", taxa.to.drop)
     phy <- ape::drop.tip(phy, taxa.to.drop)
   }
+  ##############################################################################
+  # aligning
+  ##############################################################################
   if ("mafft" %in% aligner) {
     message("... Aligning BOLD sequences with MAFFT.")
     alignment <- ape::as.DNAbin(final.sequences)
@@ -156,7 +169,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
     message("MUSCLE alignment done!")
     # alignment MUST BE OF CLASS phyDat TO BE READ BY ACCTRAN on next step
   }
-
+  ##############################################################################
+  # branch length estimation, using topology in phy
+  ##############################################################################
   message("... Estimating tree with PML.")
   xx <- phangorn::acctran(ape::multi2di(phy), alignment)
   pml.object <- phangorn::pml(xx, data = alignment)
@@ -167,6 +182,9 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
     phy <- pml.object$tree
   }
   message("PML tree obtained!")
+  ##############################################################################
+  # dating
+  ##############################################################################
   if (chronogram) {
     message("... Dating PML tree with chronoMPL.")
     pml.object$tree <- ape::chronoMPL(pml.object$tree, se = FALSE, test = FALSE)
@@ -186,7 +204,7 @@ make_bold_otol_tree <- function(input = c("Rhea americana", "Struthio camelus", 
           optRooted = TRUE,
           optQ = TRUE
         )$tree
-        message("chronoPML chornogram optimized!")
+        message("chronoPML chronogram optimized!")
       }
     }
   }
