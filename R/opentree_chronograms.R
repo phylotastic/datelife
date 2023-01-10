@@ -74,7 +74,6 @@ update_datelife_cache <- function(write = TRUE,
 #' This includes opentree chronograms, contributors, treebase and curators
 #' For speed, datelife caches chronograms and other information. Running this (within the checked out version of datelife) will refresh these. Then git commit and git push them back
 #' @return None
-#' @export
 update_all_cached <- function() {
   opentree_chronograms <- get_opentree_chronograms()
   usethis::use_data(opentree_chronograms, overwrite = TRUE)

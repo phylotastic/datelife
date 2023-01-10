@@ -201,7 +201,6 @@ make_otol_associations <- function() {
 #' Find all authors and where they have deposited their trees
 #' @param outputfile Path including file name. NULL to prevent saving.
 #' @return a `data.frame` of "person" and "urls".
-#' @export
 make_all_associations <- function(outputfile = "depositorcache.RData") {
   tb <- make_treebase_associations()
   ot <- make_otol_associations()

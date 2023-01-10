@@ -1,8 +1,8 @@
-## New submission v0.6.6
-This is mainly a maintainace submission where I have:
+## New submission v0.6.7
+This is a new submission where I have:
 
-* fixed an error from an example coming up on Linux platforms
-* fixed a couple bugs
+* added a vignette
+*
 
 Thanks!
 

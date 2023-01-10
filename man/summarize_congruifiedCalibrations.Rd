@@ -16,5 +16,5 @@ A \code{data.frame} of summarized ages.
 }
 \description{
 Function \code{summarize_congruifiedCalibrations} returns a table of
-summary statistic for each node in \code{congruified_calibrations} argument.
+summary statistics for each node in \code{congruified_calibrations} argument.
 }
