@@ -1,7 +1,7 @@
 ## New submission v0.6.7
 This is a new submission where I have:
 
-* added a vignette
+* added vignettes
 *
 
 Thanks!

@@ -4,7 +4,13 @@
 #' @inheritParams make_mrbayes_runfile
 #' @return A `phylo` object with branch lengths proportional to time. It saves all mrBayes outputs in the working directory.
 #' @export
-make_mrbayes_tree <- function(constraint = NULL, taxa = NULL, ncalibration = NULL, missing_taxa = NULL, age_distribution = "fixed", root_calibration = FALSE, mrbayes_output_file = "mrbayes_run.nexus") {
+make_mrbayes_tree <- function(constraint = NULL,
+                              taxa = NULL,
+                              ncalibration = NULL,
+                              missing_taxa = NULL,
+                              age_distribution = "fixed",
+                              root_calibration = FALSE,
+                              mrbayes_output_file = "mrbayes_run.nexus") {
   make_mrbayes_runfile(constraint = constraint, taxa = taxa, ncalibration = ncalibration, age_distribution = age_distribution, root_calibration = root_calibration, missing_taxa = missing_taxa, mrbayes_output_file = mrbayes_output_file)
   message("Running MrBayes. This might take a while.")
   run_mrbayes(mrbayes_output_file = mrbayes_output_file)
@@ -12,7 +18,7 @@ make_mrbayes_tree <- function(constraint = NULL, taxa = NULL, ncalibration = NUL
   message("Done.")
   if (length(mrbayes_contre) == 1) {
     if (is.na(mrbayes_contre)) {
-      stop("MrBayes ran but output files cannot be found.", "\n", "  Please check the log file for errors.")
+      stop("MrBayes ran, but output files cannot be found.", "\n", "  Please check the log file for errors.")
     }
   }
   return(mrbayes_contre)
@@ -25,7 +31,13 @@ make_mrbayes_tree <- function(constraint = NULL, taxa = NULL, ncalibration = NUL
 #' @param mrbayes_output_file A character vector specifying the name of mrBayes run file and outputs (can specify directory too).
 #' @return A MrBayes block run file in nexus format.
 #' @export
-make_mrbayes_runfile <- function(constraint = NULL, taxa = NULL, ncalibration = NULL, missing_taxa = NULL, age_distribution = "fixed", root_calibration = FALSE, mrbayes_output_file = "mrbayes_run.nexus") {
+make_mrbayes_runfile <- function(constraint = NULL,
+                                 taxa = NULL,
+                                 ncalibration = NULL,
+                                 missing_taxa = NULL,
+                                 age_distribution = "fixed",
+                                 root_calibration = FALSE,
+                                 mrbayes_output_file = "mrbayes_run.nexus") {
   if (!is.null(constraint)) {
     # constraint <- phylo_tiplabel_space_to_underscore(constraint)
     node_constraints <- get_mrbayes_node_constraints(constraint = constraint, taxa = taxa, ncalibration = ncalibration, age_distribution = age_distribution, root_calibration = root_calibration, missing_taxa = missing_taxa)
@@ -151,7 +163,14 @@ run_mrbayes <- function(mrbayes_output_file = NULL) {
 #' @param clockratepr A character vector indicating the clockrateprior to be used.
 #' @return A set of MrBayes constraints and/or calibration commands printed in console as character strings or as a text file specified in mrbayes_constraints_file.
 #' @export
-get_mrbayes_node_constraints <- function(constraint = NULL, taxa = NULL, missing_taxa = NULL, ncalibration = NULL, age_distribution = "fixed", root_calibration = FALSE, mrbayes_constraints_file = NULL, clockratepr = "prset clockratepr = fixed(1);") {
+get_mrbayes_node_constraints <- function(constraint = NULL,
+                                         taxa = NULL,
+                                         missing_taxa = NULL,
+                                         ncalibration = NULL,
+                                         age_distribution = "fixed",
+                                         root_calibration = FALSE,
+                                         mrbayes_constraints_file = NULL,
+                                         clockratepr = "prset clockratepr = fixed(1);") {
   stop_flag <- TRUE
   if (is.list(constraint) & "descendant_tips_label" %in% names(constraint)) {
     stop_flag <- FALSE
