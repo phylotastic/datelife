@@ -7,9 +7,8 @@ output.}
 \usage{
 clean_taxon_info_children(
   taxon_info,
-  invalid = c("barren", "extinct", "uncultured", "major_rank_conflict",
-    "incertae_sedis", "unplaced", "conflict", "environmental", "not_otu", "hidden",
-    "hybrid")
+  invalid = c("barren", "extinct", "uncultured", "major_rank_conflict", "incertae_sedis",
+    "unplaced", "conflict", "environmental", "not_otu", "hidden", "hybrid")
 )
 }
 \arguments{

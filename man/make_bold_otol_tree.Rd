@@ -33,8 +33,8 @@ used for branch length estimation.}
 \code{\link[ape:chronoMPL]{ape::chronoMPL()}}. If \code{FALSE}, branch lengths returned are estimated with
 \code{\link[phangorn:parsimony]{phangorn::acctran()}} and represent relative substitution rates.}
 
-\item{doML}{Default to \code{FALSE}. If \code{TRUE}, it does ML branch length optimization
-with \code{\link[phangorn:pml]{phangorn::optim.pml()}}. Only relevant if chronogram = \code{TRUE}.}
+\item{doML}{Default to \code{FALSE}. If \code{TRUE}, it does a ML branch length optimization
+with \code{\link[phangorn:pml]{phangorn::optim.pml()}}.}
 
 \item{aligner}{A character vector indicating whether to use MAFFT or MUSCLE
 to align BOLD sequences. It is not case sensitive. Default to MUSCLE,
