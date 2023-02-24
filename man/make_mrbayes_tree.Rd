@@ -20,7 +20,11 @@ make_mrbayes_tree(
 
 \item{taxa}{A character vector with taxon names to be maintained in tree}
 
-\item{ncalibration}{The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.}
+\item{ncalibration}{The node calibrations: a phylo object with branch lengths
+proportional to time; in this case all nodes from ncalibration will be used
+as calibration points. Alternatively, a list with two elements: the first is
+a character vector with node names from phy to calibrate; the second is a numeric
+vector with the corresponding ages to use as calibrations.}
 
 \item{missing_taxa}{A tree, a data frame or a vector enlisting all missing taxa you want to include.
 \describe{
@@ -46,12 +50,14 @@ By default, a 95 CI sd is used.}
 Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.}
 }}
 
-\item{root_calibration}{Used to set a calibration at the root or not. Default to FALSE. Only relevant if ncalibration is specified.}
+\item{root_calibration}{Used to set a calibration at the root or not. Default
+to FALSE. Only relevant if ncalibration is specified.}
 
 \item{mrbayes_output_file}{A character vector specifying the name of mrBayes run file and outputs (can specify directory too).}
 }
 \value{
-A \code{phylo} object with branch lengths proportional to time. It saves all mrBayes outputs in the working directory.
+A \code{phylo} object with branch lengths proportional to time. It saves all
+mrBayes outputs in the working directory.
 }
 \description{
 Take a constraint tree and use mrBayes to get node ages and branch lengths
