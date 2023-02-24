@@ -37,4 +37,4 @@ renv
 renv.lock
 pkgdown/
 inst/CITATION.cff
-cache
+cache/.
