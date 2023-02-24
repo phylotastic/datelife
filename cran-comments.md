@@ -1,8 +1,8 @@
 ## New submission v0.6.7
 This is a new submission where I have:
 
-* added vignettes
-*
+* added vignette for bold data workflow (precomputed, so cache folder is buildignored)
+*  
 
 Thanks!
 

@@ -53,6 +53,7 @@ Imports:
     knitcitations,
     phylobase,
     taxize,
+    treebase,
     utils,
     httr,
     plyr,
