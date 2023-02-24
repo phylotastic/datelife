@@ -2,7 +2,8 @@
 #' given a set of node calibrations without any data.
 # we can add the option to use data and no constraint tree
 #' @inheritParams make_mrbayes_runfile
-#' @return A `phylo` object with branch lengths proportional to time. It saves all mrBayes outputs in the working directory.
+#' @return A `phylo` object with branch lengths proportional to time. It saves all
+#'   mrBayes outputs in the working directory.
 #' @export
 make_mrbayes_tree <- function(constraint = NULL,
                               taxa = NULL,
@@ -11,7 +12,13 @@ make_mrbayes_tree <- function(constraint = NULL,
                               age_distribution = "fixed",
                               root_calibration = FALSE,
                               mrbayes_output_file = "mrbayes_run.nexus") {
-  make_mrbayes_runfile(constraint = constraint, taxa = taxa, ncalibration = ncalibration, age_distribution = age_distribution, root_calibration = root_calibration, missing_taxa = missing_taxa, mrbayes_output_file = mrbayes_output_file)
+  make_mrbayes_runfile(constraint = constraint,
+                       taxa = taxa,
+                       ncalibration = ncalibration,
+                       age_distribution = age_distribution,
+                       root_calibration = root_calibration,
+                       missing_taxa = missing_taxa,
+                       mrbayes_output_file = mrbayes_output_file)
   message("Running MrBayes. This might take a while.")
   run_mrbayes(mrbayes_output_file = mrbayes_output_file)
   mrbayes_contre <- tryCatch(ape::read.nexus(paste0(mrbayes_output_file, ".con.tre")), error = function(e) NA)
@@ -40,7 +47,12 @@ make_mrbayes_runfile <- function(constraint = NULL,
                                  mrbayes_output_file = "mrbayes_run.nexus") {
   if (!is.null(constraint)) {
     # constraint <- phylo_tiplabel_space_to_underscore(constraint)
-    node_constraints <- get_mrbayes_node_constraints(constraint = constraint, taxa = taxa, ncalibration = ncalibration, age_distribution = age_distribution, root_calibration = root_calibration, missing_taxa = missing_taxa)
+    node_constraints <- get_mrbayes_node_constraints(constraint = constraint,
+                                                     taxa = taxa,
+                                                     ncalibration = ncalibration,
+                                                     age_distribution = age_distribution,
+                                                     root_calibration = root_calibration,
+                                                     missing_taxa = missing_taxa)
     og <- tree_get_singleton_outgroup(tree = constraint) # if(is.null(outgroup))
   } else {
     stop("constraint is NULL")
@@ -147,7 +159,11 @@ run_mrbayes <- function(mrbayes_output_file = NULL) {
 #' @param constraint The constraint tree: a phylo object or a newick character string, with or without branch lengths.
 #' @param taxa A character vector with taxon names to be maintained in tree
 #' @inheritParams missing_taxa_check
-#' @param ncalibration The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.
+#' @param ncalibration The node calibrations: a phylo object with branch lengths
+#'   proportional to time; in this case all nodes from ncalibration will be used
+#'   as calibration points. Alternatively, a list with two elements: the first is
+#'   a character vector with node names from phy to calibrate; the second is a numeric
+#'   vector with the corresponding ages to use as calibrations.
 #' @param age_distribution A character string specifying the type of calibration.
 #' Only "fixed" and "uniform" are implemented for now.
 #' \describe{
@@ -158,10 +174,13 @@ run_mrbayes <- function(mrbayes_output_file = NULL) {
 #' 	 \item{uniform}{The age given in ncalibration will be used as mean age.
 #' 		Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.}
 #' }
-#' @param root_calibration Used to set a calibration at the root or not. Default to FALSE. Only relevant if ncalibration is specified.
-#' @param mrbayes_constraints_file NULL or a character vector indicating the name of mrbayes constraint and/or calibration block file.
+#' @param root_calibration Used to set a calibration at the root or not. Default
+#'   to FALSE. Only relevant if ncalibration is specified.
+#' @param mrbayes_constraints_file NULL or a character vector indicating the name
+#'   of mrbayes constraint and/or calibration block file.
 #' @param clockratepr A character vector indicating the clockrateprior to be used.
-#' @return A set of MrBayes constraints and/or calibration commands printed in console as character strings or as a text file specified in mrbayes_constraints_file.
+#' @return A set of MrBayes constraints and/or calibration commands printed in console
+#'   as character strings or as a text file specified in mrbayes_constraints_file.
 #' @export
 get_mrbayes_node_constraints <- function(constraint = NULL,
                                          taxa = NULL,

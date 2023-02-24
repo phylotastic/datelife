@@ -34,7 +34,11 @@ constraint tree to which each taxon will be assigned.}
 They will be added at random to the constraint tree.}
 }}
 
-\item{ncalibration}{The node calibrations: a phylo object with branch lengths proportional to time; in this case all nodes from ncalibration will be used as calibration points. Alternatively, a list with two elements: the first is a character vector with node names from phy to calibrate; the second is a numeric vector with the corresponding ages to use as calibrations.}
+\item{ncalibration}{The node calibrations: a phylo object with branch lengths
+proportional to time; in this case all nodes from ncalibration will be used
+as calibration points. Alternatively, a list with two elements: the first is
+a character vector with node names from phy to calibrate; the second is a numeric
+vector with the corresponding ages to use as calibrations.}
 
 \item{age_distribution}{A character string specifying the type of calibration.
 Only "fixed" and "uniform" are implemented for now.
@@ -47,14 +51,17 @@ By default, a 95 CI sd is used.}
 Where min_age = 0.9 * mean age, and max_age = 1.1 * mean age.}
 }}
 
-\item{root_calibration}{Used to set a calibration at the root or not. Default to FALSE. Only relevant if ncalibration is specified.}
+\item{root_calibration}{Used to set a calibration at the root or not. Default
+to FALSE. Only relevant if ncalibration is specified.}
 
-\item{mrbayes_constraints_file}{NULL or a character vector indicating the name of mrbayes constraint and/or calibration block file.}
+\item{mrbayes_constraints_file}{NULL or a character vector indicating the name
+of mrbayes constraint and/or calibration block file.}
 
 \item{clockratepr}{A character vector indicating the clockrateprior to be used.}
 }
 \value{
-A set of MrBayes constraints and/or calibration commands printed in console as character strings or as a text file specified in mrbayes_constraints_file.
+A set of MrBayes constraints and/or calibration commands printed in console
+as character strings or as a text file specified in mrbayes_constraints_file.
 }
 \description{
 Makes a block of node constraints and node calibrations for a MrBayes run file

@@ -44,7 +44,6 @@ get_bold_data <- function(input = c("Rhea americana", "Struthio camelus", "Gallu
   ##############################################################################
   message("---> Searching for ", marker,
           " sequences available in the Barcode of Life Database (BOLD) for 'input' taxon names.")
-  aligner <- match.arg(arg = tolower(aligner), choices = c("muscle", "mafft"), several.ok = FALSE)
   phy$edge.length <- NULL # making sure there are no branch lengths in phy
   phy$tip.label <- gsub(" ", "_", phy$tip.label) # so phangorn::acctran works
   bold_input <- gsub("_", " ", phy$tip.label) # so bold search works
