@@ -31,6 +31,9 @@
     <loc>http://phylotastic.org/datelife/articles/make_datelife_query.html</loc>
   </url>
   <url>
+    <loc>http://phylotastic.org/datelife/articles/making_bold_trees.html</loc>
+  </url>
+  <url>
     <loc>http://phylotastic.org/datelife/authors.html</loc>
   </url>
   <url>
@@ -185,6 +188,9 @@
   </url>
   <url>
     <loc>http://phylotastic.org/datelife/reference/get_biggest_phylo.html</loc>
+  </url>
+  <url>
+    <loc>http://phylotastic.org/datelife/reference/get_bold_data.html</loc>
   </url>
   <url>
     <loc>http://phylotastic.org/datelife/reference/get_calibrations_datelifequery.html</loc>
