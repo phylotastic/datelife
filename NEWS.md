@@ -5,7 +5,8 @@ DONE:
 -->
 
 # datelife v0.6.7
-
+  - added vignette for bold data workflow
+  - `use_calibrations_bladj.matchedCalibrations()` 
 
 # datelife v0.6.6
   - when congruification fails, return `NA` and produce a warning on functions that use `geiger::congruify.phylo()`:

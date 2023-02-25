@@ -2,7 +2,7 @@
 This is a new submission where I have:
 
 * added vignette for bold data workflow (precomputed, so cache folder is buildignored)
-*  
+* added warning when using random age for the root
 
 Thanks!
 
