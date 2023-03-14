@@ -16,7 +16,13 @@ names in \code{phy}, usually obtained with \code{\link[=get_all_calibrations]{ge
 
 \item{type}{The type of age to use as calibration. Options are "median", "mean", "min", or "max".}
 
-\item{root_age}{Not implemented yet. Numeric specifying the age of the root. If there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10\% more than the age of the calibration.}
+\item{root_age}{Numeric specifying an age for the root, provided by the user.
+Only used if there are no time calibrations for the root node in the chronograms database.
+If \code{NULL} or not numeric, the maximum calibration age plus one unit of the sd
+(calculated with \code{\link[stats:sd]{stats::sd()}})
+of all node ages available for the tree will be used as root calibration.
+If there is only one calibration available for the whole tree, the root
+node age will be proportional to 1.1 of the age of that calibration.}
 }
 \value{
 A \code{phylo} object with branch lengths proportional to time.
