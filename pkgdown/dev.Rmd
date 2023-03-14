@@ -71,7 +71,7 @@ pkgdown::build_site()
 ```
 
 
-#### _Releasing to CRAN_
+#### _Preparing a CRAN release_
 
 ##### _**Updating GitHub actions R CMD check**_
 
@@ -124,6 +124,15 @@ cran_prep <- check_for_cran()
 cran_prep$cran_summary()
 ```
 
+To [check for URL validity](https://blog.r-hub.io/2020/12/01/url-checks/) and on Windows OS, use:
+
+```r
+devtools::check_win_release()
+devtools::check_win_devel()
+```
+
+#### _Releasing to CRAN_
+
 To submit to CRAN call:
 
 ```
@@ -131,9 +140,3 @@ devtools::release()
 ```
 
 and answer the prompted questions. If the answer to all of these is _yes_, the package will be submitted to CRAN :rocket:
-
-To [check for URL validity](https://blog.r-hub.io/2020/12/01/url-checks/) specifically, use:
-
-```r
-devtools::check_win_release()
-```
