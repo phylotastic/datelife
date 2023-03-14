@@ -6,8 +6,9 @@
 #' @param type The type of age to use as calibration. Options are "median", "mean", "min", or "max".
 #' @param root_age Numeric specifying an age for the root, provided by the user.
 #'        Only used if there are no time calibrations for the root node in the chronograms database.
-#'        If NULL or not numeric, the maximum calibration age plus one unit of the
-#'        mean of differences between ages available for the tree will be used as root calibration.
+#'        If `NULL` or not numeric, the maximum calibration age plus one unit of the sd
+#### '    At some point I tried using the mean of differences between ages available for the tree
+#'        of all node ages available for the tree will be used as root calibration.
 #'        If there is only one calibration available for the whole tree, the root
 #'        node age will be proportional to 1.1 of the age of that calibration.
 #' @return A `phylo` object with branch lengths proportional to time.
@@ -64,9 +65,10 @@ use_calibrations_bladj.matchedCalibrations <- function(calibrations,
   if (!root_node_name %in% node_names) {
     warning("An age for the root is not available in the data set.")
     # assign a RANDOM age for the root if none is provided by the user:
-    if is.null(root_age) {
+    if (is.null(root_age)) {
       if (length(node_ages) > 1) {
-        root_age <- max(node_ages) + mean(abs(diff(sort(node_ages))))
+        root_age <- max(node_ages) + sd(node_ages)
+        # root_age <- max(node_ages) + mean(abs(diff(sort(node_ages))))
       } else {
         # if there is only one calibration the line above will give NaN
         root_age <- 1.1 * max(node_ages)
