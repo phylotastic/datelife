@@ -9,6 +9,7 @@ DONE:
   - `use_calibrations_bladj.matchedCalibrations()`:
     - can use a root age provided by the user
     - if tehre is no root age, provides a heavy warning and uses the age of the maximum calibration available plus one unit of standard deviation -- if multiple calibrations available, or plus 0.1*calibration age if only one calibration is available.
+  - update links in `pkgdown/badges.Rmd` and `pkgdown/presentation.Rmd`
 
 # datelife v0.6.6
   - when congruification fails, return `NA` and produce a warning on functions that use `geiger::congruify.phylo()`:

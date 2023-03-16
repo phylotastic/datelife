@@ -14,4 +14,6 @@ experts and non-experts in the field alike.
 You can install the `datelife` R package on your own computer and use it locally.
 
 If you do not want/have time to deal with installation and R code, you can use
-[DateLife's interactive website application](http://datelife.opentreeoflife.org/query/).
+[DateLife's interactive website application]().
+
+<!-- http://datelife.opentreeoflife.org/query/ -->

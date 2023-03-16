@@ -4,20 +4,20 @@
 [![R-CMD-check](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)-->
 <!-- Stable status -->
 [![CRAN status](https://www.r-pkg.org/badges/version/datelife)](https://CRAN.R-project.org/package=datelife)
-[![CRAN checks results](https://cranchecks.info/badges/worst/datelife)](https://cran.r-project.org/web/checks/check_results_datelife.html)
+[![CRAN checks results](https://cranchecks.info/badges/worst/datelife)](https://cran-archive.r-project.org/web/checks/2023/2023-02-23_check_results_datelife.html)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/datelife)](https://www.r-pkg.org/pkg/datelife)
 [![DOI](https://zenodo.org/badge/23036/phylotastic/datelife.svg)](https://zenodo.org/badge/latestdoi/23036/phylotastic/datelife)
 
 <!-- Development status -->
-![GitHub master branch package version](https://img.shields.io/github/r-package/v/phylotastic/datelife/master?color=y&label=GitHub%40master)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/phylotastic/datelife/R-CMD-check)
+[![GitHub master branch package version](https://img.shields.io/github/r-package/v/phylotastic/datelife/master?color=y&label=GitHub%40master)](https://github.com/phylotastic/datelife)
+[![GitHub R-CMD check Status](https://img.shields.io/github/workflow/status/phylotastic/datelife/R-CMD-check)](https://github.com/phylotastic/datelife/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://app.codecov.io/gh/phylotastic/datelife)
 [![Github Open Issues](https://img.shields.io/github/issues-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues)
 [![Github Closed Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues?q=is%3Aissue+is%3Aclosed)
 
 <!-- Funding -->
-[![NSF-1458603](https://img.shields.io/badge/NSF-1458603-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458603)
-[![NSF-0905606](https://img.shields.io/badge/NSF-0905606-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=0905606)
-[![NSF-1458572](https://img.shields.io/badge/NSF-1458572-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458572)
+[![NSF-1458603](https://img.shields.io/badge/NSF-1458603-white.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1458603)
+[![NSF-0905606](https://img.shields.io/badge/NSF-0905606-white.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=0905606)
+[![NSF-1458572](https://img.shields.io/badge/NSF-1458572-white.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1458572)
 
 <!-- badges: end -->
