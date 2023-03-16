@@ -3,25 +3,28 @@
 
 <img src='https://github.com/phylotastic/datelife/raw/master/man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
 
+<!--
+# BADGES DEV
+install.packages("badger")
+library(badger)
+badge_github_actions("phylotastic/datelife")
+badge_cran_checks("phylotastic/datelife")
+-->
 <!-- badges: start -->
-<!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)
-[![R-CMD-check](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)-->
 <!-- Stable status -->
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/datelife)](https://CRAN.R-project.org/package=datelife)
-[![CRAN checks
-results](https://cranchecks.info/badges/worst/datelife)](https://cran.r-project.org/web/checks/check_results_datelife.html)
 [![CRAN RStudio mirror
 downloads](https://cranlogs.r-pkg.org/badges/datelife)](https://www.r-pkg.org/pkg/datelife)
 [![DOI](https://zenodo.org/badge/23036/phylotastic/datelife.svg)](https://zenodo.org/badge/latestdoi/23036/phylotastic/datelife)
 
 <!-- Development status -->
 
-![GitHub master branch package
-version](https://img.shields.io/github/r-package/v/phylotastic/datelife/master?color=y&label=GitHub%40master)
-![GitHub Workflow
-Status](https://img.shields.io/github/workflow/status/phylotastic/datelife/R-CMD-check)
+[![GitHub master branch package
+version](https://img.shields.io/github/r-package/v/phylotastic/datelife/master?color=y&label=GitHub%40master)](https://github.com/phylotastic/datelife)
+[![GitHub R-CMD-check
+Status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions/)
 [![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://app.codecov.io/gh/phylotastic/datelife)
 [![Github Open
 Issues](https://img.shields.io/github/issues-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues)
@@ -30,9 +33,9 @@ Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg
 
 <!-- Funding -->
 
-[![NSF-1458603](https://img.shields.io/badge/NSF-1458603-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458603)
-[![NSF-0905606](https://img.shields.io/badge/NSF-0905606-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=0905606)
-[![NSF-1458572](https://img.shields.io/badge/NSF-1458572-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458572)
+[![NSF-1458603](https://img.shields.io/badge/NSF-1458603-white.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1458603)
+[![NSF-0905606](https://img.shields.io/badge/NSF-0905606-white.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=0905606)
+[![NSF-1458572](https://img.shields.io/badge/NSF-1458572-white.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1458572)
 
 <!-- badges: end -->
 
@@ -57,8 +60,9 @@ You can install the `datelife` R package on your own computer and use it
 locally.
 
 If you do not want/have time to deal with installation and R code, you
-can use [DateLife’s interactive website
-application](http://datelife.opentreeoflife.org/query/).
+can use [DateLife’s interactive website application]().
+
+<!-- http://datelife.opentreeoflife.org/query/ -->
 
 ## Documentation topics:
 
@@ -99,9 +103,9 @@ the accompanying paper:
 
 <p>
 O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K,
-Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022).
+Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2023).
 <em>datelife: Scientific Data on Time of Lineage Divergence for Your
-Taxa</em>. R package version 0.6.5,
+Taxa</em>. R package version 0.6.7,
 <a href="https://doi.org/10.5281/zenodo.593938">https://doi.org/10.5281/zenodo.593938</a>.
 </p>
 <p>
