@@ -1,8 +1,10 @@
 ## New submission v0.6.7
-This is a new submission where I have:
+This is a new submission adter the package was archived because of an unavailable dependecy.
+The dependecy is availabel again, and I have made a couple update to the package:
 
 * added vignette for bold data workflow (precomputed, so cache folder is buildignored)
-* added warning when using random age for the root
+* added some warnings when using random age for the root
+
 
 Thanks!
 
@@ -44,12 +46,26 @@ All the packages imported are needed for the datelife workflow.
 * Note 2
 
 ```
-Found the following (possibly) invalid DOIs:
-  DOI: 10.1111/2041-210X.12051
-    From: DESCRIPTION
-    Status: Service Unavailable
-    Message: 503
+Possibly misspelled words in DESCRIPTION:
+  BLADJ (32:15)
+  Britton (33:6)
+  Criscuolo (24:18)
+  DateLife (21:62)
+  Huelsenbeck (33:71)
+  O'Meara (35:9)
+  PATHd (32:79)
+  Ronquist (34:9)
+  SDM (23:67)
+  Schenk (29:50)
+  al (24:31, 26:61, 31:19, 32:30, 33:17)
+  chronogram (22:61)
+  chronograms (19:43, 23:14, 25:26)
+  congruification (30:76)
+  et (24:28, 26:58, 31:16, 32:27, 33:14)
+  mrBayes (33:62)
+  phylogenetic (19:62, 28:13)
+  treePL (34:69)
 ```
 **Comments**: <br/>
 
-The DOI is functional
+All these words are OK.
