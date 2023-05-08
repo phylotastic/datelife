@@ -57,12 +57,12 @@ and non-experts in the field alike.
 ## How can you use `datelife`?
 
 You can install the `datelife` R package on your own computer and use it
-locally.
+locally. You can find instructions for a local installation below.
 
 If you do not want/have time to deal with installation and R code, you
 can use [DateLife’s interactive website
-application](http://phylotastic.org/datelife/articles/404.html).
-However, the website is not up at the moment, apologies.
+application](https://github.com/phylotastic/datelifedocker). Note that
+the website is not live at the moment, apologies.
 
 <!-- http://datelife.opentreeoflife.org/query/ -->
 <!--
