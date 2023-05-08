@@ -1,6 +1,6 @@
 ## New submission v0.6.7
-This is a new submission adter the package was archived because of an unavailable dependecy.
-The dependecy is availabel again, and I have made a couple update to the package:
+This is a new submission, package was archived on CRAN after because of an unavailable dependecy, `phylocomr`.
+The dependecy is available again, and I have made a couple updates to the package:
 
 * added vignette for bold data workflow (precomputed, so cache folder is buildignored)
 * added some warnings when using random age for the root
@@ -13,7 +13,7 @@ Luna Sanchez
 
 ## Test environments:
 
-* local OS X install, R 4.2.0
+* local OS X install, R 4.2.2
 * macOS Big Sur 10.16, x86_64-apple-darwin17.0, R 4.2.2
 * Ubuntu 20.04.5, x86_64-pc-linux-gnu (github actions), R 4.2.2
 * Windows Server x64 (build 20348), x86_64-w64-mingw32 (github actions), R 4.2.2
@@ -25,7 +25,7 @@ Luna Sanchez
 
 ## R CMD check results
 
-0 errors ✔ | 0 warnings ✔ | 2 notes ✖
+0 errors ✔ | 0 warnings ✔ | 4 notes ✖
 
 * Note 1
 
@@ -69,3 +69,29 @@ Possibly misspelled words in DESCRIPTION:
 **Comments**: <br/>
 
 All these words are OK.
+
+* Note 3
+
+```
+CRAN repository db overrides:
+  X-CRAN-Comment: Archived on 2023-02-24 as requires archived package
+    'phylocomr'.
+```
+
+**Comments**: <br/>
+
+Package phylocomr is available on CRAn again.
+
+* Note 4
+
+```
+Found the following (possibly) invalid DOIs:
+  DOI: 10.1111/2041-210X.12051
+    From: DESCRIPTION
+    Status: Forbidden
+    Message: 403
+```
+
+**Comments**: <br/>
+
+The DOI is correct.
