@@ -8,7 +8,7 @@ DONE:
   - added vignette for bold data workflow
   - `use_calibrations_bladj.matchedCalibrations()`:
     - can use a root age provided by the user
-    - if tehre is no root age, provides a heavy warning and uses the age of the maximum calibration available plus one unit of standard deviation -- if multiple calibrations available, or plus 0.1*calibration age if only one calibration is available.
+    - if there is no root age, provides a heavy warning and uses the age of the maximum calibration available plus one unit of standard deviation -- if multiple calibrations available, or plus 0.1*calibration age if only one calibration is available.
   - update links in `pkgdown/badges.Rmd` and `pkgdown/presentation.Rmd`
 
 # datelife v0.6.6
@@ -21,7 +21,7 @@ DONE:
     - correctly assigns congruified `phy` as attribute
   - `use_calibrations_bladj.matchedCalibrations()` correctly uses `calibrations` argument
   - `get_ott_children()` has error handling for when OpenTree APIs might be down, or there is no internet connection
-  - varius fixes to `make_datelife_query()` _et al._ functions
+  - various fixes to `make_datelife_query()` _et al._ functions
   - added a new vignette for making datelife query functions (allows testing various functionalities)
 
 # datelife v0.6.5
