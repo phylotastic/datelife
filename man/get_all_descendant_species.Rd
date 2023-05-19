@@ -20,5 +20,5 @@ A list of unique OTT names and OTT ids of species within the provided taxon.
 This is less thorough than get_open_tree_species(), but much faster. It uses the fact
 that something has just two names (genus and species) to assume that something is a
 single species; if it has more than two names, it is assumed to be a subspecies so
-it goes up one level in the hierarchy.
+it goes up one level in the hierarchy. It will return the subspecies and the species.
 }
