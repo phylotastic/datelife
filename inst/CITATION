@@ -2,42 +2,44 @@ citHeader("To cite package 'datelife' in publications, please use the first entr
 
 year <- format(Sys.time(), "%Y")
 vers <- paste("R package version", meta$Version)
-authors <- personList(person("Brian", "O'Meara", email = "omeara.brian@gmail.com", role = c("aut", "cre")),
-                      person("Luna L.", "Sanchez-Reyes", email = "sanchez.reyes.luna@gmail.com", role = "aut"),
-                      person("Jonathan", "Eastman", role=c("aut")),
-                      person("Tracy", "Heath", role=c("aut")),
-                      person("April", "Wright", role=c("aut")),
-                      person("Klaus", "Schliep", role=c("aut")),
-                      person("Scott", "Chamberlain", role=c("aut")),
-                      person("Peter", "Midford", role=c("aut")),
-                      person("Luke", "Harmon", role=c("aut")),
-                      person("Joseph", "Brown", role=c("aut")),
-                      person("Matt", "Pennell", role=c("aut")),
-                      person("Mike", "Alfaro", role=c("aut")))
+authors <- c(person("Brian", "O'Meara", email = "omeara.brian@gmail.com", role = c("aut", "cre")),
+             person("Luna L.", "Sanchez-Reyes", email = "sanchez.reyes.luna@gmail.com", role = "aut"),
+             person("Jonathan", "Eastman", role=c("aut")),
+             person("Tracy", "Heath", role=c("aut")),
+             person("April", "Wright", role=c("aut")),
+             person("Klaus", "Schliep", role=c("aut")),
+             person("Scott", "Chamberlain", role=c("aut")),
+             person("Peter", "Midford", role=c("aut")),
+             person("Luke", "Harmon", role=c("aut")),
+             person("Joseph", "Brown", role=c("aut")),
+             person("Matt", "Pennell", role=c("aut")),
+             person("Mike", "Alfaro", role=c("aut")),
+             person("Emily Jane", "McTavish", role=c("ctb")))
 
 authors_format <- paste(format(authors, include = c("given", "family")), collapse = ", ")
 pkg_title <- paste0(meta$Package, ": ", meta$Title)
 
-citEntry(entry="Manual",
- 		  title = pkg_title,
- 		  author =  authors,
- 		  year = year,
- 		  note = vers,
-      url = "https://doi.org/10.5281/zenodo.593938",
- 		  textVersion = paste(authors_format, year, pkg_title, vers, sep=". "))
+bibentry(bibtype = "Manual",
+ 		     title = pkg_title,
+ 		     author =  authors,
+ 		     year = year,
+ 		     note = vers,
+         url = "https://doi.org/10.5281/zenodo.593938",
+ 		     textVersion = paste(authors_format, year, pkg_title, vers, sep=". "))
 
-authors2 <- personList(person("Luna L.", "Sanchez-Reyes", email = "sanchez.reyes.luna@gmail.com"),
-                       person("Brian", "O'Meara", email = "omeara.brian@gmail.com"))
+authors2 <- c(person("Luna L.", "Sanchez-Reyes", email = "sanchez.reyes.luna@gmail.com"),
+              person("Emily Jane", "McTavish", email = "ejmctavish@ucmerced.edu"),
+              person("Brian", "O'Meara", email = "omeara.brian@gmail.com"))
 authors2_format <- paste(format(authors2, include = c("given", "family")), collapse = ", ")
 
-citEntry(entry="Article",
+bibentry(bibtype = "Article",
 	title = "datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life",
   author = authors2,
 	journal = "bioRxiv",
-  	year = "2019",
+  year = "2022",
 	volume = "782094",
 	url = "https://doi.org/10.1101/782094",
-  textVersion = paste0(authors2_format, ". 2019. datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life. bioRxiv 782094; doi: https://doi.org/10.1101/782094")
+  textVersion = paste0(authors2_format, ". 2022. datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life. bioRxiv 782094; doi: https://doi.org/10.1101/782094")
   )
 
 citFooter("As datelife is continually evolving, you may want to cite its version number. Find it with 'help(package=datelife)'.")

@@ -1,0 +1,31 @@
+---
+title: "Making a BLADJ chronogram"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{making_bladj_chronograms}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(datelife)
+library(phangorn)
+```
+
+When we have no initial branch lengths to perform a phylogenetic dating analysis,
+we can use programs like BLADJ or MrBayes that can smooth node ages in the absence
+of any genetic data.
+
+The function `use_calibrations_bladj.matchedCalibrations()` takes the output of
+function `get_all_calibrations()`:
+
+```{r eval = FALSE}
+make_bold_otol_tree(input = "Canis")
+```

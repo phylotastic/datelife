@@ -3,25 +3,28 @@
 
 <img src='man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />
 
+<!--
+# BADGES DEV
+install.packages("badger")
+library(badger)
+badge_github_actions("phylotastic/datelife")
+badge_cran_checks("phylotastic/datelife")
+-->
 <!-- badges: start -->
-<!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)
-[![R-CMD-check](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)-->
 <!-- Stable status -->
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/datelife)](https://CRAN.R-project.org/package=datelife)
-[![CRAN checks
-results](https://cranchecks.info/badges/worst/datelife)](https://cran.r-project.org/web/checks/check_results_datelife.html)
 [![CRAN RStudio mirror
 downloads](https://cranlogs.r-pkg.org/badges/datelife)](https://www.r-pkg.org/pkg/datelife)
 [![DOI](https://zenodo.org/badge/23036/phylotastic/datelife.svg)](https://zenodo.org/badge/latestdoi/23036/phylotastic/datelife)
 
 <!-- Development status -->
 
-![GitHub master branch package
-version](https://img.shields.io/github/r-package/v/phylotastic/datelife/master?color=y&label=GitHub%40master)
-![GitHub Workflow
-Status](https://img.shields.io/github/workflow/status/phylotastic/datelife/R-CMD-check)
+[![GitHub master branch package
+version](https://img.shields.io/github/r-package/v/phylotastic/datelife/master?color=y&label=GitHub%40master)](https://github.com/phylotastic/datelife)
+[![GitHub R-CMD-check
+Status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions/)
 [![codecov](https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg)](https://app.codecov.io/gh/phylotastic/datelife)
 [![Github Open
 Issues](https://img.shields.io/github/issues-raw/phylotastic/datelife.svg)](https://github.com/phylotastic/datelife/issues)
@@ -30,9 +33,9 @@ Issues](https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg
 
 <!-- Funding -->
 
-[![NSF-1458603](https://img.shields.io/badge/NSF-1458603-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458603)
-[![NSF-0905606](https://img.shields.io/badge/NSF-0905606-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=0905606)
-[![NSF-1458572](https://img.shields.io/badge/NSF-1458572-white.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1458572)
+[![NSF-1458603](https://img.shields.io/badge/NSF-1458603-white.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1458603)
+[![NSF-0905606](https://img.shields.io/badge/NSF-0905606-white.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=0905606)
+[![NSF-1458572](https://img.shields.io/badge/NSF-1458572-white.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1458572)
 
 <!-- badges: end -->
 
@@ -54,12 +57,14 @@ and non-experts in the field alike.
 ## How can you use `datelife`?
 
 You can install the `datelife` R package on your own computer and use it
-locally.
+locally. You can find instructions for a local installation below.
 
 If you do not want/have time to deal with installation and R code, you
 can use [DateLife’s interactive website
-application](http://datelife.opentreeoflife.org/query/).
+application](https://github.com/phylotastic/datelifedocker). Note that
+the website is not live at the moment, apologies.
 
+<!-- http://datelife.opentreeoflife.org/query/ -->
 <!--
 Get a phylogenetic tree with branch lengths proportional to geologic time (aka a
 _**chronogram**_) of any two or more lineages of interest to you.
@@ -107,9 +112,9 @@ the accompanying paper:
 
 <p>
 O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K,
-Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022).
+Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2023).
 <em>datelife: Scientific Data on Time of Lineage Divergence for Your
-Taxa</em>. R package version 0.6.5,
+Taxa</em>. R package version 0.6.7,
 <a href="https://doi.org/10.5281/zenodo.593938">https://doi.org/10.5281/zenodo.593938</a>.
 </p>
 <p>
@@ -193,6 +198,14 @@ with `knitr::knit()`. The following command renders the vignette
 knitr::knit("vignettes/Getting_started_with_datelife.Rmd")
 ```
 
+To update “pre-rendered” vignettes, follow [this
+blog](https://ropensci.org/blog/2019/12/08/precompute-vignettes/#the-solution-locally-knitting-rmarkdown).
+For example, to render the vignette about making trees with BOLD, do:
+
+``` r
+knitr::knit("vignettes/making_bold_trees.Rmd.orig", output = "vignettes/making_bold_trees.Rmd")
+```
+
 #### *Creating a documentation website for the package*
 
 Using `pkgdown` for this is quite straightforward and fun:
@@ -202,7 +215,7 @@ usethis::use_pkgdown()
 pkgdown::build_site()
 ```
 
-#### *Releasing to CRAN*
+#### *Preparing a CRAN release*
 
 ##### ***Updating GitHub actions R CMD check***
 
@@ -267,17 +280,23 @@ cran_prep <- check_for_cran()
 cran_prep$cran_summary()
 ```
 
-To submit to CRAN call `devtools::release()` and answer the prompted
-questions. If the answer to all of these is *yes*, the package will be
-submitted to CRAN :rocket:
-
 To [check for URL
-validity](https://blog.r-hub.io/2020/12/01/url-checks/) specifically,
-use:
+validity](https://blog.r-hub.io/2020/12/01/url-checks/) and on Windows
+OS, use:
 
 ``` r
 devtools::check_win_release()
+devtools::check_win_devel()
 ```
+
+#### *Releasing to CRAN*
+
+To submit to CRAN call:
+
+    devtools::release()
+
+and answer the prompted questions. If the answer to all of these is
+*yes*, the package will be submitted to CRAN :rocket:
 
 ## License
 

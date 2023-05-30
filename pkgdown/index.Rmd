@@ -15,6 +15,11 @@ knitr::opts_chunk$set(
 )
 IS_README <- TRUE
 library(datelife)
+on_cran <- FALSE
+cran_checks_badge <- "[![CRAN checks results](https://badges.cranchecks.info/summary/datelife.svg)](https://cran.r-project.org/web/checks/check_results_phylotastic/datelife.html)"
+cran_checks_archived <- "https://cran.r-project.org/web/checks/check_results_phylotastic/datelife.html"
+# not used for now
+website_down <- TRUE
 ```
 
 <img src='https://github.com/phylotastic/datelife/raw/master/man/figures/datelife-hexsticker-ai.png' align='right' style='width:150px' />

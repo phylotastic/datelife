@@ -22,3 +22,7 @@ sapply(list.files("figure/"), function(x){
 # figure dir is deleted
 # tip from http://theautomatic.net/2018/07/11/manipulate-files-r/
 unlink("figure", recursive = TRUE)
+
+#######################################################################
+knitr::knit("data-raw/vignettes_making_bladj_trees.Rmd",
+            output = "vignettes/making_bladj_trees.Rmd")

@@ -4,7 +4,14 @@
 #' @param calibrations A `data.frame` of secondary calibrations for any pair of taxon
 #' names in `phy`, usually obtained with [get_all_calibrations()].
 #' @param type The type of age to use as calibration. Options are "median", "mean", "min", or "max".
-#' @param root_age Not implemented yet. Numeric specifying the age of the root. If there are no calibrations for it. If NULL or not numeric, the maximum calibration plus a unit of the mean differences will be used as root calibration. If there is only one internal calibration, the root age will be set to 10% more than the age of the calibration.
+#' @param root_age Numeric specifying an age for the root, provided by the user.
+#'        Only used if there are no time calibrations for the root node in the chronograms database.
+#'        If `NULL` or not numeric, the maximum calibration age plus one unit of the sd
+#### '    At some point I tried using the mean of differences between ages available for the tree
+#'        (calculated with [stats::sd()])
+#'        of all node ages available for the tree will be used as root calibration.
+#'        If there is only one calibration available for the whole tree, the root
+#'        node age will be proportional to 1.1 of the age of that calibration.
 #' @return A `phylo` object with branch lengths proportional to time.
 #' @details
 #' The BLADJ algorithm is part of the Phylocom software, presented in Webb et al.
@@ -54,17 +61,30 @@ use_calibrations_bladj.matchedCalibrations <- function(calibrations,
   node_names <- names(node_ages)
   # length(node_names)
   root_node_name <- paste0("n", ape::Ntip(attributes(calibrations)$phy) + 1)
+  # check if the root is available in the data set
+  # if not, add a root age and name:
   if (!root_node_name %in% node_names) {
-    if (length(node_ages) > 1) {
-      root_age <- max(node_ages) + mean(abs(diff(sort(node_ages))))
-    } else {
-      # if there is only one calibration the line above will give NaN
-      root_age <- 1.1 * max(node_ages)
+    warning("An age for the root is not available in the data set.")
+    # assign a RANDOM age for the root if none is provided by the user:
+    if (is.null(root_age)) {
+      if (length(node_ages) > 1) {
+        root_age <- max(node_ages) + stats::sd(node_ages)
+        # root_age <- max(node_ages) + mean(abs(diff(sort(node_ages))))
+      } else {
+        # if there is only one calibration the line above will give NaN
+        root_age <- 1.1 * max(node_ages)
+      }
+      warn <- paste("We are using a RANDOM ROOT value of",
+                    root_age, "Myrs.")
+      warning(warn)
+      warning("You can provide an informative age for the root (from the literature)",
+              "using the argument 'root_age = `, to get a more accurate chronogram estimate.")
     }
     # add root node name and age:
     node_ages <- c(root_age, node_ages)
     node_names <- c(root_node_name, node_names)
   }
+  # create the chronogram
   chronogram <- make_bladj_tree(
     tree = attributes(calibrations)$phy, nodeages = node_ages,
     nodenames = node_names

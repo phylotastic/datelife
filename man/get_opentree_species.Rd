@@ -17,7 +17,7 @@ Used in the context of OTT to detect invalid taxon names.}
 Tree of Life only or not. Default to \code{TRUE}.}
 }
 \value{
-A list of unique OTT names and OTT ids of species withing the provided taxon.
+A list of unique OTT names and OTT ids of species within the provided taxon.
 }
 \description{
 Get all species belonging to a taxon from the Open Tree of Life Taxonomy (OTT)

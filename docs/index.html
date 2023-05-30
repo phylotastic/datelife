@@ -24,8 +24,8 @@
     and O'Meara (2012) &lt;doi:10.1093/bioinformatics/bts492&gt;).">
 <title>Scientific Data on Time of Lineage Divergence for Your Taxa • datelife</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Scientific Data on Time of Lineage Divergence for Your Taxa">
 <meta property="og:description" content="Methods and workflows to get chronograms (i.e., phylogenetic trees with branch lengths
@@ -102,9 +102,14 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><p><img src="https://github.com/phylotastic/datelife/raw/master/man/figures/datelife-hexsticker-ai.png" align="right" style="width:150px"></p>
+<!--
+# BADGES DEV
+install.packages("badger")
+library(badger)
+badge_github_actions("phylotastic/datelife")
+badge_cran_checks("phylotastic/datelife")
+-->
 <!-- badges: start -->
-<!-- [![R build status](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)
-[![R-CMD-check](https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg)](https://github.com/phylotastic/datelife/actions)-->
 <!-- Stable status -->
 
 <!-- Development status -->
@@ -123,8 +128,9 @@
 <div class="section level2">
 <h2 id="how-can-you-use-datelife">How can you use <code>datelife</code>?<a class="anchor" aria-label="anchor" href="#how-can-you-use-datelife"></a>
 </h2>
-<p>You can install the <code>datelife</code> R package on your own computer and use it locally.</p>
-<p>If you do not want/have time to deal with installation and R code, you can use <a href="http://datelife.opentreeoflife.org/query/" class="external-link">DateLife’s interactive website application</a>.</p>
+<p>You can install the <code>datelife</code> R package on your own computer and use it locally. You can find instructions for a local installation below.</p>
+<p>If you do not want/have time to deal with installation and R code, you can use <a href="https://github.com/phylotastic/datelifedocker" class="external-link">DateLife’s interactive website application</a>. Note that the website is not live at the moment, apologies.</p>
+<!-- http://datelife.opentreeoflife.org/query/ -->
 </div>
 <div class="section level2">
 <h2 id="documentation-topics">Documentation topics:<a class="anchor" aria-label="anchor" href="#documentation-topics"></a>
@@ -154,7 +160,7 @@
 </h2>
 <p>If you use <code>datelife</code> for a publication, please cite the R package and the accompanying paper:</p>
 <p>
-O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K, Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2022). <em>datelife: Scientific Data on Time of Lineage Divergence for Your Taxa</em>. R package version 0.6.5, <a href="https://doi.org/10.5281/zenodo.593938" class="external-link">https://doi.org/10.5281/zenodo.593938</a>.
+O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K, Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2023). <em>datelife: Scientific Data on Time of Lineage Divergence for Your Taxa</em>. R package version 0.6.7, <a href="https://doi.org/10.5281/zenodo.593938" class="external-link">https://doi.org/10.5281/zenodo.593938</a>.
 </p>
 <p>
 Sanchez-Reyes L, O’Meara B (2019). “datelife: Leveraging databases and analytical tools to reveal the dated Tree of Life.” <em>bioRxiv</em>, <b>782094</b>. <a href="https://doi.org/10.1101/782094" class="external-link">https://doi.org/10.1101/782094</a>.
@@ -223,15 +229,16 @@ Sanchez-Reyes L, O’Meara B (2019). “datelife: Leveraging databases and analy
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://CRAN.R-project.org/package=datelife" class="external-link"><img src="https://www.r-pkg.org/badges/version/datelife" alt="CRAN status"></a></li>
-<li><a href="https://cran.r-project.org/web/checks/check_results_datelife.html" class="external-link"><img src="https://cranchecks.info/badges/worst/datelife" alt="CRAN checks results"></a></li>
 <li><a href="https://www.r-pkg.org/pkg/datelife" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/datelife" alt="CRAN RStudio mirror downloads"></a></li>
 <li><a href="https://zenodo.org/badge/latestdoi/23036/phylotastic/datelife" class="external-link"><img src="https://zenodo.org/badge/23036/phylotastic/datelife.svg" alt="DOI"></a></li>
+<li><a href="https://github.com/phylotastic/datelife" class="external-link"><img src="https://img.shields.io/github/r-package/v/phylotastic/datelife/master?color=y&amp;label=GitHub%40master" alt="GitHub master branch package version"></a></li>
+<li><a href="https://github.com/phylotastic/datelife/actions/" class="external-link"><img src="https://github.com/phylotastic/datelife/workflows/R-CMD-check/badge.svg" alt="GitHub R-CMD-check Status"></a></li>
 <li><a href="https://app.codecov.io/gh/phylotastic/datelife" class="external-link"><img src="https://codecov.io/gh/phylotastic/datelife/branch/master/graph/badge.svg" alt="codecov"></a></li>
 <li><a href="https://github.com/phylotastic/datelife/issues" class="external-link"><img src="https://img.shields.io/github/issues-raw/phylotastic/datelife.svg" alt="Github Open Issues"></a></li>
 <li><a href="https://github.com/phylotastic/datelife/issues?q=is%3Aissue+is%3Aclosed" class="external-link"><img src="https://img.shields.io/github/issues-closed-raw/phylotastic/datelife.svg" alt="Github Closed Issues"></a></li>
-<li><a href="https://nsf.gov/awardsearch/showAward?AWD_ID=1458603" class="external-link"><img src="https://img.shields.io/badge/NSF-1458603-white.svg" alt="NSF-1458603"></a></li>
-<li><a href="https://nsf.gov/awardsearch/showAward?AWD_ID=0905606" class="external-link"><img src="https://img.shields.io/badge/NSF-0905606-white.svg" alt="NSF-0905606"></a></li>
-<li><a href="https://nsf.gov/awardsearch/showAward?AWD_ID=1458572" class="external-link"><img src="https://img.shields.io/badge/NSF-1458572-white.svg" alt="NSF-1458572"></a></li>
+<li><a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1458603" class="external-link"><img src="https://img.shields.io/badge/NSF-1458603-white.svg" alt="NSF-1458603"></a></li>
+<li><a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=0905606" class="external-link"><img src="https://img.shields.io/badge/NSF-0905606-white.svg" alt="NSF-0905606"></a></li>
+<li><a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1458572" class="external-link"><img src="https://img.shields.io/badge/NSF-1458572-white.svg" alt="NSF-1458572"></a></li>
 </ul>
 </div>
 
