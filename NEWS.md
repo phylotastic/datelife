@@ -3,6 +3,8 @@
 
 DONE:
 -->
+# datelife v0.6.8
+- fixed bug in function `extract_calibrations_phylo`
 
 # datelife v0.6.7
   - added vignette for bold data workflow

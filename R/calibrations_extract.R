@@ -92,7 +92,7 @@ extract_calibrations_phylo <- function(input = NULL,
     # 		Warning message:
     # In if (class(stock) == "phylo") { :
     # the condition has length > 1 and only the first element will be used
-    if (!inherits(local_df, "list")) {
+    if (!inherits(local_df, "data.frame")) {
       warning("Congruification failed")
       return(NA)
     }
