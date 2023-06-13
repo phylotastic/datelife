@@ -50,7 +50,7 @@ tnrs_match.default <- function(input, reference_taxonomy = "ott", ...) { # enhan
     # cat("\n") # just to make the progress bar look better
     # hardcoding Mus:
     if (sum("mus" == tolower(input)) > 0) {
-      df["mus" == tolower(input), ] <- list("mus", "Mus (genus in Deuterostomia)", FALSE, 1068778, FALSE, "SIBLING_HIGHER", 3)
+      df["mus" == tolower(input), ] <- list("mus", "Mus (genus in Deuterostomia)", FALSE, 1, 1068778, FALSE, "SIBLING_HIGHER", 3)
     }
     rownames(df)[1] <- "1"
     # df[is.na(df$unique_name),1] <- input[is.na(df$unique_name)]  # in case the unmatched input are dropped from final df
