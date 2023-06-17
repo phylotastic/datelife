@@ -131,9 +131,9 @@ summary.matchedCalibrations <- function(object, ...) {
   if (length(not_in_phy_rows) > 0) {
     not_in_phy <- object[not_in_phy_rows, ]
     in_phy <- object[-not_in_phy_rows, ]
-    message1 <- c(message1, "Not all taxon name pairs are in 'phy'.")
+    message1 <- "Not all taxon name pairs are in 'phy'."
   } else {
-    message1 <- c(message1, "All taxon name pairs are in 'phy'.")
+    message1 <- "All taxon name pairs are in 'phy'."
     not_in_phy <- NULL
     in_phy <- object
   }
@@ -141,12 +141,11 @@ summary.matchedCalibrations <- function(object, ...) {
   in_phy$reference <- as.factor(in_phy$reference)
   # is MaxAge and MinAge the same value?
   if (all(in_phy$MaxAge == in_phy$MinAge)) {
-    message1 <- c(message1,
-                  "\n'MaxAge' and 'MinAge' columns in input 'matchedCalibrations' /
-                   have the same values.")
+    message1 <- paste(message1,
+                      "\n'MaxAge' and 'MinAge' columns from matched",
+                      "calibrations have the same values.")
   }
-  message("Success!")
-  message(message1)
+  message(paste("Success!", message1))
   return(structure(list(not_in_phy = not_in_phy, in_phy = in_phy),
                    class = c("list", "summaryMatchedCalibrations")))
 }

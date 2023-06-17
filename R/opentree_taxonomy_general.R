@@ -50,7 +50,7 @@ tnrs_match.default <- function(input, reference_taxonomy = "ott", ...) { # enhan
     # cat("\n") # just to make the progress bar look better
     # hardcoding Mus:
     if (sum("mus" == tolower(input)) > 0) {
-      if (packageVersion("rotl") >= 3.1.0) {
+      if (utils::packageVersion("rotl") >= "3.1.0") {
         df["mus" == tolower(input), ] <- list("mus", "Mus (genus in Deuterostomia)", FALSE, 1, 1068778, FALSE, "SIBLING_HIGHER", 3)
       } else {
         df["mus" == tolower(input), ] <- list("mus", "Mus (genus in Deuterostomia)", FALSE, 1068778, FALSE, "SIBLING_HIGHER", 3)

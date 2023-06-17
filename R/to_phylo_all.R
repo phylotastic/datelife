@@ -98,6 +98,8 @@ summary_matrix_to_phylo_all <- function(summ_matrix,
     target_tree <- suppressMessages(get_otol_synthetic_tree(input = colnames(summ_matrix), ...))
     if (!inherits(target_tree, "phylo")) {
       # enhance: we should find a better way to do this, but it should be ok for now:
+      message(paste("Obtaining a topology from Open Tree failed."))
+      message(paste("... Converting patristic matrix to phylo."))
       target_tree <- suppressWarnings(suppressMessages(patristic_matrix_to_phylo(summ_matrix, ultrametric = TRUE)))
       # target_tree <- consensus(phyloall, p = 0.5) # can't use consensus here: bc not all trees have the same number of tips
     }

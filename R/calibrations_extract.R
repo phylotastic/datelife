@@ -92,19 +92,19 @@ extract_calibrations_phylo <- function(input = NULL,
     # 		Warning message:
     # In if (class(stock) == "phylo") { :
     # the condition has length > 1 and only the first element will be used
-    if (!inherits(local_df, "data.frame")) {
-      warning("Congruification failed")
-      return(NA)
-    }
-    local_df$reference <- names(chronograms)[i]
-    if (each) {
-      calibrations <- c(calibrations, list(local_df))
-    } else {
-      if (i == 1) {
-        calibrations <- local_df
+    if (inherits(local_df, "data.frame")) {
+      local_df$reference <- names(chronograms)[i]
+      if (each) {
+        calibrations <- c(calibrations, list(local_df))
       } else {
-        calibrations <- rbind(calibrations, local_df)
+        if (i == 1) {
+          calibrations <- local_df
+        } else {
+          calibrations <- rbind(calibrations, local_df)
+        }
       }
+    } else {
+      warning("Congruification of chronogram ", i, " failed.")
     }
   }
   ##############################################################################

@@ -4,7 +4,11 @@
 DONE:
 -->
 # datelife v0.6.8
-- fixed bug in function `extract_calibrations_phylo`
+- fix bug in function `extract_calibrations_phylo()`
+- update messages in `calibrations_match()`
+- add faster function to retrieve descendants
+- updates for new rotl version
+- fix uri in DESCRIPTION
 
 # datelife v0.6.7
   - added vignette for bold data workflow
