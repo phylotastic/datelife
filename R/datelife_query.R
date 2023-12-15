@@ -169,7 +169,11 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
           ifelse(length(cleaned_names) <= 10,
                  ".",
                  paste("... omitted ", length(cleaned_names) - 10, "taxon names.")))
-  ifelse(length(cleaned_names) < 1, message("ERROR: No names retained for search\n"), message("DateLife query done!\n"))
+  if(length(cleaned_names) < 1) {
+    message("ERROR: No names retained for search\n")
+  } else{
+    message("DateLife query made!\n")
+  } 
   return(structure(datelife_query_return, class = "datelifeQuery"))
 }
 #' Process a phylo object or a character string to determine if it's correct newick
