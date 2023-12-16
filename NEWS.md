@@ -3,6 +3,11 @@
 
 DONE:
 -->
+# datelife v0.6.9
+- fix bug in `check_ott_input()`
+- fix bug in `make_datelife_query()` when getting ott ids
+- use spaces instead of "_" to run tnrs, avoids bug from `rotl::tnrs_match_names()` v3.0.14
+
 # datelife v0.6.8
 - fix bug in function `extract_calibrations_phylo()`
 - update messages in `calibrations_match()`

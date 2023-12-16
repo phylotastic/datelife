@@ -108,7 +108,8 @@ R CMD check --as-cran datelife_0.6.0.tar.gz
 If you do not have access to different OS to test your package on, the [rhub](https://CRAN.R-project.org/package=rhub) package allows remote testing on a variety of OS with the command:
 
 ```r
-rhub::check_for_cran()
+rhub::check_for_cran(platforms = "debian-gcc-release")
+rhub::check_for_cran(platforms = "fedora-clang-devel")
 ```
 
 For more `rhub` useful workflows, check out its [documentation](https://r-hub.github.io/rhub/articles/rhub.html). For example

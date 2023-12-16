@@ -1,9 +1,8 @@
-## New submission v0.6.7
-This is a new submission, package was archived on CRAN after because of an unavailable dependecy, `phylocomr`.
-The dependecy is available again, and I have made a couple updates to the package:
-
-* added vignette for bold data workflow (precomputed, so cache folder is buildignored)
-* added some warnings when using random age for the root
+## New submission v0.6.9
+This is a new submission, where I have:
+- added tests
+- added spelling
+- updated some functions
 
 
 Thanks!
@@ -14,18 +13,17 @@ Luna Sanchez
 ## Test environments:
 
 * local OS X install, R 4.2.2
-* macOS Big Sur 10.16, x86_64-apple-darwin17.0, R 4.2.2
-* Ubuntu 20.04.5, x86_64-pc-linux-gnu (github actions), R 4.2.2
-* Windows Server x64 (build 20348), x86_64-w64-mingw32 (github actions), R 4.2.2
-* Fedora Linux, R-devel, clang, gfortran
-* Ubuntu Linux 20.04.1 LTS, R-release, GCC
-* Windows Server 2022, R-devel, 64 bit
-* Debian Linux, R-release, GCC
+* github actions: macOS Big Sur 10.16, x86_64-apple-darwin17.0, R 4.2.2
+* github actions: Ubuntu 20.04.5, x86_64-pc-linux-gnu, release, old release and development, R 4.2.2
+* github actions: Windows Server x64 (build 20348), x86_64-w64-mingw32, R 4.2.2
+* R project win builder: Windows Server 2022, 64 bit, GCC, R under development 2023-06-17 r84564 ucrt
+* rub: Fedora Linux, R-devel, clang, gfortran
+* rub: Debian Linux, R-release, GCC
 
 
 ## R CMD check results
 
-0 errors ✔ | 0 warnings ✔ | 4 notes ✖
+0 errors ✔ | 0 warnings ✔ | 3 notes ✖
 
 * Note 1
 
@@ -71,18 +69,6 @@ Possibly misspelled words in DESCRIPTION:
 All these words are OK.
 
 * Note 3
-
-```
-CRAN repository db overrides:
-  X-CRAN-Comment: Archived on 2023-02-24 as requires archived package
-    'phylocomr'.
-```
-
-**Comments**: <br/>
-
-Package phylocomr is available on CRAn again.
-
-* Note 4
 
 ```
 Found the following (possibly) invalid DOIs:
