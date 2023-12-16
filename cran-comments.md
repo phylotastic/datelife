@@ -1,5 +1,5 @@
 ## New submission v0.6.9
-This is a new submission, where I have:
+This is a maintenance submission, where I have:
 - added tests
 - added spelling
 - updated some functions

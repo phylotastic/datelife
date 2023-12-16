@@ -1,4 +1,4 @@
-pandoc: 2.19.2
+pandoc: 3.1.1
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
@@ -6,7 +6,7 @@ articles:
   fringiliidae: fringiliidae.html
   make_datelife_query: make_datelife_query.html
   making_bold_trees: making_bold_trees.html
-last_built: 2023-05-08T20:01Z
+last_built: 2023-06-19T22:39Z
 urls:
   reference: http://phylotastic.org/datelife/reference
   article: http://phylotastic.org/datelife/articles
