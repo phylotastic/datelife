@@ -90,7 +90,7 @@ check_ott_input <- function(input = NULL, ott_ids = NULL, ...) {
       message(input)
       stop("OTT ids are NULL.")
     }
-    if (is.numeric(input$ott_id) & !is.na(input$ott_id)) {
+    if (all(is.numeric(input$ott_id) & !is.na(input$ott_id))) {
       ott_ids <- input$ott_ids
       names(ott_ids) <- input$cleaned_names
     } else {

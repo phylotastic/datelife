@@ -125,7 +125,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
       species_list <- get_opentree_species(taxon_name = cleaned_names_tnrs$unique_name,
                                            ott_id = cleaned_names_tnrs$ott_id,
                                            synth_tree_only = TRUE)
-      cleaned_names <- species_list$species_names
+      cleaned_names <- unname(species_list$tnrs_names)
       ott_ids <- species_list$ott_ids
     } else {
       # example: df <- get_ott_children(ott_ids = 698424, ott_rank = "species")
@@ -169,7 +169,11 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
           ifelse(length(cleaned_names) <= 10,
                  ".",
                  paste("... omitted ", length(cleaned_names) - 10, "taxon names.")))
-  message("DateLife query done!\n")
+  if(length(cleaned_names) < 1) {
+    message("ERROR: No names retained for search\n")
+  } else{
+    message("DateLife query made!\n")
+  } 
   return(structure(datelife_query_return, class = "datelifeQuery"))
 }
 #' Process a phylo object or a character string to determine if it's correct newick
