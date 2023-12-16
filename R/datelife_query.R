@@ -87,18 +87,18 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
     cleaned_names_tnrs <- clean_tnrs(tnrs_match(input = cleaned_names),
                                      remove_nonmatches = TRUE)
     # recover original names of invalid taxa and unmatched:
+    cleaned_names <- gsub("_", " ", cleaned_names)
     ii <- !tolower(cleaned_names) %in% cleaned_names_tnrs$search_string
     cleaned_names <- c(cleaned_names_tnrs$unique_name, cleaned_names[ii])
-    cleaned_names <- gsub(" ", "_", cleaned_names)
     if (inherits(phy_new, "phylo")) {
       if (is.null(phy_new$ott_ids)) {
         # after some tests, decided to use rotl's method instead of taxize::gnr_resolve, and just output the original input and the actual query for users to check out.
         # cleaned_names <- taxize::gnr_resolve(names = cleaned_names, data_source_ids=179, fields="all")$matched_name
-        # rename the tip labels with tnrs matched names
+        # rename phy tip labels with TNRS matched names:
         ott_ids <- rep(NA, length(cleaned_names))
-        ii <- match(cleaned_names_tnrs$search_string,
-                    tolower(phy_new$tip.label))
-        phy_new$tip.label[ii] <- cleaned_names[ii]
+        ii <- match(gsub(" ", "_", cleaned_names_tnrs$search_string),
+                    tolower(gsub(" ", "_", phy_new$tip.label)))
+        phy_new$tip.label[ii] <- gsub(" ", "_", cleaned_names)[ii]
         ott_ids[ii] <- cleaned_names_tnrs$ott_id
         phy_new$ott_ids <- ott_ids
       }
