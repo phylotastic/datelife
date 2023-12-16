@@ -138,8 +138,8 @@ phylo_has_brlen <- function(phy) {
 get_opentree_chronograms <- function(max_tree_count = "all") {
   options(warn = 1)
   start_time <- Sys.time() # to register run time
-  chronogram_matches <- rotl::studies_find_trees(property = "ot:branchLengthMode",
-                                                 value = "ot:time",
+  chronogram_matches <- rotl::studies_find_trees(property = "ot:branchLengthTimeUnit",
+                                                 value = "Myr",
                                                  detailed = TRUE,
                                                  verbose = FALSE)
   # rotl::studies_find_trees throws this Warning in rbind(c(n_trees = "1", tree_ids = "tree6160", candidate = "tree6160",  :
