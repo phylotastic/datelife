@@ -123,9 +123,6 @@ You can summarize all source chronograms found by DateLife with the median metho
 
 You can also summarize source chronograms with a supertree approach. In here we have implemented SDM method.
 
-Within DateLife, we have also wrapped the OToL scaling service available from http://141.211.236.35:10999.
-
-See also the Time Tree of Life web for getting time of divergence of a pair of taxa or a synthetic chronogram of lineages within a single taxon.
 
 # Generating chronograms
 
@@ -147,5 +144,4 @@ Alternatively, new chronograms can be generated using available information as s
 
 
 # Citing
-
-The datelife manuscript is still being written.
+Luna L. Sánchez Reyes, Emily Jane McTavish, Brian O’Meara. (2023) "DateLife: leveraging databases and analytical tools to reveal the dated Tree of Life" *Accepted* Systematic Biology. Preprint: bioRxiv https://doi.org/10.1101/782094
