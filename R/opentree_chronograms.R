@@ -22,15 +22,182 @@
 #' @keywords opentree dates myrs million years time phylogeny chronogram
 #' @details
 #' Generated with
-#' devtools::install_github("ropensci/rotl", ref = devtools::github_pull("137"))
-#' remotes::install_github("ROpenSci/bibtex")'
 #' opentree_chronograms <- get_opentree_chronograms()
-#' opentree_chronograms$update <- Sys.time()
-#' opentree_chronograms$version <- '2022.01.28'
+#' opentree_chronograms$version <- '2023.12.30'
 #' usethis::use_data(opentree_chronograms, overwrite = T, compress = "xz")
 #' and updated with update_datelife_cache()
 "opentree_chronograms"
 
+#' Get all chronograms from Open Tree of Life database using direct call from Open Tree API
+#' @param max_tree_count Default to "all", it gets all available chronograms. For testing purposes, a numeric value indicating the max number of trees to be cached.
+#' @return A list of 4 elements:
+#' \describe{
+#'   \item{authors}{A list of lists of author names of the original studies that
+#'     published chronograms currently stored in the Open Tree of Life database.}
+#'   \item{curators}{A list of lists of curator names that uploaded chronograms
+#'     to the Open Tree of Life database.}
+#'   \item{studies}{A list of study identifiers from original studies that
+#'     published chronograms currently stored in the Open Tree of Life database.}
+#'   \item{trees}{A `multiPhylo` object storing the chronograms from Open Tree of
+#'     Life database.}
+#'   \item{update}{A character vector indicating the time when the database object
+#'     was last updated.}
+#'   \item{version}{A character vector indicating the datelife package version when the
+#'     object was last updated.}
+#' }
+#' @export
+get_opentree_chronograms <- function(max_tree_count = "all") {
+  options(warn = 1)
+  start_time <- Sys.time() # to register run time
+  result <- httr::POST("https://api.opentreeoflife.org/cached/v3/studies/find_trees",
+               body = '{"property":"ot:branchLengthTimeUnit","value":"Myr", "verbose":true}',
+               httr::add_headers(.headers = "content-type:application/json"))
+
+  output <- httr::content(result)
+  # length(output$matched_studies)
+  data_frame_output <- data.frame(study_id = character(), tree_id = character())
+  for(i in output) {
+    for (e in i) {
+      for (tree in e$matched_trees) {
+        if(tree$`ot:branchLengthMode` == "ot:time"){
+          study_id = tree$`ot:studyId`
+          tree_id = tree$`ot:treeId`
+          data_frame_output <- rbind(data_frame_output, c(study_id, tree_id))
+        }
+      }
+    }
+  }
+  names(data_frame_output) <- c("study_id", "tree_id")
+  trees <- list()
+  authors <- list()
+  curators <- list()
+  studies <- list()
+  dois <- list()
+  tree_count <- 0
+  bad_ones <- c()
+  ott_id_problems <- data.frame(study_id = character(), tree_id = character()) # nrow(fix_negative_brlen) is 0
+  # utils::opentree_chronograms
+  for (id in seq(nrow(data_frame_output))) {
+    # the only purpose for the following conditional is testing:
+    if (is.numeric(max_tree_count)) {
+      if (tree_count > max_tree_count) {
+        break
+      }
+    }
+    study_id <- data_frame_output$study_id[id] # pg_2853, pg_753
+    # study_id <- "ot_708"; study_id <- "pg_2853"
+    # tree_id <- "tree1"; tree_id <- "tree6624"
+    tree_id <- data_frame_output$tree_id[id] # tree6624, tree1383
+    message("Downloading tree(s) from study '", 
+            study_id, 
+            "' (",
+            tree_count + 1,
+            " out of ", 
+            length(unique(data_frame_output$study_id)), 
+            " studies).")
+    new_tree_taxon_name <- new_tree_ott_id <- NULL
+    # if (!grepl("\\.\\.\\.", tree_id) & !is.na(tree_id)) { # we do not need to deal with ellipsis bug anymore
+    message("Tree with tree_id = '", tree_id, "'")
+    new_tree_taxon_name <- tryCatch(rotl::get_study_tree(study_id = study_id,
+                                              tree_id = tree_id,
+                                              tip_label = "ott_taxon_name",
+                                              deduplicate = TRUE),
+                           error = function(e) NULL)
+      # would like to dedup; don't use get_study_subtree, as right now it doesn't take tip_label args
+      # try(new_tree <- datelife:::get_study_tree_with_dups(study_id=study_id,tree_id=tree_id ))
+      # try(new_tree <- rotl::get_study_subtree(study_id=study_id,tree_id=tree_id, tip_label="ott_taxon_name", subtree_id="ingroup")) #only want ingroup, as it's the one that's been lovingly curated.
+    if (!is.null(new_tree_taxon_name) & phylo_has_brlen(phy = new_tree_taxon_name)) {
+        # add ott_ids
+        # right now the function is having trouble to retrieve trees with ott ids as tip labels from certain studies
+        new_tree_ott_id <- tryCatch(rotl::get_study_tree(study_id = study_id,
+                                                   tree_id = tree_id,
+                                                   tip_label = "ott_id"),
+                                    error = function(e) NULL)
+        # remove the tag to unmapped tips, but leave the "*tip" marker:
+        # new_tree_taxon_name$ott_ids <- gsub("_.*", "", new_tree_ott_id$tip.label) 
+        # if new_tree2 is null it will generate an empty vector
+        # we were running TNRS for unmapped tip labels, but it is unsafe, so do not do it:
+        # try_tree <- datelife::clean_ott_chronogram(new_tree)
+        # previous line will give NA if just one or no tip labels are mapped to OTT??
+        new_tree_taxon_name$ott_ids <- suppressWarnings(as.numeric(new_tree_ott_id$tip.label))
+        if (all(is.na(new_tree_taxon_name$ott_ids))) {
+          problem <- "Open Tree of Life database does not have ott ids for this tree (names have not been curated)"
+          ott_id_problems <- rbind(ott_id_problems, data.frame(study_id, tree_id))
+        }
+        if (phylo_has_brlen(phy = new_tree_taxon_name)) {
+          if (is_good_chronogram(new_tree_taxon_name)) {
+            message("'", tree_id, "' has branch lengths and is ultrametric.")
+            study_meta <- rotl::get_study_meta(study_id)
+            publication_meta <- rotl::get_publication(study_meta)
+            doi <- NULL
+            try(doi <- gsub("https?://(dx\\.)?doi.org/", "", attr(publication_meta, "DOI")))
+            authors <- append(authors, NA)
+            if (length(doi) == 0) {
+              warning(paste(study_id, "has no DOI attribute, author names will not be retrieved."))
+            } else {
+              try(authors[length(authors)] <- list(paste(as.character(knitcitations::bib_metadata(doi)$author))))
+            }
+            curators <- append(curators, NA)
+            try(curators[length(curators)] <- list(study_meta[["nexml"]][["^ot:curatorName"]]))
+            try(studies <- append(studies, study_id))
+            tree_count <- tree_count + 1
+            # print(tree_count)
+            try(dois <- append(dois, doi))
+            trees[[tree_count]] <- new_tree_taxon_name
+            names(trees)[tree_count] <- publication_meta[1]
+            message("'", tree_id, "' was added to chronogram database.")
+            potential_bad <- NULL
+          }
+        }
+        # add taxonomic nodelabels to trees object here
+        new_tree_taxon_name <- map_nodes_ott(tree = new_tree_taxon_name)
+      }
+
+      
+    if (!is.null(potential_bad)) {
+      bad_ones <- append(bad_ones, potential_bad)
+    }
+    
+  }
+  message("Problematic combos:")
+  # Fix name encoding:
+  message(paste0(utils::capture.output(bad_ones), collapse = "\n"))
+  for (i in sequence(length(authors))) {
+    if (!any(is.na(authors[[i]])) & length(authors[[i]]) > 0) {
+      Encoding(authors[[i]]) <- "latin1"
+      authors[[i]] <- iconv(authors[[i]], "latin1", "UTF-8")
+    }
+    for (j in sequence(length(curators[[i]]))) {
+      if (!any(is.na(curators[[i]][[j]])) & length(curators[[i]][[j]]) > 0) {
+        Encoding(curators[[i]][[j]]) <- "latin1"
+        curators[[i]][[j]] <- iconv(curators[[i]][[j]], "latin1", "UTF-8")
+      }
+    }
+  }
+  
+  if (nrow(ott_id_problems) > 0) {
+    problems_file <- file.path(tempdir(), paste0("ott_id_problems_", max_tree_count, ".csv"))
+    utils::write.csv(ott_id_problems,
+      file = problems_file,
+      quote = FALSE, row.names = FALSE
+    )
+    message("Problematic chronograms were saved to ", problems_file)
+  } else {
+    message("There were no problematic chronograms.")
+  }
+  tot_time <- Sys.time() - start_time # end of registering function running time
+  class(trees) <- "multiPhylo"
+  result <- list(trees = trees,
+                 authors = authors,
+                 curators = curators,
+                 studies = studies,
+                 dois = dois,
+                 update = Sys.time(),
+                 version = utils::packageVersion("datelife"))
+  attr(result, "running_time") <- tot_time
+  message(tot_time)
+  return(result)
+}
 
 #' Create an updated OpenTree chronograms database object
 
@@ -134,17 +301,22 @@ phylo_has_brlen <- function(phy) {
 #'   \item{version}{A character vector indicating the datelife package version when the
 #'     object was last updated.}
 #' }
-#' @export
-get_opentree_chronograms <- function(max_tree_count = "all") {
+# #' @export
+get_opentree_chronograms_slow <- function(max_tree_count = "all") {
   options(warn = 1)
   start_time <- Sys.time() # to register run time
-  chronogram_matches <- rotl::studies_find_trees(property = "ot:branchLengthTimeUnit",
-                                                 value = "Myr",
-                                                 detailed = TRUE,
-                                                 verbose = FALSE)
-  # rotl::studies_find_trees throws this Warning in rbind(c(n_trees = "1", tree_ids = "tree6160", candidate = "tree6160",  :
+  message()
+  chronogram_matches <- suppressWarnings(
+    rotl::studies_find_trees(property = "ot:branchLengthTimeUnit",
+                             value = "Myr",
+                             detailed = TRUE,
+                             verbose = FALSE))
+  # rotl::studies_find_trees throws this Warning for different studies:
+  # Warning in rbind(c(n_trees = "1", tree_ids = "tree6160", candidate = "tree6160",  : pg_2641
+  # tree6160 <- rotl::get_study_tree(study_id = "pg_2641", tree_id = "tree6160")
   # number of columns of result is not a multiple of vector length (arg 1)  colnames(chronogram_matches)
   # rotl::list_trees(chronogram_matches)
+  # study_id = "ot_615", tree_id = "Tr76459"
   trees <- list()
   authors <- list()
   curators <- list()
@@ -298,8 +470,8 @@ is_good_chronogram <- function(phy) {
     warning("tree failed over not having more internal nodes than tips")
   }
   if (length(which(grepl("not.mapped", phy$tip.label))) > 0) {
-    warning("tree failed over having not mapped taxa that should have been checked")
-    passing <- FALSE # not cleaned properly
+    warning("tree has tip labels that are not mapped to the Open Tree Taxonomy")
+    passing <- TRUE # not cleaned properly
   }
   # enhance: test that there are no duplicated labels in chronogram:
   if (any(is.na(phy$tip.label))) {
@@ -443,6 +615,11 @@ map_nodes_ott <- function(tree) {
   # tree <- ss[[1]]
   # phy <- opentree_chronograms$trees[[i]]
   phy <- tree_check(tree = tree, dated = FALSE)
+  # check that at least some tip labels have OTT names:
+  if (all(is.na(tree$ott_ids))) {
+    warning("OTT nodes could not be mapped on tree.")
+    return(tree)
+  }
   cc <- tryCatch(classification_paths_from_taxonomy(phy$tip.label, sources = "Open Tree of Life Reference Taxonomy"),
     error = function(e) list(resolved = c())
   ) # this traps the error when phy = opentree_chronograms$trees[[50]] from load(data-raw/opentree_chronograms_oct2018.rda)
