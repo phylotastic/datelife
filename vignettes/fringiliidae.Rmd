@@ -206,4 +206,4 @@ dsumm$phylo_all[[1]]
 #> Rooted; includes branch lengths.
 ```
 
-
+### To see how different `datelife` queries are made, check out the next tutorial vignette: [Making a `datelife` query](make_datelife_query.html).
