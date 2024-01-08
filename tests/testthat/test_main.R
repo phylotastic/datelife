@@ -1,3 +1,35 @@
+
+test_that("a known datelife_search run works as it should", {
+  datelife_query <- make_datelife_query(input = c("Delphinus_delphis",
+                                               "Gallus gallus",
+                                               "elephas Maximus",
+                                               "felis_catus",
+                                               "homo-sapiens"))
+
+  datelifeSearch <- datelife_search(datelife_query, 
+                                    summary_format = "phylo_median")
+  
+  datelife_result <- get_datelife_result_datelifequery(
+    datelife_query = datelife_query,
+    partial = TRUE,
+    cache = "opentree_chronograms")
+  
+  expect_true(length(datelife_result) > 0)
+  
+  res <- summarize_datelife_result(
+              datelife_result = datelife_result,
+              datelife_query = datelife_query,
+              summary_format = "phylo_median",
+              na_rm = FALSE,
+              summary_print = c("citations", "taxa"),
+              taxon_summary = c("none", "summary", "matrix"),
+              criterion = "taxa")
+  
+  taxon_summ <- get_taxon_summary(
+      datelife_result = datelife_result,
+      datelife_query = datelife_query)
+}) 
+
 test_that("datelife_use workflows work", {
   du <- datelife_use(
     input = "Rhea americana, Struthio camelus, Gallus gallus",

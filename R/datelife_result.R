@@ -36,7 +36,7 @@ get_datelife_result_datelifequery <- function(datelife_query = NULL,
     stop("'datelife_query' must be a 'datelifeQuery' object.")
   }
   if (length(datelife_query$cleaned_names) == 1) {
-    message("Can't get divergence times from just one taxon in 'datelife_query$cleaned_names'.")
+    message("Can't get divergence times from just one taxon available in 'datelife_query$cleaned_names'.")
     message("Making a 'datelifeQuery' again, setting 'get_spp_from_taxon = TRUE'.")
     datelife_query <- make_datelife_query(input = datelife_query$cleaned_names,
                                           get_spp_from_taxon = TRUE,
@@ -46,16 +46,17 @@ get_datelife_result_datelifequery <- function(datelife_query = NULL,
   # do that later in summarizing steps
   results_list <- lapply(cache$trees,
     get_subset_array_dispatch,
-    taxa = datelife_query$cleaned_names,
+    taxa = gsub(" ", "_", datelife_query$cleaned_names),
     phy = NULL
   )
+  # length(results_list) is always the same size as the number of chronograms in the database
   datelife_result <- results_list_process(results_list,
     datelife_query$cleaned_names,
     partial = partial
   )
   message("Search done!")
   message("\nInput taxon names were found in ", length(datelife_result), " chronograms.")
-  class(datelife_result) <- c("datelifeResult")
+  class(datelife_result) <- c(class(datelife_result), "datelifeResult")
   attr(datelife_result, "datelife_query") <- datelife_query
   return(datelife_result)
 }

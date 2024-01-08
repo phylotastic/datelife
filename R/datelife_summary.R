@@ -22,17 +22,27 @@ get_taxon_summary <- function(datelife_result = NULL,
                               datelife_query = NULL) {
 
   # datelife_result <- check_datelife_result(datelife_result)
-  if (is.null(datelife_result) | !inherits(datelife_result, "datelifeResult")) {
+  if (is.null(datelife_result) | !inherits(datelife_result, "list")) {
     warning("'datelife_result' argument must be a list of patristic matrices (you can get one with get_datelife_result()).")
+    message("Taxon summary can not be generated.")
     return(NA)
   }
-
+  if (any(!sapply(datelife_result, inherits, "array"))) {
+    warning("Some (or all) elements of 'datelife_result' list are not of class 'array' (you can get the correct format from get_datelife_result()).")
+    message("Taxon summary can not be generated.")
+    return(NA)
+  }
+  if (length(datelife_result == 0)) {
+    warning("'datelife_result' is empty (length == 0).")
+    message("Taxon summary can not be generated.")
+    return(NA)
+  }
   if (suppressMessages(is_datelife_query(input = datelife_query))) {
     if (is.null(attributes(datelife_result)$datelife_query)) {
-      cleaned_names <- datelife_query$cleaned_names
+      cleaned_names <- gsub(" ", "_", datelife_query$cleaned_names)
     } else {
       input <- attributes(datelife_result)$datelife_query
-      cleaned_names <- attributes(datelife_result)$datelife_query$cleaned_names
+      cleaned_names <- gsub(" ", "_", input$cleaned_names)
     }
   } else {
     message("'datelife_query' argument was not provided.")
