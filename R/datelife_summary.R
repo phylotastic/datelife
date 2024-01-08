@@ -32,7 +32,7 @@ get_taxon_summary <- function(datelife_result = NULL,
     message("Taxon summary can not be generated.")
     return(NA)
   }
-  if (length(datelife_result == 0)) {
+  if (length(datelife_result) == 0) {
     warning("'datelife_result' is empty (length == 0).")
     message("Taxon summary can not be generated.")
     return(NA)
@@ -42,7 +42,8 @@ get_taxon_summary <- function(datelife_result = NULL,
       cleaned_names <- gsub(" ", "_", datelife_query$cleaned_names)
     } else {
       input <- attributes(datelife_result)$datelife_query
-      cleaned_names <- gsub(" ", "_", input$cleaned_names)
+      input$cleaned_names <- gsub(" ", "_", input$cleaned_names)
+      cleaned_names <- input$cleaned_names
     }
   } else {
     message("'datelife_query' argument was not provided.")
