@@ -1,3 +1,48 @@
+
+test_that("a known datelife_search run works as it should", {
+  expect_no_error(
+    datelife_query <- make_datelife_query(
+      input = c("Delphinus_delphis", 
+                "Gallus gallus", 
+                "elephas Maximus", 
+                "felis_catus", 
+                "homo-sapiens"))
+  )
+
+  expect_no_error(
+    datelife_result <- get_datelife_result_datelifequery(
+      datelife_query = datelife_query,
+      partial = TRUE,
+      cache = "opentree_chronograms")
+    )
+  
+  expect_true(length(datelife_result) > 0)
+  
+  expect_no_error(
+    res <- summarize_datelife_result(
+              datelife_result = datelife_result,
+              datelife_query = datelife_query,
+              summary_format = "phylo_median",
+              na_rm = FALSE,
+              summary_print = c("citations", "taxa"),
+              taxon_summary = c("none", "summary", "matrix"),
+              criterion = "taxa")
+    )
+  
+  expect_no_error(
+    taxon_summ <- get_taxon_summary(
+      datelife_result = datelife_result,
+      datelife_query = datelife_query)
+  )
+  
+  expect_no_error(
+    datelifeSearch <- datelife_search(
+      datelife_query, 
+      summary_format = "phylo_median")
+  )
+}) 
+
+##########################################
 test_that("datelife_use workflows work", {
   du <- datelife_use(
     input = "Rhea americana, Struthio camelus, Gallus gallus",
@@ -46,6 +91,7 @@ test_that("datelife_use workflows work", {
   input_process(input = du0)
 })
 
+#############################################################################
 test_that("input processing a newick string and multiPhylo workflows work", {
   newick <- "(Gallus_gallus,(Rhea_americana,Struthio_camelus)Palaeognathae)Aves;"
   phylo <- input_process(newick)
@@ -62,16 +108,17 @@ test_that("input processing a newick string and multiPhylo workflows work", {
   expect_warning(match_all_calibrations(phy = phylo, calibrations = calibs))
 })
 
+#################################
 test_that("object checks work", {
   expect_warning(match_all_calibrations(phy = NULL))
   expect_error(use_calibrations(phy = NULL))
   expect_error(get_calibrations_datelifequery(datelife_query = NULL))
 })
 
-
+###############################################
 test_that("you can load opentree_chronograms",{
   data(opentree_chronograms, package = "datelife")
-  expect_equal(ls(opentree_chronograms), c("authors","curators","dois","studies","trees"))
+  expect_true(all(c("authors","curators","dois","studies","trees") %in% ls(opentree_chronograms)))
 })
 
 

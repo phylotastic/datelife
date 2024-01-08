@@ -3,6 +3,16 @@
 
 DONE:
 -->
+# datelife v0.6.9
+- fix bug in `check_ott_input()`
+- fix bug in `make_datelife_query()` when getting ott ids
+- use spaces instead of "_" to run tnrs, avoids bug from `rotl::tnrs_match_names()` v3.0.14
+- faster and more accurate way to get study ids and tree ids from opentree API on `get_opentree_chronograms()` that have branch lengths in Myrs, no relative time.
+- update to chronogram database, now with 292 chronograms.
+- `get_taxon_summary()` now manages case when `datelife_result` is empty; throws warning instead of criptic error.
+- better `testthat` suite for `datelife_search()` inner functions.
+
+
 # datelife v0.6.8
 - fix bug in function `extract_calibrations_phylo()`
 - update messages in `calibrations_match()`

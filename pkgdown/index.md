@@ -68,12 +68,13 @@ the website is not live at the moment, apologies.
 
 ## Documentation topics:
 
-- [Local
-  installation](http://phylotastic.org/datelife/index.html#installation)
-- [Getting
-  started](http://phylotastic.org/datelife/articles/Getting_started_with_datelife.html)
-- [Function
-  documentation](http://phylotastic.org/datelife/reference/index.html)
+- [Local installation](#local-installation-of-the-datelife-r-package)
+- [Getting started](../docs/articles/Getting_started_with_datelife.html)
+- [Case Study: the true finches](../docs/articles/fringiliidae.html)
+- [Making a `datelife` query](../docs/articles/make_datelife_query.html)
+- [Estimating initial branch
+  lengths](../docs/articles/making_bold_trees.html)
+- [Function documentation](../docs/reference/index.html)
 
 ## Local installation of the `datelife` R package
 
@@ -105,15 +106,15 @@ the accompanying paper:
 
 <p>
 O’Meara B, Sanchez-Reyes L, Eastman J, Heath T, Wright A, Schliep K,
-Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M (2023).
-<em>datelife: Scientific Data on Time of Lineage Divergence for Your
-Taxa</em>. R package version 0.6.7,
+Chamberlain S, Midford P, Harmon L, Brown J, Pennell M, Alfaro M,
+McTavish E (2024). <em>datelife: Scientific Data on Time of Lineage
+Divergence for Your Taxa</em>. R package version 0.6.9,
 <a href="https://doi.org/10.5281/zenodo.593938">https://doi.org/10.5281/zenodo.593938</a>.
 </p>
 <p>
-Sanchez-Reyes L, O’Meara B (2019). “datelife: Leveraging databases and
-analytical tools to reveal the dated Tree of Life.” <em>bioRxiv</em>,
-<b>782094</b>.
+Sanchez-Reyes L, McTavish E, O’Meara B (2022). “datelife: Leveraging
+databases and analytical tools to reveal the dated Tree of Life.”
+<em>bioRxiv</em>, <b>782094</b>.
 <a href="https://doi.org/10.1101/782094">https://doi.org/10.1101/782094</a>.
 </p>
 

@@ -35,9 +35,12 @@ website_down <- TRUE
 
 ## Documentation topics:
 
-- [Local installation](http://phylotastic.org/datelife/index.html#installation)
-- [Getting started](http://phylotastic.org/datelife/articles/Getting_started_with_datelife.html)
-- [Function documentation](http://phylotastic.org/datelife/reference/index.html)
+- [Local installation](#local-installation-of-the-datelife-r-package)
+- [Getting started](../docs/articles/Getting_started_with_datelife.html)
+- [Case Study: the true finches](../docs/articles/fringiliidae.html)
+- [Making a `datelife` query](../docs/articles/make_datelife_query.html)
+- [Estimating initial branch lengths](../docs/articles/making_bold_trees.html)
+- [Function documentation](../docs/reference/index.html)
 
 
 ```{r, child = "installation.Rmd"}

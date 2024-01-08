@@ -172,3 +172,5 @@ list(tnrs_names = return_names,
      ott_ids = return_ott_ids)
 
 ```
+
+### To see how trees with branch lengths estimated from BOLD (Barcode Of Life Database) data can be made with a `datelife` workflow, check out the next tutorial vignette: [Estimating Branch Lengths](making_bold_trees.html).
