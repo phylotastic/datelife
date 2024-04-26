@@ -85,7 +85,7 @@ make_datelife_query <- function(input = c("Rhea americana", "Pterocnemia pennata
   if (use_tnrs_global) {
     # process names even if it's a "higher" taxon name:
     cleaned_names_tnrs <- clean_tnrs(tnrs_match(input = cleaned_names),
-                                     remove_nonmatches = TRUE)
+                                     remove_nonmatches = FALSE)
     # recover original names of invalid taxa and unmatched:
     cleaned_names <- gsub("_", " ", cleaned_names)
     ii <- !tolower(cleaned_names) %in% cleaned_names_tnrs$search_string
