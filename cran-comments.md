@@ -1,13 +1,8 @@
-## New submission v0.6.8
-
-This is a maintenance submission, where I have:
-
-- fixed invalid URI in the package DESCRIPTION
-- addressed compatibility issues with new `rotl` package release
-
-Additionally, I have made an updates to the package:
-
-* fixed a bug in a function that was returning NAs when it was not supposed to
+## New submission v0.6.9
+This is a maintenance submission, where we have:
+- added tests
+- added spelling check
+- updated and fixed bugs from functions
 
 
 Thanks!

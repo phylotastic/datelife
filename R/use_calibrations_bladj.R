@@ -28,6 +28,16 @@ use_calibrations_bladj <- function(phy = NULL,
                                    root_age) {
   ############################################################################
   # initial checks
+  if (is.null(calibrations)) {
+    stop("calibrations were not provided.")
+  }
+  if (inherits(calibrations, "calibrations")) { 
+    stop("calibrations have not been congruified to 'phy'")
+  }
+  congruified <- inherits(calibrations, "matchedCalibrations") | inherits(calibrations, "congruifiedCalibrations")
+  if (!congruified) {
+    stop("calibrations might not be congruified, 'calibrations' object is not of class 'matchedCalibrations' nor 'congruifiedCalibrations'")
+  }
   type <- match.arg(tolower(type), c("mean", "min", "max", "median"))
   message("... Using ", type, " ages as secondary calibrations with BLADJ.")
   ############################################################################

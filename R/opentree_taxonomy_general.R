@@ -27,6 +27,7 @@ tnrs_match.default <- function(input, reference_taxonomy = "ott", ...) { # enhan
           toupper(reference_taxonomy),
           ").")
   input <- stringr::str_trim(input, side = "both") # cleans the input of lingering unneeded white spaces
+  input <- gsub("_", " ", input) # do tnrs with spaces and not underscore to avoid bug from rotl v3.0.14 (felis_margarita to Margarites_helicinus)
   allinput <- input
   input <- unique(input)
   # enhance: infer taxonomic contexts:

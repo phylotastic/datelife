@@ -93,12 +93,8 @@ datelife_search <- function(input = c("Rhea americana", "Pterocnemia pennata", "
   datelife_result.here <- get_datelife_result_datelifequery(
     datelife_query = datelife_query,
     partial = partial,
-    # approximate_match = approximate_match,
     cache = cache)
-  # print.datelife(datelife_result = datelife_result.here)
-  # datelife <- list(datelife_query = datelife_query, datelife_result = datelife_result.here)
-  # class(datelife) <- "datelife"
-  # return(datelife)
+  
   res <- summarize_datelife_result(
     datelife_result = datelife_result.here,
     datelife_query = datelife_query,

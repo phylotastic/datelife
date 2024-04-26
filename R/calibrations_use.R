@@ -142,7 +142,7 @@ use_calibrations <- function(phy = NULL,
   # enhance: add a check for calibrations object structure
   if (!inherits(calibrations, "data.frame")) {
     exit <- TRUE
-    msg2 <- "'calibrations' is NOT a data frame. Check this."
+    msg2 <- "'calibrations' is NOT a data frame. Correct this."
   } else {
     msg2 <- "'calibrations' is a data frame. You are good."
   }

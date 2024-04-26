@@ -3,7 +3,7 @@
 \name{get_opentree_chronograms}
 \alias{get_opentree_chronograms}
 \alias{get_otol_chronograms}
-\title{Get all chronograms from Open Tree of Life database}
+\title{Get all chronograms from Open Tree of Life database using direct call from Open Tree API}
 \usage{
 get_opentree_chronograms(max_tree_count = "all")
 
@@ -30,5 +30,5 @@ object was last updated.}
 }
 }
 \description{
-Get all chronograms from Open Tree of Life database
+Get all chronograms from Open Tree of Life database using direct call from Open Tree API
 }
