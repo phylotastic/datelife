@@ -93,31 +93,25 @@ This is done with the function <code><a href="../reference/make_datelife_query.h
 <h3 id="when-input-is-list-or-vector-of-taxon-names">When <code>input</code> is list or vector of taxon names<a class="anchor" aria-label="anchor" href="#when-input-is-list-or-vector-of-taxon-names"></a>
 </h3>
 <p>We can process a single taxon:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>query1 <span class="ot">&lt;-</span> <span class="fu">make_datelife_query</span>(<span class="at">input =</span> <span class="st">"Canis"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; ---&gt; Making a DateLife query.</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; ---&gt; Working with the following taxon: Canis.</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; DateLife query made!</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">query1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_datelife_query.html">make_datelife_query</a></span><span class="op">(</span>input <span class="op">=</span> <span class="st">"Canis"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
+<span><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
+<span><span class="co">#&gt; ---&gt; Making a DateLife query.</span></span>
+<span><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">#&gt; ---&gt; Working with the following taxon: Canis.</span></span>
+<span><span class="co">#&gt; DateLife query made!</span></span></code></pre></div>
 <p>Or several taxon names:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>query10 <span class="ot">&lt;-</span> <span class="fu">make_datelife_query</span>(<span class="at">input =</span> <span class="fu">rep</span>(<span class="st">"Canis"</span>, <span class="dv">10</span>))</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; ---&gt; Making a DateLife query.</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; ---&gt; Working with the following 10 taxa: Canis | Canis | Canis | Canis | Canis | Canis | Canis | Canis | Canis | Canis.</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; DateLife query made!</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">query10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_datelife_query.html">make_datelife_query</a></span><span class="op">(</span>input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Canis"</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
+<span><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
+<span><span class="co">#&gt; ---&gt; Making a DateLife query.</span></span>
+<span><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">#&gt; ---&gt; Working with the following 10 taxa: Canis | Canis | Canis | Canis | Canis | Canis | Canis | Canis | Canis | Canis.</span></span>
+<span><span class="co">#&gt; DateLife query made!</span></span></code></pre></div>
 <p>In any case, the output is a list:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">query10</span></span>
@@ -140,120 +134,98 @@ This is done with the function <code><a href="../reference/make_datelife_query.h
 </h3>
 <p>The function returns <code>NA</code> as taxonomic id for the missing
 name:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">make_datelife_query2</span>(<span class="at">input =</span> <span class="fu">c</span>(<span class="st">"Canis"</span>, <span class="st">"werewolf"</span>, <span class="st">"jupiter"</span>))</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="er">|=======================</span>                                               <span class="er">|</span>  <span class="dv">33</span>%</span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; Warning: werewolf are not matched</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  <span class="er">|===============================================</span>                       <span class="er">|</span>  <span class="dv">67</span>%</span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; Warning: jupiter are not matched</span></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt; $cleaned_names</span></span>
-<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; [1] "Canis"    "werewolf" "jupiter" </span></span>
-<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; $tnrs_names</span></span>
-<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt; [1] "Canis" NA      NA     </span></span>
-<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt; $ott_ids</span></span>
-<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="co">#&gt; [1] 372706     NA     NA</span></span>
-<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="co">#&gt; $phy</span></span>
-<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a><span class="co">#&gt; attr(,"class")</span></span>
-<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/make_datelife_query2.html">make_datelife_query2</a></span><span class="op">(</span>input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Canis"</span>, <span class="st">"werewolf"</span>, <span class="st">"jupiter"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
+<span><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
+<span><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%</span></span>
+<span><span class="co">#&gt; Warning: werewolf are not matched</span></span>
+<span><span class="co">#&gt;   |                                                                              |===============================================                       |  67%</span></span>
+<span><span class="co">#&gt; Warning: jupiter are not matched</span></span>
+<span><span class="co">#&gt;   |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">#&gt; $cleaned_names</span></span>
+<span><span class="co">#&gt; [1] "Canis"    "werewolf" "jupiter" </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $tnrs_names</span></span>
+<span><span class="co">#&gt; [1] "Canis" NA      NA     </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ott_ids</span></span>
+<span><span class="co">#&gt; [1] 372706     NA     NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $phy</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="subspecies-can-also-be-searched">Subspecies can also be searched<a class="anchor" aria-label="anchor" href="#subspecies-can-also-be-searched"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">make_datelife_query2</span>(<span class="at">input =</span> <span class="st">"Canis mesomelas elongae"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; $cleaned_names</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; [1] "Canis mesomelas elongae"</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; $tnrs_names</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; [1] "Canis mesomelas elongae"</span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; $ott_ids</span></span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; [1] 576165</span></span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; $phy</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; attr(,"class")</span></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; [1] "datelifeQuery"</span></span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a></span>
-<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>all_subspecies <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Canis mesomelas elongae"</span>, <span class="st">"Canis mesomelas elongae"</span>)</span>
-<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="fu">make_datelife_query2</span>(<span class="at">input =</span> all_subspecies)</span>
-<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
-<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
-<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
-<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a><span class="co">#&gt; $cleaned_names</span></span>
-<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a><span class="co">#&gt; [1] "Canis mesomelas elongae" "Canis mesomelas elongae"</span></span>
-<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a><span class="co">#&gt; $tnrs_names</span></span>
-<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a><span class="co">#&gt; [1] "Canis mesomelas elongae" "Canis mesomelas elongae"</span></span>
-<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a><span class="co">#&gt; $ott_ids</span></span>
-<span id="cb6-42"><a href="#cb6-42" tabindex="-1"></a><span class="co">#&gt; [1] 576165 576165</span></span>
-<span id="cb6-43"><a href="#cb6-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-44"><a href="#cb6-44" tabindex="-1"></a><span class="co">#&gt; $phy</span></span>
-<span id="cb6-45"><a href="#cb6-45" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb6-46"><a href="#cb6-46" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-47"><a href="#cb6-47" tabindex="-1"></a><span class="co">#&gt; attr(,"class")</span></span>
-<span id="cb6-48"><a href="#cb6-48" tabindex="-1"></a><span class="co">#&gt; [1] "datelifeQuery"</span></span>
-<span id="cb6-49"><a href="#cb6-49" tabindex="-1"></a></span>
-<span id="cb6-50"><a href="#cb6-50" tabindex="-1"></a>one_subspecies <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Canis mesomelas elongae"</span>, <span class="st">"Canis adustus"</span>, <span class="st">"Lycalopex fulvipes"</span>)</span>
-<span id="cb6-51"><a href="#cb6-51" tabindex="-1"></a><span class="fu">make_datelife_query2</span>(<span class="at">input =</span> one_subspecies)</span>
-<span id="cb6-52"><a href="#cb6-52" tabindex="-1"></a><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
-<span id="cb6-53"><a href="#cb6-53" tabindex="-1"></a><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
-<span id="cb6-54"><a href="#cb6-54" tabindex="-1"></a><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
-<span id="cb6-55"><a href="#cb6-55" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-56"><a href="#cb6-56" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb6-57"><a href="#cb6-57" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb6-58"><a href="#cb6-58" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb6-59"><a href="#cb6-59" tabindex="-1"></a>  <span class="er">|=======================</span>                                               <span class="er">|</span>  <span class="dv">33</span>%</span>
-<span id="cb6-60"><a href="#cb6-60" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb6-61"><a href="#cb6-61" tabindex="-1"></a>  <span class="er">|===============================================</span>                       <span class="er">|</span>  <span class="dv">67</span>%</span>
-<span id="cb6-62"><a href="#cb6-62" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb6-63"><a href="#cb6-63" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb6-64"><a href="#cb6-64" tabindex="-1"></a><span class="co">#&gt; $cleaned_names</span></span>
-<span id="cb6-65"><a href="#cb6-65" tabindex="-1"></a><span class="co">#&gt; [1] "Canis mesomelas elongae" "Canis adustus"          </span></span>
-<span id="cb6-66"><a href="#cb6-66" tabindex="-1"></a><span class="co">#&gt; [3] "Lycalopex fulvipes"     </span></span>
-<span id="cb6-67"><a href="#cb6-67" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-68"><a href="#cb6-68" tabindex="-1"></a><span class="co">#&gt; $tnrs_names</span></span>
-<span id="cb6-69"><a href="#cb6-69" tabindex="-1"></a><span class="co">#&gt; [1] "Canis mesomelas elongae" "Canis adustus"          </span></span>
-<span id="cb6-70"><a href="#cb6-70" tabindex="-1"></a><span class="co">#&gt; [3] "Lycalopex fulvipes"     </span></span>
-<span id="cb6-71"><a href="#cb6-71" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-72"><a href="#cb6-72" tabindex="-1"></a><span class="co">#&gt; $ott_ids</span></span>
-<span id="cb6-73"><a href="#cb6-73" tabindex="-1"></a><span class="co">#&gt; [1] 576165 621176 996573</span></span>
-<span id="cb6-74"><a href="#cb6-74" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-75"><a href="#cb6-75" tabindex="-1"></a><span class="co">#&gt; $phy</span></span>
-<span id="cb6-76"><a href="#cb6-76" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb6-77"><a href="#cb6-77" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-78"><a href="#cb6-78" tabindex="-1"></a><span class="co">#&gt; attr(,"class")</span></span>
-<span id="cb6-79"><a href="#cb6-79" tabindex="-1"></a><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/make_datelife_query2.html">make_datelife_query2</a></span><span class="op">(</span>input <span class="op">=</span> <span class="st">"Canis mesomelas elongae"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
+<span><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
+<span><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">#&gt; $cleaned_names</span></span>
+<span><span class="co">#&gt; [1] "Canis mesomelas elongae"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $tnrs_names</span></span>
+<span><span class="co">#&gt; [1] "Canis mesomelas elongae"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ott_ids</span></span>
+<span><span class="co">#&gt; [1] 576165</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $phy</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "datelifeQuery"</span></span>
+<span></span>
+<span><span class="va">all_subspecies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Canis mesomelas elongae"</span>, <span class="st">"Canis mesomelas elongae"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/make_datelife_query2.html">make_datelife_query2</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">all_subspecies</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
+<span><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
+<span><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">#&gt; $cleaned_names</span></span>
+<span><span class="co">#&gt; [1] "Canis mesomelas elongae" "Canis mesomelas elongae"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $tnrs_names</span></span>
+<span><span class="co">#&gt; [1] "Canis mesomelas elongae" "Canis mesomelas elongae"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ott_ids</span></span>
+<span><span class="co">#&gt; [1] 576165 576165</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $phy</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "datelifeQuery"</span></span>
+<span></span>
+<span><span class="va">one_subspecies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Canis mesomelas elongae"</span>, <span class="st">"Canis adustus"</span>, <span class="st">"Lycalopex fulvipes"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/make_datelife_query2.html">make_datelife_query2</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">one_subspecies</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
+<span><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
+<span><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">#&gt; $cleaned_names</span></span>
+<span><span class="co">#&gt; [1] "Canis mesomelas elongae" "Canis adustus"          </span></span>
+<span><span class="co">#&gt; [3] "Lycalopex fulvipes"     </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $tnrs_names</span></span>
+<span><span class="co">#&gt; [1] "Canis mesomelas elongae" "Canis adustus"          </span></span>
+<span><span class="co">#&gt; [3] "Lycalopex fulvipes"     </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ott_ids</span></span>
+<span><span class="co">#&gt; [1] 576165 621176 996573</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $phy</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="choosing-between-homonyms">Choosing between homonyms<a class="anchor" aria-label="anchor" href="#choosing-between-homonyms"></a>
@@ -264,65 +236,51 @@ to a monkey and a grass. TNRS is smart enough to choose a taxonomic
 context for a set of names, but it is not infallible.</p>
 <p>For example, when referring to the grass, TNRS chooses the correct
 taxon id:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">make_datelife_query2</span>(<span class="at">input =</span> <span class="fu">c</span>(<span class="st">"Aotus"</span>, <span class="st">"Poa"</span>, <span class="st">"Arabidopsis"</span>))</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="er">|=======================</span>                                               <span class="er">|</span>  <span class="dv">33</span>%</span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="er">|===============================================</span>                       <span class="er">|</span>  <span class="dv">67</span>%</span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; $cleaned_names</span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; [1] "Aotus"       "Poa"         "Arabidopsis"</span></span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; $tnrs_names</span></span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; [1] "Aotus (genus in kingdom Archaeplastida)"</span></span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; [2] "Poa"                                    </span></span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; [3] "Arabidopsis"                            </span></span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; $ott_ids</span></span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; [1] 559026 985636 309275</span></span>
-<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt; $phy</span></span>
-<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co">#&gt; attr(,"class")</span></span>
-<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/make_datelife_query2.html">make_datelife_query2</a></span><span class="op">(</span>input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Aotus"</span>, <span class="st">"Poa"</span>, <span class="st">"Arabidopsis"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
+<span><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
+<span><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">#&gt; $cleaned_names</span></span>
+<span><span class="co">#&gt; [1] "Aotus"       "Poa"         "Arabidopsis"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $tnrs_names</span></span>
+<span><span class="co">#&gt; [1] "Aotus (genus in kingdom Archaeplastida)"</span></span>
+<span><span class="co">#&gt; [2] "Poa"                                    </span></span>
+<span><span class="co">#&gt; [3] "Arabidopsis"                            </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ott_ids</span></span>
+<span><span class="co">#&gt; [1] 559026 985636 309275</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $phy</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
 <p>But when referring to the monkey, TNRS still chooses the grass:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">make_datelife_query2</span>(<span class="at">input =</span> <span class="fu">c</span>(<span class="st">"Aotus"</span>, <span class="st">"Insulacebus"</span>, <span class="st">"Microcebus"</span>))</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  <span class="er">|=======================</span>                                               <span class="er">|</span>  <span class="dv">33</span>%</span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  <span class="er">|===============================================</span>                       <span class="er">|</span>  <span class="dv">67</span>%</span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; $cleaned_names</span></span>
-<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; [1] "Aotus"       "Insulacebus" "Microcebus" </span></span>
-<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; $tnrs_names</span></span>
-<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt; [1] "Aotus (genus in kingdom Archaeplastida)"</span></span>
-<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; [2] "Insulacebus"                            </span></span>
-<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt; [3] "Microcebus"                             </span></span>
-<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt; $ott_ids</span></span>
-<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt; [1]  559026 6145234  734824</span></span>
-<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt; $phy</span></span>
-<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt; attr(,"class")</span></span>
-<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/make_datelife_query2.html">make_datelife_query2</a></span><span class="op">(</span>input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Aotus"</span>, <span class="st">"Insulacebus"</span>, <span class="st">"Microcebus"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
+<span><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
+<span><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">#&gt; $cleaned_names</span></span>
+<span><span class="co">#&gt; [1] "Aotus"       "Insulacebus" "Microcebus" </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $tnrs_names</span></span>
+<span><span class="co">#&gt; [1] "Aotus (genus in kingdom Archaeplastida)"</span></span>
+<span><span class="co">#&gt; [2] "Insulacebus"                            </span></span>
+<span><span class="co">#&gt; [3] "Microcebus"                             </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ott_ids</span></span>
+<span><span class="co">#&gt; [1]  559026 6145234  734824</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $phy</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
 <p>To make sure that we get the taxonomic id and data for the taxon we
 want, we can specify a “taxonomic context”:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -334,453 +292,440 @@ want, we can specify a “taxonomic context”:</p>
 <h3 id="making-a-query-from-an-inclusive-taxonomic-group">Making a query from an inclusive taxonomic group<a class="anchor" aria-label="anchor" href="#making-a-query-from-an-inclusive-taxonomic-group"></a>
 </h3>
 <p>You can run it for one taxon name only:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">make_datelife_query2</span>(<span class="at">input =</span> <span class="st">"Canis"</span>,</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>                     <span class="at">get_spp_from_taxon =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>                     <span class="at">reference_taxonomy =</span> <span class="st">"ott"</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; ---&gt; Getting species for the following taxon names :Canis.</span></span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; ---&gt; Obtaining taxonomic data from lineages within genus 'Canis' with OTT id number = 372706.</span></span>
-<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; * Found the following taxonomic ranks: species, subspecies, no rank - terminal, no rank.</span></span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; * There are 21 subspecies.</span></span>
-<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; * There are 42 total species.</span></span>
-<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; * There are 36 species in OpenTree's synthetic tree.</span></span>
-<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; ---&gt; Retrieving taxonomic info for 36 species names within 'Canis' that are in the OpenTree synthetic tree.</span></span>
-<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; $cleaned_names</span></span>
-<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; [1] "Canis"</span></span>
-<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; $tnrs_names</span></span>
-<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt;                      3612500                      5835572 </span></span>
-<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt;                "Canis dirus"               "Canis anthus" </span></span>
-<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="co">#&gt;                       113383                       752755 </span></span>
-<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="co">#&gt;                "Canis rufus"             "Canis simensis" </span></span>
-<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="co">#&gt;                       621168                       621176 </span></span>
-<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="co">#&gt;               "Canis aureus"              "Canis adustus" </span></span>
-<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="co">#&gt;                       247331                       346723 </span></span>
-<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a><span class="co">#&gt;              "Canis latrans"         "Canis himalayensis" </span></span>
-<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a><span class="co">#&gt;                       346728                      4941918 </span></span>
-<span id="cb10-32"><a href="#cb10-32" tabindex="-1"></a><span class="co">#&gt;               "Canis indica" "Canis environmental sample" </span></span>
-<span id="cb10-33"><a href="#cb10-33" tabindex="-1"></a><span class="co">#&gt;                      7655930                      7655947 </span></span>
-<span id="cb10-34"><a href="#cb10-34" tabindex="-1"></a><span class="co">#&gt;            "Canis ameghinoi"             "Canis nehringi" </span></span>
-<span id="cb10-35"><a href="#cb10-35" tabindex="-1"></a><span class="co">#&gt;                      7655949                      7655942 </span></span>
-<span id="cb10-36"><a href="#cb10-36" tabindex="-1"></a><span class="co">#&gt;            "Canis palustris"                "Canis lanka" </span></span>
-<span id="cb10-37"><a href="#cb10-37" tabindex="-1"></a><span class="co">#&gt;                      7655948                      7655939 </span></span>
-<span id="cb10-38"><a href="#cb10-38" tabindex="-1"></a><span class="co">#&gt;             "Canis pallipes"                 "Canis gezi" </span></span>
-<span id="cb10-39"><a href="#cb10-39" tabindex="-1"></a><span class="co">#&gt;                      7655951                      7655935 </span></span>
-<span id="cb10-40"><a href="#cb10-40" tabindex="-1"></a><span class="co">#&gt;            "Canis primaevus"            "Canis chrysurus" </span></span>
-<span id="cb10-41"><a href="#cb10-41" tabindex="-1"></a><span class="co">#&gt;                      7655937                      7655941 </span></span>
-<span id="cb10-42"><a href="#cb10-42" tabindex="-1"></a><span class="co">#&gt;          "Canis dukhunensis"               "Canis kokree" </span></span>
-<span id="cb10-43"><a href="#cb10-43" tabindex="-1"></a><span class="co">#&gt;                      7655952                      7655940 </span></span>
-<span id="cb10-44"><a href="#cb10-44" tabindex="-1"></a><span class="co">#&gt;              "Canis sladeni"           "Canis himalaicus" </span></span>
-<span id="cb10-45"><a href="#cb10-45" tabindex="-1"></a><span class="co">#&gt;                      7655934                      7655936 </span></span>
-<span id="cb10-46"><a href="#cb10-46" tabindex="-1"></a><span class="co">#&gt;               "Canis chanco"         "Canis curvipalatus" </span></span>
-<span id="cb10-47"><a href="#cb10-47" tabindex="-1"></a><span class="co">#&gt;                      7655943                      7655931 </span></span>
-<span id="cb10-48"><a href="#cb10-48" tabindex="-1"></a><span class="co">#&gt;            "Canis lateralis"           "Canis argentinus" </span></span>
-<span id="cb10-49"><a href="#cb10-49" tabindex="-1"></a><span class="co">#&gt;                      7655953                      7655946 </span></span>
-<span id="cb10-50"><a href="#cb10-50" tabindex="-1"></a><span class="co">#&gt;           "Canis tarijensis"                "Canis naria" </span></span>
-<span id="cb10-51"><a href="#cb10-51" tabindex="-1"></a><span class="co">#&gt;                      7655950                      7655933 </span></span>
-<span id="cb10-52"><a href="#cb10-52" tabindex="-1"></a><span class="co">#&gt;             "Canis peruanus"             "Canis cautleyi" </span></span>
-<span id="cb10-53"><a href="#cb10-53" tabindex="-1"></a><span class="co">#&gt;                      7655954                      6145382 </span></span>
-<span id="cb10-54"><a href="#cb10-54" tabindex="-1"></a><span class="co">#&gt;              "Canis ursinus"           "Canis antarticus" </span></span>
-<span id="cb10-55"><a href="#cb10-55" tabindex="-1"></a><span class="co">#&gt;                      6145383                      7655938 </span></span>
-<span id="cb10-56"><a href="#cb10-56" tabindex="-1"></a><span class="co">#&gt;                "Canis dingo"             "Canis etruscus" </span></span>
-<span id="cb10-57"><a href="#cb10-57" tabindex="-1"></a><span class="co">#&gt;                       666235                       247341 </span></span>
-<span id="cb10-58"><a href="#cb10-58" tabindex="-1"></a><span class="co">#&gt;            "Canis mesomelas"                "Canis lupus" </span></span>
-<span id="cb10-59"><a href="#cb10-59" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-60"><a href="#cb10-60" tabindex="-1"></a><span class="co">#&gt; $ott_ids</span></span>
-<span id="cb10-61"><a href="#cb10-61" tabindex="-1"></a><span class="co">#&gt;                Canis dirus               Canis anthus </span></span>
-<span id="cb10-62"><a href="#cb10-62" tabindex="-1"></a><span class="co">#&gt;                    3612500                    5835572 </span></span>
-<span id="cb10-63"><a href="#cb10-63" tabindex="-1"></a><span class="co">#&gt;                Canis rufus             Canis simensis </span></span>
-<span id="cb10-64"><a href="#cb10-64" tabindex="-1"></a><span class="co">#&gt;                     113383                     752755 </span></span>
-<span id="cb10-65"><a href="#cb10-65" tabindex="-1"></a><span class="co">#&gt;               Canis aureus              Canis adustus </span></span>
-<span id="cb10-66"><a href="#cb10-66" tabindex="-1"></a><span class="co">#&gt;                     621168                     621176 </span></span>
-<span id="cb10-67"><a href="#cb10-67" tabindex="-1"></a><span class="co">#&gt;              Canis latrans         Canis himalayensis </span></span>
-<span id="cb10-68"><a href="#cb10-68" tabindex="-1"></a><span class="co">#&gt;                     247331                     346723 </span></span>
-<span id="cb10-69"><a href="#cb10-69" tabindex="-1"></a><span class="co">#&gt;               Canis indica Canis environmental sample </span></span>
-<span id="cb10-70"><a href="#cb10-70" tabindex="-1"></a><span class="co">#&gt;                     346728                    4941918 </span></span>
-<span id="cb10-71"><a href="#cb10-71" tabindex="-1"></a><span class="co">#&gt;            Canis ameghinoi             Canis nehringi </span></span>
-<span id="cb10-72"><a href="#cb10-72" tabindex="-1"></a><span class="co">#&gt;                    7655930                    7655947 </span></span>
-<span id="cb10-73"><a href="#cb10-73" tabindex="-1"></a><span class="co">#&gt;            Canis palustris                Canis lanka </span></span>
-<span id="cb10-74"><a href="#cb10-74" tabindex="-1"></a><span class="co">#&gt;                    7655949                    7655942 </span></span>
-<span id="cb10-75"><a href="#cb10-75" tabindex="-1"></a><span class="co">#&gt;             Canis pallipes                 Canis gezi </span></span>
-<span id="cb10-76"><a href="#cb10-76" tabindex="-1"></a><span class="co">#&gt;                    7655948                    7655939 </span></span>
-<span id="cb10-77"><a href="#cb10-77" tabindex="-1"></a><span class="co">#&gt;            Canis primaevus            Canis chrysurus </span></span>
-<span id="cb10-78"><a href="#cb10-78" tabindex="-1"></a><span class="co">#&gt;                    7655951                    7655935 </span></span>
-<span id="cb10-79"><a href="#cb10-79" tabindex="-1"></a><span class="co">#&gt;          Canis dukhunensis               Canis kokree </span></span>
-<span id="cb10-80"><a href="#cb10-80" tabindex="-1"></a><span class="co">#&gt;                    7655937                    7655941 </span></span>
-<span id="cb10-81"><a href="#cb10-81" tabindex="-1"></a><span class="co">#&gt;              Canis sladeni           Canis himalaicus </span></span>
-<span id="cb10-82"><a href="#cb10-82" tabindex="-1"></a><span class="co">#&gt;                    7655952                    7655940 </span></span>
-<span id="cb10-83"><a href="#cb10-83" tabindex="-1"></a><span class="co">#&gt;               Canis chanco         Canis curvipalatus </span></span>
-<span id="cb10-84"><a href="#cb10-84" tabindex="-1"></a><span class="co">#&gt;                    7655934                    7655936 </span></span>
-<span id="cb10-85"><a href="#cb10-85" tabindex="-1"></a><span class="co">#&gt;            Canis lateralis           Canis argentinus </span></span>
-<span id="cb10-86"><a href="#cb10-86" tabindex="-1"></a><span class="co">#&gt;                    7655943                    7655931 </span></span>
-<span id="cb10-87"><a href="#cb10-87" tabindex="-1"></a><span class="co">#&gt;           Canis tarijensis                Canis naria </span></span>
-<span id="cb10-88"><a href="#cb10-88" tabindex="-1"></a><span class="co">#&gt;                    7655953                    7655946 </span></span>
-<span id="cb10-89"><a href="#cb10-89" tabindex="-1"></a><span class="co">#&gt;             Canis peruanus             Canis cautleyi </span></span>
-<span id="cb10-90"><a href="#cb10-90" tabindex="-1"></a><span class="co">#&gt;                    7655950                    7655933 </span></span>
-<span id="cb10-91"><a href="#cb10-91" tabindex="-1"></a><span class="co">#&gt;              Canis ursinus           Canis antarticus </span></span>
-<span id="cb10-92"><a href="#cb10-92" tabindex="-1"></a><span class="co">#&gt;                    7655954                    6145382 </span></span>
-<span id="cb10-93"><a href="#cb10-93" tabindex="-1"></a><span class="co">#&gt;                Canis dingo             Canis etruscus </span></span>
-<span id="cb10-94"><a href="#cb10-94" tabindex="-1"></a><span class="co">#&gt;                    6145383                    7655938 </span></span>
-<span id="cb10-95"><a href="#cb10-95" tabindex="-1"></a><span class="co">#&gt;            Canis mesomelas                Canis lupus </span></span>
-<span id="cb10-96"><a href="#cb10-96" tabindex="-1"></a><span class="co">#&gt;                     666235                     247341 </span></span>
-<span id="cb10-97"><a href="#cb10-97" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-98"><a href="#cb10-98" tabindex="-1"></a><span class="co">#&gt; $phy</span></span>
-<span id="cb10-99"><a href="#cb10-99" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb10-100"><a href="#cb10-100" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb10-101"><a href="#cb10-101" tabindex="-1"></a><span class="co">#&gt; attr(,"class")</span></span>
-<span id="cb10-102"><a href="#cb10-102" tabindex="-1"></a><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/make_datelife_query2.html">make_datelife_query2</a></span><span class="op">(</span>input <span class="op">=</span> <span class="st">"Canis"</span>,</span>
+<span>                     get_spp_from_taxon <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                     reference_taxonomy <span class="op">=</span> <span class="st">"ott"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
+<span><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
+<span><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">#&gt; ---&gt; Getting species for the following taxon names :Canis.</span></span>
+<span><span class="co">#&gt; ---&gt; Obtaining taxonomic data from lineages within genus 'Canis' with OTT id number = 372706.</span></span>
+<span><span class="co">#&gt; * Found the following taxonomic ranks: species, subspecies, no rank - terminal, no rank.</span></span>
+<span><span class="co">#&gt; * There are 21 subspecies.</span></span>
+<span><span class="co">#&gt; * There are 42 total species.</span></span>
+<span><span class="co">#&gt; * There are 36 species in OpenTree's synthetic tree.</span></span>
+<span><span class="co">#&gt; ---&gt; Retrieving taxonomic info for 36 species names within 'Canis' that are in the OpenTree synthetic tree.</span></span>
+<span><span class="co">#&gt; $cleaned_names</span></span>
+<span><span class="co">#&gt; [1] "Canis"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $tnrs_names</span></span>
+<span><span class="co">#&gt;                      3612500                      5835572 </span></span>
+<span><span class="co">#&gt;                "Canis dirus"               "Canis anthus" </span></span>
+<span><span class="co">#&gt;                       113383                       752755 </span></span>
+<span><span class="co">#&gt;                "Canis rufus"             "Canis simensis" </span></span>
+<span><span class="co">#&gt;                       621168                       621176 </span></span>
+<span><span class="co">#&gt;               "Canis aureus"              "Canis adustus" </span></span>
+<span><span class="co">#&gt;                       247331                       346723 </span></span>
+<span><span class="co">#&gt;              "Canis latrans"         "Canis himalayensis" </span></span>
+<span><span class="co">#&gt;                       346728                      4941918 </span></span>
+<span><span class="co">#&gt;               "Canis indica" "Canis environmental sample" </span></span>
+<span><span class="co">#&gt;                      7655930                      7655947 </span></span>
+<span><span class="co">#&gt;            "Canis ameghinoi"             "Canis nehringi" </span></span>
+<span><span class="co">#&gt;                      7655949                      7655942 </span></span>
+<span><span class="co">#&gt;            "Canis palustris"                "Canis lanka" </span></span>
+<span><span class="co">#&gt;                      7655948                      7655939 </span></span>
+<span><span class="co">#&gt;             "Canis pallipes"                 "Canis gezi" </span></span>
+<span><span class="co">#&gt;                      7655951                      7655935 </span></span>
+<span><span class="co">#&gt;            "Canis primaevus"            "Canis chrysurus" </span></span>
+<span><span class="co">#&gt;                      7655937                      7655941 </span></span>
+<span><span class="co">#&gt;          "Canis dukhunensis"               "Canis kokree" </span></span>
+<span><span class="co">#&gt;                      7655952                      7655940 </span></span>
+<span><span class="co">#&gt;              "Canis sladeni"           "Canis himalaicus" </span></span>
+<span><span class="co">#&gt;                      7655934                      7655936 </span></span>
+<span><span class="co">#&gt;               "Canis chanco"         "Canis curvipalatus" </span></span>
+<span><span class="co">#&gt;                      7655943                      7655931 </span></span>
+<span><span class="co">#&gt;            "Canis lateralis"           "Canis argentinus" </span></span>
+<span><span class="co">#&gt;                      7655953                      7655946 </span></span>
+<span><span class="co">#&gt;           "Canis tarijensis"                "Canis naria" </span></span>
+<span><span class="co">#&gt;                      7655950                      7655933 </span></span>
+<span><span class="co">#&gt;             "Canis peruanus"             "Canis cautleyi" </span></span>
+<span><span class="co">#&gt;                      7655954                      6145382 </span></span>
+<span><span class="co">#&gt;              "Canis ursinus"           "Canis antarticus" </span></span>
+<span><span class="co">#&gt;                      6145383                      7655938 </span></span>
+<span><span class="co">#&gt;                "Canis dingo"             "Canis etruscus" </span></span>
+<span><span class="co">#&gt;                       666235                       247341 </span></span>
+<span><span class="co">#&gt;            "Canis mesomelas"                "Canis lupus" </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ott_ids</span></span>
+<span><span class="co">#&gt;                Canis dirus               Canis anthus </span></span>
+<span><span class="co">#&gt;                    3612500                    5835572 </span></span>
+<span><span class="co">#&gt;                Canis rufus             Canis simensis </span></span>
+<span><span class="co">#&gt;                     113383                     752755 </span></span>
+<span><span class="co">#&gt;               Canis aureus              Canis adustus </span></span>
+<span><span class="co">#&gt;                     621168                     621176 </span></span>
+<span><span class="co">#&gt;              Canis latrans         Canis himalayensis </span></span>
+<span><span class="co">#&gt;                     247331                     346723 </span></span>
+<span><span class="co">#&gt;               Canis indica Canis environmental sample </span></span>
+<span><span class="co">#&gt;                     346728                    4941918 </span></span>
+<span><span class="co">#&gt;            Canis ameghinoi             Canis nehringi </span></span>
+<span><span class="co">#&gt;                    7655930                    7655947 </span></span>
+<span><span class="co">#&gt;            Canis palustris                Canis lanka </span></span>
+<span><span class="co">#&gt;                    7655949                    7655942 </span></span>
+<span><span class="co">#&gt;             Canis pallipes                 Canis gezi </span></span>
+<span><span class="co">#&gt;                    7655948                    7655939 </span></span>
+<span><span class="co">#&gt;            Canis primaevus            Canis chrysurus </span></span>
+<span><span class="co">#&gt;                    7655951                    7655935 </span></span>
+<span><span class="co">#&gt;          Canis dukhunensis               Canis kokree </span></span>
+<span><span class="co">#&gt;                    7655937                    7655941 </span></span>
+<span><span class="co">#&gt;              Canis sladeni           Canis himalaicus </span></span>
+<span><span class="co">#&gt;                    7655952                    7655940 </span></span>
+<span><span class="co">#&gt;               Canis chanco         Canis curvipalatus </span></span>
+<span><span class="co">#&gt;                    7655934                    7655936 </span></span>
+<span><span class="co">#&gt;            Canis lateralis           Canis argentinus </span></span>
+<span><span class="co">#&gt;                    7655943                    7655931 </span></span>
+<span><span class="co">#&gt;           Canis tarijensis                Canis naria </span></span>
+<span><span class="co">#&gt;                    7655953                    7655946 </span></span>
+<span><span class="co">#&gt;             Canis peruanus             Canis cautleyi </span></span>
+<span><span class="co">#&gt;                    7655950                    7655933 </span></span>
+<span><span class="co">#&gt;              Canis ursinus           Canis antarticus </span></span>
+<span><span class="co">#&gt;                    7655954                    6145382 </span></span>
+<span><span class="co">#&gt;                Canis dingo             Canis etruscus </span></span>
+<span><span class="co">#&gt;                    6145383                    7655938 </span></span>
+<span><span class="co">#&gt;            Canis mesomelas                Canis lupus </span></span>
+<span><span class="co">#&gt;                     666235                     247341 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $phy</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
 <p>Or two or more:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">make_datelife_query2</span>(<span class="at">input =</span> <span class="fu">c</span>(<span class="st">"Canis"</span>, <span class="st">"Elephas"</span>),</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>                     <span class="at">get_spp_from_taxon =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>                     <span class="at">reference_taxonomy =</span> <span class="st">"ott"</span>)</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>  <span class="er">|===================================</span>                                   <span class="er">|</span>  <span class="dv">50</span>%</span>
-<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co">#&gt; ---&gt; Getting species for the following taxon names :Canis, Elephas.</span></span>
-<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="co">#&gt; ---&gt; Obtaining taxonomic data from lineages within genus 'Canis' with OTT id number = 372706.</span></span>
-<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a><span class="co">#&gt; * Found the following taxonomic ranks: species, subspecies, no rank - terminal, no rank.</span></span>
-<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="co">#&gt; * There are 21 subspecies.</span></span>
-<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="co">#&gt; * There are 42 total species.</span></span>
-<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="co">#&gt; * There are 36 species in OpenTree's synthetic tree.</span></span>
-<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a><span class="co">#&gt; ---&gt; Retrieving taxonomic info for 36 species names within 'Canis' that are in the OpenTree synthetic tree.</span></span>
-<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="co">#&gt; ---&gt; Obtaining taxonomic data from lineages within genus 'Elephas' with OTT id number = 541927.</span></span>
-<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a><span class="co">#&gt; * Found the following taxonomic ranks: subspecies, no rank, no rank - terminal, species.</span></span>
-<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="co">#&gt; * There are 5 subspecies.</span></span>
-<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="co">#&gt; * There are 8 total species.</span></span>
-<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="co">#&gt; * There are 7 species in OpenTree's synthetic tree.</span></span>
-<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a><span class="co">#&gt; ---&gt; Retrieving taxonomic info for 7 species names within 'Elephas' that are in the OpenTree synthetic tree.</span></span>
-<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a><span class="co">#&gt; $cleaned_names</span></span>
-<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a><span class="co">#&gt; [1] "Canis"   "Elephas"</span></span>
-<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a><span class="co">#&gt; $tnrs_names</span></span>
-<span id="cb11-31"><a href="#cb11-31" tabindex="-1"></a><span class="co">#&gt;                      3612500                      5835572 </span></span>
-<span id="cb11-32"><a href="#cb11-32" tabindex="-1"></a><span class="co">#&gt;                "Canis dirus"               "Canis anthus" </span></span>
-<span id="cb11-33"><a href="#cb11-33" tabindex="-1"></a><span class="co">#&gt;                       113383                       752755 </span></span>
-<span id="cb11-34"><a href="#cb11-34" tabindex="-1"></a><span class="co">#&gt;                "Canis rufus"             "Canis simensis" </span></span>
-<span id="cb11-35"><a href="#cb11-35" tabindex="-1"></a><span class="co">#&gt;                       621168                       621176 </span></span>
-<span id="cb11-36"><a href="#cb11-36" tabindex="-1"></a><span class="co">#&gt;               "Canis aureus"              "Canis adustus" </span></span>
-<span id="cb11-37"><a href="#cb11-37" tabindex="-1"></a><span class="co">#&gt;                       247331                       346723 </span></span>
-<span id="cb11-38"><a href="#cb11-38" tabindex="-1"></a><span class="co">#&gt;              "Canis latrans"         "Canis himalayensis" </span></span>
-<span id="cb11-39"><a href="#cb11-39" tabindex="-1"></a><span class="co">#&gt;                       346728                      4941918 </span></span>
-<span id="cb11-40"><a href="#cb11-40" tabindex="-1"></a><span class="co">#&gt;               "Canis indica" "Canis environmental sample" </span></span>
-<span id="cb11-41"><a href="#cb11-41" tabindex="-1"></a><span class="co">#&gt;                      7655930                      7655947 </span></span>
-<span id="cb11-42"><a href="#cb11-42" tabindex="-1"></a><span class="co">#&gt;            "Canis ameghinoi"             "Canis nehringi" </span></span>
-<span id="cb11-43"><a href="#cb11-43" tabindex="-1"></a><span class="co">#&gt;                      7655949                      7655942 </span></span>
-<span id="cb11-44"><a href="#cb11-44" tabindex="-1"></a><span class="co">#&gt;            "Canis palustris"                "Canis lanka" </span></span>
-<span id="cb11-45"><a href="#cb11-45" tabindex="-1"></a><span class="co">#&gt;                      7655948                      7655939 </span></span>
-<span id="cb11-46"><a href="#cb11-46" tabindex="-1"></a><span class="co">#&gt;             "Canis pallipes"                 "Canis gezi" </span></span>
-<span id="cb11-47"><a href="#cb11-47" tabindex="-1"></a><span class="co">#&gt;                      7655951                      7655935 </span></span>
-<span id="cb11-48"><a href="#cb11-48" tabindex="-1"></a><span class="co">#&gt;            "Canis primaevus"            "Canis chrysurus" </span></span>
-<span id="cb11-49"><a href="#cb11-49" tabindex="-1"></a><span class="co">#&gt;                      7655937                      7655941 </span></span>
-<span id="cb11-50"><a href="#cb11-50" tabindex="-1"></a><span class="co">#&gt;          "Canis dukhunensis"               "Canis kokree" </span></span>
-<span id="cb11-51"><a href="#cb11-51" tabindex="-1"></a><span class="co">#&gt;                      7655952                      7655940 </span></span>
-<span id="cb11-52"><a href="#cb11-52" tabindex="-1"></a><span class="co">#&gt;              "Canis sladeni"           "Canis himalaicus" </span></span>
-<span id="cb11-53"><a href="#cb11-53" tabindex="-1"></a><span class="co">#&gt;                      7655934                      7655936 </span></span>
-<span id="cb11-54"><a href="#cb11-54" tabindex="-1"></a><span class="co">#&gt;               "Canis chanco"         "Canis curvipalatus" </span></span>
-<span id="cb11-55"><a href="#cb11-55" tabindex="-1"></a><span class="co">#&gt;                      7655943                      7655931 </span></span>
-<span id="cb11-56"><a href="#cb11-56" tabindex="-1"></a><span class="co">#&gt;            "Canis lateralis"           "Canis argentinus" </span></span>
-<span id="cb11-57"><a href="#cb11-57" tabindex="-1"></a><span class="co">#&gt;                      7655953                      7655946 </span></span>
-<span id="cb11-58"><a href="#cb11-58" tabindex="-1"></a><span class="co">#&gt;           "Canis tarijensis"                "Canis naria" </span></span>
-<span id="cb11-59"><a href="#cb11-59" tabindex="-1"></a><span class="co">#&gt;                      7655950                      7655933 </span></span>
-<span id="cb11-60"><a href="#cb11-60" tabindex="-1"></a><span class="co">#&gt;             "Canis peruanus"             "Canis cautleyi" </span></span>
-<span id="cb11-61"><a href="#cb11-61" tabindex="-1"></a><span class="co">#&gt;                      7655954                      6145382 </span></span>
-<span id="cb11-62"><a href="#cb11-62" tabindex="-1"></a><span class="co">#&gt;              "Canis ursinus"           "Canis antarticus" </span></span>
-<span id="cb11-63"><a href="#cb11-63" tabindex="-1"></a><span class="co">#&gt;                      6145383                      7655938 </span></span>
-<span id="cb11-64"><a href="#cb11-64" tabindex="-1"></a><span class="co">#&gt;                "Canis dingo"             "Canis etruscus" </span></span>
-<span id="cb11-65"><a href="#cb11-65" tabindex="-1"></a><span class="co">#&gt;                       666235                       247341 </span></span>
-<span id="cb11-66"><a href="#cb11-66" tabindex="-1"></a><span class="co">#&gt;            "Canis mesomelas"                "Canis lupus" </span></span>
-<span id="cb11-67"><a href="#cb11-67" tabindex="-1"></a><span class="co">#&gt;                      7654243                      7654244 </span></span>
-<span id="cb11-68"><a href="#cb11-68" tabindex="-1"></a><span class="co">#&gt;         "Elephas armeniacus"          "Elephas namadicus" </span></span>
-<span id="cb11-69"><a href="#cb11-69" tabindex="-1"></a><span class="co">#&gt;                      7654245                      3607197 </span></span>
-<span id="cb11-70"><a href="#cb11-70" tabindex="-1"></a><span class="co">#&gt;               "Elephas zulu"         "Elephas bombifrons" </span></span>
-<span id="cb11-71"><a href="#cb11-71" tabindex="-1"></a><span class="co">#&gt;                      6144032                      7654246 </span></span>
-<span id="cb11-72"><a href="#cb11-72" tabindex="-1"></a><span class="co">#&gt;         "Elephas celebensis"    "Palaeoloxodon lomolinoi" </span></span>
-<span id="cb11-73"><a href="#cb11-73" tabindex="-1"></a><span class="co">#&gt;                       541928 </span></span>
-<span id="cb11-74"><a href="#cb11-74" tabindex="-1"></a><span class="co">#&gt;            "Elephas maximus" </span></span>
-<span id="cb11-75"><a href="#cb11-75" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-76"><a href="#cb11-76" tabindex="-1"></a><span class="co">#&gt; $ott_ids</span></span>
-<span id="cb11-77"><a href="#cb11-77" tabindex="-1"></a><span class="co">#&gt;                Canis dirus               Canis anthus </span></span>
-<span id="cb11-78"><a href="#cb11-78" tabindex="-1"></a><span class="co">#&gt;                    3612500                    5835572 </span></span>
-<span id="cb11-79"><a href="#cb11-79" tabindex="-1"></a><span class="co">#&gt;                Canis rufus             Canis simensis </span></span>
-<span id="cb11-80"><a href="#cb11-80" tabindex="-1"></a><span class="co">#&gt;                     113383                     752755 </span></span>
-<span id="cb11-81"><a href="#cb11-81" tabindex="-1"></a><span class="co">#&gt;               Canis aureus              Canis adustus </span></span>
-<span id="cb11-82"><a href="#cb11-82" tabindex="-1"></a><span class="co">#&gt;                     621168                     621176 </span></span>
-<span id="cb11-83"><a href="#cb11-83" tabindex="-1"></a><span class="co">#&gt;              Canis latrans         Canis himalayensis </span></span>
-<span id="cb11-84"><a href="#cb11-84" tabindex="-1"></a><span class="co">#&gt;                     247331                     346723 </span></span>
-<span id="cb11-85"><a href="#cb11-85" tabindex="-1"></a><span class="co">#&gt;               Canis indica Canis environmental sample </span></span>
-<span id="cb11-86"><a href="#cb11-86" tabindex="-1"></a><span class="co">#&gt;                     346728                    4941918 </span></span>
-<span id="cb11-87"><a href="#cb11-87" tabindex="-1"></a><span class="co">#&gt;            Canis ameghinoi             Canis nehringi </span></span>
-<span id="cb11-88"><a href="#cb11-88" tabindex="-1"></a><span class="co">#&gt;                    7655930                    7655947 </span></span>
-<span id="cb11-89"><a href="#cb11-89" tabindex="-1"></a><span class="co">#&gt;            Canis palustris                Canis lanka </span></span>
-<span id="cb11-90"><a href="#cb11-90" tabindex="-1"></a><span class="co">#&gt;                    7655949                    7655942 </span></span>
-<span id="cb11-91"><a href="#cb11-91" tabindex="-1"></a><span class="co">#&gt;             Canis pallipes                 Canis gezi </span></span>
-<span id="cb11-92"><a href="#cb11-92" tabindex="-1"></a><span class="co">#&gt;                    7655948                    7655939 </span></span>
-<span id="cb11-93"><a href="#cb11-93" tabindex="-1"></a><span class="co">#&gt;            Canis primaevus            Canis chrysurus </span></span>
-<span id="cb11-94"><a href="#cb11-94" tabindex="-1"></a><span class="co">#&gt;                    7655951                    7655935 </span></span>
-<span id="cb11-95"><a href="#cb11-95" tabindex="-1"></a><span class="co">#&gt;          Canis dukhunensis               Canis kokree </span></span>
-<span id="cb11-96"><a href="#cb11-96" tabindex="-1"></a><span class="co">#&gt;                    7655937                    7655941 </span></span>
-<span id="cb11-97"><a href="#cb11-97" tabindex="-1"></a><span class="co">#&gt;              Canis sladeni           Canis himalaicus </span></span>
-<span id="cb11-98"><a href="#cb11-98" tabindex="-1"></a><span class="co">#&gt;                    7655952                    7655940 </span></span>
-<span id="cb11-99"><a href="#cb11-99" tabindex="-1"></a><span class="co">#&gt;               Canis chanco         Canis curvipalatus </span></span>
-<span id="cb11-100"><a href="#cb11-100" tabindex="-1"></a><span class="co">#&gt;                    7655934                    7655936 </span></span>
-<span id="cb11-101"><a href="#cb11-101" tabindex="-1"></a><span class="co">#&gt;            Canis lateralis           Canis argentinus </span></span>
-<span id="cb11-102"><a href="#cb11-102" tabindex="-1"></a><span class="co">#&gt;                    7655943                    7655931 </span></span>
-<span id="cb11-103"><a href="#cb11-103" tabindex="-1"></a><span class="co">#&gt;           Canis tarijensis                Canis naria </span></span>
-<span id="cb11-104"><a href="#cb11-104" tabindex="-1"></a><span class="co">#&gt;                    7655953                    7655946 </span></span>
-<span id="cb11-105"><a href="#cb11-105" tabindex="-1"></a><span class="co">#&gt;             Canis peruanus             Canis cautleyi </span></span>
-<span id="cb11-106"><a href="#cb11-106" tabindex="-1"></a><span class="co">#&gt;                    7655950                    7655933 </span></span>
-<span id="cb11-107"><a href="#cb11-107" tabindex="-1"></a><span class="co">#&gt;              Canis ursinus           Canis antarticus </span></span>
-<span id="cb11-108"><a href="#cb11-108" tabindex="-1"></a><span class="co">#&gt;                    7655954                    6145382 </span></span>
-<span id="cb11-109"><a href="#cb11-109" tabindex="-1"></a><span class="co">#&gt;                Canis dingo             Canis etruscus </span></span>
-<span id="cb11-110"><a href="#cb11-110" tabindex="-1"></a><span class="co">#&gt;                    6145383                    7655938 </span></span>
-<span id="cb11-111"><a href="#cb11-111" tabindex="-1"></a><span class="co">#&gt;            Canis mesomelas                Canis lupus </span></span>
-<span id="cb11-112"><a href="#cb11-112" tabindex="-1"></a><span class="co">#&gt;                     666235                     247341 </span></span>
-<span id="cb11-113"><a href="#cb11-113" tabindex="-1"></a><span class="co">#&gt;         Elephas armeniacus          Elephas namadicus </span></span>
-<span id="cb11-114"><a href="#cb11-114" tabindex="-1"></a><span class="co">#&gt;                    7654243                    7654244 </span></span>
-<span id="cb11-115"><a href="#cb11-115" tabindex="-1"></a><span class="co">#&gt;               Elephas zulu         Elephas bombifrons </span></span>
-<span id="cb11-116"><a href="#cb11-116" tabindex="-1"></a><span class="co">#&gt;                    7654245                    3607197 </span></span>
-<span id="cb11-117"><a href="#cb11-117" tabindex="-1"></a><span class="co">#&gt;         Elephas celebensis    Palaeoloxodon lomolinoi </span></span>
-<span id="cb11-118"><a href="#cb11-118" tabindex="-1"></a><span class="co">#&gt;                    6144032                    7654246 </span></span>
-<span id="cb11-119"><a href="#cb11-119" tabindex="-1"></a><span class="co">#&gt;            Elephas maximus </span></span>
-<span id="cb11-120"><a href="#cb11-120" tabindex="-1"></a><span class="co">#&gt;                     541928 </span></span>
-<span id="cb11-121"><a href="#cb11-121" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-122"><a href="#cb11-122" tabindex="-1"></a><span class="co">#&gt; $phy</span></span>
-<span id="cb11-123"><a href="#cb11-123" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb11-124"><a href="#cb11-124" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-125"><a href="#cb11-125" tabindex="-1"></a><span class="co">#&gt; attr(,"class")</span></span>
-<span id="cb11-126"><a href="#cb11-126" tabindex="-1"></a><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/make_datelife_query2.html">make_datelife_query2</a></span><span class="op">(</span>input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Canis"</span>, <span class="st">"Elephas"</span><span class="op">)</span>,</span>
+<span>                     get_spp_from_taxon <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                     reference_taxonomy <span class="op">=</span> <span class="st">"ott"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
+<span><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
+<span><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">#&gt; ---&gt; Getting species for the following taxon names :Canis, Elephas.</span></span>
+<span><span class="co">#&gt; ---&gt; Obtaining taxonomic data from lineages within genus 'Canis' with OTT id number = 372706.</span></span>
+<span><span class="co">#&gt; * Found the following taxonomic ranks: species, subspecies, no rank - terminal, no rank.</span></span>
+<span><span class="co">#&gt; * There are 21 subspecies.</span></span>
+<span><span class="co">#&gt; * There are 42 total species.</span></span>
+<span><span class="co">#&gt; * There are 36 species in OpenTree's synthetic tree.</span></span>
+<span><span class="co">#&gt; ---&gt; Retrieving taxonomic info for 36 species names within 'Canis' that are in the OpenTree synthetic tree.</span></span>
+<span><span class="co">#&gt; ---&gt; Obtaining taxonomic data from lineages within genus 'Elephas' with OTT id number = 541927.</span></span>
+<span><span class="co">#&gt; * Found the following taxonomic ranks: subspecies, no rank, no rank - terminal, species.</span></span>
+<span><span class="co">#&gt; * There are 5 subspecies.</span></span>
+<span><span class="co">#&gt; * There are 8 total species.</span></span>
+<span><span class="co">#&gt; * There are 7 species in OpenTree's synthetic tree.</span></span>
+<span><span class="co">#&gt; ---&gt; Retrieving taxonomic info for 7 species names within 'Elephas' that are in the OpenTree synthetic tree.</span></span>
+<span><span class="co">#&gt; $cleaned_names</span></span>
+<span><span class="co">#&gt; [1] "Canis"   "Elephas"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $tnrs_names</span></span>
+<span><span class="co">#&gt;                      3612500                      5835572 </span></span>
+<span><span class="co">#&gt;                "Canis dirus"               "Canis anthus" </span></span>
+<span><span class="co">#&gt;                       113383                       752755 </span></span>
+<span><span class="co">#&gt;                "Canis rufus"             "Canis simensis" </span></span>
+<span><span class="co">#&gt;                       621168                       621176 </span></span>
+<span><span class="co">#&gt;               "Canis aureus"              "Canis adustus" </span></span>
+<span><span class="co">#&gt;                       247331                       346723 </span></span>
+<span><span class="co">#&gt;              "Canis latrans"         "Canis himalayensis" </span></span>
+<span><span class="co">#&gt;                       346728                      4941918 </span></span>
+<span><span class="co">#&gt;               "Canis indica" "Canis environmental sample" </span></span>
+<span><span class="co">#&gt;                      7655930                      7655947 </span></span>
+<span><span class="co">#&gt;            "Canis ameghinoi"             "Canis nehringi" </span></span>
+<span><span class="co">#&gt;                      7655949                      7655942 </span></span>
+<span><span class="co">#&gt;            "Canis palustris"                "Canis lanka" </span></span>
+<span><span class="co">#&gt;                      7655948                      7655939 </span></span>
+<span><span class="co">#&gt;             "Canis pallipes"                 "Canis gezi" </span></span>
+<span><span class="co">#&gt;                      7655951                      7655935 </span></span>
+<span><span class="co">#&gt;            "Canis primaevus"            "Canis chrysurus" </span></span>
+<span><span class="co">#&gt;                      7655937                      7655941 </span></span>
+<span><span class="co">#&gt;          "Canis dukhunensis"               "Canis kokree" </span></span>
+<span><span class="co">#&gt;                      7655952                      7655940 </span></span>
+<span><span class="co">#&gt;              "Canis sladeni"           "Canis himalaicus" </span></span>
+<span><span class="co">#&gt;                      7655934                      7655936 </span></span>
+<span><span class="co">#&gt;               "Canis chanco"         "Canis curvipalatus" </span></span>
+<span><span class="co">#&gt;                      7655943                      7655931 </span></span>
+<span><span class="co">#&gt;            "Canis lateralis"           "Canis argentinus" </span></span>
+<span><span class="co">#&gt;                      7655953                      7655946 </span></span>
+<span><span class="co">#&gt;           "Canis tarijensis"                "Canis naria" </span></span>
+<span><span class="co">#&gt;                      7655950                      7655933 </span></span>
+<span><span class="co">#&gt;             "Canis peruanus"             "Canis cautleyi" </span></span>
+<span><span class="co">#&gt;                      7655954                      6145382 </span></span>
+<span><span class="co">#&gt;              "Canis ursinus"           "Canis antarticus" </span></span>
+<span><span class="co">#&gt;                      6145383                      7655938 </span></span>
+<span><span class="co">#&gt;                "Canis dingo"             "Canis etruscus" </span></span>
+<span><span class="co">#&gt;                       666235                       247341 </span></span>
+<span><span class="co">#&gt;            "Canis mesomelas"                "Canis lupus" </span></span>
+<span><span class="co">#&gt;                      7654243                      7654244 </span></span>
+<span><span class="co">#&gt;         "Elephas armeniacus"          "Elephas namadicus" </span></span>
+<span><span class="co">#&gt;                      7654245                      3607197 </span></span>
+<span><span class="co">#&gt;               "Elephas zulu"         "Elephas bombifrons" </span></span>
+<span><span class="co">#&gt;                      6144032                      7654246 </span></span>
+<span><span class="co">#&gt;         "Elephas celebensis"    "Palaeoloxodon lomolinoi" </span></span>
+<span><span class="co">#&gt;                       541928 </span></span>
+<span><span class="co">#&gt;            "Elephas maximus" </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ott_ids</span></span>
+<span><span class="co">#&gt;                Canis dirus               Canis anthus </span></span>
+<span><span class="co">#&gt;                    3612500                    5835572 </span></span>
+<span><span class="co">#&gt;                Canis rufus             Canis simensis </span></span>
+<span><span class="co">#&gt;                     113383                     752755 </span></span>
+<span><span class="co">#&gt;               Canis aureus              Canis adustus </span></span>
+<span><span class="co">#&gt;                     621168                     621176 </span></span>
+<span><span class="co">#&gt;              Canis latrans         Canis himalayensis </span></span>
+<span><span class="co">#&gt;                     247331                     346723 </span></span>
+<span><span class="co">#&gt;               Canis indica Canis environmental sample </span></span>
+<span><span class="co">#&gt;                     346728                    4941918 </span></span>
+<span><span class="co">#&gt;            Canis ameghinoi             Canis nehringi </span></span>
+<span><span class="co">#&gt;                    7655930                    7655947 </span></span>
+<span><span class="co">#&gt;            Canis palustris                Canis lanka </span></span>
+<span><span class="co">#&gt;                    7655949                    7655942 </span></span>
+<span><span class="co">#&gt;             Canis pallipes                 Canis gezi </span></span>
+<span><span class="co">#&gt;                    7655948                    7655939 </span></span>
+<span><span class="co">#&gt;            Canis primaevus            Canis chrysurus </span></span>
+<span><span class="co">#&gt;                    7655951                    7655935 </span></span>
+<span><span class="co">#&gt;          Canis dukhunensis               Canis kokree </span></span>
+<span><span class="co">#&gt;                    7655937                    7655941 </span></span>
+<span><span class="co">#&gt;              Canis sladeni           Canis himalaicus </span></span>
+<span><span class="co">#&gt;                    7655952                    7655940 </span></span>
+<span><span class="co">#&gt;               Canis chanco         Canis curvipalatus </span></span>
+<span><span class="co">#&gt;                    7655934                    7655936 </span></span>
+<span><span class="co">#&gt;            Canis lateralis           Canis argentinus </span></span>
+<span><span class="co">#&gt;                    7655943                    7655931 </span></span>
+<span><span class="co">#&gt;           Canis tarijensis                Canis naria </span></span>
+<span><span class="co">#&gt;                    7655953                    7655946 </span></span>
+<span><span class="co">#&gt;             Canis peruanus             Canis cautleyi </span></span>
+<span><span class="co">#&gt;                    7655950                    7655933 </span></span>
+<span><span class="co">#&gt;              Canis ursinus           Canis antarticus </span></span>
+<span><span class="co">#&gt;                    7655954                    6145382 </span></span>
+<span><span class="co">#&gt;                Canis dingo             Canis etruscus </span></span>
+<span><span class="co">#&gt;                    6145383                    7655938 </span></span>
+<span><span class="co">#&gt;            Canis mesomelas                Canis lupus </span></span>
+<span><span class="co">#&gt;                     666235                     247341 </span></span>
+<span><span class="co">#&gt;         Elephas armeniacus          Elephas namadicus </span></span>
+<span><span class="co">#&gt;                    7654243                    7654244 </span></span>
+<span><span class="co">#&gt;               Elephas zulu         Elephas bombifrons </span></span>
+<span><span class="co">#&gt;                    7654245                    3607197 </span></span>
+<span><span class="co">#&gt;         Elephas celebensis    Palaeoloxodon lomolinoi </span></span>
+<span><span class="co">#&gt;                    6144032                    7654246 </span></span>
+<span><span class="co">#&gt;            Elephas maximus </span></span>
+<span><span class="co">#&gt;                     541928 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $phy</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
 <p>Sometimes, only some input taxon names are inclusive:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">make_datelife_query2</span>(<span class="at">input =</span> <span class="fu">c</span>(<span class="st">"Mus"</span>, <span class="st">"Mus musculus"</span>),</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                     <span class="at">get_spp_from_taxon =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>),</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>                     <span class="at">reference_taxonomy =</span> <span class="st">"ott"</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>  <span class="er">|===================================</span>                                   <span class="er">|</span>  <span class="dv">50</span>%</span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; ---&gt; Getting species for the following taxon names :Mus.</span></span>
-<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt; ---&gt; Obtaining taxonomic data from lineages within genus 'Mus' with OTT id number = 1068778.</span></span>
-<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">#&gt; * Found the following taxonomic ranks: species, subspecies, no rank - terminal, no rank.</span></span>
-<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co">#&gt; * There are 20 subspecies.</span></span>
-<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="co">#&gt; * There are 84 total species.</span></span>
-<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a><span class="co">#&gt; * There are 60 species in OpenTree's synthetic tree.</span></span>
-<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a><span class="co">#&gt; ---&gt; Retrieving taxonomic info for 60 species names within 'Mus' that are in the OpenTree synthetic tree.</span></span>
-<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a><span class="co">#&gt; ---&gt; Adding species data from inclusive taxon names.</span></span>
-<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a><span class="co">#&gt; $cleaned_names</span></span>
-<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a><span class="co">#&gt; [1] "Mus musculus" "Mus"         </span></span>
-<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a><span class="co">#&gt; $tnrs_names</span></span>
-<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a><span class="co">#&gt;                                           </span></span>
-<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a><span class="co">#&gt;                            "Mus musculus" </span></span>
-<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a><span class="co">#&gt;                                   7067432 </span></span>
-<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a><span class="co">#&gt;                     "Mus cf. callewaerti" </span></span>
-<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a><span class="co">#&gt;                                   5857433 </span></span>
-<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a><span class="co">#&gt;                  "Mus cf. setulosus West" </span></span>
-<span id="cb12-32"><a href="#cb12-32" tabindex="-1"></a><span class="co">#&gt;                                   5857432 </span></span>
-<span id="cb12-33"><a href="#cb12-33" tabindex="-1"></a><span class="co">#&gt;                "Mus cf. tenellus TA-2014" </span></span>
-<span id="cb12-34"><a href="#cb12-34" tabindex="-1"></a><span class="co">#&gt;                                   5857436 </span></span>
-<span id="cb12-35"><a href="#cb12-35" tabindex="-1"></a><span class="co">#&gt;                    "Mus cf. baoulei West" </span></span>
-<span id="cb12-36"><a href="#cb12-36" tabindex="-1"></a><span class="co">#&gt;                                   5857434 </span></span>
-<span id="cb12-37"><a href="#cb12-37" tabindex="-1"></a><span class="co">#&gt;             "Mus cf. callewaerti TA-2014" </span></span>
-<span id="cb12-38"><a href="#cb12-38" tabindex="-1"></a><span class="co">#&gt;                                   3608901 </span></span>
-<span id="cb12-39"><a href="#cb12-39" tabindex="-1"></a><span class="co">#&gt;                              "Mus neavei" </span></span>
-<span id="cb12-40"><a href="#cb12-40" tabindex="-1"></a><span class="co">#&gt;                                    844274 </span></span>
-<span id="cb12-41"><a href="#cb12-41" tabindex="-1"></a><span class="co">#&gt;                             "Mus sorella" </span></span>
-<span id="cb12-42"><a href="#cb12-42" tabindex="-1"></a><span class="co">#&gt;                                    844277 </span></span>
-<span id="cb12-43"><a href="#cb12-43" tabindex="-1"></a><span class="co">#&gt;                            "Mus tenellus" </span></span>
-<span id="cb12-44"><a href="#cb12-44" tabindex="-1"></a><span class="co">#&gt;                                    844280 </span></span>
-<span id="cb12-45"><a href="#cb12-45" tabindex="-1"></a><span class="co">#&gt;                     "Mus cf. musculoides" </span></span>
-<span id="cb12-46"><a href="#cb12-46" tabindex="-1"></a><span class="co">#&gt;                                    844282 </span></span>
-<span id="cb12-47"><a href="#cb12-47" tabindex="-1"></a><span class="co">#&gt;                                "Mus bufo" </span></span>
-<span id="cb12-48"><a href="#cb12-48" tabindex="-1"></a><span class="co">#&gt;                                   3608883 </span></span>
-<span id="cb12-49"><a href="#cb12-49" tabindex="-1"></a><span class="co">#&gt;                         "Mus callewaerti" </span></span>
-<span id="cb12-50"><a href="#cb12-50" tabindex="-1"></a><span class="co">#&gt;                                   5857435 </span></span>
-<span id="cb12-51"><a href="#cb12-51" tabindex="-1"></a><span class="co">#&gt;                             "Mus mahomet" </span></span>
-<span id="cb12-52"><a href="#cb12-52" tabindex="-1"></a><span class="co">#&gt;                                   7067433 </span></span>
-<span id="cb12-53"><a href="#cb12-53" tabindex="-1"></a><span class="co">#&gt; "Mus sp. musculoides-minutoides DPL-2017" </span></span>
-<span id="cb12-54"><a href="#cb12-54" tabindex="-1"></a><span class="co">#&gt;                                    369735 </span></span>
-<span id="cb12-55"><a href="#cb12-55" tabindex="-1"></a><span class="co">#&gt;                             "Mus baoulei" </span></span>
-<span id="cb12-56"><a href="#cb12-56" tabindex="-1"></a><span class="co">#&gt;                                    403204 </span></span>
-<span id="cb12-57"><a href="#cb12-57" tabindex="-1"></a><span class="co">#&gt;                               "Mus emesi" </span></span>
-<span id="cb12-58"><a href="#cb12-58" tabindex="-1"></a><span class="co">#&gt;                                    996648 </span></span>
-<span id="cb12-59"><a href="#cb12-59" tabindex="-1"></a><span class="co">#&gt;                         "Mus musculoides" </span></span>
-<span id="cb12-60"><a href="#cb12-60" tabindex="-1"></a><span class="co">#&gt;                                   1000695 </span></span>
-<span id="cb12-61"><a href="#cb12-61" tabindex="-1"></a><span class="co">#&gt;                             "Mus indutus" </span></span>
-<span id="cb12-62"><a href="#cb12-62" tabindex="-1"></a><span class="co">#&gt;                                    759679 </span></span>
-<span id="cb12-63"><a href="#cb12-63" tabindex="-1"></a><span class="co">#&gt;                            "Mus mattheyi" </span></span>
-<span id="cb12-64"><a href="#cb12-64" tabindex="-1"></a><span class="co">#&gt;                                    845966 </span></span>
-<span id="cb12-65"><a href="#cb12-65" tabindex="-1"></a><span class="co">#&gt;                          "Mus minutoides" </span></span>
-<span id="cb12-66"><a href="#cb12-66" tabindex="-1"></a><span class="co">#&gt;                                    845980 </span></span>
-<span id="cb12-67"><a href="#cb12-67" tabindex="-1"></a><span class="co">#&gt;                           "Mus setulosus" </span></span>
-<span id="cb12-68"><a href="#cb12-68" tabindex="-1"></a><span class="co">#&gt;                                   1000702 </span></span>
-<span id="cb12-69"><a href="#cb12-69" tabindex="-1"></a><span class="co">#&gt;                              "Mus haussa" </span></span>
-<span id="cb12-70"><a href="#cb12-70" tabindex="-1"></a><span class="co">#&gt;                                   1000700 </span></span>
-<span id="cb12-71"><a href="#cb12-71" tabindex="-1"></a><span class="co">#&gt;                        "Mus cf. saxicola" </span></span>
-<span id="cb12-72"><a href="#cb12-72" tabindex="-1"></a><span class="co">#&gt;                                    887682 </span></span>
-<span id="cb12-73"><a href="#cb12-73" tabindex="-1"></a><span class="co">#&gt;                         "Mus shortridgei" </span></span>
-<span id="cb12-74"><a href="#cb12-74" tabindex="-1"></a><span class="co">#&gt;                                    542525 </span></span>
-<span id="cb12-75"><a href="#cb12-75" tabindex="-1"></a><span class="co">#&gt;                            "Mus saxicola" </span></span>
-<span id="cb12-76"><a href="#cb12-76" tabindex="-1"></a><span class="co">#&gt;                                    845970 </span></span>
-<span id="cb12-77"><a href="#cb12-77" tabindex="-1"></a><span class="co">#&gt;                          "Mus platythrix" </span></span>
-<span id="cb12-78"><a href="#cb12-78" tabindex="-1"></a><span class="co">#&gt;                                    348560 </span></span>
-<span id="cb12-79"><a href="#cb12-79" tabindex="-1"></a><span class="co">#&gt;                          "Mus terricolor" </span></span>
-<span id="cb12-80"><a href="#cb12-80" tabindex="-1"></a><span class="co">#&gt;                                    451263 </span></span>
-<span id="cb12-81"><a href="#cb12-81" tabindex="-1"></a><span class="co">#&gt;                             "Mus booduga" </span></span>
-<span id="cb12-82"><a href="#cb12-82" tabindex="-1"></a><span class="co">#&gt;                                    289304 </span></span>
-<span id="cb12-83"><a href="#cb12-83" tabindex="-1"></a><span class="co">#&gt;                              "Mus triton" </span></span>
-<span id="cb12-84"><a href="#cb12-84" tabindex="-1"></a><span class="co">#&gt;                                    542521 </span></span>
-<span id="cb12-85"><a href="#cb12-85" tabindex="-1"></a><span class="co">#&gt;                             "Mus spretus" </span></span>
-<span id="cb12-86"><a href="#cb12-86" tabindex="-1"></a><span class="co">#&gt;                                    542528 </span></span>
-<span id="cb12-87"><a href="#cb12-87" tabindex="-1"></a><span class="co">#&gt;                              "Mus cookii" </span></span>
-<span id="cb12-88"><a href="#cb12-88" tabindex="-1"></a><span class="co">#&gt;                                    845976 </span></span>
-<span id="cb12-89"><a href="#cb12-89" tabindex="-1"></a><span class="co">#&gt;                          "Mus spicilegus" </span></span>
-<span id="cb12-90"><a href="#cb12-90" tabindex="-1"></a><span class="co">#&gt;                                   1027340 </span></span>
-<span id="cb12-91"><a href="#cb12-91" tabindex="-1"></a><span class="co">#&gt;                             "Mus famulus" </span></span>
-<span id="cb12-92"><a href="#cb12-92" tabindex="-1"></a><span class="co">#&gt;                                    922493 </span></span>
-<span id="cb12-93"><a href="#cb12-93" tabindex="-1"></a><span class="co">#&gt;                              "Mus caroli" </span></span>
-<span id="cb12-94"><a href="#cb12-94" tabindex="-1"></a><span class="co">#&gt;                                   1010350 </span></span>
-<span id="cb12-95"><a href="#cb12-95" tabindex="-1"></a><span class="co">#&gt;                        "Mus fragilicauda" </span></span>
-<span id="cb12-96"><a href="#cb12-96" tabindex="-1"></a><span class="co">#&gt;                                    185328 </span></span>
-<span id="cb12-97"><a href="#cb12-97" tabindex="-1"></a><span class="co">#&gt;                       "Mus crociduroides" </span></span>
-<span id="cb12-98"><a href="#cb12-98" tabindex="-1"></a><span class="co">#&gt;                                    542493 </span></span>
-<span id="cb12-99"><a href="#cb12-99" tabindex="-1"></a><span class="co">#&gt;                              "Mus pahari" </span></span>
-<span id="cb12-100"><a href="#cb12-100" tabindex="-1"></a><span class="co">#&gt;                                   6144910 </span></span>
-<span id="cb12-101"><a href="#cb12-101" tabindex="-1"></a><span class="co">#&gt;                       "Mus terraereginae" </span></span>
-<span id="cb12-102"><a href="#cb12-102" tabindex="-1"></a><span class="co">#&gt;                                   7654766 </span></span>
-<span id="cb12-103"><a href="#cb12-103" tabindex="-1"></a><span class="co">#&gt;                             "Mus aegaeus" </span></span>
-<span id="cb12-104"><a href="#cb12-104" tabindex="-1"></a><span class="co">#&gt;                                   7654768 </span></span>
-<span id="cb12-105"><a href="#cb12-105" tabindex="-1"></a><span class="co">#&gt;                              "Mus camini" </span></span>
-<span id="cb12-106"><a href="#cb12-106" tabindex="-1"></a><span class="co">#&gt;                                   7654773 </span></span>
-<span id="cb12-107"><a href="#cb12-107" tabindex="-1"></a><span class="co">#&gt;                             "Mus paulina" </span></span>
-<span id="cb12-108"><a href="#cb12-108" tabindex="-1"></a><span class="co">#&gt;                                   7654776 </span></span>
-<span id="cb12-109"><a href="#cb12-109" tabindex="-1"></a><span class="co">#&gt;                            "Mus vulpinus" </span></span>
-<span id="cb12-110"><a href="#cb12-110" tabindex="-1"></a><span class="co">#&gt;                                   7654767 </span></span>
-<span id="cb12-111"><a href="#cb12-111" tabindex="-1"></a><span class="co">#&gt;                          "Mus arboricola" </span></span>
-<span id="cb12-112"><a href="#cb12-112" tabindex="-1"></a><span class="co">#&gt;                                   7654772 </span></span>
-<span id="cb12-113"><a href="#cb12-113" tabindex="-1"></a><span class="co">#&gt;                             "Mus nigrita" </span></span>
-<span id="cb12-114"><a href="#cb12-114" tabindex="-1"></a><span class="co">#&gt;                                   7654775 </span></span>
-<span id="cb12-115"><a href="#cb12-115" tabindex="-1"></a><span class="co">#&gt;                          "Mus tomentosus" </span></span>
-<span id="cb12-116"><a href="#cb12-116" tabindex="-1"></a><span class="co">#&gt;                                   7654774 </span></span>
-<span id="cb12-117"><a href="#cb12-117" tabindex="-1"></a><span class="co">#&gt;                          "Mus proconodon" </span></span>
-<span id="cb12-118"><a href="#cb12-118" tabindex="-1"></a><span class="co">#&gt;                                   7654771 </span></span>
-<span id="cb12-119"><a href="#cb12-119" tabindex="-1"></a><span class="co">#&gt;                      "Mus microdontoides" </span></span>
-<span id="cb12-120"><a href="#cb12-120" tabindex="-1"></a><span class="co">#&gt;                                   7654770 </span></span>
-<span id="cb12-121"><a href="#cb12-121" tabindex="-1"></a><span class="co">#&gt;                           "Mus leptosoma" </span></span>
-<span id="cb12-122"><a href="#cb12-122" tabindex="-1"></a><span class="co">#&gt;                                   3608899 </span></span>
-<span id="cb12-123"><a href="#cb12-123" tabindex="-1"></a><span class="co">#&gt;                           "Mus oubanguii" </span></span>
-<span id="cb12-124"><a href="#cb12-124" tabindex="-1"></a><span class="co">#&gt;                                   3608881 </span></span>
-<span id="cb12-125"><a href="#cb12-125" tabindex="-1"></a><span class="co">#&gt;                             "Mus goundae" </span></span>
-<span id="cb12-126"><a href="#cb12-126" tabindex="-1"></a><span class="co">#&gt;                                   3608904 </span></span>
-<span id="cb12-127"><a href="#cb12-127" tabindex="-1"></a><span class="co">#&gt;                            "Mus orangiae" </span></span>
-<span id="cb12-128"><a href="#cb12-128" tabindex="-1"></a><span class="co">#&gt;                                   3608880 </span></span>
-<span id="cb12-129"><a href="#cb12-129" tabindex="-1"></a><span class="co">#&gt;                           "Mus phillipsi" </span></span>
-<span id="cb12-130"><a href="#cb12-130" tabindex="-1"></a><span class="co">#&gt;                                   3608890 </span></span>
-<span id="cb12-131"><a href="#cb12-131" tabindex="-1"></a><span class="co">#&gt;                             "Mus setzeri" </span></span>
-<span id="cb12-132"><a href="#cb12-132" tabindex="-1"></a><span class="co">#&gt;                                   3608886 </span></span>
-<span id="cb12-133"><a href="#cb12-133" tabindex="-1"></a><span class="co">#&gt;                          "Mus fernandoni" </span></span>
-<span id="cb12-134"><a href="#cb12-134" tabindex="-1"></a><span class="co">#&gt;                                   3608885 </span></span>
-<span id="cb12-135"><a href="#cb12-135" tabindex="-1"></a><span class="co">#&gt;                             "Mus vulcani" </span></span>
-<span id="cb12-136"><a href="#cb12-136" tabindex="-1"></a><span class="co">#&gt;                                   3608874 </span></span>
-<span id="cb12-137"><a href="#cb12-137" tabindex="-1"></a><span class="co">#&gt;                              "Mus mayori" </span></span>
-<span id="cb12-138"><a href="#cb12-138" tabindex="-1"></a><span class="co">#&gt;                                   7654769 </span></span>
-<span id="cb12-139"><a href="#cb12-139" tabindex="-1"></a><span class="co">#&gt;                            "Mus colletti" </span></span>
-<span id="cb12-140"><a href="#cb12-140" tabindex="-1"></a><span class="co">#&gt;                                   6144906 </span></span>
-<span id="cb12-141"><a href="#cb12-141" tabindex="-1"></a><span class="co">#&gt;                             "Mus canguru" </span></span>
-<span id="cb12-142"><a href="#cb12-142" tabindex="-1"></a><span class="co">#&gt;                                    542509 </span></span>
-<span id="cb12-143"><a href="#cb12-143" tabindex="-1"></a><span class="co">#&gt;                            "Mus musculus" </span></span>
-<span id="cb12-144"><a href="#cb12-144" tabindex="-1"></a><span class="co">#&gt;                                    542519 </span></span>
-<span id="cb12-145"><a href="#cb12-145" tabindex="-1"></a><span class="co">#&gt;                          "Mus cervicolor" </span></span>
-<span id="cb12-146"><a href="#cb12-146" tabindex="-1"></a><span class="co">#&gt;                                    845973 </span></span>
-<span id="cb12-147"><a href="#cb12-147" tabindex="-1"></a><span class="co">#&gt;                         "Mus macedonicus" </span></span>
-<span id="cb12-148"><a href="#cb12-148" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb12-149"><a href="#cb12-149" tabindex="-1"></a><span class="co">#&gt; $ott_ids</span></span>
-<span id="cb12-150"><a href="#cb12-150" tabindex="-1"></a><span class="co">#&gt;                                                             Mus cf. callewaerti </span></span>
-<span id="cb12-151"><a href="#cb12-151" tabindex="-1"></a><span class="co">#&gt;                                  542509                                 7067432 </span></span>
-<span id="cb12-152"><a href="#cb12-152" tabindex="-1"></a><span class="co">#&gt;                  Mus cf. setulosus West                Mus cf. tenellus TA-2014 </span></span>
-<span id="cb12-153"><a href="#cb12-153" tabindex="-1"></a><span class="co">#&gt;                                 5857433                                 5857432 </span></span>
-<span id="cb12-154"><a href="#cb12-154" tabindex="-1"></a><span class="co">#&gt;                    Mus cf. baoulei West             Mus cf. callewaerti TA-2014 </span></span>
-<span id="cb12-155"><a href="#cb12-155" tabindex="-1"></a><span class="co">#&gt;                                 5857436                                 5857434 </span></span>
-<span id="cb12-156"><a href="#cb12-156" tabindex="-1"></a><span class="co">#&gt;                              Mus neavei                             Mus sorella </span></span>
-<span id="cb12-157"><a href="#cb12-157" tabindex="-1"></a><span class="co">#&gt;                                 3608901                                  844274 </span></span>
-<span id="cb12-158"><a href="#cb12-158" tabindex="-1"></a><span class="co">#&gt;                            Mus tenellus                     Mus cf. musculoides </span></span>
-<span id="cb12-159"><a href="#cb12-159" tabindex="-1"></a><span class="co">#&gt;                                  844277                                  844280 </span></span>
-<span id="cb12-160"><a href="#cb12-160" tabindex="-1"></a><span class="co">#&gt;                                Mus bufo                         Mus callewaerti </span></span>
-<span id="cb12-161"><a href="#cb12-161" tabindex="-1"></a><span class="co">#&gt;                                  844282                                 3608883 </span></span>
-<span id="cb12-162"><a href="#cb12-162" tabindex="-1"></a><span class="co">#&gt;                             Mus mahomet Mus sp. musculoides-minutoides DPL-2017 </span></span>
-<span id="cb12-163"><a href="#cb12-163" tabindex="-1"></a><span class="co">#&gt;                                 5857435                                 7067433 </span></span>
-<span id="cb12-164"><a href="#cb12-164" tabindex="-1"></a><span class="co">#&gt;                             Mus baoulei                               Mus emesi </span></span>
-<span id="cb12-165"><a href="#cb12-165" tabindex="-1"></a><span class="co">#&gt;                                  369735                                  403204 </span></span>
-<span id="cb12-166"><a href="#cb12-166" tabindex="-1"></a><span class="co">#&gt;                         Mus musculoides                             Mus indutus </span></span>
-<span id="cb12-167"><a href="#cb12-167" tabindex="-1"></a><span class="co">#&gt;                                  996648                                 1000695 </span></span>
-<span id="cb12-168"><a href="#cb12-168" tabindex="-1"></a><span class="co">#&gt;                            Mus mattheyi                          Mus minutoides </span></span>
-<span id="cb12-169"><a href="#cb12-169" tabindex="-1"></a><span class="co">#&gt;                                  759679                                  845966 </span></span>
-<span id="cb12-170"><a href="#cb12-170" tabindex="-1"></a><span class="co">#&gt;                           Mus setulosus                              Mus haussa </span></span>
-<span id="cb12-171"><a href="#cb12-171" tabindex="-1"></a><span class="co">#&gt;                                  845980                                 1000702 </span></span>
-<span id="cb12-172"><a href="#cb12-172" tabindex="-1"></a><span class="co">#&gt;                        Mus cf. saxicola                         Mus shortridgei </span></span>
-<span id="cb12-173"><a href="#cb12-173" tabindex="-1"></a><span class="co">#&gt;                                 1000700                                  887682 </span></span>
-<span id="cb12-174"><a href="#cb12-174" tabindex="-1"></a><span class="co">#&gt;                            Mus saxicola                          Mus platythrix </span></span>
-<span id="cb12-175"><a href="#cb12-175" tabindex="-1"></a><span class="co">#&gt;                                  542525                                  845970 </span></span>
-<span id="cb12-176"><a href="#cb12-176" tabindex="-1"></a><span class="co">#&gt;                          Mus terricolor                             Mus booduga </span></span>
-<span id="cb12-177"><a href="#cb12-177" tabindex="-1"></a><span class="co">#&gt;                                  348560                                  451263 </span></span>
-<span id="cb12-178"><a href="#cb12-178" tabindex="-1"></a><span class="co">#&gt;                              Mus triton                             Mus spretus </span></span>
-<span id="cb12-179"><a href="#cb12-179" tabindex="-1"></a><span class="co">#&gt;                                  289304                                  542521 </span></span>
-<span id="cb12-180"><a href="#cb12-180" tabindex="-1"></a><span class="co">#&gt;                              Mus cookii                          Mus spicilegus </span></span>
-<span id="cb12-181"><a href="#cb12-181" tabindex="-1"></a><span class="co">#&gt;                                  542528                                  845976 </span></span>
-<span id="cb12-182"><a href="#cb12-182" tabindex="-1"></a><span class="co">#&gt;                             Mus famulus                              Mus caroli </span></span>
-<span id="cb12-183"><a href="#cb12-183" tabindex="-1"></a><span class="co">#&gt;                                 1027340                                  922493 </span></span>
-<span id="cb12-184"><a href="#cb12-184" tabindex="-1"></a><span class="co">#&gt;                        Mus fragilicauda                       Mus crociduroides </span></span>
-<span id="cb12-185"><a href="#cb12-185" tabindex="-1"></a><span class="co">#&gt;                                 1010350                                  185328 </span></span>
-<span id="cb12-186"><a href="#cb12-186" tabindex="-1"></a><span class="co">#&gt;                              Mus pahari                       Mus terraereginae </span></span>
-<span id="cb12-187"><a href="#cb12-187" tabindex="-1"></a><span class="co">#&gt;                                  542493                                 6144910 </span></span>
-<span id="cb12-188"><a href="#cb12-188" tabindex="-1"></a><span class="co">#&gt;                             Mus aegaeus                              Mus camini </span></span>
-<span id="cb12-189"><a href="#cb12-189" tabindex="-1"></a><span class="co">#&gt;                                 7654766                                 7654768 </span></span>
-<span id="cb12-190"><a href="#cb12-190" tabindex="-1"></a><span class="co">#&gt;                             Mus paulina                            Mus vulpinus </span></span>
-<span id="cb12-191"><a href="#cb12-191" tabindex="-1"></a><span class="co">#&gt;                                 7654773                                 7654776 </span></span>
-<span id="cb12-192"><a href="#cb12-192" tabindex="-1"></a><span class="co">#&gt;                          Mus arboricola                             Mus nigrita </span></span>
-<span id="cb12-193"><a href="#cb12-193" tabindex="-1"></a><span class="co">#&gt;                                 7654767                                 7654772 </span></span>
-<span id="cb12-194"><a href="#cb12-194" tabindex="-1"></a><span class="co">#&gt;                          Mus tomentosus                          Mus proconodon </span></span>
-<span id="cb12-195"><a href="#cb12-195" tabindex="-1"></a><span class="co">#&gt;                                 7654775                                 7654774 </span></span>
-<span id="cb12-196"><a href="#cb12-196" tabindex="-1"></a><span class="co">#&gt;                      Mus microdontoides                           Mus leptosoma </span></span>
-<span id="cb12-197"><a href="#cb12-197" tabindex="-1"></a><span class="co">#&gt;                                 7654771                                 7654770 </span></span>
-<span id="cb12-198"><a href="#cb12-198" tabindex="-1"></a><span class="co">#&gt;                           Mus oubanguii                             Mus goundae </span></span>
-<span id="cb12-199"><a href="#cb12-199" tabindex="-1"></a><span class="co">#&gt;                                 3608899                                 3608881 </span></span>
-<span id="cb12-200"><a href="#cb12-200" tabindex="-1"></a><span class="co">#&gt;                            Mus orangiae                           Mus phillipsi </span></span>
-<span id="cb12-201"><a href="#cb12-201" tabindex="-1"></a><span class="co">#&gt;                                 3608904                                 3608880 </span></span>
-<span id="cb12-202"><a href="#cb12-202" tabindex="-1"></a><span class="co">#&gt;                             Mus setzeri                          Mus fernandoni </span></span>
-<span id="cb12-203"><a href="#cb12-203" tabindex="-1"></a><span class="co">#&gt;                                 3608890                                 3608886 </span></span>
-<span id="cb12-204"><a href="#cb12-204" tabindex="-1"></a><span class="co">#&gt;                             Mus vulcani                              Mus mayori </span></span>
-<span id="cb12-205"><a href="#cb12-205" tabindex="-1"></a><span class="co">#&gt;                                 3608885                                 3608874 </span></span>
-<span id="cb12-206"><a href="#cb12-206" tabindex="-1"></a><span class="co">#&gt;                            Mus colletti                             Mus canguru </span></span>
-<span id="cb12-207"><a href="#cb12-207" tabindex="-1"></a><span class="co">#&gt;                                 7654769                                 6144906 </span></span>
-<span id="cb12-208"><a href="#cb12-208" tabindex="-1"></a><span class="co">#&gt;                            Mus musculus                          Mus cervicolor </span></span>
-<span id="cb12-209"><a href="#cb12-209" tabindex="-1"></a><span class="co">#&gt;                                  542509                                  542519 </span></span>
-<span id="cb12-210"><a href="#cb12-210" tabindex="-1"></a><span class="co">#&gt;                         Mus macedonicus </span></span>
-<span id="cb12-211"><a href="#cb12-211" tabindex="-1"></a><span class="co">#&gt;                                  845973 </span></span>
-<span id="cb12-212"><a href="#cb12-212" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb12-213"><a href="#cb12-213" tabindex="-1"></a><span class="co">#&gt; $phy</span></span>
-<span id="cb12-214"><a href="#cb12-214" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb12-215"><a href="#cb12-215" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb12-216"><a href="#cb12-216" tabindex="-1"></a><span class="co">#&gt; attr(,"class")</span></span>
-<span id="cb12-217"><a href="#cb12-217" tabindex="-1"></a><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/make_datelife_query2.html">make_datelife_query2</a></span><span class="op">(</span>input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Mus"</span>, <span class="st">"Mus musculus"</span><span class="op">)</span>,</span>
+<span>                     get_spp_from_taxon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>                     reference_taxonomy <span class="op">=</span> <span class="st">"ott"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ---&gt; Phylo-processing 'input'.</span></span>
+<span><span class="co">#&gt; * 'input' is not a phylogeny.</span></span>
+<span><span class="co">#&gt; ---&gt; Runnning TNRS to match input names to reference taxonomy (OTT).</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="co">#&gt; ---&gt; Getting species for the following taxon names :Mus.</span></span>
+<span><span class="co">#&gt; ---&gt; Obtaining taxonomic data from lineages within genus 'Mus' with OTT id number = 1068778.</span></span>
+<span><span class="co">#&gt; * Found the following taxonomic ranks: species, subspecies, no rank - terminal, no rank.</span></span>
+<span><span class="co">#&gt; * There are 20 subspecies.</span></span>
+<span><span class="co">#&gt; * There are 84 total species.</span></span>
+<span><span class="co">#&gt; * There are 60 species in OpenTree's synthetic tree.</span></span>
+<span><span class="co">#&gt; ---&gt; Retrieving taxonomic info for 60 species names within 'Mus' that are in the OpenTree synthetic tree.</span></span>
+<span><span class="co">#&gt; ---&gt; Adding species data from inclusive taxon names.</span></span>
+<span><span class="co">#&gt; $cleaned_names</span></span>
+<span><span class="co">#&gt; [1] "Mus musculus" "Mus"         </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $tnrs_names</span></span>
+<span><span class="co">#&gt;                                           </span></span>
+<span><span class="co">#&gt;                            "Mus musculus" </span></span>
+<span><span class="co">#&gt;                                   7067432 </span></span>
+<span><span class="co">#&gt;                     "Mus cf. callewaerti" </span></span>
+<span><span class="co">#&gt;                                   5857433 </span></span>
+<span><span class="co">#&gt;                  "Mus cf. setulosus West" </span></span>
+<span><span class="co">#&gt;                                   5857432 </span></span>
+<span><span class="co">#&gt;                "Mus cf. tenellus TA-2014" </span></span>
+<span><span class="co">#&gt;                                   5857436 </span></span>
+<span><span class="co">#&gt;                    "Mus cf. baoulei West" </span></span>
+<span><span class="co">#&gt;                                   5857434 </span></span>
+<span><span class="co">#&gt;             "Mus cf. callewaerti TA-2014" </span></span>
+<span><span class="co">#&gt;                                   3608901 </span></span>
+<span><span class="co">#&gt;                              "Mus neavei" </span></span>
+<span><span class="co">#&gt;                                    844274 </span></span>
+<span><span class="co">#&gt;                             "Mus sorella" </span></span>
+<span><span class="co">#&gt;                                    844277 </span></span>
+<span><span class="co">#&gt;                            "Mus tenellus" </span></span>
+<span><span class="co">#&gt;                                    844280 </span></span>
+<span><span class="co">#&gt;                     "Mus cf. musculoides" </span></span>
+<span><span class="co">#&gt;                                    844282 </span></span>
+<span><span class="co">#&gt;                                "Mus bufo" </span></span>
+<span><span class="co">#&gt;                                   3608883 </span></span>
+<span><span class="co">#&gt;                         "Mus callewaerti" </span></span>
+<span><span class="co">#&gt;                                   5857435 </span></span>
+<span><span class="co">#&gt;                             "Mus mahomet" </span></span>
+<span><span class="co">#&gt;                                   7067433 </span></span>
+<span><span class="co">#&gt; "Mus sp. musculoides-minutoides DPL-2017" </span></span>
+<span><span class="co">#&gt;                                    369735 </span></span>
+<span><span class="co">#&gt;                             "Mus baoulei" </span></span>
+<span><span class="co">#&gt;                                    403204 </span></span>
+<span><span class="co">#&gt;                               "Mus emesi" </span></span>
+<span><span class="co">#&gt;                                    996648 </span></span>
+<span><span class="co">#&gt;                         "Mus musculoides" </span></span>
+<span><span class="co">#&gt;                                   1000695 </span></span>
+<span><span class="co">#&gt;                             "Mus indutus" </span></span>
+<span><span class="co">#&gt;                                    759679 </span></span>
+<span><span class="co">#&gt;                            "Mus mattheyi" </span></span>
+<span><span class="co">#&gt;                                    845966 </span></span>
+<span><span class="co">#&gt;                          "Mus minutoides" </span></span>
+<span><span class="co">#&gt;                                    845980 </span></span>
+<span><span class="co">#&gt;                           "Mus setulosus" </span></span>
+<span><span class="co">#&gt;                                   1000702 </span></span>
+<span><span class="co">#&gt;                              "Mus haussa" </span></span>
+<span><span class="co">#&gt;                                   1000700 </span></span>
+<span><span class="co">#&gt;                        "Mus cf. saxicola" </span></span>
+<span><span class="co">#&gt;                                    887682 </span></span>
+<span><span class="co">#&gt;                         "Mus shortridgei" </span></span>
+<span><span class="co">#&gt;                                    542525 </span></span>
+<span><span class="co">#&gt;                            "Mus saxicola" </span></span>
+<span><span class="co">#&gt;                                    845970 </span></span>
+<span><span class="co">#&gt;                          "Mus platythrix" </span></span>
+<span><span class="co">#&gt;                                    348560 </span></span>
+<span><span class="co">#&gt;                          "Mus terricolor" </span></span>
+<span><span class="co">#&gt;                                    451263 </span></span>
+<span><span class="co">#&gt;                             "Mus booduga" </span></span>
+<span><span class="co">#&gt;                                    289304 </span></span>
+<span><span class="co">#&gt;                              "Mus triton" </span></span>
+<span><span class="co">#&gt;                                    542521 </span></span>
+<span><span class="co">#&gt;                             "Mus spretus" </span></span>
+<span><span class="co">#&gt;                                    542528 </span></span>
+<span><span class="co">#&gt;                              "Mus cookii" </span></span>
+<span><span class="co">#&gt;                                    845976 </span></span>
+<span><span class="co">#&gt;                          "Mus spicilegus" </span></span>
+<span><span class="co">#&gt;                                   1027340 </span></span>
+<span><span class="co">#&gt;                             "Mus famulus" </span></span>
+<span><span class="co">#&gt;                                    922493 </span></span>
+<span><span class="co">#&gt;                              "Mus caroli" </span></span>
+<span><span class="co">#&gt;                                   1010350 </span></span>
+<span><span class="co">#&gt;                        "Mus fragilicauda" </span></span>
+<span><span class="co">#&gt;                                    185328 </span></span>
+<span><span class="co">#&gt;                       "Mus crociduroides" </span></span>
+<span><span class="co">#&gt;                                    542493 </span></span>
+<span><span class="co">#&gt;                              "Mus pahari" </span></span>
+<span><span class="co">#&gt;                                   6144910 </span></span>
+<span><span class="co">#&gt;                       "Mus terraereginae" </span></span>
+<span><span class="co">#&gt;                                   7654766 </span></span>
+<span><span class="co">#&gt;                             "Mus aegaeus" </span></span>
+<span><span class="co">#&gt;                                   7654768 </span></span>
+<span><span class="co">#&gt;                              "Mus camini" </span></span>
+<span><span class="co">#&gt;                                   7654773 </span></span>
+<span><span class="co">#&gt;                             "Mus paulina" </span></span>
+<span><span class="co">#&gt;                                   7654776 </span></span>
+<span><span class="co">#&gt;                            "Mus vulpinus" </span></span>
+<span><span class="co">#&gt;                                   7654767 </span></span>
+<span><span class="co">#&gt;                          "Mus arboricola" </span></span>
+<span><span class="co">#&gt;                                   7654772 </span></span>
+<span><span class="co">#&gt;                             "Mus nigrita" </span></span>
+<span><span class="co">#&gt;                                   7654775 </span></span>
+<span><span class="co">#&gt;                          "Mus tomentosus" </span></span>
+<span><span class="co">#&gt;                                   7654774 </span></span>
+<span><span class="co">#&gt;                          "Mus proconodon" </span></span>
+<span><span class="co">#&gt;                                   7654771 </span></span>
+<span><span class="co">#&gt;                      "Mus microdontoides" </span></span>
+<span><span class="co">#&gt;                                   7654770 </span></span>
+<span><span class="co">#&gt;                           "Mus leptosoma" </span></span>
+<span><span class="co">#&gt;                                   3608899 </span></span>
+<span><span class="co">#&gt;                           "Mus oubanguii" </span></span>
+<span><span class="co">#&gt;                                   3608881 </span></span>
+<span><span class="co">#&gt;                             "Mus goundae" </span></span>
+<span><span class="co">#&gt;                                   3608904 </span></span>
+<span><span class="co">#&gt;                            "Mus orangiae" </span></span>
+<span><span class="co">#&gt;                                   3608880 </span></span>
+<span><span class="co">#&gt;                           "Mus phillipsi" </span></span>
+<span><span class="co">#&gt;                                   3608890 </span></span>
+<span><span class="co">#&gt;                             "Mus setzeri" </span></span>
+<span><span class="co">#&gt;                                   3608886 </span></span>
+<span><span class="co">#&gt;                          "Mus fernandoni" </span></span>
+<span><span class="co">#&gt;                                   3608885 </span></span>
+<span><span class="co">#&gt;                             "Mus vulcani" </span></span>
+<span><span class="co">#&gt;                                   3608874 </span></span>
+<span><span class="co">#&gt;                              "Mus mayori" </span></span>
+<span><span class="co">#&gt;                                   7654769 </span></span>
+<span><span class="co">#&gt;                            "Mus colletti" </span></span>
+<span><span class="co">#&gt;                                   6144906 </span></span>
+<span><span class="co">#&gt;                             "Mus canguru" </span></span>
+<span><span class="co">#&gt;                                    542509 </span></span>
+<span><span class="co">#&gt;                            "Mus musculus" </span></span>
+<span><span class="co">#&gt;                                    542519 </span></span>
+<span><span class="co">#&gt;                          "Mus cervicolor" </span></span>
+<span><span class="co">#&gt;                                    845973 </span></span>
+<span><span class="co">#&gt;                         "Mus macedonicus" </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ott_ids</span></span>
+<span><span class="co">#&gt;                                                             Mus cf. callewaerti </span></span>
+<span><span class="co">#&gt;                                  542509                                 7067432 </span></span>
+<span><span class="co">#&gt;                  Mus cf. setulosus West                Mus cf. tenellus TA-2014 </span></span>
+<span><span class="co">#&gt;                                 5857433                                 5857432 </span></span>
+<span><span class="co">#&gt;                    Mus cf. baoulei West             Mus cf. callewaerti TA-2014 </span></span>
+<span><span class="co">#&gt;                                 5857436                                 5857434 </span></span>
+<span><span class="co">#&gt;                              Mus neavei                             Mus sorella </span></span>
+<span><span class="co">#&gt;                                 3608901                                  844274 </span></span>
+<span><span class="co">#&gt;                            Mus tenellus                     Mus cf. musculoides </span></span>
+<span><span class="co">#&gt;                                  844277                                  844280 </span></span>
+<span><span class="co">#&gt;                                Mus bufo                         Mus callewaerti </span></span>
+<span><span class="co">#&gt;                                  844282                                 3608883 </span></span>
+<span><span class="co">#&gt;                             Mus mahomet Mus sp. musculoides-minutoides DPL-2017 </span></span>
+<span><span class="co">#&gt;                                 5857435                                 7067433 </span></span>
+<span><span class="co">#&gt;                             Mus baoulei                               Mus emesi </span></span>
+<span><span class="co">#&gt;                                  369735                                  403204 </span></span>
+<span><span class="co">#&gt;                         Mus musculoides                             Mus indutus </span></span>
+<span><span class="co">#&gt;                                  996648                                 1000695 </span></span>
+<span><span class="co">#&gt;                            Mus mattheyi                          Mus minutoides </span></span>
+<span><span class="co">#&gt;                                  759679                                  845966 </span></span>
+<span><span class="co">#&gt;                           Mus setulosus                              Mus haussa </span></span>
+<span><span class="co">#&gt;                                  845980                                 1000702 </span></span>
+<span><span class="co">#&gt;                        Mus cf. saxicola                         Mus shortridgei </span></span>
+<span><span class="co">#&gt;                                 1000700                                  887682 </span></span>
+<span><span class="co">#&gt;                            Mus saxicola                          Mus platythrix </span></span>
+<span><span class="co">#&gt;                                  542525                                  845970 </span></span>
+<span><span class="co">#&gt;                          Mus terricolor                             Mus booduga </span></span>
+<span><span class="co">#&gt;                                  348560                                  451263 </span></span>
+<span><span class="co">#&gt;                              Mus triton                             Mus spretus </span></span>
+<span><span class="co">#&gt;                                  289304                                  542521 </span></span>
+<span><span class="co">#&gt;                              Mus cookii                          Mus spicilegus </span></span>
+<span><span class="co">#&gt;                                  542528                                  845976 </span></span>
+<span><span class="co">#&gt;                             Mus famulus                              Mus caroli </span></span>
+<span><span class="co">#&gt;                                 1027340                                  922493 </span></span>
+<span><span class="co">#&gt;                        Mus fragilicauda                       Mus crociduroides </span></span>
+<span><span class="co">#&gt;                                 1010350                                  185328 </span></span>
+<span><span class="co">#&gt;                              Mus pahari                       Mus terraereginae </span></span>
+<span><span class="co">#&gt;                                  542493                                 6144910 </span></span>
+<span><span class="co">#&gt;                             Mus aegaeus                              Mus camini </span></span>
+<span><span class="co">#&gt;                                 7654766                                 7654768 </span></span>
+<span><span class="co">#&gt;                             Mus paulina                            Mus vulpinus </span></span>
+<span><span class="co">#&gt;                                 7654773                                 7654776 </span></span>
+<span><span class="co">#&gt;                          Mus arboricola                             Mus nigrita </span></span>
+<span><span class="co">#&gt;                                 7654767                                 7654772 </span></span>
+<span><span class="co">#&gt;                          Mus tomentosus                          Mus proconodon </span></span>
+<span><span class="co">#&gt;                                 7654775                                 7654774 </span></span>
+<span><span class="co">#&gt;                      Mus microdontoides                           Mus leptosoma </span></span>
+<span><span class="co">#&gt;                                 7654771                                 7654770 </span></span>
+<span><span class="co">#&gt;                           Mus oubanguii                             Mus goundae </span></span>
+<span><span class="co">#&gt;                                 3608899                                 3608881 </span></span>
+<span><span class="co">#&gt;                            Mus orangiae                           Mus phillipsi </span></span>
+<span><span class="co">#&gt;                                 3608904                                 3608880 </span></span>
+<span><span class="co">#&gt;                             Mus setzeri                          Mus fernandoni </span></span>
+<span><span class="co">#&gt;                                 3608890                                 3608886 </span></span>
+<span><span class="co">#&gt;                             Mus vulcani                              Mus mayori </span></span>
+<span><span class="co">#&gt;                                 3608885                                 3608874 </span></span>
+<span><span class="co">#&gt;                            Mus colletti                             Mus canguru </span></span>
+<span><span class="co">#&gt;                                 7654769                                 6144906 </span></span>
+<span><span class="co">#&gt;                            Mus musculus                          Mus cervicolor </span></span>
+<span><span class="co">#&gt;                                  542509                                  542519 </span></span>
+<span><span class="co">#&gt;                         Mus macedonicus </span></span>
+<span><span class="co">#&gt;                                  845973 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $phy</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "datelifeQuery"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-function-get_opentree_species">The function <code>get_opentree_species()</code><a class="anchor" aria-label="anchor" href="#the-function-get_opentree_species"></a>

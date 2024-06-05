@@ -61,6 +61,9 @@
 <li>use spaces instead of “_” to run tnrs, avoids bug from <code><a href="https://docs.ropensci.org/rotl/reference/tnrs_match_names.html" class="external-link">rotl::tnrs_match_names()</a></code> v3.0.14</li>
 <li>faster and more accurate way to get study ids and tree ids from opentree API on <code><a href="../reference/get_opentree_chronograms.html">get_opentree_chronograms()</a></code> that have branch lengths in Myrs, no relative time.</li>
 <li>update to chronogram database, now with 292 chronograms.</li>
+<li>
+<code><a href="../reference/get_taxon_summary.html">get_taxon_summary()</a></code> now manages case when <code>datelife_result</code> is empty; throws warning instead of criptic error.</li>
+<li>better <code>testthat</code> suite for <code><a href="../reference/datelife_search.html">datelife_search()</a></code> inner functions.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.8" id="datelife-v068">datelife v0.6.8<a class="anchor" aria-label="anchor" href="#datelife-v068"></a></h2><p class="text-muted">CRAN release: 2023-06-19</p>

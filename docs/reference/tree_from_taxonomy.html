@@ -97,13 +97,13 @@
 <span class="r-in"><span>  <span class="st">"Ginkgo biloba"</span>, <span class="st">"Vulcan"</span>, <span class="st">"Klingon"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">tree_from_taxonomy</span><span class="op">(</span><span class="va">taxa</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in lapply(x, f):</span> object 'taxa' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'taxa' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">unresolved</span><span class="op">)</span> <span class="co"># The taxa that do not match</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in print(results$unresolved):</span> object 'results' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'results' not found</span>
 <span class="r-in"><span><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/plot.phylo.html" class="external-link">plot.phylo</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">phy</span><span class="op">)</span> <span class="co"># may generate warnings due to problems with singletons</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ape::plot.phylo(results$phy):</span> object 'results' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'results' not found</span>
 <span class="r-in"><span><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/plot.phylo.html" class="external-link">plot.phylo</a></span><span class="op">(</span><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/collapse.singles.html" class="external-link">collapse.singles</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">phy</span><span class="op">)</span>, show.node.label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ape::collapse.singles(results$phy):</span> object 'results' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'results' not found</span>
 <span class="r-in"><span><span class="co"># got rid of singles, but this also removes a lot of the node.labels</span></span></span>
 <span class="r-in"><span> <span class="co"># end dontrun</span></span></span>
 </code></pre></div>
