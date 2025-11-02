@@ -3,6 +3,10 @@
 
 DONE:
 -->
+# datelife v0.7.0
+- updated cache from Open Tree of Life: now with 318 chronograms
+
+
 # datelife v0.6.9
 - fix bug in `check_ott_input()`
 - fix bug in `make_datelife_query()` when getting ott ids
