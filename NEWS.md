@@ -3,6 +3,9 @@
 
 DONE:
 -->
+# datelife v0.7.1
+- updated cache from Open Tree of Life: now with 371 chronograms
+
 # datelife v0.7.0
 - updated cache from Open Tree of Life: now with 318 chronograms
 

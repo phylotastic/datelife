@@ -23,7 +23,7 @@
 #' @details
 #' Generated with
 #' opentree_chronograms <- get_opentree_chronograms()
-#' opentree_chronograms$version <- '2023.12.30'
+#' opentree_chronograms$version <- '2026.09.06' # 6 September 2026
 #' usethis::use_data(opentree_chronograms, overwrite = T, compress = "xz")
 #' and updated with update_datelife_cache()
 "opentree_chronograms"
